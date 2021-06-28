@@ -8,7 +8,13 @@
     <PolicyId>B2C_1A_TrustFrameworkBase</PolicyId>
   </BasePolicy>
   <BuildingBlocks>
-
+    <ClaimsSchema>
+      <ClaimType Id="mobile">
+        <DisplayName>Mobile Phone Number</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+    </ClaimsSchema>
   </BuildingBlocks>
 
   <ClaimsProviders>
@@ -22,6 +28,7 @@
           </Metadata>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="givenName" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="mobile"/>
           </OutputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -41,7 +48,23 @@
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
-
+    <ClaimsProvider>
+      <DisplayName>Azure Active Directory</DisplayName>
+      <TechnicalProfiles>
+        <!-- Write data during a local account sign-up flow. -->
+        <TechnicalProfile Id="AAD-UserWriteUsingLogonEmail">
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="mobile"/>
+          </PersistedClaims>
+        </TechnicalProfile>
+        <!-- Read data after user authenticates with a local account. -->
+        <TechnicalProfile Id="AAD-UserReadUsingObjectId">
+          <OutputClaims>  
+            <OutputClaim ClaimTypeReferenceId="mobile" />
+          </OutputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
   </ClaimsProviders>
 
   <!--UserJourneys>
