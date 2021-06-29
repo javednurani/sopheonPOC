@@ -81,6 +81,7 @@
       </LocalizedResources>
       <LocalizedResources Id="api.localaccountsignup.en">
         <LocalizedStrings>
+          <LocalizedString ElementType="ClaimType" ElementId="mobile" StringId="DisplayName">#Mobile Phone Number</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">#Email Address</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="email" StringId="UserHelpText">#Email address that can be used to contact you.</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="email" StringId="PatternHelpText">#Please enter a valid email address.</LocalizedString>
