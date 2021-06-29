@@ -13,8 +13,28 @@
         <DisplayName>Mobile Phone Number</DisplayName>
         <DataType>string</DataType>
         <UserInputType>TextBox</UserInputType>
+        <PredicateValidationReference Id="PhoneNumberValidation" />
       </ClaimType>
     </ClaimsSchema>
+    <Predicates>
+      <Predicate Id="PhoneNumberRegex" Method="MatchesRegex">
+        <Parameters>
+          <Parameter Id="RegularExpression">^[0-9\(\)\-\s+]*$</Parameter>
+        </Parameters>
+      </Predicate>
+    </Predicates>
+    <PredicateValidations>
+      <PredicateValidation Id="PhoneNumberValidation">
+        <PredicateGroups>
+          <PredicateGroup Id="PhoneNumberGroup">
+            <UserHelpText>Please Enter a Valid Phone Number (NON LOCALIZED)</UserHelpText>
+            <PredicateReferences>
+              <PredicateReference Id="PhoneNumberRegex" />
+            </PredicateReferences>
+          </PredicateGroup>
+        </PredicateGroups>
+      </PredicateValidation>
+    </PredicateValidations>
   </BuildingBlocks>
 
   <ClaimsProviders>
