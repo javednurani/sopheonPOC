@@ -1,11 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
-  PolicySchemaVersion="0.3.0.0" 
-  TenantId="StratusB2CDev.onmicrosoft.com" 
-  PolicyId="B2C_1A_TrustFrameworkExtensions" 
-  PublicPolicyUri="http://StratusB2CDev.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="StratusB2CDev.onmicrosoft.com" PolicyId="B2C_1A_TrustFrameworkExtensions" PublicPolicyUri="http://StratusB2CDev.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions">
 
   <BasePolicy>
     <TenantId>StratusB2CDev.onmicrosoft.com</TenantId>
@@ -60,7 +54,7 @@
           </Metadata>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="givenName" Required="true" />
-            <OutputClaim ClaimTypeReferenceId="mobile"/>
+            <OutputClaim ClaimTypeReferenceId="mobile" />
             <OutputClaim ClaimTypeReferenceId="extension_newsletter" />
           </OutputClaims>
         </TechnicalProfile>
@@ -87,7 +81,7 @@
         <!-- Write data during a local account sign-up flow. -->
         <TechnicalProfile Id="AAD-UserWriteUsingLogonEmail">
           <PersistedClaims>
-            <PersistedClaim ClaimTypeReferenceId="mobile"/>
+            <PersistedClaim ClaimTypeReferenceId="mobile" />
             <PersistedClaim ClaimTypeReferenceId="extension_newsletter" />
           </PersistedClaims>
         </TechnicalProfile>
