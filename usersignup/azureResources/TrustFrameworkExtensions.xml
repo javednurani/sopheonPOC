@@ -45,7 +45,7 @@
             <Item Key="EnforceEmailVerification">false</Item>
           </Metadata>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="givenName" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="displayName" Required="true" />
             <OutputClaim ClaimTypeReferenceId="mobile" />
           </OutputClaims>
         </TechnicalProfile>
