@@ -21,7 +21,7 @@ try {
     $policycontent = Get-Content $PathToFile
 
     # Optional: Change the content of the policy. For example, replace the tenant-name with your tenant name.
-    # $policycontent = $policycontent.Replace("your-tenant.onmicrosoft.com", "contoso.onmicrosoft.com")     
+    $policycontent = $policycontent.Replace("non-existent.onmicrosoft.com", $TenantId)     
 
     $response = Invoke-RestMethod -Uri $graphuri -Method Put -Body $policycontent -Headers $headers
 
