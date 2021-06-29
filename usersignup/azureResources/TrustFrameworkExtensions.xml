@@ -25,6 +25,7 @@
       <PredicateValidation Id="PhoneNumberValidation">
         <PredicateGroups>
           <PredicateGroup Id="PhoneNumberGroup">
+            <UserHelpText>Please Enter a Valid Phone Number (NON LOCALIZED)</UserHelpText>
             <PredicateReferences>
               <PredicateReference Id="PhoneNumberRegex" />
             </PredicateReferences>
