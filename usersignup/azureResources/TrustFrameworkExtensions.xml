@@ -1,11 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
-  PolicySchemaVersion="0.3.0.0" 
-  TenantId="non-existent.onmicrosoft.com" 
-  PolicyId="B2C_1A_TrustFrameworkExtensions" 
-  PublicPolicyUri="http://non-existent.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions">
+<?xml version="1.0" encoding="utf-8"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="non-existent.onmicrosoft.com" PolicyId="B2C_1A_TrustFrameworkExtensions" PublicPolicyUri="http://non-existent.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions">
 
   <BasePolicy>
     <TenantId>non-existent.onmicrosoft.com</TenantId>
@@ -13,6 +7,14 @@
   </BasePolicy>
   <BuildingBlocks>
     <ClaimsSchema>
+      <ClaimType Id="extension_newsletter">
+        <DisplayName>Subscribe to newsletter?</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>CheckboxMultiSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="Yes, keep me informed on product news!" Value="true" SelectByDefault="true" />
+        </Restriction>
+      </ClaimType>
       <ClaimType Id="mobile">
         <DisplayName>Mobile Phone Number</DisplayName>
         <DataType>string</DataType>
@@ -52,7 +54,8 @@
           </Metadata>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="givenName" Required="true" />
-            <OutputClaim ClaimTypeReferenceId="mobile"/>
+            <OutputClaim ClaimTypeReferenceId="mobile" />
+            <OutputClaim ClaimTypeReferenceId="extension_newsletter" />
           </OutputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -78,13 +81,15 @@
         <!-- Write data during a local account sign-up flow. -->
         <TechnicalProfile Id="AAD-UserWriteUsingLogonEmail">
           <PersistedClaims>
-            <PersistedClaim ClaimTypeReferenceId="mobile"/>
+            <PersistedClaim ClaimTypeReferenceId="mobile" />
+            <PersistedClaim ClaimTypeReferenceId="extension_newsletter" />
           </PersistedClaims>
         </TechnicalProfile>
         <!-- Read data after user authenticates with a local account. -->
         <TechnicalProfile Id="AAD-UserReadUsingObjectId">
-          <OutputClaims>  
+          <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="mobile" />
+            <OutputClaim ClaimTypeReferenceId="extension_newsletter" />
           </OutputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
