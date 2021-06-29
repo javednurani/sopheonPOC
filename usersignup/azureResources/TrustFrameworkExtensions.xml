@@ -9,6 +9,14 @@
   </BasePolicy>
   <BuildingBlocks>
     <ClaimsSchema>
+      <ClaimType Id="extension_newsletter">
+        <DisplayName>Subscribe to newsletter?</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>CheckboxMultiSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="Yes, keep me informed on product news!" Value="true" SelectByDefault="true" />
+        </Restriction>
+      </ClaimType>
       <ClaimType Id="mobile">
         <DisplayName>Mobile Phone Number</DisplayName>
         <DataType>string</DataType>
@@ -48,6 +56,7 @@
           </Metadata>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="givenName" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="extension_newsletter" />
             <OutputClaim ClaimTypeReferenceId="mobile"/>
           </OutputClaims>
         </TechnicalProfile>
@@ -75,12 +84,14 @@
         <TechnicalProfile Id="AAD-UserWriteUsingLogonEmail">
           <PersistedClaims>
             <PersistedClaim ClaimTypeReferenceId="mobile"/>
+            <PersistedClaim ClaimTypeReferenceId="extension_newsletter" />
           </PersistedClaims>
         </TechnicalProfile>
         <!-- Read data after user authenticates with a local account. -->
         <TechnicalProfile Id="AAD-UserReadUsingObjectId">
-          <OutputClaims>  
+          <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="mobile" />
+            <OutputClaim ClaimTypeReferenceId="extension_newsletter" />
           </OutputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
