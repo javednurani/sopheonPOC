@@ -80,6 +80,7 @@
       </LocalizedResources>
       <LocalizedResources Id="api.localaccountsignup.en">
         <LocalizedStrings>
+          <LocalizedString ElementType="Predicate" ElementId="PhoneNumberRegex" StringId="HelpText">#Use 0-9, (, ), -, and +</LocalizedString>
           <LocalizedString ElementType="InputValidation" ElementId="PhoneNumberValidation" StringId="PhoneNumberGroup">#Please Enter a Valid Phone Number</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="mobile" StringId="DisplayName">#Mobile Phone Number</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">#Email Address</LocalizedString>
