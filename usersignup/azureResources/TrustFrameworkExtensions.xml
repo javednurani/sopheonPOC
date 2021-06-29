@@ -56,8 +56,8 @@
           </Metadata>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="givenName" Required="true" />
-            <OutputClaim ClaimTypeReferenceId="extension_newsletter" />
             <OutputClaim ClaimTypeReferenceId="mobile"/>
+            <OutputClaim ClaimTypeReferenceId="extension_newsletter" />
           </OutputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
