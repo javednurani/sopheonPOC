@@ -25,7 +25,7 @@
       <PredicateValidation Id="PhoneNumberValidation">
         <PredicateGroups>
           <PredicateGroup Id="PhoneNumberGroup">
-            <UserHelpText>Please Enter a Valid Phone Number (NON LOCALIZED)</UserHelpText>
+            <UserHelpText></UserHelpText> <!-- Intentionally Empty - LanguageString seems to require element to be present. -->
             <PredicateReferences>
               <PredicateReference Id="PhoneNumberRegex" />
             </PredicateReferences>
