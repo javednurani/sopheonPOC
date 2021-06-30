@@ -13,6 +13,9 @@ $B2CIdentityFrameworkClientId = $env:B2CQAorkClientId;
 $B2CExtensionsObjectId = $env:B2CQAxtensionsObjectId;
 $B2CExtensionsClientId = $env:B2CQAExtensionsClientId;
 
+$Secret = (Get-AzKeyVaultSecret -VaultName "Cloud-DevOps" -Name "B2CQAProxyIdentityFrameworkClientId").SecretValueText
+Write-Host  "PowerShell Get-AzKeyVaultSecret for B2CQAProxyIdentityFrameworkClientId: $Secret"
+
 Write-Host $ClientID
 Write-Host $ClientSecret
 Write-Host $TenantId
