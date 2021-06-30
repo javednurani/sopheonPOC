@@ -7,6 +7,14 @@
   </BasePolicy>
   <BuildingBlocks>
     <ClaimsSchema>
+      <ClaimType Id="extension_newsletter">
+        <DisplayName>Subscribe to newsletter?</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>CheckboxMultiSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="Yes, keep me informed on product news!" Value="subscribed" SelectByDefault="true" />
+        </Restriction>
+      </ClaimType>
       <ClaimType Id="mobile">
         <DisplayName>Mobile Phone Number</DisplayName>
         <DataType>string</DataType>
@@ -36,12 +44,12 @@
     <ContentDefinitions>
       <ContentDefinition Id="api.signuporsignin">
         <LocalizedResourcesReferences MergeBehavior="Prepend">
-            <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.signuporsignin.en" />
+          <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.signuporsignin.en" />
         </LocalizedResourcesReferences>
       </ContentDefinition>
       <ContentDefinition Id="api.localaccountsignup">
         <LocalizedResourcesReferences MergeBehavior="Prepend">
-            <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.localaccountsignup.en" />
+          <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.localaccountsignup.en" />
         </LocalizedResourcesReferences>
       </ContentDefinition>
     </ContentDefinitions>
@@ -80,10 +88,16 @@
         </LocalizedStrings>
       </LocalizedResources>
       <LocalizedResources Id="api.localaccountsignup.en">
+        <LocalizedCollections>
+          <LocalizedCollection ElementType="ClaimType" ElementId="extension_newsletter" TargetCollection="Restriction">
+            <Item Text="#Yes, keep me informed on product news!" Value="subscribed" SelectByDefault="true" />
+          </LocalizedCollection>
+        </LocalizedCollections>
         <LocalizedStrings>
           <LocalizedString ElementType="Predicate" ElementId="PhoneNumberRegex" StringId="HelpText">#Digits (0-9), and one or more of the following symbols: ( ) - +</LocalizedString>
           <LocalizedString ElementType="InputValidation" ElementId="PhoneNumberValidation" StringId="PhoneNumberGroup">#Please Enter a Valid Phone Number</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="mobile" StringId="DisplayName">#Mobile Phone Number</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="extension_newsletter" StringId="DisplayName">#Subscribe to newsletter?</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">#Email Address</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="email" StringId="UserHelpText">#Email address that can be used to contact you.</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="email" StringId="PatternHelpText">#Please enter a valid email address.</LocalizedString>
@@ -145,6 +159,7 @@
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="displayName" Required="true" />
             <OutputClaim ClaimTypeReferenceId="mobile" />
+            <OutputClaim ClaimTypeReferenceId="extension_newsletter" />
           </OutputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -167,16 +182,24 @@
     <ClaimsProvider>
       <DisplayName>Azure Active Directory</DisplayName>
       <TechnicalProfiles>
+        <TechnicalProfile Id="AAD-Common">
+          <Metadata>
+            <Item Key="ClientId">6761db95-ad20-4fbd-9776-a6984ab232ea</Item>
+            <Item Key="ApplicationObjectId">feae738a-8455-46d7-b22f-75755f17dc34</Item>
+          </Metadata>
+        </TechnicalProfile>
         <!-- Write data during a local account sign-up flow. -->
         <TechnicalProfile Id="AAD-UserWriteUsingLogonEmail">
           <PersistedClaims>
             <PersistedClaim ClaimTypeReferenceId="mobile" />
+            <PersistedClaim ClaimTypeReferenceId="extension_newsletter" />
           </PersistedClaims>
         </TechnicalProfile>
         <!-- Read data after user authenticates with a local account. -->
         <TechnicalProfile Id="AAD-UserReadUsingObjectId">
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="mobile" />
+            <OutputClaim ClaimTypeReferenceId="extension_newsletter" />
           </OutputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
