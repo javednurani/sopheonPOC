@@ -182,6 +182,12 @@
     <ClaimsProvider>
       <DisplayName>Azure Active Directory</DisplayName>
       <TechnicalProfiles>
+        <TechnicalProfile Id="AAD-Common">
+          <Metadata>
+            <Item Key="ClientId">6761db95-ad20-4fbd-9776-a6984ab232ea</Item>
+            <Item Key="ApplicationObjectId">feae738a-8455-46d7-b22f-75755f17dc34</Item>
+          </Metadata>
+        </TechnicalProfile>
         <!-- Write data during a local account sign-up flow. -->
         <TechnicalProfile Id="AAD-UserWriteUsingLogonEmail">
           <PersistedClaims>
