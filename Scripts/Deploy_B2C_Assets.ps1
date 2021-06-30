@@ -5,16 +5,16 @@ Param(
     [Parameter(Mandatory = $true)][string]$Environment
 )
 
-$ClientID = $(StratusB2C$($Environment)ClientId);
-$ClientSecret = $(StratusB2C$($Environment));
-$TenantId = $(StratusB2C$($Environment)TenantId);
-$ProxyIdentityFrameworkClientId = $(B2C$($Environment)ProxyIdentityFrameworkClientId);
-$B2CIdentityFrameworkClientId = $(B2C$($Environment)IdentityFrameworkClientId);
-$B2CExtensionsObjectId = $(B2C$($Environment)ExtensionsObjectId);
-$B2CExtensionsClientId = $(B2C$($Environment)ExtensionsClientId);
+$ClientID =$(env:StratusB2C$($Environment)ClientId);
+$ClientSecret = $(env:StratusB2C$($Environment));
+$TenantId = $(env:StratusB2C$($Environment)TenantId);
+$ProxyIdentityFrameworkClientId = $(env:B2C$($Environment)ProxyIdentityFrameworkClientId);
+$B2CIdentityFrameworkClientId = $(env:B2C$($Environment)IdentityFrameworkClientId);
+$B2CExtensionsObjectId = $(env:B2C$($Environment)ExtensionsObjectId);
+$B2CExtensionsClientId = $(env:B2C$($Environment)ExtensionsClientId);
 
 try {
-    $body = @{grant_type = "client_credentials"; scope = "https://graph.microsoft.com/.default"; client_id = $ClientID; client_secret = $ClientSecret }
+    $body = @{ grant_type = "client_credentials"; scope = "https://graph.microsoft.com/.default"; client_id = $ClientID; client_secret = $ClientSecret }
 
     $response = Invoke-RestMethod -Uri https://login.microsoftonline.com/$TenantId/oauth2/v2.0/token -Method Post -Body $body
     $token = $response.access_token
