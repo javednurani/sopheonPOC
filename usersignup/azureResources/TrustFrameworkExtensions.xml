@@ -88,6 +88,11 @@
         </LocalizedStrings>
       </LocalizedResources>
       <LocalizedResources Id="api.localaccountsignup.en">
+        <LocalizedCollections>
+          <LocalizedCollection ElementType="ClaimType" ElementId="extension_newsletter" TargetCollection="Restriction">
+            <Item Text="#Yes, keep me informed on product news!" Value="true" SelectByDefault="true" />
+          </LocalizedCollection>
+        </LocalizedCollections>
         <LocalizedStrings>
           <LocalizedString ElementType="Predicate" ElementId="PhoneNumberRegex" StringId="HelpText">#Digits (0-9), and one or more of the following symbols: ( ) - +</LocalizedString>
           <LocalizedString ElementType="InputValidation" ElementId="PhoneNumberValidation" StringId="PhoneNumberGroup">#Please Enter a Valid Phone Number</LocalizedString>
@@ -138,11 +143,6 @@
           <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfMissingRequiredElement">#Missing required element: {0}</LocalizedString>
           <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfValidationError">#Error in validation by: {0}</LocalizedString>
         </LocalizedStrings>
-        <LocalizedCollections>
-          <LocalizedCollection ElementType="ClaimType" ElementId="extension_newsletter" TargetCollection="Restriction">
-            <Item Text="#Yes, keep me informed on product news!" Value="true" SelectByDefault="true" />
-          </LocalizedCollection>
-        </LocalizedCollections>
       </LocalizedResources>
     </Localization>
   </BuildingBlocks>
