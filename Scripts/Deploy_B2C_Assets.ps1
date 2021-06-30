@@ -13,6 +13,14 @@ $B2CIdentityFrameworkClientId = $env:B2CQAorkClientId;
 $B2CExtensionsObjectId = $env:B2CQAxtensionsObjectId;
 $B2CExtensionsClientId = $env:B2CQAExtensionsClientId;
 
+Write-Host $ClientID
+Write-Host $ClientSecret
+Write-Host $TenantId
+Write-Host $ProxyIdentityFrameworkClientId
+Write-Host $B2CIdentityFrameworkClientId
+Write-Host $B2CExtensionsObjectId
+Write-Host $B2CExtensionsClientId
+
 try {
     $body = @{ grant_type = "client_credentials"; scope = "https://graph.microsoft.com/.default"; client_id = $ClientID; client_secret = $ClientSecret }
 
