@@ -5,13 +5,13 @@ Param(
     [Parameter(Mandatory = $true)][string]$Environment
 )
 
-$ClientID = (Get-ChildItem env:StratusB2C$($Environment)ClientId).value;
-$ClientSecret = (Get-ChildItem env:StratusB2C$($Environment)).value;
-$TenantId = (Get-ChildItem env:StratusB2C$($Environment)TenantId).value;
-$ProxyIdentityFrameworkClientId = (Get-ChildItem env:B2C$($Environment)ProxyIdentityFrameworkClientId).value;
-$B2CIdentityFrameworkClientId = (Get-ChildItem env:B2C$($Environment)IdentityFrameworkClientId).value;
-$B2CExtensionsObjectId = (Get-ChildItem env:B2C$($Environment)ExtensionsObjectId).value;
-$B2CExtensionsClientId = (Get-ChildItem env:B2C$($Environment)ExtensionsClientId).value;
+$ClientID = $(StratusB2C$($Environment)ClientId);
+$ClientSecret = $(StratusB2C$($Environment));
+$TenantId = $(StratusB2C$($Environment)TenantId);
+$ProxyIdentityFrameworkClientId = $(B2C$($Environment)ProxyIdentityFrameworkClientId);
+$B2CIdentityFrameworkClientId = $(B2C$($Environment)IdentityFrameworkClientId);
+$B2CExtensionsObjectId = $(B2C$($Environment)ExtensionsObjectId);
+$B2CExtensionsClientId = $(B2C$($Environment)ExtensionsClientId);
 
 try {
     $body = @{grant_type = "client_credentials"; scope = "https://graph.microsoft.com/.default"; client_id = $ClientID; client_secret = $ClientSecret }
