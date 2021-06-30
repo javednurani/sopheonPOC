@@ -5,13 +5,13 @@ Param(
     [Parameter(Mandatory = $true)][string]$Environment
 )
 
-$ClientID =$(env:StratusB2C$($Environment)ClientId);
-$ClientSecret = $(env:StratusB2C$($Environment));
-$TenantId = $(env:StratusB2C$($Environment)TenantId);
-$ProxyIdentityFrameworkClientId = $(env:B2C$($Environment)ProxyIdentityFrameworkClientId);
-$B2CIdentityFrameworkClientId = $(env:B2C$($Environment)IdentityFrameworkClientId);
-$B2CExtensionsObjectId = $(env:B2C$($Environment)ExtensionsObjectId);
-$B2CExtensionsClientId = $(env:B2C$($Environment)ExtensionsClientId);
+$ClientID =$env:StratusB2CQAClientId;
+$ClientSecret = $env:StratusB2CQA;
+$TenantId = $env:StratusB2CQATenantId;
+$ProxyIdentityFrameworkClientId = $env:B2CQAProxyIdentityFrameworkClientId;
+$B2CIdentityFrameworkClientId = $env:B2CQAorkClientId;
+$B2CExtensionsObjectId = $env:B2CQAxtensionsObjectId;
+$B2CExtensionsClientId = $env:B2CQAExtensionsClientId;
 
 try {
     $body = @{ grant_type = "client_credentials"; scope = "https://graph.microsoft.com/.default"; client_id = $ClientID; client_secret = $ClientSecret }
