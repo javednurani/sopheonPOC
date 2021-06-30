@@ -90,7 +90,7 @@
       <LocalizedResources Id="api.localaccountsignup.en">
         <LocalizedCollections>
           <LocalizedCollection ElementType="ClaimType" ElementId="extension_newsletter" TargetCollection="Restriction">
-            <Item Text="#Yes, keep me informed on product news!" Value="true" SelectByDefault="true" />
+            <Item Text="#Yes, keep me informed on product news!" Value="subscribed" SelectByDefault="true" />
           </LocalizedCollection>
         </LocalizedCollections>
         <LocalizedStrings>
