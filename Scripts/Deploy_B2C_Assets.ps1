@@ -1,11 +1,17 @@
 [Cmdletbinding()]
 Param(
-    [Parameter(Mandatory = $true)][string]$ClientID,
-    [Parameter(Mandatory = $true)][string]$ClientSecret,
-    [Parameter(Mandatory = $true)][string]$TenantId,
     [Parameter(Mandatory = $true)][string]$PolicyId,
-    [Parameter(Mandatory = $true)][string]$PathToFile
+    [Parameter(Mandatory = $true)][string]$PathToFile,
+    [Parameter(Mandatory = $true)][string]$Environment
 )
+
+$ClientID = (Get-ChildItem env:StratusB2C$($Environment)ClientId).value;
+$ClientSecret = (Get-ChildItem env:StratusB2C$($Environment)).value;
+$TenantId = (Get-ChildItem env:StratusB2C$($Environment)TenantId).value;
+$ProxyIdentityFrameworkClientId = (Get-ChildItem env:B2C$($Environment)ProxyIdentityFrameworkClientId).value;
+$B2CIdentityFrameworkClientId = (Get-ChildItem env:B2C$($Environment)IdentityFrameworkClientId).value;
+$B2CExtensionsObjectId = (Get-ChildItem env:B2C$($Environment)ExtensionsObjectId).value;
+$B2CExtensionsClientId = (Get-ChildItem env:B2C$($Environment)ExtensionsClientId).value;
 
 try {
     $body = @{grant_type = "client_credentials"; scope = "https://graph.microsoft.com/.default"; client_id = $ClientID; client_secret = $ClientSecret }
@@ -21,7 +27,11 @@ try {
     $policycontent = Get-Content $PathToFile
 
     # Optional: Change the content of the policy. For example, replace the tenant-name with your tenant name.
-    $policycontent = $policycontent.Replace("non-existent.onmicrosoft.com", $TenantId)     
+    $policycontent = $policycontent.Replace("non-existent.onmicrosoft.com", $TenantId)
+    $policycontent = $policycontent.Replace("^ProxyIdentityFrameworkClientId^", $ProxyIdentityFrameworkClientId);
+    $policycontent = $policycontent.Replace("^IdentityFrameworkClientId^", $B2CIdentityFrameworkClientId);
+    $policycontent = $policycontent.Replace("^ExtensionsAppObjectId^", $B2CExtensionsObjectId);
+    $policycontent = $policycontent.Replace("^ExtensionsAppClientId^", $B2CExtensionsClientId);
 
     $response = Invoke-RestMethod -Uri $graphuri -Method Put -Body $policycontent -Headers $headers
 
