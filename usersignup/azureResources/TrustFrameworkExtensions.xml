@@ -12,7 +12,7 @@
         <DataType>string</DataType>
         <UserInputType>CheckboxMultiSelect</UserInputType>
         <Restriction>
-          <Enumeration Text="Yes, keep me informed on product news!" Value="true" SelectByDefault="true" />
+          <Enumeration Text="Yes, keep me informed on product news!" Value="subscribed" SelectByDefault="true" />
         </Restriction>
       </ClaimType>
       <ClaimType Id="mobile">
