@@ -169,12 +169,12 @@
       <TechnicalProfiles>
         <TechnicalProfile Id="login-NonInteractive">
           <Metadata>
-            <Item Key="client_id">ProxyIdentityFrameworkClientId</Item>
-            <Item Key="IdTokenAudience">IdentityFrameworkClientId</Item>
+            <Item Key="client_id">^ProxyIdentityFrameworkClientId^</Item>
+            <Item Key="IdTokenAudience">^IdentityFrameworkClientId^</Item>
           </Metadata>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="ProxyIdentityFrameworkClientId" />
-            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="IdentityFrameworkClientId" />
+            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="^ProxyIdentityFrameworkClientId^" />
+            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="^IdentityFrameworkClientId^" />
           </InputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -184,8 +184,8 @@
       <TechnicalProfiles>
         <TechnicalProfile Id="AAD-Common">
           <Metadata>
-            <Item Key="ClientId">ExtensionsAppClientId</Item>
-            <Item Key="ApplicationObjectId">ExtensionsAppObjectId</Item>
+            <Item Key="ClientId">^ExtensionsAppClientId^</Item>
+            <Item Key="ApplicationObjectId">^ExtensionsAppObjectId^</Item>
           </Metadata>
         </TechnicalProfile>
         <!-- Write data during a local account sign-up flow. -->
