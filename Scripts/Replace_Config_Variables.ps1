@@ -12,7 +12,7 @@ $JWTClientId = (az keyvault secret show --vault-name "Stratus-$($Environment)" -
 $fileContent = Get-Content $PathToFile;
 
 $fileContent = $fileContent.Replace("non-existent.onmicrosoft.com", $TenantName);
-$fileContent = $fileContent.Replace("^B2CLoginName^", $TenantName.Replace(".onmicrosoft.com". ""));
+$fileContent = $fileContent.Replace("^B2CLoginName^", $TenantName -replace ".onmicrosoft.com", "");
 $fileContent = $fileContent.Replace("^B2CClientId^", $JWTClientId);
 
 Set-Content -Path $PathToFile -Value $fileContent -Force;
