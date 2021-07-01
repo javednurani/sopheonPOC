@@ -5,6 +5,7 @@ Param(
     [Parameter(Mandatory = $true)][string]$Environment
 )
 
+Write-Host "Colleting KeyVault secrets for B2C Asset deployments";
 $ClientID = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CClientId" --query value).Replace('"', '');
 $ClientSecret = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CClientSecret" --query value).Replace('"', '');
 $TenantId = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CTenantName" --query value).Replace('"', '');
@@ -12,14 +13,6 @@ $ProxyIdentityFrameworkClientId = (az keyvault secret show --vault-name "Stratus
 $B2CIdentityFrameworkClientId = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CIdentityFrameworkClientId" --query value).Replace('"', '');
 $B2CExtensionsObjectId = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CExtensionsObjectId" --query value).Replace('"', '');
 $B2CExtensionsClientId = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CExtensionsClientId" --query value).Replace('"', '');
-
-Write-Host $ClientID
-Write-Host $ClientSecret
-Write-Host $TenantId
-Write-Host $ProxyIdentityFrameworkClientId
-Write-Host $B2CIdentityFrameworkClientId
-Write-Host $B2CExtensionsObjectId
-Write-Host $B2CExtensionsClientId
 
 try {
     $body = @{ grant_type = "client_credentials"; scope = "https://graph.microsoft.com/.default"; client_id = $ClientID; client_secret = $ClientSecret }
@@ -34,6 +27,7 @@ try {
     $graphuri = 'https://graph.microsoft.com/beta/trustframework/policies/' + $PolicyId + '/$value'
     $policycontent = Get-Content $PathToFile
 
+    Write-Host "Updating configurable variables on policy content";
     # Optional: Change the content of the policy. For example, replace the tenant-name with your tenant name.
     $policycontent = $policycontent.Replace("non-existent.onmicrosoft.com", $TenantId)
     $policycontent = $policycontent.Replace("^ProxyIdentityFrameworkClientId^", $ProxyIdentityFrameworkClientId);
