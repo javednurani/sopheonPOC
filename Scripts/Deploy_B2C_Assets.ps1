@@ -5,16 +5,13 @@ Param(
     [Parameter(Mandatory = $true)][string]$Environment
 )
 
-$ClientID =$env:StratusB2CQAClientId;
-$ClientSecret = $env:StratusB2CQA;
-$TenantId = $env:StratusB2CQATenantId;
-$ProxyIdentityFrameworkClientId = $env:B2CQAProxyIdentityFrameworkClientId;
-$B2CIdentityFrameworkClientId = $env:B2CQAorkClientId;
-$B2CExtensionsObjectId = $env:B2CQAxtensionsObjectId;
-$B2CExtensionsClientId = $env:B2CQAExtensionsClientId;
-
-$Secret = (Get-AzKeyVaultSecret -VaultName "Cloud-DevOps" -Name "B2CQAProxyIdentityFrameworkClientId").SecretValueText
-Write-Host  "PowerShell Get-AzKeyVaultSecret for B2CQAProxyIdentityFrameworkClientId: $Secret"
+$ClientID = (Get-AzKeyVaultSecret -VaultName "Stratus-$($Environment)" -Name "StratusB2CClientId").SecretValueText;
+$ClientSecret = (Get-AzKeyVaultSecret -VaultName "Stratus-$($Environment)" -Name "StratusB2CClientSecret").SecretValueText;
+$TenantId = (Get-AzKeyVaultSecret -VaultName "Stratus-$($Environment)" -Name "StratusB2CTenantName").SecretValueText;
+$ProxyIdentityFrameworkClientId = (Get-AzKeyVaultSecret -VaultName "Stratus-$($Environment)" -Name "StratusB2CProxyIdentityFrameworkClientId").SecretValueText;
+$B2CIdentityFrameworkClientId = (Get-AzKeyVaultSecret -VaultName "Stratus-$($Environment)" -Name "StratusB2CIdentityFrameworkClientId").SecretValueText;
+$B2CExtensionsObjectId = (Get-AzKeyVaultSecret -VaultName "Stratus-$($Environment)" -Name "StratusB2CExtensionsObjectId").SecretValueText;
+$B2CExtensionsClientId = (Get-AzKeyVaultSecret -VaultName "Stratus-$($Environment)" -Name "StratusB2CExtensionsClientId").SecretValueText;
 
 Write-Host $ClientID
 Write-Host $ClientSecret
