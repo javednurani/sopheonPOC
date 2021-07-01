@@ -5,13 +5,13 @@ Param(
     [Parameter(Mandatory = $true)][string]$Environment
 )
 
-$ClientID = (Get-AzKeyVaultSecret -VaultName "Stratus-$($Environment)" -Name "StratusB2CClientId").SecretValueText;
-$ClientSecret = (Get-AzKeyVaultSecret -VaultName "Stratus-$($Environment)" -Name "StratusB2CClientSecret").SecretValueText;
-$TenantId = (Get-AzKeyVaultSecret -VaultName "Stratus-$($Environment)" -Name "StratusB2CTenantName").SecretValueText;
-$ProxyIdentityFrameworkClientId = (Get-AzKeyVaultSecret -VaultName "Stratus-$($Environment)" -Name "StratusB2CProxyIdentityFrameworkClientId").SecretValueText;
-$B2CIdentityFrameworkClientId = (Get-AzKeyVaultSecret -VaultName "Stratus-$($Environment)" -Name "StratusB2CIdentityFrameworkClientId").SecretValueText;
-$B2CExtensionsObjectId = (Get-AzKeyVaultSecret -VaultName "Stratus-$($Environment)" -Name "StratusB2CExtensionsObjectId").SecretValueText;
-$B2CExtensionsClientId = (Get-AzKeyVaultSecret -VaultName "Stratus-$($Environment)" -Name "StratusB2CExtensionsClientId").SecretValueText;
+$ClientID = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CClientId" --query value).Replace('"', '');
+$ClientSecret = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CClientSecret" --query value).Replace('"', '');
+$TenantId = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CTenantName" --query value).Replace('"', '');
+$ProxyIdentityFrameworkClientId = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CProxyIdentityFrameworkClientId" --query value).Replace('"', '');
+$B2CIdentityFrameworkClientId = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CIdentityFrameworkClientId" --query value).Replace('"', '');
+$B2CExtensionsObjectId = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CExtensionsObjectId" --query value).Replace('"', '');
+$B2CExtensionsClientId = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CExtensionsClientId" --query value).Replace('"', '');
 
 Write-Host $ClientID
 Write-Host $ClientSecret
