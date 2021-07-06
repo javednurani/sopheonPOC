@@ -319,6 +319,12 @@
           <InputParameter Id="valueToCompareTo" DataType="boolean" Value="true" />
         </InputParameters>
       </ClaimsTransformation>
+
+      <ClaimsTransformation Id="GetSystemDateTimeConsent" TransformationMethod="GetCurrentDateTime">
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedDate" TransformationClaimType="currentDateTime" />
+        </OutputClaims>
+      </ClaimsTransformation>
     </ClaimsTransformations>
 
     <ClientDefinitions>
@@ -613,7 +619,7 @@
           <PersistedClaims>
             <PersistedClaim ClaimTypeReferenceId="objectId" />
             <PersistedClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedDate" />
-            <PersistedClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedVersion" />
+            <PersistedClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedVersion" DefaultValue="v0.1" />
           </PersistedClaims>
           <IncludeTechnicalProfile ReferenceId="AAD-Common" />
         </TechnicalProfile>
@@ -655,9 +661,10 @@
             <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
           </CryptographicKeys>
           <InputClaims />
-          <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsented" Required="true" />
-          </OutputClaims>
+          <OutputClaims />
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="GetSystemDateTimeConsent" />
+          </OutputClaimsTransformations>
           <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="AAD-WriteUserConsentByObjectId-ThrowIfNotExists" />
           </ValidationTechnicalProfiles>
