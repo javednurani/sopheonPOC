@@ -394,6 +394,15 @@
         </Metadata>
       </ContentDefinition>
 
+      <ContentDefinition Id="api.selfasserted.consent">
+        <LoadUri>~/tenant/default/selfasserted.cshtml</LoadUri>
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
+        <Metadata>
+          <Item Key="DisplayName">Consent</Item>
+        </Metadata>
+      </ContentDefinition>
+
     </ContentDefinitions>
   </BuildingBlocks>
 
