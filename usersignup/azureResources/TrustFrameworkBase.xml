@@ -296,6 +296,10 @@
       <ClaimType Id="extension_TermsOfUseConsentedVersion">
         <DisplayName>Terms of Use Consented Version</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>CheckboxMultiSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="v1.0checkbox" Value="v1.0checkbox" SelectByDefault="true" />
+        </Restriction>
       </ClaimType>
 
     </ClaimsSchema>
