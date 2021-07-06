@@ -288,6 +288,24 @@
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
 
+      <ClaimType Id="extension_TermsOfUseConsentedDate">
+        <DisplayName>Terms of Use Consented Date</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>CheckboxMultiSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="I am agreeing to the terms of use" Value="2018-09-15" SelectByDefault="false" />
+        </Restriction>
+      </ClaimType>
+
+      <ClaimType Id="extension_TermsOfUseConsentedVersion">
+        <DisplayName>Terms of Use Consented Version</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>CheckboxMultiSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="I am agreeing to the terms of use" Value="2018-09-15" SelectByDefault="false" />
+        </Restriction>
+      </ClaimType>
+
     </ClaimsSchema>
 
     <ClaimsTransformations>
