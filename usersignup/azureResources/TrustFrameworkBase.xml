@@ -661,7 +661,9 @@
             <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
           </CryptographicKeys>
           <InputClaims />
-          <OutputClaims />
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedVersion" Required="true" />
+          </OutputClaims>
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="GetSystemDateTimeConsent" />
           </OutputClaimsTransformations>
