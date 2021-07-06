@@ -290,7 +290,7 @@
 
       <ClaimType Id="extension_TermsOfUseConsentedDate">
         <DisplayName>Terms of Use Consented Date</DisplayName>
-        <DataType>string</DataType>
+        <DataType>dateTime</DataType>
       </ClaimType>
 
       <ClaimType Id="extension_TermsOfUseConsentedVersion">
