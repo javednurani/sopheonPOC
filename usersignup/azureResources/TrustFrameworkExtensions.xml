@@ -243,8 +243,8 @@
         <OrchestrationStep Order="4" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-              <Value>extension_TermsOfUseConsented</Value>
-              <Value>2018-09-15</Value>
+              <Value>extension_TermsOfUseConsentedVersion</Value>
+              <Value>v0.1</Value>
               <Action>SkipThisOrchestrationStep</Action>
             </Precondition>
           </Preconditions>
