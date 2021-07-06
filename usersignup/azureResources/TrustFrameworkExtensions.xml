@@ -241,13 +241,13 @@
          <!-- execute consent step if the users consented version does not met the current version,
               otherwhise this step is skipped -->
         <OrchestrationStep Order="4" Type="ClaimsExchange">
-          <Preconditions>
+          <!-- <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
               <Value>extension_TermsOfUseConsentedVersion</Value>
               <Value>v0.1</Value>
               <Action>SkipThisOrchestrationStep</Action>
             </Precondition>
-          </Preconditions>
+          </Preconditions> -->
           <ClaimsExchanges>
             <ClaimsExchange Id="SelfAssertedConsentExchange" TechnicalProfileReferenceId="SelfAsserted-Consent" />
           </ClaimsExchanges>

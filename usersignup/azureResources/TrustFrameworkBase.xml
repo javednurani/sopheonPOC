@@ -294,8 +294,12 @@
       </ClaimType>
 
       <ClaimType Id="extension_TermsOfUseConsentedVersion">
-        <DisplayName>Terms of Use Consented Version</DisplayName>
+        <DisplayName>Accept the Terms of Service to keep going</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>CheckboxMultiSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="I accept" Value="v1.0checkbox" SelectByDefault="true" />
+        </Restriction>
       </ClaimType>
 
     </ClaimsSchema>
@@ -411,7 +415,7 @@
       </ContentDefinition>
 
       <ContentDefinition Id="api.selfasserted.consent">
-        <LoadUri>~/tenant/default/selfasserted.cshtml</LoadUri>
+        <LoadUri>https://stratuswebsitedev.blob.core.windows.net/b2cassets/consent-page.html</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
         <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
         <Metadata>
@@ -613,6 +617,9 @@
             <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
           </Metadata>
           <IncludeInSso>false</IncludeInSso>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="GetSystemDateTimeConsent" />
+          </InputClaimsTransformations>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
           </InputClaims>
@@ -661,7 +668,9 @@
             <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
           </CryptographicKeys>
           <InputClaims />
-          <OutputClaims />
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedVersion" Required="true" />
+          </OutputClaims>
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="GetSystemDateTimeConsent" />
           </OutputClaimsTransformations>
