@@ -294,11 +294,11 @@
       </ClaimType>
 
       <ClaimType Id="extension_TermsOfUseConsentedVersion">
-        <DisplayName>Terms of Use Consented Version</DisplayName>
+        <DisplayName>Accept the Terms of Service to keep going</DisplayName>
         <DataType>string</DataType>
         <UserInputType>CheckboxMultiSelect</UserInputType>
         <Restriction>
-          <Enumeration Text="v1.0checkbox" Value="v1.0checkbox" SelectByDefault="true" />
+          <Enumeration Text="I accept" Value="v1.0checkbox" SelectByDefault="true" />
         </Restriction>
       </ClaimType>
 
