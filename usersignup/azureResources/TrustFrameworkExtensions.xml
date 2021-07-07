@@ -152,7 +152,7 @@
       <LocalizedResources Id="api.selfasserted.consent.en">
         <LocalizedCollections>
           <LocalizedCollection ElementType="ClaimType" ElementId="extension_TermsOfUseConsentedVersion" TargetCollection="Restriction">
-            <Item Text="I accept" Value="v1.0checkbox" SelectByDefault="true" />
+            <Item Text="#I accept" Value="v0.1" SelectByDefault="true" />
           </LocalizedCollection>
         </LocalizedCollections>
         <LocalizedStrings>
