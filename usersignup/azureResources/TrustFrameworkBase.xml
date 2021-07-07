@@ -415,7 +415,7 @@
       </ContentDefinition>
 
       <ContentDefinition Id="api.selfasserted.consent">
-        <LoadUri>https://stratuswebsitedev.blob.core.windows.net/b2cassets/consentPage.html</LoadUri>
+        <LoadUri>https://&StorageAccountName&.blob.core.windows.net/b2cassets/consentPage.html</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
         <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
         <Metadata>
