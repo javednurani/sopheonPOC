@@ -187,7 +187,8 @@ PublishScripts/
 # NuGet Symbol Packages
 *.snupkg
 # The packages folder can be ignored because of Package Restore
-**/[Pp]ackages/*
+# Cloud-1000 - commenting out ignore of packages folder. We need the shell/app solution "packages" folder for @sopheon/shell-api and @sopheon/shared-ui.
+#**/[Pp]ackages/*
 # except build/, which is used as an MSBuild target.
 !**/[Pp]ackages/build/
 # Uncomment if necessary however generally it will be regenerated when needed
