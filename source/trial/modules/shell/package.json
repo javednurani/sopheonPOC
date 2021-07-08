@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@azure/msal-browser": "^2.14.0",
+    "@azure/msal-react": "^1.0.1",
     "@fluentui/react": "^7.155.4",
     "@fluentui/react-theme-provider": "^0.18.3",
     "@fluentui/theme": "^2.0.2",
