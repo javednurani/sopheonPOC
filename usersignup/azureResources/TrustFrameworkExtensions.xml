@@ -188,9 +188,16 @@
             <Item Key="EnforceEmailVerification">false</Item>
           </Metadata>
           <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" />
             <OutputClaim ClaimTypeReferenceId="displayName" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="Verified.Email" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="newPassword" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="reenterPassword" Required="true" />
             <OutputClaim ClaimTypeReferenceId="mobile" />
             <OutputClaim ClaimTypeReferenceId="extension_newsletter" />
+            <OutputClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" DefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" />
+            <OutputClaim ClaimTypeReferenceId="newUser" />
           </OutputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
