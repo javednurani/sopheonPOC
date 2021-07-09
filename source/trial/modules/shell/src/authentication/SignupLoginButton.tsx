@@ -2,27 +2,27 @@ import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/
 import { DefaultButton, IContextualMenuProps } from '@fluentui/react';
 import React, { FunctionComponent } from 'react';
 
-const menuProps: IContextualMenuProps = {
-  items: [
-    {
-      key: 'profile',
-      text: 'My Profile',
-      iconProps: { iconName: 'EditContact' },
-    },
-    {
-      key: 'signout',
-      text: 'Sign Out',
-      iconProps: { iconName: 'SignOut' },
-    },
-  ],
-};
-
 const SignupLoginButton: FunctionComponent = () => {
-  const { instance } = useMsal(); // , accounts, inProgress
+  const { instance, accounts } = useMsal(); // , accounts, inProgress
+  const menuProps: IContextualMenuProps = {
+    items: [
+      {
+        key: 'profile',
+        text: 'My Profile',
+        iconProps: { iconName: 'EditContact' },
+      },
+      {
+        key: 'signout',
+        text: 'Sign Out',
+        iconProps: { iconName: 'SignOut' },
+      },
+    ],
+  };
+
   return (
     <React.Fragment>
       <AuthenticatedTemplate>
-        <DefaultButton text="Your Name" split menuProps={menuProps} />
+        <DefaultButton text={accounts[0] ? accounts[0].name : 'My Profile'} split menuProps={menuProps} />
       </AuthenticatedTemplate>
       <UnauthenticatedTemplate>
         <DefaultButton
