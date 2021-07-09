@@ -280,15 +280,15 @@
               otherwhise this step is skipped -->
         <OrchestrationStep Order="4" Type="ClaimsExchange">
           <Preconditions>
-            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+            <!-- <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
               <Value>extension_TermsOfUseConsentedVersion</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-            <!-- <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-              <Value>extension_TermsOfUseConsentedVersion</Value>
-              <Value>v0.1</Value>
               <Action>SkipThisOrchestrationStep</Action>
             </Precondition> -->
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>extension_TermsOfUseConsentedVersion</Value>
+              <Value>v0.2</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
           </Preconditions>
           <ClaimsExchanges>
             <ClaimsExchange Id="SelfAssertedConsentExchange" TechnicalProfileReferenceId="SelfAsserted-Consent" />
