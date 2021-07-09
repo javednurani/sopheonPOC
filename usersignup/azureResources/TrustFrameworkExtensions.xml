@@ -103,16 +103,16 @@
           <LocalizedString ElementType="InputValidation" ElementId="PhoneNumberValidation" StringId="PhoneNumberGroup">Please Enter a Valid Phone Number</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="mobile" StringId="DisplayName">Mobile Phone Number</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_newsletter" StringId="DisplayName">Subscribe to newsletter?</LocalizedString>
-          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">Email Address</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">Email Address *</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="email" StringId="UserHelpText">Email address that can be used to contact you.</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="email" StringId="PatternHelpText">Please enter a valid email address.</LocalizedString>
-          <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="DisplayName">New Password</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="DisplayName">New Password *</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="UserHelpText">Enter new password</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="PatternHelpText">8-16 characters, containing 3 out of 4 of the following: Lowercase characters, uppercase characters, digits (0-9), and one or more of the following symbols: @ # $ % ^ &amp; * - _ + = [ ] { } | \ : ' , ? / ` ~ " ( ) ; .</LocalizedString>
-          <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="DisplayName">Confirm New Password</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="DisplayName">Confirm New Password *</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="UserHelpText">Confirm new password</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="PatternHelpText">8-16 characters, containing 3 out of 4 of the following: Lowercase characters, uppercase characters, digits (0-9), and one or more of the following symbols: @ # $ % ^ &amp; * - _ + = [ ] { } | \ : ' , ? / ` ~ " ( ) ; .</LocalizedString>
-          <LocalizedString ElementType="ClaimType" ElementId="displayName" StringId="DisplayName">Name</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="displayName" StringId="DisplayName">Name *</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="displayName" StringId="UserHelpText">Your name.</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="surname" StringId="DisplayName">Surname</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="surname" StringId="UserHelpText">Your surname (also known as family name or last name).  </LocalizedString>
