@@ -13,7 +13,6 @@ const msalConfig: Configuration = {
     clientId: '8bdfb9a7-913a-48a8-9fe0-5b2877fb844d', // TODO application (clientId) of app registration
     authority: 'https://StratusB2CDev.b2clogin.com/StratusB2CDev.onmicrosoft.com/B2C_1A_SIGNUP_SIGNIN', // TODO authority with B2C tenant Id
     knownAuthorities: ['StratusB2CDev.b2clogin.com'], // TODO
-    redirectUri: 'https://localhost:3000/', // TODO location.origin?
   },
 };
 
