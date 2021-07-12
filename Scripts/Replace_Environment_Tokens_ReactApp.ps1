@@ -5,7 +5,7 @@ $childFiles = dir .\* -include ('*.js', '*.json', '*.ts') -recurse
 
 Write-Host "Running through files: $($childFiles.Length)";
 
-$ShellClientId = (az keyvault secret show --vault-name "Stratus$($Environment)" --name "StratusB2CShellAppClientId" --query value).Replace('"', '');
+$ShellClientId = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CShellAppClientId" --query value).Replace('"', '');
 $TenantName = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CTenantName" --query value).Replace('"', '');
 $LoginName = $TenantName.Replace(".onmicrosoft.com", "");
 
