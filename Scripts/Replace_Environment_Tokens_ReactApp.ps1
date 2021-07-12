@@ -1,0 +1,36 @@
+# This script is used at the release pipeline level, as it searches for files .js, based on .ts transcompilations
+
+$childFiles = dir .\* -include ('*.js', '*.json', '*.ts') -recurse
+
+Write-Host "Running through files: $($childFiles.Length)";
+
+$ShellClientId = (az keyvault secret show --vault-name "Stratus$($Envrionment)" --name "StratusB2CShellAppClientId" --query value).Replace('"', '');
+$TenantName = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CTenantName" --query value).Replace('"', '');
+$LoginName = $TenantName.Replace(".onmicrosoft.com", "");
+
+
+$childFiles | ForEach-Object -Process { 
+    Write-Host "START word match on file: $($_.FullName)"
+    $rawData = Get-Content -Path $_.FullName -Raw;
+    $isDataTouched  = $false;
+    
+    Write-Host "Looking for Token: '&ShellAppClientId&'";
+    if($rawData -match "&ShellAppClientId&") {
+        $isDataTouched = $true;
+        $rawData = $rawData -replace "&ShellAppClientId&", $ShellClientId;
+        Write-Host "Replaced Shell App Client Id in file: $($_.FullName)";
+    }
+
+    Write-Host "Looking for Token: 'B2CTenantName'";
+    if($rawData -match "&B2CTenantName&") {        
+        $isDataTouched = $true;
+        $rawData = $rawData -replace "&B2CTenantName&", $LoginName;
+        Write-Host "Replaced Tenant Name in file: $($_.FullName)";
+    }   
+
+    if($isDataTouched) {
+        Write-Host "Is data touched, replacing data in file"
+         $rawData | Set-Content -Path $_;
+    }
+    Write-Host "END word match on file: $($_.FullName)"
+}
