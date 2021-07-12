@@ -99,29 +99,67 @@ exports[`Testing the App component App snapshot render test 1`] = `
                 <div
                   className="ms-StackItem css-121"
                 >
+                  Array [
+                    "",
+                    Array [
+                      <button
+                        className="ms-Button ms-Button--default root-125"
+                        data-is-focusable={true}
+                        onClick={[Function]}
+                        onKeyDown={[Function]}
+                        onKeyPress={[Function]}
+                        onKeyUp={[Function]}
+                        onMouseDown={[Function]}
+                        onMouseUp={[Function]}
+                        type="button"
+                      >
+                        <span
+                          className="ms-Button-flexContainer flexContainer-126"
+                          data-automationid="splitbuttonprimary"
+                        >
+                          <span
+                            className="ms-Button-textContainer textContainer-127"
+                          >
+                            <span
+                              className="ms-Button-label label-129"
+                              id="id__8"
+                              key="id__8"
+                            >
+                              Signup/Login
+                            </span>
+                          </span>
+                        </span>
+                      </button>,
+                      "",
+                    ],
+                  ]
+                </div>
+                <div
+                  className="ms-StackItem css-121"
+                >
                   <div
-                    className="ms-Stack css-125"
+                    className="ms-Stack css-133"
                   >
                     Dark Theme
                     <div
-                      className="ms-Toggle is-enabled root-126"
+                      className="ms-Toggle is-enabled root-134"
                     >
                       <div
-                        className="ms-Toggle-innerContainer container-128"
+                        className="ms-Toggle-innerContainer container-136"
                       >
                         <button
                           aria-checked={false}
                           aria-label="Dark Theme"
-                          className="ms-Toggle-background pill-129"
+                          className="ms-Toggle-background pill-137"
                           data-is-focusable={true}
-                          id="Toggle2"
+                          id="Toggle11"
                           onChange={[Function]}
                           onClick={[Function]}
                           role="switch"
                           type="button"
                         >
                           <span
-                            className="ms-Toggle-thumb thumb-130"
+                            className="ms-Toggle-thumb thumb-138"
                           />
                         </button>
                       </div>
@@ -135,7 +173,7 @@ exports[`Testing the App component App snapshot render test 1`] = `
       </div>
     </div>
     <div
-      className="ms-StackItem css-132"
+      className="ms-StackItem css-140"
     >
       <main
         key=".0"
@@ -148,10 +186,10 @@ exports[`Testing the App component App snapshot render test 1`] = `
         }
       >
         <div
-          className="ms-ScrollablePane root-133"
+          className="ms-ScrollablePane root-141"
         >
           <div
-            className="stickyAbove-135"
+            className="stickyAbove-143"
             style={
               Object {
                 "height": 0,
@@ -162,11 +200,11 @@ exports[`Testing the App component App snapshot render test 1`] = `
             }
           />
           <div
-            className="ms-ScrollablePane--contentContainer contentContainer-134"
+            className="ms-ScrollablePane--contentContainer contentContainer-142"
             data-is-scrollable={true}
           />
           <div
-            className="stickyBelow-136"
+            className="stickyBelow-144"
             style={
               Object {
                 "bottom": "0px",
@@ -177,7 +215,7 @@ exports[`Testing the App component App snapshot render test 1`] = `
             }
           >
             <div
-              className="stickyBelowItems-137"
+              className="stickyBelowItems-145"
             />
           </div>
         </div>
@@ -202,40 +240,40 @@ exports[`Testing the App component App snapshot render test 1`] = `
             className="ms-Stack css-122"
           >
             <div
-              className="ms-StackItem css-138"
+              className="ms-StackItem css-146"
             >
               RSS Feeds | Sitemap | Privacy | Legal | Contact Us :: Copyright 2020-2021 Sopheon. All Rights Reserved
             </div>
             <div
-              className="ms-StackItem css-139"
+              className="ms-StackItem css-147"
             >
               <span
                 key=".0"
               >
                 <i
                   aria-hidden="true"
-                  className="root-141"
+                  className="root-149"
                   data-icon-name="LikeSolid"
                 >
                   
                 </i>
                 <i
                   aria-hidden="true"
-                  className="root-143"
+                  className="root-151"
                   data-icon-name="CommentSolid"
                 >
                   
                 </i>
                 <i
                   aria-hidden="true"
-                  className="root-145"
+                  className="root-153"
                   data-icon-name="LinkedInLogo"
                 >
                   
                 </i>
                 <i
                   aria-hidden="true"
-                  className="root-147"
+                  className="root-155"
                   data-icon-name="TeamsLogo"
                 >
                   
