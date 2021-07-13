@@ -10,10 +10,9 @@ import ConnectedThemeProvider from './themes/components/connectedThemeProvider/C
 
 const msalConfig: Configuration = {
   auth: {
-    clientId: '8bdfb9a7-913a-48a8-9fe0-5b2877fb844d', // TODO application (clientId) of app registration
-    authority: 'https://StratusB2CDev.b2clogin.com/StratusB2CDev.onmicrosoft.com/B2C_1A_SIGNUP_SIGNIN', // TODO authority with B2C tenant Id
-    knownAuthorities: ['StratusB2CDev.b2clogin.com'], // TODO
-    redirectUri: 'https://localhost:3000/', // TODO location.origin?
+    clientId: '&ShellAppClientId&', // TODO application (clientId) of app registration
+    authority: 'https://&B2CTenantName&.b2clogin.com/&B2CTenantName&.onmicrosoft.com/B2C_1A_SIGNUP_SIGNIN', // TODO authority with B2C tenant Id
+    knownAuthorities: ['&B2CTenantName&.b2clogin.com'], // TODO
   },
 };
 
