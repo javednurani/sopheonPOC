@@ -6,7 +6,6 @@ import { useIntl } from 'react-intl';
 const SignupLoginButton: FunctionComponent = () => {
   const { formatMessage } = useIntl();
   const { instance, accounts } = useMsal();
-
   const menuProps: IContextualMenuProps = {
     items: [
       {
