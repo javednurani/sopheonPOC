@@ -1,14 +1,21 @@
 import { Configuration, PublicClientApplication } from '@azure/msal-browser';
 import { MsalProvider } from '@azure/msal-react';
 import { messages } from '@sopheon/shared-ui';
+import { screen, waitFor } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import React, { ReactElement } from 'react';
+import { IntlProvider } from 'react-intl';
 
 import { RootState } from '../store';
-import { getInitState, languageRender } from '../testUtils';
+import { getInitState, languageRender, render } from '../testUtils';
 import SignupLoginButton from './SignupLoginButton';
 
 expect.extend(toHaveNoViolations);
+
+afterEach(() => {
+  // cleanup on exiting
+  jest.clearAllMocks();
+});
 
 describe('Test SignupLoginButton component', () => {
   test('Unauthenticated signup button renders correctly', async () => {
@@ -26,42 +33,32 @@ describe('Test SignupLoginButton component', () => {
     expect(signup).toBeInTheDocument();
     expect(axeResults).toHaveNoViolations();
   });
-  test.skip('Unauthenticated signup button onClick event', async () => {
+  test('Unauthenticated signup button onClick event', async () => {
     // Arrange
     const msalConfig: Configuration = {
       auth: {
-        clientId: '8bdfb9a7-913a-48a8-9fe0-5b2877fb844d', // TODO application (clientId) of app registration
+        clientId: '8bdfb9a7-913a-48a8-9fe0-5b2877fb844d',
       },
     };
-
     const pca = new PublicClientApplication(msalConfig);
-    // Not sure why, but wrapping with MsalProvider causes debug to only contain a div
-    const sut: ReactElement = (
-      <MsalProvider instance={pca}>
-        <SignupLoginButton />
-      </MsalProvider>
-    );
-    // const sut: ReactElement = <SignupLoginButton />;
-    const initialState: RootState = getInitState({});
-    const mockUseMsal = {
-      instance: {
-        loginRedirect: jest.fn(),
-      },
-      accounts: [],
-    };
-    jest.mock('@azure/msal-react', () => ({
-      ...(jest.requireActual('@azure/msal-react') as {}),
-      useMsal: jest.fn().mockImplementation(() => mockUseMsal),
-    }));
+    const loginRedirectSpy = jest.spyOn(pca, 'loginRedirect').mockImplementation(request => {
+      expect(request).toBe(undefined);
+
+      return Promise.resolve();
+    });
 
     // Act
-    const { debug, getByRole } = languageRender(sut, initialState);
-    console.log(debug());
-    const button: HTMLElement = getByRole('button');
+    render(
+      <MsalProvider instance={pca}>
+        <IntlProvider locale="en" messages={messages.en}>
+          <SignupLoginButton />
+        </IntlProvider>
+      </MsalProvider>
+    );
+    const button: HTMLElement = await screen.findByText(messages.en['auth.signuplogin']);
     button.click();
-
     // Assert
-    expect(mockUseMsal.instance.loginRedirect).toBeCalled();
+    await waitFor(() => expect(loginRedirectSpy).toHaveBeenCalledTimes(1));
   });
   test.skip('Authenticated button renders correctly', () => {
     // Mock msal, expect to render with user's name displayed as button text
