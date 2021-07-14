@@ -14,7 +14,10 @@ const NewUserLanding: FunctionComponent = () => {
   const { instance } = useMsal();
   useEffect(() => {
     document.body.style.margin = '0 0';
-
+    // TODO: tokenize / isDev redirectUris
+    // TODO, stack style (center spinner on page?)
+    // TODO, resource spinner label
+    // TODO, spinner style white
     instance
       .handleRedirectPromise()
       .then(tokenResponse => {
