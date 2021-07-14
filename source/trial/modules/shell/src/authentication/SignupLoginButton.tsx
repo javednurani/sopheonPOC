@@ -1,65 +1,11 @@
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
 import { DefaultButton, IContextualMenuProps } from '@fluentui/react';
-import React, { FunctionComponent, useEffect } from 'react';
+import React, { FunctionComponent } from 'react';
 import { useIntl } from 'react-intl';
 
 const SignupLoginButton: FunctionComponent = () => {
   const { formatMessage } = useIntl();
   const { instance, accounts } = useMsal();
-
-  // !!!!!!
-  // Use this section with Implicit Grant Flow settings on the app registration
-  // !!!!!!
-
-  useEffect(() => {
-    if (window.location.hash.startsWith('#id_token')) {
-      instance
-        .handleRedirectPromise()
-        .then(tokenResponse => {
-          if (!tokenResponse) {
-            const accountList = instance.getAllAccounts();
-            if (accountList.length === 0) {
-              // No user signed in
-              // instance.loginRedirect();
-              instance.acquireTokenRedirect({ scopes: ['openid', 'offline_access'] });
-            }
-          } else {
-            // Do something with the tokenResponse
-          }
-        })
-        .catch(err => {
-          // Handle error
-          console.error(err);
-        });
-    }
-  }, []);
-
-  // !!!!!!
-  // Use this section with Authorization Code Flow settings on the app registration
-  // !!!!!!
-
-  // useEffect(() => {
-  //   if (window.location.search.startsWith('?code')) {
-  //     instance
-  //       .handleRedirectPromise()
-  //       .then(tokenResponse => {
-  //         if (!tokenResponse) {
-  //           const accountList = instance.getAllAccounts();
-  //           if (accountList.length === 0) {
-  //             // No user signed in
-  //             // instance.loginRedirect();
-  //             instance.acquireTokenRedirect({ scopes: ['openid', 'offline_access'] });
-  //           }
-  //         } else {
-  //           // Do something with the tokenResponse
-  //         }
-  //       })
-  //       .catch(err => {
-  //         // Handle error
-  //         console.error(err);
-  //       });
-  //   }
-  // }, []);
 
   const menuProps: IContextualMenuProps = {
     items: [
@@ -72,8 +18,6 @@ const SignupLoginButton: FunctionComponent = () => {
         key: 'signout',
         text: formatMessage({ id: 'auth.signout' }),
         iconProps: { iconName: 'SignOut' },
-        //@ts-ignore
-        onClick: () => instance.logout(),
       },
     ],
   };
