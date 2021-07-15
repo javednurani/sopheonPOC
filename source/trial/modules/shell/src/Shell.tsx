@@ -11,19 +11,13 @@ import ConnectedThemeProvider from './themes/components/connectedThemeProvider/C
 
 const isDev = process.env.NODE_ENV === 'development';
 
-const authorityUrl: string = isDev
-  ? `https://${azureSettings.AD_B2C_TenantName_Dev}.b2clogin.com/${azureSettings.AD_B2C_TenantName_Dev}.onmicrosoft.com/B2C_1A_SIGNUP_SIGNIN`
-  : `https://${azureSettings.AD_B2C_TenantName}.b2clogin.com/${azureSettings.AD_B2C_TenantName}.onmicrosoft.com/B2C_1A_SIGNUP_SIGNIN`;
-
-const knownAuthoritiesArray: string[] = isDev
-  ? [`${azureSettings.AD_B2C_TenantName_Dev}.b2clogin.com`]
-  : [`${azureSettings.AD_B2C_TenantName}.b2clogin.com`];
+const adB2cTenantName: string = isDev ? azureSettings.AD_B2C_TenantName_Dev : azureSettings.AD_B2C_TenantName;
 
 const msalConfig: Configuration = {
   auth: {
     clientId: isDev ? azureSettings.AD_B2C_ClientId_Dev : azureSettings.AD_B2C_ClientId,
-    authority: authorityUrl,
-    knownAuthorities: knownAuthoritiesArray,
+    authority: `https://${adB2cTenantName}.b2clogin.com/${adB2cTenantName}.onmicrosoft.com/B2C_1A_SIGNUP_SIGNIN`,
+    knownAuthorities: [`${adB2cTenantName}.b2clogin.com`],
   },
 };
 
