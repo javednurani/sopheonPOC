@@ -3,9 +3,6 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-trigger:
-- master
-
 name: $(SourceBranchName)-$(Date:yyyyMMdd).$(rev:rrr)
 
 pool: Default
@@ -15,15 +12,16 @@ steps:
   displayName: 'dotnet restore'
   inputs:
     command: restore
+    projects: '$(System.DefaultWorkingDirectory)\source\SpecFlow\**\*.csproj'
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
-    script: 'dotnet-project-licenses -i ''.\'' --allowed-license-types ''.\AllowedLicenses.json'' --output --outfile ''$(Build.ArtifactStagingDirectory)\licenses.txt'''
+    script: 'dotnet-project-licenses -i ''$(System.DefaultWorkingDirectory)\source\SpecFlow\CloudSpecFlowFramework.sln'' --allowed-license-types ''$(System.DefaultWorkingDirectory)\source\SpecFlow\AllowedLicenses.json'' --output --outfile ''$(Build.ArtifactStagingDirectory)\licenses.txt'''
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet build'
   inputs:
-    arguments: '-o $(Build.ArtifactStagingDirectory)'
+    projects: '$(System.DefaultWorkingDirectory)\source\SpecFlow\CloudSpecFlowFramework.sln'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
