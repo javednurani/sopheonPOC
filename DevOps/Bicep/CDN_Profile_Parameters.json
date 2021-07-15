@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "profiles_cdn_name": {
-            "value": "&CDNProfileName&"
+            "value": "Stratus-Neptune"
         },
         "profile_endpoint_name": {
-            "value": "&CDNProfileEndpointName&"
+            "value": "Stratus-Neptune"
         },
         "profile_endpoint_origin": {
-            "value": "&CDNProfileEndpointOrigin&"
+            "value": ""
         }
     }
 }

@@ -1,8 +1,8 @@
 @description('The name of the Storage Account')
-param storageAccounts_name string = '&StorageAccountName&'
+param storageAccounts_name string = 'stratuswebsiteneptune'
 
 @description('The name of the Key Vault')
-param keyVault_name string = '&KeyVaultName&'
+param keyVault_name string = 'Stratus-Neptune'
 
 @description('The location of where to deploy the resource')
 param location string = resourceGroup().location
@@ -24,4 +24,5 @@ module KeyVault 'Key_Vault.bicep' = {
     keyVault_name: keyVault_name
   }
 }
+
 
