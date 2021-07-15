@@ -1,11 +1,11 @@
 @description('The name of the CDN Profile')
-param profiles_cdn_name string = 'Stratus-Neptune'
+param profiles_cdn_name string = '&CDNProfileName&'
 
 @description('The name of the CDN Endpoint')
-param profile_endpoint_name string = 'Stratus-Neptune'
+param profile_endpoint_name string = '&CDNProfileEndpointName&'
 
 @description('The Storage Account Endpoint Origin')
-param profile_endpoint_origin string = ''
+param profile_endpoint_origin string = '&CDNProfileEndpointOrigin&'
 
 resource CDN_Profile 'Microsoft.Cdn/profiles@2020-09-01' = {
   name: profiles_cdn_name
@@ -157,4 +157,3 @@ resource CDN_Profile_Endpoint 'Microsoft.Cdn/profiles/endpoints@2020-09-01' = {
     }
   }
 }
-

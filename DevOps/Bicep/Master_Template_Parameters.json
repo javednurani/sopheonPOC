@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "storageAccounts_name": {
-            "value":"stratuswebsiteneptune"            
+            "value":"&StorageAccountName&"            
         },
         "keyVault_name": {
-            "value": "Stratus-Neptune"
+            "value": "&KeyVaultName&"
         }       
     }
 }
