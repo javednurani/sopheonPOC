@@ -50,3 +50,4 @@ $CDNProfileEndpointOriginValue = $StorageAccountStaticWebsiteUrl -replace 'https
 Write-Host "Set! Static Website Url: $($CDNProfileEndpointOriginValue)";
 
 #endregion
+
