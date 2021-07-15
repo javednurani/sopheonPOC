@@ -1,4 +1,4 @@
-import { Configuration, PublicClientApplication } from '@azure/msal-browser';
+import { AccountInfo, Configuration, PublicClientApplication } from '@azure/msal-browser';
 import { MsalProvider } from '@azure/msal-react';
 import { messages } from '@sopheon/shared-ui';
 import { screen, waitFor } from '@testing-library/react';
@@ -7,7 +7,7 @@ import React, { ReactElement } from 'react';
 import { IntlProvider } from 'react-intl';
 
 import { RootState } from '../store';
-import { getInitState, languageRender, render } from '../testUtils';
+import { getInitState, languageRender, randomString, render } from '../testUtils';
 import SignupLoginButton from './SignupLoginButton';
 
 expect.extend(toHaveNoViolations);
@@ -17,8 +17,8 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
-describe('Test SignupLoginButton component', () => {
-  test('Unauthenticated signup button renders correctly', async () => {
+describe('Test Unauthenticated SignupLoginButton component', () => {
+  test('button renders correctly and a11y compliant', async () => {
     // Arrange
     const sut: ReactElement = <SignupLoginButton />;
     const initialState: RootState = getInitState({});
@@ -33,7 +33,7 @@ describe('Test SignupLoginButton component', () => {
     expect(signup).toBeInTheDocument();
     expect(axeResults).toHaveNoViolations();
   });
-  test('Unauthenticated signup button onClick event', async () => {
+  test('button onClick event fires loginRedirect', async () => {
     // Arrange
     const msalConfig: Configuration = {
       auth: {
@@ -60,13 +60,47 @@ describe('Test SignupLoginButton component', () => {
     // Assert
     await waitFor(() => expect(loginRedirectSpy).toHaveBeenCalledTimes(1));
   });
-  test.skip('Authenticated button renders correctly', () => {
-    // Mock msal, expect to render with user's name displayed as button text
-    // verify no axe errors
-    // click the button to expand the split options, verify no axe issues here either
-  });
-  test.skip('Authenticated button onClick events', () => {
-    // Mock msal, expect to render with user's name displayed as button text
-    // At this point the menu options do nothing, eventually will need to test logout and more
+});
+describe('Test Authenticated SignupLoginButton component', () => {
+  test('button renders correctly and a11y compliant', async () => {
+    // Arrange
+    const msalConfig: Configuration = {
+      auth: {
+        clientId: '8bdfb9a7-913a-48a8-9fe0-5b2877fb844d',
+      },
+    };
+
+    const testAccount: AccountInfo = {
+      homeAccountId: randomString(),
+      localAccountId: randomString(),
+      environment: 'login.windows.net',
+      tenantId: randomString(),
+      username: 'test@test.com',
+      name: randomString(), // This value will appear on button
+    };
+
+    const pca = new PublicClientApplication(msalConfig);
+    const handleRedirectSpy = jest.spyOn(pca, 'handleRedirectPromise');
+    const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
+    getAllAccountsSpy.mockImplementation(() => [testAccount]);
+
+    // Act
+    const { container } = render(
+      <MsalProvider instance={pca}>
+        <IntlProvider locale="en" messages={messages.en}>
+          <p>This text will always display.</p>
+          <SignupLoginButton />
+        </IntlProvider>
+      </MsalProvider>
+    );
+    const axeResults = await axe(container);
+    const userName: string = testAccount.name ? testAccount.name : '';
+    const button: HTMLElement = await screen.findByText(userName);
+
+    // Assert
+    await waitFor(() => expect(handleRedirectSpy).toHaveBeenCalledTimes(1));
+    expect(screen.queryByText('This text will always display.')).toBeInTheDocument();
+    expect(button).toBeInTheDocument();
+    expect(axeResults).toHaveNoViolations();
   });
 });
