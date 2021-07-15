@@ -12,18 +12,16 @@ steps:
   displayName: 'dotnet restore'
   inputs:
     command: restore
-    arguments: '.\source\SpecFlow\CloudSpecFlowFramework.sln'
-    workingDirectory: 'source\SpecFlow'
+    workingDirectory: '$(System.DefaultWorkingDirectory)\source\SpecFlow\'
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
-    script: 'dotnet-project-licenses -i ''.\source\SpecFlow\CloudSpecFlowFramework.sln'' --allowed-license-types ''source\SpecFlow\AllowedLicenses.json'' --output --outfile ''$(Build.ArtifactStagingDirectory)\licenses.txt'''
+    script: 'dotnet-project-licenses -i ''$(System.DefaultWorkingDirectory)\source\SpecFlow\CloudSpecFlowFramework.sln'' --allowed-license-types ''source\SpecFlow\AllowedLicenses.json'' --output --outfile ''$(Build.ArtifactStagingDirectory)\licenses.txt'''
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet build'
   inputs:
-    arguments: '\source\SpecFlow\CloudSpecFlowFramework.sln -o $(Build.ArtifactStagingDirectory)'
-    workingDirectory: 'source\SpecFlow'
+    arguments: '$(System.DefaultWorkingDirectory)\source\SpecFlow\CloudSpecFlowFramework.sln -o $(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
