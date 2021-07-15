@@ -1,13 +1,13 @@
 import { useMsal } from '@azure/msal-react';
-import { Spinner, SpinnerSize, Stack } from '@fluentui/react';
-import React, { FunctionComponent, useEffect } from 'react';
+import { ISpinnerStyles, IStackStyles, Spinner, SpinnerSize, Stack } from '@fluentui/react';
+import React, { CSSProperties, FunctionComponent, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
 import azureSettings from '../azureSettings';
 import AzureBlueBackground from '../images/azure-blue-background.png';
 
-const sectionStyle = {
-  width: '100%',
+const sectionStyle: CSSProperties = {
+  width: '100vw',
   height: '100vh',
   backgroundImage: `url(${AzureBlueBackground})`,
 };
@@ -24,14 +24,11 @@ const NewUserLanding: FunctionComponent = () => {
       .handleRedirectPromise()
       .then(tokenResponse => {
         if (!tokenResponse) {
-          const accountList = instance.getAllAccounts();
-          if (accountList.length === 0) {
-            instance.loginRedirect({
-              scopes: ['openid', 'offline_access'],
-              redirectUri: redirectUri,
-              redirectStartPage: redirectUri,
-            });
-          }
+          instance.loginRedirect({
+            scopes: ['openid', 'offline_access'],
+            redirectUri: redirectUri,
+            redirectStartPage: redirectUri,
+          });
         }
       })
       .catch(err => {
@@ -42,12 +39,12 @@ const NewUserLanding: FunctionComponent = () => {
       });
   }, []);
 
-  const stackStyles = {
+  const stackStyles: IStackStyles = {
     root: {
       height: '100vh',
     },
   };
-  const spinnerStyles = {
+  const spinnerStyles: ISpinnerStyles = {
     label: {
       color: 'white',
       fontSize: '18px',
