@@ -5,6 +5,7 @@ export const messages: Record<string, Record<string, string>> = {
     'auth.myprofile': 'My Profile',
     'auth.signout': 'Sign Out',
     'auth.signuplogin': 'Signup/Login',
+    'newuserlanding.enteringflow': 'Entering Sign Up / Sign In Flow...',
     'header.welcome': 'Page Title',
     'header.useDarkTheme': 'Dark Theme',
     'footer.copyright': 'RSS Feeds | Sitemap | Privacy | Legal | Contact Us :: Copyright 2020-2021 Sopheon. All Rights Reserved',
