@@ -12,6 +12,7 @@ steps:
   displayName: 'dotnet restore'
   inputs:
     command: restore
+    arguments: '.\source\SpecFlow'
     workingDirectory: 'source\SpecFlow'
 - task: PowerShell@2
   inputs:
@@ -21,7 +22,7 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: 'dotnet build'
   inputs:
-    arguments: '-o $(Build.ArtifactStagingDirectory)'
+    arguments: '.\source\SpecFlow -o $(Build.ArtifactStagingDirectory)'
     workingDirectory: 'source\SpecFlow'
 
 - task: PublishBuildArtifacts@1
