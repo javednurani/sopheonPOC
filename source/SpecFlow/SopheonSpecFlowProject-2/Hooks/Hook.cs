@@ -105,7 +105,7 @@ namespace SpecFlowProject2.Hooks
         {
 
             //Initialize Extent report before test starts
-            var htmlReporter = new ExtentHtmlReporter(@"C:\Users\Ben Mese\source\repos\CloudSpecFlowFramework\SpecFlowProject1\ExtentReport.html");
+            var htmlReporter = new ExtentHtmlReporter($@"{AppDomain.CurrentDomain.BaseDirectory}\TestResults\");
             htmlReporter.Config.Theme = AventStack.ExtentReports.Reporter.Configuration.Theme.Dark;
 
             //Attach report to reporter

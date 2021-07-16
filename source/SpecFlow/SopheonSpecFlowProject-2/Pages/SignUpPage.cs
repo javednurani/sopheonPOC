@@ -6,10 +6,11 @@ using System.Text;
 
 namespace SopheonSpecFlowProject2.Pages
 {
-    class SignUpPage
+    public class SignUpPage : PageBase
     {
 
-        public static string url = "https://stratusqa.b2clogin.com/StratusQA.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1A_SIGNUP_SIGNIN&client_id=b279a355-b4cc-444d-be98-610cc1f0a7b0&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login";
+	    //public string url = $"{B2CLoginUrl}/oauth2/v2.0/authorize?p=B2C_1A_SIGNUP_SIGNIN&client_id=b279a355-b4cc-444d-be98-610cc1f0a7b0&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login";
+
         IWebDriver driver;
         IWebElement nameBox => driver.FindElement(By.XPath("//input[@id='signInName']"));
         IWebElement signUpNowButton => driver.FindElement(By.Id("createAccount"));
@@ -39,7 +40,7 @@ namespace SopheonSpecFlowProject2.Pages
             driver = Hook.driver;
         }
 
-        public void NavigateSignUpPagePage() => driver.Navigate().GoToUrl(url);
+        public void NavigateSignUpPagePage() => driver.Navigate().GoToUrl($"{B2CLoginUrl}/oauth2/v2.0/authorize?p=B2C_1A_SIGNUP_SIGNIN&client_id={B2CClientId}&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login");
 
     }
 }
