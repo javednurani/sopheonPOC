@@ -22,6 +22,8 @@ steps:
   displayName: 'dotnet build'
   inputs:
     projects: '$(System.DefaultWorkingDirectory)\source\SpecFlow\CloudSpecFlowFramework.sln'
+    arguments: '-o $(Build.ArtifactStagingDirectory)'
+
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
