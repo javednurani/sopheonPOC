@@ -15,16 +15,29 @@ const sectionStyle: CSSProperties = {
 const isDev = process.env.NODE_ENV === 'development';
 const redirectUri: string = isDev ? azureSettings.SPA_Root_URL_Dev : azureSettings.SPA_Root_URL;
 
-const LoginSignupLanding: FunctionComponent = () => {
+// eslint-disable-next-line no-shadow
+export enum LandingMode {
+  Login,
+  Signup,
+}
+
+export interface LoginSignupLandingProps {
+  landingMode: LandingMode;
+}
+
+const LoginSignupLanding: FunctionComponent<LoginSignupLandingProps> = ({ landingMode }: LoginSignupLandingProps) => {
   const { instance } = useMsal();
   const { formatMessage } = useIntl();
   useEffect(() => {
     document.body.style.margin = '0 0';
+
+    const authorityUrl: string = landingMode === LandingMode.Login ? `` : ``; // TODO 1174
     instance
       .handleRedirectPromise()
       .then(tokenResponse => {
         if (!tokenResponse) {
           instance.loginRedirect({
+            authority: authorityUrl,
             scopes: ['openid', 'offline_access'],
             redirectUri: redirectUri,
             redirectStartPage: redirectUri,
