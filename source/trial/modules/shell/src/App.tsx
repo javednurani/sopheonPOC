@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import { appModules } from './appModuleSettings';
-import NewUserLanding from './authentication/NewUserLanding';
+import LoginSignupLanding from './authentication/LoginSignupLanding';
 import { DynamicModule } from './DynamicModule';
 import Footer from './footer/Footer';
 import Header from './header/Header';
@@ -50,8 +50,11 @@ const App: FunctionComponent<AppProps> = ({ changeTheme }: AppProps) => {
     <div className="App" style={appStyle}>
       <BrowserRouter>
         <Switch>
-          <Route exact path="/newuserlanding">
-            <NewUserLanding />
+          <Route exact path="/login">
+            <LoginSignupLanding />
+          </Route>
+          <Route exact path="/signup">
+            <LoginSignupLanding />
           </Route>
           <Route path="/">
             <Stack

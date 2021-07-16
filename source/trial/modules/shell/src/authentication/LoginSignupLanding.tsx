@@ -15,7 +15,7 @@ const sectionStyle: CSSProperties = {
 const isDev = process.env.NODE_ENV === 'development';
 const redirectUri: string = isDev ? azureSettings.SPA_Root_URL_Dev : azureSettings.SPA_Root_URL;
 
-const NewUserLanding: FunctionComponent = () => {
+const LoginSignupLanding: FunctionComponent = () => {
   const { instance } = useMsal();
   const { formatMessage } = useIntl();
   useEffect(() => {
@@ -61,7 +61,7 @@ const NewUserLanding: FunctionComponent = () => {
         <Stack.Item grow>
           <Stack horizontal verticalAlign="center" styles={stackStyles}>
             <Stack.Item grow>
-              <Spinner styles={spinnerStyles} size={SpinnerSize.large} label={formatMessage({ id: 'newuserlanding.enteringflow' })} />
+              <Spinner styles={spinnerStyles} size={SpinnerSize.large} label={formatMessage({ id: 'loginsignuplanding.enteringflow' })} />
             </Stack.Item>
           </Stack>
         </Stack.Item>
@@ -70,4 +70,4 @@ const NewUserLanding: FunctionComponent = () => {
   );
 };
 
-export default NewUserLanding;
+export default LoginSignupLanding;
