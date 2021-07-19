@@ -71,13 +71,15 @@ const LoginSignupLanding: FunctionComponent<LoginSignupLandingProps> = ({ landin
       width: '40px',
     },
   };
+  const spinnerMessage: string = landingMode === LandingMode.Login ? 'loginsignuplanding.loginspinner' : 'loginsignuplanding.signupspinner';
+
   return (
     <section style={sectionStyle}>
       <Stack>
         <Stack.Item grow>
           <Stack horizontal verticalAlign="center" styles={stackStyles}>
             <Stack.Item grow>
-              <Spinner styles={spinnerStyles} size={SpinnerSize.large} label={formatMessage({ id: 'loginsignuplanding.enteringflow' })} />
+              <Spinner styles={spinnerStyles} size={SpinnerSize.large} label={formatMessage({ id: spinnerMessage })} />
             </Stack.Item>
           </Stack>
         </Stack.Item>
