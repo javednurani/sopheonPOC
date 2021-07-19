@@ -8,7 +8,7 @@ import { IntlProvider } from 'react-intl';
 
 import { RootState } from '../store';
 import { getInitState, languageRender, randomString, render } from '../testUtils';
-import SignupLoginButton from './SignupLoginButton';
+import LoginSignupButton from './LoginSignupButton';
 
 expect.extend(toHaveNoViolations);
 
@@ -17,10 +17,10 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
-describe('Test Unauthenticated SignupLoginButton component', () => {
+describe('Test Unauthenticated LoginSignupButton component', () => {
   test('button renders correctly and a11y compliant', async () => {
     // Arrange
-    const sut: ReactElement = <SignupLoginButton />;
+    const sut: ReactElement = <LoginSignupButton />;
     const initialState: RootState = getInitState({});
 
     // Act
@@ -51,7 +51,7 @@ describe('Test Unauthenticated SignupLoginButton component', () => {
     render(
       <MsalProvider instance={pca}>
         <IntlProvider locale="en" messages={messages.en}>
-          <SignupLoginButton />
+          <LoginSignupButton />
         </IntlProvider>
       </MsalProvider>
     );
@@ -61,7 +61,7 @@ describe('Test Unauthenticated SignupLoginButton component', () => {
     await waitFor(() => expect(loginRedirectSpy).toHaveBeenCalledTimes(1));
   });
 });
-describe('Test Authenticated SignupLoginButton component', () => {
+describe('Test Authenticated LoginSignupButton component', () => {
   test('button renders correctly and a11y compliant', async () => {
     // Arrange
     const msalConfig: Configuration = {
@@ -89,7 +89,7 @@ describe('Test Authenticated SignupLoginButton component', () => {
       <MsalProvider instance={pca}>
         <IntlProvider locale="en" messages={messages.en}>
           <p>This text will always display.</p>
-          <SignupLoginButton />
+          <LoginSignupButton />
         </IntlProvider>
       </MsalProvider>
     );

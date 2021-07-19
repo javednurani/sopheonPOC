@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl';
 import { useLocation } from 'react-router-dom';
 
 import { AppModule, appModules } from '../appModuleSettings';
-import SignupLoginButton from '../authentication/SignupLoginButton';
+import LoginSignupButton from '../authentication/LoginSignupButton';
 import { ReactComponent as LucyLogo } from '../images/Lucy_logo.svg';
 import Navbar from '../navbar/Navbar';
 import ThemeSelector from '../themes/components/themeSelector/ThemeSelector';
@@ -73,7 +73,7 @@ const Header: FunctionComponent<HeaderProps> = ({ changeTheme }: HeaderProps) =>
           <Stack.Item>
             <Stack tokens={stackTokensWithGap}>
               <Stack.Item>
-                <SignupLoginButton />
+                <LoginSignupButton />
               </Stack.Item>
               <Stack.Item>
                 <ThemeSelector changeTheme={changeTheme} />
