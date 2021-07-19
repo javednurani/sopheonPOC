@@ -3,7 +3,7 @@ import { DefaultButton, IContextualMenuProps } from '@fluentui/react';
 import React, { FunctionComponent } from 'react';
 import { useIntl } from 'react-intl';
 
-const SignupLoginButton: FunctionComponent = () => {
+const LoginSignupButton: FunctionComponent = () => {
   const { formatMessage } = useIntl();
   const { instance, accounts } = useMsal();
   const menuProps: IContextualMenuProps = {
@@ -33,4 +33,4 @@ const SignupLoginButton: FunctionComponent = () => {
   );
 };
 
-export default SignupLoginButton;
+export default LoginSignupButton;
