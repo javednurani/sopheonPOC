@@ -31,7 +31,10 @@ const LoginSignupLanding: FunctionComponent<LoginSignupLandingProps> = ({ landin
   useEffect(() => {
     document.body.style.margin = '0 0';
 
-    const authorityUrl: string = landingMode === LandingMode.Login ? `` : ``; // TODO 1174
+    const adB2cTenantName: string = isDev ? azureSettings.AD_B2C_TenantName_Dev : azureSettings.AD_B2C_TenantName;
+    const adB2cPolicyName: string = landingMode === LandingMode.Login ? azureSettings.AD_B2C_SignUpSignIn_Policy : azureSettings.AD_B2C_SignUp_Policy;
+
+    const authorityUrl = `https://${adB2cTenantName}.b2clogin.com/${adB2cTenantName}.onmicrosoft.com/${adB2cPolicyName}`;
     instance
       .handleRedirectPromise()
       .then(tokenResponse => {
