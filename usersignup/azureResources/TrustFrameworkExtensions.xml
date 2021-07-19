@@ -245,6 +245,42 @@
   </ClaimsProviders>
 
   <UserJourneys>
+    <UserJourney Id="SignUp-withConsent">
+      <OrchestrationSteps>
+    
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+    
+        <!-- This step reads any user attributes that we may not have received when in the token. -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+    
+         <!-- execute consent step if the users consented version does not met the current version,
+              otherwhise this step is skipped -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>extension_TermsOfUseConsentedVersion</Value>
+              <Value>v0.1</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAssertedConsentExchange" TechnicalProfileReferenceId="SelfAsserted-Consent" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+    
+        <OrchestrationStep Order="4" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+    
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
     <UserJourney Id="SignUpOrSignIn-withConsent">
       <OrchestrationSteps>
     
