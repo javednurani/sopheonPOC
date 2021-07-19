@@ -15,16 +15,32 @@ const sectionStyle: CSSProperties = {
 const isDev = process.env.NODE_ENV === 'development';
 const redirectUri: string = isDev ? azureSettings.SPA_Root_URL_Dev : azureSettings.SPA_Root_URL;
 
-const NewUserLanding: FunctionComponent = () => {
+// eslint-disable-next-line no-shadow
+export enum LandingMode {
+  Login,
+  Signup,
+}
+
+export interface LoginSignupLandingProps {
+  landingMode: LandingMode;
+}
+
+const LoginSignupLanding: FunctionComponent<LoginSignupLandingProps> = ({ landingMode }: LoginSignupLandingProps) => {
   const { instance } = useMsal();
   const { formatMessage } = useIntl();
   useEffect(() => {
     document.body.style.margin = '0 0';
+
+    const adB2cTenantName: string = isDev ? azureSettings.AD_B2C_TenantName_Dev : azureSettings.AD_B2C_TenantName;
+    const adB2cPolicyName: string = landingMode === LandingMode.Login ? azureSettings.AD_B2C_SignUpSignIn_Policy : azureSettings.AD_B2C_SignUp_Policy;
+
+    const authorityUrl = `https://${adB2cTenantName}.b2clogin.com/${adB2cTenantName}.onmicrosoft.com/${adB2cPolicyName}`;
     instance
       .handleRedirectPromise()
       .then(tokenResponse => {
         if (!tokenResponse) {
           instance.loginRedirect({
+            authority: authorityUrl,
             scopes: ['openid', 'offline_access'],
             redirectUri: redirectUri,
             redirectStartPage: redirectUri,
@@ -61,7 +77,7 @@ const NewUserLanding: FunctionComponent = () => {
         <Stack.Item grow>
           <Stack horizontal verticalAlign="center" styles={stackStyles}>
             <Stack.Item grow>
-              <Spinner styles={spinnerStyles} size={SpinnerSize.large} label={formatMessage({ id: 'newuserlanding.enteringflow' })} />
+              <Spinner styles={spinnerStyles} size={SpinnerSize.large} label={formatMessage({ id: 'loginsignuplanding.enteringflow' })} />
             </Stack.Item>
           </Stack>
         </Stack.Item>
@@ -70,4 +86,4 @@ const NewUserLanding: FunctionComponent = () => {
   );
 };
 
-export default NewUserLanding;
+export default LoginSignupLanding;

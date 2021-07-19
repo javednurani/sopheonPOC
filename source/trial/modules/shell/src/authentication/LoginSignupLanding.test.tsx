@@ -4,26 +4,26 @@ import { axe, toHaveNoViolations } from 'jest-axe';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
-import NewUserLanding from './NewUserLanding';
+import LoginSignupLanding, { LandingMode } from './LoginSignupLanding';
 
 expect.extend(toHaveNoViolations);
 
-describe('Test NewUserLanding component', () => {
-  it('NewUserLanding component renders and is a11y compliant', async () => {
+describe('Test LoginSignupLanding component', () => {
+  it('LoginSignupLanding component renders and is a11y compliant', async () => {
     const wrapper = mount(
       <IntlProvider locale="en" messages={messages.en}>
-        <NewUserLanding />
+        <LoginSignupLanding landingMode={LandingMode.Login} />
       </IntlProvider>
     );
     const axeResults = await axe(wrapper.getDOMNode(), {
       rules: {
-        // NewUserLanding page is correctly rendered in <body> region at runtime.
+        // LoginSignupLanding page is correctly rendered in <body> region at runtime.
         region: { enabled: false },
       },
     });
 
     expect(wrapper.find('.ms-Spinner')).toHaveLength(1);
-    expect(wrapper.find('.ms-Spinner-label').text()).toEqual(messages.en['newuserlanding.enteringflow']);
+    expect(wrapper.find('.ms-Spinner-label').text()).toEqual(messages.en['loginsignuplanding.enteringflow']);
     expect(axeResults).toHaveNoViolations();
   });
 });

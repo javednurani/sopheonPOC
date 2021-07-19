@@ -15,8 +15,8 @@ const adB2cTenantName: string = isDev ? azureSettings.AD_B2C_TenantName_Dev : az
 
 const msalConfig: Configuration = {
   auth: {
+    authority: `https://${adB2cTenantName}.b2clogin.com/${adB2cTenantName}.onmicrosoft.com/${azureSettings.AD_B2C_SignUpSignIn_Policy}`,
     clientId: isDev ? azureSettings.AD_B2C_ClientId_Dev : azureSettings.AD_B2C_ClientId,
-    authority: `https://${adB2cTenantName}.b2clogin.com/${adB2cTenantName}.onmicrosoft.com/B2C_1A_SIGNUP_SIGNIN`,
     knownAuthorities: [`${adB2cTenantName}.b2clogin.com`],
   },
 };
