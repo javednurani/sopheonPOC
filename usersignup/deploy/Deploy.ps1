@@ -11,17 +11,17 @@ Write-Host "...Replacing Configuration Variables on website/index.html...";
 # Replace variables on index.html 
 powershell.exe -file "$($Scripts)/Replace_Config_Variables.ps1" -PathToFile "$($B2CAssets)/website/index.html";
 
-Write-Host "...Replacing Environment Tokens on termsOfUse/consentPage.html...";
+Write-Host "...Replacing Environment Tokens on azureResources/termsOfUse/consentPage.html...";
 # Replace tokens on constentPage.html 
-powershell.exe -file "$($Scripts)/Replace_Environment_Tokens.ps1" -PathToFile "$($B2CAssets)/termsOfUse/consentPage.html";
+powershell.exe -file "$($Scripts)/Replace_Environment_Tokens.ps1" -PathToFile "$($B2CAssets)/azureResources/termsOfUse/consentPage.html";
 
-Write-Host "...Replacing Environment Tokens on Login/LoginCustom.html...";
+Write-Host "...Replacing Environment Tokens on azureResources/Login/LoginCustom.html...";
 # Replace tokens on LoginCustom.html 
-powershell.exe -file "$($Scripts)/Replace_Environment_Tokens.ps1" -PathToFile "$($B2CAssets)/Login/LoginCustom.html";
+powershell.exe -file "$($Scripts)/Replace_Environment_Tokens.ps1" -PathToFile "$($B2CAssets)/azureResources/Login/LoginCustom.html";
 
-Write-Host "...Replacing Environment Tokens on TrustFrameworkBase.xml...";
+Write-Host "...Replacing Environment Tokens on azureResources/TrustFrameworkBase.xml...";
 # Replace tokens on TrustFrameworkBase.xml 
-powershell.exe -file "$($Scripts)/Replace_Environment_Tokens.ps1" -PathToFile "$($B2CAssets)/TrustFrameworkBase.xml";
+powershell.exe -file "$($Scripts)/Replace_Environment_Tokens.ps1" -PathToFile "$($B2CAssets)/azureResources/TrustFrameworkBase.xml";
 
 
 # Upload the TrustFramework .xml files from the GraphApi...
