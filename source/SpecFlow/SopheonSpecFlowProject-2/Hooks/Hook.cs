@@ -24,6 +24,8 @@ namespace SpecFlowProject2.Hooks
         private ExtentTest _currentScenarioName;
         public static IWebDriver driver;
         private readonly IObjectContainer _objectContainer;
+        private static ExtentTest featureName;
+        private static AventStack.ExtentReports.ExtentReports extent;
 
         public Hook(IObjectContainer objectContainer)
         {
@@ -36,10 +38,6 @@ namespace SpecFlowProject2.Hooks
             _featureContext = featureContext;
             _scenarioContext = scenarioContext;
         }
-
-        private static ExtentTest featureName;
-        private static AventStack.ExtentReports.ExtentReports extent;
-
 
         [AfterStep]
         public void AfterEachStep()
@@ -105,7 +103,7 @@ namespace SpecFlowProject2.Hooks
         {
 
             //Initialize Extent report before test starts
-            var htmlReporter = new ExtentHtmlReporter(@"C:\Users\Ben Mese\source\repos\CloudSpecFlowFramework\SpecFlowProject1\ExtentReport.html");
+            var htmlReporter = new ExtentHtmlReporter($@"{AppDomain.CurrentDomain.BaseDirectory}\TestResults\");
             htmlReporter.Config.Theme = AventStack.ExtentReports.Reporter.Configuration.Theme.Dark;
 
             //Attach report to reporter
@@ -121,14 +119,12 @@ namespace SpecFlowProject2.Hooks
             extent.Flush();
         }
 
-
         [BeforeFeature]
         public static void InitializeReport(FeatureContext featureContext)
         {
             //Get feature Name
             featureName = extent.CreateTest<Feature>(featureContext.FeatureInfo.Title);
         }
-
 
         [BeforeScenario]
         public void Initialize()
@@ -139,18 +135,12 @@ namespace SpecFlowProject2.Hooks
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(30);
         }
 
-
-
         [AfterScenario]
         public void TestStop()
         {
             driver.Quit();
 
         }
-
-
     }
-
-
 }
 

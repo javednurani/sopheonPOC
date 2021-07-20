@@ -6,7 +6,7 @@ using System.Text;
 
 namespace SopheonSpecFlowProject2.Pages
 {
-    class AccountSetUpPage
+    public class AccountSetUpPage : PageBase
     {
         public static string url = "https://stratusqa.b2clogin.com/StratusQA.onmicrosoft.com/B2C_1A_signup_signin/api/CombinedSigninAndSignup/unified?local=signup&csrf_token=cjhxL3ZzbzJPdnZCdUtiNlVONjc1WWova0pacEx3R2ZtazVOekpYbGg0ay9saU9SVWNDUFhadnl6L0tSZFdJbldNWjZkVTBMY3ROaHNHNUJoZVlvRVE9PTsyMDIxLTA3LTA5VDE5OjIyOjMyLjM3MTIzNzJaOzRSRjdzYnFXbEhyVndndmZha24yZEE9PTt7Ik9yY2hlc3RyYXRpb25TdGVwIjoxfQ==&tx=StateProperties=eyJUSUQiOiJlMDEyZDcxMS04MjFjLTQ1OTgtYjZlOC03Njc0ZmUzNTkzYzkifQ&p=B2C_1A_signup_signin";
         IWebDriver driver;
@@ -20,8 +20,6 @@ namespace SopheonSpecFlowProject2.Pages
         IWebElement mobilePhoneBox => driver.FindElement(By.Id("mobile"));
         IWebElement errorMessageForPhone => driver.FindElement(By.XPath("//body/div[3]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[5]/ul[1]/li[5]/div[1]/div[1]"));
         IWebElement checkBox => driver.FindElement(By.Id("extension_newsletter_subscribed"));
-
-
 
         public bool isPassWordMassegeExist() => passWordMessage.Displayed;
         public bool isErrorMessageForPhoneMessageExist() => errorMessageForPhone.Displayed;
@@ -41,10 +39,6 @@ namespace SopheonSpecFlowProject2.Pages
         {
             get { return errorMessage.Text; }
         }
-
-     
-
-
 
         public AccountSetUpPage()
         {
