@@ -112,7 +112,6 @@ resource CDN_Profile_Endpoint 'Microsoft.Cdn/profiles/endpoints@2020-09-01' = {
                 matchValues: [
                   '0'
                 ]
-                transforms: []
                 '@odata.type': '#Microsoft.Azure.Cdn.Models.DeliveryRuleUrlFileExtensionMatchConditionParameters'
               }
             }
