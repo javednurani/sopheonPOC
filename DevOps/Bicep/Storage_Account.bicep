@@ -3,7 +3,7 @@ param storageAccounts_name string = '&StorageAccountName&'
 
 param location string
 
-resource StaticWebpage_StorageAccount 'Microsoft.Storage/storageAccounts@2020-08-01-preview' = {
+resource StaticWebpage_StorageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   name: storageAccounts_name
   location: location
   sku: {
@@ -36,7 +36,7 @@ resource StaticWebpage_StorageAccount 'Microsoft.Storage/storageAccounts@2020-08
   }
 }
 
-resource StaticWebpage_Storage_BlobService 'Microsoft.Storage/storageAccounts/blobServices@2020-08-01-preview' = {
+resource StaticWebpage_Storage_BlobService 'Microsoft.Storage/storageAccounts/blobServices@2021-04-01' = {
   name: '${StaticWebpage_StorageAccount.name}/default'
   properties: {
     deleteRetentionPolicy: {
@@ -45,19 +45,19 @@ resource StaticWebpage_Storage_BlobService 'Microsoft.Storage/storageAccounts/bl
   }
 }
 
-resource StaticWebpage_Storage_FileService 'Microsoft.Storage/storageAccounts/fileServices@2020-08-01-preview' = {
+resource StaticWebpage_Storage_FileService 'Microsoft.Storage/storageAccounts/fileServices@2021-04-01' = {
   name: '${StaticWebpage_StorageAccount.name}/default'
 }
 
-resource StaticWebpage_Storage_QueueService 'Microsoft.Storage/storageAccounts/queueServices@2020-08-01-preview' = {
+resource StaticWebpage_Storage_QueueService 'Microsoft.Storage/storageAccounts/queueServices@2021-04-01' = {
   name: '${StaticWebpage_StorageAccount.name}/default'
 }
 
-resource StaticWebpage_Storage_TableService 'Microsoft.Storage/storageAccounts/tableServices@2020-08-01-preview' = {
+resource StaticWebpage_Storage_TableService 'Microsoft.Storage/storageAccounts/tableServices@2021-04-01' = {
   name: '${StaticWebpage_StorageAccount.name}/default'
 }
 
-resource StaticWebpage_Storage_BlobService_WebContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2020-08-01-preview' = {
+resource StaticWebpage_Storage_BlobService_WebContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-04-01' = {
   name: '${StaticWebpage_Storage_BlobService.name}/$web'
   properties: {
     defaultEncryptionScope: '$account-encryption-key'
