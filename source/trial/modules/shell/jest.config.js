@@ -6,7 +6,8 @@ module.exports = {
   moduleFileExtensions: ['ts', 'tsx', 'js', 'scss'],
   moduleNameMapper: {
     //'^.+\\.(css|less|scss|sass)$': 'identity-obj-proxy',
-    '\\.(jpg|jpeg|png|gif|svg)$': 'identity-obj-proxy',
+    '\\.(jpg|jpeg|gif|svg)$': 'identity-obj-proxy',
+    '\\.png$': '<rootDir>/src/__mocks__/fileMock.js',
   },
   modulePathIgnorePatterns: ['<rootDir>/.tmp/', '<rootDir>/build/', '<rootDir>/dist/'],
   setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect', '<rootDir>/build/test-setup.ts'],

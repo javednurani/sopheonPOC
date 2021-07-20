@@ -12,6 +12,8 @@ import { RootState } from './store';
 import { initialState as initialThemeState } from './themes/themeReducer/themeReducer';
 import { LanguageShape } from './types';
 
+export const randomString = (): string => Math.random().toString().substring(2, 15);
+
 const rootReducer = combineReducers({ shell });
 const initialLanguageState: LanguageShape = {
   direction: constants.LOCALE_DIR_LTR,

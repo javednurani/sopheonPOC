@@ -5,6 +5,7 @@ import { useIntl } from 'react-intl';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import { appModules } from './appModuleSettings';
+import NewUserLanding from './authentication/NewUserLanding';
 import { DynamicModule } from './DynamicModule';
 import Footer from './footer/Footer';
 import Header from './header/Header';
@@ -48,43 +49,50 @@ const App: FunctionComponent<AppProps> = ({ changeTheme }: AppProps) => {
   return (
     <div className="App" style={appStyle}>
       <BrowserRouter>
-        <Stack
-          grow
-          styles={{
-            root: {
-              height: '100%',
-              width: '100%',
-            },
-          }}
-        >
-          <Stack.Item shrink>
-            <Header changeTheme={changeTheme} />
-          </Stack.Item>
-          <Stack.Item
-            verticalFill
-            styles={{
-              root: {
-                height: '100%',
-                overflow: 'auto',
-              },
-            }}
-          >
-            <main style={pageContainerStyle} role="main">
-              <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-                <Switch>
-                  {appModules.map(appModule => (
-                    <Route exact key={appModule.scope} path={appModule.routeName}>
-                      <DynamicModule module={appModule} loadingMessage={loadingMessage} shellApi={shellApi} />
-                    </Route>
-                  ))}
-                </Switch>
-              </ScrollablePane>
-            </main>
-          </Stack.Item>
-          <Stack.Item>
-            <Footer />
-          </Stack.Item>
-        </Stack>
+        <Switch>
+          <Route exact path="/newuserlanding">
+            <NewUserLanding />
+          </Route>
+          <Route path="/">
+            <Stack
+              grow
+              styles={{
+                root: {
+                  height: '100%',
+                  width: '100%',
+                },
+              }}
+            >
+              <Stack.Item shrink>
+                <Header changeTheme={changeTheme} />
+              </Stack.Item>
+              <Stack.Item
+                verticalFill
+                styles={{
+                  root: {
+                    height: '100%',
+                    overflow: 'auto',
+                  },
+                }}
+              >
+                <main style={pageContainerStyle} role="main">
+                  <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
+                    <Switch>
+                      {appModules.map(appModule => (
+                        <Route exact key={appModule.scope} path={appModule.routeName}>
+                          <DynamicModule module={appModule} loadingMessage={loadingMessage} shellApi={shellApi} />
+                        </Route>
+                      ))}
+                    </Switch>
+                  </ScrollablePane>
+                </main>
+              </Stack.Item>
+              <Stack.Item>
+                <Footer />
+              </Stack.Item>
+            </Stack>
+          </Route>
+        </Switch>
       </BrowserRouter>
     </div>
   );
