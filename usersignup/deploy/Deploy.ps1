@@ -17,8 +17,9 @@ Write-Host "...Replacing Environment Tokens on azureResources/termsOfUse/consent
 powershell.exe -file "$($Scripts)/Replace_Environment_Tokens.ps1" -PathToFile "$($B2CAssets)/azureResources/termsOfUse/consentPage.html";
 
 Write-Host "...Replacing Environment Tokens on azureResources/Login/LoginCustom.html...";
+$ErrorActionPreference = 'Stop'
 # Replace tokens on LoginCustom.html 
-powershell.exe -file "$($Scripts)/Replace_Environment_Tokens.ps1" -PathToFile "$($B2CAssets)/Login/LoginCustom.html";
+powershell.exe -file "$($Scripts)/Replace_Environment_Tokens.ps1" -PathToFile "$($B2CAssets)/Login/LoginCustom.html" 2>&1;
 
 Write-Host "...Replacing Environment Tokens on azureResources/TrustFrameworkBase.xml...";
 # Replace tokens on TrustFrameworkBase.xml 
