@@ -5,7 +5,8 @@ import { useIntl } from 'react-intl';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import { appModules } from './appModuleSettings';
-import LoginSignupLanding, { LandingMode } from './authentication/LoginSignupLanding';
+import Login from './authentication/Login';
+import Signup from './authentication/Signup';
 import { DynamicModule } from './DynamicModule';
 import Footer from './footer/Footer';
 import Header from './header/Header';
@@ -51,10 +52,10 @@ const App: FunctionComponent<AppProps> = ({ changeTheme }: AppProps) => {
       <BrowserRouter>
         <Switch>
           <Route exact path="/login">
-            <LoginSignupLanding landingMode={LandingMode.Login} />
+            <Login />
           </Route>
           <Route exact path="/signup">
-            <LoginSignupLanding landingMode={LandingMode.Signup} />
+            <Signup />
           </Route>
           <Route path="/">
             <Stack
