@@ -5,7 +5,7 @@ Param(
     [Parameter(Mandatory = $true)][string]$Environment
 )
 
-Write-Host "Colleting KeyVault secrets for B2C Asset deployments";
+Write-Host "Collecting KeyVault secrets for B2C Asset deployments";
 $ClientID = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CClientId" --query value).Replace('"', '');
 $ClientSecret = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CClientSecret" --query value).Replace('"', '');
 $TenantId = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CTenantName" --query value).Replace('"', '');
