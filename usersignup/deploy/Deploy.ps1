@@ -19,7 +19,7 @@ powershell.exe -file "$($Scripts)/Replace_Environment_Tokens.ps1" -PathToFile "$
 Write-Host "...Replacing Environment Tokens on azureResources/Login/LoginCustom.html...";
 $ErrorActionPreference = 'Stop'
 # Replace tokens on LoginCustom.html 
-powershell.exe -file "$($Scripts)/Replace_Environment_Tokens.ps1" -PathToFile "$($B2CAssets)/Login/LoginCustom.html" 2>&1;
+$output = powershell.exe -file "$($Scripts)/Replace_Environment_Tokens.ps1" -PathToFile "$($B2CAssets)/Login/LoginCustom.html" 2>&1;
 
 Write-Host "...Replacing Environment Tokens on azureResources/TrustFrameworkBase.xml...";
 # Replace tokens on TrustFrameworkBase.xml 
@@ -30,5 +30,7 @@ powershell.exe -file "$($Scripts)/Replace_Environment_Tokens.ps1" -PathToFile "$
 
 
 } catch {
+    Write-Host "ERROR: ";
+    Write-Host $output;
     exit 1;
 }
