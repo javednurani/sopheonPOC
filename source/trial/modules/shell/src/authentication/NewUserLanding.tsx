@@ -15,24 +15,18 @@ const sectionStyle: CSSProperties = {
 const isDev = process.env.NODE_ENV === 'development';
 const redirectUri: string = isDev ? azureSettings.SPA_Root_URL_Dev : azureSettings.SPA_Root_URL;
 
-// eslint-disable-next-line no-shadow
-export enum LandingMode {
-  Login,
-  Signup,
+export interface NewUserLandingProps {
+  adB2cPolicyName: string;
+  spinnerMessageResourceKey: string;
 }
 
-export interface LoginSignupLandingProps {
-  landingMode: LandingMode;
-}
-
-const LoginSignupLanding: FunctionComponent<LoginSignupLandingProps> = ({ landingMode }: LoginSignupLandingProps) => {
+const NewUserLanding: FunctionComponent<NewUserLandingProps> = ({ adB2cPolicyName, spinnerMessageResourceKey }: NewUserLandingProps) => {
   const { instance } = useMsal();
   const { formatMessage } = useIntl();
   useEffect(() => {
     document.body.style.margin = '0 0';
 
     const adB2cTenantName: string = isDev ? azureSettings.AD_B2C_TenantName_Dev : azureSettings.AD_B2C_TenantName;
-    const adB2cPolicyName: string = landingMode === LandingMode.Login ? azureSettings.AD_B2C_SignUpSignIn_Policy : azureSettings.AD_B2C_SignUp_Policy;
 
     const authorityUrl = `https://${adB2cTenantName}.b2clogin.com/${adB2cTenantName}.onmicrosoft.com/${adB2cPolicyName}`;
     instance
@@ -71,7 +65,6 @@ const LoginSignupLanding: FunctionComponent<LoginSignupLandingProps> = ({ landin
       width: '40px',
     },
   };
-  const spinnerMessage: string = landingMode === LandingMode.Login ? 'loginsignuplanding.loginspinner' : 'loginsignuplanding.signupspinner';
 
   return (
     <section style={sectionStyle}>
@@ -79,7 +72,7 @@ const LoginSignupLanding: FunctionComponent<LoginSignupLandingProps> = ({ landin
         <Stack.Item grow>
           <Stack horizontal verticalAlign="center" styles={stackStyles}>
             <Stack.Item grow>
-              <Spinner styles={spinnerStyles} size={SpinnerSize.large} label={formatMessage({ id: spinnerMessage })} />
+              <Spinner styles={spinnerStyles} size={SpinnerSize.large} label={formatMessage({ id: spinnerMessageResourceKey })} />
             </Stack.Item>
           </Stack>
         </Stack.Item>
@@ -88,4 +81,4 @@ const LoginSignupLanding: FunctionComponent<LoginSignupLandingProps> = ({ landin
   );
 };
 
-export default LoginSignupLanding;
+export default NewUserLanding;
