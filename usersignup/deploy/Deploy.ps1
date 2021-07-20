@@ -1,6 +1,7 @@
 $ZipUtil = "C:\Program Files\7-Zip\7z.exe";
 $B2CAssets = "$($env:System_DefaultWorkingDirectory)/B2CAssets";
 $Scripts = "$($env:System_DefaultWorkingDirectory)/Scripts";
+$Environment = $env:Environment;
 
 try {
 # Zip/Archive Scripts 
@@ -27,6 +28,21 @@ powershell.exe -file "$($Scripts)/Replace_Environment_Tokens.ps1" -PathToFile "$
 
 
 # Upload the TrustFramework .xml files from the GraphApi...
+
+Write-Host "...Uploading Policy: B2C_1A_TrustFrameworkBase via GraphAPI...";
+powershell.exe -file "$($Scripts)/Deploy_B2C_Assets.ps1" -PolicyId B2C_1A_TrustFrameworkBase -PathToFile "$($B2CAssets)/azureResources/TrustFrameworkBase.xml" -Environment $Environment 2>&1;
+
+# Write-Host "...Uploading Policy: B2C_1A_TrustFrameworkExtensions via GraphAPI...";
+# powershell.exe -file "$($Scripts)/Deploy_B2C_Assets.ps1" -PolicyId B2C_1A_TrustFrameworkExtensions -PathToFile "$($B2CAssets)/azureResources/TrustFrameworkExtensions.xml" -Environment $Environment 2>&1;
+
+
+# Write-Host "...Uploading Policy: B2C_1A_signup via GraphAPI...";
+# powershell.exe -file "$($Scripts)/Deploy_B2C_Assets.ps1" -PolicyId B2C_1A_signup -PathToFile "$($B2CAssets)/azureResources/SignUp.xml" -Environment $Environment 2>&1;
+
+# Write-Host "...Uploading Policy: B2C_1A_signup_signin via GraphAPI...";
+# powershell.exe -file "$($Scripts)/Deploy_B2C_Assets.ps1" -PolicyId B2C_1A_signup_signin -PathToFile "$($B2CAssets)/azureResources/SignUpOrSignin.xml" -Environment $Environment 2>&1;
+
+
 
 
 } catch {
