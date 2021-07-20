@@ -5,22 +5,22 @@ import React from 'react';
 import { IntlProvider } from 'react-intl';
 
 import { randomString } from '../testUtils';
-import NewUserLanding from './NewUserLanding';
+import AuthLanding from './AuthLanding';
 
 expect.extend(toHaveNoViolations);
 
-describe('Test NewUserLanding component', () => {
-  it('NewUserLanding component with Login Props renders and is a11y compliant', async () => {
+describe('Test AuthLanding component', () => {
+  it('AuthLanding component with Login Props renders and is a11y compliant', async () => {
     const policyName = randomString();
-    const resourceKey = 'newuserlanding.loginspinner';
+    const resourceKey = 'authlanding.loginspinner';
     const wrapper = mount(
       <IntlProvider locale="en" messages={messages.en}>
-        <NewUserLanding adB2cPolicyName={policyName} spinnerMessageResourceKey={resourceKey} />
+        <AuthLanding adB2cPolicyName={policyName} spinnerMessageResourceKey={resourceKey} />
       </IntlProvider>
     );
     const axeResults = await axe(wrapper.getDOMNode(), {
       rules: {
-        // NewUserLanding page is correctly rendered in <body> region at runtime.
+        // AuthLanding page is correctly rendered in <body> region at runtime.
         region: { enabled: false },
       },
     });
@@ -29,17 +29,17 @@ describe('Test NewUserLanding component', () => {
     expect(wrapper.find('.ms-Spinner-label').text()).toEqual(messages.en[resourceKey]);
     expect(axeResults).toHaveNoViolations();
   });
-  it('NewUserLanding component with Signup Props renders and is a11y compliant', async () => {
+  it('AuthLanding component with Signup Props renders and is a11y compliant', async () => {
     const policyName = randomString();
-    const resourceKey = 'newuserlanding.signupspinner';
+    const resourceKey = 'authlanding.signupspinner';
     const wrapper = mount(
       <IntlProvider locale="en" messages={messages.en}>
-        <NewUserLanding adB2cPolicyName={policyName} spinnerMessageResourceKey={resourceKey} />
+        <AuthLanding adB2cPolicyName={policyName} spinnerMessageResourceKey={resourceKey} />
       </IntlProvider>
     );
     const axeResults = await axe(wrapper.getDOMNode(), {
       rules: {
-        // NewUserLanding page is correctly rendered in <body> region at runtime.
+        // AuthLanding page is correctly rendered in <body> region at runtime.
         region: { enabled: false },
       },
     });

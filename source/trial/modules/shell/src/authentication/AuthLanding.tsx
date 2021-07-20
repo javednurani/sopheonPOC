@@ -15,12 +15,12 @@ const sectionStyle: CSSProperties = {
 const isDev = process.env.NODE_ENV === 'development';
 const redirectUri: string = isDev ? azureSettings.SPA_Root_URL_Dev : azureSettings.SPA_Root_URL;
 
-export interface NewUserLandingProps {
+export interface AuthLandingProps {
   adB2cPolicyName: string;
   spinnerMessageResourceKey: string;
 }
 
-const NewUserLanding: FunctionComponent<NewUserLandingProps> = ({ adB2cPolicyName, spinnerMessageResourceKey }: NewUserLandingProps) => {
+const AuthLanding: FunctionComponent<AuthLandingProps> = ({ adB2cPolicyName, spinnerMessageResourceKey }: AuthLandingProps) => {
   const { instance } = useMsal();
   const { formatMessage } = useIntl();
   useEffect(() => {
@@ -81,4 +81,4 @@ const NewUserLanding: FunctionComponent<NewUserLandingProps> = ({ adB2cPolicyNam
   );
 };
 
-export default NewUserLanding;
+export default AuthLanding;
