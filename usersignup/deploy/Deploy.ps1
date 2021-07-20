@@ -32,5 +32,7 @@ powershell.exe -file "$($Scripts)/Replace_Environment_Tokens.ps1" -PathToFile "$
 } catch {
     Write-Host "ERROR: ";
     Write-Host $output;
+    Write-Host $_;
+    Write-Host $_.exception;
     exit 1;
 }
