@@ -4,13 +4,13 @@ $Scripts = "$($env:System_DefaultWorkingDirectory)/Scripts";
 $Environment = $env:Environment;
 $StorageAccountName = "stratuswebsite$($Environment.ToLower())";
 
-try {
+try {    
+$ErrorActionPreference = 'Stop'
 # Zip/Archive Scripts 
 Write-Host "Zipping Artfacts for UserSignUp...";
 & $ZipUtil "x" "$($PSScriptRoot)/UserSignUpSignIn_*.zip" "-o$($B2CAssets)";
 & $ZipUtil "x" "$($env:System_DefaultWorkingDirectory)/_DevOpsScripts/DevOps/PowerShell_Scripts_*.zip" "-o$($Scripts)";
 
-$ErrorActionPreference = 'Stop'
 Write-Host "...Replacing Configuration Variables on website/index.html...";
 # Replace variables on index.html 
 powershell.exe -file "$($Scripts)/Replace_Config_Variables.ps1" -PathToFile "$($B2CAssets)/website/index.html" 2>&1;
