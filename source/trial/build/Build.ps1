@@ -11,7 +11,7 @@ Write-Host "Building package.json at Shell-Api location"
 npm run build
 
 Write-Host "License check in folder: Shell-Api location"
-node C:\Windows\ServiceProfiles\NetworkService\AppData\Roaming\npm\node_modules\license-checker\bin\license-checker --out $($env:Build_ArtifactStagingDirectory)\shell_api_licenses.csv --csv --failOn 'GPL'
+node C:\Windows\ServiceProfiles\NetworkService\AppData\Roaming\npm\node_modules\license-checker\bin\license-checker --start (Get-Location).Path --out $($env:Build_ArtifactStagingDirectory)\shell_api_licenses.csv --csv --failOn 'GPL'
 
 
 # Set location to packages shared-ui
@@ -23,7 +23,7 @@ Write-Host "Building package.json at shared-ui location"
 npm run build
 
 Write-Host "License check in folder: Shell-Api location"
-node C:\Windows\ServiceProfiles\NetworkService\AppData\Roaming\npm\node_modules\license-checker\bin\license-checker --out $($env:Build_ArtifactStagingDirectory)\sharedui_licenses.csv --csv --failOn 'GPL'
+node C:\Windows\ServiceProfiles\NetworkService\AppData\Roaming\npm\node_modules\license-checker\bin\license-checker --start (Get-Location).Path --out $($env:Build_ArtifactStagingDirectory)\sharedui_licenses.csv --csv --failOn 'GPL'
 
 
 # Set location to trial app
@@ -35,7 +35,7 @@ Write-Host "Building package.json at trial location"
 npm run build
 
 Write-Host "License check in folder: trial location"
-node C:\Windows\ServiceProfiles\NetworkService\AppData\Roaming\npm\node_modules\license-checker\bin\license-checker --out $($env:Build_ArtifactStagingDirectory)\sharedui_licenses.csv --csv --failOn 'GPL'
+node C:\Windows\ServiceProfiles\NetworkService\AppData\Roaming\npm\node_modules\license-checker\bin\license-checker --start (Get-Location).Path --out $($env:Build_ArtifactStagingDirectory)\sharedui_licenses.csv --csv --failOn 'GPL'
 
 
 
