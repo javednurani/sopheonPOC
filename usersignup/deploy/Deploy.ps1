@@ -2,6 +2,7 @@ $ZipUtil = "C:\Program Files\7-Zip\7z.exe";
 $B2CAssets = "$($env:System_DefaultWorkingDirectory)/B2CAssets";
 $Scripts = "$($env:System_DefaultWorkingDirectory)/Scripts";
 $Environment = $env:Environment;
+$StorageAccountName = "stratuswebsite$($Environment)";
 
 try {
 # Zip/Archive Scripts 
@@ -42,22 +43,22 @@ Write-Host "...Uploading Policy: B2C_1A_signup_signin via GraphAPI...";
 powershell.exe -file "$($Scripts)/Deploy_B2C_Assets.ps1" -PolicyId B2C_1A_signup_signin -PathToFile "$($B2CAssets)/azureResources/SignUpOrSignin.xml" -Environment $Environment 2>&1;
 
 Write-Host "Uploading Marketing Page to blob storage";
-$MarketingUploadResults = az storage blob upload --container-name '$web' --account-name $StorageAccountNameValue --file "$($B2CAssets)/website/index.html";
+$MarketingUploadResults = az storage blob upload --container-name '$web' --account-name $StorageAccountName --file "$($B2CAssets)/website/index.html";
 $MarketingUploadResults;
 Write-Host "Complete! Transfered files to Storage Account Blob: "'$web';
 
 Write-Host "Uploading Terms of Consent blob storage";
-$MarketingUploadResults = az storage blob upload-batch --container-name 'b2cassets' --account-name $StorageAccountNameValue --file "$($B2CAssets)/azureResources/termsOfUse/*";
+$MarketingUploadResults = az storage blob upload-batch --container-name 'b2cassets' --account-name $StorageAccountName --file "$($B2CAssets)/azureResources/termsOfUse/*";
 $MarketingUploadResults;
 Write-Host "Complete! Transfered files to Storage Account Blob: "'b2cassets';
 
 Write-Host "Uploading Terms of Service to blob storage";
-$MarketingUploadResults = az storage blob upload --container-name '$web' --name "TermsOfService" --account-name $StorageAccountNameValue --file "$($B2CAssets)/termsOfService/index.html";
+$MarketingUploadResults = az storage blob upload --container-name '$web' --name "TermsOfService" --account-name $StorageAccountName --file "$($B2CAssets)/termsOfService/index.html";
 $MarketingUploadResults;
 Write-Host "Complete! Transfered files to Storage Account Blob: "'$web/TermsOfService';
 
 Write-Host "Uploading LoginCustom to blob storage";
-$MarketingUploadResults = az storage blob upload --container-name 'b2cassets' --account-name $StorageAccountNameValue --file "$($B2CAssets)/azureResources/Login/LoginCustom.html";
+$MarketingUploadResults = az storage blob upload --container-name 'b2cassets' --account-name $StorageAccountName --file "$($B2CAssets)/azureResources/Login/LoginCustom.html";
 $MarketingUploadResults;
 Write-Host "Complete! Transfered files to Storage Account Blob: "'b2cassets';
 
