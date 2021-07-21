@@ -25,7 +25,7 @@ describe('Test Unauthenticated LoginSignupButton component', () => {
 
     // Act
     const { getByText, container, getAllByRole } = languageRender(sut, initialState);
-    const signup: HTMLElement = getByText(messages.en['auth.signuplogin']);
+    const signup: HTMLElement = getByText(messages.en['auth.loginbutton']);
     const axeResults = await axe(container);
 
     // Assert
@@ -55,7 +55,7 @@ describe('Test Unauthenticated LoginSignupButton component', () => {
         </IntlProvider>
       </MsalProvider>
     );
-    const button: HTMLElement = await screen.findByText(messages.en['auth.signuplogin']);
+    const button: HTMLElement = await screen.findByText(messages.en['auth.loginbutton']);
     button.click();
     // Assert
     await waitFor(() => expect(loginRedirectSpy).toHaveBeenCalledTimes(1));

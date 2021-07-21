@@ -27,7 +27,7 @@ const LoginSignupButton: FunctionComponent = () => {
         <DefaultButton text={accounts[0] ? accounts[0].name : formatMessage({ id: 'auth.myprofile' })} split menuProps={menuProps} />
       </AuthenticatedTemplate>
       <UnauthenticatedTemplate>
-        <DefaultButton text={formatMessage({ id: 'auth.signuplogin' })} onClick={() => instance.loginRedirect()} />
+        <DefaultButton text={formatMessage({ id: 'auth.loginbutton' })} onClick={() => instance.loginRedirect()} />
       </UnauthenticatedTemplate>
     </React.Fragment>
   );
