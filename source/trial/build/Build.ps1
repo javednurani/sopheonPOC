@@ -9,6 +9,8 @@ Write-Host "Location set for shared packages 'Shell-Api'";
 npm install
 
 
+Write-Host "Building package.json at Shell-Api location"
+npm run build
 
 
 # Zip/Archive Scripts 
