@@ -12,7 +12,7 @@ Write-Host "Building package.json at Shell-Api location"
 npm run build
 
 Write-Host "License check in folder: Shell-Api location"
-node license-checker --out "$($env:System_DefaultWorkingDirectory)/shell_api_licenses.csv" --csv --failOn 'GPL'
+license-checker --out "$($env:System_DefaultWorkingDirectory)/shell_api_licenses.csv" --csv --failOn 'GPL'
 
 
 # Set location to packages shared-ui
@@ -25,7 +25,7 @@ Write-Host "Building package.json at shared-ui location"
 npm run build
 
 Write-Host "License check in folder: Shell-Api location"
-node license-checker --out "$($env:System_DefaultWorkingDirectory)/shared_ui_licenses.csv" --csv --failOn 'GPL'
+license-checker --out "$($env:System_DefaultWorkingDirectory)/shared_ui_licenses.csv" --csv --failOn 'GPL'
 
 
 # Set location to trial app
@@ -38,7 +38,7 @@ Write-Host "Building package.json at trial location"
 npm run build
 
 Write-Host "License check in folder: trial location"
-node license-checker --out "$($env:System_DefaultWorkingDirectory)/shell_licenses.csv" --csv --failOn 'GPL'
+license-checker --out "$($env:System_DefaultWorkingDirectory)/shell_licenses.csv" --csv --failOn 'GPL'
 
 
 
