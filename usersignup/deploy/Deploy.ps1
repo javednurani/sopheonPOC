@@ -23,9 +23,9 @@ Write-Host "...Replacing Environment Tokens on azureResources/Login/LoginCustom.
 # Replace tokens on LoginCustom.html 
 powershell.exe -file "$($Scripts)/Replace_Environment_Tokens.ps1" -PathToFile "$($B2CAssets)/azureResources/Login/LoginCustom.html" 2>&1;
 
-Write-Host "...Replacing Environment Tokens on azureResources/TrustFrameworkBase.xml...";
-# Replace tokens on TrustFrameworkBase.xml 
-powershell.exe -file "$($Scripts)/Replace_Environment_Tokens.ps1" -PathToFile "$($B2CAssets)/azureResources/TrustFrameworkBase.xml" 2>&1;
+Write-Host "...Replacing Environment Tokens on azureResources/TrustFrameworkExtensions.xml...";
+# Replace tokens on TrustFrameworkExtensions.xml 
+powershell.exe -file "$($Scripts)/Replace_Environment_Tokens.ps1" -PathToFile "$($B2CAssets)/azureResources/TrustFrameworkExtensions.xml" 2>&1;
 
 
 # Upload the TrustFramework .xml files from the GraphApi...
