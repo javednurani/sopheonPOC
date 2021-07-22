@@ -34,3 +34,5 @@ Write-Host "Zipping Artfacts for Shell Trial...";
 & $ZipUtil "a" "-tzip" "$($env:Build_ArtifactStagingDirectory)/ShellTrial_$($env:Build_BuildId)" "$($env:System_DefaultWorkingDirectory)/source/trial/modules/shell/dist/*" "-xr!build" "-xr!deploy";
 
 Write-Host "Zipping Complete!";
+
+Write-Output "Build Script Complete"
