@@ -53,7 +53,7 @@ $MarketingUploadResults;
 Write-Host "Complete! Transfered files to Storage Account Blob: "'b2cassets';
 
 Write-Host "Uploading Terms of Service to blob storage";
-$MarketingUploadResults = az storage blob upload --container-name '$web' --name "TermsOfService" --account-name $StorageAccountName --file "$($B2CAssets)/termsOfService/index.html" --name index.html --auth-mode login;
+$MarketingUploadResults = az storage blob upload --container-name '$web' --name "TermsOfService" --account-name $StorageAccountName --file "$($B2CAssets)/termsOfService/index.html" --auth-mode login;
 $MarketingUploadResults;
 Write-Host "Complete! Transfered files to Storage Account Blob: "'$web/TermsOfService';
 
