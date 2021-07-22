@@ -423,7 +423,7 @@
             <!-- Commenting out "grant_type password" as a workaround to localize invalid username/password messages. See below references.-->
             <!-- https://docs.microsoft.com/en-us/answers/questions/178990/azure-b2c-custom-policies-error-message.html -->
             <!-- https://github.com/MicrosoftDocs/azure-docs/issues/70538 -->
-            <!-- <Item Key="grant_type">password</Item> -->
+            <Item Key="grant_type">password</Item>
 
             <!-- Policy Engine Clients -->
             <Item Key="UsePolicyInRedirectUri">false</Item>
