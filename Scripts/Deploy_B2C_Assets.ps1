@@ -36,6 +36,7 @@ try {
     $policycontent = $policycontent.Replace("^ExtensionsAppClientId^", $B2CExtensionsClientId);
 
     $response = Invoke-RestMethod -Uri $graphuri -Method Put -Body $policycontent -Headers $headers
+    $response;
 
     Write-Host "Policy" $PolicyId "uploaded successfully."
 }
