@@ -7,8 +7,8 @@ $StorageAccountName = "stratuswebsite$($Environment.ToLower())";
 try {    
 $ErrorActionPreference = 'Stop'
 # Zip/Archive Scripts 
-Write-Host "Zipping Artfacts for UserSignUp...";
-& $ZipUtil "x" "$($PSScriptRoot)/ShellApp_*.zip" "-o$($ShellApp)";
+Write-Host "Zipping Artfacts for ShellApp...";
+& $ZipUtil "x" "$($PSScriptRoot)/ShellTrial_*.zip" "-o$($ShellApp)";
 & $ZipUtil "x" "$($env:System_DefaultWorkingDirectory)/_DevOpsScripts/DevOps/PowerShell_Scripts_*.zip" "-o$($Scripts)";
 
 
