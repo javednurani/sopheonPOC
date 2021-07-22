@@ -21,7 +21,7 @@ $DeleteStorage = az storage blob delete-batch --account-name $StorageAccountName
 $DeleteStorage;
 
 Write-Host "Uploading Marketing Page to blob storage";
-$ShellAppUploadResults = az storage blob upload-batch --destination '$web' --destination-path 'WebApp/' --account-name $StorageAccountName --source "$($ShellApp)/*";
+$ShellAppUploadResults = az storage blob upload-batch --destination '$web' --destination-path 'WebApp/' --account-name $StorageAccountName --source "$($ShellApp)";
 $ShellAppUploadResults;
 Write-Host "Complete! Transfered files to Storage Account Blob: "'$web/WebApp';
 

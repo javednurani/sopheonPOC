@@ -48,7 +48,7 @@ $MarketingUploadResults;
 Write-Host "Complete! Transfered files to Storage Account Blob: "'$web';
 
 Write-Host "Uploading Terms of Consent blob storage";
-$MarketingUploadResults = az storage blob upload-batch --container-name 'b2cassets' --account-name $StorageAccountName --file "$($B2CAssets)/azureResources/termsOfUse/*";
+$MarketingUploadResults = az storage blob upload-batch --container-name 'b2cassets' --account-name $StorageAccountName --source "$($B2CAssets)/azureResources/termsOfUse";
 $MarketingUploadResults;
 Write-Host "Complete! Transfered files to Storage Account Blob: "'b2cassets';
 
