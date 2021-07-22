@@ -21,6 +21,18 @@
         <UserInputType>TextBox</UserInputType>
         <PredicateValidationReference Id="PhoneNumberValidation" />
       </ClaimType>
+      <ClaimType Id="extension_TermsOfUseConsentedDate">
+        <DisplayName>Terms of Use Consented Date</DisplayName>
+        <DataType>dateTime</DataType>
+      </ClaimType>
+      <ClaimType Id="extension_TermsOfUseConsentedVersion">
+        <DisplayName>Accept the Terms of Service to keep going</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>CheckboxMultiSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="I accept" Value="v1.0checkbox" SelectByDefault="true" />
+        </Restriction>
+      </ClaimType>
     </ClaimsSchema>
     <Predicates>
       <Predicate Id="PhoneNumberRegex" Method="MatchesRegex">
@@ -41,8 +53,16 @@
         </PredicateGroups>
       </PredicateValidation>
     </PredicateValidations>
+    <ClaimsTransformations>
+      <ClaimsTransformation Id="GetSystemDateTimeConsent" TransformationMethod="GetCurrentDateTime">
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedDate" TransformationClaimType="currentDateTime" />
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
     <ContentDefinitions>
       <ContentDefinition Id="api.signuporsignin">
+        <LoadUri>https://&StorageAccountName&.blob.core.windows.net/b2cassets/LoginCustom.html</LoadUri>
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.signuporsignin.en" />
         </LocalizedResourcesReferences>
@@ -53,6 +73,12 @@
         </LocalizedResourcesReferences>
       </ContentDefinition>
       <ContentDefinition Id="api.selfasserted.consent">
+        <LoadUri>https://&StorageAccountName&.blob.core.windows.net/b2cassets/consentPage.html</LoadUri>
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
+        <Metadata>
+          <Item Key="DisplayName">Consent</Item>
+        </Metadata>
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.consent.en" />
         </LocalizedResourcesReferences>
@@ -214,6 +240,13 @@
             <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="^ProxyIdentityFrameworkClientId^" />
             <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="^IdentityFrameworkClientId^" />
           </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="oid" />
+            <OutputClaim ClaimTypeReferenceId="tenantId" PartnerClaimType="tid" />
+            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
+            <OutputClaim ClaimTypeReferenceId="userPrincipalName" PartnerClaimType="upn" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="localAccountAuthentication" />
+          </OutputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
@@ -233,12 +266,66 @@
             <PersistedClaim ClaimTypeReferenceId="extension_newsletter" />
           </PersistedClaims>
         </TechnicalProfile>
+        <TechnicalProfile Id="AAD-UserReadUsingEmailAddress">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedDate" />
+            <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedVersion" />
+          </OutputClaims>
+        </TechnicalProfile>
         <!-- Read data after user authenticates with a local account. -->
         <TechnicalProfile Id="AAD-UserReadUsingObjectId">
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="mobile" />
             <OutputClaim ClaimTypeReferenceId="extension_newsletter" />
+            <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedDate" />
+            <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedVersion" />
           </OutputClaims>
+        </TechnicalProfile>
+        <TechnicalProfile Id="AAD-WriteUserConsentByObjectId-ThrowIfNotExists">
+          <Metadata>
+            <Item Key="Operation">Write</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="GetSystemDateTimeConsent" />
+          </InputClaimsTransformations>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+          </InputClaims>
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="objectId" />
+            <PersistedClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedDate" />
+            <PersistedClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedVersion" DefaultValue="v0.1" />
+          </PersistedClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <ClaimsProvider>
+      <DisplayName>Self Asserted</DisplayName>
+      <TechnicalProfiles>
+        <!-- Terms of Service -->
+        <TechnicalProfile Id="SelfAsserted-Consent">
+          <DisplayName>User Consent</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted.consent</Item>
+            <Item Key="setting.showCancelButton">false</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
+          </CryptographicKeys>
+          <InputClaims />
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedVersion" Required="true" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="GetSystemDateTimeConsent" />
+          </OutputClaimsTransformations>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="AAD-WriteUserConsentByObjectId-ThrowIfNotExists" />
+          </ValidationTechnicalProfiles>
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
