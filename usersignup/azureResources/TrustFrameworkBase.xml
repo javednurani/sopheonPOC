@@ -420,10 +420,11 @@
             <Item Key="response_types">id_token</Item>
             <Item Key="response_mode">query</Item>
             <Item Key="scope">email openid</Item>
+            <!-- Sopheon Cloud-998 -->
             <!-- Commenting out "grant_type password" as a workaround to localize invalid username/password messages. See below references.-->
             <!-- https://docs.microsoft.com/en-us/answers/questions/178990/azure-b2c-custom-policies-error-message.html -->
             <!-- https://github.com/MicrosoftDocs/azure-docs/issues/70538 -->
-            <Item Key="grant_type">password</Item>
+            <!-- <Item Key="grant_type">password</Item> -->
 
             <!-- Policy Engine Clients -->
             <Item Key="UsePolicyInRedirectUri">false</Item>
@@ -657,8 +658,10 @@
 
             <!-- Optional claims, to be collected from the user -->
             <OutputClaim ClaimTypeReferenceId="displayName" />
-            <OutputClaim ClaimTypeReferenceId="givenName" />
-            <OutputClaim ClaimTypeReferenceId="surName" />
+            <!-- Sopheon Cloud-998 -->
+            <!-- Removing givenName and surName from self-asserted - do not want to show User Input for these two fields -->
+            <!-- <OutputClaim ClaimTypeReferenceId="givenName" /> -->
+            <!-- <OutputClaim ClaimTypeReferenceId="surName" /> -->
           </OutputClaims>
           <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingLogonEmail" />
