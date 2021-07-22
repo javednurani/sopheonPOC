@@ -17,11 +17,11 @@ Write-Host "...Replacing Environment Tokens on azureResources/termsOfUse/consent
 powershell.exe -file "$($Scripts)/Replace_Environment_Tokens_ReactApp.ps1" 2>&1;
 
 Write-Output "Deleting existing web app files to reduce blob size"
-$DeleteStorage = az storage blob delete-batch --account-name $StorageAccountName --source '$web' --pattern 'WebApp/*';
+$DeleteStorage = az storage blob delete-batch --account-name $StorageAccountName --source '$web' --pattern 'WebApp/*' --auth-mode login;
 $DeleteStorage;
 
 Write-Host "Uploading Marketing Page to blob storage";
-$ShellAppUploadResults = az storage blob upload-batch --container-name '$web' --destination-path 'WebApp/' --account-name $StorageAccountName --file "$($ShellApp)/*";
+$ShellAppUploadResults = az storage blob upload-batch --destination '$web' --destination-path 'WebApp/' --account-name $StorageAccountName --source "$($ShellApp)/*";
 $ShellAppUploadResults;
 Write-Host "Complete! Transfered files to Storage Account Blob: "'$web/WebApp';
 
