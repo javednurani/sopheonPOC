@@ -29,7 +29,7 @@
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
       <ClaimType Id="extension_Company">
-        <DisplayName>Job Title</DisplayName>
+        <DisplayName>Company</DisplayName>
         <DataType>string</DataType>
         <UserHelpText />
         <UserInputType>TextBox</UserInputType>
