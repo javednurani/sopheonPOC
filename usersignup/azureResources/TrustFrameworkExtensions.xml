@@ -638,9 +638,9 @@
         <TechnicalProfile Id="SelfAsserted-ProfileUpdate">
           <OutputClaims>
             <!-- Optional profile claims -->
-            <PersistedClaim ClaimTypeReferenceId="jobTitle" />
-            <PersistedClaim ClaimTypeReferenceId="country" />
-            <PersistedClaim ClaimTypeReferenceId="extension_Company" />
+            <OutputClaim ClaimTypeReferenceId="jobTitle" />
+            <OutputClaim ClaimTypeReferenceId="country" />
+            <OutputClaim ClaimTypeReferenceId="extension_Company" />
           </OutputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
