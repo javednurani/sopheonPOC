@@ -336,6 +336,14 @@
           </PersistedClaims>
           <IncludeTechnicalProfile ReferenceId="AAD-Common" />
         </TechnicalProfile>
+        <TechnicalProfile Id="AAD-UserWriteProfileUsingObjectId">
+          <PersistedClaims>
+            <!-- Optional profile claims -->
+            <PersistedClaim ClaimTypeReferenceId="jobTitle" />
+            <PersistedClaim ClaimTypeReferenceId="country" />
+            <PersistedClaim ClaimTypeReferenceId="extension_Company" />
+          </PersistedClaims>
+        </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
     <ClaimsProvider>
@@ -362,6 +370,14 @@
           <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="AAD-WriteUserConsentByObjectId-ThrowIfNotExists" />
           </ValidationTechnicalProfiles>
+        </TechnicalProfile>
+        <TechnicalProfile Id="SelfAsserted-ProfileUpdate">
+          <OutputClaims>
+            <!-- Optional profile claims -->
+            <PersistedClaim ClaimTypeReferenceId="jobTitle" />
+            <PersistedClaim ClaimTypeReferenceId="country" />
+            <PersistedClaim ClaimTypeReferenceId="extension_Company" />
+          </OutputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
