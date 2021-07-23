@@ -14,7 +14,6 @@
         <PredicateValidationReference Id="PhoneNumberValidation" />
       </ClaimType>
       <ClaimType Id="country">
-        <DisplayName>Country</DisplayName>
         <DataType>string</DataType>
         <UserHelpText />
         <UserInputType>DropdownSingleSelect</UserInputType>
