@@ -54,6 +54,9 @@
           <Enumeration Text="I accept" Value="v1.0checkbox" SelectByDefault="true" />
         </Restriction>
       </ClaimType>
+      <ClaimType Id="extension_ProfileEditDate">
+        <DataType>dateTime</DataType>
+      </ClaimType>
     </ClaimsSchema>
     <Predicates>
       <Predicate Id="PhoneNumberRegex" Method="MatchesRegex">
@@ -78,6 +81,11 @@
       <ClaimsTransformation Id="GetSystemDateTimeConsent" TransformationMethod="GetCurrentDateTime">
         <OutputClaims>
           <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedDate" TransformationClaimType="currentDateTime" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="GetSystemDateTimeProfileEdit" TransformationMethod="GetCurrentDateTime">
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="extension_ProfileEditDate" TransformationClaimType="currentDateTime" />
         </OutputClaims>
       </ClaimsTransformation>
     </ClaimsTransformations>
@@ -306,6 +314,7 @@
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedDate" />
             <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedVersion" />
+            <OutputClaim ClaimTypeReferenceId="extension_ProfileEditDate" />
           </OutputClaims>
         </TechnicalProfile>
         <!-- Read data after user authenticates with a local account. -->
@@ -315,6 +324,7 @@
             <OutputClaim ClaimTypeReferenceId="extension_newsletter" />
             <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedDate" />
             <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedVersion" />
+            <OutputClaim ClaimTypeReferenceId="extension_ProfileEditDate" />
           </OutputClaims>
         </TechnicalProfile>
         <TechnicalProfile Id="AAD-WriteUserConsentByObjectId-ThrowIfNotExists">
@@ -337,11 +347,15 @@
           <IncludeTechnicalProfile ReferenceId="AAD-Common" />
         </TechnicalProfile>
         <TechnicalProfile Id="AAD-UserWriteProfileUsingObjectId">
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="GetSystemDateTimeProfileEdit" />
+          </InputClaimsTransformations>
           <PersistedClaims>
             <!-- Optional profile claims -->
             <PersistedClaim ClaimTypeReferenceId="jobTitle" />
             <PersistedClaim ClaimTypeReferenceId="country" />
             <PersistedClaim ClaimTypeReferenceId="extension_Company" />
+            <PersistedClaim ClaimTypeReferenceId="extension_ProfileEditDate" />
           </PersistedClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -364,9 +378,6 @@
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedVersion" Required="true" />
           </OutputClaims>
-          <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="GetSystemDateTimeConsent" />
-          </OutputClaimsTransformations>
           <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="AAD-WriteUserConsentByObjectId-ThrowIfNotExists" />
           </ValidationTechnicalProfiles>
@@ -473,14 +484,14 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
+        <!-- SignUpOrSignIn (Log In) journey - don't confront a user with Profile Update if they've already seen it  -->
         <OrchestrationStep Order="5" Type="ClaimsExchange">
-          <!-- <Preconditions>
-            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-              <Value>extension_TermsOfUseConsentedVersion</Value>
-              <Value>v0.1</Value>
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>extension_ProfileEditDate</Value>
               <Action>SkipThisOrchestrationStep</Action>
             </Precondition>
-          </Preconditions> -->
+          </Preconditions>
           <ClaimsExchanges>
             <ClaimsExchange Id="B2CUserProfileUpdateExchange" TechnicalProfileReferenceId="SelfAsserted-ProfileUpdate" />
           </ClaimsExchanges>
