@@ -7,6 +7,33 @@
   </BasePolicy>
   <BuildingBlocks>
     <ClaimsSchema>
+      <ClaimType Id="mobile">
+        <DisplayName>Mobile Phone Number</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+        <PredicateValidationReference Id="PhoneNumberValidation" />
+      </ClaimType>
+      <ClaimType Id="country">
+        <DisplayName>Country</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText />
+        <UserInputType>DropdownSingleSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="Country/Region" Value="DEFAULT" SelectByDefault="false" />
+        </Restriction>
+      </ClaimType>
+      <ClaimType Id="jobTitle">
+        <DisplayName>Job Title</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText />
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="extension_Company">
+        <DisplayName>Company</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText />
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
       <ClaimType Id="extension_newsletter">
         <DisplayName>Subscribe to newsletter?</DisplayName>
         <DataType>string</DataType>
@@ -14,12 +41,6 @@
         <Restriction>
           <Enumeration Text="Yes, keep me informed on product news!" Value="subscribed" SelectByDefault="true" />
         </Restriction>
-      </ClaimType>
-      <ClaimType Id="mobile">
-        <DisplayName>Mobile Phone Number</DisplayName>
-        <DataType>string</DataType>
-        <UserInputType>TextBox</UserInputType>
-        <PredicateValidationReference Id="PhoneNumberValidation" />
       </ClaimType>
       <ClaimType Id="extension_TermsOfUseConsentedDate">
         <DisplayName>Terms of Use Consented Date</DisplayName>
@@ -81,6 +102,11 @@
         </Metadata>
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.consent.en" />
+        </LocalizedResourcesReferences>
+      </ContentDefinition>
+      <ContentDefinition Id="api.selfasserted.profileupdate">
+        <LocalizedResourcesReferences MergeBehavior="Prepend">
+          <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.profileupdate.en" />
         </LocalizedResourcesReferences>
       </ContentDefinition>
     </ContentDefinitions>
@@ -199,6 +225,16 @@
           <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfInvalidInput">{0} has invalid input.</LocalizedString>
           <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfMissingRequiredElement">Missing required element: {0}</LocalizedString>
           <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfValidationError">Error in validation by: {0}</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+      <LocalizedResources Id="api.selfasserted.profileupdate.en">
+        <LocalizedStrings>
+          <LocalizedString ElementType="ClaimType" ElementId="country" StringId="DisplayName">#DN Country</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="country" StringId="UserHelpText">#UHT Country</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="jobTitle" StringId="DisplayName">#DN Job Title</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="jobTitle" StringId="UserHelpText">#UHT Job Title</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="extension_Company" StringId="DisplayName">#DN Company</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="extension_Company" StringId="UserHelpText">#UHT Company</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
     </Localization>
