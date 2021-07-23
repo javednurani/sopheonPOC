@@ -236,14 +236,6 @@
         </LocalizedStrings>
       </LocalizedResources>
       <LocalizedResources Id="api.selfasserted.profileupdate.en">
-        <LocalizedStrings>
-          <LocalizedString ElementType="ClaimType" ElementId="country" StringId="DisplayName">#DN Country</LocalizedString>
-          <LocalizedString ElementType="ClaimType" ElementId="country" StringId="UserHelpText">#UHT Country</LocalizedString>
-          <LocalizedString ElementType="ClaimType" ElementId="jobTitle" StringId="DisplayName">#DN Job Title</LocalizedString>
-          <LocalizedString ElementType="ClaimType" ElementId="jobTitle" StringId="UserHelpText">#UHT Job Title</LocalizedString>
-          <LocalizedString ElementType="ClaimType" ElementId="extension_Company" StringId="DisplayName">#DN Company</LocalizedString>
-          <LocalizedString ElementType="ClaimType" ElementId="extension_Company" StringId="UserHelpText">#UHT Company</LocalizedString>
-        </LocalizedStrings>
         <LocalizedCollections>
           <LocalizedCollection ElementType="ClaimType" ElementId="country" TargetCollection="Restriction">
             <Item Text="Country/Region" Value="DEFAULT" SelectByDefault="true" />
@@ -497,6 +489,14 @@
             <Item Text="Zimbabwe" Value="ZW" />
           </LocalizedCollection>
         </LocalizedCollections>
+        <LocalizedStrings>
+          <LocalizedString ElementType="ClaimType" ElementId="country" StringId="DisplayName">#DN Country</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="country" StringId="UserHelpText">#UHT Country</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="jobTitle" StringId="DisplayName">#DN Job Title</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="jobTitle" StringId="UserHelpText">#UHT Job Title</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="extension_Company" StringId="DisplayName">#DN Company</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="extension_Company" StringId="UserHelpText">#UHT Company</LocalizedString>
+        </LocalizedStrings>
       </LocalizedResources>
     </Localization>
   </BuildingBlocks>
@@ -638,9 +638,9 @@
         <TechnicalProfile Id="SelfAsserted-ProfileUpdate">
           <OutputClaims>
             <!-- Optional profile claims -->
-            <PersistedClaim ClaimTypeReferenceId="jobTitle" />
-            <PersistedClaim ClaimTypeReferenceId="country" />
-            <PersistedClaim ClaimTypeReferenceId="extension_Company" />
+            <OutputClaim ClaimTypeReferenceId="jobTitle" />
+            <OutputClaim ClaimTypeReferenceId="country" />
+            <OutputClaim ClaimTypeReferenceId="extension_Company" />
           </OutputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
