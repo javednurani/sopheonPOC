@@ -636,8 +636,8 @@
           <OutputClaims>
             <!-- Optional profile claims -->
             <OutputClaim ClaimTypeReferenceId="jobTitle" />
-            <OutputClaim ClaimTypeReferenceId="country" />
             <OutputClaim ClaimTypeReferenceId="extension_Company" />
+            <OutputClaim ClaimTypeReferenceId="country" />
           </OutputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
