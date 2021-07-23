@@ -236,6 +236,259 @@
           <LocalizedString ElementType="ClaimType" ElementId="extension_Company" StringId="DisplayName">#DN Company</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_Company" StringId="UserHelpText">#UHT Company</LocalizedString>
         </LocalizedStrings>
+        <LocalizedCollections>
+          <LocalizedCollection ElementType="ClaimType" ElementId="country" TargetCollection="Restriction">
+            <Item Text="Country/Region" Value="DEFAULT" SelectByDefault="true" />
+            <Item Text="Afghanistan" Value="AF" />
+            <Item Text="Åland Islands" Value="AX" />
+            <Item Text="Albania" Value="AL" />
+            <Item Text="Algeria" Value="DZ" />
+            <Item Text="American Samoa" Value="AS" />
+            <Item Text="Andorra" Value="AD" />
+            <Item Text="Angola" Value="AO" />
+            <Item Text="Anguilla" Value="AI" />
+            <Item Text="Antarctica" Value="AQ" />
+            <Item Text="Antigua and Barbuda" Value="AG" />
+            <Item Text="Argentina" Value="AR" />
+            <Item Text="Armenia" Value="AM" />
+            <Item Text="Aruba" Value="AW" />
+            <Item Text="Australia" Value="AU" />
+            <Item Text="Austria" Value="AT" />
+            <Item Text="Azerbaijan" Value="AZ" />
+            <Item Text="Bahamas" Value="BS" />
+            <Item Text="Bahrain" Value="BH" />
+            <Item Text="Bangladesh" Value="BD" />
+            <Item Text="Barbados" Value="BB" />
+            <Item Text="Belarus" Value="BY" />
+            <Item Text="Belgium" Value="BE" />
+            <Item Text="Belize" Value="BZ" />
+            <Item Text="Benin" Value="BJ" />
+            <Item Text="Bermuda" Value="BM" />
+            <Item Text="Bhutan" Value="BT" />
+            <Item Text="Bolivia" Value="BO" />
+            <Item Text="Bonaire" Value="BQ" />
+            <Item Text="Bosnia and Herzegovina" Value="BA" />
+            <Item Text="Botswana" Value="BW" />
+            <Item Text="Bouvet Island" Value="BV" />
+            <Item Text="Brazil" Value="BR" />
+            <Item Text="British Indian Ocean Territory" Value="IO" />
+            <Item Text="British Virgin Islands" Value="VG" />
+            <Item Text="Brunei" Value="BN" />
+            <Item Text="Bulgaria" Value="BG" />
+            <Item Text="Burkina Faso" Value="BF" />
+            <Item Text="Burundi" Value="BI" />
+            <Item Text="Cabo Verde" Value="CV" />
+            <Item Text="Cambodia" Value="KH" />
+            <Item Text="Cameroon" Value="CM" />
+            <Item Text="Canada" Value="CA" />
+            <Item Text="Cayman Islands" Value="KY" />
+            <Item Text="Central African Republic" Value="CF" />
+            <Item Text="Chad" Value="TD" />
+            <Item Text="Chile" Value="CL" />
+            <Item Text="China" Value="CN" />
+            <Item Text="Christmas Island" Value="CX" />
+            <Item Text="Cocos (Keeling) Islands" Value="CC" />
+            <Item Text="Colombia" Value="CO" />
+            <Item Text="Comoros" Value="KM" />
+            <Item Text="Congo" Value="CG" />
+            <Item Text="Congo (DRC)" Value="CD" />
+            <Item Text="Cook Islands" Value="CK" />
+            <Item Text="Costa Rica" Value="CR" />
+            <Item Text="Côte d'Ivoire" Value="CI" />
+            <Item Text="Croatia" Value="HR" />
+            <Item Text="Cuba" Value="CU" />
+            <Item Text="Curaçao" Value="CW" />
+            <Item Text="Cyprus" Value="CY" />
+            <Item Text="Czech Republic" Value="CZ" />
+            <Item Text="Denmark" Value="DK" />
+            <Item Text="Djibouti" Value="DJ" />
+            <Item Text="Dominica" Value="DM" />
+            <Item Text="Dominican Republic" Value="DO" />
+            <Item Text="Ecuador" Value="EC" />
+            <Item Text="Egypt" Value="EG" />
+            <Item Text="El Salvador" Value="SV" />
+            <Item Text="Equatorial Guinea" Value="GQ" />
+            <Item Text="Eritrea" Value="ER" />
+            <Item Text="Estonia" Value="EE" />
+            <Item Text="Ethiopia" Value="ET" />
+            <Item Text="Falkland Islands" Value="FK" />
+            <Item Text="Faroe Islands" Value="FO" />
+            <Item Text="Fiji" Value="FJ" />
+            <Item Text="Finland" Value="FI" />
+            <Item Text="France" Value="FR" />
+            <Item Text="French Guiana" Value="GF" />
+            <Item Text="French Polynesia" Value="PF" />
+            <Item Text="French Southern Territories" Value="TF" />
+            <Item Text="Gabon" Value="GA" />
+            <Item Text="Gambia" Value="GM" />
+            <Item Text="Georgia" Value="GE" />
+            <Item Text="Germany" Value="DE" />
+            <Item Text="Ghana" Value="GH" />
+            <Item Text="Gibraltar" Value="GI" />
+            <Item Text="Greece" Value="GR" />
+            <Item Text="Greenland" Value="GL" />
+            <Item Text="Grenada" Value="GD" />
+            <Item Text="Guadeloupe" Value="GP" />
+            <Item Text="Guam" Value="GU" />
+            <Item Text="Guatemala" Value="GT" />
+            <Item Text="Guernsey" Value="GG" />
+            <Item Text="Guinea" Value="GN" />
+            <Item Text="Guinea-Bissau" Value="GW" />
+            <Item Text="Guyana" Value="GY" />
+            <Item Text="Haiti" Value="HT" />
+            <Item Text="Heard Island and McDonald Islands" Value="HM" />
+            <Item Text="Honduras" Value="HN" />
+            <Item Text="Hong Kong SAR" Value="HK" />
+            <Item Text="Hungary" Value="HU" />
+            <Item Text="Iceland" Value="IS" />
+            <Item Text="India" Value="IN" />
+            <Item Text="Indonesia" Value="ID" />
+            <Item Text="Iran" Value="IR" />
+            <Item Text="Iraq" Value="IQ" />
+            <Item Text="Ireland" Value="IE" />
+            <Item Text="Isle of Man" Value="IM" />
+            <Item Text="Israel" Value="IL" />
+            <Item Text="Italy" Value="IT" />
+            <Item Text="Jamaica" Value="JM" />
+            <Item Text="Japan" Value="JP" />
+            <Item Text="Jersey" Value="JE" />
+            <Item Text="Jordan" Value="JO" />
+            <Item Text="Kazakhstan" Value="KZ" />
+            <Item Text="Kenya" Value="KE" />
+            <Item Text="Kiribati" Value="KI" />
+            <Item Text="Korea" Value="KR" />
+            <Item Text="Kuwait" Value="KW" />
+            <Item Text="Kyrgyzstan" Value="KG" />
+            <Item Text="Laos" Value="LA" />
+            <Item Text="Latvia" Value="LV" />
+            <Item Text="Lebanon" Value="LB" />
+            <Item Text="Lesotho" Value="LS" />
+            <Item Text="Liberia" Value="LR" />
+            <Item Text="Libya" Value="LY" />
+            <Item Text="Liechtenstein" Value="LI" />
+            <Item Text="Lithuania" Value="LT" />
+            <Item Text="Luxembourg" Value="LU" />
+            <Item Text="Macao SAR" Value="MO" />
+            <Item Text="North Macedonia" Value="MK" />
+            <Item Text="Madagascar" Value="MG" />
+            <Item Text="Malawi" Value="MW" />
+            <Item Text="Malaysia" Value="MY" />
+            <Item Text="Maldives" Value="MV" />
+            <Item Text="Mali" Value="ML" />
+            <Item Text="Malta" Value="MT" />
+            <Item Text="Marshall Islands" Value="MH" />
+            <Item Text="Martinique" Value="MQ" />
+            <Item Text="Mauritania" Value="MR" />
+            <Item Text="Mauritius" Value="MU" />
+            <Item Text="Mayotte" Value="YT" />
+            <Item Text="Mexico" Value="MX" />
+            <Item Text="Micronesia" Value="FM" />
+            <Item Text="Moldova" Value="MD" />
+            <Item Text="Monaco" Value="MC" />
+            <Item Text="Mongolia" Value="MN" />
+            <Item Text="Montenegro" Value="ME" />
+            <Item Text="Montserrat" Value="MS" />
+            <Item Text="Morocco" Value="MA" />
+            <Item Text="Mozambique" Value="MZ" />
+            <Item Text="Myanmar" Value="MM" />
+            <Item Text="Namibia" Value="NA" />
+            <Item Text="Nauru" Value="NR" />
+            <Item Text="Nepal" Value="NP" />
+            <Item Text="Netherlands" Value="NL" />
+            <Item Text="New Caledonia" Value="NC" />
+            <Item Text="New Zealand" Value="NZ" />
+            <Item Text="Nicaragua" Value="NI" />
+            <Item Text="Niger" Value="NE" />
+            <Item Text="Nigeria" Value="NG" />
+            <Item Text="Niue" Value="NU" />
+            <Item Text="Norfolk Island" Value="NF" />
+            <Item Text="North Korea" Value="KP" />
+            <Item Text="Northern Mariana Islands" Value="MP" />
+            <Item Text="Norway" Value="NO" />
+            <Item Text="Oman" Value="OM" />
+            <Item Text="Pakistan" Value="PK" />
+            <Item Text="Palau" Value="PW" />
+            <Item Text="Palestinian Authority" Value="PS" />
+            <Item Text="Panama" Value="PA" />
+            <Item Text="Papua New Guinea" Value="PG" />
+            <Item Text="Paraguay" Value="PY" />
+            <Item Text="Peru" Value="PE" />
+            <Item Text="Philippines" Value="PH" />
+            <Item Text="Pitcairn Islands" Value="PN" />
+            <Item Text="Poland" Value="PL" />
+            <Item Text="Portugal" Value="PT" />
+            <Item Text="Puerto Rico" Value="PR" />
+            <Item Text="Qatar" Value="QA" />
+            <Item Text="Réunion" Value="RE" />
+            <Item Text="Romania" Value="RO" />
+            <Item Text="Russia" Value="RU" />
+            <Item Text="Rwanda" Value="RW" />
+            <Item Text="Saint Barthélemy" Value="BL" />
+            <Item Text="Saint Kitts and Nevis" Value="KN" />
+            <Item Text="Saint Lucia" Value="LC" />
+            <Item Text="Saint Martin" Value="MF" />
+            <Item Text="Saint Pierre and Miquelon" Value="PM" />
+            <Item Text="Saint Vincent and the Grenadines" Value="VC" />
+            <Item Text="Samoa" Value="WS" />
+            <Item Text="San Marino" Value="SM" />
+            <Item Text="São Tomé and Príncipe" Value="ST" />
+            <Item Text="Saudi Arabia" Value="SA" />
+            <Item Text="Senegal" Value="SN" />
+            <Item Text="Serbia" Value="RS" />
+            <Item Text="Seychelles" Value="SC" />
+            <Item Text="Sierra Leone" Value="SL" />
+            <Item Text="Singapore" Value="SG" />
+            <Item Text="Sint Maarten" Value="SX" />
+            <Item Text="Slovakia" Value="SK" />
+            <Item Text="Slovenia" Value="SI" />
+            <Item Text="Solomon Islands" Value="SB" />
+            <Item Text="Somalia" Value="SO" />
+            <Item Text="South Africa" Value="ZA" />
+            <Item Text="South Georgia and South Sandwich Islands" Value="GS" />
+            <Item Text="South Sudan" Value="SS" />
+            <Item Text="Spain" Value="ES" />
+            <Item Text="Sri Lanka" Value="LK" />
+            <Item Text="St Helena Ascension Tristan da Cunha" Value="SH" />
+            <Item Text="Sudan" Value="SD" />
+            <Item Text="Suriname" Value="SR" />
+            <Item Text="Svalbard" Value="SJ" />
+            <Item Text="Swaziland" Value="SZ" />
+            <Item Text="Sweden" Value="SE" />
+            <Item Text="Switzerland" Value="CH" />
+            <Item Text="Syria" Value="SY" />
+            <Item Text="Taiwan" Value="TW" />
+            <Item Text="Tajikistan" Value="TJ" />
+            <Item Text="Tanzania" Value="TZ" />
+            <Item Text="Thailand" Value="TH" />
+            <Item Text="Timor-Leste" Value="TL" />
+            <Item Text="Togo" Value="TG" />
+            <Item Text="Tokelau" Value="TK" />
+            <Item Text="Tonga" Value="TO" />
+            <Item Text="Trinidad and Tobago" Value="TT" />
+            <Item Text="Tunisia" Value="TN" />
+            <Item Text="Turkey" Value="TR" />
+            <Item Text="Turkmenistan" Value="TM" />
+            <Item Text="Turks and Caicos Islands" Value="TC" />
+            <Item Text="Tuvalu" Value="TV" />
+            <Item Text="U.S. Outlying Islands" Value="UM" />
+            <Item Text="U.S. Virgin Islands" Value="VI" />
+            <Item Text="Uganda" Value="UG" />
+            <Item Text="Ukraine" Value="UA" />
+            <Item Text="United Arab Emirates" Value="AE" />
+            <Item Text="United Kingdom" Value="GB" />
+            <Item Text="United States" Value="US" />
+            <Item Text="Uruguay" Value="UY" />
+            <Item Text="Uzbekistan" Value="UZ" />
+            <Item Text="Vanuatu" Value="VU" />
+            <Item Text="Vatican City" Value="VA" />
+            <Item Text="Venezuela" Value="VE" />
+            <Item Text="Vietnam" Value="VN" />
+            <Item Text="Wallis and Futuna" Value="WF" />
+            <Item Text="Yemen" Value="YE" />
+            <Item Text="Zambia" Value="ZM" />
+            <Item Text="Zimbabwe" Value="ZW" />
+          </LocalizedCollection>
+        </LocalizedCollections>
       </LocalizedResources>
     </Localization>
   </BuildingBlocks>
