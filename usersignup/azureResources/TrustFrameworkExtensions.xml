@@ -228,14 +228,13 @@
         </LocalizedStrings>
       </LocalizedResources>
       <LocalizedResources Id="api.selfasserted.profileupdate.en">
-        <LocalizedString ElementType="ClaimType" ElementId="country" StringId="DisplayName">#DN Country</LocalizedString>
-        <LocalizedString ElementType="ClaimType" ElementId="country" StringId="UserHelpText">#UHT Country</LocalizedString>
-        <LocalizedString ElementType="ClaimType" ElementId="jobTitle" StringId="DisplayName">#DN Job Title</LocalizedString>
-        <LocalizedString ElementType="ClaimType" ElementId="jobTitle" StringId="UserHelpText">#UHT Job Title</LocalizedString>
-        <LocalizedString ElementType="ClaimType" ElementId="extension_Company" StringId="DisplayName">#DN Company</LocalizedString>
-        <LocalizedString ElementType="ClaimType" ElementId="extension_Company" StringId="UserHelpText">#UHT Company</LocalizedString>
         <LocalizedStrings>
-
+          <LocalizedString ElementType="ClaimType" ElementId="country" StringId="DisplayName">#DN Country</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="country" StringId="UserHelpText">#UHT Country</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="jobTitle" StringId="DisplayName">#DN Job Title</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="jobTitle" StringId="UserHelpText">#UHT Job Title</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="extension_Company" StringId="DisplayName">#DN Company</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="extension_Company" StringId="UserHelpText">#UHT Company</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
     </Localization>
