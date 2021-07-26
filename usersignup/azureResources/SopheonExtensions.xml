@@ -1,0 +1,749 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="non-existent.onmicrosoft.com" PolicyId="B2C_1A_SopheonExtensions" PublicPolicyUri="http://non-existent.onmicrosoft.com/B2C_1A_SopheonExtensions">
+
+  <BasePolicy>
+    <TenantId>non-existent.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="mobile">
+        <DisplayName>Mobile Phone Number</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+        <PredicateValidationReference Id="PhoneNumberValidation" />
+      </ClaimType>
+      <ClaimType Id="country">
+        <DataType>string</DataType>
+        <UserHelpText />
+        <UserInputType>DropdownSingleSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="Country/Region" Value="DEFAULT" SelectByDefault="false" />
+        </Restriction>
+      </ClaimType>
+      <ClaimType Id="jobTitle">
+        <DisplayName>Job Title</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText />
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="extension_Company">
+        <DisplayName>Company</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText />
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="extension_newsletter">
+        <DisplayName>Subscribe to newsletter?</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>CheckboxMultiSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="Yes, keep me informed on product news!" Value="subscribed" SelectByDefault="true" />
+        </Restriction>
+      </ClaimType>
+      <ClaimType Id="extension_TermsOfUseConsentedDate">
+        <DisplayName>Terms of Use Consented Date</DisplayName>
+        <DataType>dateTime</DataType>
+      </ClaimType>
+      <ClaimType Id="extension_TermsOfUseConsentedVersion">
+        <DisplayName>Accept the Terms of Service to keep going</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>CheckboxMultiSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="I accept" Value="v1.0checkbox" SelectByDefault="true" />
+        </Restriction>
+      </ClaimType>
+      <ClaimType Id="extension_ProfileEditDate">
+        <DataType>dateTime</DataType>
+      </ClaimType>
+    </ClaimsSchema>
+    <Predicates>
+      <Predicate Id="PhoneNumberRegex" Method="MatchesRegex">
+        <Parameters>
+          <Parameter Id="RegularExpression">^[0-9\(\)\-\s+]*$</Parameter>
+        </Parameters>
+      </Predicate>
+    </Predicates>
+    <PredicateValidations>
+      <PredicateValidation Id="PhoneNumberValidation">
+        <PredicateGroups>
+          <PredicateGroup Id="PhoneNumberGroup">
+            <UserHelpText></UserHelpText> <!-- Intentionally Empty - LocalizedString seems to require element to be present. -->
+            <PredicateReferences>
+              <PredicateReference Id="PhoneNumberRegex" />
+            </PredicateReferences>
+          </PredicateGroup>
+        </PredicateGroups>
+      </PredicateValidation>
+    </PredicateValidations>
+    <ClaimsTransformations>
+      <ClaimsTransformation Id="GetSystemDateTimeConsent" TransformationMethod="GetCurrentDateTime">
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedDate" TransformationClaimType="currentDateTime" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="GetSystemDateTimeProfileEdit" TransformationMethod="GetCurrentDateTime">
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="extension_ProfileEditDate" TransformationClaimType="currentDateTime" />
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
+    <ContentDefinitions>
+      <ContentDefinition Id="api.signuporsignin">
+        <LoadUri>https://&StorageAccountName&.blob.core.windows.net/b2cassets/LoginCustom.html</LoadUri>
+        <LocalizedResourcesReferences MergeBehavior="Prepend">
+          <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.signuporsignin.en" />
+        </LocalizedResourcesReferences>
+      </ContentDefinition>
+      <ContentDefinition Id="api.localaccountsignup">
+        <LocalizedResourcesReferences MergeBehavior="Prepend">
+          <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.localaccountsignup.en" />
+        </LocalizedResourcesReferences>
+      </ContentDefinition>
+      <ContentDefinition Id="api.selfasserted.consent">
+        <LoadUri>https://&StorageAccountName&.blob.core.windows.net/b2cassets/consentPage.html</LoadUri>
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
+        <Metadata>
+          <Item Key="DisplayName">Consent</Item>
+        </Metadata>
+        <LocalizedResourcesReferences MergeBehavior="Prepend">
+          <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.consent.en" />
+        </LocalizedResourcesReferences>
+      </ContentDefinition>
+      <ContentDefinition Id="api.selfasserted.profileupdate">
+        <LocalizedResourcesReferences MergeBehavior="Prepend">
+          <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.profileupdate.en" />
+        </LocalizedResourcesReferences>
+      </ContentDefinition>
+    </ContentDefinitions>
+    <Localization Enabled="true">
+      <SupportedLanguages DefaultLanguage="en" MergeBehavior="ReplaceAll">
+        <SupportedLanguage>en</SupportedLanguage>
+      </SupportedLanguages>
+      <LocalizedResources Id="api.signuporsignin.en">
+        <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="logonIdentifier_email">Email Address</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="requiredField_email">Please enter your email</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="logonIdentifier_username">Username</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="password">Password</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="createaccount_link">Sign up now</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="requiredField_username">Please enter your user name</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="createaccount_intro">Don't have an account?</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="forgotpassword_link">Forgot your password?</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="divider_title">OR</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="cancel_message">The user has forgotten their password</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="button_signin">Sign in</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="social_intro">Sign in with your social account</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="requiredField_password">Please enter your password</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="invalid_password">The password you entered is not in the expected format.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="local_intro_username">Sign in with your user name</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="local_intro_email">Sign in with your existing account</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="invalid_email">Please enter a valid email address</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="unknown_error">We are having trouble signing you in. Please try again later.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="email_pattern">^[a-zA-Z0-9.!#$%&amp;'^_`{}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfInvalidPassword">Invalid Credentials.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimsPrincipalDoesNotExist">Invalid Credentials.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfOldPasswordUsed">Invalid Credentials.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="DefaultMessage">Invalid Credentials.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfUserAccountDisabled">Your account has been locked. Contact your support person to unlock it, then try again.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfUserAccountLocked">Your account is temporarily locked to prevent unauthorized use. Try again later.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="AADRequestsThrottled">There are too many requests at this moment. Please wait for some time and try again.</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+      <LocalizedResources Id="api.localaccountsignup.en">
+        <LocalizedCollections>
+          <LocalizedCollection ElementType="ClaimType" ElementId="extension_newsletter" TargetCollection="Restriction">
+            <Item Text="Yes, keep me informed on product news!" Value="subscribed" SelectByDefault="true" />
+          </LocalizedCollection>
+        </LocalizedCollections>
+        <LocalizedStrings>
+          <LocalizedString ElementType="Predicate" ElementId="PhoneNumberRegex" StringId="HelpText">Digits (0-9), and one or more of the following symbols: ( ) - +</LocalizedString>
+          <LocalizedString ElementType="InputValidation" ElementId="PhoneNumberValidation" StringId="PhoneNumberGroup">Please Enter a Valid Phone Number</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="mobile" StringId="DisplayName">Mobile Phone Number</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="extension_newsletter" StringId="DisplayName">Subscribe to newsletter?</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">Email Address *</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="UserHelpText">Email address that can be used to contact you.</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="PatternHelpText">Please enter a valid email address.</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="DisplayName">New Password *</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="UserHelpText">Enter new password</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="PatternHelpText">8-16 characters, containing 3 out of 4 of the following: Lowercase characters, uppercase characters, digits (0-9), and one or more of the following symbols: @ # $ % ^ &amp; * - _ + = [ ] { } | \ : ' , ? / ` ~ " ( ) ; .</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="DisplayName">Confirm New Password *</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="UserHelpText">Confirm new password</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="PatternHelpText">8-16 characters, containing 3 out of 4 of the following: Lowercase characters, uppercase characters, digits (0-9), and one or more of the following symbols: @ # $ % ^ &amp; * - _ + = [ ] { } | \ : ' , ? / ` ~ " ( ) ; .</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="displayName" StringId="DisplayName">Name *</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="displayName" StringId="UserHelpText">Your name.</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="surname" StringId="DisplayName">Surname</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="surname" StringId="UserHelpText">Your surname (also known as family name or last name).  </LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="givenName" StringId="DisplayName">Given Name</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="givenName" StringId="UserHelpText">Your given name (also known as first name).</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="button_continue">Create</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="button_cancel">Cancel</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="error_fieldIncorrect">One or more fields are filled out incorrectly. Please check your entries and try again.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="error_passwordEntryMismatch">The password entry fields do not match. Please enter the same password in both fields and try again.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="error_requiredFieldMissing">A required field is missing. Please fill out all required fields and try again.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="helplink_text">What is this?</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Please provide the following details.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="preloader_alt">Please wait</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="required_field">This information is required.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_edit">Change e-mail</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_resend">Send new code</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_send">Send verification code</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_verify">Verify code</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_code_expired">That code is expired. Please request a new code.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_no_retry">You've made too many incorrect attempts. Please try again later.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_retry">That code is incorrect. Please try again.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_server">We are having trouble verifying your email address. Please enter a valid email address and try again.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_throttled">There have been too many requests to verify this email address. Please wait a while, then try again.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_info_msg">Verification code has been sent to your inbox. Please copy it to the input box below.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_input">Verification code</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_intro_msg">Verification is necessary. Please click Send button.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_success_msg">E-mail address verified. You can now continue.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="ServiceThrottled">There are too many requests at this moment. Please wait for some time and try again.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimNotVerified">Claim not verified: {0}</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimsPrincipalAlreadyExists">A user with the specified ID already exists. Please choose a different one.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfIncorrectPattern">Incorrect pattern for: {0}</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfInvalidInput">{0} has invalid input.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfMissingRequiredElement">Missing required element: {0}</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfValidationError">Error in validation by: {0}</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+      <LocalizedResources Id="api.selfasserted.consent.en">
+        <LocalizedCollections>
+          <LocalizedCollection ElementType="ClaimType" ElementId="extension_TermsOfUseConsentedVersion" TargetCollection="Restriction">
+            <Item Text="I accept" Value="v0.1" SelectByDefault="true" />
+          </LocalizedCollection>
+        </LocalizedCollections>
+        <LocalizedStrings>
+          <LocalizedString ElementType="ClaimType" ElementId="extension_TermsOfUseConsentedVersion" StringId="DisplayName">Accept the Terms of Service to keep going</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="button_continue">Continue</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="button_cancel">Cancel</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="error_fieldIncorrect">One or more fields are filled out incorrectly. Please check your entries and try again.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="error_passwordEntryMismatch">The password entry fields do not match. Please enter the same password in both fields and try again.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="error_requiredFieldMissing">A required field is missing. Please fill out all required fields and try again.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="helplink_text">What is this?</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Please provide the following details.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="preloader_alt">Please wait</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="required_field">This information is required.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="ServiceThrottled">There are too many requests at this moment. Please wait for some time and try again.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimNotVerified">Claim not verified: {0}</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimsPrincipalAlreadyExists">A user with the specified ID already exists. Please choose a different one.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfIncorrectPattern">Incorrect pattern for: {0}</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfInvalidInput">{0} has invalid input.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfMissingRequiredElement">Missing required element: {0}</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfValidationError">Error in validation by: {0}</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+      <LocalizedResources Id="api.selfasserted.profileupdate.en">
+        <LocalizedCollections>
+          <LocalizedCollection ElementType="ClaimType" ElementId="country" TargetCollection="Restriction">
+            <Item Text="Country/Region" Value="DEFAULT" SelectByDefault="true" />
+            <Item Text="Afghanistan" Value="AF" />
+            <Item Text="Åland Islands" Value="AX" />
+            <Item Text="Albania" Value="AL" />
+            <Item Text="Algeria" Value="DZ" />
+            <Item Text="American Samoa" Value="AS" />
+            <Item Text="Andorra" Value="AD" />
+            <Item Text="Angola" Value="AO" />
+            <Item Text="Anguilla" Value="AI" />
+            <Item Text="Antarctica" Value="AQ" />
+            <Item Text="Antigua and Barbuda" Value="AG" />
+            <Item Text="Argentina" Value="AR" />
+            <Item Text="Armenia" Value="AM" />
+            <Item Text="Aruba" Value="AW" />
+            <Item Text="Australia" Value="AU" />
+            <Item Text="Austria" Value="AT" />
+            <Item Text="Azerbaijan" Value="AZ" />
+            <Item Text="Bahamas" Value="BS" />
+            <Item Text="Bahrain" Value="BH" />
+            <Item Text="Bangladesh" Value="BD" />
+            <Item Text="Barbados" Value="BB" />
+            <Item Text="Belarus" Value="BY" />
+            <Item Text="Belgium" Value="BE" />
+            <Item Text="Belize" Value="BZ" />
+            <Item Text="Benin" Value="BJ" />
+            <Item Text="Bermuda" Value="BM" />
+            <Item Text="Bhutan" Value="BT" />
+            <Item Text="Bolivia" Value="BO" />
+            <Item Text="Bonaire" Value="BQ" />
+            <Item Text="Bosnia and Herzegovina" Value="BA" />
+            <Item Text="Botswana" Value="BW" />
+            <Item Text="Bouvet Island" Value="BV" />
+            <Item Text="Brazil" Value="BR" />
+            <Item Text="British Indian Ocean Territory" Value="IO" />
+            <Item Text="British Virgin Islands" Value="VG" />
+            <Item Text="Brunei" Value="BN" />
+            <Item Text="Bulgaria" Value="BG" />
+            <Item Text="Burkina Faso" Value="BF" />
+            <Item Text="Burundi" Value="BI" />
+            <Item Text="Cabo Verde" Value="CV" />
+            <Item Text="Cambodia" Value="KH" />
+            <Item Text="Cameroon" Value="CM" />
+            <Item Text="Canada" Value="CA" />
+            <Item Text="Cayman Islands" Value="KY" />
+            <Item Text="Central African Republic" Value="CF" />
+            <Item Text="Chad" Value="TD" />
+            <Item Text="Chile" Value="CL" />
+            <Item Text="China" Value="CN" />
+            <Item Text="Christmas Island" Value="CX" />
+            <Item Text="Cocos (Keeling) Islands" Value="CC" />
+            <Item Text="Colombia" Value="CO" />
+            <Item Text="Comoros" Value="KM" />
+            <Item Text="Congo" Value="CG" />
+            <Item Text="Congo (DRC)" Value="CD" />
+            <Item Text="Cook Islands" Value="CK" />
+            <Item Text="Costa Rica" Value="CR" />
+            <Item Text="Côte d'Ivoire" Value="CI" />
+            <Item Text="Croatia" Value="HR" />
+            <Item Text="Cuba" Value="CU" />
+            <Item Text="Curaçao" Value="CW" />
+            <Item Text="Cyprus" Value="CY" />
+            <Item Text="Czech Republic" Value="CZ" />
+            <Item Text="Denmark" Value="DK" />
+            <Item Text="Djibouti" Value="DJ" />
+            <Item Text="Dominica" Value="DM" />
+            <Item Text="Dominican Republic" Value="DO" />
+            <Item Text="Ecuador" Value="EC" />
+            <Item Text="Egypt" Value="EG" />
+            <Item Text="El Salvador" Value="SV" />
+            <Item Text="Equatorial Guinea" Value="GQ" />
+            <Item Text="Eritrea" Value="ER" />
+            <Item Text="Estonia" Value="EE" />
+            <Item Text="Ethiopia" Value="ET" />
+            <Item Text="Falkland Islands" Value="FK" />
+            <Item Text="Faroe Islands" Value="FO" />
+            <Item Text="Fiji" Value="FJ" />
+            <Item Text="Finland" Value="FI" />
+            <Item Text="France" Value="FR" />
+            <Item Text="French Guiana" Value="GF" />
+            <Item Text="French Polynesia" Value="PF" />
+            <Item Text="French Southern Territories" Value="TF" />
+            <Item Text="Gabon" Value="GA" />
+            <Item Text="Gambia" Value="GM" />
+            <Item Text="Georgia" Value="GE" />
+            <Item Text="Germany" Value="DE" />
+            <Item Text="Ghana" Value="GH" />
+            <Item Text="Gibraltar" Value="GI" />
+            <Item Text="Greece" Value="GR" />
+            <Item Text="Greenland" Value="GL" />
+            <Item Text="Grenada" Value="GD" />
+            <Item Text="Guadeloupe" Value="GP" />
+            <Item Text="Guam" Value="GU" />
+            <Item Text="Guatemala" Value="GT" />
+            <Item Text="Guernsey" Value="GG" />
+            <Item Text="Guinea" Value="GN" />
+            <Item Text="Guinea-Bissau" Value="GW" />
+            <Item Text="Guyana" Value="GY" />
+            <Item Text="Haiti" Value="HT" />
+            <Item Text="Heard Island and McDonald Islands" Value="HM" />
+            <Item Text="Honduras" Value="HN" />
+            <Item Text="Hong Kong SAR" Value="HK" />
+            <Item Text="Hungary" Value="HU" />
+            <Item Text="Iceland" Value="IS" />
+            <Item Text="India" Value="IN" />
+            <Item Text="Indonesia" Value="ID" />
+            <Item Text="Iran" Value="IR" />
+            <Item Text="Iraq" Value="IQ" />
+            <Item Text="Ireland" Value="IE" />
+            <Item Text="Isle of Man" Value="IM" />
+            <Item Text="Israel" Value="IL" />
+            <Item Text="Italy" Value="IT" />
+            <Item Text="Jamaica" Value="JM" />
+            <Item Text="Japan" Value="JP" />
+            <Item Text="Jersey" Value="JE" />
+            <Item Text="Jordan" Value="JO" />
+            <Item Text="Kazakhstan" Value="KZ" />
+            <Item Text="Kenya" Value="KE" />
+            <Item Text="Kiribati" Value="KI" />
+            <Item Text="Korea" Value="KR" />
+            <Item Text="Kuwait" Value="KW" />
+            <Item Text="Kyrgyzstan" Value="KG" />
+            <Item Text="Laos" Value="LA" />
+            <Item Text="Latvia" Value="LV" />
+            <Item Text="Lebanon" Value="LB" />
+            <Item Text="Lesotho" Value="LS" />
+            <Item Text="Liberia" Value="LR" />
+            <Item Text="Libya" Value="LY" />
+            <Item Text="Liechtenstein" Value="LI" />
+            <Item Text="Lithuania" Value="LT" />
+            <Item Text="Luxembourg" Value="LU" />
+            <Item Text="Macao SAR" Value="MO" />
+            <Item Text="North Macedonia" Value="MK" />
+            <Item Text="Madagascar" Value="MG" />
+            <Item Text="Malawi" Value="MW" />
+            <Item Text="Malaysia" Value="MY" />
+            <Item Text="Maldives" Value="MV" />
+            <Item Text="Mali" Value="ML" />
+            <Item Text="Malta" Value="MT" />
+            <Item Text="Marshall Islands" Value="MH" />
+            <Item Text="Martinique" Value="MQ" />
+            <Item Text="Mauritania" Value="MR" />
+            <Item Text="Mauritius" Value="MU" />
+            <Item Text="Mayotte" Value="YT" />
+            <Item Text="Mexico" Value="MX" />
+            <Item Text="Micronesia" Value="FM" />
+            <Item Text="Moldova" Value="MD" />
+            <Item Text="Monaco" Value="MC" />
+            <Item Text="Mongolia" Value="MN" />
+            <Item Text="Montenegro" Value="ME" />
+            <Item Text="Montserrat" Value="MS" />
+            <Item Text="Morocco" Value="MA" />
+            <Item Text="Mozambique" Value="MZ" />
+            <Item Text="Myanmar" Value="MM" />
+            <Item Text="Namibia" Value="NA" />
+            <Item Text="Nauru" Value="NR" />
+            <Item Text="Nepal" Value="NP" />
+            <Item Text="Netherlands" Value="NL" />
+            <Item Text="New Caledonia" Value="NC" />
+            <Item Text="New Zealand" Value="NZ" />
+            <Item Text="Nicaragua" Value="NI" />
+            <Item Text="Niger" Value="NE" />
+            <Item Text="Nigeria" Value="NG" />
+            <Item Text="Niue" Value="NU" />
+            <Item Text="Norfolk Island" Value="NF" />
+            <Item Text="North Korea" Value="KP" />
+            <Item Text="Northern Mariana Islands" Value="MP" />
+            <Item Text="Norway" Value="NO" />
+            <Item Text="Oman" Value="OM" />
+            <Item Text="Pakistan" Value="PK" />
+            <Item Text="Palau" Value="PW" />
+            <Item Text="Palestinian Authority" Value="PS" />
+            <Item Text="Panama" Value="PA" />
+            <Item Text="Papua New Guinea" Value="PG" />
+            <Item Text="Paraguay" Value="PY" />
+            <Item Text="Peru" Value="PE" />
+            <Item Text="Philippines" Value="PH" />
+            <Item Text="Pitcairn Islands" Value="PN" />
+            <Item Text="Poland" Value="PL" />
+            <Item Text="Portugal" Value="PT" />
+            <Item Text="Puerto Rico" Value="PR" />
+            <Item Text="Qatar" Value="QA" />
+            <Item Text="Réunion" Value="RE" />
+            <Item Text="Romania" Value="RO" />
+            <Item Text="Russia" Value="RU" />
+            <Item Text="Rwanda" Value="RW" />
+            <Item Text="Saint Barthélemy" Value="BL" />
+            <Item Text="Saint Kitts and Nevis" Value="KN" />
+            <Item Text="Saint Lucia" Value="LC" />
+            <Item Text="Saint Martin" Value="MF" />
+            <Item Text="Saint Pierre and Miquelon" Value="PM" />
+            <Item Text="Saint Vincent and the Grenadines" Value="VC" />
+            <Item Text="Samoa" Value="WS" />
+            <Item Text="San Marino" Value="SM" />
+            <Item Text="São Tomé and Príncipe" Value="ST" />
+            <Item Text="Saudi Arabia" Value="SA" />
+            <Item Text="Senegal" Value="SN" />
+            <Item Text="Serbia" Value="RS" />
+            <Item Text="Seychelles" Value="SC" />
+            <Item Text="Sierra Leone" Value="SL" />
+            <Item Text="Singapore" Value="SG" />
+            <Item Text="Sint Maarten" Value="SX" />
+            <Item Text="Slovakia" Value="SK" />
+            <Item Text="Slovenia" Value="SI" />
+            <Item Text="Solomon Islands" Value="SB" />
+            <Item Text="Somalia" Value="SO" />
+            <Item Text="South Africa" Value="ZA" />
+            <Item Text="South Georgia and South Sandwich Islands" Value="GS" />
+            <Item Text="South Sudan" Value="SS" />
+            <Item Text="Spain" Value="ES" />
+            <Item Text="Sri Lanka" Value="LK" />
+            <Item Text="St Helena Ascension Tristan da Cunha" Value="SH" />
+            <Item Text="Sudan" Value="SD" />
+            <Item Text="Suriname" Value="SR" />
+            <Item Text="Svalbard" Value="SJ" />
+            <Item Text="Swaziland" Value="SZ" />
+            <Item Text="Sweden" Value="SE" />
+            <Item Text="Switzerland" Value="CH" />
+            <Item Text="Syria" Value="SY" />
+            <Item Text="Taiwan" Value="TW" />
+            <Item Text="Tajikistan" Value="TJ" />
+            <Item Text="Tanzania" Value="TZ" />
+            <Item Text="Thailand" Value="TH" />
+            <Item Text="Timor-Leste" Value="TL" />
+            <Item Text="Togo" Value="TG" />
+            <Item Text="Tokelau" Value="TK" />
+            <Item Text="Tonga" Value="TO" />
+            <Item Text="Trinidad and Tobago" Value="TT" />
+            <Item Text="Tunisia" Value="TN" />
+            <Item Text="Turkey" Value="TR" />
+            <Item Text="Turkmenistan" Value="TM" />
+            <Item Text="Turks and Caicos Islands" Value="TC" />
+            <Item Text="Tuvalu" Value="TV" />
+            <Item Text="U.S. Outlying Islands" Value="UM" />
+            <Item Text="U.S. Virgin Islands" Value="VI" />
+            <Item Text="Uganda" Value="UG" />
+            <Item Text="Ukraine" Value="UA" />
+            <Item Text="United Arab Emirates" Value="AE" />
+            <Item Text="United Kingdom" Value="GB" />
+            <Item Text="United States" Value="US" />
+            <Item Text="Uruguay" Value="UY" />
+            <Item Text="Uzbekistan" Value="UZ" />
+            <Item Text="Vanuatu" Value="VU" />
+            <Item Text="Vatican City" Value="VA" />
+            <Item Text="Venezuela" Value="VE" />
+            <Item Text="Vietnam" Value="VN" />
+            <Item Text="Wallis and Futuna" Value="WF" />
+            <Item Text="Yemen" Value="YE" />
+            <Item Text="Zambia" Value="ZM" />
+            <Item Text="Zimbabwe" Value="ZW" />
+          </LocalizedCollection>
+        </LocalizedCollections>
+        <LocalizedStrings>
+          <LocalizedString ElementType="ClaimType" ElementId="jobTitle" StringId="DisplayName">Job Title</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="jobTitle" StringId="UserHelpText">Job Title</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="extension_Company" StringId="DisplayName">Company</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="extension_Company" StringId="UserHelpText">Company</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+    </Localization>
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Local Account</DisplayName>
+      <TechnicalProfiles>
+        <!--Local account sign-up page-->
+        <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
+          <Metadata>
+            <Item Key="EnforceEmailVerification">false</Item>
+          </Metadata>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="displayName" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="Verified.Email" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="newPassword" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="reenterPassword" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="mobile" />
+            <OutputClaim ClaimTypeReferenceId="extension_newsletter" />
+            <OutputClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" DefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" />
+            <OutputClaim ClaimTypeReferenceId="newUser" />
+          </OutputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <ClaimsProvider>
+      <DisplayName>Local Account SignIn</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="login-NonInteractive">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="oid" />
+            <OutputClaim ClaimTypeReferenceId="tenantId" PartnerClaimType="tid" />
+            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
+            <OutputClaim ClaimTypeReferenceId="userPrincipalName" PartnerClaimType="upn" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="localAccountAuthentication" />
+          </OutputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <ClaimsProvider>
+      <DisplayName>Azure Active Directory</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="AAD-Common">
+          <Metadata>
+            <Item Key="ClientId">^ExtensionsAppClientId^</Item>
+            <Item Key="ApplicationObjectId">^ExtensionsAppObjectId^</Item>
+          </Metadata>
+        </TechnicalProfile>
+        <!-- Write data during a local account sign-up flow. -->
+        <TechnicalProfile Id="AAD-UserWriteUsingLogonEmail">
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="mobile" />
+            <PersistedClaim ClaimTypeReferenceId="extension_newsletter" />
+          </PersistedClaims>
+        </TechnicalProfile>
+        <TechnicalProfile Id="AAD-UserReadUsingEmailAddress">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedDate" />
+            <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedVersion" />
+            <OutputClaim ClaimTypeReferenceId="extension_ProfileEditDate" />
+          </OutputClaims>
+        </TechnicalProfile>
+        <!-- Read data after user authenticates with a local account. -->
+        <TechnicalProfile Id="AAD-UserReadUsingObjectId">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="mobile" />
+            <OutputClaim ClaimTypeReferenceId="extension_newsletter" />
+            <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedDate" />
+            <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedVersion" />
+            <OutputClaim ClaimTypeReferenceId="extension_ProfileEditDate" />
+          </OutputClaims>
+        </TechnicalProfile>
+        <TechnicalProfile Id="AAD-WriteUserConsentByObjectId-ThrowIfNotExists">
+          <Metadata>
+            <Item Key="Operation">Write</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="GetSystemDateTimeConsent" />
+          </InputClaimsTransformations>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+          </InputClaims>
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="objectId" />
+            <PersistedClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedDate" />
+            <PersistedClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedVersion" DefaultValue="v0.1" />
+          </PersistedClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+        </TechnicalProfile>
+        <TechnicalProfile Id="AAD-UserWriteProfileUsingObjectId">
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="GetSystemDateTimeProfileEdit" />
+          </InputClaimsTransformations>
+          <PersistedClaims>
+            <!-- Optional profile claims -->
+            <PersistedClaim ClaimTypeReferenceId="jobTitle" />
+            <PersistedClaim ClaimTypeReferenceId="country" />
+            <PersistedClaim ClaimTypeReferenceId="extension_Company" />
+            <PersistedClaim ClaimTypeReferenceId="extension_ProfileEditDate" />
+          </PersistedClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <ClaimsProvider>
+      <DisplayName>Self Asserted</DisplayName>
+      <TechnicalProfiles>
+        <!-- Terms of Service -->
+        <TechnicalProfile Id="SelfAsserted-Consent">
+          <DisplayName>User Consent</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted.consent</Item>
+            <Item Key="setting.showCancelButton">false</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
+          </CryptographicKeys>
+          <InputClaims />
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedVersion" Required="true" />
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="AAD-WriteUserConsentByObjectId-ThrowIfNotExists" />
+          </ValidationTechnicalProfiles>
+        </TechnicalProfile>
+        <TechnicalProfile Id="SelfAsserted-ProfileUpdate">
+          <OutputClaims>
+            <!-- Optional profile claims -->
+            <OutputClaim ClaimTypeReferenceId="jobTitle" />
+            <OutputClaim ClaimTypeReferenceId="extension_Company" />
+            <OutputClaim ClaimTypeReferenceId="country" />
+          </OutputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+  <UserJourneys>
+    <UserJourney Id="SignUp-withConsent">
+      <OrchestrationSteps>
+    
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+    
+        <!-- This step reads any user attributes that we may not have received when in the token. -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+    
+         <!-- execute consent step if the users consented version does not met the current version,
+              otherwhise this step is skipped -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>extension_TermsOfUseConsentedVersion</Value>
+              <Value>v0.1</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAssertedConsentExchange" TechnicalProfileReferenceId="SelfAsserted-Consent" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Sign Up journey - always confront user with Profile Update  -->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="B2CUserProfileUpdateExchange" TechnicalProfileReferenceId="SelfAsserted-ProfileUpdate" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+    
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+    <UserJourney Id="SignUpOrSignIn-withConsent">
+      <OrchestrationSteps>
+
+        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
+          </ClaimsProviderSelections>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- This step reads any user attributes that we may not have received when in the token. -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- execute consent step if the users consented version does not met the current version,
+              otherwhise this step is skipped -->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>extension_TermsOfUseConsentedVersion</Value>
+              <Value>v0.1</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAssertedConsentExchange" TechnicalProfileReferenceId="SelfAsserted-Consent" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- SignUpOrSignIn (Log In) journey - don't confront a user with Profile Update if they've already seen it  -->
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>extension_ProfileEditDate</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="B2CUserProfileUpdateExchange" TechnicalProfileReferenceId="SelfAsserted-ProfileUpdate" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+  </UserJourneys>
+
+</TrustFrameworkPolicy>

@@ -3,7 +3,7 @@
 
   <BasePolicy>
     <TenantId>non-existent.onmicrosoft.com</TenantId>
-    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+    <PolicyId>B2C_1A_SopheonExtensions</PolicyId>
   </BasePolicy>
 
   <RelyingParty>
