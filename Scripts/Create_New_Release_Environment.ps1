@@ -21,13 +21,13 @@ $CDNParametersTemplate = "$($PSScriptRoot)\..\DevOps\Bicep\CDN_Profile_Parameter
 
 Write-Host "Replacing tokens on Master Template...";
 $a = Get-Content $MasterTemplate -raw;
-$a = $a -replace '^StorageAccountName^', $StorageAccountNameValue -replace '&KeyVaultName&', $KeyVaultNameValue
+$a = $a -replace '^StorageAccountName^', $StorageAccountNameValue -replace '^KeyVaultName^', $KeyVaultNameValue
 Set-Content -Value $a -Path $MasterTemplate;
 Write-Host "Complete!";
 
 Write-Host "Replacing tokens on Master Parameters Template...";
 $a = Get-Content $MasterParametersTemplate -raw;
-$a = $a -replace '^StorageAccountName^', $StorageAccountNameValue -replace '&KeyVaultName&', $KeyVaultNameValue;
+$a = $a -replace '^StorageAccountName^', $StorageAccountNameValue -replace '^KeyVaultName^', $KeyVaultNameValue;
 Set-Content -Value $a -Path $MasterParametersTemplate;
 Write-Host "Complete!";
 
@@ -59,11 +59,11 @@ $CDNProfileEndpointOriginValue = $StorageAccountStaticWebsiteUrl -replace 'https
 Write-Host "Set! Static Website Url: $($CDNProfileEndpointOriginValue)";
 
 #region CDN template
-$CDNProfileNameToken = '&CDNProfileName&';
+$CDNProfileNameToken = '^CDNProfileName^';
 $CDNProfileNameValue = $ResourceGroupValue;
-$CDNProfileEndpointNameToken = '&CDNProfileEndpointName&';
+$CDNProfileEndpointNameToken = '^CDNProfileEndpointName^';
 $CDNProfileEndpointNameValue = $ResourceGroupValue;
-$CDNProfileEndpointOriginToken = '&CDNProfileEndpointOrigin&';
+$CDNProfileEndpointOriginToken = '^CDNProfileEndpointOrigin^';
 $CDNProfileEndpointOriginValue = '';
 
 Write-Host "Replacing tokens on Master CDN Template...";
