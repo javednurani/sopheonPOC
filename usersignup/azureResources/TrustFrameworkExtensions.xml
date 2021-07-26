@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="non-existent.onmicrosoft.com" PolicyId="B2C_1A_TrustFrameworkExtensions" PublicPolicyUri="http://non-existent.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions">
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" xsi:schemaLocation="http://schemas.microsoft.com/online/cpim/schemas/2013/06 TrustFrameworkPolicy_0.3.0.0.xsd" PolicySchemaVersion="0.3.0.0" TenantId="nonexistent.onmicrosoft.com" PolicyId="B2C_1A_TrustFrameworkExtensions" PublicPolicyUri="http://nonexistent.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions">
 
   <BasePolicy>
-    <TenantId>non-existent.onmicrosoft.com</TenantId>
+    <TenantId>nonexistent.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_TrustFrameworkBase</PolicyId>
   </BasePolicy>
   <BuildingBlocks>
@@ -90,7 +90,7 @@
     </ClaimsTransformations>
     <ContentDefinitions>
       <ContentDefinition Id="api.signuporsignin">
-        <LoadUri>https://&StorageAccountName&.blob.core.windows.net/b2cassets/LoginCustom.html</LoadUri>
+        <LoadUri>https://^StorageAccountName^.blob.core.windows.net/b2cassets/LoginCustom.html</LoadUri>
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.signuporsignin.en" />
         </LocalizedResourcesReferences>
@@ -101,7 +101,7 @@
         </LocalizedResourcesReferences>
       </ContentDefinition>
       <ContentDefinition Id="api.selfasserted.consent">
-        <LoadUri>https://&StorageAccountName&.blob.core.windows.net/b2cassets/consentPage.html</LoadUri>
+        <LoadUri>https://^StorageAccountName^.blob.core.windows.net/b2cassets/consentPage.html</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
         <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
         <Metadata>

@@ -1,5 +1,5 @@
 @description('The name of the Storage Account')
-param storageAccounts_name string = '&StorageAccountName&'
+param storageAccounts_name string = '^StorageAccountName^'
 
 param location string
 

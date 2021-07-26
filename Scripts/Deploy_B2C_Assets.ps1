@@ -29,7 +29,7 @@ try {
 
     Write-Host "Updating configurable variables on policy content";
     # Optional: Change the content of the policy. For example, replace the tenant-name with your tenant name.
-    $policycontent = $policycontent.Replace("non-existent.onmicrosoft.com", $TenantId)
+    $policycontent = $policycontent.Replace("nonexistent.onmicrosoft.com", $TenantId)
     $policycontent = $policycontent.Replace("^ProxyIdentityFrameworkClientId^", $ProxyIdentityFrameworkClientId);
     $policycontent = $policycontent.Replace("^IdentityFrameworkClientId^", $B2CIdentityFrameworkClientId);
     $policycontent = $policycontent.Replace("^ExtensionsAppObjectId^", $B2CExtensionsObjectId);
