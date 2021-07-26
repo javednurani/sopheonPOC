@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "profiles_cdn_name": {
-            "value": "&CDNProfileName&"
+            "value": "^CDNProfileName^"
         },
         "profile_endpoint_name": {
-            "value": "&CDNProfileEndpointName&"
+            "value": "^CDNProfileEndpointName^"
         },
         "profile_endpoint_origin": {
             "value": ""

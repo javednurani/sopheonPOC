@@ -6,7 +6,7 @@
             "value":"^StorageAccountName^"            
         },
         "keyVault_name": {
-            "value": "&KeyVaultName&"
+            "value": "^KeyVaultName^"
         }       
     }
 }
