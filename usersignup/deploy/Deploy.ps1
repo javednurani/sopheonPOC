@@ -37,9 +37,9 @@ Check-LastExitCode;
 # powershell.exe -file "$($Scripts)/Replace_Environment_Tokens.ps1" -PathToFile "$($B2CAssets)/azureResources/TrustFrameworkBase.xml";
 # Check-LastExitCode;
 
-Write-Host "...Replacing Environment Tokens on azureResources/TrustFrameworkExtensions.xml...";
-# Replace tokens on TrustFrameworkBase.xml 
-powershell.exe -file "$($Scripts)/Replace_Environment_Tokens.ps1" -PathToFile "$($B2CAssets)/azureResources/TrustFrameworkExtensions.xml";
+Write-Host "...Replacing Environment Tokens on azureResources/SopheonExtensions.xml...";
+# Replace tokens on SopheonExtensions.xml 
+powershell.exe -file "$($Scripts)/Replace_Environment_Tokens.ps1" -PathToFile "$($B2CAssets)/azureResources/SopheonExtensions.xml";
 Check-LastExitCode;
 
 # Upload the TrustFramework .xml files from the GraphApi...
@@ -49,6 +49,10 @@ Check-LastExitCode;
 
 Write-Host "...Uploading Policy: B2C_1A_TrustFrameworkExtensions via GraphAPI...";
 powershell.exe -file "$($Scripts)/Deploy_B2C_Assets.ps1" -PolicyId B2C_1A_TrustFrameworkExtensions -PathToFile "$($B2CAssets)/azureResources/TrustFrameworkExtensions.xml" -Environment $Environment;
+Check-LastExitCode;
+
+Write-Host "...Uploading Policy: B2C_1A_SopheonExtensions via GraphAPI...";
+powershell.exe -file "$($Scripts)/Deploy_B2C_Assets.ps1" -PolicyId B2C_1A_SopheonExtensions -PathToFile "$($B2CAssets)/azureResources/SopheonExtensions.xml" -Environment $Environment;
 Check-LastExitCode;
 
 Write-Host "...Uploading Policy: B2C_1A_signup via GraphAPI...";
