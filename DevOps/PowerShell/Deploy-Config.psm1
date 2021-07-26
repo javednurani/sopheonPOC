@@ -7,7 +7,7 @@ $AppServiceNameValue = $ResourceGroup;
 #endregion
 
 #region Storage Account
-$StorageAccountNameToken = '&StorageAccountName&';
+$StorageAccountNameToken = '^StorageAccountName^';
 $StorageAccountNameValue = $ResourceGroup.ToLower();
 #endregion
 
