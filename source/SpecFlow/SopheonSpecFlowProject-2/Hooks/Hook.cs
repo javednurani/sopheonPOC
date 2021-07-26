@@ -132,7 +132,7 @@ namespace SpecFlowProject2.Hooks
             driver = new ChromeDriver();
             _currentScenarioName = featureName.CreateNode<Scenario>(_scenarioContext.ScenarioInfo.Title);
             driver.Manage().Window.Maximize();
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(30);
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(300);
         }
 
         [AfterScenario]
