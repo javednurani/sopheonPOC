@@ -1,5 +1,5 @@
 @description('The name of the Storage Account')
-param storageAccounts_name string = '&StorageAccountName&'
+param storageAccounts_name string = '^StorageAccountName^'
 
 @description('The name of the Key Vault')
 param keyVault_name string = '&KeyVaultName&'
