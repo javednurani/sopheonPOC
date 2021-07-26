@@ -90,7 +90,7 @@
     </ClaimsTransformations>
     <ContentDefinitions>
       <ContentDefinition Id="api.signuporsignin">
-        <LoadUri>https://#StorageAccountName#.blob.core.windows.net/b2cassets/LoginCustom.html</LoadUri>
+        <LoadUri>https://^StorageAccountName^.blob.core.windows.net/b2cassets/LoginCustom.html</LoadUri>
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.signuporsignin.en" />
         </LocalizedResourcesReferences>
