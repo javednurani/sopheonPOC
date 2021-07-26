@@ -348,3 +348,9 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+/Cloud Native Behavior Testing/SpecFlowProject1
+/Cloud Native Behavior Testing/SopheonSpecFlowProject-2/Features/Terms of Service Review/Verify implicit acceptance.feature.cs
+/Cloud Native Behavior Testing/SopheonSpecFlowProject-2/Features/Terms of Service Review/Verify scrolling within the TOS screen.feature.cs
+/Cloud Native Behavior Testing/SopheonSpecFlowProject-2/Features/Terms of Service Review/Verify the TOS page is present in the workflow.feature.cs
+/Cloud Native Behavior Testing/SopheonSpecFlowProject-2/Features/Terms of Service Review/Verify the user does not see a Back button on TOS.feature.cs
+/Cloud Native Behavior Testing/SopheonSpecFlowProject-2/Features/Terms of Service Review/Verify wording for acceptance on TOS screen.feature.cs
