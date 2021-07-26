@@ -14,7 +14,7 @@ $fileContent = Get-Content $PathToFile;
 
 $loginName = $TenantName.Replace(".onmicrosoft.com", "");
 
-$fileContent = $fileContent.Replace("non-existent.onmicrosoft.com", $TenantName);
+$fileContent = $fileContent.Replace("nonexistent.onmicrosoft.com", $TenantName);
 $fileContent = $fileContent.Replace("^B2CLoginName^", $loginName);
 $fileContent = $fileContent.Replace("^B2CClientId^", $ShellAppClientId);
 $fileContent = $fileContent.Replace("&BrowserWebAppUrl&", $BrowswerWebAppUrl);
