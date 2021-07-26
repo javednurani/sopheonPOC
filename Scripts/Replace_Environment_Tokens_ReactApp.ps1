@@ -16,24 +16,24 @@ $childFiles | ForEach-Object -Process {
     $rawData = Get-Content -Path $_.FullName -Raw;
     $isDataTouched  = $false;
     
-    Write-Host "Looking for Token: '&ShellAppClientId&'";
-    if($rawData -match "&ShellAppClientId&") {
+    Write-Host "Looking for Token: '^ShellAppClientId^'";
+    if($rawData -match "^ShellAppClientId^") {
         $isDataTouched = $true;
-        $rawData = $rawData -replace "&ShellAppClientId&", $ShellClientId;
+        $rawData = $rawData -replace "^ShellAppClientId^", $ShellClientId;
         Write-Host "Replaced Shell App Client Id in file: $($_.FullName)";
     }
 
-    Write-Host "Looking for Token: '&B2CTenantName&'";
-    if($rawData -match "&B2CTenantName&") {        
+    Write-Host "Looking for Token: '^B2CTenantName^'";
+    if($rawData -match "^B2CTenantName^") {        
         $isDataTouched = $true;
-        $rawData = $rawData -replace "&B2CTenantName&", $LoginName;
+        $rawData = $rawData -replace "^B2CTenantName^", $LoginName;
         Write-Host "Replaced Tenant Name in file: $($_.FullName)";
     }
     
-    Write-Host "Looking for Token: '&BrowserWebAppUrl&'";
-    if($rawData -match "&BrowserWebAppUrl&") {        
+    Write-Host "Looking for Token: '^BrowserWebAppUrl^'";
+    if($rawData -match "^BrowserWebAppUrl^") {        
         $isDataTouched = $true;
-        $rawData = $rawData -replace "&BrowserWebAppUrl&", $BrowswerWebAppUrl;
+        $rawData = $rawData -replace "^BrowserWebAppUrl^", $BrowswerWebAppUrl;
         Write-Host "Replaced Tenant Name in file: $($_.FullName)";
     }  
 
