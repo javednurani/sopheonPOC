@@ -30,14 +30,14 @@ namespace SopheonSpecFlowProject2.Steps.New_User_Account_Setup
             accountSetUpPage.emailBoxType();
             accountSetUpPage.newPassWordBoxType();
             accountSetUpPage.reenterPassWordBoxType();
-            accountSetUpPage.mobileBoxType();
-            accountSetUpPage.clickCreateButton();
+           
         }
 
         [Then(@"the Account is created")]
         public void ThenTheAccountIsCreated()
         {
-            //accountSetUpPage.clickCreateButton();
+             accountSetUpPage.mobileBoxType();
+            accountSetUpPage.clickCreateButton();
         }
 
     }
