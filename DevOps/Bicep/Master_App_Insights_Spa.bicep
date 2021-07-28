@@ -1,7 +1,7 @@
 param location string
 param appInsightsSpaName string
 
-resource AppInsights_Spa 'Microsoft.Insights/components@2020-02-02-preview' = {
+resource AppInsights_Spa 'Microsoft.Insights/components@2020-02-02' = {
   name: appInsightsSpaName
   location: location
   kind: 'web'
