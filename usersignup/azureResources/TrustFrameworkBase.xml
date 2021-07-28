@@ -288,6 +288,20 @@
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
 
+      <ClaimType Id="extension_TermsOfUseConsentedDate">
+        <DisplayName>Terms of Use Consented Date</DisplayName>
+        <DataType>dateTime</DataType>
+      </ClaimType>
+
+      <ClaimType Id="extension_TermsOfUseConsentedVersion">
+        <DisplayName>Accept the Terms of Service to keep going</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>CheckboxMultiSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="I accept" Value="v1.0checkbox" SelectByDefault="true" />
+        </Restriction>
+      </ClaimType>
+
     </ClaimsSchema>
 
     <ClaimsTransformations>
@@ -308,6 +322,12 @@
         <InputParameters>
           <InputParameter Id="valueToCompareTo" DataType="boolean" Value="true" />
         </InputParameters>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="GetSystemDateTimeConsent" TransformationMethod="GetCurrentDateTime">
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedDate" TransformationClaimType="currentDateTime" />
+        </OutputClaims>
       </ClaimsTransformation>
     </ClaimsTransformations>
 
@@ -391,6 +411,15 @@
         <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
         <Metadata>
           <Item Key="DisplayName">Local account change password page</Item>
+        </Metadata>
+      </ContentDefinition>
+
+      <ContentDefinition Id="api.selfasserted.consent">
+        <LoadUri>https://&StorageAccountName&.blob.core.windows.net/b2cassets/consentPage.html</LoadUri>
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
+        <Metadata>
+          <Item Key="DisplayName">Consent</Item>
         </Metadata>
       </ContentDefinition>
 
@@ -515,6 +544,8 @@
             <OutputClaim ClaimTypeReferenceId="accountEnabled" />
             <OutputClaim ClaimTypeReferenceId="otherMails" />
             <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress" />
+            <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedDate" />
+            <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedVersion" />
           </OutputClaims>
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="AssertAccountEnabledIsTrue" />
@@ -574,7 +605,29 @@
             <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress" />
             <OutputClaim ClaimTypeReferenceId="displayName" />
             <OutputClaim ClaimTypeReferenceId="otherMails" />
+            <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedDate" />
+            <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedVersion" />
           </OutputClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="AAD-WriteUserConsentByObjectId-ThrowIfNotExists">
+          <Metadata>
+            <Item Key="Operation">Write</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="GetSystemDateTimeConsent" />
+          </InputClaimsTransformations>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+          </InputClaims>
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="objectId" />
+            <PersistedClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedDate" />
+            <PersistedClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedVersion" DefaultValue="v0.1" />
+          </PersistedClaims>
           <IncludeTechnicalProfile ReferenceId="AAD-Common" />
         </TechnicalProfile>
 
@@ -601,6 +654,29 @@
           </OutputClaims>
           <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="AAD-UserWriteProfileUsingObjectId" />
+          </ValidationTechnicalProfiles>
+        </TechnicalProfile>
+
+        <!-- Terms of Service -->
+        <TechnicalProfile Id="SelfAsserted-Consent">
+          <DisplayName>User Consent</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted.consent</Item>
+            <Item Key="setting.showCancelButton">false</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
+          </CryptographicKeys>
+          <InputClaims />
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedVersion" Required="true" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="GetSystemDateTimeConsent" />
+          </OutputClaimsTransformations>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="AAD-WriteUserConsentByObjectId-ThrowIfNotExists" />
           </ValidationTechnicalProfiles>
         </TechnicalProfile>
       </TechnicalProfiles>
