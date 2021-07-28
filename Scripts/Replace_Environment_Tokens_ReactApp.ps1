@@ -17,21 +17,21 @@ $childFiles | ForEach-Object -Process {
     $isDataTouched  = $false;
     
     Write-Host "Looking for Token: '^ShellAppClientId^'";
-    if($rawData -match "^ShellAppClientId^") {
+    if($rawData.Contains("^ShellAppClientId^")) {
         $isDataTouched = $true;
         $rawData = $rawData.Replace("^ShellAppClientId^", $ShellClientId);
         Write-Host "Replaced Shell App Client Id in file: $($_.FullName)";
     }
 
     Write-Host "Looking for Token: '^B2CTenantName^'";
-    if($rawData -match "^B2CTenantName^") {        
+    if($rawData.Contains("^B2CTenantName^")) {        
         $isDataTouched = $true;
         $rawData = $rawData.Replace("^B2CTenantName^", $LoginName);
         Write-Host "Replaced Tenant Name in file: $($_.FullName)";
     }
     
     Write-Host "Looking for Token: '^BrowserWebAppUrl^'";
-    if($rawData -match "^BrowserWebAppUrl^") {        
+    if($rawData.Contains("^BrowserWebAppUrl^")) {        
         $isDataTouched = $true;
         $rawData = $rawData.Replace("^BrowserWebAppUrl^", $BrowswerWebAppUrl);
         Write-Host "Replaced Tenant Name in file: $($_.FullName)";
