@@ -38,7 +38,6 @@ const AuthLanding: FunctionComponent<AuthLandingProps> = ({ adB2cPolicyName, spi
             scopes: ['openid', 'offline_access'],
             redirectUri: redirectUri,
             redirectStartPage: redirectUri,
-            prompt: 'login',
           });
         }
       })
