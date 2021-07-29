@@ -645,7 +645,7 @@
   </ClaimsProviders>
 
   <UserJourneys>
-    <UserJourney Id="SignUp-withConsent">
+    <UserJourney Id="SopheonSignUp">
       <OrchestrationSteps>
 
         <OrchestrationStep Order="1" Type="ClaimsExchange">
@@ -688,7 +688,7 @@
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
-    <UserJourney Id="SignUpOrSignIn-withConsent">
+    <UserJourney Id="SopheonSignUpOrSignIn">
       <OrchestrationSteps>
 
         <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
