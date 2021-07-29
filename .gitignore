@@ -354,3 +354,4 @@ MigrationBackup/
 /Cloud Native Behavior Testing/SopheonSpecFlowProject-2/Features/Terms of Service Review/Verify the TOS page is present in the workflow.feature.cs
 /Cloud Native Behavior Testing/SopheonSpecFlowProject-2/Features/Terms of Service Review/Verify the user does not see a Back button on TOS.feature.cs
 /Cloud Native Behavior Testing/SopheonSpecFlowProject-2/Features/Terms of Service Review/Verify wording for acceptance on TOS screen.feature.cs
+/.vscode/launch.json
