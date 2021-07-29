@@ -28,6 +28,8 @@ npm install
 Write-Host "Building package.json at trial location"
 npm run build
 
+Write-Host "Testing trial location"
+npm run test -- --ci --reporters=jest-junit --reporters=default --coverage --coverageReporters=cobertura --watchAll=false
 
 # Zip/Archive Scripts 
 Write-Host "Zipping Artfacts for Shell Trial...";
