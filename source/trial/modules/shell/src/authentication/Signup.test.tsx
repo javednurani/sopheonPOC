@@ -19,6 +19,12 @@ const mockAccount: AccountInfo = {
   username: 'test@test.com',
   name: randomString(),
 };
+const msalConfig: Configuration = {
+  auth: {
+    clientId: randomString(),
+  },
+};
+const pca = new PublicClientApplication(msalConfig);
 
 jest.mock('@azure/msal-react', () => ({
   ...jest.requireActual('@azure/msal-react'),
@@ -44,13 +50,7 @@ afterEach(() => {
 describe('Signup when logged in', () => {
   test('calls logout once.', async () => {
     // Arrange
-    mockAccounts = [mockAccount];   // user is logged in
-    const msalConfig: Configuration = {
-      auth: {
-        clientId: '8bdfb9a7-913a-48a8-9fe0-5b2877fb844d',
-      },
-    };
-    const pca = new PublicClientApplication(msalConfig);
+    mockAccounts = [mockAccount]; // user is logged in
 
     // Act
     const wrapper = shallow(
@@ -62,7 +62,7 @@ describe('Signup when logged in', () => {
     );
 
     // dive to deeper levels to find/exercise our sut
-    wrapper.find(IntlProvider).dive().find(Signup).dive();
+    wrapper.find(Signup).dive();
 
     // Assert
     expect(mockLogoutSpy).toHaveBeenCalledTimes(1);
@@ -72,13 +72,7 @@ describe('Signup when logged in', () => {
 describe('Signup when NOT logged in', () => {
   test('does not log user out', async () => {
     // Arrange
-    mockAccounts = [];  // user is logged out
-    const msalConfig: Configuration = {
-      auth: {
-        clientId: '8bdfb9a7-913a-48a8-9fe0-5b2877fb844d',
-      },
-    };
-    const pca = new PublicClientApplication(msalConfig);
+    mockAccounts = []; // user is logged out
 
     // Act
     const wrapper = shallow(
@@ -90,7 +84,7 @@ describe('Signup when NOT logged in', () => {
     );
 
     // dive to deeper levels to find/exercise our sut
-    wrapper.find(IntlProvider).dive().find(Signup).dive();
+    wrapper.find(Signup).dive();
 
     // Assert
     expect(mockLogoutSpy).not.toHaveBeenCalled();
