@@ -25,6 +25,8 @@ Set-Location -Path "$($env:System_DefaultWorkingDirectory)/source/trial/modules/
 Write-Host "Location set for shared packages 'shell'";
 npm install
 
+npm install jest-junit
+
 Write-Host "Building package.json at trial location"
 npm run build
 
