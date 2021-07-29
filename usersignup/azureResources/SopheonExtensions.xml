@@ -563,10 +563,13 @@
         <TechnicalProfile Id="AAD-UserReadUsingObjectId">
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="mobile" />
+            <OutputClaim ClaimTypeReferenceId="jobTitle" />
+            <OutputClaim ClaimTypeReferenceId="country" />
             <OutputClaim ClaimTypeReferenceId="extension_newsletter" />
             <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedDate" />
             <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedVersion" />
             <OutputClaim ClaimTypeReferenceId="extension_ProfileEditDate" />
+            <OutputClaim ClaimTypeReferenceId="extension_Company" />
           </OutputClaims>
         </TechnicalProfile>
         <TechnicalProfile Id="AAD-WriteUserConsentByObjectId-ThrowIfNotExists">
@@ -625,6 +628,11 @@
           </ValidationTechnicalProfiles>
         </TechnicalProfile>
         <TechnicalProfile Id="SelfAsserted-ProfileUpdate">
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="jobTitle" />
+            <InputClaim ClaimTypeReferenceId="extension_Company" />
+            <InputClaim ClaimTypeReferenceId="country" />
+          </InputClaims>
           <OutputClaims>
             <!-- Optional profile claims -->
             <OutputClaim ClaimTypeReferenceId="jobTitle" />
@@ -639,21 +647,21 @@
   <UserJourneys>
     <UserJourney Id="SignUp-withConsent">
       <OrchestrationSteps>
-    
+
         <OrchestrationStep Order="1" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
           </ClaimsExchanges>
         </OrchestrationStep>
-    
+
         <!-- This step reads any user attributes that we may not have received when in the token. -->
         <OrchestrationStep Order="2" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
           </ClaimsExchanges>
         </OrchestrationStep>
-    
-         <!-- execute consent step if the users consented version does not met the current version,
+
+        <!-- execute consent step if the users consented version does not met the current version,
               otherwhise this step is skipped -->
         <OrchestrationStep Order="3" Type="ClaimsExchange">
           <Preconditions>
@@ -676,7 +684,7 @@
         </OrchestrationStep>
 
         <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
-    
+
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
