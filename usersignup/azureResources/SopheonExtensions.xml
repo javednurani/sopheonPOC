@@ -14,23 +14,24 @@
         <PredicateValidationReference Id="PhoneNumberValidation" />
       </ClaimType>
       <ClaimType Id="country">
+        <DisplayName>Country :)</DisplayName>
         <DataType>string</DataType>
-        <UserHelpText />
+        <UserHelpText>Country :D</UserHelpText>
         <UserInputType>DropdownSingleSelect</UserInputType>
         <Restriction>
           <Enumeration Text="Country/Region" Value="DEFAULT" SelectByDefault="false" />
         </Restriction>
       </ClaimType>
       <ClaimType Id="jobTitle">
-        <DisplayName>Job Title</DisplayName>
+        <DisplayName>Job Title :)</DisplayName>
         <DataType>string</DataType>
-        <UserHelpText />
+        <UserHelpText>Job Title :D</UserHelpText>
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
       <ClaimType Id="extension_Company">
-        <DisplayName>Company</DisplayName>
+        <DisplayName>Company :)</DisplayName>
         <DataType>string</DataType>
-        <UserHelpText />
+        <UserHelpText>Company :D</UserHelpText>
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
       <ClaimType Id="extension_newsletter">
@@ -493,6 +494,8 @@
           <LocalizedString ElementType="ClaimType" ElementId="jobTitle" StringId="UserHelpText">Job Title</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_Company" StringId="DisplayName">Company</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_Company" StringId="UserHelpText">Company</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="country" StringId="DisplayName">Country</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="country" StringId="UserHelpText">Country</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
     </Localization>
@@ -639,21 +642,21 @@
   <UserJourneys>
     <UserJourney Id="SignUp-withConsent">
       <OrchestrationSteps>
-    
+
         <OrchestrationStep Order="1" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
           </ClaimsExchanges>
         </OrchestrationStep>
-    
+
         <!-- This step reads any user attributes that we may not have received when in the token. -->
         <OrchestrationStep Order="2" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
           </ClaimsExchanges>
         </OrchestrationStep>
-    
-         <!-- execute consent step if the users consented version does not met the current version,
+
+        <!-- execute consent step if the users consented version does not met the current version,
               otherwhise this step is skipped -->
         <OrchestrationStep Order="3" Type="ClaimsExchange">
           <Preconditions>
@@ -676,7 +679,7 @@
         </OrchestrationStep>
 
         <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
-    
+
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
