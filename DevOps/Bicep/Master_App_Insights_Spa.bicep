@@ -15,7 +15,7 @@ resource AppInsights_Spa 'Microsoft.Insights/components@2020-02-02' = {
   }
 }
 
-resource components_AccoladeCloudNative_Dev_name_degradationindependencyduration 'microsoft.insights/components/ProactiveDetectionConfigs@2018-05-01-preview' = {
+resource components_AccoladeCloudNative_Dev_name_degradationindependencyduration 'Microsoft.Insights/components/ProactiveDetectionConfigs@2018-05-01-preview' = {
   name: '${AppInsights_Spa.name}/degradationindependencyduration'
   location: location
   properties: {

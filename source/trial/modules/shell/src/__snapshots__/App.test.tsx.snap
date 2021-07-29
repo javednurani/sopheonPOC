@@ -125,7 +125,7 @@ exports[`Testing the App component App snapshot render test 1`] = `
                               id="id__8"
                               key="id__8"
                             >
-                              Signup/Login
+                              Log In
                             </span>
                           </span>
                         </span>
