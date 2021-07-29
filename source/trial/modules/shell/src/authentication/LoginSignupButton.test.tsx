@@ -1,7 +1,7 @@
 import { AccountInfo, Configuration, PublicClientApplication } from '@azure/msal-browser';
 import { MsalProvider } from '@azure/msal-react';
 import { messages } from '@sopheon/shared-ui';
-import { screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import React, { ReactElement } from 'react';
 import { IntlProvider } from 'react-intl';
@@ -59,7 +59,7 @@ describe('Test Unauthenticated LoginSignupButton component', () => {
     const button: HTMLElement = await screen.findByText(messages.en['auth.loginbutton']);
     button.click();
     // Assert
-    await waitFor(() => expect(loginRedirectSpy).toHaveBeenCalledTimes(1));
+    expect(loginRedirectSpy).toHaveBeenCalledTimes(1);
   });
 });
 describe('Test Authenticated LoginSignupButton component', () => {
@@ -98,7 +98,7 @@ describe('Test Authenticated LoginSignupButton component', () => {
     const button: HTMLElement = await screen.findByText(userName);
 
     // Assert
-    await waitFor(() => expect(handleRedirectSpy).toHaveBeenCalledTimes(1));
+    expect(handleRedirectSpy).toHaveBeenCalledTimes(1);
     expect(screen.queryByText('This text will always display.')).toBeInTheDocument();
     expect(button).toBeInTheDocument();
     expect(axeResults).toHaveNoViolations();
@@ -145,6 +145,6 @@ describe('Test Authenticated LoginSignupButton component', () => {
     profileButton.click();
 
     // Assert
-    await waitFor(() => expect(loginRedirectSpy).toHaveBeenCalledTimes(1));
+    expect(loginRedirectSpy).toHaveBeenCalledTimes(1);
   });
 });
