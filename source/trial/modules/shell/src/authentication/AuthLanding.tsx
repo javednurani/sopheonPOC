@@ -27,8 +27,8 @@ const AuthLanding: FunctionComponent<AuthLandingProps> = ({ adB2cPolicyName, spi
     document.body.style.margin = '0 0';
 
     const adB2cTenantName: string = isDev ? azureSettings.AD_B2C_TenantName_Dev : azureSettings.AD_B2C_TenantName;
-
     const authorityUrl = `https://${adB2cTenantName}.b2clogin.com/${adB2cTenantName}.onmicrosoft.com/${adB2cPolicyName}`;
+
     instance
       .handleRedirectPromise()
       .then(tokenResponse => {
