@@ -8,7 +8,7 @@ import { IntlProvider } from 'react-intl';
 
 import { RootState } from '../store';
 import { getInitState, languageRender, randomString, render } from '../testUtils';
-import azureSettings from './../azureSettings';
+import { azureSettings } from './../azureSettings';
 import LoginSignupButton from './LoginSignupButton';
 
 expect.extend(toHaveNoViolations);
