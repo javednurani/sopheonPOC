@@ -14,24 +14,24 @@
         <PredicateValidationReference Id="PhoneNumberValidation" />
       </ClaimType>
       <ClaimType Id="country">
-        <DisplayName>Country :)</DisplayName>
+        <DisplayName>Country</DisplayName>
         <DataType>string</DataType>
-        <UserHelpText>Country :D</UserHelpText>
+        <UserHelpText />
         <UserInputType>DropdownSingleSelect</UserInputType>
         <Restriction>
           <Enumeration Text="Country/Region" Value="DEFAULT" SelectByDefault="false" />
         </Restriction>
       </ClaimType>
       <ClaimType Id="jobTitle">
-        <DisplayName>Job Title :)</DisplayName>
+        <DisplayName>Job Title</DisplayName>
         <DataType>string</DataType>
-        <UserHelpText>Job Title :D</UserHelpText>
+        <UserHelpText />
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
       <ClaimType Id="extension_Company">
-        <DisplayName>Company :)</DisplayName>
+        <DisplayName>Company</DisplayName>
         <DataType>string</DataType>
-        <UserHelpText>Company :D</UserHelpText>
+        <UserHelpText />
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
       <ClaimType Id="extension_newsletter">
@@ -113,7 +113,6 @@
         </LocalizedResourcesReferences>
       </ContentDefinition>
       <ContentDefinition Id="api.selfasserted.profileupdate">
-        <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:2.0</DataUri>
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.profileupdate.en" />
         </LocalizedResourcesReferences>
