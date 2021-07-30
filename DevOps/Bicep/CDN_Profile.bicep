@@ -1,11 +1,11 @@
 @description('The name of the CDN Profile')
-param profiles_cdn_name string = '&CDNProfileName&'
+param profiles_cdn_name string = '^CDNProfileName^'
 
 @description('The name of the CDN Endpoint')
-param profile_endpoint_name string = '&CDNProfileEndpointName&'
+param profile_endpoint_name string = '^CDNProfileEndpointName^'
 
 @description('The Storage Account Endpoint Origin')
-param profile_endpoint_origin string = '&CDNProfileEndpointOrigin&'
+param profile_endpoint_origin string = '^CDNProfileEndpointOrigin^'
 
 @description('The name of the Marketing CDN Endpoint')
 param profile_endpoint_marketing_name string = '&CDNProfileEndpointMarketingName&'

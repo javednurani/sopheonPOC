@@ -9,6 +9,6 @@ $StorageAccount = $env:StorageAccount
 
 $fileContent = Get-Content $PathToFile;
 
-$fileContent = $fileContent.Replace("&StorageAccountName&", $StorageAccount);
+$fileContent = $fileContent.Replace("^StorageAccountName^", $StorageAccount);
 
 Set-Content -Path $PathToFile -Value $fileContent -Force;
