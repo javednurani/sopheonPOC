@@ -12,8 +12,6 @@ const sectionStyle: CSSProperties = {
   backgroundImage: `url(${AzureBlueBackground})`,
 };
 
-const isDev = process.env.NODE_ENV === 'development';
-const redirectUri: string = isDev ? azureSettings.SPA_Root_URL_Dev : azureSettings.SPA_Root_URL;
 
 export interface AuthLandingProps {
   adB2cPolicyName: string;
@@ -26,8 +24,8 @@ const AuthLanding: FunctionComponent<AuthLandingProps> = ({ adB2cPolicyName, spi
   useEffect(() => {
     document.body.style.margin = '0 0';
 
-    const adB2cTenantName: string = isDev ? azureSettings.AD_B2C_TenantName_Dev : azureSettings.AD_B2C_TenantName;
-    const authorityUrl = `https://${adB2cTenantName}.b2clogin.com/${adB2cTenantName}.onmicrosoft.com/${adB2cPolicyName}`;
+    // dup
+    const authorityUrl = `https://${azureSettings.AD_B2C_TenantName}.b2clogin.com/${azureSettings.AD_B2C_TenantName}.onmicrosoft.com/${adB2cPolicyName}`;
 
     instance
       .handleRedirectPromise()
@@ -36,8 +34,8 @@ const AuthLanding: FunctionComponent<AuthLandingProps> = ({ adB2cPolicyName, spi
           instance.loginRedirect({
             authority: authorityUrl,
             scopes: ['openid', 'offline_access'],
-            redirectUri: redirectUri,
-            redirectStartPage: redirectUri,
+            redirectUri: azureSettings.SPA_Root_URL,
+            redirectStartPage: azureSettings.SPA_Root_URL,
           });
         }
       })

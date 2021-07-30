@@ -10,13 +10,12 @@ const LoginSignupButton: FunctionComponent = () => {
   const { instance, accounts } = useMsal();
 
   const editProfileClick = () => {
-    const isDev = process.env.NODE_ENV === 'development';
-    const redirectUri: string = isDev ? azureSettings.SPA_Root_URL_Dev : azureSettings.SPA_Root_URL;
-    const adB2cTenantName: string = isDev ? azureSettings.AD_B2C_TenantName_Dev : azureSettings.AD_B2C_TenantName;
-    const profileEditAuthorityUrl = `https://${adB2cTenantName}.b2clogin.com/${adB2cTenantName}.onmicrosoft.com/${azureSettings.AD_B2C_ProfileEdit_Policy}`;
+    // dup
+    const profileEditAuthorityUrl =
+      `https://${azureSettings.AD_B2C_TenantName}.b2clogin.com/${azureSettings.AD_B2C_TenantName}.onmicrosoft.com/${azureSettings.AD_B2C_ProfileEdit_Policy}`;
     instance.loginRedirect({
       authority: profileEditAuthorityUrl,
-      redirectUri: redirectUri,
+      redirectUri: azureSettings.SPA_Root_URL,
       scopes: [],
     });
   };
