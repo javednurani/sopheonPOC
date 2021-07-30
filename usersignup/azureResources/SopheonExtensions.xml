@@ -113,6 +113,7 @@
         </LocalizedResourcesReferences>
       </ContentDefinition>
       <ContentDefinition Id="api.selfasserted.profileupdate">
+        <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:2.0</DataUri>
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.profileupdate.en" />
         </LocalizedResourcesReferences>
@@ -490,8 +491,8 @@
           </LocalizedCollection>
         </LocalizedCollections>
         <LocalizedStrings>
-          <LocalizedString ElementType="ClaimType" ElementId="jobTitle" StringId="DisplayName">Job Title Display</LocalizedString>
-          <LocalizedString ElementType="ClaimType" ElementId="jobTitle" StringId="UserHelpText">Job Title UserHelp</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="jobTitle" StringId="DisplayName">Job Title</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="jobTitle" StringId="UserHelpText">Job Title</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_Company" StringId="DisplayName">Company</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_Company" StringId="UserHelpText">Company</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="country" StringId="DisplayName">Country</LocalizedString>
