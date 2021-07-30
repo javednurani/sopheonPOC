@@ -3,18 +3,15 @@ import { DefaultButton, IContextualMenuProps } from '@fluentui/react';
 import React, { FunctionComponent } from 'react';
 import { useIntl } from 'react-intl';
 
-import azureSettings from '../azureSettings';
+import { azureSettings, getAuthorityUrl } from '../azureSettings';
 
 const LoginSignupButton: FunctionComponent = () => {
   const { formatMessage } = useIntl();
   const { instance, accounts } = useMsal();
 
   const editProfileClick = () => {
-    // dup
-    const profileEditAuthorityUrl =
-      `https://${azureSettings.AD_B2C_TenantName}.b2clogin.com/${azureSettings.AD_B2C_TenantName}.onmicrosoft.com/${azureSettings.AD_B2C_ProfileEdit_Policy}`;
     instance.loginRedirect({
-      authority: profileEditAuthorityUrl,
+      authority: getAuthorityUrl(azureSettings.AD_B2C_ProfileEdit_Policy),
       redirectUri: azureSettings.SPA_Root_URL,
       scopes: [],
     });
