@@ -632,6 +632,9 @@
           </ValidationTechnicalProfiles>
         </TechnicalProfile>
         <TechnicalProfile Id="SelfAsserted-ProfileUpdate">
+          <Metadata>
+            <Item Key="AllowGenerationOfClaimsWithNullValues">true</Item>
+          </Metadata>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="jobTitle" />
             <InputClaim ClaimTypeReferenceId="extension_Company" />
