@@ -46,7 +46,6 @@ const LoginSignupButton: FunctionComponent = () => {
       },
       {
         key: 'changepassword',
-        // TODO-1214 LOCALIZE
         text: formatMessage({ id: 'auth.changepassword' }),
         iconProps: { iconName: 'EditContact' },
         onClick: changePasswordClick,
