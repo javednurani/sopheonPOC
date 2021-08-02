@@ -10,10 +10,13 @@ const LoginSignupButton: FunctionComponent = () => {
   const { instance, accounts } = useMsal();
 
   const editProfileClick = () => {
+    // Cloud-1339: The below ts-ignore is due to not including a 'scopes' property in the RedirectRequest object
+    // The linked example code from Microsoft, demo'ing a loginRedirect Profile Edit, does not include 'scopes' on the RedirectRequest
+    // https://github.com/Azure-Samples/ms-identity-b2c-javascript-spa/blob/main/App/authRedirect.js
+    // @ts-ignore
     instance.loginRedirect({
       authority: getAuthorityUrl(azureSettings.AD_B2C_ProfileEdit_Policy),
       redirectUri: azureSettings.SPA_Root_URL,
-      scopes: [],
     });
   };
 
