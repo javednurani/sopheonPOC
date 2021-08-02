@@ -27,6 +27,12 @@
         <UserHelpText />
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
+      <ClaimType Id="oldPassword">
+        <DisplayName>Old Password</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText />
+        <UserInputType>Password</UserInputType>
+      </ClaimType>
       <ClaimType Id="extension_Company">
         <DisplayName>Company</DisplayName>
         <DataType>string</DataType>
@@ -114,6 +120,14 @@
       <ContentDefinition Id="api.selfasserted.profileupdate">
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.profileupdate.en" />
+        </LocalizedResourcesReferences>
+      </ContentDefinition>
+      <ContentDefinition Id="api.selfasserted.passwordchange">
+        <LoadUri>~/tenant/templates/AzureBlue/selfAsserted.cshtml</LoadUri>
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
+        <LocalizedResourcesReferences MergeBehavior="Prepend">
+          <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.passwordchange.en" />
         </LocalizedResourcesReferences>
       </ContentDefinition>
     </ContentDefinitions>
@@ -495,6 +509,12 @@
           <LocalizedString ElementType="ClaimType" ElementId="extension_Company" StringId="UserHelpText">Company</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
+      <LocalizedResources Id="api.selfasserted.passwordchange.en">
+        <LocalizedStrings>
+          <LocalizedString ElementType="ClaimType" ElementId="oldPassword" StringId="DisplayName">Old Password</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="oldPassword" StringId="UserHelpText">Old Password</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
     </Localization>
   </BuildingBlocks>
 
@@ -533,6 +553,37 @@
             <OutputClaim ClaimTypeReferenceId="userPrincipalName" PartnerClaimType="upn" />
             <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="localAccountAuthentication" />
           </OutputClaims>
+        </TechnicalProfile>
+        <TechnicalProfile Id="login-NonInteractive-PasswordChange">
+          <DisplayName>Local Account SignIn</DisplayName>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="oldPassword" PartnerClaimType="password" Required="true" />
+          </InputClaims>
+          <IncludeTechnicalProfile ReferenceId="login-NonInteractive" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <ClaimsProvider>
+      <DisplayName>Local Account Password Change</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="LocalAccountWritePasswordChangeUsingObjectId">
+          <DisplayName>Change password (username)</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted.passwordchange</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="oldPassword" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="newPassword" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="reenterPassword" Required="true" />
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="login-NonInteractive-PasswordChange" />
+            <ValidationTechnicalProfile ReferenceId="AAD-UserWritePasswordUsingObjectId" />
+          </ValidationTechnicalProfiles>
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
@@ -639,21 +690,21 @@
   <UserJourneys>
     <UserJourney Id="SignUp-withConsent">
       <OrchestrationSteps>
-    
+
         <OrchestrationStep Order="1" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
           </ClaimsExchanges>
         </OrchestrationStep>
-    
+
         <!-- This step reads any user attributes that we may not have received when in the token. -->
         <OrchestrationStep Order="2" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
           </ClaimsExchanges>
         </OrchestrationStep>
-    
-         <!-- execute consent step if the users consented version does not met the current version,
+
+        <!-- execute consent step if the users consented version does not met the current version,
               otherwhise this step is skipped -->
         <OrchestrationStep Order="3" Type="ClaimsExchange">
           <Preconditions>
@@ -676,7 +727,7 @@
         </OrchestrationStep>
 
         <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
-    
+
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
@@ -741,6 +792,32 @@
 
         <OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
 
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+    <UserJourney Id="PasswordChange">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.signuporsignin">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection TargetClaimsExchangeId="LocalAccountSigninEmailExchange" />
+          </ClaimsProviderSelections>
+        </OrchestrationStep>
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordChangeUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
