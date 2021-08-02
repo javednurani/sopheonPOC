@@ -567,7 +567,7 @@
           <DisplayName>Change password (username)</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ContentDefinitionReferenceId">api.selfasserted.profileupdate</Item>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted.passwordchange</Item>
           </Metadata>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="objectId" />
