@@ -27,6 +27,11 @@ try {
     powershell.exe -file "$($Scripts)/Replace_Environment_Tokens.ps1" -PathToFile "$($B2CAssets)/azureResources/termsOfUse/consentPage.html";
     Check-LastExitCode;
 
+    Write-Host "...Replacing Environment Tokens on azureResources/SelfAsserted/selfAssertedTemplate.html...";
+    # Replace tokens on selfAssertedTemplate.html 
+    powershell.exe -file "$($Scripts)/Replace_Environment_Tokens.ps1" -PathToFile "$($B2CAssets)/azureResources/SelfAsserted/selfAssertedTemplate.html";
+    Check-LastExitCode;
+
     Write-Host "...Replacing Environment Tokens on azureResources/Login/LoginCustom.html...";
     # Replace tokens on LoginCustom.html 
     powershell.exe -file "$($Scripts)/Replace_Environment_Tokens.ps1" -PathToFile "$($B2CAssets)/azureResources/Login/LoginCustom.html";
@@ -73,6 +78,12 @@ try {
     $MarketingUploadResults;
     Check-LastExitCode;
     Write-Host "Complete! Transfered files to Storage Account Blob: "'$web';
+
+    Write-Host "Uploading SelfAssertedTemplate blob storage";
+    $MarketingUploadResults = az storage blob upload-batch --destination 'b2cassets' --account-name $StorageAccountName --source "$($B2CAssets)/azureResources/SelfAsserted" --auth-mode login;
+    $MarketingUploadResults;
+    Check-LastExitCode;
+    Write-Host "Complete! Transfered files to Storage Account Blob: "'b2cassets';
 
     Write-Host "Uploading Terms of Consent blob storage";
     $MarketingUploadResults = az storage blob upload-batch --destination 'b2cassets' --account-name $StorageAccountName --source "$($B2CAssets)/azureResources/termsOfUse" --auth-mode login;
