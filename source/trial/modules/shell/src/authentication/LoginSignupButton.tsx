@@ -26,7 +26,15 @@ const LoginSignupButton: FunctionComponent = () => {
     instance.loginRedirect({
       authority: passwordChangeAuthorityUrl,
       redirectUri: redirectUri,
+      scopes: ['openid', 'offline_access'],
+      // TODO: look at line 47 of https://github.com/Azure-Samples/ms-identity-b2c-javascript-spa/blob/main/App/authRedirect.js
+      // this should let us avoid ts-ignoring/ no-scoping on both changePassword and profileEdit.
+      // we need to retrieve the correct account (of multiple) from the MSAL instance
     });
+  };
+
+  const debugClick = () => {
+    console.log(accounts);
   };
 
   const menuProps: IContextualMenuProps = {
@@ -47,6 +55,7 @@ const LoginSignupButton: FunctionComponent = () => {
         key: 'signout',
         text: formatMessage({ id: 'auth.signout' }),
         iconProps: { iconName: 'SignOut' },
+        onClick: debugClick,
       },
     ],
   };
