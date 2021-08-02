@@ -1,0 +1,7 @@
+{
+	"BaseWebAppUrl": "&BaseWebAppUrl&",
+	"BaseB2CLoginUrl": "&BaseB2CLoginUrl&",
+	"B2CLoginRedirectUrl":  "&B2CLoginRedirectUrl&", 
+	"BaseMarketingUrl": "&BaseMarketingUrl&",
+	"B2CClientId": "&B2CClientId&" 
+}

@@ -62,21 +62,22 @@ Write-Host "Set! Static Website Url: $($CDNProfileEndpointOriginValue)";
 $CDNProfileNameToken = '^CDNProfileName^';
 $CDNProfileNameValue = $ResourceGroupValue;
 $CDNProfileEndpointNameToken = '^CDNProfileEndpointName^';
-$CDNProfileEndpointNameValue = $ResourceGroupValue;
+$CDNProfileEndpointNameValue = "StratusApp-$($EnvironmentName)";
+$CDNProfileEndpointMarketingNameValue = "StratusMarketing-$($EnvironmentName)";
+$CDNProfileEndpointMarketingNameToken = '^CDNProfileEndpointMarketingName^';
 $CDNProfileEndpointOriginToken = '^CDNProfileEndpointOrigin^';
-$CDNProfileEndpointOriginValue = '';
 
 Write-Host "Replacing tokens on Master CDN Template...";
 $a = Get-Content $CDNTemplate -raw;
 $a = $a -replace $CDNProfileNameToken, $CDNProfileNameValue -replace $CDNProfileEndpointNameToken, $CDNProfileEndpointNameValue;
-$a = $a -replace $CDNProfileEndpointOriginToken, $CDNProfileEndpointOriginValue;
+$a = $a -replace $CDNProfileEndpointOriginToken, $CDNProfileEndpointOriginValue -replace $CDNProfileEndpointMarketingNameToken, $CDNProfileEndpointMarketingNameValue;
 Set-Content -Value $a -Path $CDNTemplate;
 Write-Host "Complete!";
 
 Write-Host "Replacing tokens on Master CDN Parameters Template...";
 $a = Get-Content $CDNParametersTemplate -raw;
 $a = $a -replace $CDNProfileNameToken, $CDNProfileNameValue -replace $CDNProfileEndpointNameToken, $CDNProfileEndpointNameValue;
-$a = $a -replace $CDNProfileEndpointOriginToken, $CDNProfileEndpointOriginValue;
+$a = $a -replace $CDNProfileEndpointOriginToken, $CDNProfileEndpointOriginValue -replace $CDNProfileEndpointMarketingNameToken, $CDNProfileEndpointMarketingNameValue;
 Set-Content -Value $a -Path $CDNParametersTemplate;
 Write-Host "Complete!";
 
