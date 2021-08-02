@@ -63,6 +63,10 @@ Write-Host "...Uploading Policy: B2C_1A_signup_signin via GraphAPI...";
 powershell.exe -file "$($Scripts)/Deploy_B2C_Assets.ps1" -PolicyId B2C_1A_signup_signin -PathToFile "$($B2CAssets)/azureResources/SignUpOrSignin.xml" -Environment $Environment;
 Check-LastExitCode;
 
+Write-Host "...Uploading Policy: B2C_1A_profileedit_passwordchange via GraphAPI...";
+powershell.exe -file "$($Scripts)/Deploy_B2C_Assets.ps1" -PolicyId B2C_1A_profileedit_passwordchange -PathToFile "$($B2CAssets)/azureResources/ProfileEditPasswordChange.xml" -Environment $Environment;
+Check-LastExitCode;
+
 # Upload related B2C Assets to Blob Storage
 Write-Host "Uploading Marketing Page to blob storage";
 $MarketingUploadResults = az storage blob upload --container-name '$web' --account-name $StorageAccountName --file "$($B2CAssets)/website/index.html" --name index.html --auth-mode login;
