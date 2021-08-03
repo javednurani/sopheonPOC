@@ -1,13 +1,14 @@
 import { AccountInfo, Configuration, PublicClientApplication } from '@azure/msal-browser';
 import { MsalProvider } from '@azure/msal-react';
 import { messages } from '@sopheon/shared-ui';
-import { screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import React, { ReactElement } from 'react';
 import { IntlProvider } from 'react-intl';
 
 import { RootState } from '../store';
 import { getInitState, languageRender, randomString, render } from '../testUtils';
+import { azureSettings } from './../azureSettings';
 import LoginSignupButton from './LoginSignupButton';
 
 expect.extend(toHaveNoViolations);
@@ -37,7 +38,7 @@ describe('Test Unauthenticated LoginSignupButton component', () => {
     // Arrange
     const msalConfig: Configuration = {
       auth: {
-        clientId: '8bdfb9a7-913a-48a8-9fe0-5b2877fb844d',
+        clientId: randomString(),
       },
     };
     const pca = new PublicClientApplication(msalConfig);
@@ -58,7 +59,7 @@ describe('Test Unauthenticated LoginSignupButton component', () => {
     const button: HTMLElement = await screen.findByText(messages.en['auth.loginbutton']);
     button.click();
     // Assert
-    await waitFor(() => expect(loginRedirectSpy).toHaveBeenCalledTimes(1));
+    expect(loginRedirectSpy).toHaveBeenCalledTimes(1);
   });
 });
 describe('Test Authenticated LoginSignupButton component', () => {
@@ -66,10 +67,10 @@ describe('Test Authenticated LoginSignupButton component', () => {
     // Arrange
     const msalConfig: Configuration = {
       auth: {
-        clientId: '8bdfb9a7-913a-48a8-9fe0-5b2877fb844d',
+        clientId: randomString(),
       },
     };
-
+    const pca = new PublicClientApplication(msalConfig);
     const testAccount: AccountInfo = {
       homeAccountId: randomString(),
       localAccountId: randomString(),
@@ -79,7 +80,6 @@ describe('Test Authenticated LoginSignupButton component', () => {
       name: randomString(), // This value will appear on button
     };
 
-    const pca = new PublicClientApplication(msalConfig);
     const handleRedirectSpy = jest.spyOn(pca, 'handleRedirectPromise');
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
     getAllAccountsSpy.mockImplementation(() => [testAccount]);
@@ -98,9 +98,53 @@ describe('Test Authenticated LoginSignupButton component', () => {
     const button: HTMLElement = await screen.findByText(userName);
 
     // Assert
-    await waitFor(() => expect(handleRedirectSpy).toHaveBeenCalledTimes(1));
+    expect(handleRedirectSpy).toHaveBeenCalledTimes(1);
     expect(screen.queryByText('This text will always display.')).toBeInTheDocument();
     expect(button).toBeInTheDocument();
     expect(axeResults).toHaveNoViolations();
+  });
+  test('MyProfile button calls ProfileEdit loginRedirect onClick', async () => {
+    // Arrange
+    const msalConfig: Configuration = {
+      auth: {
+        clientId: randomString(),
+      },
+    };
+    const pca = new PublicClientApplication(msalConfig);
+    const testAccount: AccountInfo = {
+      homeAccountId: randomString(),
+      localAccountId: randomString(),
+      environment: 'login.windows.net',
+      tenantId: randomString(),
+      username: 'test@test.com',
+      name: randomString(), // This value will appear on button
+    };
+
+    const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
+    getAllAccountsSpy.mockImplementation(() => [testAccount]);
+    const loginRedirectSpy = jest.spyOn(pca, 'loginRedirect').mockImplementation(request => {
+      expect(request?.authority).toContain(azureSettings.AD_B2C_ProfileEdit_Policy);
+
+      return Promise.resolve();
+    });
+
+    // Act
+    render(
+      <MsalProvider instance={pca}>
+        <IntlProvider locale="en" messages={messages.en}>
+          <p>This text will always display.</p>
+          <LoginSignupButton />
+        </IntlProvider>
+      </MsalProvider>
+    );
+
+    const userName: string = testAccount.name ? testAccount.name : '';
+    const accountButton: HTMLElement = await screen.findByText(userName);
+    accountButton.click();
+    const profileButton: HTMLElement = await screen.findByText(messages.en['auth.myprofile']);
+    profileButton.click();
+
+    // Assert
+    expect(loginRedirectSpy).toHaveBeenCalledTimes(1);
   });
 });

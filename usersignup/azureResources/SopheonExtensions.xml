@@ -14,6 +14,7 @@
         <PredicateValidationReference Id="PhoneNumberValidation" />
       </ClaimType>
       <ClaimType Id="country">
+        <DisplayName>Country</DisplayName>
         <DataType>string</DataType>
         <UserHelpText />
         <UserInputType>DropdownSingleSelect</UserInputType>
@@ -112,6 +113,7 @@
         </LocalizedResourcesReferences>
       </ContentDefinition>
       <ContentDefinition Id="api.selfasserted.profileupdate">
+        <LoadUri>https://^StorageAccountName^.blob.core.windows.net/b2cassets/selfAssertedTemplate.html</LoadUri>
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.profileupdate.en" />
         </LocalizedResourcesReferences>
@@ -493,6 +495,8 @@
           <LocalizedString ElementType="ClaimType" ElementId="jobTitle" StringId="UserHelpText">Job Title</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_Company" StringId="DisplayName">Company</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="extension_Company" StringId="UserHelpText">Company</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="country" StringId="DisplayName">Country</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="country" StringId="UserHelpText">Country</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
     </Localization>
@@ -563,10 +567,13 @@
         <TechnicalProfile Id="AAD-UserReadUsingObjectId">
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="mobile" />
+            <OutputClaim ClaimTypeReferenceId="jobTitle" />
+            <OutputClaim ClaimTypeReferenceId="country" />
             <OutputClaim ClaimTypeReferenceId="extension_newsletter" />
             <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedDate" />
             <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedVersion" />
             <OutputClaim ClaimTypeReferenceId="extension_ProfileEditDate" />
+            <OutputClaim ClaimTypeReferenceId="extension_Company" />
           </OutputClaims>
         </TechnicalProfile>
         <TechnicalProfile Id="AAD-WriteUserConsentByObjectId-ThrowIfNotExists">
@@ -625,6 +632,14 @@
           </ValidationTechnicalProfiles>
         </TechnicalProfile>
         <TechnicalProfile Id="SelfAsserted-ProfileUpdate">
+          <Metadata>
+            <Item Key="AllowGenerationOfClaimsWithNullValues">true</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="jobTitle" />
+            <InputClaim ClaimTypeReferenceId="extension_Company" />
+            <InputClaim ClaimTypeReferenceId="country" />
+          </InputClaims>
           <OutputClaims>
             <!-- Optional profile claims -->
             <OutputClaim ClaimTypeReferenceId="jobTitle" />
@@ -637,23 +652,23 @@
   </ClaimsProviders>
 
   <UserJourneys>
-    <UserJourney Id="SignUp-withConsent">
+    <UserJourney Id="SopheonSignUp">
       <OrchestrationSteps>
-    
+
         <OrchestrationStep Order="1" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
           </ClaimsExchanges>
         </OrchestrationStep>
-    
+
         <!-- This step reads any user attributes that we may not have received when in the token. -->
         <OrchestrationStep Order="2" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
           </ClaimsExchanges>
         </OrchestrationStep>
-    
-         <!-- execute consent step if the users consented version does not met the current version,
+
+        <!-- execute consent step if the users consented version does not met the current version,
               otherwhise this step is skipped -->
         <OrchestrationStep Order="3" Type="ClaimsExchange">
           <Preconditions>
@@ -676,11 +691,11 @@
         </OrchestrationStep>
 
         <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
-    
+
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
-    <UserJourney Id="SignUpOrSignIn-withConsent">
+    <UserJourney Id="SopheonSignUpOrSignIn">
       <OrchestrationSteps>
 
         <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
