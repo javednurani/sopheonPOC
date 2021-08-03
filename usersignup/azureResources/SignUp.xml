@@ -7,7 +7,7 @@
   </BasePolicy>
 
   <RelyingParty>
-    <DefaultUserJourney ReferenceId="SignUp-withConsent" />
+    <DefaultUserJourney ReferenceId="SopheonSignUp" />
     <TechnicalProfile Id="PolicyProfile">
       <DisplayName>PolicyProfile</DisplayName>
       <Protocol Name="OpenIdConnect" />
