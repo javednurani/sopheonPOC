@@ -19,6 +19,7 @@ export const azureSettings: Record<string, string> = {
   AD_B2C_TenantName: isDev ? azureRawSettings.AD_B2C_TenantName_Dev : azureRawSettings.AD_B2C_TenantName,
   AD_B2C_SignUpSignIn_Policy: azureRawSettings.AD_B2C_SignUpSignIn_Policy,
   AD_B2C_SignUp_Policy: azureRawSettings.AD_B2C_SignUp_Policy,
+  AD_B2C_PasswordChange_Policy: azureRawSettings.AD_B2C_PasswordChange_Policy,
   AD_B2C_ProfileEdit_Policy: azureRawSettings.AD_B2C_ProfileEdit_Policy,
   SPA_Root_URL: isDev ? azureRawSettings.SPA_Root_URL_Dev : azureRawSettings.SPA_Root_URL,
 };
