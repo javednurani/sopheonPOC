@@ -37,6 +37,8 @@ const LoginSignupButton: FunctionComponent = () => {
        * sure we are selecting the account with homeAccountId that contains the sign-up/sign-in user-flow,
        * as this is the default flow the user initially signed-in with.
        */
+      const adB2cAuthorityDomain = `${azureSettings.AD_B2C_TenantName}.b2clogin.com`;
+
       const msalAccounts = currentMsalAccounts.filter(
         msalAccount =>
           msalAccount.homeAccountId.toUpperCase().includes(azureSettings.AD_B2C_SignUpSignIn_Policy.toUpperCase()) &&
@@ -46,7 +48,7 @@ const LoginSignupButton: FunctionComponent = () => {
           msalAccount.idTokenClaims.iss.toUpperCase().includes(adB2cAuthorityDomain.toUpperCase()) &&
           // AccountInfo.idTokenClaims is typed as 'object' by Microsoft
           // @ts-ignore
-          msalAccount.idTokenClaims.aud === adB2cClientId
+          msalAccount.idTokenClaims.aud === azureSettings.AD_B2C_ClientId
       );
 
       if (msalAccounts.length > 1) {
@@ -66,33 +68,19 @@ const LoginSignupButton: FunctionComponent = () => {
     }
   };
 
-  // TODO, refactor with Cloud-1214 work
-  const isDev = process.env.NODE_ENV === 'development';
-  const adB2cClientId = isDev ? azureSettings.AD_B2C_ClientId_Dev : azureSettings.AD_B2C_ClientId;
-  const adB2cTenantName: string = isDev ? azureSettings.AD_B2C_TenantName_Dev : azureSettings.AD_B2C_TenantName;
-  const adB2cAuthorityDomain = `${adB2cTenantName}.b2clogin.com`;
-
   const changePasswordClick = () => {
-    // TODO, this will be refactored once main branch (with Cloud-1214 work) is merged into Cloud-1275 story branch
-    // ternary statements will be replaced by logic in azureSettings, and getAuthorityUrl helper function will be used
-    const redirectUri: string = isDev ? azureSettings.SPA_Root_URL_Dev : azureSettings.SPA_Root_URL;
-
-    const passwordChangeAuthorityUrl = `https://${adB2cTenantName}.b2clogin.com/${adB2cTenantName}.onmicrosoft.com/${azureSettings.AD_B2C_PasswordChange_Policy}`;
-
     instance.loginRedirect({
-      authority: passwordChangeAuthorityUrl,
-      redirectUri: redirectUri,
+      authority: getAuthorityUrl(azureSettings.AD_B2C_PasswordChange_Policy),
+      redirectUri: azureSettings.SPA_Root_URL,
       scopes: [],
     });
   };
+
   const editProfileClick = () => {
-    // Cloud-1339: The below ts-ignore is due to not including a 'scopes' property in the RedirectRequest object
-    // The linked example code from Microsoft, demo'ing a loginRedirect Profile Edit, does not include 'scopes' on the RedirectRequest
-    // https://github.com/Azure-Samples/ms-identity-b2c-javascript-spa/blob/main/App/authRedirect.js
-    // @ts-ignore
     instance.loginRedirect({
       authority: getAuthorityUrl(azureSettings.AD_B2C_ProfileEdit_Policy),
       redirectUri: azureSettings.SPA_Root_URL,
+      scopes: [],
     });
   };
 
