@@ -30,10 +30,12 @@ try {
     Write-Host "Updating configurable variables on policy content";
     # Optional: Change the content of the policy. For example, replace the tenant-name with your tenant name.
     $policycontent = $policycontent.Replace("nonexistent.onmicrosoft.com", $TenantId)
+    Write-Output "Nonexistent was replaced with: $TenantId"
     $policycontent = $policycontent.Replace("^ProxyIdentityFrameworkClientId^", $ProxyIdentityFrameworkClientId);
     $policycontent = $policycontent.Replace("^IdentityFrameworkClientId^", $B2CIdentityFrameworkClientId);
     $policycontent = $policycontent.Replace("^ExtensionsAppObjectId^", $B2CExtensionsObjectId);
     $policycontent = $policycontent.Replace("^ExtensionsAppClientId^", $B2CExtensionsClientId);
+    Set-Content -Path $PathToFile -Value $policycontent
 
     $response = Invoke-RestMethod -Uri $graphuri -Method Put -Body $policycontent -Headers $headers
     $response;

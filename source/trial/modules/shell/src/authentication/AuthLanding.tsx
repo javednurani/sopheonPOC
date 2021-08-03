@@ -3,7 +3,7 @@ import { ISpinnerStyles, IStackStyles, Spinner, SpinnerSize, Stack } from '@flue
 import React, { CSSProperties, FunctionComponent, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
-import azureSettings from '../azureSettings';
+import { azureSettings, getAuthorityUrl } from '../azureSettings';
 import AzureBlueBackground from '../images/azure-blue-background.png';
 
 const sectionStyle: CSSProperties = {
@@ -11,9 +11,6 @@ const sectionStyle: CSSProperties = {
   height: '100vh',
   backgroundImage: `url(${AzureBlueBackground})`,
 };
-
-const isDev = process.env.NODE_ENV === 'development';
-const redirectUri: string = isDev ? azureSettings.SPA_Root_URL_Dev : azureSettings.SPA_Root_URL;
 
 export interface AuthLandingProps {
   adB2cPolicyName: string;
@@ -26,18 +23,15 @@ const AuthLanding: FunctionComponent<AuthLandingProps> = ({ adB2cPolicyName, spi
   useEffect(() => {
     document.body.style.margin = '0 0';
 
-    const adB2cTenantName: string = isDev ? azureSettings.AD_B2C_TenantName_Dev : azureSettings.AD_B2C_TenantName;
-
-    const authorityUrl = `https://${adB2cTenantName}.b2clogin.com/${adB2cTenantName}.onmicrosoft.com/${adB2cPolicyName}`;
     instance
       .handleRedirectPromise()
       .then(tokenResponse => {
         if (!tokenResponse) {
           instance.loginRedirect({
-            authority: authorityUrl,
+            authority: getAuthorityUrl(adB2cPolicyName),
             scopes: ['openid', 'offline_access'],
-            redirectUri: redirectUri,
-            redirectStartPage: redirectUri,
+            redirectUri: azureSettings.SPA_Root_URL,
+            redirectStartPage: azureSettings.SPA_Root_URL,
           });
         }
       })
