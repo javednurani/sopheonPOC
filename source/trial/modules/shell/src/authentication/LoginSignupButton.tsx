@@ -4,7 +4,7 @@ import { DefaultButton, IContextualMenuProps } from '@fluentui/react';
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
-import { changePasswordRequest, editProfileRequest, setMsalAccount } from './authHelpers';
+import { changePasswordRequest, editProfileRequest, getMsalAccount } from './authHelpers';
 
 const LoginSignupButton: FunctionComponent = () => {
   const { formatMessage } = useIntl();
@@ -13,7 +13,7 @@ const LoginSignupButton: FunctionComponent = () => {
   const [account, setAccount] = useState<AccountInfo>();
 
   useEffect(() => {
-    setMsalAccount(instance, setAccount);
+    setAccount(getMsalAccount(instance));
   }, [instance, accounts]);
 
   const changePasswordClick = () => {

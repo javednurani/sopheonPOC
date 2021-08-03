@@ -26,7 +26,7 @@ export const getAuthLandingRedirectRequest = (adB2cPolicyName: string): Redirect
 // including profile edit, password change, etc.  We need the account / auth response returned from the SignUpSignIn flow.
 // See MS example code with a version of this function
 // https://github.com/Azure-Samples/ms-identity-b2c-javascript-spa/blob/main/App/authRedirect.js
-export const setMsalAccount = (instance: IPublicClientApplication, setAccount: (value: React.SetStateAction<AccountInfo | undefined>) => void): void => {
+export const getMsalAccount = (instance: IPublicClientApplication): (AccountInfo | undefined) => {
   /**
    * See here for more information on account retrieval:
    * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
@@ -35,7 +35,7 @@ export const setMsalAccount = (instance: IPublicClientApplication, setAccount: (
   const currentMsalAccounts = instance.getAllAccounts();
 
   if (currentMsalAccounts.length < 1) {
-    return;
+    return undefined; // TODO better than undefined?
   } else if (currentMsalAccounts.length > 1) {
     /**
      * Due to the way MSAL caches account objects, the auth response from initiating a user-flow
@@ -61,15 +61,14 @@ export const setMsalAccount = (instance: IPublicClientApplication, setAccount: (
       // localAccountId identifies the entity for which the token asserts information.
       if (msalAccounts.every(msalAccount => msalAccount.localAccountId === msalAccounts[0].localAccountId)) {
         // All accounts belong to the same user
-        setAccount(msalAccounts[0]);
-      } else {
-        // Multiple users detected. Logout all to be safe.
-        instance.logout();
+        return msalAccounts[0];
       }
+      // Multiple users detected. Logout all to be safe.
+      instance.logout();
     } else if (msalAccounts.length === 1) {
-      setAccount(msalAccounts[0]);
+      return msalAccounts[0];
     }
   } else if (currentMsalAccounts.length === 1) {
-    setAccount(currentMsalAccounts[0]);
+    return currentMsalAccounts[0];
   }
 };
