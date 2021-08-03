@@ -6,6 +6,7 @@ import { axe, toHaveNoViolations } from 'jest-axe';
 import React, { ReactElement } from 'react';
 import { IntlProvider } from 'react-intl';
 
+import azureSettings from '../azureSettings';
 import { RootState } from '../store';
 import { getInitState, languageRender, randomString, render } from '../testUtils';
 import LoginSignupButton from './LoginSignupButton';
@@ -102,5 +103,51 @@ describe('Test Authenticated LoginSignupButton component', () => {
     expect(screen.queryByText('This text will always display.')).toBeInTheDocument();
     expect(button).toBeInTheDocument();
     expect(axeResults).toHaveNoViolations();
+  });
+  // TODO, refactor or reduce duplicates as possible with Cloud-1214 work merged
+  // can a testAccount creator be moved to testUtils?
+  test('ChangePassword button calls ProfileEdit_PasswordChange loginRedirect onClick', async () => {
+    // Arrange
+    const msalConfig: Configuration = {
+      auth: {
+        clientId: randomString(),
+      },
+    };
+    const pca = new PublicClientApplication(msalConfig);
+    const testAccount: AccountInfo = {
+      homeAccountId: randomString(),
+      localAccountId: randomString(),
+      environment: 'login.windows.net',
+      tenantId: randomString(),
+      username: 'test@test.com',
+      name: randomString(), // This value will appear on button
+    };
+
+    const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
+    getAllAccountsSpy.mockImplementation(() => [testAccount]);
+    const loginRedirectSpy = jest.spyOn(pca, 'loginRedirect').mockImplementation(request => {
+      expect(request?.authority).toContain(azureSettings.AD_B2C_PasswordChange_Policy);
+
+      return Promise.resolve();
+    });
+
+    // Act
+    render(
+      <MsalProvider instance={pca}>
+        <IntlProvider locale="en" messages={messages.en}>
+          <p>This text will always display.</p>
+          <LoginSignupButton />
+        </IntlProvider>
+      </MsalProvider>
+    );
+
+    const userName: string = testAccount.name ? testAccount.name : '';
+    const accountButton: HTMLElement = await screen.findByText(userName);
+    accountButton.click();
+    const profileButton: HTMLElement = await screen.findByText(messages.en['auth.changepassword']);
+    profileButton.click();
+
+    // Assert
+    expect(loginRedirectSpy).toHaveBeenCalledTimes(1);
   });
 });
