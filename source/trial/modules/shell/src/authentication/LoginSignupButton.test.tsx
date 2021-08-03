@@ -6,7 +6,6 @@ import { axe, toHaveNoViolations } from 'jest-axe';
 import React, { ReactElement } from 'react';
 import { IntlProvider } from 'react-intl';
 
-import azureSettings from '../azureSettings';
 import { RootState } from '../store';
 import { getInitState, languageRender, randomString, render } from '../testUtils';
 import { azureSettings } from './../azureSettings';
