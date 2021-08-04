@@ -13,7 +13,10 @@ const LoginSignupButton: FunctionComponent = () => {
   const [account, setAccount] = useState<AccountInfo>();
 
   useEffect(() => {
-    setAccount(getMsalAccount(instance));
+    const msalAccount: AccountInfo | undefined = getMsalAccount(instance);
+    if (msalAccount !== undefined) {
+      setAccount(msalAccount);
+    }
   }, [instance, accounts]);
 
   const changePasswordClick = () => {

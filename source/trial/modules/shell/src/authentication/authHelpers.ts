@@ -1,6 +1,6 @@
 import { AccountInfo, IPublicClientApplication, RedirectRequest } from '@azure/msal-browser';
 
-import { azureSettings, getAuthorityUrl } from '../azureSettings';
+import { azureSettings, getAuthorityDomain, getAuthorityUrl } from '../azureSettings';
 
 
 export const changePasswordRequest: RedirectRequest = {
@@ -26,7 +26,7 @@ export const getAuthLandingRedirectRequest = (adB2cPolicyName: string): Redirect
 // including profile edit, password change, etc.  We need the account / auth response returned from the SignUpSignIn flow.
 // See MS example code with a version of this function
 // https://github.com/Azure-Samples/ms-identity-b2c-javascript-spa/blob/main/App/authRedirect.js
-export const getMsalAccount = (instance: IPublicClientApplication): (AccountInfo | undefined) => {
+export const getMsalAccount = (instance: IPublicClientApplication): AccountInfo | undefined => {
   /**
    * See here for more information on account retrieval:
    * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
@@ -35,7 +35,7 @@ export const getMsalAccount = (instance: IPublicClientApplication): (AccountInfo
   const currentMsalAccounts = instance.getAllAccounts();
 
   if (currentMsalAccounts.length < 1) {
-    return undefined; // TODO better than undefined?
+    return undefined;
   } else if (currentMsalAccounts.length > 1) {
     /**
      * Due to the way MSAL caches account objects, the auth response from initiating a user-flow
@@ -43,7 +43,6 @@ export const getMsalAccount = (instance: IPublicClientApplication): (AccountInfo
      * sure we are selecting the account with homeAccountId that contains the sign-up/sign-in user-flow,
      * as this is the default flow the user initially signed-in with.
      */
-    const adB2cAuthorityDomain = `${azureSettings.AD_B2C_TenantName}.b2clogin.com`;
 
     const msalAccounts = currentMsalAccounts.filter(
       msalAccount =>
@@ -51,7 +50,7 @@ export const getMsalAccount = (instance: IPublicClientApplication): (AccountInfo
         msalAccount.idTokenClaims !== undefined &&
         // AccountInfo.idTokenClaims is typed as 'object' by Microsoft
         // @ts-ignore
-        msalAccount.idTokenClaims.iss.toUpperCase().includes(adB2cAuthorityDomain.toUpperCase()) &&
+        msalAccount.idTokenClaims.iss.toUpperCase().includes(getAuthorityDomain().toUpperCase()) &&
         // AccountInfo.idTokenClaims is typed as 'object' by Microsoft
         // @ts-ignore
         msalAccount.idTokenClaims.aud === azureSettings.AD_B2C_ClientId
@@ -64,6 +63,7 @@ export const getMsalAccount = (instance: IPublicClientApplication): (AccountInfo
         return msalAccounts[0];
       }
       // Multiple users detected. Logout all to be safe.
+      // end of function / return undefined will be reached
       instance.logout();
     } else if (msalAccounts.length === 1) {
       return msalAccounts[0];
@@ -71,4 +71,7 @@ export const getMsalAccount = (instance: IPublicClientApplication): (AccountInfo
   } else if (currentMsalAccounts.length === 1) {
     return currentMsalAccounts[0];
   }
+  // case of multiple users detected will fall here after instance.logout()
+  // case of invalid currentMsalAccounts returned from instance.getAllAccounts() will also fall here
+  return undefined;
 };

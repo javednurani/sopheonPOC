@@ -4,7 +4,7 @@ import React, { FunctionComponent } from 'react';
 import { ConnectedProps } from 'react-redux';
 
 import App from './App';
-import { azureSettings, getAuthorityUrl } from './azureSettings';
+import { azureSettings, getAuthorityDomain, getAuthorityUrl } from './azureSettings';
 import ConnectedIntlProvider from './languages/ConnectedIntlProvider';
 import { shellApi } from './ShellApi';
 import ConnectedThemeProvider from './themes/components/connectedThemeProvider/ConnectedThemeProvider';
@@ -13,7 +13,7 @@ const msalConfig: Configuration = {
   auth: {
     authority: getAuthorityUrl(azureSettings.AD_B2C_SignUpSignIn_Policy),
     clientId: azureSettings.AD_B2C_ClientId,
-    knownAuthorities: [`${azureSettings.AD_B2C_TenantName}.b2clogin.com`],
+    knownAuthorities: [getAuthorityDomain()],
   },
 };
 

@@ -27,3 +27,7 @@ export const azureSettings: Record<string, string> = {
 export function getAuthorityUrl(adB2cPolicyName: string): string {
   return `https://${azureSettings.AD_B2C_TenantName}.b2clogin.com/${azureSettings.AD_B2C_TenantName}.onmicrosoft.com/${adB2cPolicyName}`;
 }
+
+export function getAuthorityDomain(): string {
+  return `${azureSettings.AD_B2C_TenantName}.b2clogin.com`;
+}
