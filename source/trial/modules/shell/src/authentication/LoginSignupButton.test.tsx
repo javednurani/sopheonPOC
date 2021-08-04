@@ -1,4 +1,4 @@
-import { AccountInfo, Configuration, PublicClientApplication } from '@azure/msal-browser';
+import { AccountInfo } from '@azure/msal-browser';
 import { MsalProvider } from '@azure/msal-react';
 import { messages } from '@sopheon/shared-ui';
 import { screen } from '@testing-library/react';
@@ -6,9 +6,8 @@ import { axe, toHaveNoViolations } from 'jest-axe';
 import React, { ReactElement } from 'react';
 import { IntlProvider } from 'react-intl';
 
-import azureSettings from '../azureSettings';
 import { RootState } from '../store';
-import { getInitState, languageRender, randomString, render } from '../testUtils';
+import { getInitState, languageRender, randomMsalAccount, render, testMsalInstance } from '../testUtils';
 import { azureSettings } from './../azureSettings';
 import LoginSignupButton from './LoginSignupButton';
 
@@ -37,12 +36,7 @@ describe('Test Unauthenticated LoginSignupButton component', () => {
   });
   test('button onClick event fires loginRedirect', async () => {
     // Arrange
-    const msalConfig: Configuration = {
-      auth: {
-        clientId: randomString(),
-      },
-    };
-    const pca = new PublicClientApplication(msalConfig);
+    const pca = testMsalInstance();
     const loginRedirectSpy = jest.spyOn(pca, 'loginRedirect').mockImplementation(request => {
       expect(request).toBe(undefined);
 
@@ -66,20 +60,8 @@ describe('Test Unauthenticated LoginSignupButton component', () => {
 describe('Test Authenticated LoginSignupButton component', () => {
   test('button renders correctly and a11y compliant', async () => {
     // Arrange
-    const msalConfig: Configuration = {
-      auth: {
-        clientId: randomString(),
-      },
-    };
-    const pca = new PublicClientApplication(msalConfig);
-    const testAccount: AccountInfo = {
-      homeAccountId: randomString(),
-      localAccountId: randomString(),
-      environment: 'login.windows.net',
-      tenantId: randomString(),
-      username: 'test@test.com',
-      name: randomString(), // This value will appear on button
-    };
+    const pca = testMsalInstance();
+    const testAccount: AccountInfo = randomMsalAccount();
 
     const handleRedirectSpy = jest.spyOn(pca, 'handleRedirectPromise');
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
@@ -104,24 +86,10 @@ describe('Test Authenticated LoginSignupButton component', () => {
     expect(button).toBeInTheDocument();
     expect(axeResults).toHaveNoViolations();
   });
-  // TODO, refactor or reduce duplicates as possible with Cloud-1214 work merged
-  // can a testAccount creator be moved to testUtils?
   test('MyProfile button calls ProfileEdit loginRedirect onClick', async () => {
     // Arrange
-    const msalConfig: Configuration = {
-      auth: {
-        clientId: randomString(),
-      },
-    };
-    const pca = new PublicClientApplication(msalConfig);
-    const testAccount: AccountInfo = {
-      homeAccountId: randomString(),
-      localAccountId: randomString(),
-      environment: 'login.windows.net',
-      tenantId: randomString(),
-      username: 'test@test.com',
-      name: randomString(), // This value will appear on button
-    };
+    const pca = testMsalInstance();
+    const testAccount: AccountInfo = randomMsalAccount();
 
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
     getAllAccountsSpy.mockImplementation(() => [testAccount]);
@@ -152,20 +120,8 @@ describe('Test Authenticated LoginSignupButton component', () => {
   });
   test('ChangePassword button calls ProfileEdit_PasswordChange loginRedirect onClick', async () => {
     // Arrange
-    const msalConfig: Configuration = {
-      auth: {
-        clientId: randomString(),
-      },
-    };
-    const pca = new PublicClientApplication(msalConfig);
-    const testAccount: AccountInfo = {
-      homeAccountId: randomString(),
-      localAccountId: randomString(),
-      environment: 'login.windows.net',
-      tenantId: randomString(),
-      username: 'test@test.com',
-      name: randomString(), // This value will appear on button
-    };
+    const pca = testMsalInstance();
+    const testAccount: AccountInfo = randomMsalAccount();
 
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
     getAllAccountsSpy.mockImplementation(() => [testAccount]);
