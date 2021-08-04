@@ -1,4 +1,4 @@
-import { AccountInfo } from '@azure/msal-browser';
+import { AccountInfo, Configuration, PublicClientApplication } from '@azure/msal-browser';
 import { MsalProvider } from '@azure/msal-react';
 import { messages } from '@sopheon/shared-ui';
 import { screen } from '@testing-library/react';
@@ -7,7 +7,7 @@ import React, { ReactElement } from 'react';
 import { IntlProvider } from 'react-intl';
 
 import { RootState } from '../store';
-import { getInitState, languageRender, randomMsalAccount, render, testMsalInstance } from '../testUtils';
+import { getInitState, languageRender, randomMsalAccount, randomString, render, testMsalInstance } from '../testUtils';
 import { azureSettings } from './../azureSettings';
 import LoginSignupButton from './LoginSignupButton';
 
@@ -149,5 +149,48 @@ describe('Test Authenticated LoginSignupButton component', () => {
 
     // Assert
     expect(loginRedirectSpy).toHaveBeenCalledTimes(1);
+  });
+  test('Logout button calls logoutRedirect onClick', async () => {
+    // Arrange
+    const msalConfig: Configuration = {
+      auth: {
+        clientId: randomString(),
+      },
+    };
+    const pca = new PublicClientApplication(msalConfig);
+    const testAccount: AccountInfo = {
+      homeAccountId: randomString(),
+      localAccountId: randomString(),
+      environment: 'login.windows.net',
+      tenantId: randomString(),
+      username: 'test@test.com',
+      name: randomString(), // This value will appear on button
+    };
+
+    const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
+    getAllAccountsSpy.mockImplementation(() => [testAccount]);
+    const logoutRedirectSpy = jest.spyOn(pca, 'logoutRedirect').mockImplementation(request => {
+      expect(request).toBe(undefined);
+      return Promise.resolve();
+    });
+
+    // Act
+    render(
+      <MsalProvider instance={pca}>
+        <IntlProvider locale="en" messages={messages.en}>
+          <p>This text will always display.</p>
+          <LoginSignupButton />
+        </IntlProvider>
+      </MsalProvider>
+    );
+
+    const userName: string = testAccount.name ? testAccount.name : '';
+    const accountButton: HTMLElement = await screen.findByText(userName);
+    accountButton.click();
+    const signoutButton: HTMLElement = await screen.findByText(messages.en['auth.signout']);
+    signoutButton.click();
+
+    // Assert
+    expect(logoutRedirectSpy).toHaveBeenCalledTimes(1);
   });
 });
