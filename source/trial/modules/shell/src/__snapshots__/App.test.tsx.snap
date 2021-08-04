@@ -1,0 +1,289 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing the App component App snapshot render test 1`] = `
+<div
+  className="App"
+  style={
+    Object {
+      "height": "100vh",
+      "textAlign": "center",
+    }
+  }
+>
+  <div
+    className="ms-Stack css-120"
+  >
+    <div
+      className="ms-StackItem css-121"
+    >
+      <div>
+        <header
+          role="banner"
+          style={
+            Object {
+              "borderBottom": "1px solid",
+              "borderBottomColor": "#373737",
+              "marginTop": "8px",
+            }
+          }
+        >
+          <div
+            className="ms-Stack css-122"
+          >
+            <div
+              className="ms-StackItem css-121"
+            >
+              <div
+                key=".0"
+                style={
+                  Object {
+                    "margin": "5px",
+                  }
+                }
+                title="Lucy"
+              >
+                <ReactComponent
+                  style={
+                    Object {
+                      "fill": "#72379e",
+                      "height": "100%",
+                      "maxHeight": "100px",
+                      "maxWidth": "100px",
+                      "minHeight": "25px",
+                      "minWidth": "25px",
+                      "overflow": "visible",
+                      "stroke": "#72379e",
+                      "width": "100%",
+                    }
+                  }
+                />
+              </div>
+            </div>
+            <div
+              className="ms-StackItem css-121"
+            >
+              <nav
+                role="navigation"
+              >
+                <a
+                  href="/app"
+                  onClick={[Function]}
+                  style={
+                    Object {
+                      "color": "#72379e",
+                      "fontSize": "20px",
+                    }
+                  }
+                >
+                  App
+                </a>
+              </nav>
+            </div>
+            <div
+              className="ms-StackItem css-123"
+            >
+              <h1
+                className="page-title"
+                id="page-title"
+                key=".0"
+              >
+                Template Title
+              </h1>
+            </div>
+            <div
+              className="ms-StackItem css-121"
+            >
+              <div
+                className="ms-Stack css-124"
+              >
+                <div
+                  className="ms-StackItem css-121"
+                >
+                  Array [
+                    "",
+                    Array [
+                      <button
+                        className="ms-Button ms-Button--default root-125"
+                        data-is-focusable={true}
+                        onClick={[Function]}
+                        onKeyDown={[Function]}
+                        onKeyPress={[Function]}
+                        onKeyUp={[Function]}
+                        onMouseDown={[Function]}
+                        onMouseUp={[Function]}
+                        type="button"
+                      >
+                        <span
+                          className="ms-Button-flexContainer flexContainer-126"
+                          data-automationid="splitbuttonprimary"
+                        >
+                          <span
+                            className="ms-Button-textContainer textContainer-127"
+                          >
+                            <span
+                              className="ms-Button-label label-129"
+                              id="id__8"
+                              key="id__8"
+                            >
+                              Log In
+                            </span>
+                          </span>
+                        </span>
+                      </button>,
+                      "",
+                    ],
+                  ]
+                </div>
+                <div
+                  className="ms-StackItem css-121"
+                >
+                  <div
+                    className="ms-Stack css-133"
+                  >
+                    Dark Theme
+                    <div
+                      className="ms-Toggle is-enabled root-134"
+                    >
+                      <div
+                        className="ms-Toggle-innerContainer container-136"
+                      >
+                        <button
+                          aria-checked={false}
+                          aria-label="Dark Theme"
+                          className="ms-Toggle-background pill-137"
+                          data-is-focusable={true}
+                          id="Toggle11"
+                          onChange={[Function]}
+                          onClick={[Function]}
+                          role="switch"
+                          type="button"
+                        >
+                          <span
+                            className="ms-Toggle-thumb thumb-138"
+                          />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+      </div>
+    </div>
+    <div
+      className="ms-StackItem css-140"
+    >
+      <main
+        key=".0"
+        role="main"
+        style={
+          Object {
+            "height": "100%",
+            "position": "relative",
+          }
+        }
+      >
+        <div
+          className="ms-ScrollablePane root-141"
+        >
+          <div
+            className="stickyAbove-143"
+            style={
+              Object {
+                "height": 0,
+                "left": "0",
+                "right": "0px",
+                "top": "0",
+              }
+            }
+          />
+          <div
+            className="ms-ScrollablePane--contentContainer contentContainer-142"
+            data-is-scrollable={true}
+          />
+          <div
+            className="stickyBelow-144"
+            style={
+              Object {
+                "bottom": "0px",
+                "height": 0,
+                "left": "0",
+                "right": "0px",
+              }
+            }
+          >
+            <div
+              className="stickyBelowItems-145"
+            />
+          </div>
+        </div>
+      </main>
+    </div>
+    <div
+      className="ms-StackItem css-121"
+    >
+      <div>
+        <footer
+          role="contentinfo"
+          style={
+            Object {
+              "borderTop": "1px solid",
+              "borderTopColor": "#373737",
+              "padding": "10px",
+              "textAlign": "start",
+            }
+          }
+        >
+          <div
+            className="ms-Stack css-122"
+          >
+            <div
+              className="ms-StackItem css-146"
+            >
+              RSS Feeds | Sitemap | Privacy | Legal | Contact Us :: Copyright 2020-2021 Sopheon. All Rights Reserved
+            </div>
+            <div
+              className="ms-StackItem css-147"
+            >
+              <span
+                key=".0"
+              >
+                <i
+                  aria-hidden="true"
+                  className="root-149"
+                  data-icon-name="LikeSolid"
+                >
+                  
+                </i>
+                <i
+                  aria-hidden="true"
+                  className="root-151"
+                  data-icon-name="CommentSolid"
+                >
+                  
+                </i>
+                <i
+                  aria-hidden="true"
+                  className="root-153"
+                  data-icon-name="LinkedInLogo"
+                >
+                  
+                </i>
+                <i
+                  aria-hidden="true"
+                  className="root-155"
+                  data-icon-name="TeamsLogo"
+                >
+                  
+                </i>
+              </span>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -1,0 +1,4 @@
+# package and module build output
+dist/
+# VS Code workspace settings
+.vscode/
