@@ -16,12 +16,12 @@ steps:
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
-    script: 'dotnet-project-licenses -i ''$(System.DefaultWorkingDirectory)\source\SpecFlow\CloudSpecFlowFramework.sln'' --allowed-license-types ''$(System.DefaultWorkingDirectory)\source\SpecFlow\AllowedLicenses.json'' --output --outfile ''$(Build.ArtifactStagingDirectory)\licenses.txt'''
+    script: 'dotnet-project-licenses -i ''$(System.DefaultWorkingDirectory)\source\SpecFlow\Sopheon Cloud Specflow Build.sln'' --allowed-license-types ''$(System.DefaultWorkingDirectory)\source\SpecFlow\AllowedLicenses.json'' --output --outfile ''$(Build.ArtifactStagingDirectory)\licenses.txt'''
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet build'
   inputs:
-    projects: '$(System.DefaultWorkingDirectory)\source\SpecFlow\CloudSpecFlowFramework.sln'
+    projects: '$(System.DefaultWorkingDirectory)\source\SpecFlow\Sopheon Cloud Specflow Build.sln'
     arguments: '-o $(Build.ArtifactStagingDirectory)'
 
 

@@ -27,6 +27,10 @@ const LoginSignupButton: FunctionComponent = () => {
     instance.loginRedirect(editProfileRequest);
   };
 
+  const logoutClick = () => {
+    instance.logoutRedirect();
+  };
+
   const menuProps: IContextualMenuProps = {
     items: [
       {
@@ -45,6 +49,7 @@ const LoginSignupButton: FunctionComponent = () => {
         key: 'signout',
         text: formatMessage({ id: 'auth.signout' }),
         iconProps: { iconName: 'SignOut' },
+        onClick: logoutClick,
       },
     ],
   };
