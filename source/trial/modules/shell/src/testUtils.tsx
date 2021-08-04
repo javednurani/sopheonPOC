@@ -1,3 +1,4 @@
+import { AccountInfo } from '@azure/msal-browser';
 import { setIconOptions } from '@fluentui/react/lib-commonjs/Styling';
 import { constants, messages } from '@sopheon/shared-ui';
 import { render as rtlRender, RenderResult } from '@testing-library/react';
@@ -13,6 +14,15 @@ import { initialState as initialThemeState } from './themes/themeReducer/themeRe
 import { LanguageShape } from './types';
 
 export const randomString = (): string => Math.random().toString().substring(2, 15);
+
+export const randomMsalAccount = (): AccountInfo => ({
+  homeAccountId: randomString(),
+  localAccountId: randomString(),
+  environment: randomString(),
+  tenantId: randomString(),
+  username: `${randomString()}@test.com`,
+  name: randomString(), // This value will appear on button
+});
 
 const rootReducer = combineReducers({ shell });
 const initialLanguageState: LanguageShape = {

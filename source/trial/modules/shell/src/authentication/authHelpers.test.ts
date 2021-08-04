@@ -1,7 +1,7 @@
 import { AccountInfo, Configuration, PublicClientApplication } from '@azure/msal-browser';
 
 import { azureSettings, getAuthorityDomain } from '../azureSettings';
-import { randomString } from '../testUtils';
+import { randomMsalAccount, randomString } from '../testUtils';
 import { getMsalAccount } from './authHelpers';
 
 describe('Test authHelpers', () => {
@@ -28,30 +28,20 @@ describe('Test authHelpers', () => {
     // Arrange
     const sharedLocalAccountId: string = randomString();
 
-    const signUpSignInAccount1: AccountInfo = {
-      homeAccountId: randomString() + azureSettings.AD_B2C_SignUpSignIn_Policy,
-      localAccountId: sharedLocalAccountId,
-      environment: 'login.windows.net',
-      tenantId: randomString(),
-      username: 'test@test.com',
-      name: randomString(), // This value will appear on button
-      idTokenClaims: {
-        iss: randomString() + getAuthorityDomain(),
-        aud: azureSettings.AD_B2C_ClientId
-      }
+    const signUpSignInAccount1: AccountInfo = randomMsalAccount();
+    signUpSignInAccount1.homeAccountId = `${randomString()}-${azureSettings.AD_B2C_SignUpSignIn_Policy}`;
+    signUpSignInAccount1.localAccountId = sharedLocalAccountId;
+    signUpSignInAccount1.idTokenClaims = {
+      iss: `${randomString()}-${getAuthorityDomain()}`,
+      aud: azureSettings.AD_B2C_ClientId
     };
 
-    const signUpSignInAccount2: AccountInfo = {
-      homeAccountId: randomString() + azureSettings.AD_B2C_SignUpSignIn_Policy,
-      localAccountId: sharedLocalAccountId,
-      environment: 'login.windows.net',
-      tenantId: randomString(),
-      username: 'test@test.com',
-      name: randomString(), // This value will appear on button
-      idTokenClaims: {
-        iss: randomString() + getAuthorityDomain(),
-        aud: azureSettings.AD_B2C_ClientId
-      }
+    const signUpSignInAccount2: AccountInfo = randomMsalAccount();
+    signUpSignInAccount2.homeAccountId = `${randomString()}-${azureSettings.AD_B2C_SignUpSignIn_Policy}`;
+    signUpSignInAccount2.localAccountId = sharedLocalAccountId;
+    signUpSignInAccount2.idTokenClaims = {
+      iss: `${randomString()}-${getAuthorityDomain()}`,
+      aud: azureSettings.AD_B2C_ClientId
     };
 
     const msalConfig: Configuration = {
@@ -62,7 +52,7 @@ describe('Test authHelpers', () => {
     const pca = new PublicClientApplication(msalConfig);
 
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
-    // 0 accounts
+    // 2 signupsignin accounts (same user)
     getAllAccountsSpy.mockImplementation(() => [signUpSignInAccount1, signUpSignInAccount2]);
 
     // Act
@@ -73,31 +63,18 @@ describe('Test authHelpers', () => {
   });
   it('getMsalAccount - 2 signupsignin accounts (different users) - returns undefined, logout() called', async () => {
     // Arrange
-
-    const signUpSignInAccount1: AccountInfo = {
-      homeAccountId: randomString() + azureSettings.AD_B2C_SignUpSignIn_Policy,
-      localAccountId: randomString(),
-      environment: 'login.windows.net',
-      tenantId: randomString(),
-      username: 'test@test.com',
-      name: randomString(), // This value will appear on button
-      idTokenClaims: {
-        iss: randomString() + getAuthorityDomain(),
-        aud: azureSettings.AD_B2C_ClientId
-      }
+    const signUpSignInAccount1: AccountInfo = randomMsalAccount();
+    signUpSignInAccount1.homeAccountId = `${randomString()}-${azureSettings.AD_B2C_SignUpSignIn_Policy}`;
+    signUpSignInAccount1.idTokenClaims = {
+      iss: `${randomString()}-${getAuthorityDomain()}`,
+      aud: azureSettings.AD_B2C_ClientId
     };
 
-    const signUpSignInAccount2: AccountInfo = {
-      homeAccountId: randomString() + azureSettings.AD_B2C_SignUpSignIn_Policy,
-      localAccountId: randomString(),
-      environment: 'login.windows.net',
-      tenantId: randomString(),
-      username: 'test@test.com',
-      name: randomString(), // This value will appear on button
-      idTokenClaims: {
-        iss: randomString() + getAuthorityDomain(),
-        aud: azureSettings.AD_B2C_ClientId
-      }
+    const signUpSignInAccount2: AccountInfo = randomMsalAccount();
+    signUpSignInAccount2.homeAccountId = `${randomString()}-${azureSettings.AD_B2C_SignUpSignIn_Policy}`;
+    signUpSignInAccount2.idTokenClaims = {
+      iss: `${randomString()}-${getAuthorityDomain()}`,
+      aud: azureSettings.AD_B2C_ClientId
     };
 
     const msalConfig: Configuration = {
@@ -108,7 +85,7 @@ describe('Test authHelpers', () => {
     const pca = new PublicClientApplication(msalConfig);
 
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
-    // 0 accounts
+    // 2 signupsignin accounts (different users)
     getAllAccountsSpy.mockImplementation(() => [signUpSignInAccount1, signUpSignInAccount2]);
 
     const logoutSpy = jest.spyOn(pca, 'logout');
@@ -122,28 +99,18 @@ describe('Test authHelpers', () => {
   });
   it('getMsalAccount - 1 signupsignin account and 1 other account (of same user) - returns signupsignin account', async () => {
     // Arrange
+    const sharedLocalAccountId: string = randomString();
 
-    const signUpSignInAccount: AccountInfo = {
-      homeAccountId: randomString() + azureSettings.AD_B2C_SignUpSignIn_Policy,
-      localAccountId: randomString(),
-      environment: 'login.windows.net',
-      tenantId: randomString(),
-      username: 'test@test.com',
-      name: randomString(), // This value will appear on button
-      idTokenClaims: {
-        iss: randomString() + getAuthorityDomain(),
-        aud: azureSettings.AD_B2C_ClientId
-      }
+    const signUpSignInAccount: AccountInfo = randomMsalAccount();
+    signUpSignInAccount.homeAccountId = `${randomString()}-${azureSettings.AD_B2C_SignUpSignIn_Policy}`;
+    signUpSignInAccount.localAccountId = sharedLocalAccountId;
+    signUpSignInAccount.idTokenClaims = {
+      iss: `${randomString()}-${getAuthorityDomain()}`,
+      aud: azureSettings.AD_B2C_ClientId
     };
 
-    const otherUserFlowAccount: AccountInfo = {
-      homeAccountId: randomString(),
-      localAccountId: randomString(),
-      environment: 'login.windows.net',
-      tenantId: randomString(),
-      username: 'test@test.com',
-      name: randomString(), // This value will appear on button
-    };
+    const otherUserFlowAccount: AccountInfo = randomMsalAccount();
+    otherUserFlowAccount.localAccountId = sharedLocalAccountId;
 
     const msalConfig: Configuration = {
       auth: {
@@ -153,7 +120,7 @@ describe('Test authHelpers', () => {
     const pca = new PublicClientApplication(msalConfig);
 
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
-    // 0 accounts
+    // 1 signupsignin account and 1 other account (of same user)
     getAllAccountsSpy.mockImplementation(() => [signUpSignInAccount, otherUserFlowAccount]);
 
     // Act
@@ -165,14 +132,7 @@ describe('Test authHelpers', () => {
   it('getMsalAccount - 1 account - returns account', async () => {
     // Arrange
 
-    const testAccount: AccountInfo = {
-      homeAccountId: randomString(),
-      localAccountId: randomString(),
-      environment: 'login.windows.net',
-      tenantId: randomString(),
-      username: 'test@test.com',
-      name: randomString(), // This value will appear on button
-    };
+    const testAccount: AccountInfo = randomMsalAccount();
 
     const msalConfig: Configuration = {
       auth: {
@@ -182,7 +142,7 @@ describe('Test authHelpers', () => {
     const pca = new PublicClientApplication(msalConfig);
 
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
-    // 0 accounts
+    // 1 account
     getAllAccountsSpy.mockImplementation(() => [testAccount]);
 
     // Act

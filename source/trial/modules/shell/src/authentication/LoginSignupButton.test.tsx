@@ -7,7 +7,7 @@ import React, { ReactElement } from 'react';
 import { IntlProvider } from 'react-intl';
 
 import { RootState } from '../store';
-import { getInitState, languageRender, randomString, render } from '../testUtils';
+import { getInitState, languageRender, randomMsalAccount, randomString, render } from '../testUtils';
 import { azureSettings } from './../azureSettings';
 import LoginSignupButton from './LoginSignupButton';
 
@@ -71,14 +71,7 @@ describe('Test Authenticated LoginSignupButton component', () => {
       },
     };
     const pca = new PublicClientApplication(msalConfig);
-    const testAccount: AccountInfo = {
-      homeAccountId: randomString(),
-      localAccountId: randomString(),
-      environment: 'login.windows.net',
-      tenantId: randomString(),
-      username: 'test@test.com',
-      name: randomString(), // This value will appear on button
-    };
+    const testAccount: AccountInfo = randomMsalAccount();
 
     const handleRedirectSpy = jest.spyOn(pca, 'handleRedirectPromise');
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
@@ -103,8 +96,6 @@ describe('Test Authenticated LoginSignupButton component', () => {
     expect(button).toBeInTheDocument();
     expect(axeResults).toHaveNoViolations();
   });
-  // TODO, refactor or reduce duplicates as possible with Cloud-1214 work merged
-  // can a testAccount creator be moved to testUtils?
   test('MyProfile button calls ProfileEdit loginRedirect onClick', async () => {
     // Arrange
     const msalConfig: Configuration = {
@@ -113,14 +104,7 @@ describe('Test Authenticated LoginSignupButton component', () => {
       },
     };
     const pca = new PublicClientApplication(msalConfig);
-    const testAccount: AccountInfo = {
-      homeAccountId: randomString(),
-      localAccountId: randomString(),
-      environment: 'login.windows.net',
-      tenantId: randomString(),
-      username: 'test@test.com',
-      name: randomString(), // This value will appear on button
-    };
+    const testAccount: AccountInfo = randomMsalAccount();
 
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
     getAllAccountsSpy.mockImplementation(() => [testAccount]);
@@ -157,14 +141,7 @@ describe('Test Authenticated LoginSignupButton component', () => {
       },
     };
     const pca = new PublicClientApplication(msalConfig);
-    const testAccount: AccountInfo = {
-      homeAccountId: randomString(),
-      localAccountId: randomString(),
-      environment: 'login.windows.net',
-      tenantId: randomString(),
-      username: 'test@test.com',
-      name: randomString(), // This value will appear on button
-    };
+    const testAccount: AccountInfo = randomMsalAccount();
 
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
     getAllAccountsSpy.mockImplementation(() => [testAccount]);
