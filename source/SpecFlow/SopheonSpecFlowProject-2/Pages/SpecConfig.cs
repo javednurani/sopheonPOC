@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SopheonSpecFlowProject2.Pages
+namespace Sopheon.Cloud.SpecFlow.Base.Pages
 {
 	public class SpecConfig
 	{
