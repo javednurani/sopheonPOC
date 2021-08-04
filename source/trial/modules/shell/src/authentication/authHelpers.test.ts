@@ -9,8 +9,8 @@ describe('Test authHelpers', () => {
     // Arrange
     const pca = msalInstance();
 
-    const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
     // 0 accounts
+    const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
     getAllAccountsSpy.mockImplementation(() => []);
 
     // Act
@@ -41,8 +41,8 @@ describe('Test authHelpers', () => {
 
     const pca = msalInstance();
 
-    const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
     // 2 signupsignin accounts (same user)
+    const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
     getAllAccountsSpy.mockImplementation(() => [signUpSignInAccount1, signUpSignInAccount2]);
 
     // Act
@@ -69,8 +69,8 @@ describe('Test authHelpers', () => {
 
     const pca = msalInstance();
 
-    const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
     // 2 signupsignin accounts (different users)
+    const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
     getAllAccountsSpy.mockImplementation(() => [signUpSignInAccount1, signUpSignInAccount2]);
 
     const logoutSpy = jest.spyOn(pca, 'logout');
@@ -99,8 +99,8 @@ describe('Test authHelpers', () => {
 
     const pca = msalInstance();
 
-    const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
     // 1 signupsignin account and 1 other account (of same user)
+    const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
     getAllAccountsSpy.mockImplementation(() => [signUpSignInAccount, otherUserFlowAccount]);
 
     // Act
@@ -116,8 +116,8 @@ describe('Test authHelpers', () => {
 
     const pca = msalInstance();
 
-    const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
     // 1 account
+    const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
     getAllAccountsSpy.mockImplementation(() => [testAccount]);
 
     // Act
