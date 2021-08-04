@@ -349,10 +349,20 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-/Cloud Native Behavior Testing/SpecFlowProject1
-/Cloud Native Behavior Testing/SopheonSpecFlowProject-2/Features/Terms of Service Review/Verify implicit acceptance.feature.cs
-/Cloud Native Behavior Testing/SopheonSpecFlowProject-2/Features/Terms of Service Review/Verify scrolling within the TOS screen.feature.cs
-/Cloud Native Behavior Testing/SopheonSpecFlowProject-2/Features/Terms of Service Review/Verify the TOS page is present in the workflow.feature.cs
-/Cloud Native Behavior Testing/SopheonSpecFlowProject-2/Features/Terms of Service Review/Verify the user does not see a Back button on TOS.feature.cs
-/Cloud Native Behavior Testing/SopheonSpecFlowProject-2/Features/Terms of Service Review/Verify wording for acceptance on TOS screen.feature.cs
 /.vscode/launch.json
+usersignup/tests/User SignUp SpecFlow/Sopheon.Cloud.SpecFlow.UserSignUp.Tests/Features/NewUserAccountSetup/VerifyAccountPasswordIsRequiredOnPageLoad.feature.cs
+usersignup/tests/User SignUp SpecFlow/Sopheon.Cloud.SpecFlow.UserSignUp.Tests/Features/NewUserAccountSetup/VerifyCellPhoneFieldOnlyAcceptsNumbers.feature.cs
+usersignup/tests/User SignUp SpecFlow/Sopheon.Cloud.SpecFlow.UserSignUp.Tests/Features/NewUserAccountSetup/VerifyCellPhoneIsOptional.feature.cs
+usersignup/tests/User SignUp SpecFlow/Sopheon.Cloud.SpecFlow.UserSignUp.Tests/Features/NewUserAccountSetup/VerifyCreatingAnAccountWithMarketingNewsletterUnchecked.feature.cs
+usersignup/tests/User SignUp SpecFlow/Sopheon.Cloud.SpecFlow.UserSignUp.Tests/Features/NewUserAccountSetup/VerifyEmailAddressIsRequiredOnSubmit.feature.cs
+usersignup/tests/User SignUp SpecFlow/Sopheon.Cloud.SpecFlow.UserSignUp.Tests/Features/NewUserAccountSetup/VerifyEmailIsRequiredOnPageLoad.feature.cs
+usersignup/tests/User SignUp SpecFlow/Sopheon.Cloud.SpecFlow.UserSignUp.Tests/Features/NewUserAccountSetup/VerifyFirstNameIsRequiredOnPageLoad.feature.cs
+usersignup/tests/User SignUp SpecFlow/Sopheon.Cloud.SpecFlow.UserSignUp.Tests/Features/NewUserAccountSetup/VerifyFirstNameIsRequiredOnSubmit.feature.cs
+usersignup/tests/User SignUp SpecFlow/Sopheon.Cloud.SpecFlow.UserSignUp.Tests/Features/NewUserAccountSetup/VerifyLinkToStartSignupProcess.feature.cs
+usersignup/tests/User SignUp SpecFlow/Sopheon.Cloud.SpecFlow.UserSignUp.Tests/Features/NewUserAccountSetup/VerifyMarketingNewsletterCheckboxIsChecked.feature.cs
+usersignup/tests/User SignUp SpecFlow/Sopheon.Cloud.SpecFlow.UserSignUp.Tests/Features/NewUserAccountSetup/VerifyPasswordHintIsDisplayedToUser.feature.cs
+usersignup/tests/User SignUp SpecFlow/Sopheon.Cloud.SpecFlow.UserSignUp.Tests/Features/NewUserAccountSetup/VerifyPasswordIsRequiredOnSubmit.feature.cs
+usersignup/tests/User SignUp SpecFlow/Sopheon.Cloud.SpecFlow.UserSignUp.Tests/Features/TermsOfService/VerifyImplicitAcceptance.feature.cs
+usersignup/tests/User SignUp SpecFlow/Sopheon.Cloud.SpecFlow.UserSignUp.Tests/Features/TermsOfService/VerifyScrollingWithinTheTOSScreen.feature.cs
+usersignup/tests/User SignUp SpecFlow/Sopheon.Cloud.SpecFlow.UserSignUp.Tests/Features/TermsOfService/VerifyTheTOSPageIsPresentInTheWorkflow.feature.cs
+usersignup/tests/User SignUp SpecFlow/Sopheon.Cloud.SpecFlow.UserSignUp.Tests/Features/TermsOfService/VerifyWordingForAcceptanceOnTOSScreen.feature.cs
