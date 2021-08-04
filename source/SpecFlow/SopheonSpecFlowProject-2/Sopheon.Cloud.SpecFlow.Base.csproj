@@ -9,6 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Steps\**" />
+    <EmbeddedResource Remove="Steps\**" />
+    <None Remove="Steps\**" />
+    <SpecFlowFeatureFiles Remove="Steps\**" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Steps\**" />
+  </ItemGroup>
+
+  <ItemGroup>
 	  <PackageReference Include="DotNetSeleniumExtras.WaitHelpers" Version="3.11.0" />
 	  <PackageReference Include="ExtentReports" Version="4.1.0" />
 	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
@@ -34,10 +42,6 @@
     <None Update="SpecConfig.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Steps\" />
   </ItemGroup>
 
 </Project>
