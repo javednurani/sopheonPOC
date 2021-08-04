@@ -1,4 +1,4 @@
-import { AccountInfo, Configuration, PublicClientApplication } from '@azure/msal-browser';
+import { AccountInfo } from '@azure/msal-browser';
 import { MsalProvider } from '@azure/msal-react';
 import { messages } from '@sopheon/shared-ui';
 import { screen } from '@testing-library/react';
@@ -7,7 +7,7 @@ import React, { ReactElement } from 'react';
 import { IntlProvider } from 'react-intl';
 
 import { RootState } from '../store';
-import { getInitState, languageRender, randomMsalAccount, randomString, render, testMsalInstance } from '../testUtils';
+import { getInitState, languageRender, randomMsalAccount, render, testMsalInstance } from '../testUtils';
 import { azureSettings } from './../azureSettings';
 import LoginSignupButton from './LoginSignupButton';
 
@@ -152,20 +152,8 @@ describe('Test Authenticated LoginSignupButton component', () => {
   });
   test('Logout button calls logoutRedirect onClick', async () => {
     // Arrange
-    const msalConfig: Configuration = {
-      auth: {
-        clientId: randomString(),
-      },
-    };
-    const pca = new PublicClientApplication(msalConfig);
-    const testAccount: AccountInfo = {
-      homeAccountId: randomString(),
-      localAccountId: randomString(),
-      environment: 'login.windows.net',
-      tenantId: randomString(),
-      username: 'test@test.com',
-      name: randomString(), // This value will appear on button
-    };
+    const pca = testMsalInstance();
+    const testAccount: AccountInfo = randomMsalAccount();
 
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
     getAllAccountsSpy.mockImplementation(() => [testAccount]);
