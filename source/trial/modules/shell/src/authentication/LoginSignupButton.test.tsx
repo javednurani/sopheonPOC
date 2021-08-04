@@ -1,4 +1,4 @@
-import { AccountInfo, Configuration, PublicClientApplication } from '@azure/msal-browser';
+import { AccountInfo } from '@azure/msal-browser';
 import { MsalProvider } from '@azure/msal-react';
 import { messages } from '@sopheon/shared-ui';
 import { screen } from '@testing-library/react';
@@ -7,7 +7,7 @@ import React, { ReactElement } from 'react';
 import { IntlProvider } from 'react-intl';
 
 import { RootState } from '../store';
-import { getInitState, languageRender, randomMsalAccount, randomString, render } from '../testUtils';
+import { getInitState, languageRender, msalInstance, randomMsalAccount, render } from '../testUtils';
 import { azureSettings } from './../azureSettings';
 import LoginSignupButton from './LoginSignupButton';
 
@@ -36,12 +36,7 @@ describe('Test Unauthenticated LoginSignupButton component', () => {
   });
   test('button onClick event fires loginRedirect', async () => {
     // Arrange
-    const msalConfig: Configuration = {
-      auth: {
-        clientId: randomString(),
-      },
-    };
-    const pca = new PublicClientApplication(msalConfig);
+    const pca = msalInstance();
     const loginRedirectSpy = jest.spyOn(pca, 'loginRedirect').mockImplementation(request => {
       expect(request).toBe(undefined);
 
@@ -65,12 +60,7 @@ describe('Test Unauthenticated LoginSignupButton component', () => {
 describe('Test Authenticated LoginSignupButton component', () => {
   test('button renders correctly and a11y compliant', async () => {
     // Arrange
-    const msalConfig: Configuration = {
-      auth: {
-        clientId: randomString(),
-      },
-    };
-    const pca = new PublicClientApplication(msalConfig);
+    const pca = msalInstance();
     const testAccount: AccountInfo = randomMsalAccount();
 
     const handleRedirectSpy = jest.spyOn(pca, 'handleRedirectPromise');
@@ -98,12 +88,7 @@ describe('Test Authenticated LoginSignupButton component', () => {
   });
   test('MyProfile button calls ProfileEdit loginRedirect onClick', async () => {
     // Arrange
-    const msalConfig: Configuration = {
-      auth: {
-        clientId: randomString(),
-      },
-    };
-    const pca = new PublicClientApplication(msalConfig);
+    const pca = msalInstance();
     const testAccount: AccountInfo = randomMsalAccount();
 
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
@@ -135,12 +120,7 @@ describe('Test Authenticated LoginSignupButton component', () => {
   });
   test('ChangePassword button calls ProfileEdit_PasswordChange loginRedirect onClick', async () => {
     // Arrange
-    const msalConfig: Configuration = {
-      auth: {
-        clientId: randomString(),
-      },
-    };
-    const pca = new PublicClientApplication(msalConfig);
+    const pca = msalInstance();
     const testAccount: AccountInfo = randomMsalAccount();
 
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');

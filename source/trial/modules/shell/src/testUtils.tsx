@@ -1,4 +1,4 @@
-import { AccountInfo } from '@azure/msal-browser';
+import { AccountInfo, Configuration, PublicClientApplication } from '@azure/msal-browser';
 import { setIconOptions } from '@fluentui/react/lib-commonjs/Styling';
 import { constants, messages } from '@sopheon/shared-ui';
 import { render as rtlRender, RenderResult } from '@testing-library/react';
@@ -23,6 +23,16 @@ export const randomMsalAccount = (): AccountInfo => ({
   username: `${randomString()}@test.com`,
   name: randomString(), // This value will appear on button
 });
+
+export const msalInstance = (): PublicClientApplication => {
+  const msalConfig: Configuration = {
+    auth: {
+      clientId: randomString(),
+    },
+  };
+  const pca = new PublicClientApplication(msalConfig);
+  return pca;
+};
 
 const rootReducer = combineReducers({ shell });
 const initialLanguageState: LanguageShape = {

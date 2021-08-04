@@ -1,18 +1,13 @@
-import { AccountInfo, Configuration, PublicClientApplication } from '@azure/msal-browser';
+import { AccountInfo } from '@azure/msal-browser';
 
 import { azureSettings, getAuthorityDomain } from '../azureSettings';
-import { randomMsalAccount, randomString } from '../testUtils';
+import { msalInstance, randomMsalAccount, randomString } from '../testUtils';
 import { getMsalAccount } from './authHelpers';
 
 describe('Test authHelpers', () => {
   it('getMsalAccount - 0 accounts - returns undefined', async () => {
     // Arrange
-    const msalConfig: Configuration = {
-      auth: {
-        clientId: randomString(),
-      },
-    };
-    const pca = new PublicClientApplication(msalConfig);
+    const pca = msalInstance();
 
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
     // 0 accounts
@@ -44,12 +39,7 @@ describe('Test authHelpers', () => {
       aud: azureSettings.AD_B2C_ClientId
     };
 
-    const msalConfig: Configuration = {
-      auth: {
-        clientId: randomString(),
-      },
-    };
-    const pca = new PublicClientApplication(msalConfig);
+    const pca = msalInstance();
 
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
     // 2 signupsignin accounts (same user)
@@ -77,12 +67,7 @@ describe('Test authHelpers', () => {
       aud: azureSettings.AD_B2C_ClientId
     };
 
-    const msalConfig: Configuration = {
-      auth: {
-        clientId: randomString(),
-      },
-    };
-    const pca = new PublicClientApplication(msalConfig);
+    const pca = msalInstance();
 
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
     // 2 signupsignin accounts (different users)
@@ -112,12 +97,7 @@ describe('Test authHelpers', () => {
     const otherUserFlowAccount: AccountInfo = randomMsalAccount();
     otherUserFlowAccount.localAccountId = sharedLocalAccountId;
 
-    const msalConfig: Configuration = {
-      auth: {
-        clientId: randomString(),
-      },
-    };
-    const pca = new PublicClientApplication(msalConfig);
+    const pca = msalInstance();
 
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
     // 1 signupsignin account and 1 other account (of same user)
@@ -134,12 +114,7 @@ describe('Test authHelpers', () => {
 
     const testAccount: AccountInfo = randomMsalAccount();
 
-    const msalConfig: Configuration = {
-      auth: {
-        clientId: randomString(),
-      },
-    };
-    const pca = new PublicClientApplication(msalConfig);
+    const pca = msalInstance();
 
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
     // 1 account
