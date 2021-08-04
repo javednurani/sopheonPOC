@@ -7,7 +7,7 @@ import React, { ReactElement } from 'react';
 import { IntlProvider } from 'react-intl';
 
 import { RootState } from '../store';
-import { getInitState, languageRender, msalInstance, randomMsalAccount, render } from '../testUtils';
+import { getInitState, languageRender, randomMsalAccount, render, testMsalInstance } from '../testUtils';
 import { azureSettings } from './../azureSettings';
 import LoginSignupButton from './LoginSignupButton';
 
@@ -36,7 +36,7 @@ describe('Test Unauthenticated LoginSignupButton component', () => {
   });
   test('button onClick event fires loginRedirect', async () => {
     // Arrange
-    const pca = msalInstance();
+    const pca = testMsalInstance();
     const loginRedirectSpy = jest.spyOn(pca, 'loginRedirect').mockImplementation(request => {
       expect(request).toBe(undefined);
 
@@ -60,7 +60,7 @@ describe('Test Unauthenticated LoginSignupButton component', () => {
 describe('Test Authenticated LoginSignupButton component', () => {
   test('button renders correctly and a11y compliant', async () => {
     // Arrange
-    const pca = msalInstance();
+    const pca = testMsalInstance();
     const testAccount: AccountInfo = randomMsalAccount();
 
     const handleRedirectSpy = jest.spyOn(pca, 'handleRedirectPromise');
@@ -88,7 +88,7 @@ describe('Test Authenticated LoginSignupButton component', () => {
   });
   test('MyProfile button calls ProfileEdit loginRedirect onClick', async () => {
     // Arrange
-    const pca = msalInstance();
+    const pca = testMsalInstance();
     const testAccount: AccountInfo = randomMsalAccount();
 
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
@@ -120,7 +120,7 @@ describe('Test Authenticated LoginSignupButton component', () => {
   });
   test('ChangePassword button calls ProfileEdit_PasswordChange loginRedirect onClick', async () => {
     // Arrange
-    const pca = msalInstance();
+    const pca = testMsalInstance();
     const testAccount: AccountInfo = randomMsalAccount();
 
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');

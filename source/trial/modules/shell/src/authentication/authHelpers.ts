@@ -1,7 +1,19 @@
-import { AccountInfo, IPublicClientApplication, RedirectRequest } from '@azure/msal-browser';
+import { AccountInfo, Configuration, IPublicClientApplication, PublicClientApplication, RedirectRequest } from '@azure/msal-browser';
 
 import { azureSettings, getAuthorityDomain, getAuthorityUrl } from '../azureSettings';
 
+export const msalInstance = (): PublicClientApplication => {
+  const msalConfig: Configuration = {
+    auth: {
+      authority: getAuthorityUrl(azureSettings.AD_B2C_SignUpSignIn_Policy),
+      clientId: azureSettings.AD_B2C_ClientId,
+      knownAuthorities: [getAuthorityDomain()],
+    },
+  };
+
+  const pca = new PublicClientApplication(msalConfig);
+  return pca;
+};
 
 export const changePasswordRequest: RedirectRequest = {
   authority: getAuthorityUrl(azureSettings.AD_B2C_PasswordChange_Policy),

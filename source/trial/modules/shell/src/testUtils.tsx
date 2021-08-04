@@ -24,7 +24,7 @@ export const randomMsalAccount = (): AccountInfo => ({
   name: randomString(), // This value will appear on button
 });
 
-export const msalInstance = (): PublicClientApplication => {
+export const testMsalInstance = (): PublicClientApplication => {
   const msalConfig: Configuration = {
     auth: {
       clientId: randomString(),

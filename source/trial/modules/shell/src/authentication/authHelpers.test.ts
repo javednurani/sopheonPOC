@@ -1,13 +1,13 @@
 import { AccountInfo } from '@azure/msal-browser';
 
 import { azureSettings, getAuthorityDomain } from '../azureSettings';
-import { msalInstance, randomMsalAccount, randomString } from '../testUtils';
+import { randomMsalAccount, randomString, testMsalInstance } from '../testUtils';
 import { getMsalAccount } from './authHelpers';
 
 describe('Test authHelpers', () => {
   it('getMsalAccount - 0 accounts - returns undefined', async () => {
     // Arrange
-    const pca = msalInstance();
+    const pca = testMsalInstance();
 
     // 0 accounts
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
@@ -39,7 +39,7 @@ describe('Test authHelpers', () => {
       aud: azureSettings.AD_B2C_ClientId
     };
 
-    const pca = msalInstance();
+    const pca = testMsalInstance();
 
     // 2 signupsignin accounts (same user)
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
@@ -67,7 +67,7 @@ describe('Test authHelpers', () => {
       aud: azureSettings.AD_B2C_ClientId
     };
 
-    const pca = msalInstance();
+    const pca = testMsalInstance();
 
     // 2 signupsignin accounts (different users)
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
@@ -97,7 +97,7 @@ describe('Test authHelpers', () => {
     const otherUserFlowAccount: AccountInfo = randomMsalAccount();
     otherUserFlowAccount.localAccountId = sharedLocalAccountId;
 
-    const pca = msalInstance();
+    const pca = testMsalInstance();
 
     // 1 signupsignin account and 1 other account (of same user)
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
@@ -114,7 +114,7 @@ describe('Test authHelpers', () => {
 
     const testAccount: AccountInfo = randomMsalAccount();
 
-    const pca = msalInstance();
+    const pca = testMsalInstance();
 
     // 1 account
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');

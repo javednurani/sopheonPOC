@@ -5,14 +5,14 @@ import { shallow } from 'enzyme';
 import React, { ReactElement } from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { msalInstance, randomMsalAccount } from '../testUtils';
+import { randomMsalAccount, testMsalInstance } from '../testUtils';
 import Signup from './Signup';
 
 const sut: ReactElement = <Signup />;
 let mockLogoutSpy: jest.Mock<Promise<void>, []>;
 let mockAccounts: AccountInfo[] = [];
 const mockAccount: AccountInfo = randomMsalAccount();
-const pca = msalInstance();
+const pca = testMsalInstance();
 
 jest.mock('@azure/msal-react', () => ({
   ...jest.requireActual('@azure/msal-react'),
