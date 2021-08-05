@@ -5,6 +5,7 @@ import { useIntl } from 'react-intl';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import { appModules } from './appModuleSettings';
+import IdleMonitor from './authentication/IdleMonitor';
 import Login from './authentication/Login';
 import Signup from './authentication/Signup';
 import { DynamicModule } from './DynamicModule';
@@ -69,6 +70,9 @@ const App: FunctionComponent<AppProps> = ({ changeTheme }: AppProps) => {
             >
               <Stack.Item shrink>
                 <Header changeTheme={changeTheme} />
+              </Stack.Item>
+              <Stack.Item shrink>
+                <IdleMonitor />
               </Stack.Item>
               <Stack.Item
                 verticalFill
