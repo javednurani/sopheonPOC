@@ -4,7 +4,6 @@
         <TenantId>nonexistent.onmicrosoft.com</TenantId>
         <PolicyId>B2C_1A_SopheonExtensions</PolicyId>
     </BasePolicy> 
-
     <RelyingParty>
         <DefaultUserJourney ReferenceId="ProfileEdit" />
         <TechnicalProfile Id="PolicyProfile">
