@@ -625,6 +625,7 @@
             <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedVersion" />
             <OutputClaim ClaimTypeReferenceId="extension_ProfileEditDate" />
             <OutputClaim ClaimTypeReferenceId="extension_Company" />
+            <OutputClaim ClaimTypeReferenceId="signInName" />
           </OutputClaims>
         </TechnicalProfile>
         <TechnicalProfile Id="AAD-WriteUserConsentByObjectId-ThrowIfNotExists">
