@@ -833,7 +833,6 @@
             <ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordChangeUsingObjectId" />
           </ClaimsExchanges>
         </OrchestrationStep>
-        <!-- TODO-1383, experiment with removing if step 3 works ? duplicate READ? -->
         <OrchestrationStep Order="5" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
