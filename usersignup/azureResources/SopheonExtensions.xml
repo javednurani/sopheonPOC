@@ -824,7 +824,7 @@
         </OrchestrationStep>
         <OrchestrationStep Order="3" Type="ClaimsExchange">
           <ClaimsExchanges>
-            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+            <ClaimsExchange Id="AADUserReadWithObjectId-Pre" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
           </ClaimsExchanges>
         </OrchestrationStep>
         <OrchestrationStep Order="4" Type="ClaimsExchange">
