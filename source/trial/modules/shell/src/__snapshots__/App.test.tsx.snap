@@ -173,6 +173,9 @@ exports[`Testing the App component App snapshot render test 1`] = `
       </div>
     </div>
     <div
+      className="ms-StackItem css-121"
+    />
+    <div
       className="ms-StackItem css-140"
     >
       <main
