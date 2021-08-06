@@ -3,8 +3,8 @@ import { ISpinnerStyles, IStackStyles, Spinner, SpinnerSize, Stack } from '@flue
 import React, { CSSProperties, FunctionComponent, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
-import { azureSettings, getAuthorityUrl } from '../azureSettings';
 import AzureBlueBackground from '../images/azure-blue-background.png';
+import { azureSettings, getAuthorityUrl } from '../settings/azureSettings';
 
 const sectionStyle: CSSProperties = {
   width: '100vw',

@@ -4,7 +4,6 @@ import React, { CSSProperties, FunctionComponent } from 'react';
 import { useIntl } from 'react-intl';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import { appModules } from './appModuleSettings';
 import IdleMonitor from './authentication/IdleMonitor';
 import Login from './authentication/Login';
 import Signup from './authentication/Signup';
@@ -12,6 +11,7 @@ import { DynamicModule } from './DynamicModule';
 import Footer from './footer/Footer';
 import Header from './header/Header';
 import { ReactComponent as LLogo } from './images/Lucy24_logo.svg';
+import { appModules } from './settings/appModuleSettings';
 import { shellApi } from './ShellApi';
 import { ChangeThemeAction } from './themes/themeReducer/themeReducer';
 

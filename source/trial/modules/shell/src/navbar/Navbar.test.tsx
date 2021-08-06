@@ -4,7 +4,7 @@ import React from 'react';
 import { IntlProvider } from 'react-intl';
 import { BrowserRouter, Link } from 'react-router-dom';
 
-import { appModules } from '../appModuleSettings';
+import { appModules } from '../settings/appModuleSettings';
 import Navbar from './Navbar';
 
 describe('Test Navbar component', () => {

@@ -4,8 +4,8 @@ import React, { FunctionComponent } from 'react';
 import { ConnectedProps } from 'react-redux';
 
 import App from './App';
-import { azureSettings, getAuthorityUrl } from './azureSettings';
 import ConnectedIntlProvider from './languages/ConnectedIntlProvider';
+import { azureSettings, getAuthorityUrl } from './settings/azureSettings';
 import { shellApi } from './ShellApi';
 import ConnectedThemeProvider from './themes/components/connectedThemeProvider/ConnectedThemeProvider';
 

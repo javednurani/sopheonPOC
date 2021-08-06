@@ -4,10 +4,10 @@ import React, { FunctionComponent } from 'react';
 import { useIntl } from 'react-intl';
 import { useLocation } from 'react-router-dom';
 
-import { AppModule, appModules } from '../appModuleSettings';
 import LoginSignupButton from '../authentication/LoginSignupButton';
 import { ReactComponent as LucyLogo } from '../images/Lucy_logo.svg';
 import Navbar from '../navbar/Navbar';
+import { AppModule, appModules } from '../settings/appModuleSettings';
 import ThemeSelector from '../themes/components/themeSelector/ThemeSelector';
 import { ChangeThemeAction } from '../themes/themeReducer/themeReducer';
 

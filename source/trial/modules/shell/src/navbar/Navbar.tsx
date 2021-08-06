@@ -3,7 +3,7 @@ import React, { CSSProperties } from 'react';
 import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { appModules } from '../appModuleSettings';
+import { appModules } from '../settings/appModuleSettings';
 
 const Navbar: React.FunctionComponent = () => {
   const { formatMessage } = useIntl();

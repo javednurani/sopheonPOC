@@ -1,7 +1,7 @@
 import { useMsal } from '@azure/msal-react';
 import React, { FunctionComponent } from 'react';
 
-import { azureSettings } from '../azureSettings';
+import { azureSettings } from '../settings/azureSettings';
 import AuthLanding from './AuthLanding';
 
 const Signup: FunctionComponent = () => {
