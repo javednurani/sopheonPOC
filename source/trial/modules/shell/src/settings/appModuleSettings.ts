@@ -1,4 +1,4 @@
-const isProd = process.env.NODE_ENV === 'production';
+import { isProd } from './environmentSettings';
 
 export type AppModule = {
   //module: string; // The module to be be imported, this is always should be './App' for apps
