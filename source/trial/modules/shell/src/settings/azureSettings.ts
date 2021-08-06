@@ -1,4 +1,4 @@
-import { isDev } from '../environmentSettings';
+import { isDev } from './environmentSettings';
 
 const azureRawSettings: Record<string, string> = {
   AD_B2C_ClientId: '^ShellAppClientId^',
