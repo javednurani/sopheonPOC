@@ -2,10 +2,10 @@ import { AuthenticatedTemplate, useMsal } from '@azure/msal-react';
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useIdleTimer } from 'react-idle-timer';
 
+import { autoLogOutTime, showAutoLogOutWarningThreshhold } from '../settings/appSettings';
+
 const IdleMonitor: FunctionComponent = () => {
   const { instance } = useMsal();
-  const autoLogOutTime = 15 * 1000; // 15 seconds
-  const showAutoLogOutWarningThreshhold = 10 * 1000; // show auto log out warning at 10 seconds left
   const [autoLogOutCountdown, setRemaining] = useState(autoLogOutTime);
 
   // log out any active accounts then the idle timeout limit is reached
