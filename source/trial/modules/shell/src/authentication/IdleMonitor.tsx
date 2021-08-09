@@ -32,7 +32,9 @@ const IdleMonitor: FunctionComponent = () => {
 
   return (
     <AuthenticatedTemplate>
-      {autoLogOutCountdown < showAutoLogOutWarningThreshhold ? `Auto Log Out in ${Math.ceil(autoLogOutCountdown / 1000)} seconds...` : ''}
+      <div data-testid="idleCountdown">
+        {autoLogOutCountdown < showAutoLogOutWarningThreshhold ? `Auto Log Out in ${Math.ceil(autoLogOutCountdown / 1000)} seconds...` : ''}
+      </div>
     </AuthenticatedTemplate>
   );
 };
