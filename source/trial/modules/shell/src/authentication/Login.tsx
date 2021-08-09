@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 
-import { azureSettings } from '../azureSettings';
+import { azureSettings } from '../settings/azureSettings';
 import AuthLanding from './AuthLanding';
 
 const Login: FunctionComponent = () => (

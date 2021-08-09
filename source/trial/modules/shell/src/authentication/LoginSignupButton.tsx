@@ -3,7 +3,7 @@ import { DefaultButton, IContextualMenuProps } from '@fluentui/react';
 import React, { FunctionComponent } from 'react';
 import { useIntl } from 'react-intl';
 
-import { azureSettings, getAuthorityUrl } from '../azureSettings';
+import { azureSettings, getAuthorityUrl } from '../settings/azureSettings';
 
 const LoginSignupButton: FunctionComponent = () => {
   const { formatMessage } = useIntl();
