@@ -3,8 +3,8 @@ import { ISpinnerStyles, IStackStyles, Spinner, SpinnerSize, Stack } from '@flue
 import React, { CSSProperties, FunctionComponent, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
-import { azureSettings, getAuthorityUrl } from '../azureSettings';
 import AzureBlueBackground from '../images/azure-blue-background.png';
+import { getAuthLandingRedirectRequest } from './authHelpers';
 
 const sectionStyle: CSSProperties = {
   width: '100vw',
@@ -27,12 +27,7 @@ const AuthLanding: FunctionComponent<AuthLandingProps> = ({ adB2cPolicyName, spi
       .handleRedirectPromise()
       .then(tokenResponse => {
         if (!tokenResponse) {
-          instance.loginRedirect({
-            authority: getAuthorityUrl(adB2cPolicyName),
-            scopes: ['openid', 'offline_access'],
-            redirectUri: azureSettings.SPA_Root_URL,
-            redirectStartPage: azureSettings.SPA_Root_URL,
-          });
+          instance.loginRedirect(getAuthLandingRedirectRequest(adB2cPolicyName));
         }
       })
       .catch(err => {

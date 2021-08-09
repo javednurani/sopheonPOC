@@ -1,23 +1,30 @@
+import { AccountInfo } from '@azure/msal-browser';
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
 import { DefaultButton, IContextualMenuProps } from '@fluentui/react';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
-import { azureSettings, getAuthorityUrl } from '../azureSettings';
+import { changePasswordRequest, editProfileRequest, getMsalAccount } from './authHelpers';
 
 const LoginSignupButton: FunctionComponent = () => {
   const { formatMessage } = useIntl();
   const { instance, accounts } = useMsal();
 
+  const [account, setAccount] = useState<AccountInfo>();
+
+  useEffect(() => {
+    const msalAccount: AccountInfo | undefined = getMsalAccount(instance);
+    if (msalAccount !== undefined) {
+      setAccount(msalAccount);
+    }
+  }, [instance, accounts]);
+
+  const changePasswordClick = () => {
+    instance.loginRedirect(changePasswordRequest);
+  };
+
   const editProfileClick = () => {
-    // Cloud-1339: The below ts-ignore is due to not including a 'scopes' property in the RedirectRequest object
-    // The linked example code from Microsoft, demo'ing a loginRedirect Profile Edit, does not include 'scopes' on the RedirectRequest
-    // https://github.com/Azure-Samples/ms-identity-b2c-javascript-spa/blob/main/App/authRedirect.js
-    // @ts-ignore
-    instance.loginRedirect({
-      authority: getAuthorityUrl(azureSettings.AD_B2C_ProfileEdit_Policy),
-      redirectUri: azureSettings.SPA_Root_URL,
-    });
+    instance.loginRedirect(editProfileRequest);
   };
 
   const logoutClick = () => {
@@ -33,6 +40,12 @@ const LoginSignupButton: FunctionComponent = () => {
         onClick: editProfileClick,
       },
       {
+        key: 'changepassword',
+        text: formatMessage({ id: 'auth.changepassword' }),
+        iconProps: { iconName: 'Permissions' },
+        onClick: changePasswordClick,
+      },
+      {
         key: 'signout',
         text: formatMessage({ id: 'auth.signout' }),
         iconProps: { iconName: 'SignOut' },
@@ -44,7 +57,7 @@ const LoginSignupButton: FunctionComponent = () => {
   return (
     <React.Fragment>
       <AuthenticatedTemplate>
-        <DefaultButton text={accounts[0] ? accounts[0].name : formatMessage({ id: 'auth.myprofile' })} split menuProps={menuProps} />
+        <DefaultButton text={account ? account.name : formatMessage({ id: 'auth.myprofile' })} split menuProps={menuProps} />
       </AuthenticatedTemplate>
       <UnauthenticatedTemplate>
         <DefaultButton text={formatMessage({ id: 'auth.loginbutton' })} onClick={() => instance.loginRedirect()} />
