@@ -6,6 +6,7 @@ import { axe, toHaveNoViolations } from 'jest-axe';
 import React, { ReactElement } from 'react';
 import { IntlProvider } from 'react-intl';
 
+import { autoLogOutTime, showAutoLogOutWarningThreshhold } from '../settings/appSettings';
 import { randomMsalAccount, render, testMsalInstance } from '../testUtils';
 import IdleMonitor from './IdleMonitor';
 
@@ -30,11 +31,13 @@ describe('Test Authenticated IdleMonitor component', () => {
 
   beforeEach(() => {
     pca = testMsalInstance();
+    jest.useFakeTimers();
   });
 
   afterEach(() => {
     // cleanup on exiting
     jest.clearAllMocks();
+    jest.useRealTimers();
   });
   test('IdleMonitor renders when authenticated', async () => {
     // Arrange
@@ -65,7 +68,6 @@ describe('Test Authenticated IdleMonitor component', () => {
   });
   test('IdleMonitor shows text after 5 second delay', async () => {
     // Arrange
-    jest.setTimeout(10000);
     const testAccount: AccountInfo = randomMsalAccount();
     const handleRedirectSpy = jest.spyOn(pca, 'handleRedirectPromise');
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
@@ -89,12 +91,14 @@ describe('Test Authenticated IdleMonitor component', () => {
     await waitFor(() => expect(handleRedirectSpy).toHaveBeenCalledTimes(1));
     const countdown: HTMLElement = await screen.findByTestId('idleCountdown');
     expect(countdown).toBeInTheDocument();
-    await waitFor(() => expect(countdown.textContent).toBe('Auto Log Out in 10 seconds...'), { timeout: 5100 });
+    setTimeout(
+      () => expect(countdown.textContent).toBe(`Auto Log Out in ${showAutoLogOutWarningThreshhold / 1000} seconds...`),
+      autoLogOutTime - showAutoLogOutWarningThreshhold
+    );
     expect(logoutRedirectSpy).toHaveBeenCalledTimes(0);
   });
   test('IdleMonitor logs out user after 15 second delay', async () => {
     // Arrange
-    jest.setTimeout(30000);
     const testAccount: AccountInfo = randomMsalAccount();
     const handleRedirectSpy = jest.spyOn(pca, 'handleRedirectPromise');
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
@@ -118,7 +122,6 @@ describe('Test Authenticated IdleMonitor component', () => {
     await waitFor(() => expect(handleRedirectSpy).toHaveBeenCalledTimes(1));
     const countdown: HTMLElement = await screen.findByTestId('idleCountdown');
     expect(countdown).toBeInTheDocument();
-    await waitFor(() => expect(countdown.textContent).toBe('Auto Log Out in 0 seconds...'), { timeout: 15100 });
-    expect(logoutRedirectSpy).toHaveBeenCalledTimes(1);
+    setTimeout(() => expect(logoutRedirectSpy).toBeCalledTimes(1), autoLogOutTime);
   });
 });
