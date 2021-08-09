@@ -19,7 +19,6 @@ describe('Test Unauthenticated IdleMonitor component', () => {
     // Act
     const { container } = render(sut);
     const axeResults = await axe(container);
-    screen.debug();
 
     // Assert
     // expect(IdleMonitor).not.toBeInTheDocument();
@@ -63,5 +62,63 @@ describe('Test Authenticated IdleMonitor component', () => {
     const countdown: HTMLElement = await screen.findByTestId('idleCountdown');
     expect(countdown).toBeInTheDocument();
     expect(logoutRedirectSpy).toHaveBeenCalledTimes(0);
+  });
+  test('IdleMonitor shows text after 5 second delay', async () => {
+    // Arrange
+    jest.setTimeout(10000);
+    const testAccount: AccountInfo = randomMsalAccount();
+    const handleRedirectSpy = jest.spyOn(pca, 'handleRedirectPromise');
+    const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
+    getAllAccountsSpy.mockImplementation(() => [testAccount]);
+    const logoutRedirectSpy = jest.spyOn(pca, 'logoutRedirect').mockImplementation(request => {
+      expect(request).toBe(undefined);
+
+      return Promise.resolve();
+    });
+
+    // Act
+    render(
+      <MsalProvider instance={pca}>
+        <IntlProvider locale="en" messages={messages.en}>
+          <IdleMonitor />
+        </IntlProvider>
+      </MsalProvider>
+    );
+
+    // Assert
+    await waitFor(() => expect(handleRedirectSpy).toHaveBeenCalledTimes(1));
+    const countdown: HTMLElement = await screen.findByTestId('idleCountdown');
+    expect(countdown).toBeInTheDocument();
+    await waitFor(() => expect(countdown.textContent).toBe('Auto Log Out in 10 seconds...'), { timeout: 5100 });
+    expect(logoutRedirectSpy).toHaveBeenCalledTimes(0);
+  });
+  test('IdleMonitor logs out user after 15 second delay', async () => {
+    // Arrange
+    jest.setTimeout(30000);
+    const testAccount: AccountInfo = randomMsalAccount();
+    const handleRedirectSpy = jest.spyOn(pca, 'handleRedirectPromise');
+    const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
+    getAllAccountsSpy.mockImplementation(() => [testAccount]);
+    const logoutRedirectSpy = jest.spyOn(pca, 'logoutRedirect').mockImplementation(request => {
+      expect(request).toBe(undefined);
+
+      return Promise.resolve();
+    });
+
+    // Act
+    render(
+      <MsalProvider instance={pca}>
+        <IntlProvider locale="en" messages={messages.en}>
+          <IdleMonitor />
+        </IntlProvider>
+      </MsalProvider>
+    );
+
+    // Assert
+    await waitFor(() => expect(handleRedirectSpy).toHaveBeenCalledTimes(1));
+    const countdown: HTMLElement = await screen.findByTestId('idleCountdown');
+    expect(countdown).toBeInTheDocument();
+    await waitFor(() => expect(countdown.textContent).toBe('Auto Log Out in 0 seconds...'), { timeout: 15100 });
+    expect(logoutRedirectSpy).toHaveBeenCalledTimes(1);
   });
 });
