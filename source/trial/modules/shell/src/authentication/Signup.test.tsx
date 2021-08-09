@@ -1,30 +1,18 @@
-import { AccountInfo, Configuration, PublicClientApplication } from '@azure/msal-browser';
+import { AccountInfo } from '@azure/msal-browser';
 import { MsalProvider } from '@azure/msal-react';
 import { messages } from '@sopheon/shared-ui';
 import { shallow } from 'enzyme';
 import React, { ReactElement } from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { randomString } from '../testUtils';
+import { randomMsalAccount, testMsalInstance } from '../testUtils';
 import Signup from './Signup';
 
 const sut: ReactElement = <Signup />;
 let mockLogoutSpy: jest.Mock<Promise<void>, []>;
 let mockAccounts: AccountInfo[] = [];
-const mockAccount: AccountInfo = {
-  homeAccountId: randomString(),
-  localAccountId: randomString(),
-  environment: 'login.windows.net',
-  tenantId: randomString(),
-  username: 'test@test.com',
-  name: randomString(),
-};
-const msalConfig: Configuration = {
-  auth: {
-    clientId: randomString(),
-  },
-};
-const pca = new PublicClientApplication(msalConfig);
+const mockAccount: AccountInfo = randomMsalAccount();
+const pca = testMsalInstance();
 
 jest.mock('@azure/msal-react', () => ({
   ...jest.requireActual('@azure/msal-react'),
