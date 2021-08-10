@@ -21,7 +21,6 @@ describe('Test Unauthenticated IdleMonitor component', () => {
     const axeResults = await axe(container);
 
     // Assert
-    // expect(IdleMonitor).not.toBeInTheDocument();
     expect(axeResults).toHaveNoViolations();
   });
 });
@@ -80,5 +79,21 @@ describe('Test Authenticated IdleMonitor component', () => {
 
     // Assert
     await waitFor(() => expect(logoutRedirectSpy).toBeCalledTimes(1));
+  });
+  test('Test handleOnIdle does not call logoutRedirect if no active accounts', async () => {
+    // Arrange
+    const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
+    getAllAccountsSpy.mockImplementation(() => []);
+    const logoutRedirectSpy = jest.spyOn(pca, 'logoutRedirect').mockImplementation(request => {
+      expect(request).toBe(undefined);
+
+      return Promise.resolve();
+    });
+
+    // Act
+    handleOnIdle(pca);
+
+    // Assert
+    await waitFor(() => expect(logoutRedirectSpy).toBeCalledTimes(0));
   });
 });
