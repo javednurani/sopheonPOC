@@ -6,9 +6,8 @@ import { axe, toHaveNoViolations } from 'jest-axe';
 import React, { ReactElement } from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { autoLogOutTime, showAutoLogOutWarningThreshhold } from '../settings/appSettings';
 import { randomMsalAccount, render, testMsalInstance } from '../testUtils';
-import IdleMonitor from './IdleMonitor';
+import IdleMonitor, { handleOnIdle } from './IdleMonitor';
 
 expect.extend(toHaveNoViolations);
 
@@ -29,15 +28,14 @@ describe('Test Unauthenticated IdleMonitor component', () => {
 describe('Test Authenticated IdleMonitor component', () => {
   let pca: IPublicClientApplication;
 
+  // Reset the tests
   beforeEach(() => {
     pca = testMsalInstance();
-    jest.useFakeTimers();
   });
 
   afterEach(() => {
     // cleanup on exiting
     jest.clearAllMocks();
-    jest.useRealTimers();
   });
   test('IdleMonitor renders when authenticated', async () => {
     // Arrange
@@ -64,12 +62,11 @@ describe('Test Authenticated IdleMonitor component', () => {
     await waitFor(() => expect(handleRedirectSpy).toHaveBeenCalledTimes(1));
     const countdown: HTMLElement = await screen.findByTestId('idleCountdown');
     expect(countdown).toBeInTheDocument();
-    expect(logoutRedirectSpy).toHaveBeenCalledTimes(0);
+    expect(logoutRedirectSpy).toBeCalledTimes(0);
   });
-  test('IdleMonitor shows text after 5 second delay', async () => {
+  test('Test handleOnIdle calls logoutRedirect if an account is active', async () => {
     // Arrange
     const testAccount: AccountInfo = randomMsalAccount();
-    const handleRedirectSpy = jest.spyOn(pca, 'handleRedirectPromise');
     const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
     getAllAccountsSpy.mockImplementation(() => [testAccount]);
     const logoutRedirectSpy = jest.spyOn(pca, 'logoutRedirect').mockImplementation(request => {
@@ -79,49 +76,9 @@ describe('Test Authenticated IdleMonitor component', () => {
     });
 
     // Act
-    render(
-      <MsalProvider instance={pca}>
-        <IntlProvider locale="en" messages={messages.en}>
-          <IdleMonitor />
-        </IntlProvider>
-      </MsalProvider>
-    );
+    handleOnIdle(pca);
 
     // Assert
-    await waitFor(() => expect(handleRedirectSpy).toHaveBeenCalledTimes(1));
-    const countdown: HTMLElement = await screen.findByTestId('idleCountdown');
-    expect(countdown).toBeInTheDocument();
-    setTimeout(
-      () => expect(countdown.textContent).toBe(`Auto Log Out in ${showAutoLogOutWarningThreshhold / 1000} seconds...`),
-      autoLogOutTime - showAutoLogOutWarningThreshhold
-    );
-    expect(logoutRedirectSpy).toHaveBeenCalledTimes(0);
-  });
-  test('IdleMonitor logs out user after 15 second delay', async () => {
-    // Arrange
-    const testAccount: AccountInfo = randomMsalAccount();
-    const handleRedirectSpy = jest.spyOn(pca, 'handleRedirectPromise');
-    const getAllAccountsSpy = jest.spyOn(pca, 'getAllAccounts');
-    getAllAccountsSpy.mockImplementation(() => [testAccount]);
-    const logoutRedirectSpy = jest.spyOn(pca, 'logoutRedirect').mockImplementation(request => {
-      expect(request).toBe(undefined);
-
-      return Promise.resolve();
-    });
-
-    // Act
-    render(
-      <MsalProvider instance={pca}>
-        <IntlProvider locale="en" messages={messages.en}>
-          <IdleMonitor />
-        </IntlProvider>
-      </MsalProvider>
-    );
-
-    // Assert
-    await waitFor(() => expect(handleRedirectSpy).toHaveBeenCalledTimes(1));
-    const countdown: HTMLElement = await screen.findByTestId('idleCountdown');
-    expect(countdown).toBeInTheDocument();
-    setTimeout(() => expect(logoutRedirectSpy).toBeCalledTimes(1), autoLogOutTime);
+    await waitFor(() => expect(logoutRedirectSpy).toBeCalledTimes(1));
   });
 });
