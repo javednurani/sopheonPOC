@@ -6,9 +6,9 @@ import { axe, toHaveNoViolations } from 'jest-axe';
 import React, { ReactElement } from 'react';
 import { IntlProvider } from 'react-intl';
 
+import { azureSettings } from '../settings/azureSettings';
 import { RootState } from '../store';
 import { getInitState, languageRender, randomMsalAccount, render, testMsalInstance } from '../testUtils';
-import { azureSettings } from './../azureSettings';
 import LoginSignupButton from './LoginSignupButton';
 
 expect.extend(toHaveNoViolations);

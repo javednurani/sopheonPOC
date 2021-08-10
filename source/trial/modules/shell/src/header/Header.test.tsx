@@ -4,8 +4,8 @@ import React from 'react';
 import { IntlProvider } from 'react-intl';
 import { BrowserRouter } from 'react-router-dom';
 
-import { AppModule, appModules } from '../appModuleSettings';
 import Navbar from '../navbar/Navbar';
+import { AppModule, appModules } from '../settings/appModuleSettings';
 import ThemeSelector from '../themes/components/themeSelector/ThemeSelector';
 import { ChangeThemeAction } from '../themes/themeReducer/themeReducer';
 import Header from './Header';

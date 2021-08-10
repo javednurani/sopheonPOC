@@ -3,7 +3,7 @@ import { ErrorBoundary } from '@sopheon/shared-ui';
 import { ShellApiProps } from '@sopheon/shell-api';
 import React, { ComponentType, lazy, LazyExoticComponent, Suspense, useEffect, useState } from 'react';
 
-import { AppModule } from './appModuleSettings';
+import { AppModule } from './settings/appModuleSettings';
 
 //#region helpers
 
