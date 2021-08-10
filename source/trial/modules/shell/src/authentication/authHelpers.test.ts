@@ -1,6 +1,6 @@
 import { AccountInfo } from '@azure/msal-browser';
 
-import { azureSettings, getAuthorityDomain } from '../azureSettings';
+import { azureSettings, getAuthorityDomain } from '../settings/azureSettings';
 import { randomMsalAccount, randomString, testMsalInstance } from '../testUtils';
 import { getMsalAccount } from './authHelpers';
 
