@@ -5,6 +5,7 @@ export const messages: Record<string, Record<string, string>> = {
     'auth.myprofile': 'My Profile',
     'auth.signout': 'Sign Out',
     'auth.loginbutton': 'Log In',
+    'auth.changepassword': 'Change Password',
     'authlanding.loginspinner': 'Login',
     'authlanding.signupspinner': 'Sign Up',
     'header.welcome': 'Page Title',
