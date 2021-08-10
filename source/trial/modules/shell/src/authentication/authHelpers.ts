@@ -1,6 +1,6 @@
 import { AccountInfo, Configuration, IPublicClientApplication, PublicClientApplication, RedirectRequest } from '@azure/msal-browser';
 
-import { azureSettings, getAuthorityDomain, getAuthorityUrl } from '../azureSettings';
+import { azureSettings, getAuthorityDomain, getAuthorityUrl } from '../settings/azureSettings';
 
 export const msalInstance = (): PublicClientApplication => {
   const msalConfig: Configuration = {
