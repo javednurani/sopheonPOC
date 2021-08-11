@@ -5,14 +5,9 @@ Param(
     [Parameter(Mandatory = $true)][string]$Environment
 )
 
-Write-Host "Collecting KeyVault secrets for B2C Asset deployments";
-$ClientID = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CClientId" --query value).Replace('"', '');
-$ClientSecret = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CClientSecret" --query value).Replace('"', '');
-$TenantId = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CTenantName" --query value).Replace('"', '');
-$ProxyIdentityFrameworkClientId = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CProxyIdentityFrameworkClientId" --query value).Replace('"', '');
-$B2CIdentityFrameworkClientId = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CIdentityFrameworkClientId" --query value).Replace('"', '');
-$B2CExtensionsObjectId = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CExtensionsObjectId" --query value).Replace('"', '');
-$B2CExtensionsClientId = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CExtensionsClientId" --query value).Replace('"', '');
+$ClientID = "^B2CClientId^"
+$ClientSecret = "^B2CClientSecret^"
+$TenantId = "^StratusB2CTenantName^"
 
 try {
     $body = @{ grant_type = "client_credentials"; scope = "https://graph.microsoft.com/.default"; client_id = $ClientID; client_secret = $ClientSecret }
@@ -27,15 +22,15 @@ try {
     $graphuri = 'https://graph.microsoft.com/beta/trustframework/policies/' + $PolicyId + '/$value'
     $policycontent = Get-Content $PathToFile
 
-    Write-Host "Updating configurable variables on policy content";
-    # Optional: Change the content of the policy. For example, replace the tenant-name with your tenant name.
-    $policycontent = $policycontent.Replace("nonexistent.onmicrosoft.com", $TenantId)
-    Write-Output "Nonexistent was replaced with: $TenantId"
-    $policycontent = $policycontent.Replace("^ProxyIdentityFrameworkClientId^", $ProxyIdentityFrameworkClientId);
-    $policycontent = $policycontent.Replace("^IdentityFrameworkClientId^", $B2CIdentityFrameworkClientId);
-    $policycontent = $policycontent.Replace("^ExtensionsAppObjectId^", $B2CExtensionsObjectId);
-    $policycontent = $policycontent.Replace("^ExtensionsAppClientId^", $B2CExtensionsClientId);
-    Set-Content -Path $PathToFile -Value $policycontent
+    # Write-Host "Updating configurable variables on policy content";
+    # # Optional: Change the content of the policy. For example, replace the tenant-name with your tenant name.
+    # $policycontent = $policycontent.Replace("nonexistent.onmicrosoft.com", $TenantId)
+    # Write-Output "Nonexistent was replaced with: $TenantId"
+    # $policycontent = $policycontent.Replace("^ProxyIdentityFrameworkClientId^", $ProxyIdentityFrameworkClientId);
+    # $policycontent = $policycontent.Replace("^IdentityFrameworkClientId^", $B2CIdentityFrameworkClientId);
+    # $policycontent = $policycontent.Replace("^ExtensionsAppObjectId^", $B2CExtensionsObjectId);
+    # $policycontent = $policycontent.Replace("^ExtensionsAppClientId^", $B2CExtensionsClientId);
+    # Set-Content -Path $PathToFile -Value $policycontent
 
     $response = Invoke-RestMethod -Uri $graphuri -Method Put -Body $policycontent -Headers $headers
     $response;
