@@ -41,6 +41,24 @@
       "Pattern": "^B2CClientSecret^",
       "IsKeyVaultSecret": true,
       "KeyVaultSecretName": "StratusB2CClientSecret"
+    },
+    {
+      "TokenDisplayName": "B2C JourneyInsights Developer Mode",
+      "Pattern": "^B2CJourneyInsightsDeveloperMode^",
+      "EnvironmentVariableName": "B2CJourneyInsightsDeveloperMode",
+      "IsKeyVaultSecret": false
+    },
+    {
+      "TokenDisplayName": "B2C Policy Deployment Mode",
+      "Pattern": "^B2CPolicyDeploymentMode^",
+      "EnvironmentVariableName": "B2CPolicyDeploymentMode",
+      "IsKeyVaultSecret": false
+    },
+    {
+      "TokenDisplayName": "B2C AppInsights Instrumentation Key",
+      "Pattern": "^B2CAppInsightsInstrumentationKey^",
+      "EnvironmentVariableName": "B2CAppInsightsInstrumentationKey",
+      "IsKeyVaultSecret": false
     }
   ]
 }
