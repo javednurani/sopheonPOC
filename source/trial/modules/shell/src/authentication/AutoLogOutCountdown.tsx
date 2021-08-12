@@ -1,10 +1,12 @@
 import { useMsal } from '@azure/msal-react';
 import { DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton } from '@fluentui/react';
 import React, { FunctionComponent, useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
 
 import { showAutoLogOutWarningThreshholdSeconds } from '../settings/appSettings';
 
 const AutoLogOutCountdown: FunctionComponent = () => {
+  const { formatMessage } = useIntl();
   // example: https://developer.microsoft.com/en-us/fluentui#/controls/web/dialog
   const [seconds, setSeconds] = useState(showAutoLogOutWarningThreshholdSeconds);
   const { instance } = useMsal();
@@ -24,8 +26,8 @@ const AutoLogOutCountdown: FunctionComponent = () => {
   return (
     <Dialog hidden={false} dialogContentProps={dialogContentProps}>
       <DialogFooter>
-        <PrimaryButton text="Yes" />
-        <DefaultButton text="No" />
+        <PrimaryButton text={formatMessage({ id: 'yes' })} />
+        <DefaultButton text={formatMessage({ id: 'no' })} />
       </DialogFooter>
     </Dialog>
   );
