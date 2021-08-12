@@ -5,7 +5,7 @@ import { screen, waitFor } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import React from 'react';
 
-import { showAutoLogOutWarningThreshholdSeconds } from '../settings/appSettings';
+import { IdleTimeoutSettings } from '../settings/appSettings';
 import { getInitState, testMsalInstance } from '../testUtils';
 import { languageRender } from './../testUtils';
 import AutoLogOutCountdown from './AutoLogOutCountdown';
@@ -48,7 +48,7 @@ describe('AutoLogOutCountdown', () => {
     const warningText: HTMLElement = await screen.findByText('Are you still working?', { exact: false });
 
     // Assert
-    expect(warningText.textContent).toContain(showAutoLogOutWarningThreshholdSeconds);
+    expect(warningText.textContent).toContain(IdleTimeoutSettings.IdleLogOutWarningSeconds);
     await waitFor(() => expect(logoutRedirectSpy).toBeCalledTimes(0));
   });
   test('Countdown timer advances properly', async () => {
@@ -70,8 +70,8 @@ describe('AutoLogOutCountdown', () => {
     jest.advanceTimersByTime(secondsToAdvance * 1000);
 
     // Assert
-    expect(warningText.textContent).not.toContain(showAutoLogOutWarningThreshholdSeconds);
-    expect(warningText.textContent).toContain(showAutoLogOutWarningThreshholdSeconds - secondsToAdvance);
+    expect(warningText.textContent).not.toContain(IdleTimeoutSettings.IdleLogOutWarningSeconds);
+    expect(warningText.textContent).toContain(IdleTimeoutSettings.IdleLogOutWarningSeconds - secondsToAdvance);
     await waitFor(() => expect(logoutRedirectSpy).toBeCalledTimes(0));
   });
   test('Logout called when timer is 0', async () => {

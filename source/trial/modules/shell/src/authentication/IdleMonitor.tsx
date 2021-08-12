@@ -3,7 +3,7 @@ import { AuthenticatedTemplate, useMsal } from '@azure/msal-react';
 import React, { FunctionComponent } from 'react';
 import { useIdleTimer } from 'react-idle-timer';
 
-import { autoLogOutTimeSeconds } from '../settings/appSettings';
+import { IdleTimeoutSettings } from './../settings/appSettings';
 import AutoLogOutCountdown from './AutoLogOutCountdown';
 
 // log out any active accounts then the idle timeout limit is reached
@@ -17,7 +17,7 @@ const IdleMonitor: FunctionComponent = () => {
   const { instance } = useMsal();
 
   useIdleTimer({
-    timeout: autoLogOutTimeSeconds * 1000, // convert seconds to ms
+    timeout: IdleTimeoutSettings.IdleLogOutSeconds * 1000, // convert seconds to ms
     onIdle: () => handleOnIdle(instance),
     crossTab: {
       emitOnAllTabs: true, // prevents user from being logged out of a second app tab

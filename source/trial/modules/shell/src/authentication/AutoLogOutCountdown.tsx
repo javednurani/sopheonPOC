@@ -3,12 +3,12 @@ import { DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton } from '
 import React, { FunctionComponent, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
-import { showAutoLogOutWarningThreshholdSeconds } from '../settings/appSettings';
+import { IdleTimeoutSettings } from './../settings/appSettings';
 
 const AutoLogOutCountdown: FunctionComponent = () => {
   const { formatMessage } = useIntl();
   // example: https://developer.microsoft.com/en-us/fluentui#/controls/web/dialog
-  const [seconds, setSeconds] = React.useState(showAutoLogOutWarningThreshholdSeconds);
+  const [seconds, setSeconds] = React.useState(IdleTimeoutSettings.IdleLogOutWarningSeconds);
   const { instance } = useMsal();
 
   useEffect(() => {
