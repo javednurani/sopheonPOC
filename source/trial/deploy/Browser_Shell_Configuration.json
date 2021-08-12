@@ -1,0 +1,22 @@
+{
+  "Tokens": [
+    {
+      "TokenDisplayName": "B2C Shell App Client Id",
+      "Pattern": "^B2CShellAppClientId^",
+      "IsKeyVaultSecret": true,
+      "KeyVaultSecretName": "StratusB2CShellAppClientId"
+    },
+    {
+      "TokenDisplayName": "Browser WebApp Url",
+      "Pattern": "^BrowserWebAppUrl^",
+      "IsKeyVaultSecret": true,
+      "KeyVaultSecretName": "StratusBrowserWebAppUrl"
+    },
+    {
+      "TokenDisplayName": "B2C Tenant Login Name",
+      "Pattern": "^B2CTenantLoginName^",
+      "IsKeyVaultSecret": true,
+      "KeyVaultSecretName": "StratusB2CTenantLoginName"
+    }
+  ]
+}
