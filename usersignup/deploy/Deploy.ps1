@@ -18,7 +18,7 @@ try {
     & $ZipUtil "x" "$($env:System_DefaultWorkingDirectory)/_DevOpsScripts/DevOps/PowerShell_Scripts_*.zip" "-o$($Scripts)";
 
     #TODO: investigate why replacer is broken around KeyVault access
-    & "$($env:System_DefaultWorkingDirectory)/_TokenConfigurationManagement/TokenConfigManagement/TokenReplacer.exe" replace -c _StratusB2CAssets/B2C/User_SignUp_Configuration.json -f $B2CAssets -e $Environment
+    & "$($env:System_DefaultWorkingDirectory)/_TokenConfigurationManagement/TokenConfigManagement/TokenReplacer.exe" replace -c _StratusB2CAssets/B2C/User_SignUp_Configuration.json -f "$B2CAssets/*"  -e $Environment
 
     # Write-Host "...Replacing Configuration Variables on website/index.html...";
     # # Replace variables on index.html 
