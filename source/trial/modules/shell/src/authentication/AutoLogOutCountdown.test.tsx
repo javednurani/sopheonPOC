@@ -1,10 +1,12 @@
+import { IPublicClientApplication } from '@azure/msal-browser';
+import { MsalProvider } from '@azure/msal-react';
 import { messages } from '@sopheon/shared-ui';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import React from 'react';
 
 import { showAutoLogOutWarningThreshholdSeconds } from '../settings/appSettings';
-import { getInitState } from '../testUtils';
+import { getInitState, testMsalInstance } from '../testUtils';
 import { languageRender } from './../testUtils';
 import AutoLogOutCountdown from './AutoLogOutCountdown';
 
@@ -40,5 +42,28 @@ describe('AutoLogOutCountdown', () => {
     const warningText: HTMLElement = await screen.findByText('Are you still working?', { exact: false });
     // Assert
     expect(warningText.textContent).toContain(showAutoLogOutWarningThreshholdSeconds);
+  });
+  test('Logout called when timer is 0', async () => {
+    // Arrange
+    const pca: IPublicClientApplication = testMsalInstance();
+    const logoutRedirectSpy = jest.spyOn(pca, 'logoutRedirect').mockImplementation(request => {
+      expect(request).toBe(undefined);
+
+      return Promise.resolve();
+    });
+    const setState = jest.fn();
+    const useStateSpy = jest.spyOn(React, 'useState');
+    useStateSpy.mockImplementation(() => [0, setState]);
+
+    // Act
+    languageRender(
+      <MsalProvider instance={pca}>
+        <AutoLogOutCountdown />
+      </MsalProvider>,
+      getInitState({})
+    );
+
+    // Assert
+    await waitFor(() => expect(logoutRedirectSpy).toBeCalledTimes(1));
   });
 });
