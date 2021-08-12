@@ -1,12 +1,14 @@
-import { isDev } from './environmentSettings';
+import { isProd } from './environmentSettings';
 
 const appRawSettings: Record<string, string> = {
   IdleLogOutSeconds: '^IdleLogOutSeconds^',
+  IdleLogOutSecondsDev: '3600', // 1 hour log out
   IdleLogOutWarningSeconds: '^IdleLogOutWarningSeconds^',
+  IdleLogOutWarningSecondsDev: '60', // 60 second warning
 };
 
 // these collapsed settings incorporate the current environment
 export const IdleTimeoutSettings: Record<string, number> = {
-  IdleLogOutSeconds: isDev ? 3600 : parseInt(appRawSettings.IdleLogOutSeconds, 10), // 1 hour timeout
-  IdleLogOutWarningSeconds: isDev ? 60 : parseInt(appRawSettings.IdleLogOutWarningSeconds, 10), // show auto log out warning at 10 seconds left
+  IdleLogOutSeconds: isProd ? parseInt(appRawSettings.IdleLogOutSeconds, 10) : parseInt(appRawSettings.IdleLogOutSeconds, 10),
+  IdleLogOutWarningSeconds: isProd ? parseInt(appRawSettings.IdleLogOutWarningSeconds, 10) : parseInt(appRawSettings.IdleLogOutWarningSecondsDev, 10),
 };
