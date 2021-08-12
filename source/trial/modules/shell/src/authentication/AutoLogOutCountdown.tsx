@@ -12,10 +12,7 @@ const AutoLogOutCountdown: FunctionComponent = () => {
   };
 
   return (
-    <Dialog
-      hidden={false}
-      dialogContentProps={dialogContentProps}
-    >
+    <Dialog hidden={false} dialogContentProps={dialogContentProps}>
       <DialogFooter>
         <PrimaryButton text={formatMessage({ id: 'yes' })} />
         <DefaultButton text={formatMessage({ id: 'no' })} />
