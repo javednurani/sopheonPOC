@@ -17,7 +17,7 @@ const IdleMonitor: FunctionComponent = () => {
   const { instance } = useMsal();
 
   useIdleTimer({
-    timeout: IdleTimeoutSettings.IdleLogOutSeconds * 1000, // convert seconds to ms
+    timeout: (IdleTimeoutSettings.IdleLogOutSeconds - IdleTimeoutSettings.IdleLogOutWarningSeconds) * 1000, // time til show warning converted from s to ms
     onIdle: () => handleOnIdle(instance),
     crossTab: {
       emitOnAllTabs: true, // prevents user from being logged out of a second app tab
