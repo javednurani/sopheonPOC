@@ -5,6 +5,12 @@ Param(
     [Parameter(Mandatory = $true)][string]$Environment
 )
 
+#TODO: Return this later to complete the TokenReplacer app
+#$ClientID = "^B2CClientId^"
+#$ClientSecret = "^B2CClientSecret^"
+#$TenantId = "^StratusB2CTenantName^"
+
+
 Write-Host "Collecting KeyVault secrets for B2C Asset deployments";
 $ClientID = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CClientId" --query value).Replace('"', '');
 $ClientSecret = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CClientSecret" --query value).Replace('"', '');
@@ -13,6 +19,9 @@ $ProxyIdentityFrameworkClientId = (az keyvault secret show --vault-name "Stratus
 $B2CIdentityFrameworkClientId = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CIdentityFrameworkClientId" --query value).Replace('"', '');
 $B2CExtensionsObjectId = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CExtensionsObjectId" --query value).Replace('"', '');
 $B2CExtensionsClientId = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CExtensionsClientId" --query value).Replace('"', '');
+$B2CPolicyDeploymentMode = $($env:B2CPolicyDeploymentMode);
+$B2CJourneyInsightsDeveloperMode = $($env:B2CJourneyInsightsDeveloperMode);
+$B2CAppInsightsInstrumentationKey = $($env:B2CAppInsightsInstrumentationKey);
 
 try {
     $body = @{ grant_type = "client_credentials"; scope = "https://graph.microsoft.com/.default"; client_id = $ClientID; client_secret = $ClientSecret }
@@ -35,6 +44,9 @@ try {
     $policycontent = $policycontent.Replace("^IdentityFrameworkClientId^", $B2CIdentityFrameworkClientId);
     $policycontent = $policycontent.Replace("^ExtensionsAppObjectId^", $B2CExtensionsObjectId);
     $policycontent = $policycontent.Replace("^ExtensionsAppClientId^", $B2CExtensionsClientId);
+    $policycontent = $policycontent.Replace("^B2CPolicyDeploymentMode^", $B2CPolicyDeploymentMode);
+    $policycontent = $policycontent.Replace("^B2CJourneyInsightsDeveloperMode^", $B2CJourneyInsightsDeveloperMode);
+    $policycontent = $policycontent.Replace("^B2CAppInsightsInstrumentationKey^", $B2CAppInsightsInstrumentationKey);
     Set-Content -Path $PathToFile -Value $policycontent
 
     $response = Invoke-RestMethod -Uri $graphuri -Method Put -Body $policycontent -Headers $headers

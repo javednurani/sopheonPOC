@@ -1,0 +1,70 @@
+{
+  "Tokens": [
+    {
+      "TokenDisplayName": "B2C Client Id",
+      "Pattern": "^B2CClientId^",
+      "IsKeyVaultSecret": true,
+      "KeyVaultSecretName": "StratusB2CClientId"
+    },
+    {
+      "TokenDisplayName": "B2C Tenant Name",
+      "Pattern": "nonexistent.onmicrosoft.com",
+      "IsKeyVaultSecret": true,
+      "KeyVaultSecretName": "StratusB2CTenantName"
+    },
+    {
+      "TokenDisplayName": "B2C Proxy IDEF Client Id",
+      "Pattern": "^ProxyIdentityFrameworkClientId^",
+      "IsKeyVaultSecret": true,
+      "KeyVaultSecretName": "StratusB2CProxyIdentityFrameworkClientId"
+    },
+    {
+      "TokenDisplayName": "B2C IDEF Client Id",
+      "Pattern": "^IdentityFrameworkClientId^",
+      "IsKeyVaultSecret": true,
+      "KeyVaultSecretName": "StratusB2CIdentityFrameworkClientId"
+    },
+    {
+      "TokenDisplayName": "B2C Extensions Object Id",
+      "Pattern": "^ExtensionsAppObjectId^",
+      "IsKeyVaultSecret": true,
+      "KeyVaultSecretName": "StratusB2CExtensionsObjectId"
+    },
+    {
+      "TokenDisplayName": "B2C Extensions Client Id",
+      "Pattern": "^ExtensionsAppClientId^",
+      "IsKeyVaultSecret": true,
+      "KeyVaultSecretName": "StratusB2CExtensionsClientId"
+    },
+    {
+      "TokenDisplayName": "B2C Client Secret",
+      "Pattern": "^B2CClientSecret^",
+      "IsKeyVaultSecret": true,
+      "KeyVaultSecretName": "StratusB2CClientSecret"
+    },
+    {
+      "TokenDisplayName": "B2C JourneyInsights Developer Mode",
+      "Pattern": "^B2CJourneyInsightsDeveloperMode^",
+      "EnvironmentVariableName": "B2CJourneyInsightsDeveloperMode",
+      "IsKeyVaultSecret": false
+    },
+    {
+      "TokenDisplayName": "B2C Policy Deployment Mode",
+      "Pattern": "^B2CPolicyDeploymentMode^",
+      "EnvironmentVariableName": "B2CPolicyDeploymentMode",
+      "IsKeyVaultSecret": false
+    },
+    {
+      "TokenDisplayName": "B2C AppInsights Instrumentation Key",
+      "Pattern": "^B2CAppInsightsInstrumentationKey^",
+      "EnvironmentVariableName": "B2CAppInsightsInstrumentationKey",
+      "IsKeyVaultSecret": false
+    },
+    {
+      "TokenDisplayName": "B2C Client Secret",
+      "Pattern": "^B2CClientSecret^",
+      "IsKeyVaultSecret": true,
+      "KeyVaultSecretName": "StratusB2CClientSecret"
+    }
+  ]
+}
