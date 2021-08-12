@@ -6,7 +6,7 @@ const AutoLogOutCountdown: FunctionComponent = () => {
 
   const dialogContentProps = {
     type: DialogType.normal,
-    subText: 'Are you still working? You will be logged out in XX seconds.',    // TODO: cloud-1446
+    subText: 'Are you still working? You will be logged out in XX seconds.',
   };
 
   return (
