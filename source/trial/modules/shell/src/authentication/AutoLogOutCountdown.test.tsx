@@ -15,7 +15,7 @@ expect.extend(toHaveNoViolations);
 describe('AutoLogOutCountdown', () => {
   test('Has no a11y vialotions.', async () => {
     // Act
-    const { container } = languageRender(<AutoLogOutCountdown />, getInitState({}));
+    const { container } = languageRender(<AutoLogOutCountdown hidden={false} />, getInitState({}));
     const axeResults = await axe(container);
 
     // Assert
@@ -23,7 +23,7 @@ describe('AutoLogOutCountdown', () => {
   });
   test('To have Yes and No buttons', async () => {
     // Act
-    const { getByText } = languageRender(<AutoLogOutCountdown />, getInitState({}));
+    const { getByText } = languageRender(<AutoLogOutCountdown hidden={false} />, getInitState({}));
 
     // Assert
     const yesButton: HTMLElement = getByText(messages.en.yes);
@@ -40,7 +40,7 @@ describe('AutoLogOutCountdown', () => {
 
       return Promise.resolve();
     });
-    const sut = <AutoLogOutCountdown />;
+    const sut = <AutoLogOutCountdown hidden={false} />;
     const initialState = getInitState({});
 
     // Act
@@ -60,7 +60,8 @@ describe('AutoLogOutCountdown', () => {
 
       return Promise.resolve();
     });
-    const sut = <AutoLogOutCountdown />;
+
+    const sut = <AutoLogOutCountdown hidden={false} />;
     const initialState = getInitState({});
     const secondsToAdvance = 5;
 
@@ -89,7 +90,7 @@ describe('AutoLogOutCountdown', () => {
     // Act
     languageRender(
       <MsalProvider instance={pca}>
-        <AutoLogOutCountdown />
+        <AutoLogOutCountdown hidden={false} />
       </MsalProvider>,
       getInitState({})
     );
