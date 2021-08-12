@@ -14,7 +14,7 @@
     },
     {
       "TokenDisplayName": "B2C Tenant Login Name",
-      "Pattern": "^B2CLoginName^",
+      "Pattern": "^B2CTenantLoginName^",
       "IsKeyVaultSecret": true,
       "KeyVaultSecretName": "StratusB2CTenantLoginName"
     }
