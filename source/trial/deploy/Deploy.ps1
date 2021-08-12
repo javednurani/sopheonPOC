@@ -9,7 +9,7 @@ try {
     Write-Host "Zipping Artfacts for ShellApp...";
     & $ZipUtil "x" "$($PSScriptRoot)/ShellTrial_*.zip" "-o$($ShellApp)";
 
-    & "$($env:System_DefaultWorkingDirectory)/_TokenConfigurationManagement/TokenConfigManagement/TokenReplacer.exe" replace -c "$ShellApp/Browser_Shell_Configuration.json" -f "$ShellApp/*"  -e $Environment
+    & "$($env:System_DefaultWorkingDirectory)/_TokenConfigurationManagement/TokenConfigManagement/TokenReplacer.exe" replace -c "$($env:System_DefaultWorkingDirectory)/_StratusShellApp/ShellApp/Browser_Shell_Configuration.json" -f "$ShellApp/*"  -e $Environment
 
     Write-Output "Deleting existing web app files to reduce blob size"
     $DeleteStorage = az storage blob delete-batch --account-name $StorageAccountName --source '$web' --pattern 'WebApp/*' --auth-mode login;
