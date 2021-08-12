@@ -1,5 +1,5 @@
 import { IPublicClientApplication } from '@azure/msal-browser';
-import { AuthenticatedTemplate, useMsal } from '@azure/msal-react';
+import { useMsal } from '@azure/msal-react';
 import { useBoolean } from '@fluentui/react-hooks';
 import React, { FunctionComponent } from 'react';
 import { useIdleTimer } from 'react-idle-timer';
@@ -7,12 +7,13 @@ import { useIdleTimer } from 'react-idle-timer';
 import { IdleTimeoutSettings } from './../settings/appSettings';
 import AutoLogOutCountdown from './AutoLogOutCountdown';
 
-// log out any active accounts then the idle timeout limit is reached
+// Show AutoLogOutCountdown dialog if any accounts are logged in on idle
 export const handleOnIdle = (msalInstance: IPublicClientApplication, toggleHideDialog: () => void): void => {
   if (msalInstance.getAllAccounts().length > 0) {
     toggleHideDialog();
   }
 };
+
 const IdleMonitor: FunctionComponent = () => {
   const { instance } = useMsal();
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
@@ -25,11 +26,7 @@ const IdleMonitor: FunctionComponent = () => {
     },
   });
 
-  return (
-    <AuthenticatedTemplate>
-      <AutoLogOutCountdown hidden={hideDialog} />
-    </AuthenticatedTemplate>
-  );
+  return <AutoLogOutCountdown hidden={hideDialog} />;
 };
 
 export default IdleMonitor;
