@@ -1,7 +1,10 @@
+import { screen } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import React from 'react';
 
-import { render } from '../testUtils';
+import { showAutoLogOutWarningThreshholdSeconds } from '../settings/appSettings';
+import { getInitState, render } from '../testUtils';
+import { languageRender } from './../testUtils';
 import AutoLogOutCountdown from './AutoLogOutCountdown';
 
 expect.extend(toHaveNoViolations);
@@ -14,5 +17,16 @@ describe('AutoLogOutCountdown', () => {
 
     // Assert
     expect(axeResults).toHaveNoViolations();
+  });
+  test('Countdown timer starts at warning threshold', async () => {
+    // Arrange
+    const sut = <AutoLogOutCountdown />;
+    const initialState = getInitState({});
+
+    // Act
+    languageRender(sut, initialState);
+    const warningText: HTMLElement = await screen.findByText('Are you still working?', { exact: false });
+    // Assert
+    expect(warningText.textContent).toContain(showAutoLogOutWarningThreshholdSeconds);
   });
 });
