@@ -2,7 +2,7 @@ import { axe, toHaveNoViolations } from 'jest-axe';
 import React from 'react';
 
 import { render } from '../testUtils';
-import AutoLogOutCountdown from './AutoLogOutCountDown';
+import AutoLogOutCountdown from './AutoLogOutCountdown';
 
 expect.extend(toHaveNoViolations);
 
