@@ -22,6 +22,7 @@ describe('AutoLogOutCountdown', () => {
   afterEach(() => {
     // cleanup on exiting
     jest.clearAllMocks();
+    jest.useRealTimers();
   });
   test('Has no a11y vialotions.', async () => {
     // Act
@@ -102,8 +103,6 @@ describe('AutoLogOutCountdown', () => {
     expect(warningText.textContent).not.toContain(showAutoLogOutWarningThreshholdSeconds);
     expect(warningText.textContent).toContain(showAutoLogOutWarningThreshholdSeconds - secondsToAdvance);
     await waitFor(() => expect(logoutRedirectSpy).toBeCalledTimes(0));
-    jest.runOnlyPendingTimers();
-    jest.useRealTimers();
   });
   test('Logout called when timer is 0', async () => {
     // Arrange
