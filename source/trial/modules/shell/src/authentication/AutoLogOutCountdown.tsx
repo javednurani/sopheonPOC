@@ -1,7 +1,9 @@
 import { DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton } from '@fluentui/react';
 import React, { FunctionComponent } from 'react';
+import { useIntl } from 'react-intl';
 
 const AutoLogOutCountdown: FunctionComponent = () => {
+  const { formatMessage } = useIntl();
   // example: https://developer.microsoft.com/en-us/fluentui#/controls/web/dialog
 
   const dialogContentProps = {
@@ -15,8 +17,8 @@ const AutoLogOutCountdown: FunctionComponent = () => {
       dialogContentProps={dialogContentProps}
     >
       <DialogFooter>
-        <PrimaryButton text="Yes" />
-        <DefaultButton text="No" />
+        <PrimaryButton text={formatMessage({ id: 'yes' })} />
+        <DefaultButton text={formatMessage({ id: 'no' })} />
       </DialogFooter>
     </Dialog>
   );
