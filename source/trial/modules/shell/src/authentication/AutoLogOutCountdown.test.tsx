@@ -34,6 +34,12 @@ describe('AutoLogOutCountdown', () => {
   });
   test('Countdown timer starts at warning threshold', async () => {
     // Arrange
+    const pca: IPublicClientApplication = testMsalInstance();
+    const logoutRedirectSpy = jest.spyOn(pca, 'logoutRedirect').mockImplementation(request => {
+      expect(request).toBe(undefined);
+
+      return Promise.resolve();
+    });
     const sut = <AutoLogOutCountdown />;
     const initialState = getInitState({});
 
@@ -42,6 +48,7 @@ describe('AutoLogOutCountdown', () => {
     const warningText: HTMLElement = await screen.findByText('Are you still working?', { exact: false });
     // Assert
     expect(warningText.textContent).toContain(showAutoLogOutWarningThreshholdSeconds);
+    await waitFor(() => expect(logoutRedirectSpy).toBeCalledTimes(0));
   });
   test('Logout called when timer is 0', async () => {
     // Arrange
