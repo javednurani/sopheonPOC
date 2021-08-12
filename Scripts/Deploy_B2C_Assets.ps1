@@ -6,15 +6,15 @@ Param(
 )
 
 #TODO: Return this later to complete the TokenReplacer app
-$ClientID = "^B2CClientId^";
-$ClientSecret = "^B2CClientSecret^";
-$TenantId = "^StratusB2CTenantName^";
+# $ClientID = "^B2CClientId^";
+# $ClientSecret = "^B2CClientSecret^";
+# $TenantId = "^StratusB2CTenantName^";
 
 
 # Write-Host "Collecting KeyVault secrets for B2C Asset deployments";
-# $ClientID = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CClientId" --query value).Replace('"', '');
-# $ClientSecret = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CClientSecret" --query value).Replace('"', '');
-# $TenantId = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CTenantName" --query value).Replace('"', '');
+$ClientID = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CClientId" --query value).Replace('"', '');
+$ClientSecret = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CClientSecret" --query value).Replace('"', '');
+$TenantId = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CTenantName" --query value).Replace('"', '');
 # $ProxyIdentityFrameworkClientId = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CProxyIdentityFrameworkClientId" --query value).Replace('"', '');
 # $B2CIdentityFrameworkClientId = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CIdentityFrameworkClientId" --query value).Replace('"', '');
 # $B2CExtensionsObjectId = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "StratusB2CExtensionsObjectId" --query value).Replace('"', '');
