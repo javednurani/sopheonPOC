@@ -1,9 +1,9 @@
 import { isProd } from './environmentSettings';
 
 const appRawSettings: Record<string, string> = {
-  IdleLogOutSeconds: '^IdleLogOutSeconds^',
+  IdleLogOutSeconds: '10', // '^IdleLogOutSeconds^'
   IdleLogOutSecondsDev: '10', // 1 hour log out '3600'
-  IdleLogOutWarningSeconds: '^IdleLogOutWarningSeconds^',
+  IdleLogOutWarningSeconds: '5', // '^IdleLogOutWarningSeconds^'
   IdleLogOutWarningSecondsDev: '5', // 60 second warning '60'
 };
 
