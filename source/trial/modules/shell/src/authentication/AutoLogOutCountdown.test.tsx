@@ -5,7 +5,7 @@ import { screen, waitFor } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import React from 'react';
 
-import { showAutoLogOutWarningThreshholdSeconds } from '../settings/appSettings';
+import { IdleTimeoutSettings } from '../settings/appSettings';
 import { getInitState, testMsalInstance } from '../testUtils';
 import { languageRender } from './../testUtils';
 import AutoLogOutCountdown from './AutoLogOutCountdown';
@@ -26,7 +26,7 @@ describe('AutoLogOutCountdown', () => {
   });
   test('Has no a11y vialotions.', async () => {
     // Act
-    const { container } = languageRender(<AutoLogOutCountdown />, getInitState({}));
+    const { container } = languageRender(<AutoLogOutCountdown hidden={false} />, getInitState({}));
     const axeResults = await axe(container);
 
     // Assert
@@ -34,7 +34,7 @@ describe('AutoLogOutCountdown', () => {
   });
   test('To have Yes and No buttons', async () => {
     // Act
-    const { getByText } = languageRender(<AutoLogOutCountdown />, getInitState({}));
+    const { getByText } = languageRender(<AutoLogOutCountdown hidden={false} />, getInitState({}));
 
     // Assert
     const yesButton: HTMLElement = getByText(messages.en.yes);
@@ -71,7 +71,7 @@ describe('AutoLogOutCountdown', () => {
 
       return Promise.resolve();
     });
-    const sut = <AutoLogOutCountdown />;
+    const sut = <AutoLogOutCountdown hidden={false} />;
     const initialState = getInitState({});
 
     // Act
@@ -79,7 +79,7 @@ describe('AutoLogOutCountdown', () => {
     const warningText: HTMLElement = await screen.findByText('Are you still working?', { exact: false });
 
     // Assert
-    expect(warningText.textContent).toContain(showAutoLogOutWarningThreshholdSeconds);
+    expect(warningText.textContent).toContain(IdleTimeoutSettings.IdleLogOutWarningSeconds);
     await waitFor(() => expect(logoutRedirectSpy).toBeCalledTimes(0));
   });
   test('Countdown timer advances properly', async () => {
@@ -90,7 +90,8 @@ describe('AutoLogOutCountdown', () => {
 
       return Promise.resolve();
     });
-    const sut = <AutoLogOutCountdown />;
+
+    const sut = <AutoLogOutCountdown hidden={false} />;
     const initialState = getInitState({});
     const secondsToAdvance = 5;
 
@@ -100,8 +101,8 @@ describe('AutoLogOutCountdown', () => {
     jest.advanceTimersByTime(secondsToAdvance * 1000);
 
     // Assert
-    expect(warningText.textContent).not.toContain(showAutoLogOutWarningThreshholdSeconds);
-    expect(warningText.textContent).toContain(showAutoLogOutWarningThreshholdSeconds - secondsToAdvance);
+    expect(warningText.textContent).not.toContain(IdleTimeoutSettings.IdleLogOutWarningSeconds);
+    expect(warningText.textContent).toContain(IdleTimeoutSettings.IdleLogOutWarningSeconds - secondsToAdvance);
     await waitFor(() => expect(logoutRedirectSpy).toBeCalledTimes(0));
   });
   test('Logout called when timer is 0', async () => {
@@ -118,7 +119,7 @@ describe('AutoLogOutCountdown', () => {
     // Act
     languageRender(
       <MsalProvider instance={pca}>
-        <AutoLogOutCountdown />
+        <AutoLogOutCountdown hidden={false} />
       </MsalProvider>,
       getInitState({})
     );

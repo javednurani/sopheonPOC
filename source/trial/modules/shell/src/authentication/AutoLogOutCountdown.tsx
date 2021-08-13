@@ -3,24 +3,26 @@ import { DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton } from '
 import React, { FunctionComponent, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
-import { showAutoLogOutWarningThreshholdSeconds } from '../settings/appSettings';
+import { IdleTimeoutSettings } from './../settings/appSettings';
+export interface AutoLogoutCountdownProps {
+  hidden?: boolean | undefined;
+}
 
-const AutoLogOutCountdown: FunctionComponent = () => {
+const AutoLogOutCountdown: FunctionComponent<AutoLogoutCountdownProps> = ({ hidden }: AutoLogoutCountdownProps) => {
   const { formatMessage } = useIntl();
-  // example: https://developer.microsoft.com/en-us/fluentui#/controls/web/dialog
-  const [seconds, setSeconds] = React.useState(showAutoLogOutWarningThreshholdSeconds);
+  const [seconds, setSeconds] = React.useState(IdleTimeoutSettings.IdleLogOutWarningSeconds);
   const { instance } = useMsal();
 
   useEffect(() => {
-    if (seconds > 0) {
+    if (seconds > 0 && !hidden) {
       setTimeout(() => setSeconds(seconds - 1), 1000);
-    } else {
+    } else if (seconds <= 0) {
       instance.logout();
     }
   });
   const dialogContentProps = {
     type: DialogType.normal,
-    subText: `Are you still working? You will be logged out in ${seconds} seconds.`,
+    subText: `Are you still working? You will be logged out in ${seconds} seconds.`, // TODO: Resource this
   };
 
   const onNoButtonClick = () => {
@@ -28,7 +30,7 @@ const AutoLogOutCountdown: FunctionComponent = () => {
   };
 
   return (
-    <Dialog hidden={false} dialogContentProps={dialogContentProps}>
+    <Dialog hidden={hidden} dialogContentProps={dialogContentProps}>
       <DialogFooter>
         <PrimaryButton text={formatMessage({ id: 'yes' })} />
         <DefaultButton text={formatMessage({ id: 'no' })} onClick={onNoButtonClick} />

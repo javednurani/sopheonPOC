@@ -1,3 +1,14 @@
-// IdleMonitor / App timeout settings
-export const autoLogOutTimeSeconds = 60 * 60; // 1 hour timeout
-export const showAutoLogOutWarningThreshholdSeconds = 60; // show auto log out warning at 10 seconds left
+import { isProd } from './environmentSettings';
+
+const appRawSettings: Record<string, string> = {
+  IdleLogOutSeconds: '^IdleLogOutSeconds^',
+  IdleLogOutSecondsDev: '3600', // 1 hour log out
+  IdleLogOutWarningSeconds: '^IdleLogOutWarningSeconds^',
+  IdleLogOutWarningSecondsDev: '60', // 60 second warning
+};
+
+// these collapsed settings incorporate the current environment
+export const IdleTimeoutSettings: Record<string, number> = {
+  IdleLogOutSeconds: isProd ? parseInt(appRawSettings.IdleLogOutSeconds, 10) : parseInt(appRawSettings.IdleLogOutSeconds, 10),
+  IdleLogOutWarningSeconds: isProd ? parseInt(appRawSettings.IdleLogOutWarningSeconds, 10) : parseInt(appRawSettings.IdleLogOutWarningSecondsDev, 10),
+};
