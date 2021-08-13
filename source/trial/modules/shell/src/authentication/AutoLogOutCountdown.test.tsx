@@ -13,6 +13,17 @@ import AutoLogOutCountdown from './AutoLogOutCountdown';
 expect.extend(toHaveNoViolations);
 
 describe('AutoLogOutCountdown', () => {
+  let pca: IPublicClientApplication;
+
+  // Reset the tests
+  beforeEach(() => {
+    pca = testMsalInstance();
+  });
+  afterEach(() => {
+    // cleanup on exiting
+    jest.clearAllMocks();
+    jest.useRealTimers();
+  });
   test('Has no a11y vialotions.', async () => {
     // Act
     const { container } = languageRender(<AutoLogOutCountdown />, getInitState({}));
@@ -32,9 +43,29 @@ describe('AutoLogOutCountdown', () => {
     expect(yesButton).toBeInTheDocument();
     expect(noButton).toBeInTheDocument();
   });
+  test('Logout called when No button clicked', async () => {
+    // Arrange
+    const logoutRedirectSpy = jest.spyOn(pca, 'logoutRedirect').mockImplementation(request => {
+      expect(request).toBe(undefined);
+
+      return Promise.resolve();
+    });
+
+    // Act
+    languageRender(
+      <MsalProvider instance={pca}>
+        <AutoLogOutCountdown />
+      </MsalProvider>,
+      getInitState({})
+    );
+    const noButton: HTMLElement = await screen.findByText(messages.en.no);
+    noButton.click();
+
+    // Assert
+    expect(logoutRedirectSpy).toBeCalledTimes(1);
+  });
   test('Countdown timer starts at warning threshold', async () => {
     // Arrange
-    const pca: IPublicClientApplication = testMsalInstance();
     const logoutRedirectSpy = jest.spyOn(pca, 'logoutRedirect').mockImplementation(request => {
       expect(request).toBe(undefined);
 
@@ -54,7 +85,6 @@ describe('AutoLogOutCountdown', () => {
   test('Countdown timer advances properly', async () => {
     // Arrange
     jest.useFakeTimers();
-    const pca: IPublicClientApplication = testMsalInstance();
     const logoutRedirectSpy = jest.spyOn(pca, 'logoutRedirect').mockImplementation(request => {
       expect(request).toBe(undefined);
 
@@ -76,7 +106,6 @@ describe('AutoLogOutCountdown', () => {
   });
   test('Logout called when timer is 0', async () => {
     // Arrange
-    const pca: IPublicClientApplication = testMsalInstance();
     const logoutRedirectSpy = jest.spyOn(pca, 'logoutRedirect').mockImplementation(request => {
       expect(request).toBe(undefined);
 

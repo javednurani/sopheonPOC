@@ -23,11 +23,15 @@ const AutoLogOutCountdown: FunctionComponent = () => {
     subText: `Are you still working? You will be logged out in ${seconds} seconds.`,
   };
 
+  const onNoButtonClick = () => {
+    instance.logout();
+  };
+
   return (
     <Dialog hidden={false} dialogContentProps={dialogContentProps}>
       <DialogFooter>
         <PrimaryButton text={formatMessage({ id: 'yes' })} />
-        <DefaultButton text={formatMessage({ id: 'no' })} />
+        <DefaultButton text={formatMessage({ id: 'no' })} onClick={onNoButtonClick} />
       </DialogFooter>
     </Dialog>
   );
