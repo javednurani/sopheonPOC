@@ -54,7 +54,7 @@ describe('AutoLogOutCountdown', () => {
     // Act
     languageRender(
       <MsalProvider instance={pca}>
-        <AutoLogOutCountdown />
+        <AutoLogOutCountdown hidden={false} />
       </MsalProvider>,
       getInitState({})
     );
