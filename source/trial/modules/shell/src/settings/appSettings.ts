@@ -1,10 +1,10 @@
 import { isProd } from './environmentSettings';
 
 const appRawSettings: Record<string, string> = {
-  IdleLogOutSeconds: '10', // '^IdleLogOutSeconds^'
-  IdleLogOutSecondsDev: '20', // 1 hour log out '3600'
-  IdleLogOutWarningSeconds: '5', // '^IdleLogOutWarningSeconds^'
-  IdleLogOutWarningSecondsDev: '10', // 60 second warning '60'
+  IdleLogOutSeconds: '^IdleLogOutSeconds^',
+  IdleLogOutSecondsDev: '3600',
+  IdleLogOutWarningSeconds: '^IdleLogOutWarningSeconds^',
+  IdleLogOutWarningSecondsDev: '60',
 };
 
 // these collapsed settings incorporate the current environment
