@@ -17,6 +17,9 @@ try {
     & $ZipUtil "x" "$($PSScriptRoot)/UserSignUpSignIn_*.zip" "-o$($B2CAssets)";
     & $ZipUtil "x" "$($env:System_DefaultWorkingDirectory)/_DevOpsScripts/DevOps/PowerShell_Scripts_*.zip" "-o$($Scripts)";
 
+    #TODO: investigate why replacer is broken around KeyVault access
+    #& "$($env:System_DefaultWorkingDirectory)/_TokenConfigurationManagement/TokenConfigManagement/TokenReplacer.exe" replace -c _StratusB2CAssets/B2C/User_SignUp_Configuration.json -f $B2CAssets -e $Environment
+
     Write-Host "...Replacing Configuration Variables on website/index.html...";
     # Replace variables on index.html 
     powershell.exe -file "$($Scripts)/Replace_Config_Variables.ps1" -PathToFile "$($B2CAssets)/website/index.html";
@@ -36,11 +39,6 @@ try {
     # Replace tokens on LoginCustom.html 
     powershell.exe -file "$($Scripts)/Replace_Environment_Tokens.ps1" -PathToFile "$($B2CAssets)/azureResources/Login/LoginCustom.html";
     Check-LastExitCode;
-
-    # Write-Host "...Replacing Environment Tokens on azureResources/TrustFrameworkBase.xml...";
-    # # Replace tokens on TrustFrameworkBase.xml 
-    # powershell.exe -file "$($Scripts)/Replace_Environment_Tokens.ps1" -PathToFile "$($B2CAssets)/azureResources/TrustFrameworkBase.xml";
-    # Check-LastExitCode;
 
     Write-Host "...Replacing Environment Tokens on azureResources/SopheonExtensions.xml...";
     # Replace tokens on SopheonExtensions.xml 
