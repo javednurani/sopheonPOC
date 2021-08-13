@@ -53,6 +53,7 @@ describe('AutoLogOutCountdown', () => {
       </MsalProvider>,
       getInitState({})
     );
+
     const yesButton: HTMLElement = await screen.findByText(messages.en.yes);
     yesButton.click();
 
