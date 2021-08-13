@@ -1,4 +1,5 @@
 import { AccountInfo, Configuration, IPublicClientApplication, PublicClientApplication, RedirectRequest } from '@azure/msal-browser';
+import { StringDict } from '@azure/msal-common';
 
 import { azureSettings, getAuthorityDomain, getAuthorityUrl } from '../settings/azureSettings';
 
@@ -27,11 +28,12 @@ export const editProfileRequest: RedirectRequest = {
   scopes: [],
 };
 
-export const getAuthLandingRedirectRequest = (adB2cPolicyName: string): RedirectRequest => ({
-  authority: getAuthorityUrl(adB2cPolicyName),
+export const getAuthLandingRedirectRequest = (extraQueryParams: StringDict | undefined): RedirectRequest => ({
+  authority: getAuthorityUrl(azureSettings.AD_B2C_SignUpSignIn_Policy),
   scopes: ['openid', 'offline_access'],
   redirectUri: azureSettings.SPA_Root_URL,
   redirectStartPage: azureSettings.SPA_Root_URL,
+  extraQueryParameters: extraQueryParams
 });
 
 // Important to set MSAL account correctly - "accounts" provided by useMsal() hook can include auth responses from initiating any user flow,
@@ -58,6 +60,7 @@ export const getMsalAccount = (instance: IPublicClientApplication): AccountInfo 
 
     const msalAccounts = currentMsalAccounts.filter(
       msalAccount =>
+        // If additional policies are used for account Sign Up or Sign In, they should be referenced here
         msalAccount.homeAccountId.toUpperCase().includes(azureSettings.AD_B2C_SignUpSignIn_Policy.toUpperCase()) &&
         msalAccount.idTokenClaims !== undefined &&
         // AccountInfo.idTokenClaims is typed as 'object' by Microsoft
