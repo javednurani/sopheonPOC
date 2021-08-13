@@ -45,6 +45,53 @@ describe('AutoLogOutCountdown', () => {
     expect(yesButton).toBeInTheDocument();
     expect(noButton).toBeInTheDocument();
   });
+  test('Yes button click calls ToggleHidden prop function', async () => {
+    // Act
+    languageRender(
+      <MsalProvider instance={pca}>
+        <AutoLogOutCountdown hidden={false} toggleHidden={mockToggleHidden} />
+      </MsalProvider>,
+      getInitState({})
+    );
+    const yesButton: HTMLElement = await screen.findByText(messages.en.yes);
+    yesButton.click();
+
+    // Assert
+    expect(mockToggleHidden).toBeCalledTimes(1);
+  });
+  test('Yes button click resets seconds to IdleTimeoutSettings.IdleLogOutWarningSeconds', async () => {
+    // Arrange
+    const logoutRedirectSpy = jest.spyOn(pca, 'logoutRedirect').mockImplementation(request => {
+      expect(request).toBe(undefined);
+
+      return Promise.resolve();
+    });
+
+    const secondsLeftBeforeLogout = 2;
+    const secondsToAdvance = IdleTimeoutSettings.IdleLogOutWarningSeconds - secondsLeftBeforeLogout;
+
+    // Act
+    languageRender(
+      <MsalProvider instance={pca}>
+        <AutoLogOutCountdown hidden={false} toggleHidden={mockToggleHidden} />
+      </MsalProvider>,
+      getInitState({})
+    );
+
+    // advance to 2 seconds before logout
+    jest.advanceTimersByTime(secondsToAdvance * 1000);
+
+    // click Yes button to stay active
+    const yesButton: HTMLElement = await screen.findByText(messages.en.yes);
+    yesButton.click();
+
+    // advance 2 seconds more, will logout if seconds was not reset
+    jest.advanceTimersByTime(secondsLeftBeforeLogout * 1000);
+
+    // Assert
+    expect(mockToggleHidden).toBeCalledTimes(1);
+    expect(logoutRedirectSpy).toBeCalledTimes(0);
+  });
   test('Logout called when No button clicked', async () => {
     // Arrange
     const logoutRedirectSpy = jest.spyOn(pca, 'logoutRedirect').mockImplementation(request => {
