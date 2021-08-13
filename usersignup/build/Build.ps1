@@ -1,6 +1,7 @@
 $ZipUtil = "C:\Program Files\7-Zip\7z.exe";
 
-Copy-Item -Path "$($env:System_DefaultWorkingDirectory)/usersignup/deploy/Deploy.ps1" -Destination "$($env:Build_ArtifactStagingDirectory)/Deploy.ps1";
+Copy-Item -Path "$($env:System_DefaultWorkingDirectory)/usersignup/deploy/*" -Destination "$($env:Build_ArtifactStagingDirectory)";
+
 
 # Zip/Archive Scripts 
 Write-Host "Zipping Artfacts for UserSignUp...";
