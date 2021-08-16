@@ -14,7 +14,7 @@ const sectionStyle: CSSProperties = {
 };
 
 export interface AuthLandingProps {
-  queryParams: StringDict;
+  queryParams: StringDict | undefined;
   spinnerMessageResourceKey: string;
 }
 
