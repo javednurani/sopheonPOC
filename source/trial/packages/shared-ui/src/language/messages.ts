@@ -6,6 +6,7 @@ export const messages: Record<string, Record<string, string>> = {
     'auth.signout': 'Sign Out',
     'auth.loginbutton': 'Log In',
     'auth.changepassword': 'Change Password',
+    'auth.logoutwarning': 'Are you still working? You will be logged out in {time, number} seconds.',
     'authlanding.loginspinner': 'Login',
     'authlanding.signupspinner': 'Sign Up',
     'header.welcome': 'Page Title',
