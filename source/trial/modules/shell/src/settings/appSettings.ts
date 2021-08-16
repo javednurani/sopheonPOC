@@ -9,6 +9,6 @@ const appRawSettings: Record<string, string> = {
 
 // these collapsed settings incorporate the current environment
 export const IdleTimeoutSettings: Record<string, number> = {
-  IdleLogOutSeconds: isProd ? parseInt(appRawSettings.IdleLogOutSeconds, 10) : parseInt(appRawSettings.IdleLogOutSeconds, 10),
+  IdleLogOutSeconds: isProd ? parseInt(appRawSettings.IdleLogOutSeconds, 10) : parseInt(appRawSettings.IdleLogOutSecondsDev, 10),
   IdleLogOutWarningSeconds: isProd ? parseInt(appRawSettings.IdleLogOutWarningSeconds, 10) : parseInt(appRawSettings.IdleLogOutWarningSecondsDev, 10),
 };

@@ -14,10 +14,12 @@ expect.extend(toHaveNoViolations);
 
 describe('AutoLogOutCountdown', () => {
   let pca: IPublicClientApplication;
+  let mockToggleHidden: jest.Mock;
 
   // Reset the tests
   beforeEach(() => {
     pca = testMsalInstance();
+    mockToggleHidden = jest.fn();
   });
   afterEach(() => {
     // cleanup on exiting
@@ -26,7 +28,7 @@ describe('AutoLogOutCountdown', () => {
   });
   test('Has no a11y vialotions.', async () => {
     // Act
-    const { container } = languageRender(<AutoLogOutCountdown hidden={false} />, getInitState({}));
+    const { container } = languageRender(<AutoLogOutCountdown hidden={false} toggleHidden={mockToggleHidden} />, getInitState({}));
     const axeResults = await axe(container);
 
     // Assert
@@ -34,7 +36,7 @@ describe('AutoLogOutCountdown', () => {
   });
   test('To have Yes and No buttons', async () => {
     // Act
-    const { getByText } = languageRender(<AutoLogOutCountdown hidden={false} />, getInitState({}));
+    const { getByText } = languageRender(<AutoLogOutCountdown hidden={false} toggleHidden={mockToggleHidden} />, getInitState({}));
 
     // Assert
     const yesButton: HTMLElement = getByText(messages.en.yes);
@@ -42,6 +44,54 @@ describe('AutoLogOutCountdown', () => {
 
     expect(yesButton).toBeInTheDocument();
     expect(noButton).toBeInTheDocument();
+  });
+  test('Yes button click calls ToggleHidden prop function', async () => {
+    // Act
+    languageRender(
+      <MsalProvider instance={pca}>
+        <AutoLogOutCountdown hidden={false} toggleHidden={mockToggleHidden} />
+      </MsalProvider>,
+      getInitState({})
+    );
+
+    const yesButton: HTMLElement = await screen.findByText(messages.en.yes);
+    yesButton.click();
+
+    // Assert
+    expect(mockToggleHidden).toBeCalledTimes(1);
+  });
+  test('Yes button click resets seconds to IdleTimeoutSettings.IdleLogOutWarningSeconds', async () => {
+    // Arrange
+    const logoutRedirectSpy = jest.spyOn(pca, 'logoutRedirect').mockImplementation(request => {
+      expect(request).toBe(undefined);
+
+      return Promise.resolve();
+    });
+
+    const secondsLeftBeforeLogout = 2;
+    const secondsToAdvance = IdleTimeoutSettings.IdleLogOutWarningSeconds - secondsLeftBeforeLogout;
+
+    // Act
+    languageRender(
+      <MsalProvider instance={pca}>
+        <AutoLogOutCountdown hidden={false} toggleHidden={mockToggleHidden} />
+      </MsalProvider>,
+      getInitState({})
+    );
+
+    // advance to 2 seconds before logout
+    jest.advanceTimersByTime(secondsToAdvance * 1000);
+
+    // click Yes button to stay active
+    const yesButton: HTMLElement = await screen.findByText(messages.en.yes);
+    yesButton.click();
+
+    // advance 2 seconds more, will logout if seconds was not reset
+    jest.advanceTimersByTime(secondsLeftBeforeLogout * 1000);
+
+    // Assert
+    expect(mockToggleHidden).toBeCalledTimes(1);
+    expect(logoutRedirectSpy).toBeCalledTimes(0);
   });
   test('Logout called when No button clicked', async () => {
     // Arrange
@@ -54,7 +104,7 @@ describe('AutoLogOutCountdown', () => {
     // Act
     languageRender(
       <MsalProvider instance={pca}>
-        <AutoLogOutCountdown hidden={false} />
+        <AutoLogOutCountdown hidden={false} toggleHidden={mockToggleHidden} />
       </MsalProvider>,
       getInitState({})
     );
@@ -71,7 +121,7 @@ describe('AutoLogOutCountdown', () => {
 
       return Promise.resolve();
     });
-    const sut = <AutoLogOutCountdown hidden={false} />;
+    const sut = <AutoLogOutCountdown hidden={false} toggleHidden={mockToggleHidden} />;
     const initialState = getInitState({});
 
     // Act
@@ -91,7 +141,11 @@ describe('AutoLogOutCountdown', () => {
       return Promise.resolve();
     });
 
-    const sut = <AutoLogOutCountdown hidden={false} />;
+    const sut = (
+      <MsalProvider instance={pca}>
+        <AutoLogOutCountdown hidden={false} toggleHidden={mockToggleHidden} />
+      </MsalProvider>
+    );
     const initialState = getInitState({});
     const secondsToAdvance = 5;
 
@@ -119,7 +173,7 @@ describe('AutoLogOutCountdown', () => {
     // Act
     languageRender(
       <MsalProvider instance={pca}>
-        <AutoLogOutCountdown hidden={false} />
+        <AutoLogOutCountdown hidden={false} toggleHidden={mockToggleHidden} />
       </MsalProvider>,
       getInitState({})
     );

@@ -6,9 +6,10 @@ import { useIntl } from 'react-intl';
 import { IdleTimeoutSettings } from './../settings/appSettings';
 export interface AutoLogoutCountdownProps {
   hidden?: boolean | undefined;
+  toggleHidden: () => void;
 }
 
-const AutoLogOutCountdown: FunctionComponent<AutoLogoutCountdownProps> = ({ hidden }: AutoLogoutCountdownProps) => {
+const AutoLogOutCountdown: FunctionComponent<AutoLogoutCountdownProps> = ({ hidden, toggleHidden }: AutoLogoutCountdownProps) => {
   const { formatMessage } = useIntl();
   const [seconds, setSeconds] = React.useState(IdleTimeoutSettings.IdleLogOutWarningSeconds);
   const { instance } = useMsal();
@@ -25,6 +26,11 @@ const AutoLogOutCountdown: FunctionComponent<AutoLogoutCountdownProps> = ({ hidd
     subText: `Are you still working? You will be logged out in ${seconds} seconds.`, // TODO: Resource this
   };
 
+  const onYesButtonClick = () => {
+    toggleHidden();
+    setTimeout(() => setSeconds(IdleTimeoutSettings.IdleLogOutWarningSeconds), 1000);
+  };
+
   const onNoButtonClick = () => {
     instance.logout();
   };
@@ -32,7 +38,7 @@ const AutoLogOutCountdown: FunctionComponent<AutoLogoutCountdownProps> = ({ hidd
   return (
     <Dialog hidden={hidden} dialogContentProps={dialogContentProps}>
       <DialogFooter>
-        <PrimaryButton text={formatMessage({ id: 'yes' })} />
+        <PrimaryButton text={formatMessage({ id: 'yes' })} onClick={onYesButtonClick} />
         <DefaultButton text={formatMessage({ id: 'no' })} onClick={onNoButtonClick} />
       </DialogFooter>
     </Dialog>

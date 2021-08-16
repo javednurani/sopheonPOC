@@ -26,7 +26,7 @@ const IdleMonitor: FunctionComponent = () => {
     },
   });
 
-  return <AutoLogOutCountdown hidden={hideDialog} />;
+  return <AutoLogOutCountdown hidden={hideDialog} toggleHidden={toggleHideDialog} />;
 };
 
 export default IdleMonitor;
