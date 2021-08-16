@@ -23,7 +23,7 @@ const AutoLogOutCountdown: FunctionComponent<AutoLogoutCountdownProps> = ({ hidd
   });
   const dialogContentProps = {
     type: DialogType.normal,
-    subText: `Are you still working? You will be logged out in ${seconds} seconds.`, // TODO: Resource this
+    subText: formatMessage({ id: 'auth.logoutwarning' }, { time: seconds }),
   };
 
   const onYesButtonClick = () => {
