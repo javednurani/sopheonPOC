@@ -1,7 +1,7 @@
+import { StringDict } from '@azure/msal-common';
 import { useMsal } from '@azure/msal-react';
 import React, { FunctionComponent } from 'react';
 
-import { azureSettings } from '../settings/azureSettings';
 import AuthLanding from './AuthLanding';
 
 const Signup: FunctionComponent = () => {
@@ -13,7 +13,11 @@ const Signup: FunctionComponent = () => {
     instance.logout();
   }
 
-  return <AuthLanding adB2cPolicyName={azureSettings.AD_B2C_SignUp_Policy} spinnerMessageResourceKey={'authlanding.signupspinner'} />;
+  const queryParams: StringDict = {
+    mode: 'signup',
+  };
+
+  return <AuthLanding queryParams={queryParams} spinnerMessageResourceKey={'authlanding.signupspinner'} />;
 };
 
 export default Signup;
