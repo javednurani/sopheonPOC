@@ -63,6 +63,9 @@
       <ClaimType Id="extension_ProfileEditDate">
         <DataType>dateTime</DataType>
       </ClaimType>
+      <ClaimType Id="sopheonMode">
+        <DataType>string</DataType>
+      </ClaimType>
     </ClaimsSchema>
     <Predicates>
       <Predicate Id="PhoneNumberRegex" Method="MatchesRegex">
@@ -544,6 +547,16 @@
             <OutputClaim ClaimTypeReferenceId="newUser" />
           </OutputClaims>
         </TechnicalProfile>
+        <TechnicalProfile Id="SopheonGetQueryParameters">
+          <DisplayName>Populate claims with query parameter values via OAUTH-KV ClaimsResolvers</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+              <Item Key="IncludeClaimResolvingInClaimsHandling">true</Item>
+          </Metadata>            
+          <OutputClaims>
+              <OutputClaim ClaimTypeReferenceId="sopheonMode" DefaultValue="{oauth-kv:mode}" AlwaysUseDefaultValue="true"/> 
+          </OutputClaims>
+      </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
     <ClaimsProvider>
@@ -704,53 +717,22 @@
   </ClaimsProviders>
 
   <UserJourneys>
-    <UserJourney Id="SopheonSignUp">
+    <UserJourney Id="SopheonSignUpOrSignIn">
       <OrchestrationSteps>
-
         <OrchestrationStep Order="1" Type="ClaimsExchange">
           <ClaimsExchanges>
-            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+            <ClaimsExchange Id="GetClaimsFromQueryParameters" TechnicalProfileReferenceId="SopheonGetQueryParameters" />
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <!-- This step reads any user attributes that we may not have received when in the token. -->
-        <OrchestrationStep Order="2" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <!-- execute consent step if the users consented version does not met the current version,
-              otherwhise this step is skipped -->
-        <OrchestrationStep Order="3" Type="ClaimsExchange">
+        <OrchestrationStep Order="2" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-              <Value>extension_TermsOfUseConsentedVersion</Value>
-              <Value>v0.1</Value>
+              <Value>sopheonMode</Value>
+              <Value>signup</Value>
               <Action>SkipThisOrchestrationStep</Action>
             </Precondition>
           </Preconditions>
-          <ClaimsExchanges>
-            <ClaimsExchange Id="SelfAssertedConsentExchange" TechnicalProfileReferenceId="SelfAsserted-Consent" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <!-- Sign Up journey - always confront user with Profile Update  -->
-        <OrchestrationStep Order="4" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="B2CUserProfileUpdateExchange" TechnicalProfileReferenceId="SelfAsserted-ProfileUpdate" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
-
-      </OrchestrationSteps>
-      <ClientDefinition ReferenceId="DefaultWeb" />
-    </UserJourney>
-    <UserJourney Id="SopheonSignUpOrSignIn">
-      <OrchestrationSteps>
-
-        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
           <ClaimsProviderSelections>
             <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
           </ClaimsProviderSelections>
@@ -759,7 +741,7 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <OrchestrationStep Order="2" Type="ClaimsExchange">
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
               <Value>objectId</Value>
@@ -772,15 +754,15 @@
         </OrchestrationStep>
 
         <!-- This step reads any user attributes that we may not have received when in the token. -->
-        <OrchestrationStep Order="3" Type="ClaimsExchange">
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <!-- execute consent step if the users consented version does not met the current version,
-              otherwhise this step is skipped -->
-        <OrchestrationStep Order="4" Type="ClaimsExchange">
+        <!-- execute consent step if the users consented version does not meet the current version,
+              otherwise this step is skipped -->
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
               <Value>extension_TermsOfUseConsentedVersion</Value>
@@ -794,7 +776,7 @@
         </OrchestrationStep>
 
         <!-- SignUpOrSignIn (Log In) journey - don't confront a user with Profile Update if they've already seen it  -->
-        <OrchestrationStep Order="5" Type="ClaimsExchange">
+        <OrchestrationStep Order="6" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
               <Value>extension_ProfileEditDate</Value>
@@ -806,7 +788,7 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="7" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
 
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
