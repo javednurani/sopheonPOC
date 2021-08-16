@@ -17,6 +17,18 @@
       "Pattern": "^B2CTenantLoginName^",
       "IsKeyVaultSecret": true,
       "KeyVaultSecretName": "StratusB2CTenantLoginName"
+    },
+    {
+      "TokenDisplayName": "Idle Log Out Seconds",
+      "Pattern": "^IdleLogOutSeconds^",
+      "EnvironmentVariableName": "IdleLogOutSeconds",
+      "IsKeyVaultSecret": false
+    },
+    {
+      "TokenDisplayName": "Idle Log Out Warning Seconds",
+      "Pattern": "^IdleLogOutWarningSeconds^",
+      "EnvironmentVariableName": "IdleLogOutWarningSeconds",
+      "IsKeyVaultSecret": false
     }
   ]
 }
