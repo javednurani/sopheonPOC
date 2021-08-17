@@ -32,10 +32,6 @@ try {
     powershell.exe -file "$($Scripts)/Deploy_B2C_Assets.ps1" -PolicyId B2C_1A_SopheonExtensions -PathToFile "$($B2CAssets)/azureResources/SopheonExtensions.xml" -Environment $Environment;
     Check-LastExitCode;
 
-    Write-Host "...Uploading Policy: B2C_1A_signup via GraphAPI...";
-    powershell.exe -file "$($Scripts)/Deploy_B2C_Assets.ps1" -PolicyId B2C_1A_signup -PathToFile "$($B2CAssets)/azureResources/SignUp.xml" -Environment $Environment;
-    Check-LastExitCode;
-
     Write-Host "...Uploading Policy: B2C_1A_signup_signin via GraphAPI...";
     powershell.exe -file "$($Scripts)/Deploy_B2C_Assets.ps1" -PolicyId B2C_1A_signup_signin -PathToFile "$($B2CAssets)/azureResources/SignUpOrSignin.xml" -Environment $Environment;
     Check-LastExitCode;
