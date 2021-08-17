@@ -5,7 +5,9 @@ import { shallow } from 'enzyme';
 import React, { ReactElement } from 'react';
 import { IntlProvider } from 'react-intl';
 
+import { azureSettings } from '../settings/azureSettings';
 import { randomMsalAccount, testMsalInstance } from '../testUtils';
+import AuthLanding from './AuthLanding';
 import Signup from './Signup';
 
 const sut: ReactElement = <Signup />;
@@ -76,5 +78,26 @@ describe('Signup when NOT logged in', () => {
 
     // Assert
     expect(mockLogoutSpy).not.toHaveBeenCalled();
+  });
+  test('Renders AuthLanding with expected props.', () => {
+    // Arrange
+    const signupSpinnerResourceKey = 'authlanding.signupspinner';
+
+    // Act
+    const wrapper = shallow(
+      <MsalProvider instance={pca}>
+        <IntlProvider locale="en" messages={messages.en}>
+          {sut}
+        </IntlProvider>
+      </MsalProvider>
+    );
+
+    const sutWrapper = wrapper.find(Signup).dive();
+
+    // Assert
+    const authLanding = sutWrapper.find(AuthLanding);
+    expect(authLanding).toHaveLength(1);
+    expect(authLanding.prop('queryParams')).toHaveProperty('mode', azureSettings.AD_B2C_Sopheon_Mode_Signup);
+    expect(authLanding.prop('spinnerMessageResourceKey')).toBe(signupSpinnerResourceKey);
   });
 });
