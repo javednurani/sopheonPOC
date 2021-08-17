@@ -5,7 +5,7 @@ Param(
 
 #Environment should always be set from the Pipeline variables. If this isn't set, nothing is getting out
 $Environment = $env:Environment;
-$StorageAccount = $env:StorageAccount
+$StorageAccount = $env:StorageAccountName
 
 $fileContent = Get-Content $PathToFile;
 

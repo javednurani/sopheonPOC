@@ -1,3 +1,4 @@
+import { StringDict } from '@azure/msal-common';
 import { useMsal } from '@azure/msal-react';
 import React, { FunctionComponent } from 'react';
 
@@ -13,7 +14,12 @@ const Signup: FunctionComponent = () => {
     instance.logout();
   }
 
-  return <AuthLanding adB2cPolicyName={azureSettings.AD_B2C_SignUp_Policy} spinnerMessageResourceKey={'authlanding.signupspinner'} />;
+  // TODO: when multiple queryparameters are used, may be worth extracting this object builder to an authHelper
+  const queryParams: StringDict = {
+    mode: azureSettings.AD_B2C_Sopheon_Mode_Signup,
+  };
+
+  return <AuthLanding queryParams={queryParams} spinnerMessageResourceKey={'authlanding.signupspinner'} />;
 };
 
 export default Signup;
