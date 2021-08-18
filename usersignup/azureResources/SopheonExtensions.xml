@@ -63,6 +63,11 @@
       <ClaimType Id="extension_ProfileEditDate">
         <DataType>dateTime</DataType>
       </ClaimType>
+      <ClaimType Id="isForgotPassword">
+        <DisplayName>isForgotPassword</DisplayName>
+        <DataType>boolean</DataType>
+        <AdminHelpText>Whether the user has selected Forgot your Password</AdminHelpText>
+      </ClaimType>
     </ClaimsSchema>
     <Predicates>
       <Predicate Id="PhoneNumberRegex" Method="MatchesRegex">
