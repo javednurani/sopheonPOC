@@ -20,37 +20,55 @@ try
     $headers.Add("Content-Type", 'application/xml');
     $headers.Add("Authorization", 'Bearer ' + $token);
 
-    $graphuri = 'https://graph.microsoft.com/beta/trustframework/policies'
+    $graphuri = 'https://graph.microsoft.com/beta/trustframework/policies';
 
-    $response = Invoke-RestMethod -Uri $graphuri -Method Get -Headers $headers
+    # Get all the PolicyIds on the B2C Tenant
+    $response = Invoke-RestMethod -Uri $graphuri -Method Get -Headers $headers;
+
+    # Get all .xml policy files in folder...
     $sourceFiles = Get-ChildItem -Path $PathToFolder | Where-Object { $_.Name.EndsWith(".xml") };
-    $sourceIds = $sourceFiles | Select-Object {        
+    $sourceIds = @();    
+    $sourceFiles.ForEach({
         $XMLPath = $_.FullName;
         $xml = [xml](Get-Content $XMLPath);
-        $xmlPolicyId = $xml.TrustFrameworkPolicy | Select-Object PolicyId; 
-        return $xmlPolicyId.PolicyId;        
-    };
+        $xmlPolicyId = $xml.TrustFrameworkPolicy | Select-Object PolicyId;
+        $sourceIds += $xmlPolicyId.PolicyId.ToUpper();
+    });
 
-
+    # Loop through and see if any of the B2C Ids, match with the source files Id. If not, then mark for removal from B2C Tenant
     $policiesMarkedForDeletion = @();
-    foreach ($item in $response.value ) {
-        Write-Host $item.id;
-        $sourceFiles.ForEach({
-            $XMLPath = $_.FullName;
-            $xml = [xml](Get-Content $XMLPath);
-            $xmlPolicyId = $xml.TrustFrameworkPolicy | Select-Object PolicyId;
-            if($item.id -ne $xmlPolicyId.PolicyId.ToUpperInvariant()) {
-                $policiesMarkedForDeletion += $item.id;
-            }   
-        });    
+    foreach ($item in $response.value ) {        
+        if($sourceIds.Contains($item.id)) {
+            continue;
+        } else {
+            $policiesMarkedForDeletion += $item.id;
+        }
     }
 
-    # $graphuri = 'https://graph.microsoft.com/beta/trustframework/policies/' + $PolicyId + '/$value';
-    # $policycontent = Get-Content $PathToFile;
+    # Loop through the source files and upload them to Azure AD B2C
+    foreach($file in $sourceFiles) {
+        $xml = [xml](Get-Content $XMLPath);
+        $xmlPolicyId = $xml.TrustFrameworkPolicy | Select-Object PolicyId;
+        $policyId = $xmlPolicyId.PolicyId.ToUpper();
+        $graphuri = 'https://graph.microsoft.com/beta/trustframework/policies/' + $policyId + '/$value';
 
-    # Invoke-RestMethod -Uri $graphuri -Method Put -Body $policycontent -Headers $headers
+        Write-Output "Uploading File: " + $file.Name + "; For PolicyId: " + $policyId;
+        $policycontent = Get-Content $PathToFile;
+        Invoke-RestMethod -Uri $graphuri -Method Put -Body $policycontent -Headers $headers;
 
-    Write-Host "Policy" $PolicyId "uploaded successfully."
+        Write-Output "Policy" $policyId "uploaded successfully.";
+    }
+
+    if($policiesMarkedForDeletion.Length -gt 0) {
+        # Loop through the marked for deletion array
+        foreach($deleteId in $policiesMarkedForDeletion) {
+            Write-Output "Deleting PolicyId: " + $deleteId;
+            $graphuri = 'https://graph.microsoft.com/beta/trustframework/policies/' + $deleteId;
+
+            Invoke-RestMethod -Uri $graphuri -Method Delete -Headers $headers;
+            Write-Output "Policy" $deleteId "was successfully deleted.";
+        }    
+    }
 }
 catch 
 {
