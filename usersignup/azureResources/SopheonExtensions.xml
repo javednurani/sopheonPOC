@@ -98,6 +98,7 @@
     <ContentDefinitions>
       <ContentDefinition Id="api.signuporsignin">
         <LoadUri>https://^StorageAccountName^.blob.core.windows.net/b2cassets/LoginCustom.html</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:unifiedssp:2.1.5</DataUri>
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.signuporsignin.en" />
         </LocalizedResourcesReferences>
