@@ -548,7 +548,7 @@
         <!-- This supports passing arbitrary values from React SPA (or other client) into custom policy flow -->
         <!-- Put at the beginning of a user journey, and use the resolved claims as needed to save display content / user attributes / evaluate preconditions, etc -->
         <!-- https://docs.microsoft.com/en-us/azure/active-directory-b2c/claim-resolver-overview#oauth2-key-value-parameters -->
-        <TechnicalProfile Id="SopheonGetQueryParameters">
+        <!-- <TechnicalProfile Id="SopheonGetQueryParameters">
           <DisplayName>Populate claims with query parameter values via OAUTH-KV ClaimsResolvers</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
@@ -557,7 +557,7 @@
           <OutputClaims>
               <OutputClaim ClaimTypeReferenceId="yourClaimIdHere" DefaultValue="{oauth-kv:yourQueryStringKeyHere}" AlwaysUseDefaultValue="true"/> 
           </OutputClaims>
-      </TechnicalProfile>
+        </TechnicalProfile> -->
       </TechnicalProfiles>
     </ClaimsProvider>
     <ClaimsProvider>
