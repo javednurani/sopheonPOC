@@ -63,6 +63,11 @@
       <ClaimType Id="extension_ProfileEditDate">
         <DataType>dateTime</DataType>
       </ClaimType>
+      <ClaimType Id="isForgotPassword">
+        <DisplayName>isForgotPassword</DisplayName>
+        <DataType>boolean</DataType>
+        <AdminHelpText>Whether the user has selected Forgot your Password</AdminHelpText>
+      </ClaimType>
     </ClaimsSchema>
     <Predicates>
       <Predicate Id="PhoneNumberRegex" Method="MatchesRegex">
@@ -870,5 +875,23 @@
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
   </UserJourneys>
+  <SubJourneys>
+    <SubJourney Id="PasswordReset" Type="Call">
+      <OrchestrationSteps>
+        <!-- Validate user's email address. -->
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="PasswordResetUsingEmailAddressExchange" TechnicalProfileReferenceId="LocalAccountDiscoveryUsingEmailAddress" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
 
+        <!-- Collect and persist a new password. -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+      </OrchestrationSteps>
+    </SubJourney>
+  </SubJourneys>
 </TrustFrameworkPolicy>
