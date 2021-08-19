@@ -71,6 +71,12 @@
       "Pattern": "^StorageAccountName^",
       "EnvironmentVariableName": "StorageAccountName",
       "IsKeyVaultSecret": false
+    },
+    {
+      "TokenDisplayName": "Browser WebApp Url",
+      "Pattern": "^BrowserWebAppUrl^",
+      "IsKeyVaultSecret": true,
+      "KeyVaultSecretName": "StratusBrowserWebAppUrl"
     }
   ]
 }

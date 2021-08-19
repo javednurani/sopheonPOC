@@ -1,11 +1,40 @@
-import { AccountInfo } from '@azure/msal-browser';
+import { AccountInfo, RedirectRequest } from '@azure/msal-browser';
+import { StringDict } from '@azure/msal-common';
 
 import { azureSettings, getAuthorityDomain } from '../settings/azureSettings';
 import { randomMsalAccount, randomString, testMsalInstance } from '../testUtils';
-import { getMsalAccount } from './authHelpers';
+import { getAuthLandingRedirectRequest, getMsalAccount } from './authHelpers';
 
-describe('Test authHelpers', () => {
-  it('getMsalAccount - 0 accounts - returns undefined', async () => {
+describe('Test getAuthLandingRedirectRequest', () => {
+  it('extraQueryParams undefined, RedirectRequest returned as expected', () => {
+    // Arrange
+    const extraQueryParams: StringDict | undefined = undefined;
+
+    // Act
+    const result: RedirectRequest = getAuthLandingRedirectRequest(extraQueryParams);
+
+    // Assert
+    expect(result.extraQueryParameters).toBeUndefined();
+    expect(result.redirectUri).toEqual(azureSettings.SPA_Root_URL);
+  });
+  it('extraQueryParams passed in, RedirectRequest returned as expected', () => {
+    // Arrange
+    const extraQueryParams: StringDict | undefined = {
+      randomKey1: randomString(),
+      randomKey2: randomString()
+    };
+
+    // Act
+    const result: RedirectRequest = getAuthLandingRedirectRequest(extraQueryParams);
+
+    // Assert
+    expect(result.extraQueryParameters).toBe(extraQueryParams);
+    expect(result.redirectUri).toEqual(azureSettings.SPA_Root_URL);
+  });
+});
+
+describe('Test getMsalAccount', () => {
+  it('0 accounts - returns undefined', async () => {
     // Arrange
     const pca = testMsalInstance();
 
@@ -19,7 +48,7 @@ describe('Test authHelpers', () => {
     // Assert
     expect(result).toBeUndefined();
   });
-  it('getMsalAccount - 2 signupsignin accounts (same user) - returns 1st signupsignin account', async () => {
+  it('2 signupsignin accounts (same user) - returns 1st signupsignin account', async () => {
     // Arrange
     const sharedLocalAccountId: string = randomString();
 
@@ -51,7 +80,7 @@ describe('Test authHelpers', () => {
     // Assert
     expect(result).toBe(signUpSignInAccount1);
   });
-  it('getMsalAccount - 2 signupsignin accounts (different users) - returns undefined, logout() called', async () => {
+  it('2 signupsignin accounts (different users) - returns undefined, logout() called', async () => {
     // Arrange
     const signUpSignInAccount1: AccountInfo = randomMsalAccount();
     signUpSignInAccount1.homeAccountId = `${randomString()}-${azureSettings.AD_B2C_SignUpSignIn_Policy}`;
@@ -82,7 +111,7 @@ describe('Test authHelpers', () => {
     expect(result).toBe(undefined);
     expect(logoutSpy).toHaveBeenCalledTimes(1);
   });
-  it('getMsalAccount - 1 signupsignin account and 1 other account (of same user) - returns signupsignin account', async () => {
+  it('1 signupsignin account and 1 other account (of same user) - returns signupsignin account', async () => {
     // Arrange
     const sharedLocalAccountId: string = randomString();
 
@@ -109,7 +138,7 @@ describe('Test authHelpers', () => {
     // Assert
     expect(result).toBe(signUpSignInAccount);
   });
-  it('getMsalAccount - 1 account - returns account', async () => {
+  it('1 account - returns account', async () => {
     // Arrange
 
     const testAccount: AccountInfo = randomMsalAccount();
