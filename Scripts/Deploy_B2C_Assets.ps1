@@ -52,12 +52,13 @@ try
         $policyId = $xmlPolicyId.PolicyId.ToUpper();
         $graphuri = 'https://graph.microsoft.com/beta/trustframework/policies/' + $policyId + '/$value';
 
-        Write-Host '';
-        Write-Host 'Uploading File: ' + $file.Name + '; For PolicyId: ' + $policyId;
+        Write-Host 'Uploading File: ' $file.Name '; For PolicyId: ' $policyId;
         $policycontent = Get-Content $file.FullName;
         Invoke-RestMethod -Uri $graphuri -Method Put -Body $policycontent -Headers $headers;
 
         Write-Host "Policy $policyId uploaded successfully.";
+        Write-Host '';
+
     }
 
     if($policiesMarkedForDeletion.Length -gt 0) {
@@ -68,8 +69,12 @@ try
 
             Invoke-RestMethod -Uri $graphuri -Method Delete -Headers $headers;
             Write-Host "Policy $deleteId was successfully deleted.";
+            Write-Host '';
+
         }    
     }
+
+    Write-Host "...COMPLETE: Uploading B2C Custom Policies via GraphAPI...";
 }
 catch 
 {
