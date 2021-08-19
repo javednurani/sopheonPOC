@@ -113,6 +113,10 @@
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.localaccountsignup.en" />
         </LocalizedResourcesReferences>
       </ContentDefinition>
+      <ContentDefinition Id="api.localaccountpasswordreset">
+        <LoadUri>https://^StorageAccountName^.blob.core.windows.net/b2cassets/selfAssertedTemplate.html</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:2.1.5</DataUri>
+      </ContentDefinition>
       <ContentDefinition Id="api.selfasserted.consent">
         <LoadUri>https://^StorageAccountName^.blob.core.windows.net/b2cassets/consentPage.html</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
