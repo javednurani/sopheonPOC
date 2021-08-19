@@ -52,21 +52,22 @@ try
         $policyId = $xmlPolicyId.PolicyId.ToUpper();
         $graphuri = 'https://graph.microsoft.com/beta/trustframework/policies/' + $policyId + '/$value';
 
-        Write-Output "Uploading File: $($file.Name); For PolicyId: $policyId";
+        Write-Host '';
+        Write-Host 'Uploading File: ' + $file.Name + '; For PolicyId: ' + $policyId;
         $policycontent = Get-Content $file.FullName;
         Invoke-RestMethod -Uri $graphuri -Method Put -Body $policycontent -Headers $headers;
 
-        Write-Output "Policy $policyId uploaded successfully.";
+        Write-Host "Policy $policyId uploaded successfully.";
     }
 
     if($policiesMarkedForDeletion.Length -gt 0) {
         # Loop through the marked for deletion array
         foreach($deleteId in $policiesMarkedForDeletion) {
-            Write-Output "Deleting PolicyId: " + $deleteId;
+            Write-Host "Deleting PolicyId: $deleteId";
             $graphuri = 'https://graph.microsoft.com/beta/trustframework/policies/' + $deleteId;
 
             Invoke-RestMethod -Uri $graphuri -Method Delete -Headers $headers;
-            Write-Output "Policy $deleteId was successfully deleted.";
+            Write-Host "Policy $deleteId was successfully deleted.";
         }    
     }
 }
