@@ -47,7 +47,7 @@ try
 
     # Loop through the source files and upload them to Azure AD B2C
     foreach($file in $sourceFiles) {
-        $xml = [xml](Get-Content $file);
+        $xml = [xml](Get-Content $file.FullName);
         $xmlPolicyId = $xml.TrustFrameworkPolicy | Select-Object PolicyId;
         $policyId = $xmlPolicyId.PolicyId.ToUpper();
         $graphuri = 'https://graph.microsoft.com/beta/trustframework/policies/' + $policyId + '/$value';
