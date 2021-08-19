@@ -56,7 +56,7 @@ try
         $policycontent = Get-Content $file.FullName;
         Invoke-RestMethod -Uri $graphuri -Method Put -Body $policycontent -Headers $headers;
 
-        Write-Output "Policy" $policyId "uploaded successfully.";
+        Write-Output "Policy $policyId uploaded successfully.";
     }
 
     if($policiesMarkedForDeletion.Length -gt 0) {
@@ -66,7 +66,7 @@ try
             $graphuri = 'https://graph.microsoft.com/beta/trustframework/policies/' + $deleteId;
 
             Invoke-RestMethod -Uri $graphuri -Method Delete -Headers $headers;
-            Write-Output "Policy" $deleteId "was successfully deleted.";
+            Write-Output "Policy $deleteId was successfully deleted.";
         }    
     }
 }
