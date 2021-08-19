@@ -52,8 +52,8 @@ try
         $policyId = $xmlPolicyId.PolicyId.ToUpper();
         $graphuri = 'https://graph.microsoft.com/beta/trustframework/policies/' + $policyId + '/$value';
 
-        Write-Output "Uploading File: " + $file.Name + "; For PolicyId: " + $policyId;
-        $policycontent = Get-Content $PathToFile;
+        Write-Output "Uploading File:" $file.Name"; For PolicyId:" $policyId;
+        $policycontent = Get-Content $file.FullName;
         Invoke-RestMethod -Uri $graphuri -Method Put -Body $policycontent -Headers $headers;
 
         Write-Output "Policy" $policyId "uploaded successfully.";

@@ -20,7 +20,7 @@ try {
     & "$($env:System_DefaultWorkingDirectory)/_TokenConfigurationManagement/TokenConfigManagement/TokenReplacer.exe" replace -c _StratusB2CAssets/B2C/User_SignUp_Configuration.json -f "$B2CAssets/*"  -e $Environment
 
     # Upload the TrustFramework .xml files from the GraphApi...
-    Write-Host "...Uploading Policy: B2C_1A_TrustFrameworkBase via GraphAPI...";
+    Write-Host "...Uploading B2C Custom Policies via GraphAPI...";
     powershell.exe -file "$($Scripts)/Deploy_B2C_Assets.ps1" -PathToFolder "$($B2CAssets)/azureResources/" -Environment $Environment;
     Check-LastExitCode;
    
