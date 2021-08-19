@@ -21,33 +21,9 @@ try {
 
     # Upload the TrustFramework .xml files from the GraphApi...
     Write-Host "...Uploading Policy: B2C_1A_TrustFrameworkBase via GraphAPI...";
-    powershell.exe -file "$($Scripts)/Deploy_B2C_Assets.ps1" -PolicyId B2C_1A_TrustFrameworkBase -PathToFile "$($B2CAssets)/azureResources/TrustFrameworkBase.xml" -Environment $Environment;
+    powershell.exe -file "$($Scripts)/Deploy_B2C_Assets.ps1" -PathToFolder "$($B2CAssets)/azureResources/" -Environment $Environment;
     Check-LastExitCode;
-
-    Write-Host "...Uploading Policy: B2C_1A_TrustFrameworkExtensions via GraphAPI...";
-    powershell.exe -file "$($Scripts)/Deploy_B2C_Assets.ps1" -PolicyId B2C_1A_TrustFrameworkExtensions -PathToFile "$($B2CAssets)/azureResources/TrustFrameworkExtensions.xml" -Environment $Environment;
-    Check-LastExitCode;
-
-    Write-Host "...Uploading Policy: B2C_1A_SopheonExtensions via GraphAPI...";
-    powershell.exe -file "$($Scripts)/Deploy_B2C_Assets.ps1" -PolicyId B2C_1A_SopheonExtensions -PathToFile "$($B2CAssets)/azureResources/SopheonExtensions.xml" -Environment $Environment;
-    Check-LastExitCode;
-
-    Write-Host "...Uploading Policy: B2C_1A_signup via GraphAPI...";
-    powershell.exe -file "$($Scripts)/Deploy_B2C_Assets.ps1" -PolicyId B2C_1A_signup -PathToFile "$($B2CAssets)/azureResources/SignUp.xml" -Environment $Environment;
-    Check-LastExitCode;
-
-    Write-Host "...Uploading Policy: B2C_1A_signup_signin via GraphAPI...";
-    powershell.exe -file "$($Scripts)/Deploy_B2C_Assets.ps1" -PolicyId B2C_1A_signup_signin -PathToFile "$($B2CAssets)/azureResources/SignUpOrSignin.xml" -Environment $Environment;
-    Check-LastExitCode;
-
-    Write-Host "...Uploading Policy: B2C_1A_profileedit via GraphAPI...";
-    powershell.exe -file "$($Scripts)/Deploy_B2C_Assets.ps1" -PolicyId B2C_1A_profileedit -PathToFile "$($B2CAssets)/azureResources/ProfileEdit.xml" -Environment $Environment;
-    Check-LastExitCode;
-
-    Write-Host "...Uploading Policy: B2C_1A_profileedit_passwordchange via GraphAPI...";
-    powershell.exe -file "$($Scripts)/Deploy_B2C_Assets.ps1" -PolicyId B2C_1A_profileedit_passwordchange -PathToFile "$($B2CAssets)/azureResources/ProfileEditPasswordChange.xml" -Environment $Environment;
-    Check-LastExitCode;
-
+   
     # Upload related B2C Assets to Blob Storage
     Write-Host "Uploading Marketing Page to blob storage";
     $MarketingUploadResults = az storage blob upload --container-name '$web' --account-name $StorageAccountName --file "$($B2CAssets)/website/index.html" --name index.html --auth-mode login;
