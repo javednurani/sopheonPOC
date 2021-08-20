@@ -122,8 +122,8 @@ exports[`Testing the App component App snapshot render test 1`] = `
                           >
                             <span
                               className="ms-Button-label label-129"
-                              id="id__8"
-                              key="id__8"
+                              id="id__12"
+                              key="id__12"
                             >
                               Log In
                             </span>
@@ -152,7 +152,7 @@ exports[`Testing the App component App snapshot render test 1`] = `
                           aria-label="Dark Theme"
                           className="ms-Toggle-background pill-137"
                           data-is-focusable={true}
-                          id="Toggle11"
+                          id="Toggle15"
                           onChange={[Function]}
                           onClick={[Function]}
                           role="switch"
@@ -176,7 +176,7 @@ exports[`Testing the App component App snapshot render test 1`] = `
       className="ms-StackItem css-121"
     />
     <div
-      className="ms-StackItem css-140"
+      className="ms-StackItem css-142"
     >
       <main
         key=".0"
@@ -189,10 +189,10 @@ exports[`Testing the App component App snapshot render test 1`] = `
         }
       >
         <div
-          className="ms-ScrollablePane root-141"
+          className="ms-ScrollablePane root-143"
         >
           <div
-            className="stickyAbove-143"
+            className="stickyAbove-145"
             style={
               Object {
                 "height": 0,
@@ -203,11 +203,11 @@ exports[`Testing the App component App snapshot render test 1`] = `
             }
           />
           <div
-            className="ms-ScrollablePane--contentContainer contentContainer-142"
+            className="ms-ScrollablePane--contentContainer contentContainer-144"
             data-is-scrollable={true}
           />
           <div
-            className="stickyBelow-144"
+            className="stickyBelow-146"
             style={
               Object {
                 "bottom": "0px",
@@ -218,7 +218,7 @@ exports[`Testing the App component App snapshot render test 1`] = `
             }
           >
             <div
-              className="stickyBelowItems-145"
+              className="stickyBelowItems-147"
             />
           </div>
         </div>
@@ -243,40 +243,40 @@ exports[`Testing the App component App snapshot render test 1`] = `
             className="ms-Stack css-122"
           >
             <div
-              className="ms-StackItem css-146"
+              className="ms-StackItem css-148"
             >
               RSS Feeds | Sitemap | Privacy | Legal | Contact Us :: Copyright 2020-2021 Sopheon. All Rights Reserved
             </div>
             <div
-              className="ms-StackItem css-147"
+              className="ms-StackItem css-149"
             >
               <span
                 key=".0"
               >
                 <i
                   aria-hidden="true"
-                  className="root-149"
+                  className="root-151"
                   data-icon-name="LikeSolid"
                 >
                   
                 </i>
                 <i
                   aria-hidden="true"
-                  className="root-151"
+                  className="root-153"
                   data-icon-name="CommentSolid"
                 >
                   
                 </i>
                 <i
                   aria-hidden="true"
-                  className="root-153"
+                  className="root-155"
                   data-icon-name="LinkedInLogo"
                 >
                   
                 </i>
                 <i
                   aria-hidden="true"
-                  className="root-155"
+                  className="root-157"
                   data-icon-name="TeamsLogo"
                 >
                   
