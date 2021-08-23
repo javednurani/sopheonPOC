@@ -114,7 +114,7 @@
         </LocalizedResourcesReferences>
       </ContentDefinition>
       <ContentDefinition Id="api.localaccountpasswordreset">
-        <LoadUri>https://^StorageAccountName^.blob.core.windows.net/b2cassets/selfAssertedTemplate.html</LoadUri>
+        <LoadUri>https://^StorageAccountName^.blob.core.windows.net/b2cassets/PasswordReset.html</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
         <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.7</DataUri>
         <Metadata>
@@ -133,7 +133,7 @@
         </LocalizedResourcesReferences>
       </ContentDefinition>
       <ContentDefinition Id="api.selfasserted.profileupdate">
-        <LoadUri>https://^StorageAccountName^.blob.core.windows.net/b2cassets/selfAssertedTemplate.html</LoadUri>
+        <LoadUri>https://^StorageAccountName^.blob.core.windows.net/b2cassets/ProfileUpdate.html</LoadUri>
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.profileupdate.en" />
         </LocalizedResourcesReferences>
