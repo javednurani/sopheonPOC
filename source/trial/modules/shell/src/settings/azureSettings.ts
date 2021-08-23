@@ -3,9 +3,9 @@ import { isDev } from './environmentSettings';
 // TODO, some rawSettings are not assigned per environment (eg, AD_B2C_SignUp_Policy), can we consolidate/ eliminate pass through?
 // these raw settings allow us to defined multiple, environment-specific versions of a setting
 const azureRawSettings: Record<string, string> = {
-  AD_B2C_ClientId: '^ShellAppClientId^',
+  AD_B2C_ClientId: '^B2CShellAppClientId^',
   AD_B2C_ClientId_Dev: '8bdfb9a7-913a-48a8-9fe0-5b2877fb844d',
-  AD_B2C_TenantName: '^B2CTenantName^',
+  AD_B2C_TenantName: '^B2CTenantLoginName^',
   AD_B2C_TenantName_Dev: 'StratusB2CDev',
   AD_B2C_SignUpSignIn_Policy: 'B2C_1A_SIGNUP_SIGNIN',
   AD_B2C_SignUp_Policy: 'B2C_1A_SIGNUP',
