@@ -65,6 +65,18 @@
       "Pattern": "^B2CClientSecret^",
       "IsKeyVaultSecret": true,
       "KeyVaultSecretName": "StratusB2CClientSecret"
+    },
+    {
+      "TokenDisplayName": "Website Storage Account",
+      "Pattern": "^StorageAccountName^",
+      "EnvironmentVariableName": "StorageAccountName",
+      "IsKeyVaultSecret": false
+    },
+    {
+      "TokenDisplayName": "Browser WebApp Url",
+      "Pattern": "^BrowserWebAppUrl^",
+      "IsKeyVaultSecret": true,
+      "KeyVaultSecretName": "StratusBrowserWebAppUrl"
     }
   ]
 }

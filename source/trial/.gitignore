@@ -3,4 +3,4 @@ dist/
 # output from jest code coverage
 coverage/
 # VS Code workspace settings
-.vscode/
+.vscode/launch.json
