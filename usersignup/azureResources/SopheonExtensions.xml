@@ -116,7 +116,7 @@
       <ContentDefinition Id="api.localaccountpasswordreset">
         <LoadUri>https://^StorageAccountName^.blob.core.windows.net/b2cassets/selfAssertedTemplate.html</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
-        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:unifiedssp:2.1.5</DataUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.7</DataUri>
         <Metadata>
           <Item Key="DisplayName">Local account change password page</Item>
         </Metadata>
