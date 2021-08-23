@@ -31,8 +31,14 @@ try {
     Check-LastExitCode;
     Write-Host "Complete! Transfered files to Storage Account Blob: "'$web';
 
-    Write-Host "Uploading SelfAssertedTemplate blob storage";
-    $MarketingUploadResults = az storage blob upload-batch --destination 'b2cassets' --account-name $StorageAccountName --source "$($B2CAssets)/azureResources/SelfAsserted" --auth-mode login;
+    Write-Host "Uploading Profile Update blob storage";
+    $MarketingUploadResults = az storage blob upload-batch --destination 'b2cassets' --account-name $StorageAccountName --source "$($B2CAssets)/azureResources/ProfileUpdate" --auth-mode login;
+    $MarketingUploadResults;
+    Check-LastExitCode;
+    Write-Host "Complete! Transfered files to Storage Account Blob: "'b2cassets';
+
+    Write-Host "Uploading Password Reset blob storage";
+    $MarketingUploadResults = az storage blob upload-batch --destination 'b2cassets' --account-name $StorageAccountName --source "$($B2CAssets)/azureResources/PasswordReset" --auth-mode login;
     $MarketingUploadResults;
     Check-LastExitCode;
     Write-Host "Complete! Transfered files to Storage Account Blob: "'b2cassets';
