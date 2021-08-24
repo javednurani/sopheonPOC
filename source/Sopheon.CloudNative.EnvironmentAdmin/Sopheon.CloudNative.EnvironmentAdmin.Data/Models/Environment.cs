@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Sopheon.CloudNative.EnvironmentAdmin.Data.Models
 {
@@ -8,6 +9,13 @@ namespace Sopheon.CloudNative.EnvironmentAdmin.Data.Models
       { 
          get; 
          set; 
+      }
+
+      [MaxLength(100)]
+      public string Name
+      {
+         get;
+         set;
       }
    }
 }
