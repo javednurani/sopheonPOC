@@ -58,7 +58,6 @@ try
 
         Write-Host "Policy $policyId uploaded successfully.";
         Write-Host '';
-
     }
 
     if($policiesMarkedForDeletion.Length -gt 0) {
