@@ -11,8 +11,7 @@ namespace Sopheon.CloudNative.Environments.Domain.Migrations
                 columns: table => new
                 {
                     EnvironmentID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
+                        .Annotation("SqlServer:Identity", "1, 1")
                 },
                 constraints: table =>
                 {
