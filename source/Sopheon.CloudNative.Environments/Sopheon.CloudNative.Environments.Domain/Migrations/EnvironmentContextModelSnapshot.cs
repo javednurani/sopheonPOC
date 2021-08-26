@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Sopheon.CloudNative.EnvironmentAdmin.Data.Data;
+using Sopheon.CloudNative.Environments.Domain.Data;
 
-namespace Sopheon.CloudNative.EnvironmentAdmin.Data.Migrations
+namespace Sopheon.CloudNative.Environments.Domain.Migrations
 {
     [DbContext(typeof(EnvironmentContext))]
     partial class EnvironmentContextModelSnapshot : ModelSnapshot
@@ -18,7 +18,7 @@ namespace Sopheon.CloudNative.EnvironmentAdmin.Data.Migrations
                 .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Sopheon.CloudNative.EnvironmentAdmin.Data.Models.Environment", b =>
+            modelBuilder.Entity("Sopheon.CloudNative.Environments.Domain.Models.Environment", b =>
                 {
                     b.Property<int>("EnvironmentID")
                         .ValueGeneratedOnAdd()

@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Sopheon.CloudNative.EnvironmentAdmin.Data.Data;
+using Sopheon.CloudNative.Environments.Domain.Data;
 
-namespace Sopheon.CloudNative.EnvironmentAdmin.Data.Migrations
+namespace Sopheon.CloudNative.Environments.Domain.Migrations
 {
     [DbContext(typeof(EnvironmentContext))]
-    [Migration("20210824155137_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20210824163241_AddEnvironmentName")]
+    partial class AddEnvironmentName
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,12 +20,16 @@ namespace Sopheon.CloudNative.EnvironmentAdmin.Data.Migrations
                 .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Sopheon.CloudNative.EnvironmentAdmin.Data.Models.Environment", b =>
+            modelBuilder.Entity("Sopheon.CloudNative.Environments.Domain.Models.Environment", b =>
                 {
                     b.Property<int>("EnvironmentID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("EnvironmentID");
 
