@@ -10,9 +10,9 @@ using Newtonsoft.Json;
 
 namespace Sopheon.CloudNative.Environments.Functions.Get
 {
-    public static class Function1
+    public static class GetEnvironments
     {
-        [FunctionName("Function1")]
+        [FunctionName("GetEnvironments")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
