@@ -1,8 +1,8 @@
 #Adding blank comments to avoid bad artifact generation
 
-$ResourceGroup = "Stratus-$($Environment))";
+$ResourceGroup = "Stratus-$($env:Environment))";
 
-$SqlAdminEngima = (az keyvault secret show --vault-name "Stratus-$($Environment)" --name "SqlServerAdminEnigma" --query value).Replace('"', '');
+$SqlAdminEngima = (az keyvault secret show --vault-name "Stratus-$($env:Environment)" --name "SqlServerAdminEnigma" --query value).Replace('"', '');
 
 #region Sql Script Run
 Write-Host "Running Sql Server Script for Environment Management";
