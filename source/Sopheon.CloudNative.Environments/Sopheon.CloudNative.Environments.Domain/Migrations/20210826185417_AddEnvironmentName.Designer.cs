@@ -9,8 +9,8 @@ using Sopheon.CloudNative.Environments.Domain.Data;
 namespace Sopheon.CloudNative.Environments.Domain.Migrations
 {
     [DbContext(typeof(EnvironmentContext))]
-    [Migration("20210824155137_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20210826185417_AddEnvironmentName")]
+    partial class AddEnvironmentName
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,6 +26,10 @@ namespace Sopheon.CloudNative.Environments.Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("EnvironmentID");
 
