@@ -11,11 +11,11 @@ namespace Sopheon.CloudNative.Environments.Domain.Models
             set;
         }
 
-        [MaxLength(100)]
-        public string Name
-        {
-            get;
-            set;
-        }
+        //[MaxLength(100)]
+        //public string Name
+        //{
+        //    get;
+        //    set;
+        //}
     }
 }
