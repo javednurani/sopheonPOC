@@ -33,6 +33,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Get
 
                 // Add Custom Services
                 services.AddDbContext<EnvironmentContext>(options => options.UseSqlServer(connectionString));
+                services.AddAutoMapper(typeof(Program));
              })
              .Build();
 
