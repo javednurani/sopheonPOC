@@ -1,6 +1,6 @@
 $ZipUtil = "C:\Program Files\7-Zip\7z.exe";
 
-Copy-Item -Path "$($env:System_DefaultWorkingDirectory)/source/Sopheon.CloudNative.EnvironmentAdmin/deploy/*" -Destination "$($env:Build_ArtifactStagingDirectory)/";
+Copy-Item -Path "$($env:System_DefaultWorkingDirectory)/source/Sopheon.CloudNative.EnvironmentAdmin/deploy/*" -Destination $env:Build_ArtifactStagingDirectory;
 
 Set-Location -Path "$($env:System_DefaultWorkingDirectory)/source/Sopheon.CloudNative.EnvironmentAdmin";
 
