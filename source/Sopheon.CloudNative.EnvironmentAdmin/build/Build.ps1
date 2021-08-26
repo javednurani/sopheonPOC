@@ -4,7 +4,7 @@ Copy-Item -Path "$($env:System_DefaultWorkingDirectory)/source/Sopheon.CloudNati
 
 Set-Location -Path "$($env:System_DefaultWorkingDirectory)/source/Sopheon.CloudNative.EnvironmentAdmin";
 
-dotnet ef migrations script -p "Sopheon.CloudNative.EnvironmentAdmin.Data\Sopheon.CloudNative.EnvironmentAdmin.Data.csproj" -o $(build.artifactstagingdirectory)\scripts.sql -i
+dotnet ef migrations script -p "Sopheon.CloudNative.EnvironmentAdmin.Data\Sopheon.CloudNative.EnvironmentAdmin.Data.csproj" -o "$($env:Build_ArtifactStagingDirectory)\scripts.sql" -i
 
 # Zip/Archive Scripts 
 Write-Host "Zipping Artfacts for Environment Management...";
