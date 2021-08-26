@@ -5,41 +5,34 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Sopheon.CloudNative.Environments.Domain.Data;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using Sopheon.CloudNative.Environments.Domain.Models;
 
 namespace Sopheon.CloudNative.Environments.Functions.Get
 {
-   public static class GetEnvironments
+   public class GetEnvironments
    {
+      private readonly EnvironmentContext _environmentContext;
+
+      public GetEnvironments(EnvironmentContext environmentContext)
+      {
+         _environmentContext = environmentContext;
+      }
+
       [Function(nameof(GetEnvironments))]
-      public static async Task<HttpResponseData> Run(
+      public async Task<HttpResponseData> Run(
           [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData req,
           FunctionContext context)
       {
          var logger = context.GetLogger(nameof(GetEnvironments));
-         logger.LogInformation("C# HTTP trigger function processed a request.");
+         logger.LogInformation("GetEnvironments request.");
 
-         var queryDictionary = QueryHelpers.ParseQuery(req.Url.Query);
-         string name;
-         try
-         {
-            name = queryDictionary["name"];
-         }
-         catch
-         {
-            name = "DEFAULT";
-         }
-
-         string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-         dynamic data = JsonConvert.DeserializeObject(requestBody);
-         name = name ?? data?.name;
-
-         string responseMessage = string.IsNullOrEmpty(name)
-             ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-             : $"Hello, {name}. This HTTP triggered function executed successfully.";
+         List<Environment> environments = await _environmentContext.Environments.ToListAsync();
 
          HttpResponseData okResponse = req.CreateResponse(System.Net.HttpStatusCode.OK);
-         await okResponse.WriteAsJsonAsync(responseMessage);
-
+         await okResponse.WriteAsJsonAsync(environments);
          return okResponse;
       }
    }

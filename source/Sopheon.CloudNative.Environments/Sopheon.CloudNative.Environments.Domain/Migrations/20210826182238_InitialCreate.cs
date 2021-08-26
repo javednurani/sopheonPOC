@@ -2,7 +2,7 @@
 
 namespace Sopheon.CloudNative.Environments.Domain.Migrations
 {
-    public partial class AddEnvironmentName : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
