@@ -1,6 +1,6 @@
 #Adding blank comments to avoid bad artifact generation
 
-$ResourceGroup = "Stratus-$($env:Environment))";
+$ResourceGroup = "Stratus-$($env:Environment)";
 
 $SqlAdminEngima = (az keyvault secret show --vault-name "Stratus-$($env:Environment)" --name "SqlServerAdminEnigma" --query value).Replace('"', '');
 
