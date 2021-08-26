@@ -1,14 +1,14 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Sopheon.CloudNative.EnvironmentAdmin.Data.Models
+namespace Sopheon.CloudNative.Environments.Domain.Models
 {
    public class Environment
    {
-      public int EnvironmentID 
-      { 
-         get; 
-         set; 
+      public int EnvironmentID
+      {
+         get;
+         set;
       }
 
       [MaxLength(100)]
