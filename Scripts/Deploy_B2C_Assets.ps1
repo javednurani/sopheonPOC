@@ -26,7 +26,7 @@ try
     $response = Invoke-RestMethod -Uri $graphuri -Method Get -Headers $headers;
 
     # Get all .xml policy files in folder...
-    $sourceFiles = Get-ChildItem -Path $PathToFolder | Where-Object { $_.Name.EndsWith(".xml") };
+    $sourceFiles = Get-ChildItem -Path $PathToFolder | Where-Object { $_.Name.EndsWith(".xml") } | Sort-Object -Property Name;
     $sourceIds = @();    
     $sourceFiles.ForEach({
         $XMLPath = $_.FullName;
