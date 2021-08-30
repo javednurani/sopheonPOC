@@ -27,7 +27,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Get
 
       [Function(nameof(GetEnvironments))]
       public async Task<HttpResponseData> Run(
-          [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData req,
+          [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequestData req,
           FunctionContext context)
       {
          var logger = context.GetLogger(nameof(GetEnvironments));
