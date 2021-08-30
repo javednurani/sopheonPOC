@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿#define Managed
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -6,8 +7,11 @@ using Sopheon.CloudNative.Environments.Domain.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading.Tasks; 
 using Microsoft.EntityFrameworkCore;
+using Azure.Security.KeyVault.Secrets;
+using Azure.Identity;
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
 
 namespace Sopheon.CloudNative.Environments.Functions.Get
 {
@@ -22,6 +26,14 @@ namespace Sopheon.CloudNative.Environments.Functions.Get
                if (hostContext.HostingEnvironment.IsDevelopment())
                {
                   builder.AddUserSecrets<Program>();
+               }
+               if (hostContext.HostingEnvironment.IsProduction())
+               {
+                  var builtConfig = builder.Build();
+                  var secretClient = new SecretClient(
+                      new Uri($"https://{builtConfig["KeyVaultName"]}.vault.azure.net/"),
+                      new DefaultAzureCredential());
+                  builder.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
                }
             })
             .ConfigureFunctionsWorkerDefaults()
