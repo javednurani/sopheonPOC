@@ -13,29 +13,31 @@ namespace Sopheon.CloudNative.Environments.Functions.Get
 {
    class Program
    {
-      readonly static string connectionString = Environment.GetEnvironmentVariable("SqlConnectionString") ?? string.Empty;
-
       static Task Main(string[] args)
       {
          var host = new HostBuilder()
-             .ConfigureAppConfiguration(configurationBuilder =>
-             {
-                configurationBuilder.AddCommandLine(args);
-             })
-             .ConfigureFunctionsWorkerDefaults()
-             .ConfigureServices(services =>
-             {
-                // Add Logging
-                services.AddLogging();
+            .ConfigureAppConfiguration((hostContext, builder) =>
+            {
+               builder.AddCommandLine(args);
+               if (hostContext.HostingEnvironment.IsDevelopment())
+               {
+                  builder.AddUserSecrets<Program>();
+               }
+            })
+            .ConfigureFunctionsWorkerDefaults()
+            .ConfigureServices((hostContext, services) =>
+            {
+               // Add Logging
+               services.AddLogging();
 
-                // Add HttpClient
-                services.AddHttpClient();
+               // Add HttpClient
+               services.AddHttpClient();
 
-                // Add Custom Services
-                services.AddDbContext<EnvironmentContext>(options => options.UseSqlServer(connectionString));
-                services.AddAutoMapper(typeof(Program));
-             })
-             .Build();
+               // Add Custom Services
+               services.AddDbContext<EnvironmentContext>(options => options.UseSqlServer(hostContext.Configuration["SqlConnectionString"]));
+               services.AddAutoMapper(typeof(Program));
+            })
+            .Build();
 
          return host.RunAsync();
       }
