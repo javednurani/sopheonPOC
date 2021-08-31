@@ -33,7 +33,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Get
          var logger = context.GetLogger(nameof(GetEnvironments));
          logger.LogInformation("GetEnvironments request.");
 
-         List<Environment> environments = await _environmentContext.Environments.ToListAsync();    
+         List<Environment> environments = await _environmentContext.Environments.ToListAsync();
 
          HttpResponseData okResponse = req.CreateResponse(System.Net.HttpStatusCode.OK);
          await okResponse.WriteAsJsonAsync(_mapper.Map<List<Environment>, List<EnvironmentDTO>>(environments));

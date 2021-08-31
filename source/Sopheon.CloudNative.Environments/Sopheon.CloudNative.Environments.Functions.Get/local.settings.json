@@ -3,6 +3,6 @@
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
-    "SqlConnectionString": "Server=.;Database=env;User Id=sa;Password=NO_COMMIT;Trusted_Connection=False;MultipleActiveResultSets=true"
-  }
+    "KeyVaultName": "stratus-dev",
+  },
 }
