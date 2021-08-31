@@ -15,4 +15,4 @@ Write-Host "Removing Firewall Rule";
 az sql server firewall-rule delete --name DeployMachine --resource-group $ResourceGroup --server $ResourceGroup.ToLower();
 
 #upload function app
-az functionapp deployment source config-zip --name $ResourceGroup.ToLower() --resource-group $ResourceGroup --src "_StratusEnvironmentManagement\EnvironmentManagement\EnvironmentManagement_*.zip"
+az functionapp deployment source config-zip --name $ResourceGroup.ToLower() --resource-group $ResourceGroup --src "_StratusEnvironmentManagement\EnvironmentManagement\EnvironmentManagement.zip"
