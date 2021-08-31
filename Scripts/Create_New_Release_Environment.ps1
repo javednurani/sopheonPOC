@@ -20,15 +20,15 @@ $CDNTemplate = "$($PSScriptRoot)\..\DevOps\Bicep\CDN_Profile.bicep";
 $CDNParametersTemplate = "$($PSScriptRoot)\..\DevOps\Bicep\CDN_Profile_Parameters.json";
 
 Write-Host "Replacing tokens on Master Template...";
-$a = Get-Content $MasterTemplate -raw;
-$a = $a -replace '^StorageAccountName^', $StorageAccountNameValue -replace '^KeyVaultName^', $KeyVaultNameValue
-Set-Content -Value $a -Path $MasterTemplate;
+$masterTemplateContent = Get-Content $MasterTemplate -raw;
+$masterTemplateContent = $masterTemplateContent.Replace('^StorageAccountName^', $StorageAccountNameValue).Replace('^KeyVaultName^', $KeyVaultNameValue);
+Set-Content -Value $masterTemplateContent -Path $MasterTemplate;
 Write-Host "Complete!";
 
 Write-Host "Replacing tokens on Master Parameters Template...";
-$a = Get-Content $MasterParametersTemplate -raw;
-$a = $a -replace '^StorageAccountName^', $StorageAccountNameValue -replace '^KeyVaultName^', $KeyVaultNameValue;
-Set-Content -Value $a -Path $MasterParametersTemplate;
+$masterParametersContent = Get-Content $MasterParametersTemplate -raw;
+$masterParametersContent = $masterParametersContent.Replace('^StorageAccountName^', $StorageAccountNameValue).Replace('^KeyVaultName^', $KeyVaultNameValue);
+Set-Content -Value $masterParametersContent -Path $MasterParametersTemplate;
 Write-Host "Complete!";
 
 
@@ -48,7 +48,7 @@ Write-Host "Master Template Deployment: $($MasterTemplateDeploy)";
 
 Write-Host "Enabling Static Website properties...";
 # updates a storage account to be a static website setup with auth-mode as login
-$StaticWebsiteEnabled = az storage blob service-properties update --account-name $StorageAccountNameValue --static-website --404-document index.html --index-document index.html --auth-mode login --query "staticWebsite.enabled";
+$StaticWebsiteEnabled = az storage blob service-properties update --account-name $StorageAccountNameValue --static-website --404-document index.html --index-document WebApp/index.html --auth-mode login --query "staticWebsite.enabled";
 Write-Host "Static Website enabled: $($StaticWebsiteEnabled) on Storage Account: $($StorageAccountNameValue)";
 
 Write-Host "Setting Static Website url for origin endpoint to CDN";
@@ -68,16 +68,16 @@ $CDNProfileEndpointMarketingNameToken = '^CDNProfileEndpointMarketingName^';
 $CDNProfileEndpointOriginToken = '^CDNProfileEndpointOrigin^';
 
 Write-Host "Replacing tokens on Master CDN Template...";
-$a = Get-Content $CDNTemplate -raw;
-$a = $a -replace $CDNProfileNameToken, $CDNProfileNameValue -replace $CDNProfileEndpointNameToken, $CDNProfileEndpointNameValue;
-$a = $a -replace $CDNProfileEndpointOriginToken, $CDNProfileEndpointOriginValue -replace $CDNProfileEndpointMarketingNameToken, $CDNProfileEndpointMarketingNameValue;
-Set-Content -Value $a -Path $CDNTemplate;
+$masterCdnTemplate = Get-Content $CDNTemplate -raw;
+$masterCdnTemplate = $masterCdnTemplate.Replace($CDNProfileNameToken, $CDNProfileNameValue).Replace($CDNProfileEndpointNameToken, $CDNProfileEndpointNameValue);
+$masterCdnTemplate = $masterCdnTemplate.Replace($CDNProfileEndpointOriginToken, $CDNProfileEndpointOriginValue).Replace($CDNProfileEndpointMarketingNameToken, $CDNProfileEndpointMarketingNameValue);
+Set-Content -Value $masterCdnTemplate -Path $CDNTemplate;
 Write-Host "Complete!";
 
 Write-Host "Replacing tokens on Master CDN Parameters Template...";
-$a = Get-Content $CDNParametersTemplate -raw;
-$a = $a -replace $CDNProfileNameToken, $CDNProfileNameValue -replace $CDNProfileEndpointNameToken, $CDNProfileEndpointNameValue;
-$a = $a -replace $CDNProfileEndpointOriginToken, $CDNProfileEndpointOriginValue -replace $CDNProfileEndpointMarketingNameToken, $CDNProfileEndpointMarketingNameValue;
+$cdnParameters = Get-Content $CDNParametersTemplate -raw;
+$cdnParameters = $cdnParameters.Replace($CDNProfileNameToken, $CDNProfileNameValue).Replace($CDNProfileEndpointNameToken, $CDNProfileEndpointNameValue);
+$cdnParameters = $cdnParameters.Replace($CDNProfileEndpointOriginToken, $CDNProfileEndpointOriginValue).Replace($CDNProfileEndpointMarketingNameToken, $CDNProfileEndpointMarketingNameValue);
 Set-Content -Value $a -Path $CDNParametersTemplate;
 Write-Host "Complete!";
 

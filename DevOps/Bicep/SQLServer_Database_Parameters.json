@@ -1,0 +1,26 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "serverName": {
+            "value": "^SqlServerName^"
+        },
+        "sqlDBName": {
+            "value": "^SqlServerDatabaseName^"
+        },
+        "poolName": {
+            "value": "^SqlElasticPoolName^"
+        },
+        "administratorLogin": {
+            "value": "sopheon"
+        },
+        "administratorLoginEnigma": {
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/1c4bef1d-8a40-4a6d-96d6-764bb466ac46/resourceGroups/Accolade-Next-Gen/providers/Microsoft.KeyVault/vaults/Cloud-DevOps"
+                },
+                "secretName": "SqlServerAdminEnigma"
+            }    
+        }
+    }
+}
