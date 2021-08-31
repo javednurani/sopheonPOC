@@ -8,10 +8,10 @@ mkdir PublishOutput
 
 dotnet ef migrations script -p "Sopheon.CloudNative.Environments.Domain\Sopheon.CloudNative.Environments.Domain.csproj" -o "$($env:Build_ArtifactStagingDirectory)\scripts.sql" -i;
 
-dotnet publish -p "Sopheon.CloudNative.Environments.Functions.Get\Sopheon.CloudNative.Environments.Functions.Get.csproj" -o "$($env:System_DefaultWorkingDirectory)\PublishOutput";
+dotnet publish -p "Sopheon.CloudNative.Environments.Functions.Get\Sopheon.CloudNative.Environments.Functions.Get.csproj" -o ".\PublishOutput\";
 
 # Zip/Archive Scripts 
 Write-Host "Zipping Artfacts for Environment Management...";
-& $ZipUtil "a" "-tzip" "$($env:Build_ArtifactStagingDirectory)\EnvironmentManagement_$($env:Build_BuildId)" "$($env:Build_ArtifactStagingDirectory)\PublishOutput\*" "-xr!build" "-xr!deploy";
+& $ZipUtil "a" "-tzip" "$($env:Build_ArtifactStagingDirectory)\EnvironmentManagement_$($env:Build_BuildId)" ".\PublishOutput\*" "-xr!build" "-xr!deploy";
 
 Write-Host "Zipping Complete!";
