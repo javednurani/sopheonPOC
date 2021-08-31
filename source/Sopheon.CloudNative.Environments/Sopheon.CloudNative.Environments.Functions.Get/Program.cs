@@ -29,9 +29,10 @@ namespace Sopheon.CloudNative.Environments.Functions.Get
                }
                if (hostContext.HostingEnvironment.IsProduction())
                {
+                  var keyVaultName = Environment.GetEnvironmentVariable("KeyVaultName");
                   var builtConfig = builder.Build();
                   var secretClient = new SecretClient(
-                      new Uri($"https://{builtConfig["KeyVaultName"]}.vault.azure.net/"),
+                      new Uri($"https://{keyVaultName}.vault.azure.net/"),
                       new DefaultAzureCredential());
                   builder.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
                }
