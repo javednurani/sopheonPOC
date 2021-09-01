@@ -28,9 +28,9 @@ namespace Sopheon.CloudNative.Environments.Functions
       }
 
       [Function(nameof(CreateEnvironment))]
-      [OpenApiOperation(operationId: "Run", tags: new[] { "Environments~" })]
-      [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(EnvironmentDto), Required = true, Description = "Environment object to be created")]
-      [OpenApiResponseWithBody(statusCode: HttpStatusCode.Created, contentType: "text/plain", bodyType: typeof(string), Description = "The Created response")]
+      //[OpenApiOperation(operationId: "Run", tags: new[] { "Environments" })]
+      //[OpenApiRequestBody(contentType: "application/json", bodyType: typeof(EnvironmentDto), Required = true, Description = "Environment object to be created")]
+      //[OpenApiResponseWithBody(statusCode: HttpStatusCode.Created, contentType: "text/plain", bodyType: typeof(string), Description = "The Created response")]
       public async Task<HttpResponseData> Run(
           [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "CreateEnvironment")] HttpRequestData req,
           FunctionContext context)
