@@ -534,8 +534,13 @@
     <ClaimsProvider>
       <DisplayName>Local Account</DisplayName>
       <TechnicalProfiles>
-        <!-- Cloud-1536 call SM-AAD from PasswordReset -->
-        <TechnicalProfile Id="LocalAccountWritePasswordUsingObjectId">
+        <!-- Cloud-1536 call SM-AAD from PasswordReset SubJourney -->
+        <TechnicalProfile Id="SessionManagement">
+          <DisplayName>Session Management Call</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+          </OutputClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
         </TechnicalProfile>
         
@@ -907,8 +912,15 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <!-- Collect and persist a new password. -->
+        <!-- Connect to default SSO Session provider -->
         <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="PasswordResetSessionManagement" TechnicalProfileReferenceId="SessionManagement" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Collect and persist a new password. -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
           </ClaimsExchanges>
