@@ -37,25 +37,23 @@ namespace Sopheon.CloudNative.Environments.Functions
       {
          var logger = context.GetLogger(nameof(CreateEnvironment));
 
-         logger.LogInformation("C# HTTP trigger function processed a CreateEnvironment request.");
-
          string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
          try
          {
             EnvironmentDto data = JsonConvert.DeserializeObject<EnvironmentDto>(requestBody);
             if (string.IsNullOrEmpty(data.Name))
             {
-               logger.LogInformation("Request missing required Name field");
+               logger.LogInformation($"Request missing required {nameof(data.Name)} field");
                // TODO: Descriptive response message
                return req.CreateResponse(HttpStatusCode.BadRequest);
             }
             if (data.Owner == Guid.Empty)
             {
-               logger.LogInformation("Request missing required Owner field");
+               logger.LogInformation($"Request missing required {nameof(data.Owner)} field");
                // TODO: Descriptive response message
                return req.CreateResponse(HttpStatusCode.BadRequest);
             }
-            Environment environment = new Environment()
+            Environment environment = new Environment
             {
                EnvironmentKey = Guid.NewGuid(),
                Name = data.Name,
