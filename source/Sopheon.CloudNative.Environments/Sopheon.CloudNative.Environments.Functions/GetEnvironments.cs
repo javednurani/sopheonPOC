@@ -10,9 +10,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using Sopheon.CloudNative.Environments.Domain.Models;
 using AutoMapper;
-using Sopheon.CloudNative.Environments.Functions.Get.Models;
+using Sopheon.CloudNative.Environments.Functions.Models;
 
-namespace Sopheon.CloudNative.Environments.Functions.Get
+namespace Sopheon.CloudNative.Environments.Functions
 {
    public class GetEnvironments
    {

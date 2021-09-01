@@ -13,7 +13,7 @@ using Azure.Security.KeyVault.Secrets;
 using Azure.Identity;
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
 
-namespace Sopheon.CloudNative.Environments.Functions.Get
+namespace Sopheon.CloudNative.Environments.Functions
 {
    class Program
    {
