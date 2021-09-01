@@ -1,0 +1,11 @@
+{
+    "name": "sopheon-cloudnative-environments",
+    "version": "0.1.0",
+    "private": true,
+
+    "scripts": {
+        "start:db": "docker-compose -f docker-compose.dev-db.yml up -d --build",
+        "stop:db": "docker-compose -f docker-compose.dev-db.yml down",       
+        "prune": "powershell.exe -nologo ./docker-prune.ps1"
+    }
+}

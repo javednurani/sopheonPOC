@@ -368,3 +368,4 @@ usersignup/tests/User SignUp SpecFlow/Sopheon.Cloud.SpecFlow.UserSignUp.Tests/Fe
 usersignup/tests/User SignUp SpecFlow/Sopheon.Cloud.SpecFlow.UserSignUp.Tests/Features/TermsOfService/VerifyWordingForAcceptanceOnTOSScreen.feature.cs
 source/Sopheon.CloudNative.EnvironmentAdmin/PublishOutput/
 /source/Sopheon.CloudNative.Environments/Sopheon.CloudNative.Environments.Functions/Properties
+/source/Sopheon.CloudNative.Environments/dockervolumes/
