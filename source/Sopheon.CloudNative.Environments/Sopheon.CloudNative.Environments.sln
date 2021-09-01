@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31129.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sopheon.CloudNative.Environments.Domain", "Sopheon.CloudNative.Environments.Domain\Sopheon.CloudNative.Environments.Domain.csproj", "{B43B0294-4789-43C2-A853-0C5A6486CC51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sopheon.CloudNative.Environments.Functions", "Sopheon.CloudNative.Environments.Functions\Sopheon.CloudNative.Environments.Functions.csproj", "{3DE5C83A-0625-471B-B646-86D3E7011B92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sopheon.CloudNative.Environments.Functions", "Sopheon.CloudNative.Environments.Functions\Sopheon.CloudNative.Environments.Functions.csproj", "{3DE5C83A-0625-471B-B646-86D3E7011B92}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

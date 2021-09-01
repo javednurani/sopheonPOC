@@ -8,7 +8,7 @@ namespace Sopheon.CloudNative.Environments.Functions
    {
       public MappingProfile()
       {
-         CreateMap<Environment, EnvironmentDTO>().ReverseMap();
+         CreateMap<Environment, EnvironmentDto>().ReverseMap();
       }
    }
 }

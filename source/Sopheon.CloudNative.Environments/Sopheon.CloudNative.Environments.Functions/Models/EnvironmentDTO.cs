@@ -6,15 +6,27 @@ using System.Threading.Tasks;
 
 namespace Sopheon.CloudNative.Environments.Functions.Models
 {
-   public class EnvironmentDTO
+   public class EnvironmentDto
    {
-      public int EnvironmentID
+      public Guid EnvironmentKey
       {
          get;
          set;
       }
 
       public string Name
+      {
+         get;
+         set;
+      }
+
+      public string Description
+      {
+         get;
+         set;
+      }
+
+      public Guid Owner
       {
          get;
          set;

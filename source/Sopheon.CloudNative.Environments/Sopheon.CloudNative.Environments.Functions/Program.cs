@@ -7,11 +7,12 @@ using Sopheon.CloudNative.Environments.Domain.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks; 
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Azure.Security.KeyVault.Secrets;
 using Azure.Identity;
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
+using Microsoft.Azure.Functions.Worker.Extensions.OpenApi.Extensions;
 
 namespace Sopheon.CloudNative.Environments.Functions
 {
@@ -37,7 +38,8 @@ namespace Sopheon.CloudNative.Environments.Functions
                   builder.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
                }
             })
-            .ConfigureFunctionsWorkerDefaults()
+            .ConfigureFunctionsWorkerDefaults(worker => worker.UseNewtonsoftJson())
+            .ConfigureOpenApi()
             .ConfigureServices((hostContext, services) =>
             {
                // Add Logging
