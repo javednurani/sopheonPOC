@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sopheon.CloudNative.Environments.Functions.Get.Models
+namespace Sopheon.CloudNative.Environments.Functions.Models
 {
    public class EnvironmentDTO
    {
