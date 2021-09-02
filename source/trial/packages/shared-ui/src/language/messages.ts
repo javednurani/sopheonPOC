@@ -30,7 +30,7 @@ export const messages: Record<string, Record<string, string>> = {
     'cancel': 'Cancel',
     'add': 'Add',
     'lucy': 'Lucy',
-    'defaultTitle': 'Template Title',
+    'defaultTitle': "Cal Huebear's awesome app",
     'error.erroroccurred': 'An Error Occurred',
     'error.componentmissing': 'Component could not be loaded.',
     'error.errorcomponentmissing': 'Error component could not be loaded.',
