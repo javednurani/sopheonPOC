@@ -43,11 +43,11 @@ namespace Sopheon.CloudNative.Environments.Functions
          bodyType: typeof(EnvironmentDto),
          Summary = "201 Created response",
          Description = "Created, 201 response with Environment in response body")]
-      [OpenApiResponseWithoutBody(
-         statusCode: HttpStatusCode.BadRequest,
+      [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest,
+         contentType: "application/json",
+         bodyType: typeof(string),
          Summary = "400 Bad Request response",
-         Description = "Bad Request, 400 response without body"
-         )]
+         Description = "Bad Request, 400 response with error message in response body")]
       public async Task<HttpResponseData> Run(
           [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "environments")] HttpRequestData req,
           FunctionContext context)
@@ -61,40 +61,56 @@ namespace Sopheon.CloudNative.Environments.Functions
             if (string.IsNullOrEmpty(data.Name))
             {
                logger.LogInformation($"Request missing required {nameof(data.Name)} field");
-               // TODO: Descriptive response message
-               return req.CreateResponse(HttpStatusCode.BadRequest);
+               HttpResponseData missingNameResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+               await missingNameResponse.WriteStringAsync($"{nameof(data.Name)} field is required.");
+               return missingNameResponse;
+
             }
             if (data.Owner == Guid.Empty)
             {
                logger.LogInformation($"Request missing required {nameof(data.Owner)} field");
-               // TODO: Descriptive response message
-               return req.CreateResponse(HttpStatusCode.BadRequest);
+               HttpResponseData missingOwnerResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+               await missingOwnerResponse.WriteStringAsync($"{nameof(data.Owner)} field is required.");
+               return missingOwnerResponse;
             }
             Environment environment = new Environment
             {
                EnvironmentKey = Guid.NewGuid(),
                Name = data.Name,
                Owner = data.Owner,
-               Description = data.Description
+               Description = data.Description ?? string.Empty
             };
 
             // TODO: environments that already exist with name?
             _environmentContext.Environments.Add(environment);
             await _environmentContext.SaveChangesAsync();
 
-            HttpResponseData createdResponse = req.CreateResponse(HttpStatusCode.Created);
-            await createdResponse.WriteAsJsonAsync(_mapper.Map<Environment, EnvironmentDto>(environment));
+            HttpResponseData createdResponse = req.CreateResponse();
+            await createdResponse.WriteAsJsonAsync(_mapper.Map<Environment, EnvironmentDto>(environment), HttpStatusCode.Created);
 
             return createdResponse;
          }
+         catch (JsonReaderException ex)
+         {
+            logger.LogInformation($"{ex.GetType()} : {ex.Message}");
+            HttpResponseData deserializeExceptionResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+            await deserializeExceptionResponse.WriteStringAsync("Request body was invalid.");
+            return deserializeExceptionResponse;
+         }
          catch (JsonSerializationException ex)
          {
-            logger.LogInformation("Exception deserializing request data");
-            return req.CreateResponse(HttpStatusCode.BadRequest);
+            logger.LogInformation($"{ex.GetType()} : {ex.Message}");
+            HttpResponseData deserializeExceptionResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+            await deserializeExceptionResponse.WriteStringAsync($"Request body was invalid. Is {nameof(EnvironmentDto.Owner)} field a valid GUID?");
+            return deserializeExceptionResponse;
          }
          catch (Exception ex)
          {
-            return req.CreateResponse(HttpStatusCode.BadRequest);
+            // TODO: should this be a 400 or 500?  The try block encompasses database and network I/O that can throw exceptions
+            logger.LogInformation($"{ex.GetType()} : {ex.Message}");
+            HttpResponseData genericExceptionResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+            await genericExceptionResponse.WriteStringAsync("Something went wrong. Please try again later.");
+            return genericExceptionResponse;
          }
       }
    }
