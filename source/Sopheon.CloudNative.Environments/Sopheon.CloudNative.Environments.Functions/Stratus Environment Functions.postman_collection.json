@@ -1,0 +1,254 @@
+{
+	"info": {
+		"_postman_id": "4fca1923-9507-4227-8e46-72fd4514d8e3",
+		"name": "Stratus Environment Functions",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "POST Environments",
+			"item": [
+				{
+					"name": "Happy Path",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Happy path response status code\", function() {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Happy path repsonse body\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(jsonData.name).to.eql(\"POST Test\");\r",
+									"    pm.expect(jsonData.description).to.eql(\"An environment being created through functions\");\r",
+									"    pm.expect(jsonData.environmentKey).to.match(/^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$/);\r",
+									"    pm.expect(jsonData.owner).to.match(/^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$/);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\": \"POST Test\",\r\n    \"Description\": \"An environment being created through functions\",\r\n    \"Owner\": \"{{$guid}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{baseUrl}}.azurewebsites.net/environments",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"environments"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "POST Example stratus-dev",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Example Name\",\r\n    \"description\": \"An environment being created through functions\",\r\n    \"owner\": {{$guid}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://stratus-dev.azurewebsites.net/api/environments",
+									"protocol": "https",
+									"host": [
+										"stratus-dev",
+										"azurewebsites",
+										"net"
+									],
+									"path": [
+										"api",
+										"environments"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "Owner Missing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Missing owner response status code\", function() {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Missing owner repsonse body\", function () {\r",
+									"    pm.expect(pm.response.text()).to.eql(\"Owner field is required.\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\": \"POST Test\",\r\n    \"Description\": \"An environment being created through functions\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{baseUrl}}.azurewebsites.net/environments",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"environments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Name Missing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Missing name response status code\", function() {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Missing name repsonse body\", function () {\r",
+									"    pm.expect(pm.response.text()).to.eql(\"Name field is required.\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Description\": \"An environment being created through functions\",\r\n    \"Owner\": \"{{$guid}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{baseUrl}}.azurewebsites.net/environments",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"environments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Description Missing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Missing description response status code\", function() {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Missing description repsonse body\", function () {\r",
+									"    var jsonData = pm.response.json(); \r",
+									"    \r",
+									"    pm.expect(jsonData.name).to.eql(\"POST Test\");\r",
+									"    pm.expect(jsonData.description).to.eql(\"\");\r",
+									"    pm.expect(jsonData.description).to.not.eql(null);\r",
+									"    pm.expect(jsonData.environmentKey).to.match(/^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$/);\r",
+									"    pm.expect(jsonData.owner).to.match(/^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$/);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\": \"POST Test\",\r\n    \"Owner\": \"{{$guid}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{baseUrl}}.azurewebsites.net/environments",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"environments"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
