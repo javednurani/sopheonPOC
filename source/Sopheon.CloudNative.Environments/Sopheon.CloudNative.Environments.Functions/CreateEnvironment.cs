@@ -30,7 +30,7 @@ namespace Sopheon.CloudNative.Environments.Functions
 
       [Function(nameof(CreateEnvironment))]
       [OpenApiOperation(operationId: nameof(CreateEnvironment),
-         tags: new[] { "environments" },
+         tags: new[] { "Environments" },
          Summary = "Create an Environment",
          Description = "Create an Environment, with required and optional properties",
          Visibility = OpenApiVisibilityType.Important)]
@@ -49,7 +49,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          Description = "Bad Request, 400 response without body"
          )]
       public async Task<HttpResponseData> Run(
-          [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "CreateEnvironment")] HttpRequestData req,
+          [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "environments")] HttpRequestData req,
           FunctionContext context)
       {
          var logger = context.GetLogger(nameof(CreateEnvironment));
