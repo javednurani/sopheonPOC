@@ -1,10 +1,4 @@
-$ZipUtil = "C:\Program Files\7-Zip\7z.exe";
-
-function Check-LastExitCode {
-    if ($LASTEXITCODE -ne 0) {
-        throw "Last Exit Code was not 0 but instead: $($LASTEXITCODE)";
-    }
-}
+Import-Module "$($env:System_DefaultWorkingDirectory)\DevOps\PowerShell\CloudNative.Common.psm1";
 
 Copy-Item -Path "$($env:System_DefaultWorkingDirectory)\source\Sopheon.CloudNative.Environments\deploy\*" -Destination $env:Build_ArtifactStagingDirectory;
 

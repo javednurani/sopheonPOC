@@ -1,3 +1,5 @@
+#TODO: Migrate the variables into the master token list and remove this script
+
 [Cmdletbinding()]
 Param(
     [Parameter(Mandatory = $true)][string]$PathToFile
