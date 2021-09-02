@@ -90,23 +90,24 @@ namespace Sopheon.CloudNative.Environments.Functions
 
             return createdResponse;
          }
-         catch (JsonReaderException)
+         catch (JsonReaderException ex)
          {
-            logger.LogInformation("JsonReaderException reading request data");
+            logger.LogInformation($"{ex.GetType()} : {ex.Message}");
             HttpResponseData deserializeExceptionResponse = req.CreateResponse(HttpStatusCode.BadRequest);
             await deserializeExceptionResponse.WriteStringAsync("Request body was invalid.");
             return deserializeExceptionResponse;
          }
-         catch (JsonSerializationException)
+         catch (JsonSerializationException ex)
          {
-            logger.LogInformation("JsonSerializationException deserializing request data");
+            logger.LogInformation($"{ex.GetType()} : {ex.Message}");
             HttpResponseData deserializeExceptionResponse = req.CreateResponse(HttpStatusCode.BadRequest);
             await deserializeExceptionResponse.WriteStringAsync($"Request body was invalid. Is {nameof(EnvironmentDto.Owner)} field a valid GUID?");
             return deserializeExceptionResponse;
          }
-         catch (Exception)
+         catch (Exception ex)
          {
             // TODO: should this be a 400 or 500?  The try block encompasses database and network I/O that can throw exceptions
+            logger.LogInformation($"{ex.GetType()} : {ex.Message}");
             HttpResponseData genericExceptionResponse = req.CreateResponse(HttpStatusCode.BadRequest);
             await genericExceptionResponse.WriteStringAsync("Something went wrong. Please try again later.");
             return genericExceptionResponse;
