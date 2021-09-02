@@ -87,7 +87,7 @@ exports[`Testing the App component App snapshot render test 1`] = `
                 id="page-title"
                 key=".0"
               >
-                Cal Huebear's awesome app
+                Template Title
               </h1>
             </div>
             <div
