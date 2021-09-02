@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
@@ -28,9 +29,25 @@ namespace Sopheon.CloudNative.Environments.Functions
       }
 
       [Function(nameof(CreateEnvironment))]
-      //[OpenApiOperation(operationId: "Run", tags: new[] { "Environments" })]
-      //[OpenApiRequestBody(contentType: "application/json", bodyType: typeof(EnvironmentDto), Required = true, Description = "Environment object to be created")]
-      //[OpenApiResponseWithBody(statusCode: HttpStatusCode.Created, contentType: "text/plain", bodyType: typeof(string), Description = "The Created response")]
+      [OpenApiOperation(operationId: nameof(CreateEnvironment),
+         tags: new[] { "environments" },
+         Summary = "Create an Environment",
+         Description = "Create an Environment, with required and optional properties",
+         Visibility = OpenApiVisibilityType.Important)]
+      [OpenApiRequestBody(contentType: "application/json",
+         bodyType: typeof(EnvironmentDto),
+         Required = true,
+         Description = "Environment object to be created. Name and Owner required, Description optional")]
+      [OpenApiResponseWithBody(statusCode: HttpStatusCode.Created,
+         contentType: "application/json",
+         bodyType: typeof(EnvironmentDto),
+         Summary = "201 Created response",
+         Description = "Created, 201 response with Environment in response body")]
+      [OpenApiResponseWithoutBody(
+         statusCode: HttpStatusCode.BadRequest,
+         Summary = "400 Bad Request response",
+         Description = "Bad Request, 400 response without body"
+         )]
       public async Task<HttpResponseData> Run(
           [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "CreateEnvironment")] HttpRequestData req,
           FunctionContext context)
