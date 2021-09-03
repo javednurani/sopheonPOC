@@ -61,25 +61,12 @@ namespace Sopheon.CloudNative.Environments.Functions
             EnvironmentDto data = JsonConvert.DeserializeObject<EnvironmentDto>(requestBody);
             if (string.IsNullOrEmpty(data.Name))
             {
-               //byte[] bytes = Encoding.ASCII.GetBytes($"{nameof(data.Name)} field is required.");
-
-               //logger.LogInformation($"Request missing required {nameof(data.Name)} field");
-               //HttpResponseData missingNameResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-               //await req.Body.WriteAsync(bytes, 0, bytes.Length);
-               ////await missingNameResponse.WriteStringAsync($"{nameof(data.Name)} field is required.");
-               //return missingNameResponse;
 
                logger.LogInformation($"Request missing required {nameof(data.Name)} field");
 
                HttpResponseData missingNameResponse = req.CreateResponse(HttpStatusCode.BadRequest);
                await missingNameResponse.WriteStringAsync($"{nameof(data.Name)} field is required.");
                return missingNameResponse;
-
-
-               //HttpResponseData missingNameResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-               //await missingNameResponse.WriteStringAsync($"{nameof(data.Name)} field is required.");
-               //return missingNameResponse;
-
             }
             if (data.Owner == Guid.Empty)
             {

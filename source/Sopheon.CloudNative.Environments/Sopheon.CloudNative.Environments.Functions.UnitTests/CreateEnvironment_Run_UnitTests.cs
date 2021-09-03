@@ -12,7 +12,6 @@ using System.Linq;
 using System.Net;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Sopheon.CloudNative.Environments.Functions.UnitTests
@@ -56,22 +55,22 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          request.CallBase = true;
          request.Setup(r => r.Body).Returns(bodyStream3);
 
-         //request.Setup(r => r.CreateResponse()).Returns(() =>
-         //{
-         //   var response = new Mock<HttpResponseData>(context.Object);
-         //   response.CallBase = true;
+			request.Setup(r => r.CreateResponse()).Returns(() =>
+			{
+				var response = new Mock<HttpResponseData>(context.Object);
+				response.CallBase = true;
 
-         //   response.SetupProperty(r => r.Headers, new HttpHeadersCollection());
-         //   response.SetupProperty(r => r.StatusCode);
-         //   response.SetupProperty(r => r.Body, new MemoryStream());
-         //   //response.Setup(r => r.WriteStringAsync(It.IsAny<string>(), null)).Returns(() => Task.FromResult(typeof(void)));
-         //   //response.Setup(r => r.WriteStringAsync(It.IsAny<string>(), null)).Callback<string>(s => response.Object.Body.Write(Encoding.ASCII.GetBytes(s)));
-         //   return response.Object;
-         //});
+				response.SetupProperty(r => r.Headers, new HttpHeadersCollection());
+				response.SetupProperty(r => r.StatusCode);
+				response.SetupProperty(r => r.Body, new MemoryStream());
+			 //response.Setup(r => r.WriteStringAsync(It.IsAny<string>(), null)).Returns(() => Task.FromResult(typeof(void)));
+			 //response.Setup(r => r.WriteStringAsync(It.IsAny<string>(), null)).Callback<string>(s => response.Object.Body.Write(Encoding.ASCII.GetBytes(s)));
+			 return response.Object;
+			});
 
 
-         // Act
-         CreateEnvironment sut = new CreateEnvironment(null, null);
+			// Act
+			CreateEnvironment sut = new CreateEnvironment(null, null);
 
          HttpResponseData result = await sut.Run(request.Object, context.Object);
 
@@ -79,9 +78,12 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.NotNull(result);
          Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
 
-         string responseBody = await new StreamReader(result.Body).ReadToEndAsync();
+         result.Body.Position = 0;
+         StreamReader reader = new StreamReader(result.Body);
+         string readvalue = await reader.ReadToEndAsync();
 
-         Assert.Equal("asdf1243", responseBody);
+
+         Assert.Equal("asdf1243", readvalue);
 
       }
 
