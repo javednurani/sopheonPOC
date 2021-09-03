@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sopheon.CloudNative.Environments.Functions.Models
 {
+   [Serializable]
    public class EnvironmentDto
    {
       public Guid EnvironmentKey
