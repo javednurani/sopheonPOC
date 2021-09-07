@@ -1,8 +1,10 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Azure.Core.Serialization;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
@@ -19,6 +21,10 @@ namespace Sopheon.CloudNative.Environments.Functions
 {
    public class CreateEnvironment
    {
+      // Cloud-1484, we are defining ObjectSerializer to be used, per Function class
+      // this is due to unit test context not having a serializer configured, if we use the below line to configure serializer for production context
+      // Ideally, we would use this line in Program.cs :: main() : .ConfigureFunctionsWorkerDefaults(worker => worker.UseNewtonsoftJson())
+      private readonly static NewtonsoftJsonObjectSerializer _serializer = new NewtonsoftJsonObjectSerializer();
       private readonly EnvironmentContext _environmentContext;
       private IMapper _mapper;
 
@@ -60,11 +66,12 @@ namespace Sopheon.CloudNative.Environments.Functions
             EnvironmentDto data = JsonConvert.DeserializeObject<EnvironmentDto>(requestBody);
             if (string.IsNullOrEmpty(data.Name))
             {
+
                logger.LogInformation($"Request missing required {nameof(data.Name)} field");
+
                HttpResponseData missingNameResponse = req.CreateResponse(HttpStatusCode.BadRequest);
                await missingNameResponse.WriteStringAsync($"{nameof(data.Name)} field is required.");
                return missingNameResponse;
-
             }
             if (data.Owner == Guid.Empty)
             {
@@ -86,8 +93,7 @@ namespace Sopheon.CloudNative.Environments.Functions
             await _environmentContext.SaveChangesAsync();
 
             HttpResponseData createdResponse = req.CreateResponse();
-            await createdResponse.WriteAsJsonAsync(_mapper.Map<Environment, EnvironmentDto>(environment), HttpStatusCode.Created);
-
+            await createdResponse.WriteAsJsonAsync(_mapper.Map<Environment, EnvironmentDto>(environment), _serializer, HttpStatusCode.Created);
             return createdResponse;
          }
          catch (JsonReaderException ex)

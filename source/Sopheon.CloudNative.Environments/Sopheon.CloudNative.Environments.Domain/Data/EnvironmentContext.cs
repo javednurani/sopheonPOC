@@ -24,7 +24,7 @@ namespace Sopheon.CloudNative.Environments.Domain.Data
                 optionsBuilder.UseSqlServer();
             }
         }
-        public DbSet<Environment> Environments
+        public virtual DbSet<Environment> Environments
         {
             get;
             set;
