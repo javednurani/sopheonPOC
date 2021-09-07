@@ -4,15 +4,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using Sopheon.CloudNative.Environments.Domain.Data;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Azure.Security.KeyVault.Secrets;
 using Azure.Identity;
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Microsoft.Azure.Functions.Worker.Extensions.OpenApi.Extensions;
+using Sopheon.CloudNative.Environments.Domain.Repositories;
 
 namespace Sopheon.CloudNative.Environments.Functions
 {
@@ -54,6 +52,8 @@ namespace Sopheon.CloudNative.Environments.Functions
                // Add Custom Services
                services.AddDbContext<EnvironmentContext>(options => options.UseSqlServer(hostContext.Configuration["EnvironmentsSqlConnectionString"]));
                services.AddAutoMapper(typeof(Program));
+
+               services.AddScoped<IEnvironmentRepository, EFEnvironmentRepository>();
             })
             .Build();
 
