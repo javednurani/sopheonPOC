@@ -325,7 +325,7 @@
       <ContentDefinition Id="api.idpselections">
         <LoadUri>~/tenant/templates/AzureBlue/idpSelector.cshtml</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
-        <DataUri>urn:com:microsoft:aad:b2c:elements:idpselection:1.0.0</DataUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:providerselection:1.2.0</DataUri>
         <Metadata>
           <Item Key="DisplayName">Idp selection page</Item>
           <Item Key="language.intro">Sign in</Item>
@@ -335,7 +335,7 @@
       <ContentDefinition Id="api.idpselections.signup">
         <LoadUri>~/tenant/templates/AzureBlue/idpSelector.cshtml</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
-        <DataUri>urn:com:microsoft:aad:b2c:elements:idpselection:1.0.0</DataUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:providerselection:1.2.0</DataUri>
         <Metadata>
           <Item Key="DisplayName">Idp selection page</Item>
           <Item Key="language.intro">Sign up</Item>
