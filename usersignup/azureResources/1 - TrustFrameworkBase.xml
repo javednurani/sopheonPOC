@@ -1,12 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<TrustFrameworkPolicy
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
-  PolicySchemaVersion="0.3.0.0"
-  TenantId="nonexistent.onmicrosoft.com"
-  PolicyId="B2C_1A_TrustFrameworkBase"
-  PublicPolicyUri="http://nonexistent.onmicrosoft.com/B2C_1A_TrustFrameworkBase">
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="nonexistent.onmicrosoft.com" PolicyId="B2C_1A_TrustFrameworkBase" PublicPolicyUri="http://nonexistent.onmicrosoft.com/B2C_1A_TrustFrameworkBase">
 
   <BuildingBlocks>
     <ClaimsSchema>
@@ -29,7 +22,7 @@
       <ClaimType Id="socialIdpUserId">
         <DisplayName>Username</DisplayName>
         <DataType>string</DataType>
-        <UserHelpText/>
+        <UserHelpText />
         <UserInputType>TextBox</UserInputType>
         <Restriction>
           <Pattern RegularExpression="^[a-zA-Z0-9]+[a-zA-Z0-9_-]*$" HelpText="The username you provided is not valid. It must begin with an alphabet or number and can contain alphabets, numbers and the following symbols: _ -" />
@@ -62,7 +55,7 @@
       <ClaimType Id="signInName">
         <DisplayName>Sign in name</DisplayName>
         <DataType>string</DataType>
-        <UserHelpText/>
+        <UserHelpText />
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
 
@@ -72,7 +65,7 @@
         <UserHelpText>Email address to use for signing in.</UserHelpText>
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
-	  
+
       <ClaimType Id="accountEnabled">
         <DisplayName>Account Enabled</DisplayName>
         <DataType>boolean</DataType>
@@ -150,7 +143,7 @@
         <DefaultPartnerClaimTypes>
           <Protocol Name="OpenIdConnect" PartnerClaimType="sub" />
         </DefaultPartnerClaimTypes>
-        <UserHelpText/>
+        <UserHelpText />
       </ClaimType>
 
       <ClaimType Id="identityProvider">
@@ -161,7 +154,7 @@
           <Protocol Name="OpenIdConnect" PartnerClaimType="idp" />
           <Protocol Name="SAML2" PartnerClaimType="http://schemas.microsoft.com/identity/claims/identityprovider" />
         </DefaultPartnerClaimTypes>
-        <UserHelpText/>
+        <UserHelpText />
       </ClaimType>
 
       <ClaimType Id="displayName">
@@ -215,7 +208,7 @@
       <ClaimType Id="newUser">
         <DisplayName>User is new</DisplayName>
         <DataType>boolean</DataType>
-        <UserHelpText/>
+        <UserHelpText />
       </ClaimType>
 
       <ClaimType Id="executed-SelfAsserted-Input">
@@ -300,7 +293,7 @@
           <OutputClaim ClaimTypeReferenceId="otherMails" TransformationClaimType="collection" />
         </OutputClaims>
       </ClaimsTransformation>
- 
+
       <ClaimsTransformation Id="AssertAccountEnabledIsTrue" TransformationMethod="AssertBooleanClaimIsEqualToValue">
         <InputClaims>
           <InputClaim ClaimTypeReferenceId="accountEnabled" TransformationClaimType="inputClaim" />
@@ -323,7 +316,7 @@
       <ContentDefinition Id="api.error">
         <LoadUri>~/tenant/templates/AzureBlue/exception.cshtml</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
-        <DataUri>urn:com:microsoft:aad:b2c:elements:globalexception:1.1.0</DataUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:globalexception:1.1.0</DataUri>
         <Metadata>
           <Item Key="DisplayName">Error page</Item>
         </Metadata>
@@ -332,7 +325,7 @@
       <ContentDefinition Id="api.idpselections">
         <LoadUri>~/tenant/templates/AzureBlue/idpSelector.cshtml</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
-        <DataUri>urn:com:microsoft:aad:b2c:elements:idpselection:1.0.0</DataUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:idpselection:1.0.0</DataUri>
         <Metadata>
           <Item Key="DisplayName">Idp selection page</Item>
           <Item Key="language.intro">Sign in</Item>
@@ -342,7 +335,7 @@
       <ContentDefinition Id="api.idpselections.signup">
         <LoadUri>~/tenant/templates/AzureBlue/idpSelector.cshtml</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
-        <DataUri>urn:com:microsoft:aad:b2c:elements:idpselection:1.0.0</DataUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:idpselection:1.0.0</DataUri>
         <Metadata>
           <Item Key="DisplayName">Idp selection page</Item>
           <Item Key="language.intro">Sign up</Item>
@@ -352,7 +345,7 @@
       <ContentDefinition Id="api.signuporsignin">
         <LoadUri>~/tenant/templates/AzureBlue/unified.cshtml</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
-        <DataUri>urn:com:microsoft:aad:b2c:elements:unifiedssp:1.0.0</DataUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:unifiedssp:1.0.0</DataUri>
         <Metadata>
           <Item Key="DisplayName">Signin and Signup</Item>
         </Metadata>
@@ -361,7 +354,7 @@
       <ContentDefinition Id="api.selfasserted">
         <LoadUri>~/tenant/templates/AzureBlue/selfAsserted.cshtml</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
-        <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.1.0</DataUri>
         <Metadata>
           <Item Key="DisplayName">Collect information from user page</Item>
         </Metadata>
@@ -370,7 +363,7 @@
       <ContentDefinition Id="api.selfasserted.profileupdate">
         <LoadUri>~/tenant/templates/AzureBlue/selfAsserted.cshtml</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
-        <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.1.0</DataUri>
         <Metadata>
           <Item Key="DisplayName">Collect information from user page</Item>
         </Metadata>
@@ -379,7 +372,7 @@
       <ContentDefinition Id="api.localaccountsignup">
         <LoadUri>~/tenant/templates/AzureBlue/selfAsserted.cshtml</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
-        <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.1.0</DataUri>
         <Metadata>
           <Item Key="DisplayName">Local account sign up page</Item>
         </Metadata>
@@ -388,7 +381,7 @@
       <ContentDefinition Id="api.localaccountpasswordreset">
         <LoadUri>~/tenant/templates/AzureBlue/selfAsserted.cshtml</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
-        <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.1.0</DataUri>
         <Metadata>
           <Item Key="DisplayName">Local account change password page</Item>
         </Metadata>
@@ -402,7 +395,7 @@
         in this section, then it cannot be used in a technical policy.
     -->
   <ClaimsProviders>
- 
+
     <ClaimsProvider>
       <DisplayName>Local Account SignIn</DisplayName>
       <TechnicalProfiles>
@@ -449,7 +442,7 @@
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
- 
+
     <ClaimsProvider>
       <DisplayName>Azure Active Directory</DisplayName>
       <TechnicalProfiles>
@@ -466,7 +459,7 @@
           <IncludeInSso>false</IncludeInSso>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
-     
+
         <!-- Technical profiles for local accounts -->
 
         <TechnicalProfile Id="AAD-UserWriteUsingLogonEmail">
@@ -481,10 +474,10 @@
           <PersistedClaims>
             <!-- Required claims -->
             <PersistedClaim ClaimTypeReferenceId="email" PartnerClaimType="signInNames.emailAddress" />
-            <PersistedClaim ClaimTypeReferenceId="newPassword" PartnerClaimType="password"/>
+            <PersistedClaim ClaimTypeReferenceId="newPassword" PartnerClaimType="password" />
             <PersistedClaim ClaimTypeReferenceId="displayName" DefaultValue="unknown" />
             <PersistedClaim ClaimTypeReferenceId="passwordPolicies" DefaultValue="DisablePasswordExpiration" />
-  
+
             <!-- Optional claims. -->
             <PersistedClaim ClaimTypeReferenceId="givenName" />
             <PersistedClaim ClaimTypeReferenceId="surname" />
@@ -514,7 +507,7 @@
             <!-- Required claims -->
             <OutputClaim ClaimTypeReferenceId="objectId" />
             <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="localAccountAuthentication" />
-  
+
             <!-- Optional claims -->
             <OutputClaim ClaimTypeReferenceId="userPrincipalName" />
             <OutputClaim ClaimTypeReferenceId="displayName" />
@@ -539,8 +532,8 @@
           </InputClaims>
           <PersistedClaims>
             <PersistedClaim ClaimTypeReferenceId="objectId" />
-            <PersistedClaim ClaimTypeReferenceId="newPassword" PartnerClaimType="password"/>
-  
+            <PersistedClaim ClaimTypeReferenceId="newPassword" PartnerClaimType="password" />
+
           </PersistedClaims>
           <IncludeTechnicalProfile ReferenceId="AAD-Common" />
         </TechnicalProfile>
@@ -717,7 +710,7 @@
             <OutputClaim ClaimTypeReferenceId="objectId" />
             <OutputClaim ClaimTypeReferenceId="userPrincipalName" />
             <OutputClaim ClaimTypeReferenceId="authenticationSource" />
-  
+
           </OutputClaims>
           <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="AAD-UserReadUsingEmailAddress" />
@@ -735,7 +728,7 @@
           </CryptographicKeys>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="objectId" />
-  
+
           </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="newPassword" Required="true" />
@@ -769,10 +762,10 @@
             <PersistedClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" />
           </PersistedClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="objectIdFromSession" DefaultValue="true"/>
+            <OutputClaim ClaimTypeReferenceId="objectIdFromSession" DefaultValue="true" />
           </OutputClaims>
         </TechnicalProfile>
- 
+
       </TechnicalProfiles>
     </ClaimsProvider>
 
@@ -816,7 +809,7 @@
 
     <UserJourney Id="SignUpOrSignIn">
       <OrchestrationSteps>
-   
+
         <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
           <ClaimsProviderSelections>
             <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
@@ -844,16 +837,16 @@
             <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
           </ClaimsExchanges>
         </OrchestrationStep>
- 
+
         <OrchestrationStep Order="4" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
-    
+
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
 
     <UserJourney Id="ProfileEdit">
       <OrchestrationSteps>
-   
+
         <OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselections">
           <ClaimsProviderSelections>
             <ClaimsProviderSelection TargetClaimsExchangeId="LocalAccountSigninEmailExchange" />
@@ -869,14 +862,14 @@
             <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
           </ClaimsExchanges>
         </OrchestrationStep>
- 
+
         <OrchestrationStep Order="4" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="B2CUserProfileUpdateExchange" TechnicalProfileReferenceId="SelfAsserted-ProfileUpdate" />
           </ClaimsExchanges>
         </OrchestrationStep>
         <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
-    
+
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
@@ -897,6 +890,6 @@
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
- 
+
   </UserJourneys>
 </TrustFrameworkPolicy>
