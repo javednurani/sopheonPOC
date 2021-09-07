@@ -10,6 +10,7 @@
     <DefaultUserJourney ReferenceId="SopheonSignUpOrSignIn" />
     <UserJourneyBehaviors>
       <JourneyInsights TelemetryEngine="ApplicationInsights" InstrumentationKey="^B2CAppInsightsInstrumentationKey^" DeveloperMode="^B2CJourneyInsightsDeveloperMode^" ClientEnabled="false" ServerEnabled="true" TelemetryVersion="1.0.0" />
+      <ScriptExecution>Allow</ScriptExecution>
     </UserJourneyBehaviors>
     <TechnicalProfile Id="PolicyProfile">
       <DisplayName>PolicyProfile</DisplayName>

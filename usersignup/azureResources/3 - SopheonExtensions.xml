@@ -124,7 +124,7 @@
       <ContentDefinition Id="api.selfasserted.consent">
         <LoadUri>https://^StorageAccountName^.blob.core.windows.net/b2cassets/consentPage.html</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
-        <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.1.0</DataUri>
         <Metadata>
           <Item Key="DisplayName">Consent</Item>
         </Metadata>
@@ -141,7 +141,7 @@
       <ContentDefinition Id="api.selfasserted.passwordchange">
         <LoadUri>~/tenant/templates/AzureBlue/selfAsserted.cshtml</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
-        <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.1.0</DataUri>
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.passwordchange.en" />
         </LocalizedResourcesReferences>
@@ -543,7 +543,7 @@
           </OutputClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
         </TechnicalProfile>
-        
+
         <!--Local account sign-up page-->
         <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
           <Metadata>

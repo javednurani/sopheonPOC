@@ -1,164 +1,178 @@
 <!DOCTYPE html>
 <!-- saved from url=(0080)../assets/AzureBlue/selfAsserted.cshtml -->
 <!-- https://github.com/Azure-Samples/Azure-AD-B2C-page-templates/blob/master/ocean_blue/unified.html -->
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
     <title>Log In</title>
 
-    
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-     
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/css/bootstrap.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+
     <!-- https://github.com/Azure-Samples/Azure-AD-B2C-page-templates/blob/master/ocean_blue/css/assets.css -->
-    <style> 
-        body {
-            background-image: url(https://^StorageAccountName^.blob.core.windows.net/b2cassets/azure-blue-background.png);
-        }
-        @font-face {
-            font-family: 'SegoeUI';
-            src: url(https://^StorageAccountName^.blob.core.windows.net/b2cassets/segoeui.WOFF);
-            font-weight: normal;
-        }
-        @font-face {
-            font-family: 'SegoeUI';
-            src: url(https://^StorageAccountName^.blob.core.windows.net/b2cassets/segoeui_bold.WOFF);
-            font-weight: bold;
-        }
-        #AmazonExchange {
+    <style>
+      body {
+        background-image: url(https://^StorageAccountName^.blob.core.windows.net/b2cassets/azure-blue-background.png);
+      }
+      @font-face {
+        font-family: "SegoeUI";
+        src: url(https://^StorageAccountName^.blob.core.windows.net/b2cassets/segoeui.WOFF);
+        font-weight: normal;
+      }
+      @font-face {
+        font-family: "SegoeUI";
+        src: url(https://^StorageAccountName^.blob.core.windows.net/b2cassets/segoeui_bold.WOFF);
+        font-weight: bold;
+      }
+      #AmazonExchange {
         background-image: url(../../assets/idp_logos/colored/amazon.svg);
-        }
-        #AmazonExchange:hover {
+      }
+      #AmazonExchange:hover {
         background-image: url(../../assets/idp_logos/white/amazon.svg);
-        }
-        #FacebookExchange {
+      }
+      #FacebookExchange {
         background-image: url(../../assets/idp_logos/colored/facebook.svg);
-        }
-        #FacebookExchange:hover {
+      }
+      #FacebookExchange:hover {
         background-image: url(../../assets/idp_logos/white/facebook.svg);
-        }
-        #GitHubExchange {
+      }
+      #GitHubExchange {
         background-image: url(../../assets/idp_logos/colored/github.svg);
-        }
-        #GitHubExchange:hover {
+      }
+      #GitHubExchange:hover {
         background-image: url(../../assets/idp_logos/white/github.svg);
-        }
-        #GoogleExchange {
+      }
+      #GoogleExchange {
         background-image: url(../../assets/idp_logos/colored/google.svg);
-        }
-        #GoogleExchange:hover {
+      }
+      #GoogleExchange:hover {
         background-image: url(../../assets/idp_logos/white/google.svg);
-        }
-        #LinkedInExchange {
+      }
+      #LinkedInExchange {
         background-image: url(../../assets/idp_logos/colored/linkedin.svg);
-        }
-        #LinkedInExchange:hover {
+      }
+      #LinkedInExchange:hover {
         background-image: url(../../assets/idp_logos/white/linkedin.svg);
-        }
-        #MicrosoftAccountExchange {
+      }
+      #MicrosoftAccountExchange {
         background-image: url(../../assets/idp_logos/colored/microsoft.svg);
-        }
-        #MicrosoftAccountExchange:hover {
+      }
+      #MicrosoftAccountExchange:hover {
         background-image: url(../../assets/idp_logos/white/microsoft.svg);
-        }
-        #QQExchange {
+      }
+      #QQExchange {
         background-image: url(../../assets/idp_logos/colored/qq.svg);
-        }
-        #QQExchange:hover {
+      }
+      #QQExchange:hover {
         background-image: url(../../assets/idp_logos/white/qq.svg);
-        }
-        #TwitterExchange {
+      }
+      #TwitterExchange {
         background-image: url(../../assets/idp_logos/colored/twitter.svg);
-        }
-        #TwitterExchange:hover {
+      }
+      #TwitterExchange:hover {
         background-image: url(../../assets/idp_logos/white/twitter.svg);
-        }
-        #WeChatExchange {
+      }
+      #WeChatExchange {
         background-image: url(../../assets/idp_logos/colored/wechat.svg);
-        }
-        #WeChatExchange:hover {
+      }
+      #WeChatExchange:hover {
         background-image: url(../../assets/idp_logos/white/wechat.svg);
-        }
-        #WeiboExchange {
+      }
+      #WeiboExchange {
         background-image: url(../../assets/idp_logos/colored/weibo.svg);
-        }
-        #WeiboExchange:hover {
+      }
+      #WeiboExchange:hover {
         background-image: url(../../assets/idp_logos/white/weibo.svg);
-        }
-        .buttons #cancel:before {
-            content: url(https://^StorageAccountName^.blob.core.windows.net/b2cassets/left-arrow.svg);
-        }
+      }
+      .buttons #cancel:before {
+        content: url(https://^StorageAccountName^.blob.core.windows.net/b2cassets/left-arrow.svg);
+      }
 
-
-        #SignInWithLogonNameExchange, #SignUpWithLogonEmailExchange, #SignUpWithLogonNameExchange {
-            background-image: url(../../assets/idp_logos/colored/local.svg);
-        }
-        #SignInWithLogonNameExchange:hover, #SignUpWithLogonEmailExchange:hover, #SignUpWithLogonNameExchange:hover {
-            background-image: url(../../assets/idp_logos/white/local.svg);
-        }
+      #SignInWithLogonNameExchange,
+      #SignUpWithLogonEmailExchange,
+      #SignUpWithLogonNameExchange {
+        background-image: url(../../assets/idp_logos/colored/local.svg);
+      }
+      #SignInWithLogonNameExchange:hover,
+      #SignUpWithLogonEmailExchange:hover,
+      #SignUpWithLogonNameExchange:hover {
+        background-image: url(../../assets/idp_logos/white/local.svg);
+      }
     </style>
     <!-- https://github.com/Azure-Samples/Azure-AD-B2C-page-templates/blob/master/ocean_blue/css/common.css -->
-    <style> 
-        html {
+    <style>
+      html {
         background: none;
-        }
-        body {
-        font-family: Segoe UI,SegoeUI,"Helvetica Neue",Helvetica,Arial,sans-serif;
+      }
+      body {
+        font-family: Segoe UI, SegoeUI, "Helvetica Neue", Helvetica, Arial,
+          sans-serif;
         background-attachment: fixed;
         background-color: white;
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
         text-align: left;
-        }
-        p {
-            margin: 0px;
-        }
-        :focus, a:focus {
-            outline: none;
-        }
-        input, select {
-            border: 1px solid white;
-        }
-        input[type=password]:focus, input[type=text]:focus, input[type=email]:focus, select:focus {
-            border: 1px solid rgba(41, 110, 198, 0.5);
-        }
-        .container {
+      }
+      p {
+        margin: 0px;
+      }
+      :focus,
+      a:focus {
+        outline: none;
+      }
+      input,
+      select {
+        border: 1px solid white;
+      }
+      input[type="password"]:focus,
+      input[type="text"]:focus,
+      input[type="email"]:focus,
+      select:focus {
+        border: 1px solid rgba(41, 110, 198, 0.5);
+      }
+      .container {
         text-align: center;
         width: 100%;
         display: table;
         height: 100vh;
         padding: 0px;
-        }
-        #api {
+      }
+      #api {
         margin: 0 auto;
-        }
-        .col-lg-6 {
+      }
+      .col-lg-6 {
         max-width: 470px;
         width: 100%;
         float: none;
         display: inline-block;
         vertical-align: top;
         padding: 0px;
-        }
-        .row {
+      }
+      .row {
         width: 100%;
         margin: 0;
         display: table-cell;
         vertical-align: middle;
-        }
-        ul {
+      }
+      ul {
         padding: 0;
-        }
-        #simplemodal-container .simplemodal-data {
-            padding: 5px 8px;
-            overflow: hidden;
-            background-color: white;
-            border-radius: 3px;
-            font-style: italic;
-        }
-        /** Social Button Styles **/
-        #SignInWithLogonNameExchange {
+      }
+      #simplemodal-container .simplemodal-data {
+        padding: 5px 8px;
+        overflow: hidden;
+        background-color: white;
+        border-radius: 3px;
+        font-style: italic;
+      }
+      /** Social Button Styles **/
+      #SignInWithLogonNameExchange {
         background-color: #296ec6;
         background-image: url(none);
         background-size: 10%;
@@ -168,54 +182,54 @@
         border-radius: 0.5rem;
         width: 100%;
         width: 100%;
-        font-size: 1.0em;
+        font-size: 1em;
         margin-left: auto;
-        }
-        #SignInWithLogonNameExchange:hover {
+      }
+      #SignInWithLogonNameExchange:hover {
         background-color: #1662c7;
-        }
-        #AmazonExchange:hover {
-            background-color: #36474f !important;
-        }
-        #FacebookExchange:hover {
-            background-color: #3B5595 !important;
-        }
-        #GitHubExchange:hover {
-            background-color: #0f0f0f !important;
-        }
-        #GoogleExchange:hover {
-            background-color: #C64A29 !important;
-        }
-        #LinkedInExchange:hover {
-            background-color: #0274b3 !important;
-        }
-        #MicrosoftAccountExchange:hover {
-            background-color: #01a4ef !important;
-        }
-        #QQExchange:hover {
-            background-color: #1a97df !important;
-        }
-        #TwitterExchange:hover {
-            background-color: #1DA1F2 !important;
-        }
-        #WeChatExchange:hover {
-            background-color: #4cc522 !important;
-        }
-        #WeiboExchange:hover {
-            background-color: #e81123 !important;
-        }
-        .buttons #continue:disabled {
+      }
+      #AmazonExchange:hover {
+        background-color: #36474f !important;
+      }
+      #FacebookExchange:hover {
+        background-color: #3b5595 !important;
+      }
+      #GitHubExchange:hover {
+        background-color: #0f0f0f !important;
+      }
+      #GoogleExchange:hover {
+        background-color: #c64a29 !important;
+      }
+      #LinkedInExchange:hover {
+        background-color: #0274b3 !important;
+      }
+      #MicrosoftAccountExchange:hover {
+        background-color: #01a4ef !important;
+      }
+      #QQExchange:hover {
+        background-color: #1a97df !important;
+      }
+      #TwitterExchange:hover {
+        background-color: #1da1f2 !important;
+      }
+      #WeChatExchange:hover {
+        background-color: #4cc522 !important;
+      }
+      #WeiboExchange:hover {
+        background-color: #e81123 !important;
+      }
+      .buttons #continue:disabled {
         margin: 0 auto;
         width: 60%;
         height: 50px;
         background-color: #296ec6;
-        opacity: .3;
+        opacity: 0.3;
         border-radius: 0.5rem;
         border: none;
         color: white;
         font-size: 1em;
-        }
-        .buttons #continue {
+      }
+      .buttons #continue {
         margin: 0 auto;
         width: 60%;
         height: 50px;
@@ -226,15 +240,15 @@
         color: white;
         font-size: 1em;
         box-shadow: 0 0px 30px 0px #dae1f7;
-        }
-        .buttons #continue:hover {
+      }
+      .buttons #continue:hover {
         -moz-box-shadow: none;
         -webkit-box-shadow: none;
         box-shadow: none;
         background-color: #1662c7;
         border-color: #204d74;
-        }
-        .buttons #cancel {
+      }
+      .buttons #cancel {
         padding: 0;
         margin-left: auto;
         background: none;
@@ -248,362 +262,419 @@
         color: #505050;
         box-shadow: none;
         text-align: left;
-        }
-        .buttons #cancel:hover {
+      }
+      .buttons #cancel:hover {
         color: black !important;
-        }
-        .buttons #cancel:before {
+      }
+      .buttons #cancel:before {
         padding: 10px;
         vertical-align: sub;
         zoom: 90%;
         display: inline-block;
-        }
-        #attributeList ul {
+      }
+      #attributeList ul {
         padding: 0;
-        }
-        #attributeList ul li {
+      }
+      #attributeList ul li {
         list-style: none;
         margin: 1rem 0;
-        }
-        label {
+      }
+      label {
         font-weight: 600;
-        }
-        #attributeList ul li label {
+      }
+      #attributeList ul li label {
         float: left;
         display: none !important;
-        }
-        #attributeList ul li.CheckboxMultiSelect label,
-        #attributeList ul li.RadioSingleSelect label {
-            display: block !important;
-        }
-        #attributeList ul li label[for=country] {
+      }
+      #attributeList ul li.CheckboxMultiSelect label,
+      #attributeList ul li.RadioSingleSelect label {
+        display: block !important;
+      }
+      #attributeList ul li label[for="country"] {
         float: left;
         display: inline-block !important;
         margin-bottom: 0.5rem;
-        }
-        #attributeList ul li label[for=cpiminternal_legalCountry] {
+      }
+      #attributeList ul li label[for="cpiminternal_legalCountry"] {
         float: none;
         display: block !important;
         text-align: left;
         margin-bottom: 0.5rem;
-        }
-        #attributeList ul li label[for=cpiminternal_dateOfBirth] {
+      }
+      #attributeList ul li label[for="cpiminternal_dateOfBirth"] {
         float: none;
         text-align: left;
         display: block !important;
         margin-bottom: 0.5rem;
-        }
-        #attributeList ul li input {
+      }
+      #attributeList ul li input {
         outline: none;
         height: 50px;
         width: 70%;
         border-radius: 0.5rem;
         text-indent: 20px;
-        box-shadow: 0px 2px 10px rgba(0,0,150,0.15);
-        }
-        #attributeList ul li input::-webkit-input-placeholder {
+        box-shadow: 0px 2px 10px rgba(0, 0, 150, 0.15);
+      }
+      #attributeList ul li input::-webkit-input-placeholder {
         text-indent: 20px;
-        }
-        #attributeList ul li .attrEntry.validate input:invalid, #attributeList ul li .attrEntry.validate input.invalid {
-            border: 1px solid #bb0000;
-        }
-        #attributeList ul li .attrEntry .verify {
-            margin-top: 2rem;
-            padding-bottom: 10px;
-            position: relative;
-        }
-        #attributeList ul li .attrEntry .verify #email_ver_but_send {
+      }
+      #attributeList ul li .attrEntry.validate input:invalid,
+      #attributeList ul li .attrEntry.validate input.invalid {
+        border: 1px solid #bb0000;
+      }
+      #attributeList ul li .attrEntry .verify {
+        margin-top: 2rem;
+        padding-bottom: 10px;
+        position: relative;
+      }
+      #attributeList ul li .attrEntry .verify #email_ver_but_send {
         width: 60%;
         height: 50px;
         background-color: #296ec6;
         color: white;
         border-radius: 0.5rem;
-        }
-        #attributeList ul li .attrEntry .verify #email_ver_but_send:hover {
+      }
+      #attributeList ul li .attrEntry .verify #email_ver_but_send:hover {
         background-color: #1662c7;
-        }
-        #attributeList ul li .attrEntry .verify #email_ver_but_verify {
-            width: inherit;
-            padding: 0px 20px;
-            height: 50px;
-            background-color: #296ec6;
-            color: white;
-            margin-right: 5px;
-            border-radius: 0.5rem;
-        }
-        #attributeList ul li .attrEntry .verify #email_ver_but_verify:hover {
+      }
+      #attributeList ul li .attrEntry .verify #email_ver_but_verify {
+        width: inherit;
+        padding: 0px 20px;
+        height: 50px;
+        background-color: #296ec6;
+        color: white;
+        margin-right: 5px;
+        border-radius: 0.5rem;
+      }
+      #attributeList ul li .attrEntry .verify #email_ver_but_verify:hover {
         background-color: #1662c7;
-        }
-        #attributeList ul li .attrEntry .verify #email_ver_but_resend {
-            width: inherit;
-            padding: 0px 20px;
-            border: 0;
-            font-size: 1em;
-            height: 50px;
-            right: 0;
-            bottom: -38px;
-            background-color: #296ec6;
-            color: white;
-            border-radius: 0.5rem;
-        }
-        #attributeList ul li .attrEntry .verify #email_ver_but_resend:hover {
+      }
+      #attributeList ul li .attrEntry .verify #email_ver_but_resend {
+        width: inherit;
+        padding: 0px 20px;
+        border: 0;
+        font-size: 1em;
+        height: 50px;
+        right: 0;
+        bottom: -38px;
+        background-color: #296ec6;
+        color: white;
+        border-radius: 0.5rem;
+      }
+      #attributeList ul li .attrEntry .verify #email_ver_but_resend:hover {
         background-color: #1662c7;
-        }
-        #attributeList ul li .attrEntry .verify #email_ver_but_edit {
+      }
+      #attributeList ul li .attrEntry .verify #email_ver_but_edit {
         border: none;
         color: white;
         background-color: #296ec6;
         width: 60%;
         height: 50px;
         border-radius: 0.5rem;
-        }
-        #attributeList ul li .attrEntry .verify #email_ver_but_edit:hover {
+      }
+      #attributeList ul li .attrEntry .verify #email_ver_but_edit:hover {
         background-color: #1662c7;
-        }
-        #attributeList ul li .attrEntry .verify #email_ver_input_label {
+      }
+      #attributeList ul li .attrEntry .verify #email_ver_input_label {
         display: none !important;
-        }
-        #attributeList ul li .attrEntry .itemLevel {
+      }
+      #attributeList ul li .attrEntry .itemLevel {
         display: none;
-        }
-        #attributeList ul li .attrEntry .dropdown_single {
-            height: 45px;
-            border-radius: 0.5rem;
-            width: 100%;
-            padding-left: 15px;
-            box-shadow: 0px 2px 10px rgba(0,0,150,0.15);
-        }
-        #attributeList ul li .attrEntry .dropdown_single option:first-child {
-            display: block !important;
-        }
-        #attributeList ul li .attrEntry div#cpiminternal_dateOfBirth.date {
+      }
+      #attributeList ul li .attrEntry .dropdown_single {
+        height: 45px;
+        border-radius: 0.5rem;
+        width: 100%;
+        padding-left: 15px;
+        box-shadow: 0px 2px 10px rgba(0, 0, 150, 0.15);
+      }
+      #attributeList ul li .attrEntry .dropdown_single option:first-child {
+        display: block !important;
+      }
+      #attributeList ul li .attrEntry div#cpiminternal_dateOfBirth.date {
         display: table;
         width: 100%;
-        }
-        #attributeList ul li .attrEntry div#cpiminternal_dateOfBirth.date select {
+      }
+      #attributeList ul li .attrEntry div#cpiminternal_dateOfBirth.date select {
         border-radius: 0.5rem;
         display: table-cell;
         height: 50px;
-        box-shadow: 0px 2px 10px rgba(0,0,150,0.15);
+        box-shadow: 0px 2px 10px rgba(0, 0, 150, 0.15);
         padding-left: 15px;
-        }
-        #attributeList ul li .attrEntry div#cpiminternal_dateOfBirth select#cpiminternal_dateOfBirth_day.day {
+      }
+      #attributeList
+        ul
+        li
+        .attrEntry
+        div#cpiminternal_dateOfBirth
+        select#cpiminternal_dateOfBirth_day.day {
         margin-right: 3%;
         width: 23%;
-        }
-        #attributeList ul li .attrEntry div#cpiminternal_dateOfBirth select#cpiminternal_dateOfBirth_month.month {
+      }
+      #attributeList
+        ul
+        li
+        .attrEntry
+        div#cpiminternal_dateOfBirth
+        select#cpiminternal_dateOfBirth_month.month {
         margin-right: 3%;
         width: 38%;
-        }
-        #attributeList ul li .attrEntry div#cpiminternal_dateOfBirth select#cpiminternal_dateOfBirth_year.year {
+      }
+      #attributeList
+        ul
+        li
+        .attrEntry
+        div#cpiminternal_dateOfBirth
+        select#cpiminternal_dateOfBirth_year.year {
         width: 33%;
-        }
-        #attributeList ul li .helpLink {
+      }
+      #attributeList ul li .helpLink {
         display: none;
-        }
-        #attributeVerification .buttons {
-            margin-top: 30px;
-        }
-        @media screen and (max-width: 100%) {
+      }
+      #attributeVerification .buttons {
+        margin-top: 30px;
+      }
+      @media screen and (max-width: 100%) {
         .row .panel-default .panel-body {
-            margin-top: 40px;
+          margin-top: 40px;
         }
         .row .panel-default .panel-body .branding img {
-            display: block;
-            height: 80px;
-            width: auto;
-            margin: 0 auto;
+          display: block;
+          height: 80px;
+          width: auto;
+          margin: 0 auto;
         }
         .row .panel-default .panel-body .branding h1 {
-            display: none;
+          display: none;
         }
         .row .panel-default .panel-body h3 {
-            font-size: 1.5em;
-            margin-top: 15px;
+          font-size: 1.5em;
+          margin-top: 15px;
         }
         #attributeVerification #attributeList ul li input {
-            width: 60%;
-            height: 40px;
-            border-radius: 0.5rem;
-            border: none;
-            text-indent: 10px;
-            box-shadow: 0 0px 40px 2px #dae1f7;
+          width: 60%;
+          height: 40px;
+          border-radius: 0.5rem;
+          border: none;
+          text-indent: 10px;
+          box-shadow: 0 0px 40px 2px #dae1f7;
         }
-        #attributeVerification #attributeList ul li input::-webkit-input-placeholder {
-            text-indent: 10px;
+        #attributeVerification
+          #attributeList
+          ul
+          li
+          input::-webkit-input-placeholder {
+          text-indent: 10px;
         }
         #attributeVerification #attributeList ul li #email {
-            width: 65%;
-            float: left;
-            position: relative;
-            z-index: 2;
+          width: 65%;
+          float: left;
+          position: relative;
+          z-index: 2;
         }
         #attributeVerification #attributeList ul li #email_ver_but_verify {
-            background: none;
-            border: 0;
-            color: #496ad8;
-            font-size: 1em;
-            position: relative;
-            right: 0;
-            top: 60px;
-            font-size: 1.1em;
-            width: auto;
-            z-index: 1;
-            height: 20px;
+          background: none;
+          border: 0;
+          color: #496ad8;
+          font-size: 1em;
+          position: relative;
+          right: 0;
+          top: 60px;
+          font-size: 1.1em;
+          width: auto;
+          z-index: 1;
+          height: 20px;
         }
         #attributeVerification #attributeList ul li #email_ver_input {
-            min-width: 50%;
-            width: 60%;
-            float: left;
+          min-width: 50%;
+          width: 60%;
+          float: left;
         }
         #attributeVerification #attributeList ul li #email_ver_but_resend {
-            top: 10px;
-            font-size: 1.1em;
-            height: 20px;
+          top: 10px;
+          font-size: 1.1em;
+          height: 20px;
         }
         #attributeVerification #attributeList ul li .attrEntry #email {
-            height: 40px;
+          height: 40px;
         }
-        #attributeVerification #attributeList ul li .attrEntry .verify #email_ver_but_send:after {
-            content: " Verify";
-            font-size: 1.1em;
-            font-style: bold;
-            margin-left: 40%;
+        #attributeVerification
+          #attributeList
+          ul
+          li
+          .attrEntry
+          .verify
+          #email_ver_but_send:after {
+          content: " Verify";
+          font-size: 1.1em;
+          font-style: bold;
+          margin-left: 40%;
         }
-        #attributeVerification #attributeList ul li .attrEntry .verify #email_ver_but_send {
-            height: 40px;
-            width: auto;
-            float: right;
-            overflow: hidden;
-            text-indent: -200px;
+        #attributeVerification
+          #attributeList
+          ul
+          li
+          .attrEntry
+          .verify
+          #email_ver_but_send {
+          height: 40px;
+          width: auto;
+          float: right;
+          overflow: hidden;
+          text-indent: -200px;
         }
-        #attributeVerification #attributeList ul li .attrEntry .verify #email_ver_but_edit {
-            margin-bottom: 15px;
-            border: none;
-            color: white;
-            background-color: #496ad8;
-            border-radius: 0.5rem;
-            font-size: 1em;
-            box-shadow: 0 0px 40px 2px #dae1f7;
-            width: 30%;
-            height: 40px;
-            overflow: hidden;
-            padding-top: 6px;
-            margin-left: 40%;
+        #attributeVerification
+          #attributeList
+          ul
+          li
+          .attrEntry
+          .verify
+          #email_ver_but_edit {
+          margin-bottom: 15px;
+          border: none;
+          color: white;
+          background-color: #496ad8;
+          border-radius: 0.5rem;
+          font-size: 1em;
+          box-shadow: 0 0px 40px 2px #dae1f7;
+          width: 30%;
+          height: 40px;
+          overflow: hidden;
+          padding-top: 6px;
+          margin-left: 40%;
         }
         #attributeVerification #attributeList ul li .attrEntry .verify:after {
-            content: " ";
-            display: block;
-            clear: both;
+          content: " ";
+          display: block;
+          clear: both;
         }
         #attributeVerification #attributeList #verifying_blurb {
-            margin-top: 15px;
+          margin-top: 15px;
         }
         #attributeVerification .buttons #continue {
-            height: 40px;
+          height: 40px;
         }
         #attributeVerification .buttons #cancel {
-            font-size: 1em;
-            left: 40%;
+          font-size: 1em;
+          left: 40%;
         }
-        }
-        .panel, .panel_layout, .panel_layout_row, body, html {
+      }
+      .panel,
+      .panel_layout,
+      .panel_layout_row,
+      body,
+      html {
         height: 100%;
-        }
-        .accountButton, .buttons button {
-            background-color: white;
-            -moz-border-radius: 0.5rem;
-            -webkit-border-radius: 0.5rem;
-            border-radius: 0.5rem;
-            width: 60%;
-            border: none;
-            font-size: 1em;
-            color: black;
-            cursor: pointer;
-            margin-top: 10px;
-            margin-right: auto;
-            white-space: normal;
-            box-shadow: 0px 2px 10px rgba(0,0,150,0.15);
-        }
-        .accountButton:hover, .buttons button:hover {
+      }
+      .accountButton,
+      .buttons button {
+        background-color: white;
+        -moz-border-radius: 0.5rem;
+        -webkit-border-radius: 0.5rem;
+        border-radius: 0.5rem;
+        width: 60%;
+        border: none;
+        font-size: 1em;
+        color: black;
+        cursor: pointer;
+        margin-top: 10px;
+        margin-right: auto;
+        white-space: normal;
+        box-shadow: 0px 2px 10px rgba(0, 0, 150, 0.15);
+      }
+      .accountButton:hover,
+      .buttons button:hover {
         border: none;
         -moz-box-shadow: none;
         -webkit-box-shadow: none;
         background-color: #1662c7;
         color: white !important;
+      }
+      /** Phone **/
+      @media only screen and (max-width: 600px) {
+        .container .row .panel-default {
+          border-radius: 0px;
         }
-        /** Phone **/
-        @media only screen and (max-width: 600px) {
-            .container .row .panel-default {
-                border-radius: 0px;
-            }
-        }
+      }
     </style>
     <!-- https://github.com/Azure-Samples/Azure-AD-B2C-page-templates/blob/master/ocean_blue/css/unified.css -->
-    <style> 
-        /** Unified Signup Signin Page Styles **/
-        .unified_container .row .panel-default {
-            padding: 40px 30px;
-            margin-top: auto;
-            margin-bottom: auto;
-            height: 100%;
-            background-color: white;
-        }
-        .unified_container .row .panel-default .panel-body {
+    <style>
+      /** Unified Signup Signin Page Styles **/
+      .unified_container .row .panel-default {
+        padding: 40px 30px;
+        margin-top: auto;
+        margin-bottom: auto;
+        height: 100%;
+        background-color: white;
+      }
+      .unified_container .row .panel-default .panel-body {
         max-width: 380px;
         width: auto;
         margin: 0 auto;
         padding: 0px;
-        }
-        .unified_container .row .panel-default .panel-body .companyName {
+      }
+      .unified_container .row .panel-default .panel-body .companyName {
         font-size: 1.5em;
         margin-bottom: 45px;
-        }
-        .unified_container .row .panel-default .panel-body .companyLogo {
+      }
+      .unified_container .row .panel-default .panel-body .companyLogo {
         display: block;
-        }
-        .unified_container .row .panel-default .panel-body img {
+      }
+      .unified_container .row .panel-default .panel-body img {
         max-width: 100%;
         width: auto;
         height: 70px;
         margin: 0 auto;
         display: block;
-        }
-        .unified_container .row .panel-default .panel-body h3 {
+      }
+      .unified_container .row .panel-default .panel-body h3 {
         font-size: 1.5em;
         display: none;
-        }
-        .unified_container .row .panel-default #api {
+      }
+      .unified_container .row .panel-default #api {
         display: table;
         margin: 0;
         width: 100%;
-        }
-        .unified_container .row .panel-default #api .intro {
+      }
+      .unified_container .row .panel-default #api .intro {
         display: block;
         text-align: left;
-        }
-        .unified_container .row .panel-default #api .intro h2 {
+      }
+      .unified_container .row .panel-default #api .intro h2 {
         font-size: 20px;
-        }
-        .unified_container .row .panel-default #api .divider {
+      }
+      .unified_container .row .panel-default #api .divider {
         display: none;
-        }
-        .unified_container .row .panel-default #api .localAccount {
+      }
+      .unified_container .row .panel-default #api .localAccount {
         top: 10px;
         width: 100%;
-        }
-        .unified_container .row .panel-default #api .localAccount .intro h2 {
+      }
+      .unified_container .row .panel-default #api .localAccount .intro h2 {
         font-size: 20px;
-        }
-        .unified_container .row .panel-default #api .localAccount .error {
+      }
+      .unified_container .row .panel-default #api .localAccount .error {
         color: #bb0000;
         text-align: left;
-        }
-        .unified_container .row .panel-default #api .localAccount .entry .buttons {
+      }
+      .unified_container
+        .row
+        .panel-default
+        #api
+        .localAccount
+        .entry
+        .buttons {
         margin: 15px 0 23px 0;
         text-align: left;
-        }
-        .unified_container .row .panel-default #api .localAccount .entry .buttons button {
+      }
+      .unified_container
+        .row
+        .panel-default
+        #api
+        .localAccount
+        .entry
+        .buttons
+        button {
         background-image: none;
         background-color: #296ec6;
         border: none;
@@ -632,75 +703,139 @@
         color: #fff;
         width: 63%;
         box-shadow: 0 0px 30px 0px #dae1f7;
-        }
-        .unified_container .row .panel-default #api .localAccount .entry .buttons button:hover {
+      }
+      .unified_container
+        .row
+        .panel-default
+        #api
+        .localAccount
+        .entry
+        .buttons
+        button:hover {
         -moz-box-shadow: none;
         -webkit-box-shadow: none;
         box-shadow: none;
         background-color: #1662c7;
         color: #fff;
-        }
-        .unified_container .row .panel-default #api .localAccount .entry .entry-item {
+      }
+      .unified_container
+        .row
+        .panel-default
+        #api
+        .localAccount
+        .entry
+        .entry-item {
         width: 100%;
         padding-top: 6px;
         padding-bottom: 6px;
         display: block;
-        }
-        .unified_container .row .panel-default #api .localAccount .entry .entry-item label {
+      }
+      .unified_container
+        .row
+        .panel-default
+        #api
+        .localAccount
+        .entry
+        .entry-item
+        label {
         display: none;
-        }
-        .unified_container .row .panel-default #api .localAccount .entry .entry-item #signInName,
-        .unified_container .row .panel-default #api .localAccount .entry .entry-item #logonIdentifier,
-        .unified_container .row .panel-default #api .localAccount .entry .entry-item #password {
+      }
+      .unified_container
+        .row
+        .panel-default
+        #api
+        .localAccount
+        .entry
+        .entry-item
+        #signInName,
+      .unified_container
+        .row
+        .panel-default
+        #api
+        .localAccount
+        .entry
+        .entry-item
+        #logonIdentifier,
+      .unified_container
+        .row
+        .panel-default
+        #api
+        .localAccount
+        .entry
+        .entry-item
+        #password {
         outline: none;
         background-color: #fff !important;
         background-image: none !important;
         border-radius: 0.5rem !important;
-        box-shadow: 0px 2px 10px rgba(0,0,150,0.15);
+        box-shadow: 0px 2px 10px rgba(0, 0, 150, 0.15);
         color: #555;
         display: inline-block;
         font-size: 1em;
         height: 50px;
         line-height: 1.42857143;
         padding: 6px 20px;
-        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s !important;
+        transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s !important;
         width: 100% !important;
-        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s !important;
-        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s !important;
-        }
-        .unified_container .row .panel-default #api .localAccount .entry .entry-item .password-label {
+        -o-transition: border-color ease-in-out 0.15s,
+          box-shadow ease-in-out 0.15s !important;
+        -webkit-transition: border-color ease-in-out 0.15s,
+          -webkit-box-shadow ease-in-out 0.15s !important;
+      }
+      .unified_container
+        .row
+        .panel-default
+        #api
+        .localAccount
+        .entry
+        .entry-item
+        .password-label {
         position: relative;
         text-align: left;
         top: 165px;
         height: 0px;
         left: 0px;
         width: 100%;
+      }
+      @keyframes slideInFromRight {
+        0% {
+          opacity: 0;
+          transform: translateX(50%);
         }
-        @keyframes slideInFromRight {
-            0% {
-                opacity: 0;
-                transform: translateX(50%);
-            }
 
-            100% {
-                opacity: 1;
-                transform: translateX(0);
-            }
+        100% {
+          opacity: 1;
+          transform: translateX(0);
         }
-        .unified_container .row .panel-default #api .localAccount .entry .entry-item .password-label #forgotPassword {
+      }
+      .unified_container
+        .row
+        .panel-default
+        #api
+        .localAccount
+        .entry
+        .entry-item
+        .password-label
+        #forgotPassword {
         position: absolute;
         bottom: 90px;
         clear: right;
         cursor: pointer;
         float: right;
         text-align: right;
-        }
-        .unified_container .row .panel-default #api .localAccount .create p {
+      }
+      .unified_container .row .panel-default #api .localAccount .create p {
         text-align: left;
         margin-top: -3rem;
         margin-bottom: 3rem;
-        }
-        .unified_container .row .panel-default #api .localAccount .create #createAccount {
+      }
+      .unified_container
+        .row
+        .panel-default
+        #api
+        .localAccount
+        .create
+        #createAccount {
         border-radius: 0.5rem;
         display: inline-block;
         font-size: 1em;
@@ -720,127 +855,223 @@
         margin-top: -3rem;
         cursor: pointer;
         animation: 0.5s ease-out 0s 1 slideInFromRight;
-        }
-        .unified_container .row .panel-default #api .social {
+      }
+      .unified_container .row .panel-default #api .social {
         /* display: table-footer-group;  TODO: Restore this once we add social logins to policy*/
         display: none;
         position: relative;
         top: 1px;
         width: auto;
-        }
-        .unified_container .row .panel-default #api .social .accountButton {
-            background-size: 10% 70%;
-            background-position-x: 3%;
-            background-position-y: 50%;
-            background-repeat: no-repeat;
-            display: block;
-            font-size: 16px;
-            height: 45px;
-            width: 100%;
-            margin-left: auto;
-        }
-        .unified_container .row .panel-default #api .social .accountButton:hover {
-            border-radius: 0.5rem;
-            -moz-box-shadow: none;
-            -webkit-box-shadow: none;
-            box-shadow: none;
-            color: white;
-        }
-        @media (max-width: 100%) {
+      }
+      .unified_container .row .panel-default #api .social .accountButton {
+        background-size: 10% 70%;
+        background-position-x: 3%;
+        background-position-y: 50%;
+        background-repeat: no-repeat;
+        display: block;
+        font-size: 16px;
+        height: 45px;
+        width: 100%;
+        margin-left: auto;
+      }
+      .unified_container .row .panel-default #api .social .accountButton:hover {
+        border-radius: 0.5rem;
+        -moz-box-shadow: none;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        color: white;
+      }
+      @media (max-width: 100%) {
         .unified_container .row .panel-default {
-            margin-top: auto;
-            margin-bottom: auto;
-            height: 550px;
+          margin-top: auto;
+          margin-bottom: auto;
+          height: 550px;
         }
         .unified_container .row .panel-default .panel-body {
-            /*padding: 15px 10px;*/
-            padding: 5rem 3rem;
-            margin-top: 20px;
+          /*padding: 15px 10px;*/
+          padding: 5rem 3rem;
+          margin-top: 20px;
         }
         .unified_container .row .panel-default .panel-body .companyName {
-            display: none;
+          display: none;
         }
         .unified_container .row .panel-default .panel-body .companyLogo {
-            display: block;
+          display: block;
         }
         .unified_container .row .panel-default .panel-body h3 {
-            display: block;
+          display: block;
         }
         .unified_container .row .panel-default .panel-body #api {
-            width: auto;
+          width: auto;
         }
         .unified_container .row .panel-default .panel-body #api .social {
-            top: 370px;
-            width: auto;
+          top: 370px;
+          width: auto;
         }
-        .unified_container .row .panel-default .panel-body #api .social .options .accountButton {
-            height: 40px;
+        .unified_container
+          .row
+          .panel-default
+          .panel-body
+          #api
+          .social
+          .options
+          .accountButton {
+          height: 40px;
         }
-        .unified_container .row .panel-default .panel-body #api .social .options #FacebookExchange {
-            background-size: 12px;
-            background-position: 50% 75%;
-            margin-bottom: 10px;
+        .unified_container
+          .row
+          .panel-default
+          .panel-body
+          #api
+          .social
+          .options
+          #FacebookExchange {
+          background-size: 12px;
+          background-position: 50% 75%;
+          margin-bottom: 10px;
         }
-        .unified_container .row .panel-default .panel-body #api .social .options #GoogleExchange {
-            background-size: 20px;
-            background-position: 50% 75%;
-            margin-bottom: 10px;
+        .unified_container
+          .row
+          .panel-default
+          .panel-body
+          #api
+          .social
+          .options
+          #GoogleExchange {
+          background-size: 20px;
+          background-position: 50% 75%;
+          margin-bottom: 10px;
         }
-        .unified_container .row .panel-default .panel-body #api .social .options #TwitterExchange {
-            background-size: 20px;
-            background-position-x: 56px;
-            background-position-y: 14px;
-            margin-bottom: 10px;
+        .unified_container
+          .row
+          .panel-default
+          .panel-body
+          #api
+          .social
+          .options
+          #TwitterExchange {
+          background-size: 20px;
+          background-position-x: 56px;
+          background-position-y: 14px;
+          margin-bottom: 10px;
         }
         .unified_container .row .panel-default .panel-body #api .localAccount {
-            top: 20px;
+          top: 20px;
         }
-        .unified_container .row .panel-default .panel-body #api .localAccount .entry .entry-item {
-            display: block;
-            width: 100%;
-            margin-bottom: 10px;
+        .unified_container
+          .row
+          .panel-default
+          .panel-body
+          #api
+          .localAccount
+          .entry
+          .entry-item {
+          display: block;
+          width: 100%;
+          margin-bottom: 10px;
         }
-        .unified_container .row .panel-default .panel-body #api .localAccount .entry .entry-item .password-label {
-            top: 145px;
+        .unified_container
+          .row
+          .panel-default
+          .panel-body
+          #api
+          .localAccount
+          .entry
+          .entry-item
+          .password-label {
+          top: 145px;
         }
-        .unified_container .row .panel-default .panel-body #api .localAccount .entry .entry-item #logonIdentifier,
-        .unified_container .row .panel-default #api .localAccount .entry .entry-item #signInName {
-            height: 40px;
+        .unified_container
+          .row
+          .panel-default
+          .panel-body
+          #api
+          .localAccount
+          .entry
+          .entry-item
+          #logonIdentifier,
+        .unified_container
+          .row
+          .panel-default
+          #api
+          .localAccount
+          .entry
+          .entry-item
+          #signInName {
+          height: 40px;
         }
-        .unified_container .row .panel-default .panel-body #api .localAccount .entry .entry-item #password {
-            height: 40px;
+        .unified_container
+          .row
+          .panel-default
+          .panel-body
+          #api
+          .localAccount
+          .entry
+          .entry-item
+          #password {
+          height: 40px;
         }
-        .unified_container .row .panel-default .panel-body #api .localAccount .entry .entry-item:nth-child(2) {
-            width: auto;
-            float: left;
+        .unified_container
+          .row
+          .panel-default
+          .panel-body
+          #api
+          .localAccount
+          .entry
+          .entry-item:nth-child(2) {
+          width: auto;
+          float: left;
         }
-        .unified_container .row .panel-default .panel-body #api .localAccount .entry .buttons #next {
-            width: auto;
-            text-indent: -4px;
-            height: 40px;
-            line-height: 0px;
-            position: relative;
-            bottom: 5px;
-            left: 8px;
+        .unified_container
+          .row
+          .panel-default
+          .panel-body
+          #api
+          .localAccount
+          .entry
+          .buttons
+          #next {
+          width: auto;
+          text-indent: -4px;
+          height: 40px;
+          line-height: 0px;
+          position: relative;
+          bottom: 5px;
+          left: 8px;
         }
-        }
+      }
     </style>
-</head>
-<body>
-    <div class="container  unified_container ">
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <img alt="Company Logo" class="companyLogo" src="https://^StorageAccountName^.blob.core.windows.net/b2cassets/logo.svg">
-                        <div id="api">
-                        </div>
-                        <a target="_blank" href="https://^StorageAccountName^.z22.web.core.windows.net/TermsOfService/">View Terms of Service</a>
-                    </div>
-                </div>
+  </head>
+  <body>
+    <div class="container unified_container">
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <img
+                alt="Company Logo"
+                class="companyLogo"
+                src="https://^StorageAccountName^.blob.core.windows.net/b2cassets/logo.svg"
+              />
+              <div id="api"></div>
+              <a
+                id="termsOfService"
+                target="_blank"
+                href="https://^StorageAccountName^.z22.web.core.windows.net/TermsOfService/"
+                >View Terms of Service</a
+              >
             </div>
+          </div>
         </div>
+      </div>
     </div>
-
-
-</body></html>
+  </body>
+  <script>
+    document.getElementById("signInName").tabIndex = 1;
+    document.getElementById("password").tabIndex = 2;
+    document.getElementById("forgotPassword").tabIndex = 3;
+    document.getElementById("next").tabIndex = 4;
+    document.getElementById("createAccount").tabIndex = 5;
+    document.getElementById("termsOfService").tabIndex = 6;
+  </script>
+</html>
