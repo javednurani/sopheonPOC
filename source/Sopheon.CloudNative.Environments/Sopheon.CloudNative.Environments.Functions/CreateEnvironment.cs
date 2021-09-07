@@ -12,7 +12,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
-using Sopheon.CloudNative.Environments.Domain.Data;
+using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Functions.Models;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 using HttpTriggerAttribute = Microsoft.Azure.Functions.Worker.HttpTriggerAttribute;
@@ -25,12 +25,12 @@ namespace Sopheon.CloudNative.Environments.Functions
       // this is due to unit test context not having a serializer configured, if we use the below line to configure serializer for production context
       // Ideally, we would use this line in Program.cs :: main() : .ConfigureFunctionsWorkerDefaults(worker => worker.UseNewtonsoftJson())
       private readonly static NewtonsoftJsonObjectSerializer _serializer = new NewtonsoftJsonObjectSerializer();
-      private readonly EnvironmentContext _environmentContext;
+      private readonly IEnvironmentRepository _environmentRepository;
       private IMapper _mapper;
 
-      public CreateEnvironment(EnvironmentContext environmentContext, IMapper mapper)
+      public CreateEnvironment(IEnvironmentRepository environmentRepository, IMapper mapper)
       {
-         _environmentContext = environmentContext;
+         _environmentRepository = environmentRepository;
          _mapper = mapper;
       }
 
@@ -82,15 +82,13 @@ namespace Sopheon.CloudNative.Environments.Functions
             }
             Environment environment = new Environment
             {
-               EnvironmentKey = Guid.NewGuid(),
                Name = data.Name,
                Owner = data.Owner,
                Description = data.Description ?? string.Empty
             };
 
             // TODO: environments that already exist with name?
-            _environmentContext.Environments.Add(environment);
-            await _environmentContext.SaveChangesAsync();
+            environment = await _environmentRepository.AddEnvironment(environment);
 
             HttpResponseData createdResponse = req.CreateResponse();
             await createdResponse.WriteAsJsonAsync(_mapper.Map<Environment, EnvironmentDto>(environment), _serializer, HttpStatusCode.Created);

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
 using Sopheon.CloudNative.Environments.Domain.Data;
+using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Functions.Models;
 using Sopheon.CloudNative.Environments.Functions.UnitTests.TestHelpers;
 using System;
@@ -27,8 +28,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       Mock<FunctionContext> _context;
       Mock<HttpRequestData> _request;
 
-      Mock<EnvironmentContext> _mockDbContext;
-      Mock<DbSet<Environment>> _mockDbSetEnvironments;
+      Mock<IEnvironmentRepository> _mockEnvironmentRepository;
 
       IMapper _mapper;
 
@@ -59,14 +59,12 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.Created, result.StatusCode);
 
          // EF
-         _mockDbSetEnvironments.Verify(m => m.Add(It.Is<Environment>(x =>
+         _mockEnvironmentRepository.Verify(m => m.AddEnvironment(It.Is<Environment>(x =>
             x.Name == environmentRequest.Name &&
             x.Owner == environmentRequest.Owner &&
             x.Description == environmentRequest.Description &&
-            x.EnvironmentKey != Guid.Empty
+            x.EnvironmentKey == Guid.Empty
          )), Times.Once());
-
-         _mockDbContext.Verify(m => m.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once());
 
          // HTTP response
          string responseBody = await GetResponseBody(result);
@@ -75,7 +73,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(environmentRequest.Name, environmentResponse.Name);
          Assert.Equal(environmentRequest.Owner, environmentResponse.Owner);
          Assert.Equal(environmentRequest.Description, environmentResponse.Description);
-         Assert.NotEqual(Guid.Empty, environmentResponse.EnvironmentKey);
       }
 
       [Fact]
@@ -171,10 +168,11 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
             return response.Object;
          });
 
-         // DBContext mock
-         _mockDbSetEnvironments = new Mock<DbSet<Environment>>();
-         _mockDbContext = new Mock<EnvironmentContext>();
-         _mockDbContext.Setup(m => m.Environments).Returns(_mockDbSetEnvironments.Object);
+         // EnvironmentRepository Mock
+         _mockEnvironmentRepository = new Mock<IEnvironmentRepository>();
+         _mockEnvironmentRepository.Setup(m => m.AddEnvironment(It.IsAny<Environment>())).Returns((Environment e) => {
+            return Task.FromResult(e);
+         });
 
          // AutoMapper config
          MapperConfiguration config = new MapperConfiguration(cfg =>
@@ -184,7 +182,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          _mapper = config.CreateMapper();
 
          // create Sut
-         Sut = new CreateEnvironment(_mockDbContext.Object, _mapper);
+         Sut = new CreateEnvironment(_mockEnvironmentRepository.Object, _mapper);
       }
 
       private async Task<string> GetResponseBody(HttpResponseData response)
