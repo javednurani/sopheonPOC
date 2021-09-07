@@ -7,14 +7,16 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
 using Sopheon.CloudNative.Environments.Domain.Data;
-using Sopheon.CloudNative.Environments.Domain.Models;
 using Sopheon.CloudNative.Environments.Functions.Models;
 using Sopheon.CloudNative.Environments.Functions.UnitTests.TestHelpers;
+using System;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
+using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
 namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 {
@@ -39,23 +41,41 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       public async void Run_HappyPath_ReturnsCreated()
       {
          // Arrange
-         SetRequestBody(
-            new EnvironmentDto
-            {
-               Name = SomeRandom.String(),
-               Owner = SomeRandom.Guid(),
-               Description = SomeRandom.String()
-            });
+         EnvironmentDto environmentRequest = new EnvironmentDto
+         {
+            Name = SomeRandom.String(),
+            Owner = SomeRandom.Guid(),
+            Description = SomeRandom.String()
+         };
+
+         SetRequestBody(environmentRequest);
 
          // Act
          HttpResponseData result = await Sut.Run(_request.Object, _context.Object);
+         result.Body.Position = 0;
 
          // Assert
          Assert.NotNull(result);
-         Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
+         Assert.Equal(HttpStatusCode.Created, result.StatusCode);
 
+         // EF
+         _mockDbSetEnvironments.Verify(m => m.Add(It.Is<Environment>(x =>
+            x.Name == environmentRequest.Name &&
+            x.Owner == environmentRequest.Owner &&
+            x.Description == environmentRequest.Description &&
+            x.EnvironmentKey != Guid.Empty
+         )), Times.Once());
+
+         _mockDbContext.Verify(m => m.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once());
+
+         // HTTP response
          string responseBody = await GetResponseBody(result);
-         Assert.Equal($"{nameof(EnvironmentDto.Name)} field is required.", responseBody);
+         EnvironmentDto environmentResponse = JsonConvert.DeserializeObject<EnvironmentDto>(responseBody);
+
+         Assert.Equal(environmentRequest.Name, environmentResponse.Name);
+         Assert.Equal(environmentRequest.Owner, environmentResponse.Owner);
+         Assert.Equal(environmentRequest.Description, environmentResponse.Description);
+         Assert.NotEqual(Guid.Empty, environmentResponse.EnvironmentKey);
       }
 
       [Fact]
@@ -141,17 +161,13 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          // HttpRequestData
          _request = new Mock<HttpRequestData>(_context.Object);
-         _request.CallBase = true;
 
          _request.Setup(r => r.CreateResponse()).Returns(() =>
          {
             Mock<HttpResponseData> response = new Mock<HttpResponseData>(_context.Object);
-            response.CallBase = true;
             response.SetupProperty(r => r.Headers, new HttpHeadersCollection());
             response.SetupProperty(r => r.StatusCode);
             response.SetupProperty(r => r.Body, new MemoryStream());
-            //response.Setup(r => r.WriteStringAsync(It.IsAny<string>(), null)).Returns(() => Task.FromResult(typeof(void)));
-            //response.Setup(r => r.WriteStringAsync(It.IsAny<string>(), null)).Callback<string>(s => response.Object.Body.Write(Encoding.ASCII.GetBytes(s)));
             return response.Object;
          });
 
