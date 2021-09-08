@@ -28,7 +28,7 @@ namespace Sopheon.CloudNative.Environments.Functions
       // Ideally, we would use this line in Program.cs :: main() : .ConfigureFunctionsWorkerDefaults(worker => worker.UseNewtonsoftJson())
       private readonly static NewtonsoftJsonObjectSerializer _serializer = new NewtonsoftJsonObjectSerializer();
       private readonly IEnvironmentRepository _environmentRepository;
-      private IMapper _mapper;
+      private readonly IMapper _mapper;
       private readonly IValidator<EnvironmentDto> _validator;
       private readonly HttpResponseDataBuilder _responseBuilder;
     
