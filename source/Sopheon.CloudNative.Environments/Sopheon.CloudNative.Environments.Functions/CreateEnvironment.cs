@@ -109,9 +109,8 @@ namespace Sopheon.CloudNative.Environments.Functions
          }
          catch (Exception ex)
          {
-            // TODO: should this be a 400 or 500?  The try block encompasses database and network I/O that can throw exceptions
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            HttpResponseData genericExceptionResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+            HttpResponseData genericExceptionResponse = req.CreateResponse(HttpStatusCode.InternalServerError);
             await genericExceptionResponse.WriteStringAsync("Something went wrong. Please try again later.");
             return genericExceptionResponse;
          }
