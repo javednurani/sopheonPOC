@@ -4,6 +4,8 @@ using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using Azure.Core.Serialization;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
@@ -25,12 +27,14 @@ namespace Sopheon.CloudNative.Environments.Functions
       // Ideally, we would use this line in Program.cs :: main() : .ConfigureFunctionsWorkerDefaults(worker => worker.UseNewtonsoftJson())
       private readonly static NewtonsoftJsonObjectSerializer _serializer = new NewtonsoftJsonObjectSerializer();
       private readonly IEnvironmentRepository _environmentRepository;
-      private IMapper _mapper;
+      private readonly IMapper _mapper;
+      private readonly IValidator<EnvironmentDto> _validator;
 
-      public CreateEnvironment(IEnvironmentRepository environmentRepository, IMapper mapper)
+      public CreateEnvironment(IEnvironmentRepository environmentRepository, IMapper mapper, IValidator<EnvironmentDto> validator)
       {
          _environmentRepository = environmentRepository;
          _mapper = mapper;
+         _validator = validator;
       }
 
       [Function(nameof(CreateEnvironment))]
@@ -53,6 +57,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          bodyType: typeof(string),
          Summary = "400 Bad Request response",
          Description = "Bad Request, 400 response with error message in response body")]
+
       public async Task<HttpResponseData> Run(
           [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "environments")] HttpRequestData req,
           FunctionContext context)
@@ -63,22 +68,17 @@ namespace Sopheon.CloudNative.Environments.Functions
          try
          {
             EnvironmentDto data = JsonConvert.DeserializeObject<EnvironmentDto>(requestBody);
-            if (string.IsNullOrEmpty(data.Name))
-            {
 
-               logger.LogInformation($"Request missing required {nameof(data.Name)} field");
-
-               HttpResponseData missingNameResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-               await missingNameResponse.WriteStringAsync($"{nameof(data.Name)} field is required.");
-               return missingNameResponse;
-            }
-            if (data.Owner == Guid.Empty)
+            ValidationResult validationResult = await _validator.ValidateAsync(data);
+            if(!validationResult.IsValid)
             {
-               logger.LogInformation($"Request missing required {nameof(data.Owner)} field");
-               HttpResponseData missingOwnerResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-               await missingOwnerResponse.WriteStringAsync($"{nameof(data.Owner)} field is required.");
-               return missingOwnerResponse;
+               string validationFailureMessage = validationResult.ToString();
+               logger.LogInformation(validationFailureMessage);
+               HttpResponseData response = req.CreateResponse(HttpStatusCode.BadRequest);
+               await response.WriteStringAsync(validationFailureMessage);
+               return response;
             }
+
             Environment environment = new Environment
             {
                Name = data.Name,
