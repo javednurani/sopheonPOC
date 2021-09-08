@@ -4,16 +4,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using Sopheon.CloudNative.Environments.Domain.Data;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks; 
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Azure.Security.KeyVault.Secrets;
 using Azure.Identity;
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
+using Microsoft.Azure.Functions.Worker.Extensions.OpenApi.Extensions;
+using Sopheon.CloudNative.Environments.Domain.Repositories;
 
-namespace Sopheon.CloudNative.Environments.Functions.Get
+namespace Sopheon.CloudNative.Environments.Functions
 {
    class Program
    {
@@ -37,7 +36,11 @@ namespace Sopheon.CloudNative.Environments.Functions.Get
                   builder.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
                }
             })
+            // Cloud-1484, we are defining ObjectSerializer to be used, per Function class
+            // this is due to unit test context not having a serializer configured, if we use the below line to configure serializer for production context
+            //.ConfigureFunctionsWorkerDefaults(worker => worker.UseNewtonsoftJson())
             .ConfigureFunctionsWorkerDefaults()
+            .ConfigureOpenApi()
             .ConfigureServices((hostContext, services) =>
             {
                // Add Logging
@@ -49,6 +52,8 @@ namespace Sopheon.CloudNative.Environments.Functions.Get
                // Add Custom Services
                services.AddDbContext<EnvironmentContext>(options => options.UseSqlServer(hostContext.Configuration["EnvironmentsSqlConnectionString"]));
                services.AddAutoMapper(typeof(Program));
+
+               services.AddScoped<IEnvironmentRepository, EFEnvironmentRepository>();
             })
             .Build();
 

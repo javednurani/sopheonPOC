@@ -10,9 +10,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using Sopheon.CloudNative.Environments.Domain.Models;
 using AutoMapper;
-using Sopheon.CloudNative.Environments.Functions.Get.Models;
+using Sopheon.CloudNative.Environments.Functions.Models;
 
-namespace Sopheon.CloudNative.Environments.Functions.Get
+namespace Sopheon.CloudNative.Environments.Functions
 {
    public class GetEnvironments
    {
@@ -36,7 +36,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Get
          List<Environment> environments = await _environmentContext.Environments.ToListAsync();
 
          HttpResponseData okResponse = req.CreateResponse(System.Net.HttpStatusCode.OK);
-         await okResponse.WriteAsJsonAsync(_mapper.Map<List<Environment>, List<EnvironmentDTO>>(environments));
+         await okResponse.WriteAsJsonAsync(_mapper.Map<List<Environment>, List<EnvironmentDto>>(environments));
          return okResponse;
       }
    }
