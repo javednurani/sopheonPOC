@@ -34,12 +34,12 @@ namespace Sopheon.CloudNative.Environments.Functions
               tags: new[] { "Environments" },
               Summary = "Get all Environments",
               Description = "Get all Environments that are not deleted",
-              Visibility = OpenApiVisibilityType.Important)]      
+              Visibility = OpenApiVisibilityType.Important)]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.Created,
               contentType: "application/json",
-              bodyType: typeof(List<EnvironmentDto>),
+              bodyType: typeof(IEnumerable<EnvironmentDto>),
               Summary = "200 OK response",
-              Description = "OK, 200 response with List of Environments in response body")]      
+              Description = "OK, 200 response with List of Environments in response body")]
       public async Task<HttpResponseData> Run(
           [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "environments")] HttpRequestData req,
           FunctionContext context)
@@ -47,11 +47,10 @@ namespace Sopheon.CloudNative.Environments.Functions
          var logger = context.GetLogger(nameof(GetEnvironments));
          try
          {
-            List<Environment> environments = await _environmentRepository.GetEnvironments();
-            environments = environments.Where(env => env.IsDeleted == false).ToList(); // Filter out environments scheduled for deletion
+            IEnumerable<Environment> environments = await _environmentRepository.GetEnvironments();
 
             HttpResponseData response = req.CreateResponse();
-            await response.WriteAsJsonAsync(_mapper.Map<List<Environment>, List<EnvironmentDto>>(environments), _serializer, HttpStatusCode.OK);
+            await response.WriteAsJsonAsync(_mapper.Map<IEnumerable<Environment>, IEnumerable<EnvironmentDto>>(environments), _serializer, HttpStatusCode.OK);
             return response;
          }
          catch (Exception ex)

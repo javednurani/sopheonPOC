@@ -7,6 +7,7 @@ using Moq;
 using Newtonsoft.Json;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Functions.Models;
+using Sopheon.CloudNative.Environments.Functions.UnitTests.TestHelpers;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -36,25 +37,26 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       public async void Run_HappyPath_EnvironmentsReturned()
       {
          // Arrange
-         _mockEnvironmentRepository.Setup(m => m.GetEnvironments()).Returns(() => {
-            List<Environment> environments = new List<Environment>
+         _mockEnvironmentRepository.Setup(m => m.GetEnvironments()).Returns(() =>
+         {
+            IEnumerable<Environment> environments = new List<Environment>
             {
                new Environment
                {
-                  Name = "NotDeleted",
-                  Owner = new System.Guid(),
-                  EnvironmentKey = new System.Guid(),
-                  Description = "",
+                  Name = SomeRandom.String(),
+                  Owner = SomeRandom.Guid(),
+                  EnvironmentKey = SomeRandom.Guid(),
+                  Description = SomeRandom.String(),
                   IsDeleted = false,
                },
                new Environment
                {
-                  Name = "Deleted",
-                  Owner = new System.Guid(),
-                  EnvironmentKey = new System.Guid(),
-                  Description = "",
-                  IsDeleted = true,
-               }
+                  Name = SomeRandom.String(),
+                  Owner = SomeRandom.Guid(),
+                  EnvironmentKey = SomeRandom.Guid(),
+                  Description = SomeRandom.String(),
+                  IsDeleted = false,
+               },
             };
             return Task.FromResult(environments);
          });
@@ -73,25 +75,16 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          string responseBody = await GetResponseBody(result);
          List<EnvironmentDto> environmentResponse = JsonConvert.DeserializeObject<List<EnvironmentDto>>(responseBody);
 
-         Assert.Single(environmentResponse);
+         Assert.NotEmpty(environmentResponse);
       }
 
       [Fact]
-      public async void Run_HappyPath_NoDeletedReturned()
+      public async void Run_HappyPath_NoneReturned()
       {
          // Arrange
-         _mockEnvironmentRepository.Setup(m => m.GetEnvironments()).Returns(() => {
-            List<Environment> environments = new List<Environment>
-            {
-               new Environment
-               {
-                  Name = "Deleted",
-                  Owner = new System.Guid(),
-                  EnvironmentKey = new System.Guid(),
-                  Description = "",
-                  IsDeleted = true,
-               }
-            };
+         _mockEnvironmentRepository.Setup(m => m.GetEnvironments()).Returns(() =>
+         {
+            IEnumerable<Environment> environments = new List<Environment>();
             return Task.FromResult(environments);
          });
 
