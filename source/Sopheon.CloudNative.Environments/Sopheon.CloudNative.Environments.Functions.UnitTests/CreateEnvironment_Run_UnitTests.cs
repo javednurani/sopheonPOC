@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
+using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Functions.Models;
 using Sopheon.CloudNative.Environments.Functions.UnitTests.TestHelpers;
 using System;
@@ -26,6 +27,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       Mock<HttpRequestData> _request;
 
       Mock<IEnvironmentRepository> _mockEnvironmentRepository;
+      HttpResponseDataBuilder _responseBuilder;
 
       IMapper _mapper;
 
@@ -167,7 +169,8 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          // EnvironmentRepository Mock
          _mockEnvironmentRepository = new Mock<IEnvironmentRepository>();
-         _mockEnvironmentRepository.Setup(m => m.AddEnvironment(It.IsAny<Environment>())).Returns((Environment e) => {
+         _mockEnvironmentRepository.Setup(m => m.AddEnvironment(It.IsAny<Environment>())).Returns((Environment e) =>
+         {
             return Task.FromResult(e);
          });
 
@@ -178,8 +181,10 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          });
          _mapper = config.CreateMapper();
 
+         _responseBuilder = new HttpResponseDataBuilder();
+
          // create Sut
-         Sut = new CreateEnvironment(_mockEnvironmentRepository.Object, _mapper);
+         Sut = new CreateEnvironment(_mockEnvironmentRepository.Object, _mapper, _responseBuilder);
       }
 
       private async Task<string> GetResponseBody(HttpResponseData response)
@@ -196,5 +201,18 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          _request.Setup(r => r.Body).Returns(bodyStream);
       }
+   }
+
+   // Since HttpResponseData is an abstract class, new instances 
+   public class FakeHttpResponseData : HttpResponseData
+   {
+      public FakeHttpResponseData(FunctionContext functionContext) : base(functionContext)
+      {
+      }
+
+      public override HttpStatusCode StatusCode { get; set; }
+      public override HttpHeadersCollection Headers { get; set; }
+      public override Stream Body { get; set; }
+      public override HttpCookies Cookies { get; }
    }
 }

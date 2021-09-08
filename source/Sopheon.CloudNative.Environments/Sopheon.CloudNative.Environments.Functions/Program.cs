@@ -11,6 +11,7 @@ using Azure.Identity;
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Microsoft.Azure.Functions.Worker.Extensions.OpenApi.Extensions;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
+using Sopheon.CloudNative.Environments.Functions.Helpers;
 
 namespace Sopheon.CloudNative.Environments.Functions
 {
@@ -54,6 +55,7 @@ namespace Sopheon.CloudNative.Environments.Functions
                services.AddAutoMapper(typeof(Program));
 
                services.AddScoped<IEnvironmentRepository, EFEnvironmentRepository>();
+               services.AddScoped<HttpResponseDataBuilder>();
             })
             .Build();
 

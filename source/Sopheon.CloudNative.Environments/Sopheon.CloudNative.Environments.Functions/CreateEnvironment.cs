@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
+using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Functions.Models;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 using HttpTriggerAttribute = Microsoft.Azure.Functions.Worker.HttpTriggerAttribute;
@@ -26,11 +27,13 @@ namespace Sopheon.CloudNative.Environments.Functions
       private readonly static NewtonsoftJsonObjectSerializer _serializer = new NewtonsoftJsonObjectSerializer();
       private readonly IEnvironmentRepository _environmentRepository;
       private IMapper _mapper;
+      private readonly HttpResponseDataBuilder _responseBuilder;
 
-      public CreateEnvironment(IEnvironmentRepository environmentRepository, IMapper mapper)
+      public CreateEnvironment(IEnvironmentRepository environmentRepository, IMapper mapper, HttpResponseDataBuilder responseBuilder)
       {
          _environmentRepository = environmentRepository;
          _mapper = mapper;
+         _responseBuilder = responseBuilder;
       }
 
       [Function(nameof(CreateEnvironment))]
@@ -65,19 +68,13 @@ namespace Sopheon.CloudNative.Environments.Functions
             EnvironmentDto data = JsonConvert.DeserializeObject<EnvironmentDto>(requestBody);
             if (string.IsNullOrEmpty(data.Name))
             {
-
                logger.LogInformation($"Request missing required {nameof(data.Name)} field");
-
-               HttpResponseData missingNameResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-               await missingNameResponse.WriteStringAsync($"{nameof(data.Name)} field is required.");
-               return missingNameResponse;
+               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, $"{nameof(data.Name)} field is required.");
             }
             if (data.Owner == Guid.Empty)
             {
                logger.LogInformation($"Request missing required {nameof(data.Owner)} field");
-               HttpResponseData missingOwnerResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-               await missingOwnerResponse.WriteStringAsync($"{nameof(data.Owner)} field is required.");
-               return missingOwnerResponse;
+               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, $"{nameof(data.Owner)} field is required.");
             }
             Environment environment = new Environment
             {
@@ -88,32 +85,23 @@ namespace Sopheon.CloudNative.Environments.Functions
 
             // TODO: environments that already exist with name?
             environment = await _environmentRepository.AddEnvironment(environment);
-
-            HttpResponseData createdResponse = req.CreateResponse();
-            await createdResponse.WriteAsJsonAsync(_mapper.Map<Environment, EnvironmentDto>(environment), _serializer, HttpStatusCode.Created);
-            return createdResponse;
+            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.Created, _mapper.Map<Environment, EnvironmentDto>(environment), _serializer);
          }
          catch (JsonReaderException ex)
          {
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            HttpResponseData deserializeExceptionResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-            await deserializeExceptionResponse.WriteStringAsync("Request body was invalid.");
-            return deserializeExceptionResponse;
+            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, "Request body was invalid.");
          }
          catch (JsonSerializationException ex)
          {
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            HttpResponseData deserializeExceptionResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-            await deserializeExceptionResponse.WriteStringAsync($"Request body was invalid. Is {nameof(EnvironmentDto.Owner)} field a valid GUID?");
-            return deserializeExceptionResponse;
+            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, $"Request body was invalid. Is {nameof(EnvironmentDto.Owner)} field a valid GUID?");
          }
          catch (Exception ex)
          {
             // TODO: should this be a 400 or 500?  The try block encompasses database and network I/O that can throw exceptions
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            HttpResponseData genericExceptionResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-            await genericExceptionResponse.WriteStringAsync("Something went wrong. Please try again later.");
-            return genericExceptionResponse;
+            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, "Something went wrong. Please try again later.");
          }
       }
    }
