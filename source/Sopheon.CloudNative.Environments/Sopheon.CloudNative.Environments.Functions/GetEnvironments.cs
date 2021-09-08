@@ -48,7 +48,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          try
          {
             List<Environment> environments = await _environmentRepository.GetEnvironments();
-            environments = environments.Where(env => env.IsDeleted == false).ToList();
+            environments = environments.Where(env => env.IsDeleted == false).ToList(); // Filter out environments scheduled for deletion
 
             HttpResponseData response = req.CreateResponse();
             await response.WriteAsJsonAsync(_mapper.Map<List<Environment>, List<EnvironmentDto>>(environments), _serializer, HttpStatusCode.OK);
