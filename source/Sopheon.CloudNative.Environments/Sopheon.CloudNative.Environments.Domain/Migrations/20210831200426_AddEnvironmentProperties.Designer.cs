@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sopheon.CloudNative.Environments.Domain.Data;
 
 namespace Sopheon.CloudNative.Environments.Domain.Migrations
 {
     [DbContext(typeof(EnvironmentContext))]
-    partial class EnvironmentContextModelSnapshot : ModelSnapshot
+    [Migration("20210831200426_AddEnvironmentProperties")]
+    partial class AddEnvironmentProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: db-dev
+    ports:
+      - "1433:1433"
+    expose:
+      - 1433
+    healthcheck:
+        test: [ "CMD", "/opt/mssql-tools/bin/sqlcmd", "-U", "sa", "-P", "${SA_PASSWORD}", "-Q", "select 1" ]
+        interval: 1s
+        retries: 20
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD
+    volumes:
+      - ./dockervolumes/mssql-dev:/var/opt/mssql/data

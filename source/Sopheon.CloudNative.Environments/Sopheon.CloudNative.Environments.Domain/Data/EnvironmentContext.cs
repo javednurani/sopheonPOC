@@ -1,15 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
 
 namespace Sopheon.CloudNative.Environments.Domain.Data
 {
-    class EnvironmentContext : DbContext
+    public class EnvironmentContext : DbContext
     {
         public EnvironmentContext()
         {
@@ -24,7 +19,7 @@ namespace Sopheon.CloudNative.Environments.Domain.Data
                 optionsBuilder.UseSqlServer();
             }
         }
-        public DbSet<Environment> Environments
+        public virtual DbSet<Environment> Environments
         {
             get;
             set;
