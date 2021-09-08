@@ -1,35 +1,21 @@
 import { AccountInfo, RedirectRequest } from '@azure/msal-browser';
-import { StringDict } from '@azure/msal-common';
 
-import { azureSettings, getAuthorityDomain } from '../settings/azureSettings';
+import { azureSettings, getAuthorityDomain, getAuthorityUrl } from '../settings/azureSettings';
 import { randomMsalAccount, randomString, testMsalInstance } from '../testUtils';
 import { getAuthLandingRedirectRequest, getMsalAccount } from './authHelpers';
 
 describe('Test getAuthLandingRedirectRequest', () => {
-  it('extraQueryParams undefined, RedirectRequest returned as expected', () => {
+  it('adB2cPolicyName passed in, RedirectRequest returned as expected', () => {
     // Arrange
-    const extraQueryParams: StringDict | undefined = undefined;
-
+    const adB2cPolicyName = randomString();
+    const authorityUrl = getAuthorityUrl(adB2cPolicyName);
     // Act
-    const result: RedirectRequest = getAuthLandingRedirectRequest(extraQueryParams);
+    const result: RedirectRequest = getAuthLandingRedirectRequest(adB2cPolicyName);
 
     // Assert
+    expect(result.authority).toBe(authorityUrl);
+    expect(result.redirectUri).toEqual(azureSettings.SPA_Root_URL);
     expect(result.extraQueryParameters).toBeUndefined();
-    expect(result.redirectUri).toEqual(azureSettings.SPA_Root_URL);
-  });
-  it('extraQueryParams passed in, RedirectRequest returned as expected', () => {
-    // Arrange
-    const extraQueryParams: StringDict | undefined = {
-      randomKey1: randomString(),
-      randomKey2: randomString()
-    };
-
-    // Act
-    const result: RedirectRequest = getAuthLandingRedirectRequest(extraQueryParams);
-
-    // Assert
-    expect(result.extraQueryParameters).toBe(extraQueryParams);
-    expect(result.redirectUri).toEqual(azureSettings.SPA_Root_URL);
   });
 });
 

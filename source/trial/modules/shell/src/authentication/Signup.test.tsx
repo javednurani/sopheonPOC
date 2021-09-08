@@ -97,7 +97,7 @@ describe('Signup when NOT logged in', () => {
     // Assert
     const authLanding = sutWrapper.find(AuthLanding);
     expect(authLanding).toHaveLength(1);
-    expect(authLanding.prop('queryParams')).toHaveProperty('mode', azureSettings.AD_B2C_Sopheon_Mode_Signup);
+    expect(authLanding.prop('adB2cPolicyName')).toBe(azureSettings.AD_B2C_SignUp_Policy);
     expect(authLanding.prop('spinnerMessageResourceKey')).toBe(signupSpinnerResourceKey);
   });
 });

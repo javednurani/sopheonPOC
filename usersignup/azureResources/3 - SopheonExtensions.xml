@@ -63,8 +63,10 @@
       <ClaimType Id="extension_ProfileEditDate">
         <DataType>dateTime</DataType>
       </ClaimType>
-      <ClaimType Id="sopheonMode">
-        <DataType>string</DataType>
+      <ClaimType Id="isForgotPassword">
+        <DisplayName>isForgotPassword</DisplayName>
+        <DataType>boolean</DataType>
+        <AdminHelpText>Whether the user has selected Forgot your Password</AdminHelpText>
       </ClaimType>
     </ClaimsSchema>
     <Predicates>
@@ -101,6 +103,7 @@
     <ContentDefinitions>
       <ContentDefinition Id="api.signuporsignin">
         <LoadUri>https://^StorageAccountName^.blob.core.windows.net/b2cassets/LoginCustom.html</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:unifiedssp:2.1.5</DataUri>
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.signuporsignin.en" />
         </LocalizedResourcesReferences>
@@ -110,10 +113,18 @@
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.localaccountsignup.en" />
         </LocalizedResourcesReferences>
       </ContentDefinition>
+      <ContentDefinition Id="api.localaccountpasswordreset">
+        <LoadUri>https://^StorageAccountName^.blob.core.windows.net/b2cassets/PasswordReset.html</LoadUri>
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.7</DataUri>
+        <Metadata>
+          <Item Key="DisplayName">Local account change password page</Item>
+        </Metadata>
+      </ContentDefinition>
       <ContentDefinition Id="api.selfasserted.consent">
         <LoadUri>https://^StorageAccountName^.blob.core.windows.net/b2cassets/consentPage.html</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
-        <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.1.0</DataUri>
         <Metadata>
           <Item Key="DisplayName">Consent</Item>
         </Metadata>
@@ -122,7 +133,7 @@
         </LocalizedResourcesReferences>
       </ContentDefinition>
       <ContentDefinition Id="api.selfasserted.profileupdate">
-        <LoadUri>https://^StorageAccountName^.blob.core.windows.net/b2cassets/selfAssertedTemplate.html</LoadUri>
+        <LoadUri>https://^StorageAccountName^.blob.core.windows.net/b2cassets/ProfileUpdate.html</LoadUri>
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.profileupdate.en" />
         </LocalizedResourcesReferences>
@@ -130,7 +141,7 @@
       <ContentDefinition Id="api.selfasserted.passwordchange">
         <LoadUri>~/tenant/templates/AzureBlue/selfAsserted.cshtml</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
-        <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.1.0</DataUri>
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.passwordchange.en" />
         </LocalizedResourcesReferences>
@@ -142,25 +153,19 @@
       </SupportedLanguages>
       <LocalizedResources Id="api.signuporsignin.en">
         <LocalizedStrings>
-          <LocalizedString ElementType="UxElement" StringId="logonIdentifier_email">Email Address</LocalizedString>
-          <LocalizedString ElementType="UxElement" StringId="requiredField_email">Please enter your email</LocalizedString>
-          <LocalizedString ElementType="UxElement" StringId="logonIdentifier_username">Username</LocalizedString>
-          <LocalizedString ElementType="UxElement" StringId="password">Password</LocalizedString>
-          <LocalizedString ElementType="UxElement" StringId="createaccount_link">Sign up now</LocalizedString>
-          <LocalizedString ElementType="UxElement" StringId="requiredField_username">Please enter your user name</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="signInName" StringId="DisplayName">Email Address</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="password" StringId="DisplayName">Password</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="local_intro_generic">Sign in with your existing account</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="createaccount_one_link">Sign up now</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="invalid_generic">Please enter a valid {0}</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="requiredField_generic">Please enter your {0}</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="createaccount_intro">Don't have an account?</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="forgotpassword_link">Forgot your password?</LocalizedString>
-          <LocalizedString ElementType="UxElement" StringId="divider_title">OR</LocalizedString>
-          <LocalizedString ElementType="UxElement" StringId="cancel_message">The user has forgotten their password</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="button_signin">Sign in</LocalizedString>
-          <LocalizedString ElementType="UxElement" StringId="social_intro">Sign in with your social account</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="requiredField_password">Please enter your password</LocalizedString>
-          <LocalizedString ElementType="UxElement" StringId="invalid_password">The password you entered is not in the expected format.</LocalizedString>
-          <LocalizedString ElementType="UxElement" StringId="local_intro_username">Sign in with your user name</LocalizedString>
-          <LocalizedString ElementType="UxElement" StringId="local_intro_email">Sign in with your existing account</LocalizedString>
-          <LocalizedString ElementType="UxElement" StringId="invalid_email">Please enter a valid email address</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="social_intro">Sign in with your social account</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="divider_title">OR</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="unknown_error">We are having trouble signing you in. Please try again later.</LocalizedString>
-          <LocalizedString ElementType="UxElement" StringId="email_pattern">^[a-zA-Z0-9.!#$%&amp;'^_`{}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$</LocalizedString>
           <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfInvalidPassword">Invalid Credentials.</LocalizedString>
           <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimsPrincipalDoesNotExist">Invalid Credentials.</LocalizedString>
           <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfOldPasswordUsed">Invalid Credentials.</LocalizedString>
@@ -529,6 +534,16 @@
     <ClaimsProvider>
       <DisplayName>Local Account</DisplayName>
       <TechnicalProfiles>
+        <!-- Cloud-1536 call SM-AAD from PasswordReset SubJourney -->
+        <TechnicalProfile Id="SessionManagement">
+          <DisplayName>Session Management Call</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+        </TechnicalProfile>
+
         <!--Local account sign-up page-->
         <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
           <Metadata>
@@ -547,16 +562,32 @@
             <OutputClaim ClaimTypeReferenceId="newUser" />
           </OutputClaims>
         </TechnicalProfile>
-        <TechnicalProfile Id="SopheonGetQueryParameters">
+        <!-- SopheonGetQueryParameters can parse the /authorize call querystring and resolve values to claims defined in the claims schema -->
+        <!-- This supports passing arbitrary values from React SPA (or other client) into custom policy flow -->
+        <!-- Put at the beginning of a user journey, and use the resolved claims as needed to save display content / user attributes / evaluate preconditions, etc -->
+        <!-- https://docs.microsoft.com/en-us/azure/active-directory-b2c/claim-resolver-overview#oauth2-key-value-parameters -->
+        <!-- <TechnicalProfile Id="SopheonGetQueryParameters">
           <DisplayName>Populate claims with query parameter values via OAUTH-KV ClaimsResolvers</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
               <Item Key="IncludeClaimResolvingInClaimsHandling">true</Item>
           </Metadata>            
           <OutputClaims>
-              <OutputClaim ClaimTypeReferenceId="sopheonMode" DefaultValue="{oauth-kv:mode}" AlwaysUseDefaultValue="true"/> 
+              <OutputClaim ClaimTypeReferenceId="yourClaimIdHere" DefaultValue="{oauth-kv:yourQueryStringKeyHere}" AlwaysUseDefaultValue="true"/> 
           </OutputClaims>
-      </TechnicalProfile>
+        </TechnicalProfile> -->
+        <TechnicalProfile Id="ForgotPassword">
+          <DisplayName>Forgot your password?</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="isForgotPassword" DefaultValue="true" AlwaysUseDefaultValue="true" />
+          </OutputClaims>
+        </TechnicalProfile>
+        <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email">
+          <Metadata>
+            <Item Key="setting.forgotPasswordLinkOverride">ForgotPasswordExchange</Item>
+          </Metadata>
+        </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
     <ClaimsProvider>
@@ -717,31 +748,64 @@
   </ClaimsProviders>
 
   <UserJourneys>
-    <UserJourney Id="SopheonSignUpOrSignIn">
+    <UserJourney Id="SopheonSignUp">
       <OrchestrationSteps>
+
         <OrchestrationStep Order="1" Type="ClaimsExchange">
           <ClaimsExchanges>
-            <ClaimsExchange Id="GetClaimsFromQueryParameters" TechnicalProfileReferenceId="SopheonGetQueryParameters" />
+            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <OrchestrationStep Order="2" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+        <!-- This step reads any user attributes that we may not have received when in the token. -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- execute consent step if the users consented version does not met the current version,
+              otherwhise this step is skipped -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-              <Value>sopheonMode</Value>
-              <Value>signup</Value>
+              <Value>extension_TermsOfUseConsentedVersion</Value>
+              <Value>v0.1</Value>
               <Action>SkipThisOrchestrationStep</Action>
             </Precondition>
           </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAssertedConsentExchange" TechnicalProfileReferenceId="SelfAsserted-Consent" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Sign Up journey - always confront user with Profile Update  -->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="B2CUserProfileUpdateExchange" TechnicalProfileReferenceId="SelfAsserted-ProfileUpdate" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+
+    <UserJourney Id="SopheonSignUpOrSignIn">
+      <OrchestrationSteps>
+
+        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
           <ClaimsProviderSelections>
             <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
+            <ClaimsProviderSelection TargetClaimsExchangeId="ForgotPasswordExchange" />
           </ClaimsProviderSelections>
           <ClaimsExchanges>
             <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <OrchestrationStep Order="3" Type="ClaimsExchange">
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
               <Value>objectId</Value>
@@ -750,7 +814,20 @@
           </Preconditions>
           <ClaimsExchanges>
             <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+            <ClaimsExchange Id="ForgotPasswordExchange" TechnicalProfileReferenceId="ForgotPassword" />
           </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="3" Type="InvokeSubJourney">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>isForgotPassword</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <JourneyList>
+            <Candidate SubJourneyReferenceId="PasswordReset" />
+          </JourneyList>
         </OrchestrationStep>
 
         <!-- This step reads any user attributes that we may not have received when in the token. -->
@@ -825,5 +902,30 @@
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
   </UserJourneys>
+  <SubJourneys>
+    <SubJourney Id="PasswordReset" Type="Call">
+      <OrchestrationSteps>
+        <!-- Validate user's email address. -->
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="PasswordResetUsingEmailAddressExchange" TechnicalProfileReferenceId="LocalAccountDiscoveryUsingEmailAddress" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
 
+        <!-- Connect to default SSO Session provider -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="PasswordResetSessionManagement" TechnicalProfileReferenceId="SessionManagement" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Collect and persist a new password. -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+      </OrchestrationSteps>
+    </SubJourney>
+  </SubJourneys>
 </TrustFrameworkPolicy>
