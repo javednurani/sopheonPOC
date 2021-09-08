@@ -4,6 +4,8 @@ using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using Azure.Core.Serialization;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
@@ -27,12 +29,14 @@ namespace Sopheon.CloudNative.Environments.Functions
       private readonly static NewtonsoftJsonObjectSerializer _serializer = new NewtonsoftJsonObjectSerializer();
       private readonly IEnvironmentRepository _environmentRepository;
       private IMapper _mapper;
+      private readonly IValidator<EnvironmentDto> _validator;
       private readonly HttpResponseDataBuilder _responseBuilder;
-
-      public CreateEnvironment(IEnvironmentRepository environmentRepository, IMapper mapper, HttpResponseDataBuilder responseBuilder)
+    
+      public CreateEnvironment(IEnvironmentRepository environmentRepository, IMapper mapper, IValidator<EnvironmentDto> validator, HttpResponseDataBuilder responseBuilder)
       {
          _environmentRepository = environmentRepository;
          _mapper = mapper;
+         _validator = validator;
          _responseBuilder = responseBuilder;
       }
 
@@ -56,6 +60,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          bodyType: typeof(string),
          Summary = "400 Bad Request response",
          Description = "Bad Request, 400 response with error message in response body")]
+
       public async Task<HttpResponseData> Run(
           [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "environments")] HttpRequestData req,
           FunctionContext context)
@@ -66,16 +71,15 @@ namespace Sopheon.CloudNative.Environments.Functions
          try
          {
             EnvironmentDto data = JsonConvert.DeserializeObject<EnvironmentDto>(requestBody);
-            if (string.IsNullOrEmpty(data.Name))
+
+            ValidationResult validationResult = await _validator.ValidateAsync(data);
+            if(!validationResult.IsValid)
             {
-               logger.LogInformation($"Request missing required {nameof(data.Name)} field");
-               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, $"{nameof(data.Name)} field is required.");
+               string validationFailureMessage = validationResult.ToString();
+               logger.LogInformation(validationFailureMessage);
+               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, validationFailureMessage);
             }
-            if (data.Owner == Guid.Empty)
-            {
-               logger.LogInformation($"Request missing required {nameof(data.Owner)} field");
-               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, $"{nameof(data.Owner)} field is required.");
-            }
+
             Environment environment = new Environment
             {
                Name = data.Name,
@@ -99,9 +103,8 @@ namespace Sopheon.CloudNative.Environments.Functions
          }
          catch (Exception ex)
          {
-            // TODO: should this be a 400 or 500?  The try block encompasses database and network I/O that can throw exceptions
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, "Something went wrong. Please try again later.");
+            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.InternalServerError, "Something went wrong. Please try again later.");
          }
       }
    }
