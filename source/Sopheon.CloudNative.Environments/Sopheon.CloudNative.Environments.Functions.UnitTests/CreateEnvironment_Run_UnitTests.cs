@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
+using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Functions.Models;
 using Sopheon.CloudNative.Environments.Functions.UnitTests.TestHelpers;
 using Sopheon.CloudNative.Environments.Functions.Validators;
@@ -28,6 +29,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       Mock<HttpRequestData> _request;
 
       Mock<IEnvironmentRepository> _mockEnvironmentRepository;
+      HttpResponseDataBuilder _responseBuilder;
 
       IMapper _mapper;
       IValidator<EnvironmentDto> _validator;
@@ -170,7 +172,8 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          // EnvironmentRepository Mock
          _mockEnvironmentRepository = new Mock<IEnvironmentRepository>();
-         _mockEnvironmentRepository.Setup(m => m.AddEnvironment(It.IsAny<Environment>())).Returns((Environment e) => {
+         _mockEnvironmentRepository.Setup(m => m.AddEnvironment(It.IsAny<Environment>())).Returns((Environment e) =>
+         {
             return Task.FromResult(e);
          });
 
@@ -182,9 +185,10 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          _mapper = config.CreateMapper();
 
          _validator = new EnvironmentDtoValidator();
+         _responseBuilder = new HttpResponseDataBuilder();
 
          // create Sut
-         Sut = new CreateEnvironment(_mockEnvironmentRepository.Object, _mapper, _validator);
+         Sut = new CreateEnvironment(_mockEnvironmentRepository.Object, _mapper, _validator, _responseBuilder);
       }
 
       private async Task<string> GetResponseBody(HttpResponseData response)

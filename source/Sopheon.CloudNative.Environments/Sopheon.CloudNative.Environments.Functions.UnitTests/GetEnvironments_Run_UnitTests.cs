@@ -17,7 +17,7 @@ using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
 namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 {
-   public class GetEnvironmentst_Run_UnitTests
+   public class GetEnvironments_Run_UnitTests
    {
       GetEnvironments Sut;
 
@@ -28,7 +28,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
       IMapper _mapper;
 
-      public GetEnvironmentst_Run_UnitTests()
+      public GetEnvironments_Run_UnitTests()
       {
          TestSetup();
       }

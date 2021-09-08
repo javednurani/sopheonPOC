@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
+using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Functions.Models;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 using HttpTriggerAttribute = Microsoft.Azure.Functions.Worker.HttpTriggerAttribute;
@@ -29,12 +30,14 @@ namespace Sopheon.CloudNative.Environments.Functions
       private readonly IEnvironmentRepository _environmentRepository;
       private readonly IMapper _mapper;
       private readonly IValidator<EnvironmentDto> _validator;
-
-      public CreateEnvironment(IEnvironmentRepository environmentRepository, IMapper mapper, IValidator<EnvironmentDto> validator)
+      private readonly HttpResponseDataBuilder _responseBuilder;
+    
+      public CreateEnvironment(IEnvironmentRepository environmentRepository, IMapper mapper, IValidator<EnvironmentDto> validator, HttpResponseDataBuilder responseBuilder)
       {
          _environmentRepository = environmentRepository;
          _mapper = mapper;
          _validator = validator;
+         _responseBuilder = responseBuilder;
       }
 
       [Function(nameof(CreateEnvironment))]
@@ -74,9 +77,7 @@ namespace Sopheon.CloudNative.Environments.Functions
             {
                string validationFailureMessage = validationResult.ToString();
                logger.LogInformation(validationFailureMessage);
-               HttpResponseData response = req.CreateResponse(HttpStatusCode.BadRequest);
-               await response.WriteStringAsync(validationFailureMessage);
-               return response;
+               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, validationFailureMessage);
             }
 
             Environment environment = new Environment
@@ -88,31 +89,22 @@ namespace Sopheon.CloudNative.Environments.Functions
 
             // TODO: environments that already exist with name?
             environment = await _environmentRepository.AddEnvironment(environment);
-
-            HttpResponseData createdResponse = req.CreateResponse();
-            await createdResponse.WriteAsJsonAsync(_mapper.Map<Environment, EnvironmentDto>(environment), _serializer, HttpStatusCode.Created);
-            return createdResponse;
+            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.Created, _mapper.Map<Environment, EnvironmentDto>(environment), _serializer);
          }
          catch (JsonReaderException ex)
          {
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            HttpResponseData deserializeExceptionResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-            await deserializeExceptionResponse.WriteStringAsync("Request body was invalid.");
-            return deserializeExceptionResponse;
+            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, "Request body was invalid.");
          }
          catch (JsonSerializationException ex)
          {
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            HttpResponseData deserializeExceptionResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-            await deserializeExceptionResponse.WriteStringAsync($"Request body was invalid. Is {nameof(EnvironmentDto.Owner)} field a valid GUID?");
-            return deserializeExceptionResponse;
+            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, $"Request body was invalid. Is {nameof(EnvironmentDto.Owner)} field a valid GUID?");
          }
          catch (Exception ex)
          {
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            HttpResponseData genericExceptionResponse = req.CreateResponse(HttpStatusCode.InternalServerError);
-            await genericExceptionResponse.WriteStringAsync("Something went wrong. Please try again later.");
-            return genericExceptionResponse;
+            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.InternalServerError, "Something went wrong. Please try again later.");
          }
       }
    }
