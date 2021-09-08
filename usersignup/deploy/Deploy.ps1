@@ -1,27 +1,23 @@
 $ZipUtil = "C:\Program Files\7-Zip\7z.exe";
-$B2CAssets = "$($env:System_DefaultWorkingDirectory)/B2CAssets";
-$Scripts = "$($env:System_DefaultWorkingDirectory)/Scripts";
+$B2CAssets = "$($env:System_DefaultWorkingDirectory)\B2CAssets";
+$Scripts = "$($env:System_DefaultWorkingDirectory)\Scripts";
 $Environment = $env:Environment;
 $StorageAccountName = "stratuswebsite$($Environment.ToLower())";
-
-function Check-LastExitCode {
-    if ($LASTEXITCODE -ne 0) {
-        throw "Last Exit Code was not 0 but instead: $($LASTEXITCODE)";
-    }
-}
 
 try {    
     $ErrorActionPreference = 'Stop'
     # Zip/Archive Scripts 
     Write-Host "Zipping Artfacts for UserSignUp...";
-    & $ZipUtil "x" "$($PSScriptRoot)/UserSignUpSignIn_*.zip" "-o$($B2CAssets)";
-    & $ZipUtil "x" "$($env:System_DefaultWorkingDirectory)/_DevOpsScripts/DevOps/PowerShell_Scripts_*.zip" "-o$($Scripts)";
+    & $ZipUtil "x" "$($PSScriptRoot)\UserSignUpSignIn_*.zip" "-o$($B2CAssets)";
+    & $ZipUtil "x" "$($env:System_DefaultWorkingDirectory)\_DevOpsScripts\DevOps\PowerShell_Scripts_*.zip" "-o$($Scripts)";
+
+    Import-Module "$($Scripts)\CloudNative.Common.psm1";
     
-    & "$($env:System_DefaultWorkingDirectory)/_TokenConfigurationManagement/TokenConfigManagement/TokenReplacer.exe" replace -c _StratusB2CAssets/B2C/User_SignUp_Configuration.json -f "$B2CAssets/*"  -e $Environment
+    & "$($env:System_DefaultWorkingDirectory)\_TokenConfigurationManagement\TokenConfigManagement\TokenReplacer.exe" replace -c _StratusB2CAssets\B2C\User_SignUp_Configuration.json -f "$B2CAssets\*"  -e $Environment
 
     # Upload the TrustFramework .xml files from the GraphApi...
     Write-Host "...Uploading B2C Custom Policies via GraphAPI...";
-    powershell.exe -file "$($Scripts)/Deploy_B2C_Assets.ps1" -PathToFolder "$($B2CAssets)/azureResources/" -Environment $Environment;
+    powershell.exe -file "$($Scripts)\Deploy_B2C_Assets.ps1" -PathToFolder "$($B2CAssets)\azureResources\" -Environment $Environment;
     Check-LastExitCode;
 
     Write-Host "...Clearing Blob storage on: b2cassets files..."
@@ -29,7 +25,7 @@ try {
 
     # Upload related B2C Assets to Blob Storage
     Write-Host "Uploading Marketing Page to blob storage";
-    $MarketingUploadResults = az storage blob upload --container-name '$web' --account-name $StorageAccountName --file "$($B2CAssets)/website/index.html" --name index.html --auth-mode login;
+    $MarketingUploadResults = az storage blob upload --container-name '$web' --account-name $StorageAccountName --file "$($B2CAssets)\website\index.html" --name index.html --auth-mode login;
     $MarketingUploadResults;
     Check-LastExitCode;
     Write-Host "Complete! Transfered files to Storage Account Blob: "'$web';
@@ -47,19 +43,19 @@ try {
     Write-Host "Complete! Transfered files to Storage Account Blob: "'b2cassets';
 
     Write-Host "Uploading Terms of Consent blob storage";
-    $MarketingUploadResults = az storage blob upload-batch --destination 'b2cassets' --account-name $StorageAccountName --source "$($B2CAssets)/azureResources/termsOfUse" --auth-mode login;
+    $MarketingUploadResults = az storage blob upload-batch --destination 'b2cassets' --account-name $StorageAccountName --source "$($B2CAssets)\azureResources\termsOfUse" --auth-mode login;
     $MarketingUploadResults;
     Check-LastExitCode;
     Write-Host "Complete! Transfered files to Storage Account Blob: "'b2cassets';
 
     Write-Host "Uploading Terms of Service to blob storage";
-    $MarketingUploadResults = az storage blob upload --container-name '$web' --name "TermsOfService/index.html" --account-name $StorageAccountName --file "$($B2CAssets)/termsOfService/index.html" --auth-mode login;
+    $MarketingUploadResults = az storage blob upload --container-name '$web' --name "TermsOfService\index.html" --account-name $StorageAccountName --file "$($B2CAssets)\termsOfService\index.html" --auth-mode login;
     $MarketingUploadResults;
     Check-LastExitCode;
-    Write-Host "Complete! Transfered files to Storage Account Blob: "'$web/TermsOfService';
+    Write-Host "Complete! Transfered files to Storage Account Blob: "'$web\TermsOfService';
 
     Write-Host "Uploading LoginCustom to blob storage";
-    $MarketingUploadResults = az storage blob upload --container-name 'b2cassets' --account-name $StorageAccountName --file "$($B2CAssets)/azureResources/Login/LoginCustom.html" --name LoginCustom.html --auth-mode login;
+    $MarketingUploadResults = az storage blob upload --container-name 'b2cassets' --account-name $StorageAccountName --file "$($B2CAssets)\azureResources\Login\LoginCustom.html" --name LoginCustom.html --auth-mode login;
     $MarketingUploadResults;
     Check-LastExitCode;
     Write-Host "Complete! Transfered files to Storage Account Blob: "'b2cassets';

@@ -11,8 +11,33 @@ namespace Sopheon.CloudNative.Environments.Domain.Models
          set;
       }
 
-      [MaxLength(100)]
+      public Guid EnvironmentKey
+      {
+         get;
+         set;
+      }
+
+      [MaxLength(64)]
       public string Name
+      {
+         get;
+         set;
+      }
+
+      public Guid Owner
+      {
+         get;
+         set;
+      }
+
+      [MaxLength(1000)]
+      public string Description
+      {
+         get;
+         set;
+      }
+
+      public bool IsDeleted
       {
          get;
          set;

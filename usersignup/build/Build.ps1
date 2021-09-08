@@ -1,7 +1,6 @@
-$ZipUtil = "C:\Program Files\7-Zip\7z.exe";
+Import-Module "$($env:System_DefaultWorkingDirectory)\DevOps\PowerShell\CloudNative.Common.psm1";
 
 Copy-Item -Path "$($env:System_DefaultWorkingDirectory)/usersignup/deploy/*" -Destination "$($env:Build_ArtifactStagingDirectory)";
-
 
 # Zip/Archive Scripts 
 Write-Host "Zipping Artfacts for UserSignUp...";
