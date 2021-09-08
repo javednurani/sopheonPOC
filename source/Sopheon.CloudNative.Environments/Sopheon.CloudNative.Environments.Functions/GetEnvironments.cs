@@ -13,6 +13,7 @@ using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Azure.Core.Serialization;
 using System;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
+using System.Linq;
 
 namespace Sopheon.CloudNative.Environments.Functions
 {
@@ -47,6 +48,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          try
          {
             List<Environment> environments = await _environmentRepository.GetEnvironments();
+            environments = environments.Where(env => env.IsDeleted == false).ToList();
 
             HttpResponseData response = req.CreateResponse();
             await response.WriteAsJsonAsync(_mapper.Map<List<Environment>, List<EnvironmentDto>>(environments), _serializer, HttpStatusCode.OK);
