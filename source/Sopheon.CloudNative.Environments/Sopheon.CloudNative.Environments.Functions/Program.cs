@@ -1,16 +1,19 @@
 ﻿#define Managed
+using System;
+using System.Threading.Tasks;
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
+using FluentValidation;
+using Microsoft.Azure.Functions.Worker.Extensions.OpenApi.Extensions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
 using Sopheon.CloudNative.Environments.Domain.Data;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Azure.Security.KeyVault.Secrets;
-using Azure.Identity;
-using Azure.Extensions.AspNetCore.Configuration.Secrets;
-using Microsoft.Azure.Functions.Worker.Extensions.OpenApi.Extensions;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
+using Sopheon.CloudNative.Environments.Functions.Models;
+using Sopheon.CloudNative.Environments.Functions.Validators;
 
 namespace Sopheon.CloudNative.Environments.Functions
 {
@@ -54,6 +57,7 @@ namespace Sopheon.CloudNative.Environments.Functions
                services.AddAutoMapper(typeof(Program));
 
                services.AddScoped<IEnvironmentRepository, EFEnvironmentRepository>();
+               services.AddScoped<IValidator<EnvironmentDto>, EnvironmentDtoValidator>();
             })
             .Build();
 
