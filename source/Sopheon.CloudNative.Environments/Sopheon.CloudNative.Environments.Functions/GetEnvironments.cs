@@ -56,7 +56,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          catch (Exception ex)
          {
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            HttpResponseData genericExceptionResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+            HttpResponseData genericExceptionResponse = req.CreateResponse(HttpStatusCode.InternalServerError);
             await genericExceptionResponse.WriteStringAsync("Something went wrong. Please try again later.");
             return genericExceptionResponse;
          }
