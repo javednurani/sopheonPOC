@@ -2,6 +2,7 @@
 using Sopheon.CloudNative.Environments.Domain.Data;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
@@ -28,7 +29,7 @@ namespace Sopheon.CloudNative.Environments.Domain.Repositories
       public async Task<List<Environment>> GetEnvironments()
       {
          List<Environment> environments = await _context.Environments.ToListAsync();
-         return environments;
+         return environments.Where(env => env.IsDeleted == false).ToList();
       }
    }
 }
