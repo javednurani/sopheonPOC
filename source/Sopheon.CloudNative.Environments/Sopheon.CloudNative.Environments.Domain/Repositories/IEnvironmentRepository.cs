@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
 namespace Sopheon.CloudNative.Environments.Domain.Repositories
@@ -11,5 +12,11 @@ namespace Sopheon.CloudNative.Environments.Domain.Repositories
       /// <param name="environment">Environment model to be added</param>
       /// <returns>Task<Guid>, where Guid is the new EnvironmentKey</returns>
       Task<Environment> AddEnvironment(Environment environment);
+
+      /// <summary>
+      /// Get a list of all Environments
+      /// </summary>
+      /// <returns>Task<IEnumerable<Environment>>, a list of all environemts.</returns>
+      Task<IEnumerable<Environment>> GetEnvironments();
    }
 }
