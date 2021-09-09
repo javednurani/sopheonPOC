@@ -31,7 +31,7 @@ namespace Sopheon.CloudNative.Environments.Functions
       private readonly IMapper _mapper;
       private readonly IValidator<EnvironmentDto> _validator;
       private readonly HttpResponseDataBuilder _responseBuilder;
-    
+
       public CreateEnvironment(IEnvironmentRepository environmentRepository, IMapper mapper, IValidator<EnvironmentDto> validator, HttpResponseDataBuilder responseBuilder)
       {
          _environmentRepository = environmentRepository;
@@ -46,17 +46,17 @@ namespace Sopheon.CloudNative.Environments.Functions
          Summary = "Create an Environment",
          Description = "Create an Environment, with required and optional properties",
          Visibility = OpenApiVisibilityType.Important)]
-      [OpenApiRequestBody(contentType: "application/json",
+      [OpenApiRequestBody(contentType: StringConstants.CONTENT_TYPE_APP_JSON,
          bodyType: typeof(EnvironmentDto),
          Required = true,
          Description = "Environment object to be created. Name and Owner required, Description optional")]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.Created,
-         contentType: "application/json",
+         contentType: StringConstants.CONTENT_TYPE_APP_JSON,
          bodyType: typeof(EnvironmentDto),
          Summary = "201 Created response",
          Description = "Created, 201 response with Environment in response body")]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest,
-         contentType: "application/json",
+         contentType: StringConstants.CONTENT_TYPE_APP_JSON,
          bodyType: typeof(string),
          Summary = "400 Bad Request response",
          Description = "Bad Request, 400 response with error message in response body")]
@@ -91,20 +91,15 @@ namespace Sopheon.CloudNative.Environments.Functions
             environment = await _environmentRepository.AddEnvironment(environment);
             return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.Created, _mapper.Map<Environment, EnvironmentDto>(environment), _serializer);
          }
-         catch (JsonReaderException ex)
+         catch (JsonException ex)
          {
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, "Request body was invalid.");
-         }
-         catch (JsonSerializationException ex)
-         {
-            logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, $"Request body was invalid. Is {nameof(EnvironmentDto.Owner)} field a valid GUID?");
+            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_BODY_INVALID);
          }
          catch (Exception ex)
          {
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.InternalServerError, "Something went wrong. Please try again later.");
+            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR);
          }
       }
    }
