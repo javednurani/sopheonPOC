@@ -32,13 +32,13 @@ namespace Sopheon.CloudNative.Environments.Domain.Repositories
          return await _context.Environments.Where(env => !env.IsDeleted).ToArrayAsync();
       }
 
-      public async Task DeleteEnvironment(Environment environment)
+      public async Task DeleteEnvironment(Guid environmentKey)
       {
-         Environment entityEnvironment = await _context.Environments.SingleOrDefaultAsync(env => env.EnvironmentKey == environment.EnvironmentKey && !env.IsDeleted);
+         Environment entityEnvironment = await _context.Environments.SingleOrDefaultAsync(env => env.EnvironmentKey == environmentKey && !env.IsDeleted);
 
          if (entityEnvironment == null)
          {
-            throw new EntityNotFoundException($"An Environment was not found with a key: {environment.EnvironmentKey}");
+            throw new EntityNotFoundException($"An Environment was not found with a key: {environmentKey}");
          }
 
          entityEnvironment.IsDeleted = true;

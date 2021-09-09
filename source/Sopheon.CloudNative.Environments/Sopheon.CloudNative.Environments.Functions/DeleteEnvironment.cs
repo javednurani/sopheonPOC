@@ -64,12 +64,7 @@ namespace Sopheon.CloudNative.Environments.Functions
                return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, keyNotGuidMessage);
             }
 
-            Environment environment = new Environment
-            {
-               EnvironmentKey = environmentKey
-            };
-
-            await _environmentRepository.DeleteEnvironment(environment);
+            await _environmentRepository.DeleteEnvironment(environmentKey);
             // TODO: soft delete, 202 Accepted vs 204 No Content
             return _responseBuilder.BuildWithoutBody(req, HttpStatusCode.NoContent);
          }

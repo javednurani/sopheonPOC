@@ -12,7 +12,6 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
-using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
 namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 {
@@ -35,7 +34,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       public async void Run_HappyPath_ReturnsNoContent()
       {
          // Arrange
-         _mockEnvironmentRepository.Setup(m => m.DeleteEnvironment(It.IsAny<Environment>())).Returns(() =>
+         _mockEnvironmentRepository.Setup(m => m.DeleteEnvironment(It.IsAny<Guid>())).Returns(() =>
          {
             return Task.CompletedTask;
          });
@@ -51,8 +50,8 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.NoContent, result.StatusCode);
 
          // EF
-         _mockEnvironmentRepository.Verify(m => m.DeleteEnvironment(It.Is<Environment>(x =>
-            x.EnvironmentKey.ToString() == keyToDelete
+         _mockEnvironmentRepository.Verify(m => m.DeleteEnvironment(It.Is<Guid>(x =>
+            x.ToString() == keyToDelete
          )), Times.Once());
       }
 
@@ -76,7 +75,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       {
          // Arrange
          _mockEnvironmentRepository
-            .Setup(m => m.DeleteEnvironment(It.IsAny<Environment>()))
+            .Setup(m => m.DeleteEnvironment(It.IsAny<Guid>()))
             .Throws(new EntityNotFoundException());
 
          string keyToDelete = Guid.NewGuid().ToString();
@@ -90,8 +89,8 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
 
          // EF
-         _mockEnvironmentRepository.Verify(m => m.DeleteEnvironment(It.Is<Environment>(x =>
-            x.EnvironmentKey.ToString() == keyToDelete
+         _mockEnvironmentRepository.Verify(m => m.DeleteEnvironment(It.Is<Guid>(x =>
+            x.ToString() == keyToDelete
          )), Times.Once());
       }
 
@@ -100,7 +99,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       {
          // Arrange
          _mockEnvironmentRepository
-            .Setup(m => m.DeleteEnvironment(It.IsAny<Environment>()))
+            .Setup(m => m.DeleteEnvironment(It.IsAny<Guid>()))
             .Throws(new Exception());
 
          string keyToDelete = Guid.NewGuid().ToString();
@@ -114,8 +113,8 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.InternalServerError, result.StatusCode);
 
          // EF
-         _mockEnvironmentRepository.Verify(m => m.DeleteEnvironment(It.Is<Environment>(x =>
-            x.EnvironmentKey.ToString() == keyToDelete
+         _mockEnvironmentRepository.Verify(m => m.DeleteEnvironment(It.Is<Guid>(x =>
+            x.ToString() == keyToDelete
          )), Times.Once());
       }
 
