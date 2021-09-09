@@ -4,7 +4,6 @@ using Sopheon.CloudNative.Environments.Domain.Exceptions;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Domain.UnitTests.TestHelpers;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
@@ -14,107 +13,92 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
 {
    public class EFEnvironmentRepository_DeleteEnvironment_UnitTests
    {
+      DbContextOptions<EnvironmentContext> _dbContextOptions;
+
+      public EFEnvironmentRepository_DeleteEnvironment_UnitTests()
+      {
+         var builder = new DbContextOptionsBuilder<EnvironmentContext>();
+         builder.UseInMemoryDatabase(nameof(EFEnvironmentRepository_DeleteEnvironment_UnitTests));
+         _dbContextOptions = builder.Options;
+      }
+
       [Fact]
       public async Task DeleteEnvironment_HappyPath_IsDeletedTrue()
       {
-         // Arrange
-         var builder = new DbContextOptionsBuilder<EnvironmentContext>();
-         builder.UseInMemoryDatabase(nameof(EFEnvironmentRepository_DeleteEnvironment_UnitTests));
-         var options = builder.Options;
+         using var context = new EnvironmentContext(_dbContextOptions);
 
+         // Arrange
          Guid keyToDelete = SomeRandom.Guid();
 
-         using (var context = new EnvironmentContext(options))
-         {
-            var environments = new List<Environment>
-            {
-               new Environment { Name = SomeRandom.String(), Description = SomeRandom.String(), EnvironmentKey = keyToDelete, Owner = SomeRandom.Guid(), IsDeleted = false }
-            };
+         context.AddRange(new[] { new Environment { Name = SomeRandom.String(), Description = SomeRandom.String(), EnvironmentKey = keyToDelete, Owner = SomeRandom.Guid(), IsDeleted = false } });
+         context.SaveChanges();
 
-            context.AddRange(environments);
-            context.SaveChanges();
-         }
+         var controller = new EFEnvironmentRepository(context);
 
-         using (var context = new EnvironmentContext(options))
-         {
-            var controller = new EFEnvironmentRepository(context);
+         // Act
+         await controller.DeleteEnvironment(new Environment { EnvironmentKey = keyToDelete });
 
-            // Act
-            await controller.DeleteEnvironment(new Environment { EnvironmentKey = keyToDelete });
-
-            // Assert
-            Environment environment = await context.Environments.FirstOrDefaultAsync(env => env.EnvironmentKey == keyToDelete);
-            Assert.NotNull(environment);
-            Assert.True(environment.IsDeleted);
-         }
+         // Assert
+         Environment environment = await context.Environments.FirstOrDefaultAsync(env => env.EnvironmentKey == keyToDelete);
+         Assert.NotNull(environment);
+         Assert.True(environment.IsDeleted);
       }
 
       [Fact]
       public async Task DeleteEnvironment_EnvironmentNotFound_MissingNotFound()
       {
-         // Arrange
-         var builder = new DbContextOptionsBuilder<EnvironmentContext>();
-         builder.UseInMemoryDatabase(nameof(EFEnvironmentRepository_DeleteEnvironment_UnitTests));
-         var options = builder.Options;
+         using var context = new EnvironmentContext(_dbContextOptions);
 
+         // Arrange
          Environment environment = new Environment
          {
             EnvironmentKey = SomeRandom.Guid(), // find by key will fail
          };
 
-         using (var context = new EnvironmentContext(options))
-         {
-            var environments = new List<Environment>
-            {
-               new Environment { Name = SomeRandom.String(), Description = SomeRandom.String(), EnvironmentKey = SomeRandom.Guid(), Owner = SomeRandom.Guid(), IsDeleted = false },
-               new Environment { Name = SomeRandom.String(), Description = SomeRandom.String(), EnvironmentKey = SomeRandom.Guid(), Owner = SomeRandom.Guid(), IsDeleted = false }
-            };
+         context.AddRange(new[] { randomEnvironment(false), randomEnvironment(false) });
+         context.SaveChanges();
 
-            context.AddRange(environments);
-            context.SaveChanges();
-         }
+         EFEnvironmentRepository sut = new EFEnvironmentRepository(context);
 
-         using (var context = new EnvironmentContext(options))
-         {
-            var sut = new EFEnvironmentRepository(context);
+         // Act + Assert
+         await Assert.ThrowsAsync<EntityNotFoundException>(() => sut.DeleteEnvironment(environment));
 
-            // Act + Assert
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => sut.DeleteEnvironment(environment));
-         }
       }
 
       [Fact]
       public async Task DeleteEnvironment_EnvironmentNotFound_DeletedNotFound()
       {
-         // Arrange
-         var builder = new DbContextOptionsBuilder<EnvironmentContext>();
-         builder.UseInMemoryDatabase(nameof(EFEnvironmentRepository_DeleteEnvironment_UnitTests));
-         var options = builder.Options;
+         using var context = new EnvironmentContext(_dbContextOptions);
 
+         // Arrange
          Guid deletedKey = SomeRandom.Guid();
          Environment environment = new Environment
          {
             EnvironmentKey = deletedKey, // entity.IsDeleted = true in datastore
          };
-         using (var context = new EnvironmentContext(options))
+
+         context.AddRange(new[] {
+            new Environment { Name = SomeRandom.String(), Description = SomeRandom.String(), EnvironmentKey = deletedKey, Owner = SomeRandom.Guid(), IsDeleted = true },
+            randomEnvironment(false)
+         });
+         context.SaveChanges();
+
+         var sut = new EFEnvironmentRepository(context);
+
+         // Act + Assert
+         await Assert.ThrowsAsync<EntityNotFoundException>(() => sut.DeleteEnvironment(environment));
+      }
+
+      private static Environment randomEnvironment(bool isDeleted)
+      {
+         return new Environment
          {
-            var environments = new List<Environment>
-            {
-               new Environment { Name = SomeRandom.String(), Description = SomeRandom.String(), EnvironmentKey = deletedKey, Owner = SomeRandom.Guid(), IsDeleted = true },
-               new Environment { Name = SomeRandom.String(), Description = SomeRandom.String(), EnvironmentKey = SomeRandom.Guid(), Owner = SomeRandom.Guid(), IsDeleted = false }
-            };
-
-            context.AddRange(environments);
-            context.SaveChanges();
-         }
-
-         using (var context = new EnvironmentContext(options))
-         {
-            var sut = new EFEnvironmentRepository(context);
-
-            // Act + Assert
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => sut.DeleteEnvironment(environment));
-         }
+            Name = SomeRandom.String(),
+            Description = SomeRandom.String(),
+            EnvironmentKey = SomeRandom.Guid(),
+            Owner = SomeRandom.Guid(),
+            IsDeleted = isDeleted
+         };
       }
    }
 }

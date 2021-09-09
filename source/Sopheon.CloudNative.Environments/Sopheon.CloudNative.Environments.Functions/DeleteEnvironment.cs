@@ -71,21 +71,17 @@ namespace Sopheon.CloudNative.Environments.Functions
 
             await _environmentRepository.DeleteEnvironment(environment);
             // TODO 202 Accepted vs 204 No Content...
-            return _responseBuilder.BuildWithoutBody(req, HttpStatusCode.Accepted);
+            return _responseBuilder.BuildWithoutBody(req, HttpStatusCode.NoContent);
          }
-
+         catch (EntityNotFoundException ex)
+         {
+            logger.LogInformation(ex.Message);
+            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.NotFound, ex.Message);
+         }
          catch (Exception ex)
          {
-            if (ex is EntityNotFoundException)
-            {
-               logger.LogInformation(ex.Message);
-               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.NotFound, ex.Message);
-            }
-            else
-            {
-               logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.InternalServerError, $"Something went wrong. Please try again later. {ex.Message}");
-            }
+            logger.LogInformation($"{ex.GetType()} : {ex.Message}");
+            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.InternalServerError, $"Something went wrong. Please try again later. {ex.Message}");
          }
       }
    }
