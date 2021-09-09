@@ -16,9 +16,9 @@ using Newtonsoft.Json;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Functions.Models;
-using System.Linq;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 using HttpTriggerAttribute = Microsoft.Azure.Functions.Worker.HttpTriggerAttribute;
+using Sopheon.CloudNative.Environments.Domain.Exceptions;
 
 namespace Sopheon.CloudNative.Environments.Functions
 {
@@ -32,7 +32,7 @@ namespace Sopheon.CloudNative.Environments.Functions
       private readonly IMapper _mapper;
       private readonly IValidator<EnvironmentDto> _validator;
       private readonly HttpResponseDataBuilder _responseBuilder;
-    
+
       public UpdateEnvironment(IEnvironmentRepository environmentRepository, IMapper mapper, IValidator<EnvironmentDto> validator, HttpResponseDataBuilder responseBuilder)
       {
          _environmentRepository = environmentRepository;
@@ -73,8 +73,8 @@ namespace Sopheon.CloudNative.Environments.Functions
          Description = "Internal Server Error, 500 response with error message in response body")]
 
       public async Task<HttpResponseData> Run(
-          [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "environments/{id}")] HttpRequestData req,
-          FunctionContext context, string id)
+          [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "environments/{key}")] HttpRequestData req,
+          FunctionContext context, string key)
       {
          var logger = context.GetLogger(nameof(UpdateEnvironment));
 
@@ -82,37 +82,31 @@ namespace Sopheon.CloudNative.Environments.Functions
 
          try
          {
-            int environmentId;
-            bool isValidId = int.TryParse(id, out environmentId);
-            if (!isValidId)
+            Guid environmentKey;
+            bool validKey = Guid.TryParse(key, out environmentKey);
+            if (!validKey || environmentKey == Guid.Empty)
             {
-               string idNotIntegerMessage = "The Environment id must be an integer";
-               logger.LogInformation(idNotIntegerMessage);
-               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, idNotIntegerMessage);
-            }
-            var environment = _environmentRepository.GetEnvironments().Result.FirstOrDefault(e => e.EnvironmentID == environmentId);
-            if (environment == null)
-            {
-               string environmentNotFoundMessage = $"There was no Environment found with an id of: {id}";
-               logger.LogInformation(environmentNotFoundMessage);
-               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.NotFound, environmentNotFoundMessage);
+               string keyNotGuidMessage = "The EnvironmentKey must be a valid Guid";
+               logger.LogInformation(keyNotGuidMessage);
+               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, keyNotGuidMessage);
             }
             EnvironmentDto data = JsonConvert.DeserializeObject<EnvironmentDto>(requestBody);
-            // How to handle validation for these requests? 1 validator for each request type?
-            // Put does not allow EnvironmentKey to be updated
-            // How to validate EnvironmentId supplied is valid. return NotFound if not found.
+
             ValidationResult validationResult = await _validator.ValidateAsync(data);
-            if(!validationResult.IsValid)
+            if (!validationResult.IsValid)
             {
                string validationFailureMessage = validationResult.ToString();
                logger.LogInformation(validationFailureMessage);
                return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, validationFailureMessage);
             }
 
-            //only update these if the user passes in a value? if checks.
-            environment.Name = data.Name;
-            environment.Description = data.Description;
-            environment.Owner = data.Owner;
+            Environment environment = new Environment
+            {
+               EnvironmentKey = environmentKey,
+               Name = data.Name,
+               Owner = data.Owner,
+               Description = data.Description ?? string.Empty,
+            };
 
             environment = await _environmentRepository.UpdateEnvironment(environment);
             return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.OK, _mapper.Map<Environment, EnvironmentDto>(environment), _serializer);
@@ -126,6 +120,11 @@ namespace Sopheon.CloudNative.Environments.Functions
          {
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
             return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, $"Request body was invalid. Is {nameof(EnvironmentDto.Owner)} field a valid GUID?");
+         }    
+         catch (EntityNotFoundException ex)
+         {
+            logger.LogInformation(ex.Message);
+            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.NotFound, ex.Message);
          }
          catch (Exception ex)
          {

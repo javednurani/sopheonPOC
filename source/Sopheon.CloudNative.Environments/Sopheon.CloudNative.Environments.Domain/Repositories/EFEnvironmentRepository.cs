@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
+using Sopheon.CloudNative.Environments.Domain.Exceptions;
 
 namespace Sopheon.CloudNative.Environments.Domain.Repositories
 {
@@ -31,10 +32,22 @@ namespace Sopheon.CloudNative.Environments.Domain.Repositories
          return await _context.Environments.Where(env => !env.IsDeleted).ToArrayAsync();
       }
 
-      public async Task<Environment> UpdateEnvironment(Environment oldEnvironment)
+      public async Task<Environment> UpdateEnvironment(Environment environment)
       {
-         Environment newEnvironment = _context.Environments.Update(oldEnvironment).Entity;
+         Environment entityEnvironment = await _context.Environments.SingleOrDefaultAsync(env => env.EnvironmentKey == environment.EnvironmentKey);
+
+         if(entityEnvironment == null)
+         {
+            throw new EntityNotFoundException($"An Environment was not found with a key: {environment.EnvironmentKey}");
+         }
+
+         entityEnvironment.Name = environment.Name;
+         entityEnvironment.Owner = environment.Owner;
+         entityEnvironment.Description = environment.Description;
+
+         Environment newEnvironment = _context.Environments.Update(environment).Entity;
          await _context.SaveChangesAsync();
+
          return newEnvironment;
       }
    }

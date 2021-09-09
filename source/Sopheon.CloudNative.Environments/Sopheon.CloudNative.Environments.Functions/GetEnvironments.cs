@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using System.Collections.Generic;
-using Sopheon.CloudNative.Environments.Domain.Models;
 using AutoMapper;
 using Sopheon.CloudNative.Environments.Functions.Models;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
@@ -13,7 +12,6 @@ using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Azure.Core.Serialization;
 using System;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
-using System.Linq;
 
 namespace Sopheon.CloudNative.Environments.Functions
 {
