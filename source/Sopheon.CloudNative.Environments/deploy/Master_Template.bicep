@@ -37,6 +37,7 @@ module EnvironmentFunction 'Environments_Function_App.bicep' = {
   name: environmentFunctionApp_Name
   params: {
     location: location
+    functionAppName: environmentFunctionApp_Name
   }
 }
 
