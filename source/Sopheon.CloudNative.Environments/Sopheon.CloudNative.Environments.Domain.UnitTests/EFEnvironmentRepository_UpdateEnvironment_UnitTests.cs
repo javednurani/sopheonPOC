@@ -1,14 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Sopheon.CloudNative.Environments.Domain.Data;
 using Sopheon.CloudNative.Environments.Domain.Exceptions;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Domain.UnitTests.TestHelpers;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Xunit;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
-
 
 namespace Sopheon.CloudNative.Environments.Domain.UnitTests
 {
@@ -18,7 +16,6 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
 
       public EFEnvironmentRepository_UpdateEnvironment_UnitTests()
       {
-
          var builder = new DbContextOptionsBuilder<EnvironmentContext>();
          builder.UseInMemoryDatabase(nameof(EFEnvironmentRepository_UpdateEnvironment_UnitTests));
          _dbContextOptions = builder.Options;
@@ -48,6 +45,38 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
          Assert.Equal(environment.Owner, updateEnvironment.Owner);
          Assert.Equal(environment.Description, updateEnvironment.Description);
          Assert.Equal(environment.EnvironmentID, updateEnvironment.EnvironmentID);
+      }
+
+      [Fact]
+      public async Task UpdateEnvironment_HappyPath_EnvironmentUpdateIsPersisted()
+      {
+         // Arrange
+         Environment environment = randomEnvironment();
+         using var context = new EnvironmentContext(_dbContextOptions);
+         context.AddRange(new[] { environment, randomEnvironment(false), randomEnvironment(true) });
+         context.SaveChanges();
+
+         // Act - change environment values
+         environment.Name = SomeRandom.String();
+         environment.Description = SomeRandom.String();
+         environment.Owner = SomeRandom.Guid();
+
+         var sut = new EFEnvironmentRepository(context);
+         _ = await sut.UpdateEnvironment(environment);
+
+         // Assert
+
+         // reset environment context, which will only contain persisted data from original context
+         using var context2 = new EnvironmentContext(_dbContextOptions);
+         Environment retrievedEnvironment = (await new EFEnvironmentRepository(context2).GetEnvironments())
+            .Single(e => e.EnvironmentKey == environment.EnvironmentKey);
+
+         // ensure the updated values were retireved
+         Assert.Equal(environment.Name, retrievedEnvironment.Name);
+         Assert.Equal(environment.EnvironmentKey, retrievedEnvironment.EnvironmentKey);
+         Assert.Equal(environment.Owner, retrievedEnvironment.Owner);
+         Assert.Equal(environment.Description, retrievedEnvironment.Description);
+         Assert.Equal(environment.EnvironmentID, retrievedEnvironment.EnvironmentID);
       }
 
       [Fact]

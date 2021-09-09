@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Sopheon.CloudNative.Environments.Domain.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
+using Microsoft.EntityFrameworkCore;
+using Sopheon.CloudNative.Environments.Domain.Data;
 using Sopheon.CloudNative.Environments.Domain.Exceptions;
+using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
 namespace Sopheon.CloudNative.Environments.Domain.Repositories
 {
