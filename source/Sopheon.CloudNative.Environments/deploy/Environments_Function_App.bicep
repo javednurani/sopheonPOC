@@ -6,7 +6,7 @@ param functionAppName string = '^EnvironmentsFunctionAppName^'
 
 param appInsightsName string = '^AppInsightsName^'
 
-param storageAccountName string = 'stratuspreviewenvironmentfunctionapp'
+param storageAccountName string = 'stratuspreviewenvfuncapp'
 
 param serverFarmId string = '/subscriptions/1c4bef1d-8a40-4a6d-96d6-764bb466ac46/resourceGroups/Stratus-Dev/providers/Microsoft.Web/serverfarms/ASP-StratusDev-a1f1'
 
@@ -86,10 +86,3 @@ resource EnvironmentsFunctionApp 'Microsoft.Web/sites@2021-01-15' = {
   }
 }
 
-resource FunctionAppHostNameBindings 'Microsoft.Web/sites/hostNameBindings@2021-01-15' = {
-  name: '${functionAppName}/${functionAppName}.azurewebsites.net'
-  properties: {
-    siteName: functionAppName
-    hostNameType: 'Verified'
-  }
-}
