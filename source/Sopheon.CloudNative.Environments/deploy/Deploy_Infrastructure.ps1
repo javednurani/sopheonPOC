@@ -47,3 +47,11 @@ if('false' -eq $GroupExists)
 Write-Host "Deploying Master Template...";
 $MasterTemplateDeploy = az deployment group create --resource-group $ResourceGroupValue --template-file $MasterTemplate --parameters $MasterParametersTemplate --name "$($DeploymentName)-MasterDeploy" --query "properties.provisioningState";
 Write-Host "Master Template Deployment: $($MasterTemplateDeploy)";
+
+$SqlAdminEngima = (az keyvault secret show --vault-name "Cloud-DevOps" --name "SqlServerAdminEnigma" --query value).Replace('"', '');
+
+$environmentManagementConnectionString = (az sql db show-connection-string --client ado.net --server "$($ResourceGroupValue.ToLower()).database.windows.net" --name $SqlServerDatabaseNameValue).Replace('"', '');
+
+$environmentManagementConnectionString = $environmentManagementConnectionString.Replace('<username>', 'sopheon').Replace('<password>', $SqlAdminEngima);
+
+az webapp config connection-string set --resource-group $ResourceGroupValue --name $ResourceGroupValue.ToLower() -t SQLServer --settings EnvironmentConnection=$environmentManagementConnectionString;
