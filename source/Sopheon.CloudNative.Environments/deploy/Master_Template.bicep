@@ -1,6 +1,8 @@
 @description('The name of the Environment Function App')
 param environmentFunctionApp_Name string = '^EnvironmentFunctionAppName^'
 
+param appInsightsName string = '^AppInsightsName^'
+
 @description('The name of the SQL Server')
 param sqlServer_name string = '^SqlServerName^'
 
@@ -37,6 +39,7 @@ module EnvironmentFunction 'Environments_Function_App.bicep' = {
   name: 'Function-App-Deployment'
   params: {
     location: location
+    appInsightsName: appInsightsName
     functionAppName: environmentFunctionApp_Name
   }
 }

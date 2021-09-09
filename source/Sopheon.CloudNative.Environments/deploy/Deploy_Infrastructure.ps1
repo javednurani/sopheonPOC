@@ -10,8 +10,9 @@ $DeploymentName = "ADO-Deployment";
 $ResourceGroupValue = "Stratus-$($Environment)";
 $SqlServerNameValue = $ResourceGroupValue;
 $SqlServerPoolName = "$($ResourceGroupValue)-Pool";
-$FunctionAppName = $ResourceGroupValue;
+$FunctionAppName = $ResourceGroupValue.ToLower();
 $SqlServerDatabaseNameValue = "EnvironmentManagement";
+$AppInsightsName = $ResourceGroupValue;
 
 $MasterTemplate = "$($PSScriptRoot)\Master_Template.bicep";
 $MasterParametersTemplate = "$($PSScriptRoot)\Master_Template_Parameters.json";
@@ -20,7 +21,8 @@ $MasterParametersTemplate = "$($PSScriptRoot)\Master_Template_Parameters.json";
 Write-Host "Replacing tokens on Master Template...";
 $masterTemplateContent = Get-Content $MasterTemplate -raw;
 $masterTemplateContent = $masterTemplateContent.Replace('^SqlServerName^', $SqlServerNameValue).Replace('^SqlServerDatabaseName^', $SqlServerDatabaseNameValue)
-$masterTemplateContent = $masterTemplateContent.Replace("^SqlElasticPoolName^", $SqlServerPoolName).Replace('^EnvironmentFunctionAppName^', $FunctionAppName);
+$masterTemplateContent = $masterTemplateContent.Replace('^SqlElasticPoolName^', $SqlServerPoolName).Replace('^EnvironmentFunctionAppName^', $FunctionAppName)
+$masterTemplateContent = $masterTemplateContent.Replace('^AppInsightsName^', $AppInsightsName);
 Set-Content -Value $masterTemplateContent -Path $MasterTemplate;
 Write-Host "Complete!";
 
@@ -28,6 +30,7 @@ Write-Host "Replacing tokens on Master Parameters Template...";
 $masterParametersContent = Get-Content $MasterParametersTemplate -raw;
 $masterParametersContent = $masterParametersContent.Replace('^SqlServerName^', $SqlServerNameValue).Replace('^SqlServerDatabaseName^', $SqlServerDatabaseNameValue);
 $masterParametersContent = $masterParametersContent.Replace("^SqlElasticPoolName^", $SqlServerPoolName).Replace('^EnvironmentFunctionAppName^', $FunctionAppName);
+$masterParametersContent = $masterParametersContent.Replace('^AppInsightsName^', $AppInsightsName);
 Set-Content -Value $masterParametersContent -Path $MasterParametersTemplate;
 Write-Host "Complete!";
 

@@ -5,6 +5,9 @@
         "environmentFunctionApp_Name": {
             "value": "^EnvironmentFunctionAppName^"
         },
+        "appInsightsName" : {
+            "value": "^AppInsightsName^"
+        },
         "sqlServer_name": {
             "value": "^SqlServerName^"
         },
