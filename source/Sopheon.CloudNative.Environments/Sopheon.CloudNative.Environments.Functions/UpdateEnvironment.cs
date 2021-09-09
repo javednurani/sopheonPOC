@@ -113,7 +113,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          }
          catch (Exception ex)
          {
-            if (ex is JsonReaderException || ex is JsonSerializationException)
+            if (ex is JsonException)
             {
                logger.LogInformation($"{ex.GetType()} : {ex.Message}");
                return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, $"Request body was invalid.");

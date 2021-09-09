@@ -5,8 +5,6 @@ using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Domain.UnitTests.TestHelpers;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
