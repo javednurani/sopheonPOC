@@ -34,7 +34,7 @@ namespace Sopheon.CloudNative.Environments.Domain.Repositories
 
       public async Task<Environment> UpdateEnvironment(Environment environment)
       {
-         Environment entityEnvironment = await _context.Environments.SingleOrDefaultAsync(env => env.EnvironmentKey == environment.EnvironmentKey);
+         Environment entityEnvironment = await _context.Environments.SingleOrDefaultAsync(env => !env.IsDeleted && env.EnvironmentKey == environment.EnvironmentKey);
 
          if(entityEnvironment == null)
          {
