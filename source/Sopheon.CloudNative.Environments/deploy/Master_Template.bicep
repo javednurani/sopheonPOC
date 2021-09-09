@@ -4,8 +4,10 @@ param environmentFunctionApp_Name string = '^EnvironmentFunctionAppName^'
 @description('The name of the SQL Server')
 param sqlServer_name string = '^SqlServerName^'
 
+@description('Sql server pool name')
 param sqlServerPool_name string = '^SqlElasticPoolName^'
 
+@description('Sql server database name')
 param sqlServerDatabase_name string = '^SqlServerDatabaseName^'
 
 @description('Sql Server Password')
