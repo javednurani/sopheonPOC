@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
+using Sopheon.CloudNative.Environments.Domain.Exceptions;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Functions.Models;
@@ -159,6 +160,33 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          string responseBody = await GetResponseBody(result);
 
          Assert.Equal("'Owner' must not be empty.", responseBody);
+      }
+
+      [Fact]
+      public async void Run_EnvironmentDoesNotExist_ReturnsBadRequest()
+      {
+         // Arrange         
+         Guid environmentKey = SomeRandom.Guid();
+         EnvironmentDto environmentRequest = new EnvironmentDto
+         {
+            Name = SomeRandom.String(),
+            Description = SomeRandom.String(),
+            Owner = SomeRandom.Guid(),
+         };
+
+         SetRequestBody(environmentRequest);
+         string mockExceptionMessage = SomeRandom.String();
+         _mockEnvironmentRepository.Setup(er => er.UpdateEnvironment(It.IsAny<Environment>())).Throws(new EntityNotFoundException(mockExceptionMessage));
+
+         // Act
+         HttpResponseData result = await Sut.Run(_request.Object, _context.Object, environmentKey.ToString());
+         result.Body.Position = 0;
+
+         // Assert
+         Assert.NotNull(result);
+         Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
+         string responseBody = await GetResponseBody(result);
+         Assert.Equal(mockExceptionMessage, responseBody);
       }
 
       //TODO: Different mock to return not found and test EntityNotFoundException? Is this valuable to us? Better in a repository unit test?
