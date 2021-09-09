@@ -30,5 +30,12 @@ namespace Sopheon.CloudNative.Environments.Domain.Repositories
       {
          return await _context.Environments.Where(env => !env.IsDeleted).ToArrayAsync();
       }
+
+      public async Task<Environment> UpdateEnvironment(Environment oldEnvironment)
+      {
+         Environment newEnvironment = _context.Environments.Update(oldEnvironment).Entity;
+         await _context.SaveChangesAsync();
+         return newEnvironment;
+      }
    }
 }
