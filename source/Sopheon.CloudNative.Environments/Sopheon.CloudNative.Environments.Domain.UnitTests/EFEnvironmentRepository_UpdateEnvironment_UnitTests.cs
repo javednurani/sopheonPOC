@@ -14,123 +14,81 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
 {
    public class EFEnvironmentRepository_UpdateEnvironment_UnitTests
    {
+      DbContextOptions<EnvironmentContext> _dbContextOptions;
+
+      public EFEnvironmentRepository_UpdateEnvironment_UnitTests()
+      {
+
+         var builder = new DbContextOptionsBuilder<EnvironmentContext>();
+         builder.UseInMemoryDatabase(nameof(EFEnvironmentRepository_UpdateEnvironment_UnitTests));
+         _dbContextOptions = builder.Options;
+      }
+
       [Fact]
       public async Task UpdateEnvironment_HappyPath_EnvironmentReturned()
       {
          // Arrange
-         var builder = new DbContextOptionsBuilder<EnvironmentContext>();
-         builder.UseInMemoryDatabase(nameof(EFEnvironmentRepository_UpdateEnvironment_UnitTests));
-         var options = builder.Options;
-         Guid keyToUpdate = SomeRandom.Guid();
-         Environment environment = new Environment
-         {
-            EnvironmentKey = keyToUpdate,
-            Name = SomeRandom.String(),
-            Description = SomeRandom.String(),
-            Owner = SomeRandom.Guid(),
-         };
-         using (var context = new EnvironmentContext(options))
-         {
-            var environments = new List<Environment>
-                {
-                    environment,
-                    new Environment { Name = SomeRandom.String(), Description = SomeRandom.String(), EnvironmentKey = SomeRandom.Guid(), Owner = SomeRandom.Guid(), IsDeleted = false },
-                    new Environment { Name = SomeRandom.String(), Description = SomeRandom.String(), EnvironmentKey = SomeRandom.Guid(), Owner = SomeRandom.Guid(), IsDeleted = true },
-                };
+         Environment environment = randomEnvironment();
 
-            context.AddRange(environments);
-            context.SaveChanges();
-         }
+         using var context = new EnvironmentContext(_dbContextOptions);
+         context.AddRange(new[] { environment, randomEnvironment(false), randomEnvironment(true) });
+         context.SaveChanges();
 
-         using (var context = new EnvironmentContext(options))
-         {
-            var sut = new EFEnvironmentRepository(context);
+         // Act - change environment values
+         environment.Name = SomeRandom.String();
+         environment.Description = SomeRandom.String();
+         environment.Owner = SomeRandom.Guid();
 
-            // Act
-            environment.Name = SomeRandom.String();
-            environment.Description = SomeRandom.String();
-            environment.Owner = SomeRandom.Guid();
+         var sut = new EFEnvironmentRepository(context);
+         Environment updateEnvironment = await sut.UpdateEnvironment(environment);
 
-            Environment updateEnvironment = await sut.UpdateEnvironment(environment);
-
-            // Assert
-            Assert.Equal(environment.Name, updateEnvironment.Name);
-            Assert.Equal(environment.EnvironmentKey, updateEnvironment.EnvironmentKey);
-            Assert.Equal(environment.Owner, updateEnvironment.Owner);
-            Assert.Equal(environment.Description, updateEnvironment.Description);
-            Assert.Equal(environment.EnvironmentID, updateEnvironment.EnvironmentID);
-         }
+         // Assert
+         Assert.Equal(environment.Name, updateEnvironment.Name);
+         Assert.Equal(environment.EnvironmentKey, updateEnvironment.EnvironmentKey);
+         Assert.Equal(environment.Owner, updateEnvironment.Owner);
+         Assert.Equal(environment.Description, updateEnvironment.Description);
+         Assert.Equal(environment.EnvironmentID, updateEnvironment.EnvironmentID);
       }
 
       [Fact]
       public async Task UpdateEnvironment_EnvironmentNotFound_MissingNotFound()
       {
          // Arrange
-         var builder = new DbContextOptionsBuilder<EnvironmentContext>();
-         builder.UseInMemoryDatabase(nameof(EFEnvironmentRepository_UpdateEnvironment_UnitTests));
-         var options = builder.Options;
-         Environment environment = new Environment
-         {
-            EnvironmentKey = SomeRandom.Guid(),
-            Name = SomeRandom.String(),
-            Owner = SomeRandom.Guid(),
-         };
-         using (var context = new EnvironmentContext(options))
-         {
-            var environments = new List<Environment>
-                {
-                    new Environment { Name = SomeRandom.String(), Description = SomeRandom.String(), EnvironmentKey = SomeRandom.Guid(), Owner = SomeRandom.Guid(), IsDeleted = false },
-                    new Environment { Name = SomeRandom.String(), Description = SomeRandom.String(), EnvironmentKey = SomeRandom.Guid(), Owner = SomeRandom.Guid(), IsDeleted = false },
-                    new Environment { Name = SomeRandom.String(), Description = SomeRandom.String(), EnvironmentKey = SomeRandom.Guid(), Owner = SomeRandom.Guid(), IsDeleted = true },
-                };
+         using var context = new EnvironmentContext(_dbContextOptions);
+         context.AddRange(new[] { randomEnvironment(false), randomEnvironment(false), randomEnvironment(true) });
+         context.SaveChanges();
 
-            context.AddRange(environments);
-            context.SaveChanges();
-         }
-
-         using (var context = new EnvironmentContext(options))
-         {
-            var sut = new EFEnvironmentRepository(context);
-
-            // Act + Assert
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => sut.UpdateEnvironment(environment));
-         }
+         // Act + Assert
+         Environment nonexistentEnvironment = randomEnvironment();
+         var sut = new EFEnvironmentRepository(context);
+         await Assert.ThrowsAsync<EntityNotFoundException>(() => sut.UpdateEnvironment(nonexistentEnvironment));
       }
 
       [Fact]
       public async Task UpdateEnvironment_EnvironmentNotFound_DeletedNotFound()
       {
          // Arrange
-         var builder = new DbContextOptionsBuilder<EnvironmentContext>();
-         builder.UseInMemoryDatabase(nameof(EFEnvironmentRepository_UpdateEnvironment_UnitTests));
-         var options = builder.Options;
-         Guid deletedKey = SomeRandom.Guid();
-         Environment environment = new Environment
+         Environment deletedEnvironment = randomEnvironment(true);
+         using var context = new EnvironmentContext(_dbContextOptions);
+         context.AddRange(new[] { deletedEnvironment, randomEnvironment(false), randomEnvironment(false) });
+         context.SaveChanges();
+
+         // Act + Assert
+         var sut = new EFEnvironmentRepository(context);
+         await Assert.ThrowsAsync<EntityNotFoundException>(() => sut.UpdateEnvironment(deletedEnvironment));
+      }
+
+      // TODO: this is duplicated, where should it live?
+      private static Environment randomEnvironment(bool isDeleted = false)
+      {
+         return new Environment
          {
-            EnvironmentKey = deletedKey,
             Name = SomeRandom.String(),
+            Description = SomeRandom.String(),
+            EnvironmentKey = SomeRandom.Guid(),
             Owner = SomeRandom.Guid(),
+            IsDeleted = isDeleted
          };
-         using (var context = new EnvironmentContext(options))
-         {
-            var environments = new List<Environment>
-                {
-                    new Environment { Name = SomeRandom.String(), Description = SomeRandom.String(), EnvironmentKey = deletedKey, Owner = SomeRandom.Guid(), IsDeleted = true },
-                    new Environment { Name = SomeRandom.String(), Description = SomeRandom.String(), EnvironmentKey = SomeRandom.Guid(), Owner = SomeRandom.Guid(), IsDeleted = false },
-                    new Environment { Name = SomeRandom.String(), Description = SomeRandom.String(), EnvironmentKey = SomeRandom.Guid(), Owner = SomeRandom.Guid(), IsDeleted = false },
-                };
-
-            context.AddRange(environments);
-            context.SaveChanges();
-         }
-
-         using (var context = new EnvironmentContext(options))
-         {
-            var sut = new EFEnvironmentRepository(context);
-
-            // Act + Assert
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => sut.UpdateEnvironment(environment));            
-         }
       }
    }
 }
