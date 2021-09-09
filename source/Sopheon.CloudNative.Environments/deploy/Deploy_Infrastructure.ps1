@@ -1,7 +1,7 @@
 
 [Cmdletbinding()]
 Param(
-    [Parameter(Mandatory = $true)][string]$Environment
+    [Parameter(Mandatory = $true)][string]$Environment = $env:Environment
 )
 # Deploy Azure Resources for release definitions to talk to
 
