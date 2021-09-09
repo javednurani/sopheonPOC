@@ -22,7 +22,7 @@ param location string = resourceGroup().location
 
 // SQL Server module
 module SqlServer 'SQLServer_Database_Template.bicep' = {
-  name: sqlServer_name
+  name: 'Sql Server Deployment'
   params: {
     location: location
     administratorLoginEngima: sqlServer_Enigma
@@ -34,7 +34,7 @@ module SqlServer 'SQLServer_Database_Template.bicep' = {
 }
 
 module EnvironmentFunction 'Environments_Function_App.bicep' = {
-  name: environmentFunctionApp_Name
+  name: 'Function App Deployment'
   params: {
     location: location
     functionAppName: environmentFunctionApp_Name
