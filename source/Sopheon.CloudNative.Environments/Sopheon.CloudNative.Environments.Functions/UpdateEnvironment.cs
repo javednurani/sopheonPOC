@@ -111,25 +111,23 @@ namespace Sopheon.CloudNative.Environments.Functions
             environment = await _environmentRepository.UpdateEnvironment(environment);
             return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.OK, _mapper.Map<Environment, EnvironmentDto>(environment), _serializer);
          }
-         catch (JsonReaderException ex)
-         {
-            logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, "Request body was invalid.");
-         }
-         catch (JsonSerializationException ex)
-         {
-            logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, $"Request body was invalid. Is {nameof(EnvironmentDto.Owner)} field a valid GUID?");
-         }    
-         catch (EntityNotFoundException ex)
-         {
-            logger.LogInformation(ex.Message);
-            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.NotFound, ex.Message);
-         }
          catch (Exception ex)
          {
-            logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.InternalServerError, "Something went wrong. Please try again later.");
+            if (ex is JsonReaderException || ex is JsonSerializationException)
+            {
+               logger.LogInformation($"{ex.GetType()} : {ex.Message}");
+               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, $"Request body was invalid.");
+            }
+            else if (ex is EntityNotFoundException)
+            {
+               logger.LogInformation(ex.Message);
+               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.NotFound, ex.Message);
+            }
+            else
+            {
+               logger.LogInformation($"{ex.GetType()} : {ex.Message}");
+               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.InternalServerError, $"Something went wrong. Please try again later. {ex.Message}");
+            }
          }
       }
    }
