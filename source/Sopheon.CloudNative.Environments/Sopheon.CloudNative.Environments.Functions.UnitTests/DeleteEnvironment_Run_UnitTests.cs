@@ -148,12 +148,5 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          // create Sut
          Sut = new DeleteEnvironment(_mockEnvironmentRepository.Object, _responseBuilder);
       }
-
-      private async Task<string> GetResponseBody(HttpResponseData response)
-      {
-         response.Body.Position = 0;
-         StreamReader reader = new StreamReader(response.Body);
-         return await reader.ReadToEndAsync();
-      }
    }
 }
