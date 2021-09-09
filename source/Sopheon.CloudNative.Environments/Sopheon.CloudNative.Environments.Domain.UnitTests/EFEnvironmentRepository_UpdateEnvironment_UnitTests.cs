@@ -19,7 +19,7 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
       {
          // Arrange
          var builder = new DbContextOptionsBuilder<EnvironmentContext>();
-         builder.UseInMemoryDatabase(nameof(EFEnvironmentRepository_GetEnvironments_UnitTests));
+         builder.UseInMemoryDatabase(nameof(EFEnvironmentRepository_UpdateEnvironment_UnitTests));
          var options = builder.Options;
          Guid keyToUpdate = SomeRandom.Guid();
          Environment environment = new Environment
@@ -33,7 +33,7 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
          {
             var environments = new List<Environment>
                 {
-                    new Environment { Name = SomeRandom.String(), Description = SomeRandom.String(), EnvironmentKey = keyToUpdate, Owner = SomeRandom.Guid(), IsDeleted = false },
+                    environment,
                     new Environment { Name = SomeRandom.String(), Description = SomeRandom.String(), EnvironmentKey = SomeRandom.Guid(), Owner = SomeRandom.Guid(), IsDeleted = false },
                     new Environment { Name = SomeRandom.String(), Description = SomeRandom.String(), EnvironmentKey = SomeRandom.Guid(), Owner = SomeRandom.Guid(), IsDeleted = true },
                 };
@@ -44,13 +44,21 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
 
          using (var context = new EnvironmentContext(options))
          {
-            var controller = new EFEnvironmentRepository(context);
+            var sut = new EFEnvironmentRepository(context);
 
             // Act
-            Environment updateEnvironment = await controller.UpdateEnvironment(environment);
+            environment.Name = SomeRandom.String();
+            environment.Description = SomeRandom.String();
+            environment.Owner = SomeRandom.Guid();
+
+            Environment updateEnvironment = await sut.UpdateEnvironment(environment);
 
             // Assert
-            Assert.Equal(environment, updateEnvironment);
+            Assert.Equal(environment.Name, updateEnvironment.Name);
+            Assert.Equal(environment.EnvironmentKey, updateEnvironment.EnvironmentKey);
+            Assert.Equal(environment.Owner, updateEnvironment.Owner);
+            Assert.Equal(environment.Description, updateEnvironment.Description);
+            Assert.Equal(environment.EnvironmentID, updateEnvironment.EnvironmentID);
          }
       }
 
@@ -59,7 +67,7 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
       {
          // Arrange
          var builder = new DbContextOptionsBuilder<EnvironmentContext>();
-         builder.UseInMemoryDatabase(nameof(EFEnvironmentRepository_GetEnvironments_UnitTests));
+         builder.UseInMemoryDatabase(nameof(EFEnvironmentRepository_UpdateEnvironment_UnitTests));
          var options = builder.Options;
          Environment environment = new Environment
          {
@@ -82,10 +90,10 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
 
          using (var context = new EnvironmentContext(options))
          {
-            var controller = new EFEnvironmentRepository(context);
+            var sut = new EFEnvironmentRepository(context);
 
             // Act + Assert
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => controller.UpdateEnvironment(environment));
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => sut.UpdateEnvironment(environment));
          }
       }
 
@@ -94,7 +102,7 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
       {
          // Arrange
          var builder = new DbContextOptionsBuilder<EnvironmentContext>();
-         builder.UseInMemoryDatabase(nameof(EFEnvironmentRepository_GetEnvironments_UnitTests));
+         builder.UseInMemoryDatabase(nameof(EFEnvironmentRepository_UpdateEnvironment_UnitTests));
          var options = builder.Options;
          Guid deletedKey = SomeRandom.Guid();
          Environment environment = new Environment
@@ -118,10 +126,10 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
 
          using (var context = new EnvironmentContext(options))
          {
-            var controller = new EFEnvironmentRepository(context);
+            var sut = new EFEnvironmentRepository(context);
 
             // Act + Assert
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => controller.UpdateEnvironment(environment));            
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => sut.UpdateEnvironment(environment));            
          }
       }
    }

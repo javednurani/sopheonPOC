@@ -45,7 +45,7 @@ namespace Sopheon.CloudNative.Environments.Domain.Repositories
          entityEnvironment.Owner = environment.Owner;
          entityEnvironment.Description = environment.Description;
 
-         Environment newEnvironment = _context.Environments.Update(environment).Entity;
+         Environment newEnvironment = _context.Environments.Update(entityEnvironment).Entity;
          await _context.SaveChangesAsync();
 
          return newEnvironment;
