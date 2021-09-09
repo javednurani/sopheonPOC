@@ -1,21 +1,15 @@
 using System;
-using System.IO;
 using System.Net;
 using System.Threading.Tasks;
-using AutoMapper;
-using Azure.Core.Serialization;
-using FluentValidation;
-using FluentValidation.Results;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
+using Sopheon.CloudNative.Environments.Domain.Exceptions;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
-using Sopheon.CloudNative.Environments.Functions.Models;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 using HttpTriggerAttribute = Microsoft.Azure.Functions.Worker.HttpTriggerAttribute;
 
@@ -23,20 +17,12 @@ namespace Sopheon.CloudNative.Environments.Functions
 {
    public class DeleteEnvironment
    {
-      // Cloud-1484, we are defining ObjectSerializer to be used, per Function class
-      // this is due to unit test context not having a serializer configured, if we use the below line to configure serializer for production context
-      // Ideally, we would use this line in Program.cs :: main() : .ConfigureFunctionsWorkerDefaults(worker => worker.UseNewtonsoftJson())
-      private readonly static NewtonsoftJsonObjectSerializer _serializer = new NewtonsoftJsonObjectSerializer();
       private readonly IEnvironmentRepository _environmentRepository;
-      private readonly IMapper _mapper;
-      private readonly IValidator<EnvironmentDto> _validator;
       private readonly HttpResponseDataBuilder _responseBuilder;
-    
-      public DeleteEnvironment(IEnvironmentRepository environmentRepository, IMapper mapper, IValidator<EnvironmentDto> validator, HttpResponseDataBuilder responseBuilder)
+
+      public DeleteEnvironment(IEnvironmentRepository environmentRepository, HttpResponseDataBuilder responseBuilder)
       {
          _environmentRepository = environmentRepository;
-         _mapper = mapper;
-         _validator = validator;
          _responseBuilder = responseBuilder;
       }
 
@@ -55,6 +41,11 @@ namespace Sopheon.CloudNative.Environments.Functions
       [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest,
          Summary = "400 Bad Request response",
          Description = "Bad Request")]
+      [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError,
+         contentType: "application/json",
+         bodyType: typeof(string),
+         Summary = "500 Internal Server Error",
+         Description = "Internal Server Error, 500 response with error message in response body")]
 
       public async Task<HttpResponseData> Run(
           [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "environments/{key}")] HttpRequestData req,
@@ -78,17 +69,23 @@ namespace Sopheon.CloudNative.Environments.Functions
                EnvironmentKey = environmentKey
             };
 
-            bool deleteSuccess = await _environmentRepository.DeleteEnvironment(environment);
-
-            HttpStatusCode statusCode = deleteSuccess ? HttpStatusCode.NoContent : HttpStatusCode.NotFound;
-
-            return _responseBuilder.BuildWithoutBody(req, statusCode);
-
+            await _environmentRepository.DeleteEnvironment(environment);
+            // TODO 202 Accepted vs 204 No Content...
+            return _responseBuilder.BuildWithoutBody(req, HttpStatusCode.Accepted);
          }
+
          catch (Exception ex)
          {
-            logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.InternalServerError, "Something went wrong. Please try again later.");
+            if (ex is EntityNotFoundException)
+            {
+               logger.LogInformation(ex.Message);
+               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.NotFound, ex.Message);
+            }
+            else
+            {
+               logger.LogInformation($"{ex.GetType()} : {ex.Message}");
+               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.InternalServerError, $"Something went wrong. Please try again later. {ex.Message}");
+            }
          }
       }
    }

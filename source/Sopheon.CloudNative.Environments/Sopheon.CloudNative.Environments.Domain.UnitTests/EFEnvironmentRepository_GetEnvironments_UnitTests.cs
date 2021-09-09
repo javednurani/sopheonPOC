@@ -48,7 +48,7 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
       }
 
       [Fact]
-      public async Task GetEnvionments_HappyPath_AllDeletedFileteredAsync()
+      public async Task GetEnvironments_HappyPath_AllDeletedFilteredAsync()
       {
          // Arrange
          var builder = new DbContextOptionsBuilder<EnvironmentContext>();

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sopheon.CloudNative.Environments.Domain.Data;
+using Sopheon.CloudNative.Environments.Domain.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,21 +32,17 @@ namespace Sopheon.CloudNative.Environments.Domain.Repositories
          return await _context.Environments.Where(env => !env.IsDeleted).ToArrayAsync();
       }
 
-      public async Task<bool> DeleteEnvironment(Environment environment)
+      public async Task DeleteEnvironment(Environment environment)
       {
-         Environment entityEnvironment = await _context.Environments.SingleOrDefaultAsync(env => env.EnvironmentKey == environment.EnvironmentKey);
+         Environment entityEnvironment = await _context.Environments.SingleOrDefaultAsync(env => env.EnvironmentKey == environment.EnvironmentKey && !env.IsDeleted);
 
          if (entityEnvironment == null)
          {
-            return false;
-            //throw new Exception(); - in discussion on UPDATE story
+            throw new EntityNotFoundException($"An Environment was not found with a key: {environment.EnvironmentKey}");
          }
-
-         // TODO: check if entityEnvironment.IsDeleted ?
 
          entityEnvironment.IsDeleted = true;
          await _context.SaveChangesAsync();
-         return true;
       }
    }
 }
