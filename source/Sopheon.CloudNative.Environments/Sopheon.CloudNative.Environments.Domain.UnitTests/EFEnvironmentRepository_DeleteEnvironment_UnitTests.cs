@@ -45,7 +45,7 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
       }
 
       [Fact]
-      public async Task DeleteEnvironment_EnvironmentNotFound_MissingNotFound()
+      public async Task DeleteEnvironment_EnvironmentNotFound_ByKey_EntityNotFoundException()
       {
          using var context = new EnvironmentContext(_dbContextOptions);
 
@@ -66,7 +66,7 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
       }
 
       [Fact]
-      public async Task DeleteEnvironment_EnvironmentNotFound_DeletedNotFound()
+      public async Task DeleteEnvironment_EnvironmentNotFound_IsDeleted_EntityNotFoundException()
       {
          using var context = new EnvironmentContext(_dbContextOptions);
 
