@@ -111,23 +111,20 @@ namespace Sopheon.CloudNative.Environments.Functions
             environment = await _environmentRepository.UpdateEnvironment(environment);
             return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.OK, _mapper.Map<Environment, EnvironmentDto>(environment), _serializer);
          }
+         catch (JsonException ex)
+         {
+            logger.LogInformation($"{ex.GetType()} : {ex.Message}");
+            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, $"Request body was invalid.");
+         }
+         catch (EntityNotFoundException ex)
+         {
+            logger.LogInformation(ex.Message);
+            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.NotFound, ex.Message);
+         }
          catch (Exception ex)
          {
-            if (ex is JsonException)
-            {
-               logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, $"Request body was invalid.");
-            }
-            else if (ex is EntityNotFoundException)
-            {
-               logger.LogInformation(ex.Message);
-               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.NotFound, ex.Message);
-            }
-            else
-            {
-               logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.InternalServerError, $"Something went wrong. Please try again later. {ex.Message}");
-            }
+            logger.LogInformation($"{ex.GetType()} : {ex.Message}");
+            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.InternalServerError, $"Something went wrong. Please try again later. {ex.Message}");
          }
       }
    }
