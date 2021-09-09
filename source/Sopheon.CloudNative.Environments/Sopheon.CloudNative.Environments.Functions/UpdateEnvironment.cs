@@ -61,6 +61,11 @@ namespace Sopheon.CloudNative.Environments.Functions
          bodyType: typeof(string),
          Summary = "400 Bad Request response",
          Description = "Bad Request, 400 response with error message in response body")]
+      [OpenApiResponseWithBody(statusCode: HttpStatusCode.NotFound,
+         contentType: "application/json",
+         bodyType: typeof(string),
+         Summary = "404 Not Found response",
+         Description = "Not Found, 404 response with error message in response body.")]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError,
          contentType: "application/json",
          bodyType: typeof(string),
