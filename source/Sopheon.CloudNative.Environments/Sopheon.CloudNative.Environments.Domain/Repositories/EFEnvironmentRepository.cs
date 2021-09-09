@@ -30,5 +30,22 @@ namespace Sopheon.CloudNative.Environments.Domain.Repositories
       {
          return await _context.Environments.Where(env => !env.IsDeleted).ToArrayAsync();
       }
+
+      public async Task<bool> DeleteEnvironment(Environment environment)
+      {
+         Environment entityEnvironment = await _context.Environments.SingleOrDefaultAsync(env => env.EnvironmentKey == environment.EnvironmentKey);
+
+         if (entityEnvironment == null)
+         {
+            return false;
+            //throw new Exception(); - in discussion on UPDATE story
+         }
+
+         // TODO: check if entityEnvironment.IsDeleted ?
+
+         entityEnvironment.IsDeleted = true;
+         await _context.SaveChangesAsync();
+         return true;
+      }
    }
 }

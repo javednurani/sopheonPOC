@@ -17,10 +17,17 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          await createdResponse.WriteAsJsonAsync(body, serializer, statusCode);
          return createdResponse;
       }
+
       public async Task<HttpResponseData> BuildWithStringBody(HttpRequestData request, HttpStatusCode statusCode, string body)
       {
          HttpResponseData missingNameResponse = request.CreateResponse(statusCode);
          await missingNameResponse.WriteStringAsync(body);
+         return missingNameResponse;
+      }
+
+      public HttpResponseData BuildWithoutBody(HttpRequestData request, HttpStatusCode statusCode)
+      {
+         HttpResponseData missingNameResponse = request.CreateResponse(statusCode);
          return missingNameResponse;
       }
    }

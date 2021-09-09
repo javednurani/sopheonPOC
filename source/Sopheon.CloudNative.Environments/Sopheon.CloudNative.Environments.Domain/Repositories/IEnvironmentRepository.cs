@@ -18,5 +18,12 @@ namespace Sopheon.CloudNative.Environments.Domain.Repositories
       /// </summary>
       /// <returns>Task<IEnumerable<Environment>>, a list of all environemts.</returns>
       Task<IEnumerable<Environment>> GetEnvironments();
+
+      /// <summary>
+      /// Soft Deletes an Environment
+      /// </summary>
+      /// <param name="environmentKey">EnvironmentKey of Environment to be soft deleted</param>
+      /// <returns>Task<bool>, true if successful soft delete, false if environment not found by key</returns>
+      Task<bool> DeleteEnvironment(Environment environment);
    }
 }
