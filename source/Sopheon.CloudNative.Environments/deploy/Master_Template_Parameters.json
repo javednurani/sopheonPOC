@@ -8,10 +8,10 @@
         "sqlServer_name": {
             "value": "^SqlServerName^"
         },
-        "sqlDBName": {
+        "sqlServerDatabase_name": {
             "value": "^SqlServerDatabaseName^"
         },
-        "poolName": {
+        "sqlServerPool_name": {
             "value": "^SqlElasticPoolName^"
         },
         "administratorLogin": {
