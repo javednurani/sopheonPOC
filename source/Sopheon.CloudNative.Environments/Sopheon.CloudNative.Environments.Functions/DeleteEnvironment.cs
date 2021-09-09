@@ -30,7 +30,7 @@ namespace Sopheon.CloudNative.Environments.Functions
       [OpenApiOperation(operationId: nameof(DeleteEnvironment),
          tags: new[] { "Environments" },
          Summary = "Delete an Environment",
-         Description = "Delete an Environment",
+         Description = "Delete an Environment by EnvironmentKey",
          Visibility = OpenApiVisibilityType.Important)]
       [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NoContent,
          Summary = "204 No Content response",
@@ -70,7 +70,7 @@ namespace Sopheon.CloudNative.Environments.Functions
             };
 
             await _environmentRepository.DeleteEnvironment(environment);
-            // TODO 202 Accepted vs 204 No Content...
+            // TODO: soft delete, 202 Accepted vs 204 No Content
             return _responseBuilder.BuildWithoutBody(req, HttpStatusCode.NoContent);
          }
          catch (EntityNotFoundException ex)
