@@ -52,7 +52,6 @@ resource EnvironmentsFunctionApp 'Microsoft.Web/sites@2021-01-15' = {
 
 resource BasicPublishingCredsPoliciesFtp 'Microsoft.Web/sites/basicPublishingCredentialsPolicies@2021-01-15' = {
   name: '${functionAppName}/ftp'
-  location: location
   properties: {
     allow: true
   }
@@ -60,7 +59,6 @@ resource BasicPublishingCredsPoliciesFtp 'Microsoft.Web/sites/basicPublishingCre
 
 resource BasicPublishingCredsPoliciesScm 'Microsoft.Web/sites/basicPublishingCredentialsPolicies@2021-01-15' = {
   name: '${functionAppName}/scm'
-  location: location
   properties: {
     allow: true
   }
@@ -68,7 +66,6 @@ resource BasicPublishingCredsPoliciesScm 'Microsoft.Web/sites/basicPublishingCre
 
 resource FunctionAppConfig 'Microsoft.Web/sites/config@2021-01-15' = {
   name: '${functionAppName}/web'
-  location: location
   properties: {
     numberOfWorkers: 1
     defaultDocuments: [
@@ -145,7 +142,6 @@ resource FunctionAppConfig 'Microsoft.Web/sites/config@2021-01-15' = {
 
 resource FunctionAppHostNameBindings 'Microsoft.Web/sites/hostNameBindings@2021-01-15' = {
   name: '${functionAppName}/${functionAppName}.azurewebsites.net'
-  location: location
   properties: {
     siteName: functionAppName
     hostNameType: 'Verified'
