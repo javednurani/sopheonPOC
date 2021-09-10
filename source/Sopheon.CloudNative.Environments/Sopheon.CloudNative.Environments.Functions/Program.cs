@@ -30,15 +30,6 @@ namespace Sopheon.CloudNative.Environments.Functions
                {
                   builder.AddUserSecrets<Program>();
                }
-               if (hostContext.HostingEnvironment.IsProduction())
-               {
-                  var keyVaultName = Environment.GetEnvironmentVariable("KeyVaultName");
-                  var builtConfig = builder.Build();
-                  var secretClient = new SecretClient(
-                      new Uri($"https://{keyVaultName}.vault.azure.net/"),
-                      new DefaultAzureCredential());
-                  builder.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
-               }
             })
             // Cloud-1484, we are defining ObjectSerializer to be used, per Function class
             // this is due to unit test context not having a serializer configured, if we use the below line to configure serializer for production context
@@ -53,8 +44,9 @@ namespace Sopheon.CloudNative.Environments.Functions
                // Add HttpClient
                services.AddHttpClient();
 
-               // Add Custom Services
-               services.AddDbContext<EnvironmentContext>(options => options.UseSqlServer(hostContext.Configuration["EnvironmentsSqlConnectionString"]));
+                // Add Custom Services
+                string connString = Environment.GetEnvironmentVariable("SQLCONNSTR_EnvironmentsSqlConnectionString");
+                services.AddDbContext<EnvironmentContext>(options => options.UseSqlServer(connString));
                services.AddAutoMapper(typeof(Program));
 
                services.AddScoped<IEnvironmentRepository, EFEnvironmentRepository>();

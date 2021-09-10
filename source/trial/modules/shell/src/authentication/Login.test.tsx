@@ -1,4 +1,3 @@
-import { MsalProvider } from '@azure/msal-react';
 import { shallow } from 'enzyme';
 import React from 'react';
 
@@ -17,7 +16,7 @@ describe('Test Login component', () => {
     // Assert
     const authLanding = wrapper.find(AuthLanding);
     expect(authLanding).toHaveLength(1);
-    expect(authLanding.prop('queryParams')).toHaveProperty('mode', azureSettings.AD_B2C_Sopheon_Mode_Login);
+    expect(authLanding.prop('adB2cPolicyName')).toBe(azureSettings.AD_B2C_SignUpSignIn_Policy);
     expect(authLanding.prop('spinnerMessageResourceKey')).toBe(loginSpinnerResourceKey);
   });
 });
