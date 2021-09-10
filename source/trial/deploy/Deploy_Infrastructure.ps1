@@ -13,6 +13,9 @@ $StorageAccountNameValue = "stratuswebsite$($Environment.ToLower())";
 $MasterTemplate = "$($PSScriptRoot)\Master_Template.bicep";
 $MasterParametersTemplate = "$($PSScriptRoot)\Master_Template_Parameters.json";
 
+$CDNTemplate = "$($PSScriptRoot)\CDN_Profile.bicep";
+$CDNParametersTemplate = "$($PSScriptRoot)\CDN_Profile_Parameters.json";
+
 Write-Host "Replacing tokens on Master Template...";
 $masterTemplateContent = Get-Content $MasterTemplate -raw;
 $masterTemplateContent = $masterTemplateContent.Replace('^StorageAccountName^', $StorageAccountNameValue)
