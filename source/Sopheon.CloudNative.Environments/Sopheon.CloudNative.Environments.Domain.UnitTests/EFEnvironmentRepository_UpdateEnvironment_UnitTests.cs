@@ -68,8 +68,7 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
 
          // reset environment context, which will only contain persisted data from original context
          using var context2 = new EnvironmentContext(_dbContextOptions);
-         Environment retrievedEnvironment = (await new EFEnvironmentRepository(context2).GetEnvironments())
-            .Single(e => e.EnvironmentKey == environment.EnvironmentKey);
+         Environment retrievedEnvironment = context2.Environments.Single(e => e.EnvironmentKey == environment.EnvironmentKey);
 
          // ensure the updated values were retireved
          Assert.Equal(environment.Name, retrievedEnvironment.Name);
