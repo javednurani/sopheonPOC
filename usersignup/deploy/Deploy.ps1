@@ -19,7 +19,10 @@ try {
     Write-Host "...Uploading B2C Custom Policies via GraphAPI...";
     powershell.exe -file "$($Scripts)\Deploy_B2C_Assets.ps1" -PathToFolder "$($B2CAssets)\azureResources\" -Environment $Environment;
     Check-LastExitCode;
-   
+
+    Write-Host "...Clearing Blob storage on: b2cassets files..."
+    az storage blob delete-batch --account-name $StorageAccountName --source 'b2cassets'
+
     # Upload related B2C Assets to Blob Storage
     Write-Host "Uploading Marketing Page to blob storage";
     $MarketingUploadResults = az storage blob upload --container-name '$web' --account-name $StorageAccountName --file "$($B2CAssets)\website\index.html" --name index.html --auth-mode login;
@@ -27,8 +30,14 @@ try {
     Check-LastExitCode;
     Write-Host "Complete! Transfered files to Storage Account Blob: "'$web';
 
-    Write-Host "Uploading SelfAssertedTemplate blob storage";
-    $MarketingUploadResults = az storage blob upload-batch --destination 'b2cassets' --account-name $StorageAccountName --source "$($B2CAssets)\azureResources\SelfAsserted" --auth-mode login;
+    Write-Host "Uploading Profile Update blob storage";
+    $MarketingUploadResults = az storage blob upload-batch --destination 'b2cassets' --account-name $StorageAccountName --source "$($B2CAssets)/azureResources/ProfileUpdate" --auth-mode login;
+    $MarketingUploadResults;
+    Check-LastExitCode;
+    Write-Host "Complete! Transfered files to Storage Account Blob: "'b2cassets';
+
+    Write-Host "Uploading Password Reset blob storage";
+    $MarketingUploadResults = az storage blob upload-batch --destination 'b2cassets' --account-name $StorageAccountName --source "$($B2CAssets)/azureResources/PasswordReset" --auth-mode login;
     $MarketingUploadResults;
     Check-LastExitCode;
     Write-Host "Complete! Transfered files to Storage Account Blob: "'b2cassets';
