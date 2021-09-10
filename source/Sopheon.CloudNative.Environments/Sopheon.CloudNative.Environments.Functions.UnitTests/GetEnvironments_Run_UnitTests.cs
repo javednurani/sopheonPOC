@@ -7,7 +7,7 @@ using Moq;
 using Newtonsoft.Json;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Functions.Models;
-using Sopheon.CloudNative.Environments.Functions.UnitTests.TestHelpers;
+using Sopheon.CloudNative.Environments.Testing.Common;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -17,7 +17,7 @@ using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
 namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 {
-   public class GetEnvironments_Run_UnitTests
+   public class GetEnvironments_Run_UnitTests : FunctionUnitTestBase
    {
       GetEnvironments Sut;
 
@@ -43,18 +43,18 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
             {
                new Environment
                {
-                  Name = SomeRandom.String(),
-                  Owner = SomeRandom.Guid(),
-                  EnvironmentKey = SomeRandom.Guid(),
-                  Description = SomeRandom.String(),
+                  Name = Some.Random.String(),
+                  Owner = Some.Random.Guid(),
+                  EnvironmentKey = Some.Random.Guid(),
+                  Description = Some.Random.String(),
                   IsDeleted = false,
                },
                new Environment
                {
-                  Name = SomeRandom.String(),
-                  Owner = SomeRandom.Guid(),
-                  EnvironmentKey = SomeRandom.Guid(),
-                  Description = SomeRandom.String(),
+                  Name = Some.Random.String(),
+                  Owner = Some.Random.Guid(),
+                  EnvironmentKey = Some.Random.Guid(),
+                  Description = Some.Random.String(),
                   IsDeleted = false,
                },
             };
@@ -139,13 +139,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          // create Sut
          Sut = new GetEnvironments(_mockEnvironmentRepository.Object, _mapper);
-      }
-
-      private async Task<string> GetResponseBody(HttpResponseData response)
-      {
-         response.Body.Position = 0;
-         StreamReader reader = new StreamReader(response.Body);
-         return await reader.ReadToEndAsync();
       }
    }
 }

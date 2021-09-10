@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sopheon.CloudNative.Environ
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sopheon.CloudNative.Environments.Domain.UnitTests", "Sopheon.CloudNative.Environments.Domain.UnitTests\Sopheon.CloudNative.Environments.Domain.UnitTests.csproj", "{F4D30533-C529-4C00-94FC-05863EE168B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sopheon.CloudNative.Environments.Data", "Sopheon.CloudNative.Environments.Data\Sopheon.CloudNative.Environments.Data.csproj", "{A4A6AE93-21F3-4EE6-B96B-6B2B16F7AEAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sopheon.CloudNative.Environments.Data", "Sopheon.CloudNative.Environments.Data\Sopheon.CloudNative.Environments.Data.csproj", "{A4A6AE93-21F3-4EE6-B96B-6B2B16F7AEAE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sopheon.CloudNative.Environments.Testing.Common", "Sopheon.CloudNative.Environments.Testing.Common\Sopheon.CloudNative.Environments.Testing.Common.csproj", "{664DE8EA-0A9D-4433-BBC2-57EE205D5F6E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{A4A6AE93-21F3-4EE6-B96B-6B2B16F7AEAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4A6AE93-21F3-4EE6-B96B-6B2B16F7AEAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4A6AE93-21F3-4EE6-B96B-6B2B16F7AEAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{664DE8EA-0A9D-4433-BBC2-57EE205D5F6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{664DE8EA-0A9D-4433-BBC2-57EE205D5F6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{664DE8EA-0A9D-4433-BBC2-57EE205D5F6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{664DE8EA-0A9D-4433-BBC2-57EE205D5F6E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

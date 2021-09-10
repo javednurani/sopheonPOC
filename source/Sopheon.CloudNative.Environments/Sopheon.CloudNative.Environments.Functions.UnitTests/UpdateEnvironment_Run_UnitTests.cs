@@ -10,8 +10,8 @@ using Sopheon.CloudNative.Environments.Domain.Exceptions;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Functions.Models;
-using Sopheon.CloudNative.Environments.Functions.UnitTests.TestHelpers;
 using Sopheon.CloudNative.Environments.Functions.Validators;
+using Sopheon.CloudNative.Environments.Testing.Common;
 using System;
 using System.IO;
 using System.Net;
@@ -23,7 +23,7 @@ using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
 namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 {
-   public class UpdateEnvironment_Run_UnitTests
+   public class UpdateEnvironment_Run_UnitTests : FunctionUnitTestBase
    {
       UpdateEnvironment Sut;
 
@@ -44,16 +44,16 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       [Fact]
       public async void Run_HappyPath_ReturnsOK()
       {
-         Guid environmentKey = SomeRandom.Guid();
+         Guid environmentKey = Some.Random.Guid();
          // Arrange
          EnvironmentDto environmentRequest = new EnvironmentDto
          {
-            Name = SomeRandom.String(),
-            Owner = SomeRandom.Guid(),
-            Description = SomeRandom.String()
+            Name = Some.Random.String(),
+            Owner = Some.Random.Guid(),
+            Description = Some.Random.String()
          };
 
-         SetRequestBody(environmentRequest);
+         SetRequestBody(_request, environmentRequest);
 
          // Act
          HttpResponseData result = await Sut.Run(_request.Object, _context.Object, environmentKey.ToString());
@@ -84,15 +84,15 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       public async void Run_NonGuidKey_ReturnsBadRequest()
       {
          // Arrange
-         string environmentKey = SomeRandom.String();
+         string environmentKey = Some.Random.String();
          EnvironmentDto environmentRequest = new EnvironmentDto
          {
-            Name = SomeRandom.String(),
-            Owner = SomeRandom.Guid(),
-            Description = SomeRandom.String()
+            Name = Some.Random.String(),
+            Owner = Some.Random.Guid(),
+            Description = Some.Random.String()
          };
 
-         SetRequestBody(environmentRequest);
+         SetRequestBody(_request, environmentRequest);
 
          // Act
          HttpResponseData result = await Sut.Run(_request.Object, _context.Object, environmentKey.ToString());
@@ -112,14 +112,14 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       public async void Run_NameMissing_ReturnsBadRequest()
       {
          // Arrange         
-         Guid environmentKey = SomeRandom.Guid();
+         Guid environmentKey = Some.Random.Guid();
          EnvironmentDto environmentRequest = new EnvironmentDto
          {
-            Owner = SomeRandom.Guid(),
-            Description = SomeRandom.String()
+            Owner = Some.Random.Guid(),
+            Description = Some.Random.String()
          };
 
-         SetRequestBody(environmentRequest);
+         SetRequestBody(_request, environmentRequest);
 
          // Act
          HttpResponseData result = await Sut.Run(_request.Object, _context.Object, environmentKey.ToString());
@@ -139,14 +139,14 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       public async void Run_OwnerMissing_ReturnsBadRequest()
       {
          // Arrange         
-         Guid environmentKey = SomeRandom.Guid();
+         Guid environmentKey = Some.Random.Guid();
          EnvironmentDto environmentRequest = new EnvironmentDto
          {
-            Name = SomeRandom.String(),            
-            Description = SomeRandom.String()
+            Name = Some.Random.String(),            
+            Description = Some.Random.String()
          };
 
-         SetRequestBody(environmentRequest);
+         SetRequestBody(_request, environmentRequest);
 
          // Act
          HttpResponseData result = await Sut.Run(_request.Object, _context.Object, environmentKey.ToString());
@@ -166,16 +166,16 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       public async void Run_EnvironmentDoesNotExist_ReturnsBadRequest()
       {
          // Arrange         
-         Guid environmentKey = SomeRandom.Guid();
+         Guid environmentKey = Some.Random.Guid();
          EnvironmentDto environmentRequest = new EnvironmentDto
          {
-            Name = SomeRandom.String(),
-            Description = SomeRandom.String(),
-            Owner = SomeRandom.Guid(),
+            Name = Some.Random.String(),
+            Description = Some.Random.String(),
+            Owner = Some.Random.Guid(),
          };
 
-         SetRequestBody(environmentRequest);
-         string mockExceptionMessage = SomeRandom.String();
+         SetRequestBody(_request, environmentRequest);
+         string mockExceptionMessage = Some.Random.String();
          _mockEnvironmentRepository.Setup(er => er.UpdateEnvironment(It.IsAny<Environment>())).Throws(new EntityNotFoundException(mockExceptionMessage));
 
          // Act
@@ -232,21 +232,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          // create Sut
          Sut = new UpdateEnvironment(_mockEnvironmentRepository.Object, _mapper, _validator, _responseBuilder);
-      }
-
-      private async Task<string> GetResponseBody(HttpResponseData response)
-      {
-         response.Body.Position = 0;
-         StreamReader reader = new StreamReader(response.Body);
-         return await reader.ReadToEndAsync();
-      }
-
-      private void SetRequestBody(object requestObject)
-      {
-         byte[] byteArray = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(requestObject));
-         MemoryStream bodyStream = new MemoryStream(byteArray);
-
-         _request.Setup(r => r.Body).Returns(bodyStream);
       }
    }
 }

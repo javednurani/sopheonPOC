@@ -6,7 +6,7 @@ using Moq;
 using Sopheon.CloudNative.Environments.Domain.Exceptions;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
-using Sopheon.CloudNative.Environments.Functions.UnitTests.TestHelpers;
+using Sopheon.CloudNative.Environments.Testing.Common;
 using System;
 using System.IO;
 using System.Net;
@@ -59,7 +59,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       public async void Run_KeyIsInvalidGuid_ReturnsBadRequest()
       {
          // Arrange
-         string keyToDelete = SomeRandom.String();
+         string keyToDelete = Some.Random.String();
 
          // Act
          HttpResponseData result = await Sut.Run(_request.Object, _context.Object, keyToDelete);

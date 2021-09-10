@@ -1,8 +1,8 @@
 ﻿using System;
 using FluentValidation.TestHelper;
 using Sopheon.CloudNative.Environments.Functions.Models;
-using Sopheon.CloudNative.Environments.Functions.UnitTests.TestHelpers;
 using Sopheon.CloudNative.Environments.Functions.Validators;
+using Sopheon.CloudNative.Environments.Testing.Common;
 using Xunit;
 
 namespace Sopheon.CloudNative.Environments.Functions.UnitTests
@@ -37,9 +37,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       {
          EnvironmentDto env = new EnvironmentDto
          {
-            Name = SomeRandom.String(),
-            Description = SomeRandom.String(),
-            Owner = SomeRandom.Guid()
+            Name = Some.Random.String(),
+            Description = Some.Random.String(),
+            Owner = Some.Random.Guid()
          };
 
          TestValidationResult<EnvironmentDto> result = _sut.TestValidate(env);
