@@ -23,7 +23,7 @@ using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
 namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 {
-   public class UpdateEnvironment_Run_UnitTests
+   public class UpdateEnvironment_Run_UnitTests : FunctionUnitTestBase
    {
       UpdateEnvironment Sut;
 
@@ -53,7 +53,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
             Description = Some.Random.String()
          };
 
-         SetRequestBody(environmentRequest);
+         SetRequestBody(_request, environmentRequest);
 
          // Act
          HttpResponseData result = await Sut.Run(_request.Object, _context.Object, environmentKey.ToString());
@@ -92,7 +92,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
             Description = Some.Random.String()
          };
 
-         SetRequestBody(environmentRequest);
+         SetRequestBody(_request, environmentRequest);
 
          // Act
          HttpResponseData result = await Sut.Run(_request.Object, _context.Object, environmentKey.ToString());
@@ -119,7 +119,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
             Description = Some.Random.String()
          };
 
-         SetRequestBody(environmentRequest);
+         SetRequestBody(_request, environmentRequest);
 
          // Act
          HttpResponseData result = await Sut.Run(_request.Object, _context.Object, environmentKey.ToString());
@@ -146,7 +146,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
             Description = Some.Random.String()
          };
 
-         SetRequestBody(environmentRequest);
+         SetRequestBody(_request, environmentRequest);
 
          // Act
          HttpResponseData result = await Sut.Run(_request.Object, _context.Object, environmentKey.ToString());
@@ -174,7 +174,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
             Owner = Some.Random.Guid(),
          };
 
-         SetRequestBody(environmentRequest);
+         SetRequestBody(_request, environmentRequest);
          string mockExceptionMessage = Some.Random.String();
          _mockEnvironmentRepository.Setup(er => er.UpdateEnvironment(It.IsAny<Environment>())).Throws(new EntityNotFoundException(mockExceptionMessage));
 
@@ -232,21 +232,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          // create Sut
          Sut = new UpdateEnvironment(_mockEnvironmentRepository.Object, _mapper, _validator, _responseBuilder);
-      }
-
-      private async Task<string> GetResponseBody(HttpResponseData response)
-      {
-         response.Body.Position = 0;
-         StreamReader reader = new StreamReader(response.Body);
-         return await reader.ReadToEndAsync();
-      }
-
-      private void SetRequestBody(object requestObject)
-      {
-         byte[] byteArray = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(requestObject));
-         MemoryStream bodyStream = new MemoryStream(byteArray);
-
-         _request.Setup(r => r.Body).Returns(bodyStream);
       }
    }
 }

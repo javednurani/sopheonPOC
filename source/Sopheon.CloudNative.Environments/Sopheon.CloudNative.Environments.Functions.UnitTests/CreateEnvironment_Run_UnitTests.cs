@@ -1,4 +1,8 @@
-﻿using AutoMapper;
+﻿using System;
+using System.IO;
+using System.Net;
+using System.Threading.Tasks;
+using AutoMapper;
 using FluentValidation;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
@@ -11,17 +15,12 @@ using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Functions.Models;
 using Sopheon.CloudNative.Environments.Functions.Validators;
 using Sopheon.CloudNative.Environments.Testing.Common;
-using System;
-using System.IO;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
 namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 {
-   public class CreateEnvironment_Run_UnitTests
+   public class CreateEnvironment_Run_UnitTests : FunctionUnitTestBase
    {
       CreateEnvironment Sut;
 
@@ -50,7 +49,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
             Description = Some.Random.String()
          };
 
-         SetRequestBody(environmentRequest);
+         SetRequestBody(_request, environmentRequest);
 
          // Act
          HttpResponseData result = await Sut.Run(_request.Object, _context.Object);
@@ -81,7 +80,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       public async void Run_RequestMissingName_ReturnsBadRequest()
       {
          // Arrange
-         SetRequestBody(
+         SetRequestBody(_request,
             new EnvironmentDto
             {
                // Name field is missing
@@ -104,7 +103,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       public async void Run_RequestMissingOwner_ReturnsBadRequest()
       {
          // Arrange
-         SetRequestBody(
+         SetRequestBody(_request,
             new EnvironmentDto
             {
                Name = Some.Random.String(),
@@ -127,7 +126,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       public async void Run_OwnerNotValidGuid_ReturnsBadRequest()
       {
          // Arrange
-         SetRequestBody(
+         SetRequestBody(_request,
             // this anonymous object should NOT deserialize to an EnvironmentDto, will instead throw a JsonSerializationException
             new
             {
@@ -189,21 +188,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          // create Sut
          Sut = new CreateEnvironment(_mockEnvironmentRepository.Object, _mapper, _validator, _responseBuilder);
-      }
-
-      private async Task<string> GetResponseBody(HttpResponseData response)
-      {
-         response.Body.Position = 0;
-         StreamReader reader = new StreamReader(response.Body);
-         return await reader.ReadToEndAsync();
-      }
-
-      private void SetRequestBody(object requestObject)
-      {
-         byte[] byteArray = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(requestObject));
-         MemoryStream bodyStream = new MemoryStream(byteArray);
-
-         _request.Setup(r => r.Body).Returns(bodyStream);
       }
    }
 }
