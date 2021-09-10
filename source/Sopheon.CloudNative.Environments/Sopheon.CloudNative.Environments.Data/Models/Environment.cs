@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Sopheon.CloudNative.Environments.Domain.Models
+namespace Sopheon.CloudNative.Environments.Data.Models
 {
    public class Environment
    {
