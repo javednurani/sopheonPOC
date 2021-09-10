@@ -1,4 +1,3 @@
-import { StringDict } from '@azure/msal-common';
 import { useMsal } from '@azure/msal-react';
 import { ISpinnerStyles, IStackStyles, Spinner, SpinnerSize, Stack } from '@fluentui/react';
 import React, { CSSProperties, FunctionComponent, useEffect } from 'react';
@@ -14,11 +13,11 @@ const sectionStyle: CSSProperties = {
 };
 
 export interface AuthLandingProps {
-  queryParams: StringDict | undefined;
+  adB2cPolicyName: string;
   spinnerMessageResourceKey: string;
 }
 
-const AuthLanding: FunctionComponent<AuthLandingProps> = ({ queryParams, spinnerMessageResourceKey }: AuthLandingProps) => {
+const AuthLanding: FunctionComponent<AuthLandingProps> = ({ adB2cPolicyName, spinnerMessageResourceKey }: AuthLandingProps) => {
   const { instance } = useMsal();
   const { formatMessage } = useIntl();
   useEffect(() => {
@@ -28,7 +27,7 @@ const AuthLanding: FunctionComponent<AuthLandingProps> = ({ queryParams, spinner
       .handleRedirectPromise()
       .then(tokenResponse => {
         if (!tokenResponse) {
-          instance.loginRedirect(getAuthLandingRedirectRequest(queryParams));
+          instance.loginRedirect(getAuthLandingRedirectRequest(adB2cPolicyName));
         }
       })
       .catch(err => {
