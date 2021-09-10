@@ -3,6 +3,9 @@ using System.Text;
 
 namespace Sopheon.CloudNative.Environments.Testing.Common
 {
+   /// <summary>
+   /// This class exists as a wrapper around SomeRandom to allow easy, fluent access
+   /// </summary>
    public static class Some
    {
       public static SomeRandom Random
@@ -14,6 +17,10 @@ namespace Sopheon.CloudNative.Environments.Testing.Common
       }
    }
 
+   /// <summary>
+   /// The purpose of this class is to generate random primative data.
+   /// Instance exists to allow extension with domain-specic random data
+   /// </summary>
    public class SomeRandom
    {
       private const string _ALPHA_NUMERIC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

@@ -24,10 +24,10 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
       public async Task UpdateEnvironment_HappyPath_EnvironmentReturned()
       {
          // Arrange
-         Environment environment = randomEnvironment();
+         Environment environment = Some.Random.Environment();
 
          using var context = new EnvironmentContext(_dbContextOptions);
-         context.AddRange(new[] { environment, randomEnvironment(false), randomEnvironment(true) });
+         context.AddRange(new[] { environment, Some.Random.Environment(false), Some.Random.Environment(true) });
          context.SaveChanges();
 
          // Act - change environment values
@@ -50,9 +50,9 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
       public async Task UpdateEnvironment_HappyPath_EnvironmentUpdateIsPersisted()
       {
          // Arrange
-         Environment environment = randomEnvironment();
+         Environment environment = Some.Random.Environment();
          using var context = new EnvironmentContext(_dbContextOptions);
-         context.AddRange(new[] { environment, randomEnvironment(false), randomEnvironment(true) });
+         context.AddRange(new[] { environment, Some.Random.Environment(false), Some.Random.Environment(true) });
          context.SaveChanges();
 
          // Act - change environment values
@@ -82,11 +82,11 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
       {
          // Arrange
          using var context = new EnvironmentContext(_dbContextOptions);
-         context.AddRange(new[] { randomEnvironment(false), randomEnvironment(false), randomEnvironment(true) });
+         context.AddRange(new[] { Some.Random.Environment(false), Some.Random.Environment(false), Some.Random.Environment(true) });
          context.SaveChanges();
 
          // Act + Assert
-         Environment nonexistentEnvironment = randomEnvironment();
+         Environment nonexistentEnvironment = Some.Random.Environment();
          var sut = new EFEnvironmentRepository(context);
          await Assert.ThrowsAsync<EntityNotFoundException>(() => sut.UpdateEnvironment(nonexistentEnvironment));
       }
@@ -95,27 +95,14 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
       public async Task UpdateEnvironment_EnvironmentNotFound_DeletedNotFound()
       {
          // Arrange
-         Environment deletedEnvironment = randomEnvironment(true);
+         Environment deletedEnvironment = Some.Random.Environment(true);
          using var context = new EnvironmentContext(_dbContextOptions);
-         context.AddRange(new[] { deletedEnvironment, randomEnvironment(false), randomEnvironment(false) });
+         context.AddRange(new[] { deletedEnvironment, Some.Random.Environment(false), Some.Random.Environment(false) });
          context.SaveChanges();
 
          // Act + Assert
          var sut = new EFEnvironmentRepository(context);
          await Assert.ThrowsAsync<EntityNotFoundException>(() => sut.UpdateEnvironment(deletedEnvironment));
-      }
-
-      // TODO: this is duplicated, where should it live?
-      private static Environment randomEnvironment(bool isDeleted = false)
-      {
-         return new Environment
-         {
-            Name = Some.Random.String(),
-            Description = Some.Random.String(),
-            EnvironmentKey = Some.Random.Guid(),
-            Owner = Some.Random.Guid(),
-            IsDeleted = isDeleted
-         };
       }
    }
 }
