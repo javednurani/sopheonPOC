@@ -45,9 +45,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          // Arrange
          EnvironmentDto environmentRequest = new EnvironmentDto
          {
-            Name = SomeRandom.String(),
-            Owner = SomeRandom.Guid(),
-            Description = SomeRandom.String()
+            Name = Some.Random.String(),
+            Owner = Some.Random.Guid(),
+            Description = Some.Random.String()
          };
 
          SetRequestBody(environmentRequest);
@@ -85,8 +85,8 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
             new EnvironmentDto
             {
                // Name field is missing
-               Owner = SomeRandom.Guid(),
-               Description = SomeRandom.String()
+               Owner = Some.Random.Guid(),
+               Description = Some.Random.String()
             });
 
          // Act
@@ -107,9 +107,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          SetRequestBody(
             new EnvironmentDto
             {
-               Name = SomeRandom.String(),
+               Name = Some.Random.String(),
                // Owner field is missing
-               Description = SomeRandom.String()
+               Description = Some.Random.String()
             });
 
          // Act
@@ -131,9 +131,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
             // this anonymous object should NOT deserialize to an EnvironmentDto, will instead throw a JsonSerializationException
             new
             {
-               Name = SomeRandom.String(),
+               Name = Some.Random.String(),
                Owner = "thisIsNotAGuid",
-               Description = SomeRandom.String()
+               Description = Some.Random.String()
             });
 
          // Act

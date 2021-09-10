@@ -27,9 +27,9 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
          using var context = new EnvironmentContext(_dbContextOptions);
 
          // Arrange
-         Guid keyToDelete = SomeRandom.Guid();
+         Guid keyToDelete = Some.Random.Guid();
 
-         context.AddRange(new[] { new Environment { Name = SomeRandom.String(), Description = SomeRandom.String(), EnvironmentKey = keyToDelete, Owner = SomeRandom.Guid(), IsDeleted = false } });
+         context.AddRange(new[] { new Environment { Name = Some.Random.String(), Description = Some.Random.String(), EnvironmentKey = keyToDelete, Owner = Some.Random.Guid(), IsDeleted = false } });
          context.SaveChanges();
 
          // Act
@@ -47,9 +47,9 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
          using var context = new EnvironmentContext(_dbContextOptions);
 
          // Arrange
-         Guid keyToDelete = SomeRandom.Guid();
+         Guid keyToDelete = Some.Random.Guid();
 
-         context.AddRange(new[] { new Environment { Name = SomeRandom.String(), Description = SomeRandom.String(), EnvironmentKey = keyToDelete, Owner = SomeRandom.Guid(), IsDeleted = false } });
+         context.AddRange(new[] { new Environment { Name = Some.Random.String(), Description = Some.Random.String(), EnvironmentKey = keyToDelete, Owner = Some.Random.Guid(), IsDeleted = false } });
          context.SaveChanges();
 
          // Act
@@ -77,7 +77,7 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
          EFEnvironmentRepository sut = new EFEnvironmentRepository(context);
 
          // Act + Assert
-         await Assert.ThrowsAsync<EntityNotFoundException>(() => sut.DeleteEnvironment(SomeRandom.Guid()));
+         await Assert.ThrowsAsync<EntityNotFoundException>(() => sut.DeleteEnvironment(Some.Random.Guid()));
 
       }
 
@@ -87,11 +87,11 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
          using var context = new EnvironmentContext(_dbContextOptions);
 
          // Arrange
-         Guid deletedKey = SomeRandom.Guid();
+         Guid deletedKey = Some.Random.Guid();
 
          // entity.IsDeleted = true in datastore
          context.AddRange(new[] {
-            new Environment { Name = SomeRandom.String(), Description = SomeRandom.String(), EnvironmentKey = deletedKey, Owner = SomeRandom.Guid(), IsDeleted = true },
+            new Environment { Name = Some.Random.String(), Description = Some.Random.String(), EnvironmentKey = deletedKey, Owner = Some.Random.Guid(), IsDeleted = true },
             randomEnvironment(false)
          });
          context.SaveChanges();
@@ -106,10 +106,10 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
       {
          return new Environment
          {
-            Name = SomeRandom.String(),
-            Description = SomeRandom.String(),
-            EnvironmentKey = SomeRandom.Guid(),
-            Owner = SomeRandom.Guid(),
+            Name = Some.Random.String(),
+            Description = Some.Random.String(),
+            EnvironmentKey = Some.Random.Guid(),
+            Owner = Some.Random.Guid(),
             IsDeleted = isDeleted
          };
       }

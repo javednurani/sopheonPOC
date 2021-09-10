@@ -31,9 +31,9 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
          context.SaveChanges();
 
          // Act - change environment values
-         environment.Name = SomeRandom.String();
-         environment.Description = SomeRandom.String();
-         environment.Owner = SomeRandom.Guid();
+         environment.Name = Some.Random.String();
+         environment.Description = Some.Random.String();
+         environment.Owner = Some.Random.Guid();
 
          var sut = new EFEnvironmentRepository(context);
          Environment updateEnvironment = await sut.UpdateEnvironment(environment);
@@ -56,9 +56,9 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
          context.SaveChanges();
 
          // Act - change environment values
-         environment.Name = SomeRandom.String();
-         environment.Description = SomeRandom.String();
-         environment.Owner = SomeRandom.Guid();
+         environment.Name = Some.Random.String();
+         environment.Description = Some.Random.String();
+         environment.Owner = Some.Random.Guid();
 
          var sut = new EFEnvironmentRepository(context);
          _ = await sut.UpdateEnvironment(environment);
@@ -110,10 +110,10 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
       {
          return new Environment
          {
-            Name = SomeRandom.String(),
-            Description = SomeRandom.String(),
-            EnvironmentKey = SomeRandom.Guid(),
-            Owner = SomeRandom.Guid(),
+            Name = Some.Random.String(),
+            Description = Some.Random.String(),
+            EnvironmentKey = Some.Random.Guid(),
+            Owner = Some.Random.Guid(),
             IsDeleted = isDeleted
          };
       }

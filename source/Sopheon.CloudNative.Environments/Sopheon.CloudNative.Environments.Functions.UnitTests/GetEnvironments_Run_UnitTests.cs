@@ -43,18 +43,18 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
             {
                new Environment
                {
-                  Name = SomeRandom.String(),
-                  Owner = SomeRandom.Guid(),
-                  EnvironmentKey = SomeRandom.Guid(),
-                  Description = SomeRandom.String(),
+                  Name = Some.Random.String(),
+                  Owner = Some.Random.Guid(),
+                  EnvironmentKey = Some.Random.Guid(),
+                  Description = Some.Random.String(),
                   IsDeleted = false,
                },
                new Environment
                {
-                  Name = SomeRandom.String(),
-                  Owner = SomeRandom.Guid(),
-                  EnvironmentKey = SomeRandom.Guid(),
-                  Description = SomeRandom.String(),
+                  Name = Some.Random.String(),
+                  Owner = Some.Random.Guid(),
+                  EnvironmentKey = Some.Random.Guid(),
+                  Description = Some.Random.String(),
                   IsDeleted = false,
                },
             };

@@ -59,7 +59,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       public async void Run_KeyIsInvalidGuid_ReturnsBadRequest()
       {
          // Arrange
-         string keyToDelete = SomeRandom.String();
+         string keyToDelete = Some.Random.String();
 
          // Act
          HttpResponseData result = await Sut.Run(_request.Object, _context.Object, keyToDelete);

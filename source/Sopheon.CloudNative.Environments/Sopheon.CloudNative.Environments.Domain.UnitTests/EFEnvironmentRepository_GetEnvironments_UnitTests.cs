@@ -56,10 +56,10 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
       {
          return new Environment
          {
-            Name = SomeRandom.String(),
-            Description = SomeRandom.String(),
-            EnvironmentKey = SomeRandom.Guid(),
-            Owner = SomeRandom.Guid(),
+            Name = Some.Random.String(),
+            Description = Some.Random.String(),
+            EnvironmentKey = Some.Random.Guid(),
+            Owner = Some.Random.Guid(),
             IsDeleted = isDeleted
          };
       }

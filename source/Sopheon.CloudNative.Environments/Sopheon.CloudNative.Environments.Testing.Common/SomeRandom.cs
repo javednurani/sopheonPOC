@@ -3,12 +3,23 @@ using System.Text;
 
 namespace Sopheon.CloudNative.Environments.Testing.Common
 {
-   public static class SomeRandom
+   public static class Some
+   {
+      public static SomeRandom Random
+      {
+         get
+         {
+            return new SomeRandom();
+         }
+      }
+   }
+
+   public class SomeRandom
    {
       private const string _ALPHA_NUMERIC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
       private static readonly Random _random = new Random();
 
-      public static string String()
+      public string String()
       {
          StringBuilder stringBuilder = new StringBuilder();
 
@@ -22,17 +33,17 @@ namespace Sopheon.CloudNative.Environments.Testing.Common
          return stringBuilder.ToString();
       }
 
-      public static int Int()
+      public int Int()
       {
          return _random.Next();
       }
 
-      public static Guid Guid()
+      public Guid Guid()
       {
          return System.Guid.NewGuid();
       }
 
-      public static T Enum<T>() where T : Enum
+      public T Enum<T>() where T : Enum
       {
          Array enumValues = System.Enum.GetValues(typeof(T));
          int index = _random.Next(enumValues.Length);
