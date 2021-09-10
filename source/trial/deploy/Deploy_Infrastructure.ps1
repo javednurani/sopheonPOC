@@ -48,6 +48,13 @@ Write-Host "Enabling Static Website properties...";
 $StaticWebsiteEnabled = az storage blob service-properties update --account-name $StorageAccountNameValue --static-website --404-document WebApp/index.html --index-document index.html --auth-mode login --query "staticWebsite.enabled";
 Write-Host "Static Website enabled: $($StaticWebsiteEnabled) on Storage Account: $($StorageAccountNameValue)";
 
+Write-Host "Setting Static Website url for origin endpoint to CDN";
+# Gets the now setup url for the storage account Static Website
+# NOTE: This returns the Full HTTPS://*/ url, we need to strip out the /'s and HTTP(S): to be used properly for the CDN Origins
+$StorageAccountStaticWebsiteUrl = az storage account show --name $ResourceGroup.ToLower() --resource-group $ResourceGroup --query "primaryEndpoints.web" --output tsv;
+$CDNProfileEndpointOriginValue = $StorageAccountStaticWebsiteUrl -replace 'https:', '' -replace '/', '' -replace 'http:', '';
+Write-Host "Set! Static Website Url: $($CDNProfileEndpointOriginValue)";
+
 #region CDN template
 $CDNProfileNameToken = '^CDNProfileName^';
 $CDNProfileNameValue = $ResourceGroupValue;
