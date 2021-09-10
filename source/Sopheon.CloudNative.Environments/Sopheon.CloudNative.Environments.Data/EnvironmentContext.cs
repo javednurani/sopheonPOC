@@ -2,7 +2,7 @@
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
 
-namespace Sopheon.CloudNative.Environments.Domain.Data
+namespace Sopheon.CloudNative.Environments.Data
 {
     public class EnvironmentContext : DbContext
     {

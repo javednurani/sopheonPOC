@@ -26,6 +26,7 @@
     <PackageReference Include="Moq" Version="4.16.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Sopheon.CloudNative.Environments.Data\Sopheon.CloudNative.Environments.Data.csproj" />
     <ProjectReference Include="..\Sopheon.CloudNative.Environments.Domain\Sopheon.CloudNative.Environments.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>

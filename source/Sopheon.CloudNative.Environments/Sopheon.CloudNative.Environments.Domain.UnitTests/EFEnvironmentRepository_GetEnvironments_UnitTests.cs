@@ -1,8 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Sopheon.CloudNative.Environments.Domain.Data;
-using Sopheon.CloudNative.Environments.Domain.Repositories;
+using Sopheon.CloudNative.Environments.Data;
 using Sopheon.CloudNative.Environments.Domain.UnitTests.TestHelpers;
 using Xunit;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
