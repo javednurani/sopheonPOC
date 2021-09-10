@@ -144,7 +144,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         Assert.Equal($"Request body was invalid. Is {nameof(EnvironmentDto.Owner)} field a valid GUID?", responseBody);
+         Assert.Equal(StringConstants.RESPONSE_REQUEST_BODY_INVALID, responseBody);
       }
 
 
