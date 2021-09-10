@@ -8,7 +8,7 @@ param profile_endpoint_name string = '^CDNProfileEndpointName^'
 param profile_endpoint_origin string = '^CDNProfileEndpointOrigin^'
 
 @description('The name of the Marketing CDN Endpoint')
-param profile_endpoint_marketing_name string = '&CDNProfileEndpointMarketingName&'
+param profile_endpoint_marketing_name string = '^CDNProfileEndpointMarketingName^'
 
 resource CDN_Profile 'Microsoft.Cdn/profiles@2020-09-01' = {
   name: profiles_cdn_name

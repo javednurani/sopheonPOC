@@ -9,10 +9,10 @@
             "value": "^CDNProfileEndpointName^"
         },
         "profile_endpoint_origin": {
-            "value": "&CDNProfileEndpointOrigin&"
+            "value": "^CDNProfileEndpointOrigin^"
         },
         "profile_endpoint_marketing_name": {
-            "value": "&CDNProfileEndpointMarketingName&"
+            "value": "^CDNProfileEndpointMarketingName^"
         }
     }
 }
