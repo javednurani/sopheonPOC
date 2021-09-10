@@ -68,7 +68,7 @@ Write-Host "Replacing tokens on Master CDN Parameters Template...";
 $cdnParameters = Get-Content $CDNParametersTemplate -raw;
 $cdnParameters = $cdnParameters.Replace($CDNProfileNameToken, $CDNProfileNameValue).Replace($CDNProfileEndpointNameToken, $CDNProfileEndpointNameValue);
 $cdnParameters = $cdnParameters.Replace($CDNProfileEndpointOriginToken, $CDNProfileEndpointOriginValue).Replace($CDNProfileEndpointMarketingNameToken, $CDNProfileEndpointMarketingNameValue);
-Set-Content -Value $a -Path $CDNParametersTemplate;
+Set-Content -Value $cdnParameters -Path $CDNParametersTemplate;
 Write-Host "Complete!";
 
 Write-Host "Deploying CDN Template to Resource Group: $($ResourceGroup)";
