@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Sopheon.CloudNative.Environments.Domain.Data;
+using Sopheon.CloudNative.Environments.Data;
 
 namespace Sopheon.CloudNative.Environments.Domain.Migrations
 {
