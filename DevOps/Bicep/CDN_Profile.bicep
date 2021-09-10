@@ -19,7 +19,7 @@ resource CDN_Profile 'Microsoft.Cdn/profiles@2020-09-01' = {
 }
 
 resource CDN_Profile_Endpoint 'Microsoft.Cdn/profiles/endpoints@2020-09-01' = {
-  name: profile_endpoint_name
+  name: '${CDN_Profile.name}/${profile_endpoint_name}'
   location: 'Global'
   properties: {
     originHostHeader: profile_endpoint_origin
@@ -134,7 +134,7 @@ resource CDN_Profile_Endpoint 'Microsoft.Cdn/profiles/endpoints@2020-09-01' = {
 }
 
 resource CDN_Profile_Marketing_Endpoint 'Microsoft.Cdn/profiles/endpoints@2020-09-01' = {
-  name: profile_endpoint_marketing_name
+  name: '${CDN_Profile.name}/${profile_endpoint_marketing_name}'
   location: 'Global'
   properties: {
     originHostHeader: profile_endpoint_origin
