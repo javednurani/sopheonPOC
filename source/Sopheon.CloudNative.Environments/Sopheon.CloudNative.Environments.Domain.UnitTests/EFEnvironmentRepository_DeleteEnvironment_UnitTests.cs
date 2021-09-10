@@ -57,19 +57,13 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
          // Act
          await new EFEnvironmentRepository(context).DeleteEnvironment(keyToDelete);
 
-         // Assert
-
          // reset environment context, which will only contain persisted data from original context
          using var context2 = new EnvironmentContext(_dbContextOptions);
+         Environment deletedEnvironment = await context2.Environments.SingleOrDefaultAsync(env => env.EnvironmentKey == keyToDelete);
 
-         // TODO: getEnvironments filters out soft deletes, so we will need a different approach for this test.
-         // is the fact that GetEnvironments() does not return the deleted environment, a sufficient test that soft delete works?
-         // probably not...
-         Environment retrievedEnvironment = (await new EFEnvironmentRepository(context2).GetEnvironments())
-            .Single(e => e.EnvironmentKey == keyToDelete);
-
-         // e
-         Assert.True(retrievedEnvironment.IsDeleted);
+         // Assert
+         Assert.NotNull(deletedEnvironment);
+         Assert.True(deletedEnvironment.IsDeleted);
       }
 
       [Fact]

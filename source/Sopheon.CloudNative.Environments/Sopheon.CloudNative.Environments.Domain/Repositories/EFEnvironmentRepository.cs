@@ -29,7 +29,6 @@ namespace Sopheon.CloudNative.Environments.Domain.Repositories
 
       public async Task<IEnumerable<Environment>> GetEnvironments()
       {
-         //return await _context.Environments.ToArrayAsync();
          return await _context.Environments.Where(env => !env.IsDeleted).ToArrayAsync();
       }
 
