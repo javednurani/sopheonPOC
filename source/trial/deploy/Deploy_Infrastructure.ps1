@@ -81,7 +81,7 @@ Write-Host "Complete!";
 Write-Host "Deploying CDN Template to Resource Group: $($ResourceGroup)";
 $CDNTemplateDeploy = az deployment group create --resource-group $ResourceGroupValue --template-file $CDNTemplate --parameters $CDNParametersTemplate --name "$($DeploymentName)-CDN" --query "properties.provisioningState";
 Write-Host "CDN Template Deploy: $($CDNTemplateDeploy)";
-$CDNHostName = az cdn endpoint show --name $ResourceGroupValue --profile-name $ResourceGroupValue --resource-group $ResourceGroupValue --query "hostName" --output tsv;
+$CDNHostName = az cdn endpoint show --name $ResourceGroupValue --profile-name $CDNProfileEndpointNameValue --resource-group $ResourceGroupValue --query "hostName" --output tsv;
 $CDNHttpsEndpoint = "https://" + $CDNHostName + "/";
 Write-Host "CDN Endpoint: $($CDNHttpsEndpoint)";
 
