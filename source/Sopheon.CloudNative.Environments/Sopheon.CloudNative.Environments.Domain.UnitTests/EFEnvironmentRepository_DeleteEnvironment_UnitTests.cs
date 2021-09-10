@@ -4,6 +4,7 @@ using Sopheon.CloudNative.Environments.Domain.Exceptions;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Domain.UnitTests.TestHelpers;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
@@ -40,6 +41,29 @@ namespace Sopheon.CloudNative.Environments.Domain.UnitTests
          Environment environment = await context.Environments.FirstOrDefaultAsync(env => env.EnvironmentKey == keyToDelete);
          Assert.NotNull(environment);
          Assert.True(environment.IsDeleted);
+      }
+
+      [Fact]
+      public async Task DeleteEnvironment_HappyPath_SoftDeleteIsPersisted()
+      {
+         using var context = new EnvironmentContext(_dbContextOptions);
+
+         // Arrange
+         Guid keyToDelete = SomeRandom.Guid();
+
+         context.AddRange(new[] { new Environment { Name = SomeRandom.String(), Description = SomeRandom.String(), EnvironmentKey = keyToDelete, Owner = SomeRandom.Guid(), IsDeleted = false } });
+         context.SaveChanges();
+
+         // Act
+         await new EFEnvironmentRepository(context).DeleteEnvironment(keyToDelete);
+
+         // reset environment context, which will only contain persisted data from original context
+         using var context2 = new EnvironmentContext(_dbContextOptions);
+         Environment deletedEnvironment = await context2.Environments.SingleOrDefaultAsync(env => env.EnvironmentKey == keyToDelete);
+
+         // Assert
+         Assert.NotNull(deletedEnvironment);
+         Assert.True(deletedEnvironment.IsDeleted);
       }
 
       [Fact]
