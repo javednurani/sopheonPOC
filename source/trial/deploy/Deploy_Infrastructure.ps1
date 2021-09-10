@@ -45,6 +45,36 @@ Write-Host "Enabling Static Website properties...";
 $StaticWebsiteEnabled = az storage blob service-properties update --account-name $StorageAccountNameValue --static-website --404-document index.html --index-document WebApp/index.html --auth-mode login --query "staticWebsite.enabled";
 Write-Host "Static Website enabled: $($StaticWebsiteEnabled) on Storage Account: $($StorageAccountNameValue)";
 
-Write-Host "Infrastructure deployment complete!";
+#region CDN template
+$CDNProfileNameToken = '^CDNProfileName^';
+$CDNProfileNameValue = $ResourceGroupValue;
+$CDNProfileEndpointNameToken = '^CDNProfileEndpointName^';
+$CDNProfileEndpointNameValue = "StratusApp-$($Environment)";
+$CDNProfileEndpointMarketingNameValue = "StratusMarketing-$($Environment)";
+$CDNProfileEndpointMarketingNameToken = '^CDNProfileEndpointMarketingName^';
+$CDNProfileEndpointOriginToken = '^CDNProfileEndpointOrigin^';
+
+Write-Host "Replacing tokens on Master CDN Template...";
+$masterCdnTemplate = Get-Content $CDNTemplate -raw;
+$masterCdnTemplate = $masterCdnTemplate.Replace($CDNProfileNameToken, $CDNProfileNameValue).Replace($CDNProfileEndpointNameToken, $CDNProfileEndpointNameValue);
+$masterCdnTemplate = $masterCdnTemplate.Replace($CDNProfileEndpointOriginToken, $CDNProfileEndpointOriginValue).Replace($CDNProfileEndpointMarketingNameToken, $CDNProfileEndpointMarketingNameValue);
+Set-Content -Value $masterCdnTemplate -Path $CDNTemplate;
+Write-Host "Complete!";
+
+Write-Host "Replacing tokens on Master CDN Parameters Template...";
+$cdnParameters = Get-Content $CDNParametersTemplate -raw;
+$cdnParameters = $cdnParameters.Replace($CDNProfileNameToken, $CDNProfileNameValue).Replace($CDNProfileEndpointNameToken, $CDNProfileEndpointNameValue);
+$cdnParameters = $cdnParameters.Replace($CDNProfileEndpointOriginToken, $CDNProfileEndpointOriginValue).Replace($CDNProfileEndpointMarketingNameToken, $CDNProfileEndpointMarketingNameValue);
+Set-Content -Value $a -Path $CDNParametersTemplate;
+Write-Host "Complete!";
+
+Write-Host "Deploying CDN Template to Resource Group: $($ResourceGroup)";
+$CDNTemplateDeploy = az deployment group create --resource-group $ResourceGroupValue --template-file $CDNTemplate --parameters $CDNParametersTemplate --name "$($DeploymentName)-CDN" --query "properties.provisioningState";
+Write-Host "CDN Template Deploy: $($CDNTemplateDeploy)";
+$CDNHostName = az cdn endpoint show --name $ResourceGroupValue --profile-name $ResourceGroupValue --resource-group $ResourceGroupValue --query "hostName" --output tsv;
+$CDNHttpsEndpoint = "https://" + $CDNHostName + "/";
+Write-Host "CDN Endpoint: $($CDNHttpsEndpoint)";
 
 #endregion
+
+Write-Host "Infrastructure deployment complete!";
