@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿﻿using Microsoft.EntityFrameworkCore;
 using Sopheon.CloudNative.Environments.Domain.Data;
 using Sopheon.CloudNative.Environments.Domain.Exceptions;
 using System;
@@ -43,6 +43,25 @@ namespace Sopheon.CloudNative.Environments.Domain.Repositories
 
          entityEnvironment.IsDeleted = true;
          await _context.SaveChangesAsync();
+      }
+
+      public async Task<Environment> UpdateEnvironment(Environment environment)
+      {
+         Environment entityEnvironment = await _context.Environments.SingleOrDefaultAsync(env => !env.IsDeleted && env.EnvironmentKey == environment.EnvironmentKey);
+
+         if(entityEnvironment == null)
+         {
+            throw new EntityNotFoundException($"An Environment was not found with a key: {environment.EnvironmentKey}");
+         }
+
+         entityEnvironment.Name = environment.Name;
+         entityEnvironment.Owner = environment.Owner;
+         entityEnvironment.Description = environment.Description;
+
+         Environment newEnvironment = _context.Environments.Update(entityEnvironment).Entity;
+         await _context.SaveChangesAsync();
+
+         return newEnvironment;
       }
    }
 }
