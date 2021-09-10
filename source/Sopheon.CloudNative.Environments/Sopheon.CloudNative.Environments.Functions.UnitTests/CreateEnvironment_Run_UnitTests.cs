@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,8 +7,10 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
+using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Functions.Models;
 using Sopheon.CloudNative.Environments.Functions.UnitTests.TestHelpers;
+using Sopheon.CloudNative.Environments.Functions.Validators;
 using System;
 using System.IO;
 using System.Net;
@@ -26,8 +29,10 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       Mock<HttpRequestData> _request;
 
       Mock<IEnvironmentRepository> _mockEnvironmentRepository;
+      HttpResponseDataBuilder _responseBuilder;
 
       IMapper _mapper;
+      IValidator<EnvironmentDto> _validator;
 
       public CreateEnvironment_Run_UnitTests()
       {
@@ -92,7 +97,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         Assert.Equal($"{nameof(EnvironmentDto.Name)} field is required.", responseBody);
+         Assert.Equal($"'{nameof(EnvironmentDto.Name)}' must not be empty.", responseBody);
       }
 
       [Fact]
@@ -115,7 +120,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         Assert.Equal($"{nameof(EnvironmentDto.Owner)} field is required.", responseBody);
+         Assert.Equal($"'{nameof(EnvironmentDto.Owner)}' must not be empty.", responseBody);
       }
 
       [Fact]
@@ -139,7 +144,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         Assert.Equal($"Request body was invalid. Is {nameof(EnvironmentDto.Owner)} field a valid GUID?", responseBody);
+         Assert.Equal(StringConstants.RESPONSE_REQUEST_BODY_INVALID, responseBody);
       }
 
 
@@ -167,7 +172,8 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          // EnvironmentRepository Mock
          _mockEnvironmentRepository = new Mock<IEnvironmentRepository>();
-         _mockEnvironmentRepository.Setup(m => m.AddEnvironment(It.IsAny<Environment>())).Returns((Environment e) => {
+         _mockEnvironmentRepository.Setup(m => m.AddEnvironment(It.IsAny<Environment>())).Returns((Environment e) =>
+         {
             return Task.FromResult(e);
          });
 
@@ -178,8 +184,11 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          });
          _mapper = config.CreateMapper();
 
+         _validator = new EnvironmentDtoValidator();
+         _responseBuilder = new HttpResponseDataBuilder();
+
          // create Sut
-         Sut = new CreateEnvironment(_mockEnvironmentRepository.Object, _mapper);
+         Sut = new CreateEnvironment(_mockEnvironmentRepository.Object, _mapper, _validator, _responseBuilder);
       }
 
       private async Task<string> GetResponseBody(HttpResponseData response)
