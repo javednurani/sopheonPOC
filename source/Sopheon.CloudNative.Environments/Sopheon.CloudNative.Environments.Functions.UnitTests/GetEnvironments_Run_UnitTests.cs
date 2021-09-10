@@ -7,7 +7,7 @@ using Moq;
 using Newtonsoft.Json;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Functions.Models;
-using Sopheon.CloudNative.Environments.Functions.UnitTests.TestHelpers;
+using Sopheon.CloudNative.Environments.Testing.Common;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;

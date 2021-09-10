@@ -6,7 +6,7 @@ using Moq;
 using Sopheon.CloudNative.Environments.Domain.Exceptions;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
-using Sopheon.CloudNative.Environments.Functions.UnitTests.TestHelpers;
+using Sopheon.CloudNative.Environments.Testing.Common;
 using System;
 using System.IO;
 using System.Net;

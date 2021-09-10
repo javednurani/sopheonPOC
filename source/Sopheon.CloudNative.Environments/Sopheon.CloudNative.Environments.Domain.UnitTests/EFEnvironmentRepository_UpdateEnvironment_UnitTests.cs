@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Sopheon.CloudNative.Environments.Data;
 using Sopheon.CloudNative.Environments.Domain.Exceptions;
-using Sopheon.CloudNative.Environments.Domain.UnitTests.TestHelpers;
+using Sopheon.CloudNative.Environments.Testing.Common;
 using Xunit;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 

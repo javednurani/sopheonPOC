@@ -1,8 +1,8 @@
 ﻿using System;
 using FluentValidation.TestHelper;
 using Sopheon.CloudNative.Environments.Functions.Models;
-using Sopheon.CloudNative.Environments.Functions.UnitTests.TestHelpers;
 using Sopheon.CloudNative.Environments.Functions.Validators;
+using Sopheon.CloudNative.Environments.Testing.Common;
 using Xunit;
 
 namespace Sopheon.CloudNative.Environments.Functions.UnitTests

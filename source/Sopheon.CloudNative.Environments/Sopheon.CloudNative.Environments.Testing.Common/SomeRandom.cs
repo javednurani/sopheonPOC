@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace Sopheon.CloudNative.Environments.Functions.UnitTests.TestHelpers
+namespace Sopheon.CloudNative.Environments.Testing.Common
 {
    public static class SomeRandom
    {
