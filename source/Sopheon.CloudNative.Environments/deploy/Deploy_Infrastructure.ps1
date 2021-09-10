@@ -50,7 +50,7 @@ Write-Host "Master Template Deployment: $($MasterTemplateDeploy)";
 
 $SqlAdminEngima = (az keyvault secret show --vault-name "Cloud-DevOps" --name "SqlServerAdminEnigma" --query value).Replace('"', '');
 
-$environmentManagementConnectionString = (az sql db show-connection-string --client ado.net --server "$($ResourceGroupValue.ToLower()).database.windows.net" --name $SqlServerDatabaseNameValue).Replace('"', '');
+$environmentManagementConnectionString = (az sql db show-connection-string --client ado.net --server "$($ResourceGroupValue.ToLower())" --name $SqlServerDatabaseNameValue).Replace('"', '');
 
 $environmentManagementConnectionString = $environmentManagementConnectionString.Replace('<username>', 'sopheon').Replace('<password>', $SqlAdminEngima);
 
