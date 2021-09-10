@@ -50,7 +50,9 @@ namespace Sopheon.CloudNative.Environments.Functions
                services.AddHttpClient();
 
                // Add Custom Services
-               services.AddDbContext<EnvironmentContext>(options => options.UseSqlServer(hostContext.Configuration["EnvironmentsSqlConnectionString"]));
+               string connString =
+	               Environment.GetEnvironmentVariable("ConnectionStrings:EnvironmentsSqlConnectionString");
+               services.AddDbContext<EnvironmentContext>(options => options.UseSqlServer(connString));
                services.AddAutoMapper(typeof(Program));
 
                services.AddScoped<IEnvironmentRepository, EFEnvironmentRepository>();
