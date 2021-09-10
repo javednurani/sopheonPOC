@@ -51,7 +51,7 @@ Write-Host "Static Website enabled: $($StaticWebsiteEnabled) on Storage Account:
 Write-Host "Setting Static Website url for origin endpoint to CDN";
 # Gets the now setup url for the storage account Static Website
 # NOTE: This returns the Full HTTPS://*/ url, we need to strip out the /'s and HTTP(S): to be used properly for the CDN Origins
-$StorageAccountStaticWebsiteUrl = az storage account show --name $ResourceGroup.ToLower() --resource-group $ResourceGroup --query "primaryEndpoints.web" --output tsv;
+$StorageAccountStaticWebsiteUrl = az storage account show --name $StorageAccountNameValue --resource-group $ResourceGroupValue --query "primaryEndpoints.web" --output tsv;
 $CDNProfileEndpointOriginValue = $StorageAccountStaticWebsiteUrl -replace 'https:', '' -replace '/', '' -replace 'http:', '';
 Write-Host "Set! Static Website Url: $($CDNProfileEndpointOriginValue)";
 
