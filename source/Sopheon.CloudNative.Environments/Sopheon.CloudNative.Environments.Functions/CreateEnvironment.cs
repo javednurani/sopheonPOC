@@ -60,6 +60,11 @@ namespace Sopheon.CloudNative.Environments.Functions
          bodyType: typeof(string),
          Summary = "400 Bad Request response",
          Description = "Bad Request, 400 response with error message in response body")]
+      [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError,
+         contentType: "application/json",
+         bodyType: typeof(string),
+         Summary = "500 Internal Server Error",
+         Description = "Internal Server Error, 500 response with error message in response body")]
 
       public async Task<HttpResponseData> Run(
           [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "environments")] HttpRequestData req,

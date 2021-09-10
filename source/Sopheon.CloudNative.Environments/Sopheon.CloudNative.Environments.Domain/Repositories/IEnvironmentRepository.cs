@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
@@ -18,5 +19,12 @@ namespace Sopheon.CloudNative.Environments.Domain.Repositories
       /// </summary>
       /// <returns>Task<IEnumerable<Environment>>, a list of all environemts.</returns>
       Task<IEnumerable<Environment>> GetEnvironments();
+
+      /// <summary>
+      /// Soft Deletes an Environment
+      /// </summary>
+      /// <param name="environment">Environment entity with EnvironmentKey, to be soft deleted</param>
+      /// <returns>Task</returns>
+      Task DeleteEnvironment(Guid environmentKey);
    }
 }
