@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
-namespace Sopheon.CloudNative.Environments.Domain.Repositories
+namespace Sopheon.CloudNative.Environments.Data
 {
    public class EFEnvironmentRepository : IEnvironmentRepository
    {
