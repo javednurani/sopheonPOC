@@ -26,5 +26,12 @@ namespace Sopheon.CloudNative.Environments.Domain.Repositories
       /// <param name="environment">Environment entity with EnvironmentKey, to be soft deleted</param>
       /// <returns>Task</returns>
       Task DeleteEnvironment(Guid environmentKey);
+
+      /// <summary>
+      /// Updates an Environment
+      /// </summary>
+      /// <param name="environment">Environment model to be updated</param>
+      /// <returns>Task<Environment>, the updated Environment</returns>
+      Task<Environment> UpdateEnvironment(Environment environment);
    }
 }
