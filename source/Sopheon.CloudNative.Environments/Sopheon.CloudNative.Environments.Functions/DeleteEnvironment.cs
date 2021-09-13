@@ -10,7 +10,6 @@ using Microsoft.OpenApi.Models;
 using Sopheon.CloudNative.Environments.Domain.Exceptions;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
-using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 using HttpTriggerAttribute = Microsoft.Azure.Functions.Worker.HttpTriggerAttribute;
 
 namespace Sopheon.CloudNative.Environments.Functions
@@ -35,14 +34,18 @@ namespace Sopheon.CloudNative.Environments.Functions
       [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NoContent,
          Summary = "204 No Content response",
          Description = "No Content, successful Delete")]
-      [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound,
+      [OpenApiResponseWithBody(statusCode: HttpStatusCode.NotFound,
+         contentType: StringConstants.CONTENT_TYPE_TEXT_PLAIN,
+         bodyType: typeof(string),
          Summary = "404 Not Found response",
          Description = "Not Found, Environment to be deleted was not found")]
-      [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest,
+      [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest,
+         contentType: StringConstants.CONTENT_TYPE_TEXT_PLAIN,
+         bodyType: typeof(string),
          Summary = "400 Bad Request response",
          Description = "Bad Request")]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError,
-         contentType: "application/json",
+         contentType: StringConstants.CONTENT_TYPE_TEXT_PLAIN,
          bodyType: typeof(string),
          Summary = "500 Internal Server Error",
          Description = "Internal Server Error, 500 response with error message in response body")]

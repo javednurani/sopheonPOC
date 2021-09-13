@@ -52,22 +52,22 @@ namespace Sopheon.CloudNative.Environments.Functions
          Required = true,
          Description = "Environment object to be updated.")]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK,
-         contentType: "application/json",
+         contentType: StringConstants.CONTENT_TYPE_APP_JSON,
          bodyType: typeof(EnvironmentDto),
          Summary = "200 OK response",
          Description = "OK, 200 response with Environment in response body")]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest,
-         contentType: "application/json",
+         contentType: StringConstants.CONTENT_TYPE_TEXT_PLAIN,
          bodyType: typeof(string),
          Summary = "400 Bad Request response",
          Description = "Bad Request, 400 response with error message in response body")]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.NotFound,
-         contentType: "application/json",
+         contentType: StringConstants.CONTENT_TYPE_TEXT_PLAIN,
          bodyType: typeof(string),
          Summary = "404 Not Found response",
          Description = "Not Found, 404 response with error message in response body.")]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError,
-         contentType: "application/json",
+         contentType: StringConstants.CONTENT_TYPE_TEXT_PLAIN,
          bodyType: typeof(string),
          Summary = "500 Internal Server Error",
          Description = "Internal Server Error, 500 response with error message in response body")]

@@ -33,11 +33,16 @@ namespace Sopheon.CloudNative.Environments.Functions
               Summary = "Get all Environments",
               Description = "Get all Environments that are not deleted",
               Visibility = OpenApiVisibilityType.Important)]
-      [OpenApiResponseWithBody(statusCode: HttpStatusCode.Created,
+      [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK,
               contentType: StringConstants.CONTENT_TYPE_APP_JSON,
               bodyType: typeof(IEnumerable<EnvironmentDto>),
               Summary = "200 OK response",
               Description = "OK, 200 response with List of Environments in response body")]
+      [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError,
+         contentType: StringConstants.CONTENT_TYPE_TEXT_PLAIN,
+         bodyType: typeof(string),
+         Summary = "500 Internal Server Error",
+         Description = "Internal Server Error, 500 response with error message in response body")]
       public async Task<HttpResponseData> Run(
           [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "environments")] HttpRequestData req,
           FunctionContext context)
