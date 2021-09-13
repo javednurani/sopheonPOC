@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "8d03b56d-48fb-4e1c-95bb-56a0919268c0",
+		"_postman_id": "d70f586e-734c-4a6f-9ecf-a6df3cc3ef65",
 		"name": "Stratus Environment Functions",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -630,6 +630,187 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "DELETE Environments",
+					"item": [
+						{
+							"name": "1 - Happy Path => 204",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"    // the first DELETE request for an environmentKey should return NoContent 204\r",
+											"    // this test is not repeatable, see test \"2 - Same Key, 2nd Request => 404\"\r",
+											"\r",
+											"pm.test(\"Happy path response status code\", function() {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://{{baseUrl}}.azurewebsites.net/environments/{{environmentKey}}",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}",
+										"azurewebsites",
+										"net"
+									],
+									"path": [
+										"environments",
+										"{{environmentKey}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "2 - Same Key, 2nd Request => 404",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"    // if this request is run after a successful DELETE request, using the same environmentKey, should return NotFound 404\r",
+											"    // this test is repeatable\r",
+											"\r",
+											"pm.test(\"same key 2nd request response status code\", function() {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"same key 2nd request  response body text\", function() {\r",
+											"    // TODO to.eql(\"An Environment was not found with a key: {{environmentKey}}\");\r",
+											"    pm.expect(pm.response.text()).to.contain(\"An Environment was not found with a key: \");\r",
+											"    pm.expect(pm.response.text()).to.match(/^An Environment was not found with a key: [{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$/);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://{{baseUrl}}.azurewebsites.net/environments/{{environmentKey}}",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}",
+										"azurewebsites",
+										"net"
+									],
+									"path": [
+										"environments",
+										"{{environmentKey}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3 - Key Not Found => 404",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Key not found response status code\", function() {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Non-Guid Key response body text\", function() {\r",
+											"    // TODO to.eql(\"An Environment was not found with a key: {{environmentKey}}.toLower()\");\r",
+											"    pm.expect(pm.response.text()).to.contain(\"An Environment was not found with a key: \");\r",
+											"    pm.expect(pm.response.text()).to.match(/^An Environment was not found with a key: [{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$/);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Name\": \"PUT Test\",\r\n    \"Description\": \"An environment being updated through functions\",\r\n    \"Owner\": \"{{$guid}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}.azurewebsites.net/environments/18606E44-1A15-452F-8BA4-62088857343D",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}",
+										"azurewebsites",
+										"net"
+									],
+									"path": [
+										"environments",
+										"18606E44-1A15-452F-8BA4-62088857343D"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "4 - Non-GUID Key => 400",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Non-Guid Key response status code\", function() {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Non-Guid Key response body text\", function() {\r",
+											"    pm.expect(pm.response.text()).to.eql(\"The EnvironmentKey must be a valid Guid\");\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Name\": \"PUT Test\",\r\n    \"Description\": \"An environment being updated through functions\",\r\n    \"Owner\": \"{{$guid}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}.azurewebsites.net/environments/badKey",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}",
+										"azurewebsites",
+										"net"
+									],
+									"path": [
+										"environments",
+										"badKey"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},
@@ -1055,6 +1236,39 @@
 							"port": "{{localPort}}",
 							"path": [
 								"environments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Happy Path",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Happy path response status code\", function() {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{localPort}}/environments/{{environmentKey}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{localPort}}",
+							"path": [
+								"environments",
+								"{{environmentKey}}"
 							]
 						}
 					},
