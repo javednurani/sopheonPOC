@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sopheon.CloudNative.Environ
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sopheon.CloudNative.Environments.Functions.UnitTests", "Sopheon.CloudNative.Environments.Functions.UnitTests\Sopheon.CloudNative.Environments.Functions.UnitTests.csproj", "{FD5A9BDD-D8D9-4601-BAD4-4535CA0FBA90}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sopheon.CloudNative.Environments.Domain.UnitTests", "Sopheon.CloudNative.Environments.Domain.UnitTests\Sopheon.CloudNative.Environments.Domain.UnitTests.csproj", "{F4D30533-C529-4C00-94FC-05863EE168B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sopheon.CloudNative.Environments.Data.UnitTests", "Sopheon.CloudNative.Environments.Data.UnitTests\Sopheon.CloudNative.Environments.Data.UnitTests.csproj", "{F4D30533-C529-4C00-94FC-05863EE168B9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sopheon.CloudNative.Environments.Data", "Sopheon.CloudNative.Environments.Data\Sopheon.CloudNative.Environments.Data.csproj", "{A4A6AE93-21F3-4EE6-B96B-6B2B16F7AEAE}"
 EndProject

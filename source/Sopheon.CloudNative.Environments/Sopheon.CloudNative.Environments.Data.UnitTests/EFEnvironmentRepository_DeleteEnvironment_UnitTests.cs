@@ -8,7 +8,7 @@ using Xunit;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
 
-namespace Sopheon.CloudNative.Environments.Domain.UnitTests
+namespace Sopheon.CloudNative.Environments.Data.UnitTests
 {
    public class EFEnvironmentRepository_DeleteEnvironment_UnitTests
    {

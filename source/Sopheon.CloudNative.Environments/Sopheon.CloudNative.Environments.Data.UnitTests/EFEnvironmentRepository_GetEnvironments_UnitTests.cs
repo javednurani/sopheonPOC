@@ -6,7 +6,7 @@ using Sopheon.CloudNative.Environments.Testing.Common;
 using Xunit;
 
 
-namespace Sopheon.CloudNative.Environments.Domain.UnitTests
+namespace Sopheon.CloudNative.Environments.Data.UnitTests
 {
    public class EFEnvironmentRepository_GetEnvironments_UnitTests
    {
