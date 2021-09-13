@@ -25,6 +25,7 @@ namespace Sopheon.CloudNative.Environments.Domain.Repositories
       /// </summary>
       /// <param name="environment">Environment entity with EnvironmentKey, to be soft deleted</param>
       /// <returns>Task</returns>
+      /// <exception cref="EntityNotFoundException">Environment entity not found by EnvironmentKey</exception>"
       Task DeleteEnvironment(Guid environmentKey);
 
       /// <summary>
@@ -32,6 +33,7 @@ namespace Sopheon.CloudNative.Environments.Domain.Repositories
       /// </summary>
       /// <param name="environment">Environment model to be updated</param>
       /// <returns>Task<Environment>, the updated Environment</returns>
+      /// <exception cref="EntityNotFoundException">Environment entity not found by EnvironmentKey</exception>"
       Task<Environment> UpdateEnvironment(Environment environment);
    }
 }
