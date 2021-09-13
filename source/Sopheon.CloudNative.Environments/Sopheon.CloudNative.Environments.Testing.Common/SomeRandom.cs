@@ -26,11 +26,11 @@ namespace Sopheon.CloudNative.Environments.Testing.Common
       private const string _ALPHA_NUMERIC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
       private static readonly Random _random = new Random();
 
-      public string String()
+      public string String(int length = 32)
       {
          StringBuilder stringBuilder = new StringBuilder();
 
-         for (int i = 0; i < 32; i++)
+         for (int i = 0; i < length; i++)
          {
             int index = _random.Next(0, _ALPHA_NUMERIC.Length);
             char character = _ALPHA_NUMERIC[index];
