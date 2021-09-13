@@ -29,15 +29,20 @@ namespace Sopheon.CloudNative.Environments.Functions
 
       [Function(nameof(GetEnvironments))]
       [OpenApiOperation(operationId: nameof(GetEnvironments),
-              tags: new[] { "Environments" },
-              Summary = "Get all Environments",
-              Description = "Get all Environments that are not deleted",
-              Visibility = OpenApiVisibilityType.Important)]
-      [OpenApiResponseWithBody(statusCode: HttpStatusCode.Created,
-              contentType: StringConstants.CONTENT_TYPE_APP_JSON,
-              bodyType: typeof(IEnumerable<EnvironmentDto>),
-              Summary = "200 OK response",
-              Description = "OK, 200 response with List of Environments in response body")]
+         tags: new[] { "Environments" },
+         Summary = "Get all Environments",
+         Description = "Get all Environments that are not deleted",
+         Visibility = OpenApiVisibilityType.Important)]
+      [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK,
+         contentType: StringConstants.CONTENT_TYPE_APP_JSON,
+         bodyType: typeof(IEnumerable<EnvironmentDto>),
+         Summary = StringConstants.RESPONSE_SUMMARY_200,
+         Description = StringConstants.RESPONSE_DESCRIPTION_200)]
+      [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError,
+         contentType: StringConstants.CONTENT_TYPE_TEXT_PLAIN,
+         bodyType: typeof(string),
+         Summary = StringConstants.RESPONSE_SUMMARY_500,
+         Description = StringConstants.RESPONSE_DESCRIPTION_500)]
       public async Task<HttpResponseData> Run(
           [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "environments")] HttpRequestData req,
           FunctionContext context)
