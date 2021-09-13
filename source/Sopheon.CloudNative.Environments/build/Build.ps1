@@ -15,7 +15,7 @@ Write-Host "...Number of UnitTest projects found: $($TestProjects.Length)...";
 
 Foreach($file in $TestProjects) {
     Write-Host "...Running tests on $($file.Name)..."
-    dotnet test $file.FullName /p:CollectCoverage=true /p:CoverletOutput="$($env:System_DefaultWorkingDirectory)\source\Sopheon.CloudNative.Environments\TestResults\" /p:CoverletOutputFormat="json%2cCobertura" /p:MergeWith=$OutputCoveragePath /p:Logger=trx
+    dotnet test $file.FullName -p:CollectCoverage=true -p:CoverletOutput="$($env:System_DefaultWorkingDirectory)\source\Sopheon.CloudNative.Environments\TestResults\" -p:CoverletOutputFormat="json%2cCobertura" -p:MergeWith=$OutputCoveragePath --logger:"xunit;LogFilePath=$($OutputCoveragePath)\$($file.Name.Replace('.csproj', '')).xml"
 }
 
 Write-Host "...Running dotnet ef migrations..."
