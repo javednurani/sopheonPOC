@@ -9,7 +9,7 @@ New-Item -Path .\PublishOutput -ItemType directory;
 $OutputCoveragePath = "$($env:System_DefaultWorkingDirectory)\source\Sopheon.CloudNative.Environments\TestResults\coverage.json";
 
 
-$TestProjects = Get-Item -Path "$($env:System_DefaultWorkingDirectory)\**\*.UnitTests.csproj";
+$TestProjects = Get-Item -Path "$($env:System_DefaultWorkingDirectory)\source\Sopheon.CloudNative.Environments\**\*.UnitTests.csproj";
 
 Write-Host "...Number of UnitTest projects found: $($TestProjects.Length)...";
 
