@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Sopheon.CloudNative.Environments.Data.Extensions;
-using Sopheon.CloudNative.Environments.Domain.Exceptions;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
@@ -38,12 +37,7 @@ namespace Sopheon.CloudNative.Environments.Data
 
       public async Task DeleteEnvironment(Guid environmentKey)
       {
-         Environment entityEnvironment = await _context.Environments.FindEnvironmentAsync(environmentKey);
-
-         if (entityEnvironment == null)
-         {
-            throw new EntityNotFoundException($"An Environment was not found with a key: {environmentKey}");
-         }
+         Environment entityEnvironment = await _context.Environments.SingleEnvironmentAsync(environmentKey);
 
          entityEnvironment.IsDeleted = true;
          await _context.SaveChangesAsync();
@@ -51,12 +45,7 @@ namespace Sopheon.CloudNative.Environments.Data
 
       public async Task<Environment> UpdateEnvironment(Environment environment)
       {
-         Environment entityEnvironment = await _context.Environments.FindEnvironmentAsync(environment.EnvironmentKey);
-
-         if(entityEnvironment == null)
-         {
-            throw new EntityNotFoundException($"An Environment was not found with a key: {environment.EnvironmentKey}");
-         }
+         Environment entityEnvironment = await _context.Environments.SingleEnvironmentAsync(environment.EnvironmentKey);
 
          entityEnvironment.Name = environment.Name;
          entityEnvironment.Owner = environment.Owner;
