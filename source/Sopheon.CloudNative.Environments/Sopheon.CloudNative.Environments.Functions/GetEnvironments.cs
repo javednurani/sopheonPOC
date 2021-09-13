@@ -48,7 +48,7 @@ namespace Sopheon.CloudNative.Environments.Functions
             IEnumerable<Environment> environments = await _environmentRepository.GetEnvironments();
 
             HttpResponseData response = req.CreateResponse();
-            await response.WriteAsJsonAsync(_mapper.Map<IEnumerable<Environment>, IEnumerable<EnvironmentDto>>(environments), _serializer, HttpStatusCode.OK);
+            await response.WriteAsJsonAsync(_mapper.Map<IEnumerable<EnvironmentDto>>(environments), _serializer, HttpStatusCode.OK);
             return response;
          }
          catch (Exception ex)
