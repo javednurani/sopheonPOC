@@ -18,6 +18,7 @@ using Sopheon.CloudNative.Environments.Functions.Validators;
 
 namespace Sopheon.CloudNative.Environments.Functions
 {
+   [ExcludeFromCodeCoverage]
    class Program
    {
       static Task Main(string[] args)
