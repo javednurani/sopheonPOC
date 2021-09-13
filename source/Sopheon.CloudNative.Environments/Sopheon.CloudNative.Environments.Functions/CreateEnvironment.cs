@@ -54,17 +54,17 @@ namespace Sopheon.CloudNative.Environments.Functions
          contentType: StringConstants.CONTENT_TYPE_APP_JSON,
          bodyType: typeof(EnvironmentDto),
          Summary = StringConstants.RESPONSE_SUMMARY_201,
-         Description = "Created, 201 response with Environment in response body")]
+         Description = StringConstants.RESPONSE_DESCRIPTION_201)]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest,
          contentType: StringConstants.CONTENT_TYPE_TEXT_PLAIN,
          bodyType: typeof(string),
          Summary = StringConstants.RESPONSE_SUMMARY_400,
-         Description = "Bad Request, 400 response with error message in response body")]
+         Description = StringConstants.RESPONSE_DESCRIPTION_400)]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError,
          contentType: StringConstants.CONTENT_TYPE_TEXT_PLAIN,
          bodyType: typeof(string),
          Summary = StringConstants.RESPONSE_SUMMARY_500,
-         Description = "Internal Server Error, 500 response with error message in response body")]
+         Description = StringConstants.RESPONSE_DESCRIPTION_500)]
 
       public async Task<HttpResponseData> Run(
           [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "environments")] HttpRequestData req,
