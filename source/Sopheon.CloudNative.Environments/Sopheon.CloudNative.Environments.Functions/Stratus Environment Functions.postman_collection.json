@@ -290,12 +290,651 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "PUT Environments",
+					"item": [
+						{
+							"name": "Happy Path",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Happy path response status code\", function() {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Happy path repsonse body\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    var envKey = pm.environment.get(\"environmentId\");\r",
+											"\r",
+											"    pm.expect(jsonData.Name).to.eql(\"PUT Test\");\r",
+											"    pm.expect(jsonData.Description).to.eql(\"An environment being updated through functions\");\r",
+											"    pm.expect(jsonData.EnvironmentKey).to.eql(envKey);\r",
+											"    pm.expect(jsonData.Owner).to.match(/^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$/);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Name\": \"PUT Test\",\r\n    \"Description\": \"An environment being updated through functions\",\r\n    \"Owner\": \"{{$guid}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}.azurewebsites.net/environments/{{environmentId}}",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}",
+										"azurewebsites",
+										"net"
+									],
+									"path": [
+										"environments",
+										"{{environmentId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Name Missing",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Name missing response status code\", function() {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Missing owner repsonse body\", function () {\r",
+											"    pm.expect(pm.response.text()).to.eql(\"'Name' must not be empty.\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Description\": \"An environment being updated through functions\",\r\n    \"Owner\": \"{{$guid}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}.azurewebsites.net/environments/{{environmentId}}",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}",
+										"azurewebsites",
+										"net"
+									],
+									"path": [
+										"environments",
+										"{{environmentId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Owner Missing",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Owner missing response status code\", function() {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Missing owner repsonse body\", function () {\r",
+											"    pm.expect(pm.response.text()).to.eql(\"'Owner' must not be empty.\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Name\": \"PUT Test\",\r\n    \"Description\": \"An environment being updated through functions\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}.azurewebsites.net/environments/{{environmentId}}",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}",
+										"azurewebsites",
+										"net"
+									],
+									"path": [
+										"environments",
+										"{{environmentId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Key Not Found",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Key not found response status code\", function() {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Missing owner repsonse body\", function () {\r",
+											"    pm.expect(pm.response.text()).to.match(/^An Environment was not found with a key: [{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$/);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Name\": \"PUT Test\",\r\n    \"Description\": \"An environment being updated through functions\",\r\n    \"Owner\": \"{{$guid}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}.azurewebsites.net/environments/18606E44-1A15-452F-8BA4-62088857343D",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}",
+										"azurewebsites",
+										"net"
+									],
+									"path": [
+										"environments",
+										"18606E44-1A15-452F-8BA4-62088857343D"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Non-Guid Key",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Non-Guid Key response status code\", function() {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Missing owner repsonse body\", function () {\r",
+											"    pm.expect(pm.response.text()).to.eql(\"The EnvironmentKey must be a valid Guid\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Name\": \"PUT Test\",\r\n    \"Description\": \"An environment being updated through functions\",\r\n    \"Owner\": \"{{$guid}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}.azurewebsites.net/environments/badKey",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}",
+										"azurewebsites",
+										"net"
+									],
+									"path": [
+										"environments",
+										"badKey"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Non-Guid Owner",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Non-Guid owner response status code\", function() {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Missing owner repsonse body\", function () {\r",
+											"    pm.expect(pm.response.text()).to.eql(\"Request body was invalid.\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Name\": \"PUT Test\",\r\n    \"Description\": \"An environment being updated through functions\",\r\n    \"Owner\": \"bad owner not guid\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}.azurewebsites.net/environments/{{environmentId}}",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}",
+										"azurewebsites",
+										"net"
+									],
+									"path": [
+										"environments",
+										"{{environmentId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Non-JSON Body",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Non-JSON body response status code\", function() {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Missing owner repsonse body\", function () {\r",
+											"    pm.expect(pm.response.text()).to.eql(\"Request body was invalid.\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Name\": \"PUT Test\",\r\n    \"Descriptinvironment being updated through",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}.azurewebsites.net/environments/{{environmentId}}",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}",
+										"azurewebsites",
+										"net"
+									],
+									"path": [
+										"environments",
+										"{{environmentId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},
 		{
 			"name": "Local Requests",
 			"item": [
+				{
+					"name": "PUT Environments Local",
+					"item": [
+						{
+							"name": "Happy Path",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Happy path response status code\", function() {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Name\": \"PUT Test\",\r\n    \"Description\": \"An environment being updated through functions\",\r\n    \"Owner\": \"{{$guid}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:{{localPort}}/environments/{{environmentId}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "{{localPort}}",
+									"path": [
+										"environments",
+										"{{environmentId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Name Missing",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Name missing response status code\", function() {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Description\": \"An environment being updated through functions\",\r\n    \"Owner\": \"{{$guid}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:{{localPort}}/environments/{{environmentId}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "{{localPort}}",
+									"path": [
+										"environments",
+										"{{environmentId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Owner Missing",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Owner missing response status code\", function() {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Name\": \"PUT Test\",\r\n    \"Description\": \"An environment being updated through functions\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:{{localPort}}/environments/{{environmentId}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "{{localPort}}",
+									"path": [
+										"environments",
+										"{{environmentId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Key Not Found",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Key not found response status code\", function() {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Name\": \"PUT Test\",\r\n    \"Description\": \"An environment being updated through functions\",\r\n    \"Owner\": \"{{$guid}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:{{localPort}}/environments/18606E44-1A15-452F-8BA4-62088857343D",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "{{localPort}}",
+									"path": [
+										"environments",
+										"18606E44-1A15-452F-8BA4-62088857343D"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Non-Guid Key",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Non-Guid Key response status code\", function() {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Name\": \"PUT Test\",\r\n    \"Description\": \"An environment being updated through functions\",\r\n    \"Owner\": \"{{$guid}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:{{localPort}}/environments/badKey",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "{{localPort}}",
+									"path": [
+										"environments",
+										"badKey"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Non-Guid Owner",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Non-Guid owner response status code\", function() {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Name\": \"PUT Test\",\r\n    \"Description\": \"An environment being updated through functions\",\r\n    \"Owner\": \"bad owner not guid\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:{{localPort}}/environments/{{environmentId}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "{{localPort}}",
+									"path": [
+										"environments",
+										"{{environmentId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Non-JSON Body",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Non-JSON body response status code\", function() {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Name\": \"PUT Test\",\r\n    \"Descriptinvironment being updated through",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:{{localPort}}/environments/{{environmentId}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "{{localPort}}",
+									"path": [
+										"environments",
+										"{{environmentId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
 				{
 					"name": "GET Happy Path",
 					"event": [
@@ -323,6 +962,48 @@
 							"port": "{{localPort}}",
 							"path": [
 								"environments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Happy Path",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Happy path response status code\", function() {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\": \"PUT Test\",\r\n    \"Description\": \"An environment being updated through functions\",\r\n    \"Owner\": \"{{$guid}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:{{localPort}}/environments/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{localPort}}",
+							"path": [
+								"environments",
+								"1"
 							]
 						}
 					},

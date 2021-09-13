@@ -18,5 +18,12 @@ namespace Sopheon.CloudNative.Environments.Domain.Repositories
       /// </summary>
       /// <returns>Task<IEnumerable<Environment>>, a list of all environemts.</returns>
       Task<IEnumerable<Environment>> GetEnvironments();
+
+      /// <summary>
+      /// Updates an Environment
+      /// </summary>
+      /// <param name="environment">Environment model to be updated</param>
+      /// <returns>Task<Environment>, the updated Environment</returns>
+      Task<Environment> UpdateEnvironment(Environment environment);
    }
 }
