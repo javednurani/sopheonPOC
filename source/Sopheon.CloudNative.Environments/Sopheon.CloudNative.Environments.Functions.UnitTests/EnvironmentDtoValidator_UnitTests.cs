@@ -21,7 +21,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          {
             Name = name,
             Description = description,
-            Owner = default(Guid)
+            Owner = Guid.Empty
          };
 
          TestValidationResult<EnvironmentDto> result = _sut.TestValidate(env);
@@ -30,6 +30,22 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          result.ShouldHaveValidationErrorFor(x => x.Owner);
 
          result.ShouldNotHaveValidationErrorFor(x => x.Description);
+      }
+
+      [Fact]
+      public void FieldsTooLong_ReturnsCorrectValidationErrors()
+      {
+         EnvironmentDto env = new EnvironmentDto
+         {
+            Name = Some.Random.String(65),
+            Description = Some.Random.String(1001),
+            Owner = Some.Random.Guid()
+         };
+
+         TestValidationResult<EnvironmentDto> result = _sut.TestValidate(env);
+
+         result.ShouldHaveValidationErrorFor(x => x.Name);
+         result.ShouldHaveValidationErrorFor(x => x.Description);
       }
 
       [Fact]
