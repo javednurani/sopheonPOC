@@ -32,22 +32,22 @@ namespace Sopheon.CloudNative.Environments.Functions
          Description = "Delete an Environment by EnvironmentKey",
          Visibility = OpenApiVisibilityType.Important)]
       [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NoContent,
-         Summary = "204 No Content response",
+         Summary = StringConstants.RESPONSE_SUMMARY_204,
          Description = "No Content, successful Delete")]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.NotFound,
          contentType: StringConstants.CONTENT_TYPE_TEXT_PLAIN,
          bodyType: typeof(string),
-         Summary = "404 Not Found response",
+         Summary = StringConstants.RESPONSE_SUMMARY_404,
          Description = "Not Found, Environment to be deleted was not found")]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest,
          contentType: StringConstants.CONTENT_TYPE_TEXT_PLAIN,
          bodyType: typeof(string),
-         Summary = "400 Bad Request response",
+         Summary = StringConstants.RESPONSE_SUMMARY_400,
          Description = "Bad Request")]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError,
          contentType: StringConstants.CONTENT_TYPE_TEXT_PLAIN,
          bodyType: typeof(string),
-         Summary = "500 Internal Server Error",
+         Summary = StringConstants.RESPONSE_SUMMARY_500,
          Description = "Internal Server Error, 500 response with error message in response body")]
 
       public async Task<HttpResponseData> Run(

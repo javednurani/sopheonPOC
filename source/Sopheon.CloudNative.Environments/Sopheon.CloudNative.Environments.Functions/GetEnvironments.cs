@@ -29,19 +29,19 @@ namespace Sopheon.CloudNative.Environments.Functions
 
       [Function(nameof(GetEnvironments))]
       [OpenApiOperation(operationId: nameof(GetEnvironments),
-              tags: new[] { "Environments" },
-              Summary = "Get all Environments",
-              Description = "Get all Environments that are not deleted",
-              Visibility = OpenApiVisibilityType.Important)]
+         tags: new[] { "Environments" },
+         Summary = "Get all Environments",
+         Description = "Get all Environments that are not deleted",
+         Visibility = OpenApiVisibilityType.Important)]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK,
-              contentType: StringConstants.CONTENT_TYPE_APP_JSON,
-              bodyType: typeof(IEnumerable<EnvironmentDto>),
-              Summary = "200 OK response",
-              Description = "OK, 200 response with List of Environments in response body")]
+         contentType: StringConstants.CONTENT_TYPE_APP_JSON,
+         bodyType: typeof(IEnumerable<EnvironmentDto>),
+         Summary = StringConstants.RESPONSE_SUMMARY_200,
+         Description = "OK, 200 response with List of Environments in response body")]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError,
          contentType: StringConstants.CONTENT_TYPE_TEXT_PLAIN,
          bodyType: typeof(string),
-         Summary = "500 Internal Server Error",
+         Summary = StringConstants.RESPONSE_SUMMARY_500,
          Description = "Internal Server Error, 500 response with error message in response body")]
       public async Task<HttpResponseData> Run(
           [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "environments")] HttpRequestData req,
