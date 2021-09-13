@@ -59,9 +59,8 @@ namespace Sopheon.CloudNative.Environments.Functions
             bool validKey = Guid.TryParse(key, out environmentKey);
             if (!validKey || environmentKey == Guid.Empty)
             {
-               string keyNotGuidMessage = "The EnvironmentKey must be a valid Guid";
-               logger.LogInformation(keyNotGuidMessage);
-               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, keyNotGuidMessage);
+               logger.LogInformation(StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID);
+               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID);
             }
 
             await _environmentRepository.DeleteEnvironment(environmentKey);
@@ -76,7 +75,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          catch (Exception ex)
          {
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.InternalServerError, $"Something went wrong. Please try again later. {ex.Message}");
+            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR);
          }
       }
    }

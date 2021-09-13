@@ -86,9 +86,8 @@ namespace Sopheon.CloudNative.Environments.Functions
             bool validKey = Guid.TryParse(key, out environmentKey);
             if (!validKey || environmentKey == Guid.Empty)
             {
-               string keyNotGuidMessage = "The EnvironmentKey must be a valid Guid";
-               logger.LogInformation(keyNotGuidMessage);
-               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, keyNotGuidMessage);
+               logger.LogInformation(StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID);
+               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID);
             }
             EnvironmentDto data = JsonConvert.DeserializeObject<EnvironmentDto>(requestBody);
 
@@ -114,7 +113,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          catch (JsonException ex)
          {
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, $"Request body was invalid.");
+            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_BODY_INVALID);
          }
          catch (EntityNotFoundException ex)
          {
@@ -124,7 +123,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          catch (Exception ex)
          {
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.InternalServerError, $"Something went wrong. Please try again later. {ex.Message}");
+            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR);
          }
       }
    }
