@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
+[assembly: ExcludeFromCodeCoverage]
 namespace Sopheon.CloudNative.Environments.Testing.Common
 {
    /// <summary>
