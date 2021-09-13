@@ -17,7 +17,7 @@ namespace Sopheon.CloudNative.Environments.Functions
 {
    public class GetEnvironments
    {
-      private readonly static NewtonsoftJsonObjectSerializer _serializer = new NewtonsoftJsonObjectSerializer();
+      private readonly static JsonObjectSerializer _serializer = new JsonObjectSerializer();
       private readonly IEnvironmentRepository _environmentRepository;
       private IMapper _mapper;
 

@@ -26,7 +26,7 @@ namespace Sopheon.CloudNative.Environments.Functions
       // Cloud-1484, we are defining ObjectSerializer to be used, per Function class
       // this is due to unit test context not having a serializer configured, if we use the below line to configure serializer for production context
       // Ideally, we would use this line in Program.cs :: main() : .ConfigureFunctionsWorkerDefaults(worker => worker.UseNewtonsoftJson())
-      private readonly static NewtonsoftJsonObjectSerializer _serializer = new NewtonsoftJsonObjectSerializer();
+      private readonly static JsonObjectSerializer _serializer = new JsonObjectSerializer();
       private readonly IEnvironmentRepository _environmentRepository;
       private readonly IMapper _mapper;
       private readonly IValidator<EnvironmentDto> _validator;
