@@ -94,7 +94,7 @@ namespace Sopheon.CloudNative.Environments.Functions
 
             // TODO: environments that already exist with name?
             environment = await _environmentRepository.AddEnvironment(environment);
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.Created, _mapper.Map<Environment, EnvironmentDto>(environment), _serializer);
+            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.Created, _mapper.Map<EnvironmentDto>(environment), _serializer);
          }
          catch (JsonException ex)
          {

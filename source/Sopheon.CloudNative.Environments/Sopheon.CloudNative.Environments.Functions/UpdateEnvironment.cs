@@ -109,7 +109,7 @@ namespace Sopheon.CloudNative.Environments.Functions
             };
 
             environment = await _environmentRepository.UpdateEnvironment(environment);
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.OK, _mapper.Map<Environment, EnvironmentDto>(environment), _serializer);
+            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.OK, _mapper.Map<EnvironmentDto>(environment), _serializer);
          }
          catch (JsonException ex)
          {
