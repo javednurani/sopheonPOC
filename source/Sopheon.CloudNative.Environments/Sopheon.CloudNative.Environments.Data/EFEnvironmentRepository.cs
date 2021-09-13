@@ -29,7 +29,10 @@ namespace Sopheon.CloudNative.Environments.Data
 
       public async Task<IEnumerable<Environment>> GetEnvironments()
       {
-         return await _context.Environments.Where(env => !env.IsDeleted).ToArrayAsync();
+         return await _context.Environments
+            .Where(env => !env.IsDeleted)
+            .AsNoTracking()
+            .ToArrayAsync();
       }
 
       public async Task DeleteEnvironment(Guid environmentKey)
