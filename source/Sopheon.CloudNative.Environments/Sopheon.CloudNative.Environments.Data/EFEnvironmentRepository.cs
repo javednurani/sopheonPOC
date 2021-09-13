@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Sopheon.CloudNative.Environments.Data.Extensions;
 using Sopheon.CloudNative.Environments.Domain.Exceptions;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
@@ -37,7 +38,7 @@ namespace Sopheon.CloudNative.Environments.Data
 
       public async Task DeleteEnvironment(Guid environmentKey)
       {
-         Environment entityEnvironment = await _context.Environments.SingleOrDefaultAsync(env => env.EnvironmentKey == environmentKey && !env.IsDeleted);
+         Environment entityEnvironment = await _context.Environments.FindEnvironmentAsync(environmentKey);
 
          if (entityEnvironment == null)
          {
@@ -50,7 +51,7 @@ namespace Sopheon.CloudNative.Environments.Data
 
       public async Task<Environment> UpdateEnvironment(Environment environment)
       {
-         Environment entityEnvironment = await _context.Environments.SingleOrDefaultAsync(env => !env.IsDeleted && env.EnvironmentKey == environment.EnvironmentKey);
+         Environment entityEnvironment = await _context.Environments.FindEnvironmentAsync(environment.EnvironmentKey);
 
          if(entityEnvironment == null)
          {
