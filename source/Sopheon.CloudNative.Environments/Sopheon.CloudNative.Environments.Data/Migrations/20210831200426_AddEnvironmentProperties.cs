@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Sopheon.CloudNative.Environments.Domain.Migrations
 {
-	[ExcludeFromCodeCoverage]
     public partial class AddEnvironmentProperties : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
