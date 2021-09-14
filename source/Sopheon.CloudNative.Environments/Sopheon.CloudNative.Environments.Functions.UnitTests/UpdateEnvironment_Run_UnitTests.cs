@@ -5,7 +5,6 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Newtonsoft.Json;
 using Sopheon.CloudNative.Environments.Domain.Exceptions;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
@@ -15,7 +14,7 @@ using Sopheon.CloudNative.Environments.Testing.Common;
 using System;
 using System.IO;
 using System.Net;
-using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Xunit;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
@@ -73,7 +72,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          // HTTP response
          string responseBody = await GetResponseBody(result);
-         EnvironmentDto environmentResponse = JsonConvert.DeserializeObject<EnvironmentDto>(responseBody);
+         EnvironmentDto environmentResponse = JsonSerializer.Deserialize<EnvironmentDto>(responseBody);
 
          Assert.Equal(environmentRequest.Name, environmentResponse.Name);
          Assert.Equal(environmentRequest.Owner, environmentResponse.Owner);
@@ -100,12 +99,12 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          // Assert
          Assert.NotNull(result);
-         Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);       
+         Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
 
          // HTTP response
          string responseBody = await GetResponseBody(result);
 
-         Assert.Equal("The EnvironmentKey must be a valid Guid", responseBody);        
+         Assert.Equal("The EnvironmentKey must be a valid Guid", responseBody);
       }
 
       [Fact]
@@ -142,7 +141,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Guid environmentKey = Some.Random.Guid();
          EnvironmentDto environmentRequest = new EnvironmentDto
          {
-            Name = Some.Random.String(),            
+            Name = Some.Random.String(),
             Description = Some.Random.String()
          };
 

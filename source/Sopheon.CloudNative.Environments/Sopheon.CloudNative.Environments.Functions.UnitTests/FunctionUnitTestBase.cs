@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Azure.Functions.Worker.Http;
 using Moq;
-using Newtonsoft.Json;
 
 namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 {
@@ -19,7 +19,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
       protected void SetRequestBody(Mock<HttpRequestData> request, object requestObject)
       {
-         byte[] byteArray = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(requestObject));
+         byte[] byteArray = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(requestObject));
          MemoryStream bodyStream = new MemoryStream(byteArray);
 
          request.Setup(r => r.Body).Returns(bodyStream);

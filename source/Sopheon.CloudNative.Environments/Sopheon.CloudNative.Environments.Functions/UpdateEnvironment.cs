@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
 using Azure.Core.Serialization;
@@ -12,7 +13,6 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Functions.Models;
@@ -89,7 +89,7 @@ namespace Sopheon.CloudNative.Environments.Functions
                logger.LogInformation(StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID);
                return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID);
             }
-            EnvironmentDto data = JsonConvert.DeserializeObject<EnvironmentDto>(requestBody);
+            EnvironmentDto data = JsonSerializer.Deserialize<EnvironmentDto>(requestBody);
 
             ValidationResult validationResult = await _validator.ValidateAsync(data);
             if (!validationResult.IsValid)
