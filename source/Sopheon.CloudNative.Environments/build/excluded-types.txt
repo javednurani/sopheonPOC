@@ -1,3 +1,0 @@
-#[Assembly-Filter]Type-Filter
-[Sopheon.CloudNative.Environments.Testing.Common]*
-[Sopheon.CloudNativeSopheon.CloudNative.Environments.Functions]
