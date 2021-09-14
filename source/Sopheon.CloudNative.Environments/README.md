@@ -2,7 +2,6 @@
 This solution allows for management of "Environments" and other Azure resources to enable a product-led cloud-native product offering.
 
 Major components include:
-* Azure B2C Custom policy definitions, including SignUp and ChangePassword user journeys, etc.
 * Entity Framework model, migrations and Repositories, meant to run on SQL Server
 * Azure Functions for CRUD operations against the Environments data store
 * Unit tests on most of the above
