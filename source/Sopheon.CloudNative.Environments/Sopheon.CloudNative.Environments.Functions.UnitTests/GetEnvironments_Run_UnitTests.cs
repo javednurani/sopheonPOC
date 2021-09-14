@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
+using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Functions.Models;
 using Sopheon.CloudNative.Environments.Testing.Common;
 using System.Collections.Generic;
@@ -27,6 +28,8 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       Mock<IEnvironmentRepository> _mockEnvironmentRepository;
 
       IMapper _mapper;
+
+      HttpResponseDataBuilder _responseBuilder;
 
       public GetEnvironments_Run_UnitTests()
       {
@@ -137,8 +140,10 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          });
          _mapper = config.CreateMapper();
 
+         _responseBuilder = new HttpResponseDataBuilder();
+
          // create Sut
-         Sut = new GetEnvironments(_mockEnvironmentRepository.Object, _mapper);
+         Sut = new GetEnvironments(_mockEnvironmentRepository.Object, _mapper, _responseBuilder);
       }
    }
 }
