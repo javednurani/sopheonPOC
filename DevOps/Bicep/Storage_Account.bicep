@@ -8,7 +8,6 @@ resource StaticWebpage_StorageAccount 'Microsoft.Storage/storageAccounts@2021-04
   location: location
   sku: {
     name: 'Standard_LRS'
-    tier: 'Standard'
   }
   kind: 'StorageV2'
   properties: {
