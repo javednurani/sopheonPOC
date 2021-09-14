@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
-using Azure.Core.Serialization;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Azure.Functions.Worker;
@@ -12,7 +12,6 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Functions.Models;
@@ -24,10 +23,6 @@ namespace Sopheon.CloudNative.Environments.Functions
 {
    public class UpdateEnvironment
    {
-      // Cloud-1484, we are defining ObjectSerializer to be used, per Function class
-      // this is due to unit test context not having a serializer configured, if we use the below line to configure serializer for production context
-      // Ideally, we would use this line in Program.cs :: main() : .ConfigureFunctionsWorkerDefaults(worker => worker.UseNewtonsoftJson())
-      private readonly static NewtonsoftJsonObjectSerializer _serializer = new NewtonsoftJsonObjectSerializer();
       private readonly IEnvironmentRepository _environmentRepository;
       private readonly IMapper _mapper;
       private readonly IValidator<EnvironmentDto> _validator;
@@ -89,7 +84,7 @@ namespace Sopheon.CloudNative.Environments.Functions
                logger.LogInformation(StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID);
                return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID);
             }
-            EnvironmentDto data = JsonConvert.DeserializeObject<EnvironmentDto>(requestBody);
+            EnvironmentDto data = JsonSerializer.Deserialize<EnvironmentDto>(requestBody);
 
             ValidationResult validationResult = await _validator.ValidateAsync(data);
             if (!validationResult.IsValid)
@@ -108,7 +103,7 @@ namespace Sopheon.CloudNative.Environments.Functions
             };
 
             environment = await _environmentRepository.UpdateEnvironment(environment);
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.OK, _mapper.Map<EnvironmentDto>(environment), _serializer);
+            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.OK, _mapper.Map<EnvironmentDto>(environment));
          }
          catch (JsonException ex)
          {

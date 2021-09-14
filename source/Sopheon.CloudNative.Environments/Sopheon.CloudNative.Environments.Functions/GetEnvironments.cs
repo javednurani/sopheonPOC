@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
-using Azure.Core.Serialization;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
+using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Functions.Models;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
@@ -17,14 +17,15 @@ namespace Sopheon.CloudNative.Environments.Functions
 {
    public class GetEnvironments
    {
-      private readonly static NewtonsoftJsonObjectSerializer _serializer = new NewtonsoftJsonObjectSerializer();
       private readonly IEnvironmentRepository _environmentRepository;
       private IMapper _mapper;
+      private readonly HttpResponseDataBuilder _responseBuilder;
 
-      public GetEnvironments(IEnvironmentRepository environmentRepository, IMapper mapper)
+      public GetEnvironments(IEnvironmentRepository environmentRepository, IMapper mapper, HttpResponseDataBuilder responseBuilder)
       {
          _environmentRepository = environmentRepository;
          _mapper = mapper;
+         _responseBuilder = responseBuilder;
       }
 
       [Function(nameof(GetEnvironments))]
@@ -52,16 +53,12 @@ namespace Sopheon.CloudNative.Environments.Functions
          {
             IEnumerable<Environment> environments = await _environmentRepository.GetEnvironments();
 
-            HttpResponseData response = req.CreateResponse();
-            await response.WriteAsJsonAsync(_mapper.Map<IEnumerable<EnvironmentDto>>(environments), _serializer, HttpStatusCode.OK);
-            return response;
+            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.OK, _mapper.Map<IEnumerable<EnvironmentDto>>(environments));
          }
          catch (Exception ex)
          {
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            HttpResponseData genericExceptionResponse = req.CreateResponse(HttpStatusCode.InternalServerError);
-            await genericExceptionResponse.WriteStringAsync(StringConstants.RESPONSE_GENERIC_ERROR);
-            return genericExceptionResponse;
+            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR);
          }
       }
    }

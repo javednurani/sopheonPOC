@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
@@ -9,7 +10,6 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Newtonsoft.Json;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Functions.Models;
@@ -69,7 +69,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          // HTTP response
          string responseBody = await GetResponseBody(result);
-         EnvironmentDto environmentResponse = JsonConvert.DeserializeObject<EnvironmentDto>(responseBody);
+         EnvironmentDto environmentResponse = JsonSerializer.Deserialize<EnvironmentDto>(responseBody);
 
          Assert.Equal(environmentRequest.Name, environmentResponse.Name);
          Assert.Equal(environmentRequest.Owner, environmentResponse.Owner);

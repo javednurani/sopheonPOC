@@ -30,9 +30,6 @@ namespace Sopheon.CloudNative.Environments.Functions
                   builder.AddUserSecrets<Program>();
                }
             })
-            // Cloud-1484, we are defining ObjectSerializer to be used, per Function class
-            // this is due to unit test context not having a serializer configured, if we use the below line to configure serializer for production context
-            //.ConfigureFunctionsWorkerDefaults(worker => worker.UseNewtonsoftJson())
             .ConfigureFunctionsWorkerDefaults()
             .ConfigureOpenApi()
             .ConfigureServices((hostContext, services) =>
