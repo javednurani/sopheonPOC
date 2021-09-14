@@ -5,9 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Sopheon.CloudNative.Environments.Data;
 
-namespace Sopheon.CloudNative.Environments.Domain.Migrations
+namespace Sopheon.CloudNative.Environments.Data.Migrations
 {
     [DbContext(typeof(EnvironmentContext))]
     partial class EnvironmentContextModelSnapshot : ModelSnapshot
