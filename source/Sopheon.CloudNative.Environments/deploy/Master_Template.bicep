@@ -15,8 +15,7 @@ param sqlServerPool_name string = '^SqlElasticPoolName^'
 param sqlServerDatabase_name string = '^SqlServerDatabaseName^'
 
 @description('Sql Server Password')
-@secure()
-param sqlServer_Enigma string = ''
+param sqlServer_Enigma string = '^SqlAdminEngima^'
 
 @description('Sql server admin')
 param administratorLogin string = 'sopheon'

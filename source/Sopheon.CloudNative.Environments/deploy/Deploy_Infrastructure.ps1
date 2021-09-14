@@ -4,6 +4,13 @@ Param(
     [Parameter(Mandatory = $false)][string]$Environment = $env:Environment
 )
 # Deploy Azure Resources for release definitions to talk to
+$azureKeyVault = "Cloud-DevOps";
+if ($env:AzureEnvironment -eq "Prod"){
+    $azureKeyVault = "Prod-Cloud-DevOps"
+}
+
+$SqlAdminEngima = (az keyvault secret show --vault-name $azureKeyVault --name "SqlServerAdminEngima" --query value).Replace('"', '');
+
 
 $DeploymentName = "ADO-Deployment";
 
@@ -21,9 +28,10 @@ $MasterParametersTemplate = "$($PSScriptRoot)\Master_Template_Parameters.json";
 
 Write-Host "Replacing tokens on Master Template...";
 $masterTemplateContent = Get-Content $MasterTemplate -raw;
-$masterTemplateContent = $masterTemplateContent.Replace('^SqlServerName^', $SqlServerNameValue).Replace('^SqlServerDatabaseName^', $SqlServerDatabaseNameValue)
-$masterTemplateContent = $masterTemplateContent.Replace('^SqlElasticPoolName^', $SqlServerPoolName).Replace('^EnvironmentFunctionAppName^', $FunctionAppName)
+$masterTemplateContent = $masterTemplateContent.Replace('^SqlServerName^', $SqlServerNameValue).Replace('^SqlServerDatabaseName^', $SqlServerDatabaseNameValue);
+$masterTemplateContent = $masterTemplateContent.Replace('^SqlElasticPoolName^', $SqlServerPoolName).Replace('^EnvironmentFunctionAppName^', $FunctionAppName);
 $masterTemplateContent = $masterTemplateContent.Replace('^AppInsightsName^', $AppInsightsName).Replace('^EnvironmentFunctionStorageAccountName^', $FunctionAppStorageAccountName);
+$masterTemplateContent = $masterTemplateContent.Replace('^SqlAdminEngima^', $SqlAdminEngima);
 Set-Content -Value $masterTemplateContent -Path $MasterTemplate;
 Write-Host "Complete!";
 
@@ -32,6 +40,7 @@ $masterParametersContent = Get-Content $MasterParametersTemplate -raw;
 $masterParametersContent = $masterParametersContent.Replace('^SqlServerName^', $SqlServerNameValue).Replace('^SqlServerDatabaseName^', $SqlServerDatabaseNameValue);
 $masterParametersContent = $masterParametersContent.Replace("^SqlElasticPoolName^", $SqlServerPoolName).Replace('^EnvironmentFunctionAppName^', $FunctionAppName);
 $masterParametersContent = $masterParametersContent.Replace('^AppInsightsName^', $AppInsightsName).Replace('^EnvironmentFunctionStorageAccountName^', $FunctionAppStorageAccountName);
+$masterParametersContent = $masterParametersContent.Replace('^SqlAdminEngima^', $SqlAdminEngima);
 Set-Content -Value $masterParametersContent -Path $MasterParametersTemplate;
 Write-Host "Complete!";
 
@@ -48,8 +57,6 @@ if('false' -eq $GroupExists)
 Write-Host "Deploying Master Template...";
 $MasterTemplateDeploy = az deployment group create --resource-group $ResourceGroupValue --template-file $MasterTemplate --parameters $MasterParametersTemplate --name "$($DeploymentName)-MasterDeploy" --query "properties.provisioningState";
 Write-Host "Master Template Deployment: $($MasterTemplateDeploy)";
-
-$SqlAdminEngima = (az keyvault secret show --vault-name "Cloud-DevOps" --name "SqlServerAdminEnigma" --query value).Replace('"', '');
 
 $environmentManagementConnectionString = (az sql db show-connection-string --client ado.net --server "$($ResourceGroupValue.ToLower())" --name $SqlServerDatabaseNameValue).Replace('"', '');
 
