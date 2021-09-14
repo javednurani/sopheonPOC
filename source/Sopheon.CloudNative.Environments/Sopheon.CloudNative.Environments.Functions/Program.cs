@@ -1,9 +1,7 @@
 ﻿#define Managed
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
-using Azure.Extensions.AspNetCore.Configuration.Secrets;
-using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
 using FluentValidation;
 using Microsoft.Azure.Functions.Worker.Extensions.OpenApi.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +16,7 @@ using Sopheon.CloudNative.Environments.Functions.Validators;
 
 namespace Sopheon.CloudNative.Environments.Functions
 {
+   [ExcludeFromCodeCoverage]
    class Program
    {
       static Task Main(string[] args)
