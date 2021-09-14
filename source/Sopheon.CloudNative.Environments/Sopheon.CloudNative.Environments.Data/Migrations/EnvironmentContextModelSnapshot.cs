@@ -9,7 +9,6 @@ using Sopheon.CloudNative.Environments.Data;
 
 namespace Sopheon.CloudNative.Environments.Domain.Migrations
 {
-	[ExcludeFromCodeCoverage]
     [DbContext(typeof(EnvironmentContext))]
     partial class EnvironmentContextModelSnapshot : ModelSnapshot
     {
