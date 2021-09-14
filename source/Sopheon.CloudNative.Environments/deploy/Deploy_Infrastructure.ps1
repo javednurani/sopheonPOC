@@ -12,6 +12,7 @@ $SqlServerNameValue = $ResourceGroupValue;
 $SqlServerPoolName = "$($ResourceGroupValue)-Pool";
 $FunctionAppName = $ResourceGroupValue.ToLower();
 $SqlServerDatabaseNameValue = "EnvironmentManagement";
+$FunctionAppStorageAccountName = "stratus$($Environment.ToLower())envfuncapp"
 $AppInsightsName = $ResourceGroupValue;
 
 $MasterTemplate = "$($PSScriptRoot)\Master_Template.bicep";
@@ -22,7 +23,7 @@ Write-Host "Replacing tokens on Master Template...";
 $masterTemplateContent = Get-Content $MasterTemplate -raw;
 $masterTemplateContent = $masterTemplateContent.Replace('^SqlServerName^', $SqlServerNameValue).Replace('^SqlServerDatabaseName^', $SqlServerDatabaseNameValue)
 $masterTemplateContent = $masterTemplateContent.Replace('^SqlElasticPoolName^', $SqlServerPoolName).Replace('^EnvironmentFunctionAppName^', $FunctionAppName)
-$masterTemplateContent = $masterTemplateContent.Replace('^AppInsightsName^', $AppInsightsName);
+$masterTemplateContent = $masterTemplateContent.Replace('^AppInsightsName^', $AppInsightsName).Replace('^EnvironmentFunctionStorageAccountName^', $FunctionAppStorageAccountName);
 Set-Content -Value $masterTemplateContent -Path $MasterTemplate;
 Write-Host "Complete!";
 
@@ -30,7 +31,7 @@ Write-Host "Replacing tokens on Master Parameters Template...";
 $masterParametersContent = Get-Content $MasterParametersTemplate -raw;
 $masterParametersContent = $masterParametersContent.Replace('^SqlServerName^', $SqlServerNameValue).Replace('^SqlServerDatabaseName^', $SqlServerDatabaseNameValue);
 $masterParametersContent = $masterParametersContent.Replace("^SqlElasticPoolName^", $SqlServerPoolName).Replace('^EnvironmentFunctionAppName^', $FunctionAppName);
-$masterParametersContent = $masterParametersContent.Replace('^AppInsightsName^', $AppInsightsName);
+$masterParametersContent = $masterParametersContent.Replace('^AppInsightsName^', $AppInsightsName).Replace('^EnvironmentFunctionStorageAccountName^', $FunctionAppStorageAccountName);
 Set-Content -Value $masterParametersContent -Path $MasterParametersTemplate;
 Write-Host "Complete!";
 

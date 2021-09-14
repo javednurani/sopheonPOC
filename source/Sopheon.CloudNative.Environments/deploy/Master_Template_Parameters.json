@@ -5,6 +5,9 @@
         "environmentFunctionApp_Name": {
             "value": "^EnvironmentFunctionAppName^"
         },
+        "environmentFunctionAppStorage_name": {
+            "value": "^EnvironmentFunctionStorageAccountName^"
+        },
         "appInsightsName" : {
             "value": "^AppInsightsName^"
         },

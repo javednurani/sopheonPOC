@@ -6,7 +6,7 @@ param functionAppName string = '^EnvironmentsFunctionAppName^'
 
 param appInsightsName string = '^AppInsightsName^'
 
-param storageAccountName string = 'stratuspreviewenvfuncapp'
+param storageAccountName string = '^EnvironmentFunctionStorageAccountName^'
 
 param serverFarmId string = '/subscriptions/1c4bef1d-8a40-4a6d-96d6-764bb466ac46/resourceGroups/Stratus-Dev/providers/Microsoft.Web/serverfarms/ASP-StratusDev-a1f1'
 
