@@ -1,7 +1,7 @@
 ﻿#define Managed
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
-using Azure.Core.Serialization;
 using FluentValidation;
 using Microsoft.Azure.Functions.Worker.Extensions.OpenApi.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +16,7 @@ using Sopheon.CloudNative.Environments.Functions.Validators;
 
 namespace Sopheon.CloudNative.Environments.Functions
 {
+   [ExcludeFromCodeCoverage]
    class Program
    {
       static Task Main(string[] args)
