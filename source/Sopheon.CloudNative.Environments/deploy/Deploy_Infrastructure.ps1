@@ -9,7 +9,7 @@ if ($env:AzureEnvironment -eq "Prod"){
     $azureKeyVault = "Prod-Cloud-DevOps"
 }
 
-$SqlAdminEngima = (az keyvault secret show --vault-name $azureKeyVault --name "SqlServerAdminEngima" --query value).Replace('"', '');
+$SqlAdminEngima = (az keyvault secret show --vault-name $azureKeyVault --name "SqlServerAdminEnigma" --query value).Replace('"', '');
 
 
 $DeploymentName = "ADO-Deployment";
