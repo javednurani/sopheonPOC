@@ -20,6 +20,9 @@
         "sqlServerPool_name": {
             "value": "^SqlElasticPoolName^"
         },
+        "webServerFarm_Name": {
+            "value": "^WebServerFarmName^"
+        },
         "administratorLogin": {
             "value": "sopheon"
         },

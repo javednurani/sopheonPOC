@@ -15,6 +15,7 @@ $SqlAdminEngima = (az keyvault secret show --vault-name $azureKeyVault --name "S
 $DeploymentName = "ADO-Deployment";
 
 $ResourceGroupValue = "Stratus-$($Environment)";
+$WebServerFarmName = "ASP-$($ResourceGroupValue)";
 $SqlServerNameValue = $ResourceGroupValue;
 $SqlServerPoolName = "$($ResourceGroupValue)-Pool";
 $FunctionAppName = $ResourceGroupValue.ToLower();
@@ -31,7 +32,7 @@ $masterTemplateContent = Get-Content $MasterTemplate -raw;
 $masterTemplateContent = $masterTemplateContent.Replace('^SqlServerName^', $SqlServerNameValue).Replace('^SqlServerDatabaseName^', $SqlServerDatabaseNameValue);
 $masterTemplateContent = $masterTemplateContent.Replace('^SqlElasticPoolName^', $SqlServerPoolName).Replace('^EnvironmentFunctionAppName^', $FunctionAppName);
 $masterTemplateContent = $masterTemplateContent.Replace('^AppInsightsName^', $AppInsightsName).Replace('^EnvironmentFunctionStorageAccountName^', $FunctionAppStorageAccountName);
-$masterTemplateContent = $masterTemplateContent.Replace('^SqlAdminEngima^', $SqlAdminEngima);
+$masterTemplateContent = $masterTemplateContent.Replace('^SqlAdminEngima^', $SqlAdminEngima).Replace('^WebServerFarmName^', $WebServerFarmName);
 Set-Content -Value $masterTemplateContent -Path $MasterTemplate;
 Write-Host "Complete!";
 
@@ -40,7 +41,7 @@ $masterParametersContent = Get-Content $MasterParametersTemplate -raw;
 $masterParametersContent = $masterParametersContent.Replace('^SqlServerName^', $SqlServerNameValue).Replace('^SqlServerDatabaseName^', $SqlServerDatabaseNameValue);
 $masterParametersContent = $masterParametersContent.Replace("^SqlElasticPoolName^", $SqlServerPoolName).Replace('^EnvironmentFunctionAppName^', $FunctionAppName);
 $masterParametersContent = $masterParametersContent.Replace('^AppInsightsName^', $AppInsightsName).Replace('^EnvironmentFunctionStorageAccountName^', $FunctionAppStorageAccountName);
-$masterParametersContent = $masterParametersContent.Replace('^SqlAdminEngima^', $SqlAdminEngima);
+$masterParametersContent = $masterParametersContent.Replace('^SqlAdminEngima^', $SqlAdminEngima).Replace('^WebServerFarmName^', $WebServerFarmName);
 Set-Content -Value $masterParametersContent -Path $MasterParametersTemplate;
 Write-Host "Complete!";
 
@@ -62,4 +63,4 @@ $environmentManagementConnectionString = (az sql db show-connection-string --cli
 
 $environmentManagementConnectionString = $environmentManagementConnectionString.Replace('<username>', 'sopheon').Replace('<password>', $SqlAdminEngima);
 
-az webapp config connection-string set --resource-group $ResourceGroupValue --name $ResourceGroupValue.ToLower() -t SQLServer --settings EnvironmentsSqlConnectionString=$environmentManagementConnectionString;
+$connectionString = az webapp config connection-string set --resource-group $ResourceGroupValue --name $ResourceGroupValue.ToLower() -t SQLServer --settings EnvironmentsSqlConnectionString=$environmentManagementConnectionString;

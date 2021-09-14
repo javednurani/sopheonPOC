@@ -14,6 +14,9 @@ param sqlServerPool_name string = '^SqlElasticPoolName^'
 @description('Sql server database name')
 param sqlServerDatabase_name string = '^SqlServerDatabaseName^'
 
+@description('Name of the WebServer Farm being used')
+param webServerFarm_Name string = '^WebServerFarmName^'
+
 @description('Sql Server Password')
 param sqlServer_Enigma string = '^SqlAdminEngima^'
 
@@ -43,6 +46,7 @@ module EnvironmentFunction 'Environments_Function_App.bicep' = {
     storageAccountName: environmentFunctionAppStorage_name
     appInsightsName: appInsightsName
     functionAppName: environmentFunctionApp_Name
+    webServerFarm_Name: webServerFarm_Name
   }
 }
 

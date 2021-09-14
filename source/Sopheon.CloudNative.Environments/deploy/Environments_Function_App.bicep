@@ -8,7 +8,7 @@ param appInsightsName string = '^AppInsightsName^'
 
 param storageAccountName string = '^EnvironmentFunctionStorageAccountName^'
 
-param serverFarmId string = '/subscriptions/1c4bef1d-8a40-4a6d-96d6-764bb466ac46/resourceGroups/Stratus-Dev/providers/Microsoft.Web/serverfarms/ASP-StratusDev-a1f1'
+param webServerFarm_Name string = '^WebServerFarmName^'
 
 var functionRuntime = 'dotnet-isolated'
 
@@ -49,12 +49,25 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   }
 }
 
+resource WebServerFarmForFunction 'Microsoft.Web/serverfarms@2021-01-15' = {
+  location: location
+  name: webServerFarm_Name
+  sku: {
+    name: 'Y1'
+    tier: 'Dynamic'
+    size: 'Y1'
+    family: 'Y'
+    capacity: 0
+  }
+  kind: 'functionapp'
+}
+
 resource EnvironmentsFunctionApp 'Microsoft.Web/sites@2021-01-15' = {
   location: location
   name: functionAppName
   kind: 'functionapp'
   properties: {
-    serverFarmId: serverFarmId
+    serverFarmId: WebServerFarmForFunction.id
     siteConfig: {
       appSettings: [
         {
