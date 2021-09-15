@@ -583,7 +583,7 @@
           </OutputClaims>
           <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingLogonEmail" />
-            <ValidationTechnicalProfile ReferenceId="REST-Create-Environment" />
+            <ValidationTechnicalProfile ReferenceId="REST-Create-Environment" ContinueOnError="true" />
           </ValidationTechnicalProfiles>
         </TechnicalProfile>
         <!-- SopheonGetQueryParameters can parse the /authorize call querystring and resolve values to claims defined in the claims schema -->
