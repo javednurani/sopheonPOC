@@ -891,9 +891,22 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
+        <!-- Sopheon.CloudNative.Environments - Create Environment for new user -->
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>newUser</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="CreateEnvironment" TechnicalProfileReferenceId="REST-Create-Environment" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
         <!-- execute consent step if the users consented version does not meet the current version,
               otherwise this step is skipped -->
-        <OrchestrationStep Order="5" Type="ClaimsExchange">
+        <OrchestrationStep Order="6" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
               <Value>extension_TermsOfUseConsentedVersion</Value>
@@ -907,7 +920,7 @@
         </OrchestrationStep>
 
         <!-- SignUpOrSignIn (Log In) journey - don't confront a user with Profile Update if they've already seen it  -->
-        <OrchestrationStep Order="6" Type="ClaimsExchange">
+        <OrchestrationStep Order="7" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
               <Value>extension_ProfileEditDate</Value>
@@ -919,7 +932,7 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <OrchestrationStep Order="7" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="8" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
 
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
