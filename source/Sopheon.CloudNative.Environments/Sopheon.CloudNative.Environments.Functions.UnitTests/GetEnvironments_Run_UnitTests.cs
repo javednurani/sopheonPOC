@@ -4,20 +4,21 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Newtonsoft.Json;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
+using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Functions.Models;
-using Sopheon.CloudNative.Environments.Functions.UnitTests.TestHelpers;
+using Sopheon.CloudNative.Environments.Testing.Common;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Xunit;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
 namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 {
-   public class GetEnvironments_Run_UnitTests
+   public class GetEnvironments_Run_UnitTests : FunctionUnitTestBase
    {
       GetEnvironments Sut;
 
@@ -27,6 +28,8 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       Mock<IEnvironmentRepository> _mockEnvironmentRepository;
 
       IMapper _mapper;
+
+      HttpResponseDataBuilder _responseBuilder;
 
       public GetEnvironments_Run_UnitTests()
       {
@@ -43,18 +46,18 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
             {
                new Environment
                {
-                  Name = SomeRandom.String(),
-                  Owner = SomeRandom.Guid(),
-                  EnvironmentKey = SomeRandom.Guid(),
-                  Description = SomeRandom.String(),
+                  Name = Some.Random.String(),
+                  Owner = Some.Random.Guid(),
+                  EnvironmentKey = Some.Random.Guid(),
+                  Description = Some.Random.String(),
                   IsDeleted = false,
                },
                new Environment
                {
-                  Name = SomeRandom.String(),
-                  Owner = SomeRandom.Guid(),
-                  EnvironmentKey = SomeRandom.Guid(),
-                  Description = SomeRandom.String(),
+                  Name = Some.Random.String(),
+                  Owner = Some.Random.Guid(),
+                  EnvironmentKey = Some.Random.Guid(),
+                  Description = Some.Random.String(),
                   IsDeleted = false,
                },
             };
@@ -73,7 +76,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          // HTTP response
          string responseBody = await GetResponseBody(result);
-         List<EnvironmentDto> environmentResponse = JsonConvert.DeserializeObject<List<EnvironmentDto>>(responseBody);
+         List<EnvironmentDto> environmentResponse = JsonSerializer.Deserialize<List<EnvironmentDto>>(responseBody);
 
          Assert.NotEmpty(environmentResponse);
       }
@@ -101,7 +104,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          // HTTP response
          string responseBody = await GetResponseBody(result);
-         List<EnvironmentDto> environmentResponse = JsonConvert.DeserializeObject<List<EnvironmentDto>>(responseBody);
+         List<EnvironmentDto> environmentResponse = JsonSerializer.Deserialize<List<EnvironmentDto>>(responseBody);
          Assert.Empty(environmentResponse);
       }
 
@@ -137,15 +140,10 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          });
          _mapper = config.CreateMapper();
 
-         // create Sut
-         Sut = new GetEnvironments(_mockEnvironmentRepository.Object, _mapper);
-      }
+         _responseBuilder = new HttpResponseDataBuilder();
 
-      private async Task<string> GetResponseBody(HttpResponseData response)
-      {
-         response.Body.Position = 0;
-         StreamReader reader = new StreamReader(response.Body);
-         return await reader.ReadToEndAsync();
+         // create Sut
+         Sut = new GetEnvironments(_mockEnvironmentRepository.Object, _mapper, _responseBuilder);
       }
    }
 }

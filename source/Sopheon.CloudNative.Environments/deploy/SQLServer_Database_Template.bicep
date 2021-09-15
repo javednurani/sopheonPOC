@@ -11,8 +11,7 @@ param poolName string = '^SqlElasticPoolName^'
 param administratorLogin string = 'sopheon'
 
 @description('The administrator password of the SQL logical server.')
-@secure()
-param administratorLoginEngima string
+param administratorLoginEngima string = '^SqlAdminEngima^'
 
 param location string
 
