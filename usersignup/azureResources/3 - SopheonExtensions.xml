@@ -76,6 +76,11 @@
         <DisplayName>EnvironmentKey of a Sopheon.CloudNative.Environment</DisplayName>
         <DataType>string</DataType>
       </ClaimType>
+      <ClaimType Id="RESTcallFailed">
+        <DisplayName>RESTcallFailed</DisplayName>
+        <DataType>boolean</DataType>
+        <AdminHelpText>REST API technical profile failed</AdminHelpText>
+      </ClaimType>
     </ClaimsSchema>
     <Predicates>
       <Predicate Id="PhoneNumberRegex" Method="MatchesRegex">
@@ -584,6 +589,7 @@
           <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingLogonEmail" />
             <ValidationTechnicalProfile ReferenceId="REST-Create-Environment" ContinueOnError="true" />
+            <ValidationTechnicalProfile ReferenceId="REST-FailSafe-Dummy" />
           </ValidationTechnicalProfiles>
         </TechnicalProfile>
         <!-- SopheonGetQueryParameters can parse the /authorize call querystring and resolve values to claims defined in the claims schema -->
@@ -793,6 +799,13 @@
           </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="environmentKey" />
+          </OutputClaims>
+        </TechnicalProfile>
+        <TechnicalProfile Id="REST-FailSafe-Dummy">
+          <DisplayName>Dummy Validation Technical Profile to provide a failsafe for REST API Validation Technical Profile</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="RESTcallFailed" DefaultValue="true" AlwaysUseDefaultValue="true" />
           </OutputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
