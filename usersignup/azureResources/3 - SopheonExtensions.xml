@@ -585,6 +585,7 @@
             <OutputClaim ClaimTypeReferenceId="authenticationSource" />
             <OutputClaim ClaimTypeReferenceId="newUser" />
             <OutputClaim ClaimTypeReferenceId="environmentKey" />
+            <OutputClaim ClaimTypeReferenceId="RESTFailSafe" />
           </OutputClaims>
           <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingLogonEmail" />
@@ -805,7 +806,7 @@
           <DisplayName>Dummy Validation Technical Profile to provide a failsafe for REST API Validation Technical Profile</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="RESTcallFailed" DefaultValue="true" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="RESTFailSafe" DefaultValue="true" AlwaysUseDefaultValue="true" />
           </OutputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
