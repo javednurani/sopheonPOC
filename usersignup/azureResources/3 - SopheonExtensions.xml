@@ -580,6 +580,10 @@
             <OutputClaim ClaimTypeReferenceId="authenticationSource" />
             <OutputClaim ClaimTypeReferenceId="newUser" />
           </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="REST-Create-Environment" />
+            <ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingLogonEmail" />
+          </ValidationTechnicalProfiles>
         </TechnicalProfile>
         <!-- SopheonGetQueryParameters can parse the /authorize call querystring and resolve values to claims defined in the claims schema -->
         <!-- This supports passing arbitrary values from React SPA (or other client) into custom policy flow -->
@@ -812,15 +816,15 @@
         </OrchestrationStep>
 
         <!-- Sopheon.CloudNative.Environments - Create Environment for new user -->
-        <OrchestrationStep Order="3" Type="ClaimsExchange">
+        <!-- <OrchestrationStep Order="3" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="CreateEnvironment" TechnicalProfileReferenceId="REST-Create-Environment" />
           </ClaimsExchanges>
-        </OrchestrationStep>
+        </OrchestrationStep> -->
 
         <!-- execute consent step if the users consented version does not met the current version,
               otherwhise this step is skipped -->
-        <OrchestrationStep Order="4" Type="ClaimsExchange">
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
               <Value>extension_TermsOfUseConsentedVersion</Value>
@@ -834,13 +838,13 @@
         </OrchestrationStep>
 
         <!-- Sign Up journey - always confront user with Profile Update  -->
-        <OrchestrationStep Order="5" Type="ClaimsExchange">
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="B2CUserProfileUpdateExchange" TechnicalProfileReferenceId="SelfAsserted-ProfileUpdate" />
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
 
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
@@ -892,7 +896,7 @@
         </OrchestrationStep>
 
         <!-- Sopheon.CloudNative.Environments - Create Environment for new user -->
-        <OrchestrationStep Order="5" Type="ClaimsExchange">
+        <!-- <OrchestrationStep Order="5" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
               <Value>newUser</Value>
@@ -902,11 +906,11 @@
           <ClaimsExchanges>
             <ClaimsExchange Id="CreateEnvironment" TechnicalProfileReferenceId="REST-Create-Environment" />
           </ClaimsExchanges>
-        </OrchestrationStep>
+        </OrchestrationStep> -->
 
         <!-- execute consent step if the users consented version does not meet the current version,
               otherwise this step is skipped -->
-        <OrchestrationStep Order="6" Type="ClaimsExchange">
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
               <Value>extension_TermsOfUseConsentedVersion</Value>
@@ -920,7 +924,7 @@
         </OrchestrationStep>
 
         <!-- SignUpOrSignIn (Log In) journey - don't confront a user with Profile Update if they've already seen it  -->
-        <OrchestrationStep Order="7" Type="ClaimsExchange">
+        <OrchestrationStep Order="6" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
               <Value>extension_ProfileEditDate</Value>
@@ -932,7 +936,7 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <OrchestrationStep Order="8" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="7" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
 
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
