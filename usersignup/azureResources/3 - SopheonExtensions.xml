@@ -68,6 +68,14 @@
         <DataType>boolean</DataType>
         <AdminHelpText>Whether the user has selected Forgot your Password</AdminHelpText>
       </ClaimType>
+      <ClaimType Id="createEnvironmentRequestBody">
+        <DisplayName>String request body to send to Sopheon.CloudNative.Environment Create endpoint</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="environmentKey">
+        <DisplayName>EnvironmentKey of a Sopheon.CloudNative.Environment</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
     </ClaimsSchema>
     <Predicates>
       <Predicate Id="PhoneNumberRegex" Method="MatchesRegex">
@@ -97,6 +105,17 @@
       <ClaimsTransformation Id="GetSystemDateTimeProfileEdit" TransformationMethod="GetCurrentDateTime">
         <OutputClaims>
           <OutputClaim ClaimTypeReferenceId="extension_ProfileEditDate" TransformationClaimType="currentDateTime" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="GenerateCreateEnvironmentRequestBody" TransformationMethod="GenerateJson">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="objectId" TransformationClaimType="Owner" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="Name" DataType="string" Value="Default Environment" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="createEnvironmentRequestBody" TransformationClaimType="outputClaim" />
         </OutputClaims>
       </ClaimsTransformation>
     </ClaimsTransformations>
@@ -745,6 +764,34 @@
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
+    <ClaimsProvider>
+      <DisplayName>Sopheon-CloudNative-Environments</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="REST-Create-Environment">
+          <DisplayName>Create Environment for new user</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <!-- TODO Cloud-1761, tokenize hardcoded ServiceUrl-->
+            <Item Key="ServiceUrl">https://stratus-dev.azurewebsites.net/environments</Item>
+            <Item Key="AuthenticationType">None</Item>
+            <Item Key="SendClaimsIn">Body</Item>
+            <Item Key="ClaimUsedForRequestPayload">createEnvironmentRequestBody</Item>
+            <Item Key="DefaultUserMessageIfRequestFailed">DEBUG MESSAGE: Create Environment REST API call failed.</Item>
+            <!-- REMOVE the following line in production environments -->
+            <Item Key="AllowInsecureAuthInProduction">true</Item>
+          </Metadata>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="GenerateCreateEnvironmentRequestBody" />
+          </InputClaimsTransformations>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="createEnvironmentRequestBody" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="environmentKey" />
+          </OutputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
   </ClaimsProviders>
 
   <UserJourneys>
@@ -764,9 +811,16 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
+        <!-- Sopheon.CloudNative.Environments - Create Environment for new user -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="CreateEnvironment" TechnicalProfileReferenceId="REST-Create-Environment" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
         <!-- execute consent step if the users consented version does not met the current version,
               otherwhise this step is skipped -->
-        <OrchestrationStep Order="3" Type="ClaimsExchange">
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
               <Value>extension_TermsOfUseConsentedVersion</Value>
@@ -780,13 +834,13 @@
         </OrchestrationStep>
 
         <!-- Sign Up journey - always confront user with Profile Update  -->
-        <OrchestrationStep Order="4" Type="ClaimsExchange">
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="B2CUserProfileUpdateExchange" TechnicalProfileReferenceId="SelfAsserted-ProfileUpdate" />
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
 
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
