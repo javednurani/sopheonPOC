@@ -764,6 +764,34 @@
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
+    <ClaimsProvider>
+      <DisplayName>Sopheon-CloudNative-Environments</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="REST-Create-Environment">
+          <DisplayName>Create Environment for new user</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <!-- TODO Cloud-1761, tokenize hardcoded ServiceUrl-->
+            <Item Key="ServiceUrl">https://stratus-dev.azurewebsites.net/environments</Item>
+            <Item Key="AuthenticationType">None</Item>
+            <Item Key="SendClaimsIn">Body</Item>
+            <Item Key="ClaimUsedForRequestPayload">createEnvironmentRequestBody</Item>
+            <Item Key="DefaultUserMessageIfRequestFailed">DEBUG MESSAGE: Create Environment REST API call failed.</Item>
+            <!-- REMOVE the following line in production environments -->
+            <Item Key="AllowInsecureAuthInProduction">true</Item>
+          </Metadata>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="GenerateCreateEnvironmentRequestBody" />
+          </InputClaimsTransformations>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="createEnvironmentRequestBody" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="environmentKey" />
+          </OutputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
   </ClaimsProviders>
 
   <UserJourneys>
