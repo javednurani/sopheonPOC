@@ -68,6 +68,14 @@
         <DataType>boolean</DataType>
         <AdminHelpText>Whether the user has selected Forgot your Password</AdminHelpText>
       </ClaimType>
+      <ClaimType Id="createEnvironmentRequestBody">
+        <DisplayName>String request body to send to Sopheon.CloudNative.Environment Create endpoint</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="environmentKey">
+        <DisplayName>EnvironmentKey of a Sopheon.CloudNative.Environment</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
     </ClaimsSchema>
     <Predicates>
       <Predicate Id="PhoneNumberRegex" Method="MatchesRegex">
