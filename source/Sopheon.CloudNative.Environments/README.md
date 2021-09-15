@@ -41,6 +41,9 @@ npm run prune
 - Run the following command: func start
 - To verify functions are up and running, you navigate to the following url in a browser
   - http://localhost:7071/Environments
+- To debug local azure functions
+  - Run with the following option: func start --dotnet-isolated
+  - Note PID of function, and attach to "dotnet.exe" process with that PID
 
 # Design Decisions
 TODO: flesh this out.  This section should explain any design decisions or implementation details that might throw a newly onboarded dev for a loop.
