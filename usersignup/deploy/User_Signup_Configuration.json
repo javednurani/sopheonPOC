@@ -83,6 +83,12 @@
       "Pattern": "^B2CInsecureAuthMode^",
       "EnvironmentVariableName": "B2CInsecureAuthMode",
       "IsKeyVaultSecret": false
+    },
+    {
+      "TokenDisplayName": "Environment Management Function App Name",
+      "Pattern": "^EnvironmentsFunctionAppName^",
+      "IsKeyVaultSecret": true,
+      "KeyVaultSecretName": "StratusEnvironmentsManagementFunctionAppName"
     }
   ]
 }
