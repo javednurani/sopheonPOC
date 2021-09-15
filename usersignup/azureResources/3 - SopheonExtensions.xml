@@ -778,7 +778,7 @@
             <Item Key="ClaimUsedForRequestPayload">createEnvironmentRequestBody</Item>
             <Item Key="DefaultUserMessageIfRequestFailed">DEBUG MESSAGE: Create Environment REST API call failed.</Item>
             <!-- REMOVE the following line in production environments -->
-            <Item Key="AllowInsecureAuthInProduction">true</Item>
+            <Item Key="AllowInsecureAuthInProduction">^InsecureAuthMode^</Item>
           </Metadata>
           <InputClaimsTransformations>
             <InputClaimsTransformation ReferenceId="GenerateCreateEnvironmentRequestBody" />
