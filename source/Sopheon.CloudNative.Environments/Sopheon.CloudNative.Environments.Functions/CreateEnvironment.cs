@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Net;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
@@ -89,9 +90,11 @@ namespace Sopheon.CloudNative.Environments.Functions
 
             // TODO: environments that already exist with name?
             environment = await _environmentRepository.AddEnvironment(environment);
-            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR);
 
-            //return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.Created, _mapper.Map<EnvironmentDto>(environment));
+            // force AADB2C timeout
+            Thread.Sleep(100000);
+
+            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.Created, _mapper.Map<EnvironmentDto>(environment));
          }
          catch (JsonException ex)
          {
