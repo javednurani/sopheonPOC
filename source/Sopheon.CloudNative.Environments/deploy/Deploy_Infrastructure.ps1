@@ -56,7 +56,7 @@ if('false' -eq $GroupExists)
 }
 
 Write-Host "Deploying Master Template...";
-$MasterTemplateDeploy = az deployment group create --resource-group $ResourceGroupValue --template-file $MasterTemplate --parameters $MasterParametersTemplate --name "$($DeploymentName)-MasterDeploy" --query "properties.provisioningState";
+$MasterTemplateDeploy = az deployment group create --resource-group $ResourceGroupValue --template-file $MasterTemplate --parameters $MasterParametersTemplate --name "$($DeploymentName)-MasterDeploy-EnvironmentManagement" --query "properties.provisioningState";
 Write-Host "Master Template Deployment: $($MasterTemplateDeploy)";
 
 $environmentManagementConnectionString = (az sql db show-connection-string --client ado.net --server "$($ResourceGroupValue.ToLower())" --name $SqlServerDatabaseNameValue).Replace('"', '');

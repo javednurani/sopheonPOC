@@ -4,9 +4,6 @@
     "parameters": {
         "storageAccounts_name": {
             "value":"^StorageAccountName^"            
-        },
-        "location": {
-            "value": "[resourceGroup().location]"
         }
     }
 }
