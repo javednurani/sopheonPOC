@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace Sopheon.CloudNative.Environments.Domain.Models
 {
@@ -17,7 +16,6 @@ namespace Sopheon.CloudNative.Environments.Domain.Models
          set;
       }
 
-      [MaxLength(64)]
       public string Name
       {
          get;
@@ -30,7 +28,6 @@ namespace Sopheon.CloudNative.Environments.Domain.Models
          set;
       }
 
-      [MaxLength(1000)]
       public string Description
       {
          get;
