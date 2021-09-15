@@ -107,6 +107,17 @@
           <OutputClaim ClaimTypeReferenceId="extension_ProfileEditDate" TransformationClaimType="currentDateTime" />
         </OutputClaims>
       </ClaimsTransformation>
+      <ClaimsTransformation Id="GenerateCreateEnvironmentRequestBody" TransformationMethod="GenerateJson">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="objectId" TransformationClaimType="owner" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="name" DataType="string" Value="Default Environment" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="createEnvironmentRequestBody" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
     </ClaimsTransformations>
     <ContentDefinitions>
       <ContentDefinition Id="api.signuporsignin">
