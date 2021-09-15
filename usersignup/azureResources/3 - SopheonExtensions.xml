@@ -582,7 +582,6 @@
             <OutputClaim ClaimTypeReferenceId="environmentKey" />
           </OutputClaims>
           <ValidationTechnicalProfiles>
-            <ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingLogonEmail" />
             <ValidationTechnicalProfile ReferenceId="REST-Create-Environment" />
           </ValidationTechnicalProfiles>
         </TechnicalProfile>
