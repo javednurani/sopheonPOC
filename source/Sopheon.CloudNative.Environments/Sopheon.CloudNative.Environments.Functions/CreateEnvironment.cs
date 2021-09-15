@@ -90,10 +90,6 @@ namespace Sopheon.CloudNative.Environments.Functions
 
             // TODO: environments that already exist with name?
             environment = await _environmentRepository.AddEnvironment(environment);
-
-            // force AADB2C timeout
-            Thread.Sleep(100000);
-
             return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.Created, _mapper.Map<EnvironmentDto>(environment));
          }
          catch (JsonException ex)
