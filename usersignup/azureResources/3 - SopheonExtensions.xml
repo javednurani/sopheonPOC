@@ -76,10 +76,10 @@
         <DisplayName>EnvironmentKey of a Sopheon.CloudNative.Environment</DisplayName>
         <DataType>string</DataType>
       </ClaimType>
-      <ClaimType Id="RESTcallFailed">
-        <DisplayName>RESTcallFailed</DisplayName>
+      <ClaimType Id="RESTFailSafe">
+        <DisplayName>RESTFailSafe</DisplayName>
         <DataType>boolean</DataType>
-        <AdminHelpText>REST API technical profile failed</AdminHelpText>
+        <AdminHelpText>REST API technical profile failsafe</AdminHelpText>
       </ClaimType>
     </ClaimsSchema>
     <Predicates>
