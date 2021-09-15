@@ -1,9 +1,11 @@
 @description('The name of the Storage Account')
 param storageAccounts_name string = '^StorageAccountName^'
 
+param location string = resourceGroup().location
+
 resource StaticWebpage_StorageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   name: storageAccounts_name
-  location: resourceGroup().location
+  location: location
   sku: {
     name: 'Standard_LRS'
   }
