@@ -77,6 +77,12 @@
       "Pattern": "^BrowserWebAppUrl^",
       "IsKeyVaultSecret": true,
       "KeyVaultSecretName": "StratusBrowserWebAppUrl"
+    },
+    {
+      "TokenDisplayName": "B2C Auth Production Mode",
+      "Pattern": "^B2CInsecureAuthMode^",
+      "EnvironmentVariableName": "B2CInsecureAuthMode",
+      "IsKeyVaultSecret": false
     }
   ]
 }
