@@ -777,8 +777,8 @@
             <Item Key="SendClaimsIn">Body</Item>
             <Item Key="ClaimUsedForRequestPayload">createEnvironmentRequestBody</Item>
             <Item Key="DefaultUserMessageIfRequestFailed">DEBUG MESSAGE: Create Environment REST API call failed.</Item>
-            <!-- REMOVE the following line in production environments -->
-            <Item Key="AllowInsecureAuthInProduction">true</Item>
+            <!-- Always true for now. Must be true to have AuthenticationType set to None -->
+            <Item Key="AllowInsecureAuthInProduction">^B2CInsecureAuthMode^</Item>
           </Metadata>
           <InputClaimsTransformations>
             <InputClaimsTransformation ReferenceId="GenerateCreateEnvironmentRequestBody" />
