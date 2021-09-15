@@ -37,7 +37,7 @@ if('false' -eq $GroupExists)
 }
 
 Write-Host "Deploying Master Template...";
-$MasterTemplateDeploy = az deployment group create --resource-group $ResourceGroupValue --template-file $MasterTemplate --parameters $MasterParametersTemplate --name "$($DeploymentName)-MasterDeploy" --query "properties.provisioningState";
+$MasterTemplateDeploy = az deployment group create --resource-group $ResourceGroupValue --template-file $MasterTemplate --parameters $MasterParametersTemplate --name "$($DeploymentName)-MasterDeploy-B2CAssets" --query "properties.provisioningState";
 Write-Host "Master Template Deployment: $($MasterTemplateDeploy)";
 
 Write-Host "Enabling Static Website properties...";
