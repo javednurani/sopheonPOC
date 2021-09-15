@@ -2,7 +2,12 @@
 
 $ResourceGroup = "Stratus-$($env:Environment)";
 
-$SqlAdminEnigma = (az keyvault secret show --vault-name $ResourceGroup --name "SqlServerAdminEnigma" --query value).Replace('"', '');
+$azureKeyVault = "Cloud-DevOps";
+if ($env:AzureEnvironment -eq "Prod"){
+    $azureKeyVault = "Prod-Cloud-DevOps"
+}
+
+$SqlAdminEnigma = (az keyvault secret show --vault-name $azureKeyVault --name "SqlServerAdminEnigma" --query value).Replace('"', '');
 
 #region Sql Script Run
 Write-Host "Running Sql Server Script for Environment Management";

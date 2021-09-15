@@ -7,8 +7,9 @@ namespace Sopheon.CloudNative.Environments.Functions.Validators
    {
       public EnvironmentDtoValidator()
       {
-         RuleFor(e => e.Name).NotEmpty();
+         RuleFor(e => e.Name).NotEmpty().MaximumLength(64);
          RuleFor(e => e.Owner).NotEmpty();
+         RuleFor(e => e.Description).MaximumLength(1000);
       }
    }
 }

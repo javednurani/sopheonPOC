@@ -3,15 +3,16 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Sopheon.CloudNative.Environments.Domain.Data;
 
-namespace Sopheon.CloudNative.Environments.Domain.Migrations
+namespace Sopheon.CloudNative.Environments.Data.Migrations
 {
     [DbContext(typeof(EnvironmentContext))]
-    partial class EnvironmentContextModelSnapshot : ModelSnapshot
+    [Migration("20210913153618_EnvironmentKeyUnique")]
+    partial class EnvironmentKeyUnique
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,6 +45,9 @@ namespace Sopheon.CloudNative.Environments.Domain.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("EnvironmentID");
+
+                    b.HasIndex("EnvironmentKey")
+                        .IsUnique();
 
                     b.ToTable("Environments");
                 });

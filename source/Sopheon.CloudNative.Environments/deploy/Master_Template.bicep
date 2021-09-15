@@ -1,6 +1,8 @@
 @description('The name of the Environment Function App')
 param environmentFunctionApp_Name string = '^EnvironmentFunctionAppName^'
 
+param environmentFunctionAppStorage_name string = '^EnvironmentFunctionStorageAccountName^'
+
 param appInsightsName string = '^AppInsightsName^'
 
 @description('The name of the SQL Server')
@@ -12,9 +14,11 @@ param sqlServerPool_name string = '^SqlElasticPoolName^'
 @description('Sql server database name')
 param sqlServerDatabase_name string = '^SqlServerDatabaseName^'
 
+@description('Name of the WebServer Farm being used')
+param webServerFarm_Name string = '^WebServerFarmName^'
+
 @description('Sql Server Password')
-@secure()
-param sqlServer_Enigma string = ''
+param sqlServer_Enigma string = '^SqlAdminEngima^'
 
 @description('Sql server admin')
 param administratorLogin string = 'sopheon'
@@ -39,8 +43,10 @@ module EnvironmentFunction 'Environments_Function_App.bicep' = {
   name: 'Function-App-Deployment'
   params: {
     location: location
+    storageAccountName: environmentFunctionAppStorage_name
     appInsightsName: appInsightsName
     functionAppName: environmentFunctionApp_Name
+    webServerFarm_Name: webServerFarm_Name
   }
 }
 

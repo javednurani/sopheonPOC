@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Sopheon.CloudNative.Environments.Domain.Migrations
+namespace Sopheon.CloudNative.Environments.Data.Migrations
 {
     public partial class InitialCreate : Migration
     {
