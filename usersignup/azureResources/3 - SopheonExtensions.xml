@@ -117,7 +117,7 @@
           <InputClaim ClaimTypeReferenceId="objectId" TransformationClaimType="Owner" />
         </InputClaims>
         <InputParameters>
-          <InputParameter Id="Name" DataType="string" Value="Default Environment" />
+          <InputParameter Id="name" DataType="string" Value="Default Environment" />
         </InputParameters>
         <OutputClaims>
           <OutputClaim ClaimTypeReferenceId="createEnvironmentRequestBody" TransformationClaimType="outputClaim" />
