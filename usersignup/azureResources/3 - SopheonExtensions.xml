@@ -589,6 +589,7 @@
           </OutputClaims>
           <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingLogonEmail" />
+            <!-- Cloud-1472 call REST technical profile to create an Environment for User-->
             <ValidationTechnicalProfile ReferenceId="REST-Create-Environment" ContinueOnError="true" />
             <ValidationTechnicalProfile ReferenceId="REST-FailSafe-Dummy" />
           </ValidationTechnicalProfiles>
@@ -830,13 +831,6 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <!-- Sopheon.CloudNative.Environments - Create Environment for new user -->
-        <!-- <OrchestrationStep Order="3" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="CreateEnvironment" TechnicalProfileReferenceId="REST-Create-Environment" />
-          </ClaimsExchanges>
-        </OrchestrationStep> -->
-
         <!-- execute consent step if the users consented version does not met the current version,
               otherwhise this step is skipped -->
         <OrchestrationStep Order="3" Type="ClaimsExchange">
@@ -909,19 +903,6 @@
             <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
           </ClaimsExchanges>
         </OrchestrationStep>
-
-        <!-- Sopheon.CloudNative.Environments - Create Environment for new user -->
-        <!-- <OrchestrationStep Order="5" Type="ClaimsExchange">
-          <Preconditions>
-            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
-              <Value>newUser</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-          </Preconditions>
-          <ClaimsExchanges>
-            <ClaimsExchange Id="CreateEnvironment" TechnicalProfileReferenceId="REST-Create-Environment" />
-          </ClaimsExchanges>
-        </OrchestrationStep> -->
 
         <!-- execute consent step if the users consented version does not meet the current version,
               otherwise this step is skipped -->
