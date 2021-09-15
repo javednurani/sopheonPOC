@@ -42,7 +42,7 @@ npm run prune
 - To verify functions are up and running, you navigate to the following url in a browser
   - http://localhost:7071/Environments
 - To debug local azure functions
-  - Run with the following option: func start --dotnet-isolated
+  - Run with the following option: func start --dotnet-isolated-debug
   - Note PID of function, and attach to "dotnet.exe" process with that PID
 
 # Design Decisions
