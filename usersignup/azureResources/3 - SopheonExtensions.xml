@@ -772,7 +772,7 @@
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <!-- TODO Cloud-1761, tokenize hardcoded ServiceUrl-->
-            <Item Key="ServiceUrl">https://stratus-dev.azurewebsites.net/environments</Item>
+            <Item Key="ServiceUrl">https://^EnvironmentsFunctionAppName^.azurewebsites.net/environments</Item>
             <Item Key="AuthenticationType">None</Item>
             <Item Key="SendClaimsIn">Body</Item>
             <Item Key="ClaimUsedForRequestPayload">createEnvironmentRequestBody</Item>
