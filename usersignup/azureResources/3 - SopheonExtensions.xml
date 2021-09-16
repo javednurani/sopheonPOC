@@ -68,6 +68,19 @@
         <DataType>boolean</DataType>
         <AdminHelpText>Whether the user has selected Forgot your Password</AdminHelpText>
       </ClaimType>
+      <ClaimType Id="createEnvironmentRequestBody">
+        <DisplayName>String request body to send to Sopheon.CloudNative.Environment Create endpoint</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="environmentKey">
+        <DisplayName>EnvironmentKey of a Sopheon.CloudNative.Environment</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="RESTFailSafe">
+        <DisplayName>RESTFailSafe</DisplayName>
+        <DataType>boolean</DataType>
+        <AdminHelpText>REST API technical profile failsafe</AdminHelpText>
+      </ClaimType>
     </ClaimsSchema>
     <Predicates>
       <Predicate Id="PhoneNumberRegex" Method="MatchesRegex">
@@ -97,6 +110,17 @@
       <ClaimsTransformation Id="GetSystemDateTimeProfileEdit" TransformationMethod="GetCurrentDateTime">
         <OutputClaims>
           <OutputClaim ClaimTypeReferenceId="extension_ProfileEditDate" TransformationClaimType="currentDateTime" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="GenerateCreateEnvironmentRequestBody" TransformationMethod="GenerateJson">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="objectId" TransformationClaimType="Owner" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="Name" DataType="string" Value="Default Environment" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="createEnvironmentRequestBody" TransformationClaimType="outputClaim" />
         </OutputClaims>
       </ClaimsTransformation>
     </ClaimsTransformations>
@@ -560,7 +584,16 @@
             <OutputClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" DefaultValue="true" />
             <OutputClaim ClaimTypeReferenceId="authenticationSource" />
             <OutputClaim ClaimTypeReferenceId="newUser" />
+            <OutputClaim ClaimTypeReferenceId="environmentKey" />
+            <OutputClaim ClaimTypeReferenceId="RESTFailSafe" />
           </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingLogonEmail" />
+            <!-- Cloud-1472 call REST technical profile to create an Environment for User-->
+            <ValidationTechnicalProfile ReferenceId="REST-Create-Environment" ContinueOnError="true" />
+            <!-- Dummy Validation Technical Profile seems to be required after REST-Create-Environment, to support ContinueOnError behavior -->
+            <ValidationTechnicalProfile ReferenceId="REST-FailSafe-Dummy" />
+          </ValidationTechnicalProfiles>
         </TechnicalProfile>
         <!-- SopheonGetQueryParameters can parse the /authorize call querystring and resolve values to claims defined in the claims schema -->
         <!-- This supports passing arbitrary values from React SPA (or other client) into custom policy flow -->
@@ -741,6 +774,40 @@
             <OutputClaim ClaimTypeReferenceId="jobTitle" />
             <OutputClaim ClaimTypeReferenceId="extension_Company" />
             <OutputClaim ClaimTypeReferenceId="country" />
+          </OutputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <ClaimsProvider>
+      <DisplayName>Sopheon-CloudNative-Environments</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="REST-Create-Environment">
+          <DisplayName>Create Environment for new user</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://^EnvironmentsFunctionAppName^.azurewebsites.net/environments</Item>
+            <Item Key="AuthenticationType">None</Item>
+            <Item Key="SendClaimsIn">Body</Item>
+            <Item Key="ClaimUsedForRequestPayload">createEnvironmentRequestBody</Item>
+            <!-- Always true for now. Must be true to have AuthenticationType set to None -->
+            <Item Key="AllowInsecureAuthInProduction">^B2CInsecureAuthMode^</Item>
+          </Metadata>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="GenerateCreateEnvironmentRequestBody" />
+          </InputClaimsTransformations>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="createEnvironmentRequestBody" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="environmentKey" />
+          </OutputClaims>
+        </TechnicalProfile>
+        <TechnicalProfile Id="REST-FailSafe-Dummy">
+          <DisplayName>Dummy Validation Technical Profile to provide a failsafe for REST API Validation Technical Profile</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <OutputClaims>
+            <!-- RESTFailSafe is a dummy claim, its value of true is NOT indicative of success/failure of REST call -->
+            <OutputClaim ClaimTypeReferenceId="RESTFailSafe" DefaultValue="true" AlwaysUseDefaultValue="true" />
           </OutputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>

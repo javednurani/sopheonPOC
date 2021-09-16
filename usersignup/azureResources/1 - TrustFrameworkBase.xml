@@ -660,9 +660,12 @@
             <!-- <OutputClaim ClaimTypeReferenceId="givenName" /> -->
             <!-- <OutputClaim ClaimTypeReferenceId="surName" /> -->
           </OutputClaims>
-          <ValidationTechnicalProfiles>
+          <!-- Sopheon Cloud-1762 -->
+          <!-- Validation TP's handled in SopheonExtensions.xml -->
+          <!-- inheritance behavior with VTP's in Extensions and Base file resulted in duplicate AAD-UserWrite calls, or mis-ordering of VTP calls -->
+          <!-- <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingLogonEmail" />
-          </ValidationTechnicalProfiles>
+          </ValidationTechnicalProfiles> -->
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
         </TechnicalProfile>
 
