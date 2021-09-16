@@ -76,6 +76,11 @@
         <DisplayName>EnvironmentKey of a Sopheon.CloudNative.Environment</DisplayName>
         <DataType>string</DataType>
       </ClaimType>
+      <ClaimType Id="RESTFailSafe">
+        <DisplayName>RESTFailSafe</DisplayName>
+        <DataType>boolean</DataType>
+        <AdminHelpText>REST API technical profile failsafe</AdminHelpText>
+      </ClaimType>
     </ClaimsSchema>
     <Predicates>
       <Predicate Id="PhoneNumberRegex" Method="MatchesRegex">
@@ -579,7 +584,15 @@
             <OutputClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" DefaultValue="true" />
             <OutputClaim ClaimTypeReferenceId="authenticationSource" />
             <OutputClaim ClaimTypeReferenceId="newUser" />
+            <OutputClaim ClaimTypeReferenceId="environmentKey" />
+            <OutputClaim ClaimTypeReferenceId="RESTFailSafe" />
           </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingLogonEmail" />
+            <!-- Cloud-1472 call REST technical profile to create an Environment for User-->
+            <ValidationTechnicalProfile ReferenceId="REST-Create-Environment" ContinueOnError="true" />
+            <ValidationTechnicalProfile ReferenceId="REST-FailSafe-Dummy" />
+          </ValidationTechnicalProfiles>
         </TechnicalProfile>
         <!-- SopheonGetQueryParameters can parse the /authorize call querystring and resolve values to claims defined in the claims schema -->
         <!-- This supports passing arbitrary values from React SPA (or other client) into custom policy flow -->
@@ -790,6 +803,13 @@
             <OutputClaim ClaimTypeReferenceId="environmentKey" />
           </OutputClaims>
         </TechnicalProfile>
+        <TechnicalProfile Id="REST-FailSafe-Dummy">
+          <DisplayName>Dummy Validation Technical Profile to provide a failsafe for REST API Validation Technical Profile</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="RESTFailSafe" DefaultValue="true" AlwaysUseDefaultValue="true" />
+          </OutputClaims>
+        </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
   </ClaimsProviders>
@@ -811,16 +831,9 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <!-- Sopheon.CloudNative.Environments - Create Environment for new user -->
-        <OrchestrationStep Order="3" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="CreateEnvironment" TechnicalProfileReferenceId="REST-Create-Environment" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
         <!-- execute consent step if the users consented version does not met the current version,
               otherwhise this step is skipped -->
-        <OrchestrationStep Order="4" Type="ClaimsExchange">
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
               <Value>extension_TermsOfUseConsentedVersion</Value>
@@ -834,13 +847,13 @@
         </OrchestrationStep>
 
         <!-- Sign Up journey - always confront user with Profile Update  -->
-        <OrchestrationStep Order="5" Type="ClaimsExchange">
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="B2CUserProfileUpdateExchange" TechnicalProfileReferenceId="SelfAsserted-ProfileUpdate" />
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
 
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
@@ -891,22 +904,9 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <!-- Sopheon.CloudNative.Environments - Create Environment for new user -->
-        <OrchestrationStep Order="5" Type="ClaimsExchange">
-          <Preconditions>
-            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
-              <Value>newUser</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-          </Preconditions>
-          <ClaimsExchanges>
-            <ClaimsExchange Id="CreateEnvironment" TechnicalProfileReferenceId="REST-Create-Environment" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
         <!-- execute consent step if the users consented version does not meet the current version,
               otherwise this step is skipped -->
-        <OrchestrationStep Order="6" Type="ClaimsExchange">
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
               <Value>extension_TermsOfUseConsentedVersion</Value>
@@ -920,7 +920,7 @@
         </OrchestrationStep>
 
         <!-- SignUpOrSignIn (Log In) journey - don't confront a user with Profile Update if they've already seen it  -->
-        <OrchestrationStep Order="7" Type="ClaimsExchange">
+        <OrchestrationStep Order="6" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
               <Value>extension_ProfileEditDate</Value>
@@ -932,7 +932,7 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <OrchestrationStep Order="8" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="7" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
 
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
