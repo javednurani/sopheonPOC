@@ -591,6 +591,7 @@
             <ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingLogonEmail" />
             <!-- Cloud-1472 call REST technical profile to create an Environment for User-->
             <ValidationTechnicalProfile ReferenceId="REST-Create-Environment" ContinueOnError="true" />
+            <!-- Dummy Validation Technical Profile seems to be required after REST-Create-Environment, to support ContinueOnError behavior -->
             <ValidationTechnicalProfile ReferenceId="REST-FailSafe-Dummy" />
           </ValidationTechnicalProfiles>
         </TechnicalProfile>
@@ -784,7 +785,6 @@
           <DisplayName>Create Environment for new user</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <!-- TODO Cloud-1761, tokenize hardcoded ServiceUrl-->
             <Item Key="ServiceUrl">https://^EnvironmentsFunctionAppName^.azurewebsites.net/environments</Item>
             <Item Key="AuthenticationType">None</Item>
             <Item Key="SendClaimsIn">Body</Item>
@@ -806,6 +806,7 @@
           <DisplayName>Dummy Validation Technical Profile to provide a failsafe for REST API Validation Technical Profile</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <OutputClaims>
+            <!-- RESTFailSafe is a dummy claim, its value of true is NOT indicative of success/failure of REST call -->
             <OutputClaim ClaimTypeReferenceId="RESTFailSafe" DefaultValue="true" AlwaysUseDefaultValue="true" />
           </OutputClaims>
         </TechnicalProfile>
