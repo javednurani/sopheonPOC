@@ -21,11 +21,11 @@ namespace Sopheon.CloudNative.Environments.Domain.Models
          set;
       }
 
-      //public virtual BusinessService BusinessService
-      //{
-      //   get;
-      //   set;
-      //}
+      public virtual BusinessService BusinessService
+      {
+         get;
+         set;
+      }
 
       public int ResourceTypeId
       {
