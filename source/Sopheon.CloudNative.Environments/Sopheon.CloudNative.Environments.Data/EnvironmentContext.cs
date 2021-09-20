@@ -91,6 +91,12 @@ namespace Sopheon.CloudNative.Environments.Data
          set;
       }
 
+      public virtual DbSet<BusinessService> BusinessServices
+      {
+         get;
+         set;
+      }
+
       public virtual DbSet<BusinessServiceDependency> BusinessServiceDependencies
       {
          get;
