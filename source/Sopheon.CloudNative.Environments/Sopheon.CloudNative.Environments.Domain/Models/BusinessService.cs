@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Sopheon.CloudNative.Environments.Domain.Models
+﻿namespace Sopheon.CloudNative.Environments.Domain.Models
 {
    public class BusinessService
    {
@@ -9,6 +7,7 @@ namespace Sopheon.CloudNative.Environments.Domain.Models
          get;
          set;
       }
+
       public string Name
       {
          get;
