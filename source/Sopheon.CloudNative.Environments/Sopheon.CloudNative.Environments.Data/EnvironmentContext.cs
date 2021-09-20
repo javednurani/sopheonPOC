@@ -60,17 +60,17 @@ namespace Sopheon.CloudNative.Environments.Data
          // BUSINESSSERVICEDEPENDENCY
 
          modelBuilder.Entity<BusinessServiceDependency>()
-            .Property(e => e.DependencyName).HasMaxLength(ModelConstraints.NAME_LENGTH);
-
-         modelBuilder.Entity<BusinessServiceDependency>()
            .HasOne(bsd => bsd.BusinessService)
            .WithMany(bs => bs.BusinessServiceDependencies)
-           .HasForeignKey(bsd => bsd.BusinessServiceId);
+           .HasForeignKey(bsd => bsd.BusinessServiceId); 
 
          modelBuilder.Entity<BusinessServiceDependency>()
             .HasOne(bsd => bsd.ResourceType)
             .WithMany(rt => rt.BusinessServiceDependencies)
             .HasForeignKey(bsd => bsd.ResourceTypeId);
+
+         modelBuilder.Entity<BusinessServiceDependency>()
+            .Property(e => e.DependencyName).HasMaxLength(ModelConstraints.NAME_LENGTH);
       }
 
       public virtual DbSet<Environment> Environments
