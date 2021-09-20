@@ -38,7 +38,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          EnvironmentDto env = new EnvironmentDto
          {
             Name = Some.Random.String(65),
-            Description = Some.Random.String(1001),
+            Description = Some.Random.String(1025),  
             Owner = Some.Random.Guid()
          };
 
