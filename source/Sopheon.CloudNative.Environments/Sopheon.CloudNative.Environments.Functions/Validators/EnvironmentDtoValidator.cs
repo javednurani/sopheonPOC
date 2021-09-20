@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Sopheon.CloudNative.Environments.Domain;
 using Sopheon.CloudNative.Environments.Functions.Models;
 
 namespace Sopheon.CloudNative.Environments.Functions.Validators
@@ -7,9 +8,9 @@ namespace Sopheon.CloudNative.Environments.Functions.Validators
    {
       public EnvironmentDtoValidator()
       {
-         RuleFor(e => e.Name).NotEmpty().MaximumLength(64);
+         RuleFor(e => e.Name).NotEmpty().MaximumLength(ModelConstraints.NAME_LENGTH);
          RuleFor(e => e.Owner).NotEmpty();
-         RuleFor(e => e.Description).MaximumLength(1000);
+         RuleFor(e => e.Description).MaximumLength(ModelConstraints.DESCRIPTION_LENGTH);
       }
    }
 }
