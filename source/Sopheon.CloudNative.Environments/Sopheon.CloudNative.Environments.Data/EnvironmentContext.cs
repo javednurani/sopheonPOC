@@ -35,7 +35,7 @@ namespace Sopheon.CloudNative.Environments.Data
             .Property(e => e.Description).HasMaxLength(ModelConstraints.DESCRIPTION_LENGTH);
 
          // RESOURCETYPE
-
+         
          modelBuilder.Entity<ResourceType>()
             .Property(e => e.Name).HasMaxLength(ModelConstraints.NAME_LENGTH);
 
@@ -51,6 +51,11 @@ namespace Sopheon.CloudNative.Environments.Data
             .Property(r => r.Uri).HasMaxLength(ModelConstraints.URI_LENGTH);
          modelBuilder.Entity<Resource>()
             .HasIndex(r => r.Uri).IsUnique();
+
+         // BUSINESSSERVICE
+
+         modelBuilder.Entity<BusinessService>()
+            .Property(e => e.Name).HasMaxLength(ModelConstraints.NAME_LENGTH);
 
          // BUSINESSSERVICEDEPENDENCY
 
@@ -74,12 +79,6 @@ namespace Sopheon.CloudNative.Environments.Data
          set;
       }
 
-      public virtual DbSet<BusinessServiceDependency> BusinessServiceDependencies
-      {
-         get;
-         set;
-      }
-
       public virtual DbSet<ResourceType> DomainResourceTypes
       {
          get;
@@ -87,6 +86,12 @@ namespace Sopheon.CloudNative.Environments.Data
       }
       
       public virtual DbSet<Resource> Resources
+      {
+         get;
+         set;
+      }
+
+      public virtual DbSet<BusinessServiceDependency> BusinessServiceDependencies
       {
          get;
          set;
