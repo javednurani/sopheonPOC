@@ -35,9 +35,15 @@ namespace Sopheon.CloudNative.Environments.Data
             .Property(e => e.Description).HasMaxLength(ModelConstraints.DESCRIPTION_LENGTH);
 
          // RESOURCETYPE
-
+         
          modelBuilder.Entity<ResourceType>()
             .Property(e => e.Name).HasMaxLength(ModelConstraints.NAME_LENGTH);
+
+         // BUSINESSSERVICE
+
+         modelBuilder.Entity<BusinessService>()
+            .Property(e => e.Name).HasMaxLength(ModelConstraints.NAME_LENGTH);
+
       }
 
       public virtual DbSet<Environment> Environments
