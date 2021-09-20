@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace Sopheon.CloudNative.Environments.Domain.Models
 {
    public class BusinessServiceDependency
@@ -34,6 +36,12 @@ namespace Sopheon.CloudNative.Environments.Domain.Models
       }
 
       public virtual ResourceType ResourceType
+      {
+         get;
+         set;
+      }
+
+      public virtual ICollection<EnvironmentResourceBinding> EnvironmentResourceBindings
       {
          get;
          set;

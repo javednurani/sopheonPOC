@@ -1,47 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 
 namespace Sopheon.CloudNative.Environments.Domain.Models
 {
-   public class Environment
+   public class EnvironmentResourceBinding
    {
-      public int EnvironmentID
+      public int EnvironmentResourceBindingId
       {
          get;
          set;
       }
 
-      public Guid EnvironmentKey
+      public int EnvironmentId
       {
          get;
          set;
       }
 
-      public string Name
+      public virtual Environment Environment
       {
          get;
          set;
       }
 
-      public Guid Owner
+      public int ResourceId
       {
          get;
          set;
       }
 
-      public string Description
+      public virtual Resource Resource
       {
          get;
          set;
       }
 
-      public bool IsDeleted
+      public int BusinessServiceDependencyId
       {
          get;
          set;
       }
 
-      public virtual ICollection<EnvironmentResourceBinding> EnvironmentResourceBindings
+      public virtual BusinessServiceDependency BusinessServiceDependency
       {
          get;
          set;
