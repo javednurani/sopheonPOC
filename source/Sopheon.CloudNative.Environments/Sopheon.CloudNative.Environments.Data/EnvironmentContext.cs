@@ -51,5 +51,11 @@ namespace Sopheon.CloudNative.Environments.Data
          get;
          set;
       }
+
+      public virtual DbSet<BusinessService> BusinessServices
+      {
+         get;
+         set;
+      }
    }
 }
