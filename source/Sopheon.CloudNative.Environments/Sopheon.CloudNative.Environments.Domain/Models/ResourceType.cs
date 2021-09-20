@@ -17,6 +17,12 @@ namespace Sopheon.CloudNative.Environments.Domain.Models
          set;
       }
 
+      public virtual ICollection<BusinessServiceDependency> BusinessServiceDependencies
+      {
+         get;
+         set;
+      }
+
       public virtual ICollection<Resource> Resources
       {
          get;
