@@ -71,6 +71,23 @@ namespace Sopheon.CloudNative.Environments.Data
 
          modelBuilder.Entity<BusinessServiceDependency>()
             .Property(e => e.DependencyName).HasMaxLength(ModelConstraints.NAME_LENGTH);
+
+         // ENVIRONMENTRESOURCEBINDING
+
+         modelBuilder.Entity<EnvironmentResourceBinding>()
+            .HasOne(erb => erb.Environment)
+            .WithMany(e => e.EnvironmentResourceBindings)
+            .HasForeignKey(erb => erb.EnvironmentId);
+
+         modelBuilder.Entity<EnvironmentResourceBinding>()
+            .HasOne(erb => erb.Resource)
+            .WithMany(e => e.EnvironmentResourceBindings)
+            .HasForeignKey(erb => erb.ResourceId);
+
+         modelBuilder.Entity<EnvironmentResourceBinding>()
+            .HasOne(erb => erb.BusinessServiceDependency)
+            .WithMany(bsd => bsd.EnvironmentResourceBindings)
+            .HasForeignKey(erb => erb.BusinessServiceDependencyId);
       }
 
       public virtual DbSet<Environment> Environments
@@ -98,6 +115,12 @@ namespace Sopheon.CloudNative.Environments.Data
       }
 
       public virtual DbSet<BusinessServiceDependency> BusinessServiceDependencies
+      {
+         get;
+         set;
+      }
+
+      public virtual DbSet<EnvironmentResourceBinding> EnvironmentResourceBindings
       {
          get;
          set;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Sopheon.CloudNative.Environments.Domain.Models
 {
@@ -35,6 +36,12 @@ namespace Sopheon.CloudNative.Environments.Domain.Models
       }
 
       public bool IsDeleted
+      {
+         get;
+         set;
+      }
+
+      public virtual ICollection<EnvironmentResourceBinding> EnvironmentResourceBindings
       {
          get;
          set;
