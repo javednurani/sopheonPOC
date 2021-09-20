@@ -2,14 +2,8 @@
 
 namespace Sopheon.CloudNative.Environments.Domain.Models
 {
-   public class Resource
+   public class Resource : Entity
    {
-      public int ResourceId
-      {
-         get;
-         set;
-      }
-
       public int ResourceTypeId
       {
          get;

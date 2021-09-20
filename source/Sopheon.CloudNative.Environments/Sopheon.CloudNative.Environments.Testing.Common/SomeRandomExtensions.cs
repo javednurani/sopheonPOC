@@ -13,7 +13,7 @@ namespace Sopheon.CloudNative.Environments.Testing.Common
          return new Environment
          {
             EnvironmentKey = someRandom.Guid(),
-            EnvironmentID = someRandom.Int(),
+            Id = someRandom.Int(),
             Owner = someRandom.Guid(),
             Name = someRandom.String(),
             Description = someRandom.String(),

@@ -3,14 +3,8 @@ using System.Collections.Generic;
 
 namespace Sopheon.CloudNative.Environments.Domain.Models
 {
-   public class Environment
+   public class Environment : Entity
    {
-      public int EnvironmentID
-      {
-         get;
-         set;
-      }
-
       public Guid EnvironmentKey
       {
          get;
