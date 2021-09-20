@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace Sopheon.CloudNative.Environments.Domain.Models
 {
    public class ResourceType
@@ -10,6 +12,12 @@ namespace Sopheon.CloudNative.Environments.Domain.Models
       }
 
       public string Name
+      {
+         get;
+         set;
+      }
+
+      public virtual ICollection<Resource> Resources
       {
          get;
          set;
