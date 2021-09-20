@@ -1,6 +1,4 @@
-﻿
-
-namespace Sopheon.CloudNative.Environments.Domain.Models
+﻿namespace Sopheon.CloudNative.Environments.Domain.Models
 {
    public class EnvironmentResourceBinding
    {
