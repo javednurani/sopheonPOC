@@ -3,14 +3,8 @@ using System.Collections.Generic;
 
 namespace Sopheon.CloudNative.Environments.Domain.Models
 {
-   public class BusinessServiceDependency
+   public class BusinessServiceDependency : Entity
    {
-      public int BusinessServiceDependencyId
-      {
-         get;
-         set;
-      }
-
       public string DependencyName
       {
          get;

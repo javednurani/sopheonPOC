@@ -1,13 +1,7 @@
 ﻿namespace Sopheon.CloudNative.Environments.Domain.Models
 {
-   public class EnvironmentResourceBinding
+   public class EnvironmentResourceBinding : Entity
    {
-      public int EnvironmentResourceBindingId
-      {
-         get;
-         set;
-      }
-
       public int EnvironmentId
       {
          get;

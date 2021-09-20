@@ -63,7 +63,7 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
          Assert.Equal(environment.EnvironmentKey, retrievedEnvironment.EnvironmentKey);
          Assert.Equal(environment.Owner, retrievedEnvironment.Owner);
          Assert.Equal(environment.Description, retrievedEnvironment.Description);
-         Assert.Equal(environment.EnvironmentID, retrievedEnvironment.EnvironmentID);
+         Assert.Equal(environment.Id, retrievedEnvironment.Id);
       }
    }
 }

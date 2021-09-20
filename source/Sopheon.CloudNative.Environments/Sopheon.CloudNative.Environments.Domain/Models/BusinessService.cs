@@ -2,14 +2,8 @@
 
 namespace Sopheon.CloudNative.Environments.Domain.Models
 {
-   public class BusinessService
+   public class BusinessService : Entity
    {
-      public int BusinessServiceId
-      {
-         get;
-         set;
-      }
-
       public string Name
       {
          get;

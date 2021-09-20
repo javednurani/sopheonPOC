@@ -3,14 +3,8 @@ using System.Collections.Generic;
 
 namespace Sopheon.CloudNative.Environments.Domain.Models
 {
-   public class ResourceType
+   public class ResourceType : Entity
    {
-      public int ResourceTypeID
-      {
-         get;
-         set;
-      }
-
       public string Name
       {
          get;
