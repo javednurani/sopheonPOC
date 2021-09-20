@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Sopheon.CloudNative.Environments.Domain;
+using Sopheon.CloudNative.Environments.Domain.Models;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
 namespace Sopheon.CloudNative.Environments.Data
@@ -23,12 +25,19 @@ namespace Sopheon.CloudNative.Environments.Data
 
       protected override void OnModelCreating(ModelBuilder modelBuilder)
       {
+         // ENVIRONMENT 
+
          modelBuilder.Entity<Environment>()
             .HasIndex(e => e.EnvironmentKey).IsUnique();
          modelBuilder.Entity<Environment>()
-            .Property(e => e.Name).HasMaxLength(64);  // TODO Pull max lengths from constants file in domain project for validation
+            .Property(e => e.Name).HasMaxLength(ModelConstraints.NAME_LENGTH);
          modelBuilder.Entity<Environment>()
-            .Property(e => e.Description).HasMaxLength(1000);
+            .Property(e => e.Description).HasMaxLength(ModelConstraints.DESCRIPTION_LENGTH);
+
+         // RESOURCETYPE
+
+         modelBuilder.Entity<ResourceType>()
+            .Property(e => e.Name).HasMaxLength(ModelConstraints.NAME_LENGTH);
       }
 
       public virtual DbSet<Environment> Environments
