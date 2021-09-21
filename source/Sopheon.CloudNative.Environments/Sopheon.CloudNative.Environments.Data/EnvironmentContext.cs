@@ -24,6 +24,8 @@ namespace Sopheon.CloudNative.Environments.Data
 
       protected override void OnModelCreating(ModelBuilder modelBuilder)
       {
+         modelBuilder.HasDefaultSchema("ENV");
+
          // apply all configurations defined in current assembly
          modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
       }
