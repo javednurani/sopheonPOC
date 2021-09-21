@@ -9,7 +9,9 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
    {
       public void Configure(EntityTypeBuilder<ResourceType> builder)
       {
-         builder.Property(e => e.Name).HasMaxLength(ModelConstraints.NAME_LENGTH);
+         builder.Property(rt => rt.Id).HasColumnName(nameof(ResourceType) + "Id");
+
+         builder.Property(rt => rt.Name).HasMaxLength(ModelConstraints.NAME_LENGTH);
       }
    }
 }

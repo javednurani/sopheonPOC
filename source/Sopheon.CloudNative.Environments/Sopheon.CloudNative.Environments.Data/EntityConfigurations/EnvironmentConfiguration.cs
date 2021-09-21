@@ -9,6 +9,8 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
    {
       public void Configure(EntityTypeBuilder<Environment> builder)
       {
+         builder.Property(e => e.Id).HasColumnName(nameof(Environment) + "Id");
+
          builder.HasIndex(e => e.EnvironmentKey).IsUnique();
 
          builder.Property(e => e.Name).HasMaxLength(ModelConstraints.NAME_LENGTH);

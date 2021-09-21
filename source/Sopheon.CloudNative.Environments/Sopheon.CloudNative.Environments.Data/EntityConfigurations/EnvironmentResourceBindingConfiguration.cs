@@ -8,13 +8,15 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
    {
       public void Configure(EntityTypeBuilder<EnvironmentResourceBinding> builder)
       {
+         builder.Property(erb => erb.Id).HasColumnName(nameof(EnvironmentResourceBinding) + "Id");
+
          builder.HasOne(erb => erb.Environment)
             .WithMany(e => e.EnvironmentResourceBindings)
             .HasForeignKey(erb => erb.EnvironmentId)
             .OnDelete(DeleteBehavior.Restrict);
 
          builder.HasOne(erb => erb.Resource)
-            .WithMany(e => e.EnvironmentResourceBindings)
+            .WithMany(r => r.EnvironmentResourceBindings)
             .HasForeignKey(erb => erb.ResourceId)
             .OnDelete(DeleteBehavior.Restrict);
 
