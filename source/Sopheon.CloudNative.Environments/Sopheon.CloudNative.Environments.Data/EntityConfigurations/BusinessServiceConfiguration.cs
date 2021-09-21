@@ -9,6 +9,8 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
    {
       public void Configure(EntityTypeBuilder<BusinessService> builder)
       {
+         builder.HasIndex(bs => bs.Name).IsUnique();
+
          builder.Property(e => e.Name).HasMaxLength(ModelConstraints.NAME_LENGTH);
       }
    }
