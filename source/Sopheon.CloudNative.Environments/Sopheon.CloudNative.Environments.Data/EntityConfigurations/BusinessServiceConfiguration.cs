@@ -11,6 +11,8 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
       {
          builder.Property(bs => bs.Id).HasColumnName(GetEntityId());
 
+         builder.HasIndex(bs => bs.Name).IsUnique();
+
          builder.Property(bs => bs.Name).HasMaxLength(ModelConstraints.NAME_LENGTH);
       }
    }
