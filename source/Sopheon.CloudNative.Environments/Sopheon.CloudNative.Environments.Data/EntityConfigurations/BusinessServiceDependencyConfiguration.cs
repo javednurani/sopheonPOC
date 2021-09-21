@@ -5,11 +5,11 @@ using Sopheon.CloudNative.Environments.Domain.Models;
 
 namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
 {
-   public class BusinessServiceDependencyConfiguration : IEntityTypeConfiguration<BusinessServiceDependency>
+   public class BusinessServiceDependencyConfiguration : BaseConfiguration, IEntityTypeConfiguration<BusinessServiceDependency>
    {
       public void Configure(EntityTypeBuilder<BusinessServiceDependency> builder)
       {
-         builder.Property(bsd => bsd.Id).HasColumnName(nameof(BusinessServiceDependency) + "Id");
+         builder.Property(bsd => bsd.Id).HasColumnName(GetEntityId());
 
          builder.Property(bsd => bsd.DependencyName).HasMaxLength(ModelConstraints.NAME_LENGTH);
 

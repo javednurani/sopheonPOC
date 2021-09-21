@@ -4,11 +4,11 @@ using Sopheon.CloudNative.Environments.Domain.Models;
 
 namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
 {
-   public class EnvironmentResourceBindingConfiguration : IEntityTypeConfiguration<EnvironmentResourceBinding>
+   public class EnvironmentResourceBindingConfiguration : BaseConfiguration, IEntityTypeConfiguration<EnvironmentResourceBinding>
    {
       public void Configure(EntityTypeBuilder<EnvironmentResourceBinding> builder)
       {
-         builder.Property(erb => erb.Id).HasColumnName(nameof(EnvironmentResourceBinding) + "Id");
+         builder.Property(erb => erb.Id).HasColumnName(GetEntityId());
 
          builder.HasOne(erb => erb.Environment)
             .WithMany(e => e.EnvironmentResourceBindings)
