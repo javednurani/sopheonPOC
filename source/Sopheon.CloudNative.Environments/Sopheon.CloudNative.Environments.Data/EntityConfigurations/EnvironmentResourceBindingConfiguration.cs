@@ -10,15 +10,18 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
       {
          builder.HasOne(erb => erb.Environment)
             .WithMany(e => e.EnvironmentResourceBindings)
-            .HasForeignKey(erb => erb.EnvironmentId);
+            .HasForeignKey(erb => erb.EnvironmentId)
+            .OnDelete(DeleteBehavior.Restrict);
 
          builder.HasOne(erb => erb.Resource)
             .WithMany(e => e.EnvironmentResourceBindings)
-            .HasForeignKey(erb => erb.ResourceId);
+            .HasForeignKey(erb => erb.ResourceId)
+            .OnDelete(DeleteBehavior.Restrict);
 
          builder.HasOne(erb => erb.BusinessServiceDependency)
             .WithMany(bsd => bsd.EnvironmentResourceBindings)
-            .HasForeignKey(erb => erb.BusinessServiceDependencyId);
+            .HasForeignKey(erb => erb.BusinessServiceDependencyId)
+            .OnDelete(DeleteBehavior.Restrict);
       }
    }
 }

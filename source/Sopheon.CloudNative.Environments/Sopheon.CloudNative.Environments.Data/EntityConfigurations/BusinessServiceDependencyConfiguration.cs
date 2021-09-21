@@ -13,11 +13,13 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
 
          builder.HasOne(bsd => bsd.BusinessService)
            .WithMany(bs => bs.BusinessServiceDependencies)
-           .HasForeignKey(bsd => bsd.BusinessServiceId);
+           .HasForeignKey(bsd => bsd.BusinessServiceId)
+           .OnDelete(DeleteBehavior.Restrict);
 
          builder.HasOne(bsd => bsd.ResourceType)
             .WithMany(rt => rt.BusinessServiceDependencies)
-            .HasForeignKey(bsd => bsd.ResourceTypeId);
+            .HasForeignKey(bsd => bsd.ResourceTypeId)
+            .OnDelete(DeleteBehavior.Restrict);
       }
    }
 }

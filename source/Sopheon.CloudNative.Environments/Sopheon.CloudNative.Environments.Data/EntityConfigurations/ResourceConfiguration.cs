@@ -17,7 +17,8 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
 
          builder.HasOne(r => r.ResourceType)
             .WithMany(rt => rt.Resources)
-            .HasForeignKey(r => r.ResourceTypeId);
+            .HasForeignKey(r => r.ResourceTypeId)
+            .OnDelete(DeleteBehavior.Restrict);
       }
    }
 }
