@@ -44,11 +44,15 @@ namespace Sopheon.CloudNative.Environments.Data
          modelBuilder.Entity<Resource>()
             .HasOne(r => r.ResourceType)
             .WithMany(rt => rt.Resources)
-            .HasForeignKey(r => r.ResourceTypeId);
+            .HasForeignKey(r => r.ResourceTypeId)
+            .OnDelete(DeleteBehavior.Restrict);
+
          modelBuilder.Entity<Resource>()
             .Property(r => r.Name).HasMaxLength(ModelConstraints.NAME_LENGTH);
+
          modelBuilder.Entity<Resource>()
             .Property(r => r.Uri).HasMaxLength(ModelConstraints.URI_LENGTH);
+
          modelBuilder.Entity<Resource>()
             .HasIndex(r => r.Uri).IsUnique();
 
@@ -62,12 +66,14 @@ namespace Sopheon.CloudNative.Environments.Data
          modelBuilder.Entity<BusinessServiceDependency>()
            .HasOne(bsd => bsd.BusinessService)
            .WithMany(bs => bs.BusinessServiceDependencies)
-           .HasForeignKey(bsd => bsd.BusinessServiceId); 
+           .HasForeignKey(bsd => bsd.BusinessServiceId)
+           .OnDelete(DeleteBehavior.Restrict);
 
          modelBuilder.Entity<BusinessServiceDependency>()
             .HasOne(bsd => bsd.ResourceType)
             .WithMany(rt => rt.BusinessServiceDependencies)
-            .HasForeignKey(bsd => bsd.ResourceTypeId);
+            .HasForeignKey(bsd => bsd.ResourceTypeId)
+            .OnDelete(DeleteBehavior.Restrict);
 
          modelBuilder.Entity<BusinessServiceDependency>()
             .Property(e => e.DependencyName).HasMaxLength(ModelConstraints.NAME_LENGTH);
@@ -77,17 +83,20 @@ namespace Sopheon.CloudNative.Environments.Data
          modelBuilder.Entity<EnvironmentResourceBinding>()
             .HasOne(erb => erb.Environment)
             .WithMany(e => e.EnvironmentResourceBindings)
-            .HasForeignKey(erb => erb.EnvironmentId);
+            .HasForeignKey(erb => erb.EnvironmentId)
+            .OnDelete(DeleteBehavior.Restrict);
 
          modelBuilder.Entity<EnvironmentResourceBinding>()
             .HasOne(erb => erb.Resource)
             .WithMany(e => e.EnvironmentResourceBindings)
-            .HasForeignKey(erb => erb.ResourceId);
+            .HasForeignKey(erb => erb.ResourceId)
+            .OnDelete(DeleteBehavior.Restrict);
 
          modelBuilder.Entity<EnvironmentResourceBinding>()
             .HasOne(erb => erb.BusinessServiceDependency)
             .WithMany(bsd => bsd.EnvironmentResourceBindings)
-            .HasForeignKey(erb => erb.BusinessServiceDependencyId);
+            .HasForeignKey(erb => erb.BusinessServiceDependencyId)
+            .OnDelete(DeleteBehavior.Restrict);
       }
 
       public virtual DbSet<Environment> Environments
