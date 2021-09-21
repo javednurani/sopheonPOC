@@ -35,7 +35,6 @@ namespace Sopheon.CloudNative.Environments.Data
          modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
       }
 
-
       public virtual DbSet<Environment> Environments
       {
          get;
