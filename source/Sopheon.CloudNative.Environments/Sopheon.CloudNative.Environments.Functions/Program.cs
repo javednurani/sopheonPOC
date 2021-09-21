@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Sopheon.CloudNative.Environments.Data;
+using Sopheon.CloudNative.Environments.Domain.Queries;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Functions.Models;
@@ -54,6 +55,7 @@ namespace Sopheon.CloudNative.Environments.Functions
                services.AddAutoMapper(typeof(Program));
 
                services.AddScoped<IEnvironmentRepository, EFEnvironmentRepository>();
+               services.AddScoped<IEnvironmentQueries, EFEnvironmentQueries>();
                services.AddScoped<IValidator<EnvironmentDto>, EnvironmentDtoValidator>();
                services.AddScoped<HttpResponseDataBuilder>();
             })
