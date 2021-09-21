@@ -5,13 +5,15 @@ using Sopheon.CloudNative.Environments.Domain.Models;
 
 namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
 {
-   public class BusinessServiceConfiguration : IEntityTypeConfiguration<BusinessService>
+   public class BusinessServiceConfiguration : BaseConfiguration, IEntityTypeConfiguration<BusinessService>
    {
       public void Configure(EntityTypeBuilder<BusinessService> builder)
       {
+         builder.Property(bs => bs.Id).HasColumnName(GetEntityId());
+
          builder.HasIndex(bs => bs.Name).IsUnique();
 
-         builder.Property(e => e.Name).HasMaxLength(ModelConstraints.NAME_LENGTH);
+         builder.Property(bs => bs.Name).HasMaxLength(ModelConstraints.NAME_LENGTH);
       }
    }
 }
