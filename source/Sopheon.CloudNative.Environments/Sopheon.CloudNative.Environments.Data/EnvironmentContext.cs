@@ -6,6 +6,8 @@ namespace Sopheon.CloudNative.Environments.Data
 {
    public class EnvironmentContext : DbContext
    {
+      private static string DEFAULT_SCHEMA = "ENV";
+
       public EnvironmentContext()
       {
       }
@@ -18,17 +20,21 @@ namespace Sopheon.CloudNative.Environments.Data
       {
          if (!optionsBuilder.IsConfigured)
          {
-            optionsBuilder.UseSqlServer();
+            optionsBuilder.UseSqlServer(b => 
+               b.MigrationsHistoryTable(
+                  schema: DEFAULT_SCHEMA,
+                  tableName: "DBInstallHistory"));
          }
       }
 
       protected override void OnModelCreating(ModelBuilder modelBuilder)
       {
-         modelBuilder.HasDefaultSchema("ENV");
+         modelBuilder.HasDefaultSchema(DEFAULT_SCHEMA);
 
          // apply all configurations defined in current assembly
          modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
       }
+
 
       public virtual DbSet<Environment> Environments
       {
