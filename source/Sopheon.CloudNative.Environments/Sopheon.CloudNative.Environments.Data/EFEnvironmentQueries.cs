@@ -18,31 +18,12 @@ namespace Sopheon.CloudNative.Environments.Data
 
       public async Task<IEnumerable<string>> GetResourceUrisByBusinessServiceDependency(string businessServiceName, string dependencyName)
       {
-         var businessService = await _context.BusinessServices.FirstOrDefaultAsync(
-            bs => bs.Name.Equals(businessServiceName));
-
-         if (businessService == null)
-         {
-            throw new EntityNotFoundException($"An BusinessService was not found with a name: {businessServiceName}");
-         }
-
-         // explore nav props instead of multiple queries
-
-         var businessServiceDependency = await _context.BusinessServiceDependencies.FirstOrDefaultAsync(
-            bsd => bsd.BusinessServiceId == businessService.Id
-               && bsd.DependencyName.Equals(dependencyName));
-
-         if (businessServiceDependency == null)
-         {
-            throw new EntityNotFoundException($"An BusinessServiceDependency for the service: {businessServiceName} was not found with a name: {dependencyName}");
-         }
-
-         var environmentResourceBindings = _context.EnvironmentResourceBindings.Where(
-            erb => erb.BusinessServiceDependencyId == businessServiceDependency.Id);
-
-         var resourceUris = environmentResourceBindings.Select(erb => erb.Resource.Uri);
-
-         return await resourceUris.ToArrayAsync();
+         return await _context.EnvironmentResourceBindings
+            .Where(erb =>
+               erb.BusinessServiceDependency.DependencyName.Equals(dependencyName)
+               && erb.BusinessServiceDependency.BusinessService.Name.Equals(businessServiceName))
+            .Select(erb => erb.Resource.Uri)
+            .ToArrayAsync();
       }
    }
 }

@@ -13,7 +13,7 @@ namespace Sopheon.CloudNative.Environments.Domain.Queries
       /// </summary>
       /// <param name="businessServiceName">Business Service name/key, string</param>
       /// <param name="dependencyName">Business Service Dependency name/key, string</param>
-      /// <returns></returns>
+      /// <returns>IEnumerable of Uri (string? Dtos?)</returns>
       Task<IEnumerable<string>> GetResourceUrisByBusinessServiceDependency(string businessServiceName, string dependencyName);
    }
 }

@@ -9,8 +9,10 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Sopheon.CloudNative.Environments.Domain.Exceptions;
+using Sopheon.CloudNative.Environments.Domain.Models;
 using Sopheon.CloudNative.Environments.Domain.Queries;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
+using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
 namespace Sopheon.CloudNative.Environments.Functions
 {
@@ -29,10 +31,20 @@ namespace Sopheon.CloudNative.Environments.Functions
 
       [Function(nameof(GetResourceUrisByBusinessServiceDependency))]
       [OpenApiOperation(operationId: nameof(GetResourceUrisByBusinessServiceDependency),
-         tags: new[] { "Environments", "Resources", "BusinessServiceDependencies", "EnvironmentResourceBindings" },
+         tags: new[] { nameof(Environment), nameof(Resource), nameof(BusinessService), nameof(BusinessServiceDependency), nameof(EnvironmentResourceBinding) },
          Summary = "",
          Description = "",
          Visibility = OpenApiVisibilityType.Important)]
+      [OpenApiParameter(name: "businessServiceKey",
+         Type = typeof(Guid),
+         Required = true,
+         Description = "The key of the BusinessService",
+         Summary = "The key of the BusinessService")]
+      [OpenApiParameter(name: "dependencyKey",
+         Type = typeof(Guid),
+         Required = true,
+         Description = "The key of the BusinessServiceDependency",
+         Summary = "The key of the BusinessServiceDependency")]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK,
          contentType: StringConstants.CONTENT_TYPE_APP_JSON,
          bodyType: typeof(IEnumerable<string>),
@@ -61,7 +73,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          var logger = context.GetLogger(nameof(GetEnvironments));
          try
          {
-            // TODO, other validation eg minLength?
+            // TODO, move validation logic to a reusable class?
             if (string.IsNullOrEmpty(businessServiceKey) || string.IsNullOrEmpty(dependencyKey))
             {
                logger.LogInformation(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_MISSING);
