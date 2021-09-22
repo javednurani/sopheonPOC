@@ -23,6 +23,6 @@ namespace Sopheon.CloudNative.Environments.Domain.Queries
       /// <param name="businessServiceName">Business Service name/key, string</param>
       /// <param name="dependencyName">Business Service Dependency name/key, string</param>
       /// <returns>URI of a resource that matches the keys/names provided</returns>
-      Task<string> GetSpecificResourceUri(string environmentKey, string businessServiceName, string dependencyName);
+      Task<string> GetSpecificResourceUri(Guid environmentKey, string businessServiceName, string dependencyName);
    }
 }

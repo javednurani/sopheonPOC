@@ -248,14 +248,39 @@
     "/businessService/{businessServiceKey}/getEnvironmentResourceBindingUris({dependencyKey})": {
       "get": {
         "tags": [
-          "Environments",
-          "Resources",
-          "BusinessServiceDependencies",
-          "EnvironmentResourceBindings"
+          "Environment",
+          "Resource",
+          "BusinessService",
+          "BusinessServiceDependency",
+          "EnvironmentResourceBinding"
         ],
         "summary": "",
         "description": "",
         "operationId": "GetResourceUrisByBusinessServiceDependency",
+        "parameters": [
+          {
+            "name": "businessServiceKey",
+            "in": "path",
+            "description": "The key of the BusinessService",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "x-ms-summary": "The key of the BusinessService"
+          },
+          {
+            "name": "dependencyKey",
+            "in": "path",
+            "description": "The key of the BusinessServiceDependency",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "x-ms-summary": "The key of the BusinessServiceDependency"
+          }
+        ],
         "responses": {
           "200": {
             "description": "200 OK response, with Dto in response body",
@@ -308,7 +333,7 @@
         "x-ms-visibility": "important"
       }
     },
-    "/GetEnvironmentResourceBindingUri({environmentKey}, {businessServiceKey}, {dependencyKey})": {
+    "/GetEnvironmentResourceBindingUri({environmentKey}, {businessServiceName}, {dependencyName})": {
       "get": {
         "tags": [
           "Environments",
@@ -319,6 +344,39 @@
         "summary": "",
         "description": "",
         "operationId": "GetSpecificResourceUri",
+        "parameters": [
+          {
+            "name": "environmentKey",
+            "in": "path",
+            "description": "The key of the Environment",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "x-ms-summary": "The key of the Environment"
+          },
+          {
+            "name": "businessServiceName",
+            "in": "path",
+            "description": "The name of the BusinessService",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-ms-summary": "The name of the BusinessService"
+          },
+          {
+            "name": "dependencyName",
+            "in": "path",
+            "description": "The name of the BusinessServiceDependency",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-ms-summary": "The name of the BusinessServiceDependency"
+          }
+        ],
         "responses": {
           "200": {
             "description": "200 OK response, with Dto in response body",

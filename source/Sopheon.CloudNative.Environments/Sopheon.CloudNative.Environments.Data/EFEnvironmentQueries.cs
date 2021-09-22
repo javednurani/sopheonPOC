@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -24,12 +25,12 @@ namespace Sopheon.CloudNative.Environments.Data
             .ToArrayAsync();
       }
 
-      public async Task<string> GetSpecificResourceUri(string environmentKey, string businessServiceName, string dependencyName)
+      public async Task<string> GetSpecificResourceUri(Guid environmentKey, string businessServiceName, string dependencyName)
       {
          var environmentResourceBinding = await _context.EnvironmentResourceBindings
-            .FirstOrDefaultAsync(erb => erb.Environment.EnvironmentKey.Equals(environmentKey)  // odd that erb has FK on EnvironmentId when we utilize EnvironnmentKey.  erb.EnvironmentKey vs erb.Environment.EnvironmentKey
+            .FirstOrDefaultAsync(erb => erb.Environment.EnvironmentKey == environmentKey 
             && erb.BusinessServiceDependency.DependencyName == dependencyName
-            && erb.BusinessServiceDependency.BusinessService.Name == businessServiceName); // another one, we reference BusinessService.Name when the FK is on BusinessServiceId. erb.BusinessServiceName vs erb.BusinessService.BusinessServiceDependency.Name
+            && erb.BusinessServiceDependency.BusinessService.Name == businessServiceName); 
 
          return environmentResourceBinding.Resource.Uri;
       }

@@ -44,16 +44,16 @@ namespace Sopheon.CloudNative.Environments.Functions
          Required = true,
          Description = "The key of the Environment",
          Summary = "The key of the Environment")]
-      [OpenApiParameter(name: "businessServiceKey",
-         Type = typeof(Guid),
-         Required = true,
-         Description = "The key of the BusinessService",
-         Summary = "The key of the BusinessService")]
-      [OpenApiParameter(name: "dependencyKey",
+      [OpenApiParameter(name: "businessServiceName",
          Type = typeof(string),
          Required = true,
-         Description = "The key of the BusinessServiceDependency",
-         Summary = "The key of the BusinessServiceDependency")]
+         Description = "The name of the BusinessService",
+         Summary = "The name of the BusinessService")]
+      [OpenApiParameter(name: "dependencyName",
+         Type = typeof(string),
+         Required = true,
+         Description = "The name of the BusinessServiceDependency",
+         Summary = "The name of the BusinessServiceDependency")]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK,
          contentType: StringConstants.CONTENT_TYPE_APP_JSON,
          bodyType: typeof(string),
@@ -76,20 +76,20 @@ namespace Sopheon.CloudNative.Environments.Functions
          Description = StringConstants.RESPONSE_DESCRIPTION_500)]
       public async Task<HttpResponseData> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get",
-            Route = "GetEnvironmentResourceBindingUri({environmentKey}, {businessServiceKey}, {dependencyKey})")] HttpRequestData req,
-          FunctionContext context, string environmentKey, string businessServiceKey, string dependencyKey)
+            Route = "GetEnvironmentResourceBindingUri({environmentKey}, {businessServiceName}, {dependencyName})")] HttpRequestData req,
+          FunctionContext context, Guid environmentKey, string businessServiceName, string dependencyName)
       {
          var logger = context.GetLogger(nameof(GetSpecificResourceUri));
          try
          {
             // TODO, other validation eg minLength?
-            if (string.IsNullOrEmpty(environmentKey) || string.IsNullOrEmpty(businessServiceKey) || string.IsNullOrEmpty(dependencyKey))
+            if (Guid.Empty.Equals(environmentKey) || string.IsNullOrEmpty(businessServiceName) || string.IsNullOrEmpty(dependencyName))
             {
                logger.LogInformation(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_MISSING);
                return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_MISSING);
             }
 
-            string resourceUri = await _environmentQueries.GetSpecificResourceUri(environmentKey, businessServiceKey, dependencyKey);
+            string resourceUri = await _environmentQueries.GetSpecificResourceUri(environmentKey, businessServiceName, dependencyName);
 
             return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.OK, resourceUri);
          }
