@@ -39,6 +39,21 @@ namespace Sopheon.CloudNative.Environments.Functions
          Summary = "",
          Description = "",
          Visibility = OpenApiVisibilityType.Important)]
+      [OpenApiParameter(name: "environmentKey",
+         Type = typeof(Guid),
+         Required = true,
+         Description = "The key of the Environment",
+         Summary = "The key of the Environment")]
+      [OpenApiParameter(name: "businessServiceKey",
+         Type = typeof(Guid),
+         Required = true,
+         Description = "The key of the BusinessService",
+         Summary = "The key of the BusinessService")]
+      [OpenApiParameter(name: "dependencyKey",
+         Type = typeof(string),
+         Required = true,
+         Description = "The key of the BusinessServiceDependency",
+         Summary = "The key of the BusinessServiceDependency")]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK,
          contentType: StringConstants.CONTENT_TYPE_APP_JSON,
          bodyType: typeof(string),
