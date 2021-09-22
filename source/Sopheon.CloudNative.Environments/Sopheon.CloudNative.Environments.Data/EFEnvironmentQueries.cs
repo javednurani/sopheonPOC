@@ -44,5 +44,10 @@ namespace Sopheon.CloudNative.Environments.Data
 
          return await resourceUris.ToArrayAsync();
       }
+
+      public Task<string> GetSpecificResourceUri(string environmentKey, string businessServiceName, string dependencyName)
+      {
+         throw new System.NotImplementedException();
+      }
    }
 }
