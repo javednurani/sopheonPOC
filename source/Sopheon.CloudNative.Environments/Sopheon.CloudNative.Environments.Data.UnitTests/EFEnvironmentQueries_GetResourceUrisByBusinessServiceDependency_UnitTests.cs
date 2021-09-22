@@ -36,31 +36,16 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
          string resourceUri2 = Some.Random.String();
          string resourceUri3 = Some.Random.String();
 
-         ResourceType resourceType = new ResourceType
-         {
-            Name = Some.Random.String(),
-         };
+         ResourceType resourceType = Some.Random.ResourceType();
 
          BusinessService businessService = new BusinessService
          {
             Name = businessServiceName
          };
 
-         Environment environment1 = new Environment
-         {
-            Name = Some.Random.String(),
-            EnvironmentKey = Some.Random.Guid(),
-            IsDeleted = false,
-            Owner = Some.Random.Guid()
-         };
+         Environment environment1 = Some.Random.Environment();
 
-         Environment environment2 = new Environment
-         {
-            Name = Some.Random.String(),
-            EnvironmentKey = Some.Random.Guid(),
-            IsDeleted = false,
-            Owner = Some.Random.Guid()
-         };
+         Environment environment2 = Some.Random.Environment();
 
          IEnumerable<EnvironmentResourceBinding> environmentResourceBindings = new List<EnvironmentResourceBinding>
          {
@@ -139,23 +124,14 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
 
          string dependencyName = Some.Random.String();
 
-         ResourceType resourceType = new ResourceType
-         {
-            Name = Some.Random.String(),
-         };
+         ResourceType resourceType = Some.Random.ResourceType();
 
          BusinessService businessService = new BusinessService
          {
             Name = Some.Random.String()
          };
 
-         Environment environment = new Environment
-         {
-            Name = Some.Random.String(),
-            EnvironmentKey = Some.Random.Guid(),
-            IsDeleted = false,
-            Owner = Some.Random.Guid()
-         };
+         Environment environment = Some.Random.Environment();
 
          EnvironmentResourceBinding environmentResourceBinding = new EnvironmentResourceBinding
          {
@@ -195,23 +171,14 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
 
          string dependencyName = Some.Random.String();
 
-         ResourceType resourceType = new ResourceType
-         {
-            Name = Some.Random.String(),
-         };
+         ResourceType resourceType = Some.Random.ResourceType();
 
          BusinessService businessService = new BusinessService
          {
             Name = businessServiceName
          };
 
-         Environment environment = new Environment
-         {
-            Name = Some.Random.String(),
-            EnvironmentKey = Some.Random.Guid(),
-            IsDeleted = false,
-            Owner = Some.Random.Guid()
-         };
+         Environment environment = Some.Random.Environment();
 
          EnvironmentResourceBinding environmentResourceBinding = new EnvironmentResourceBinding
          {
@@ -248,23 +215,14 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
 
          // Arrange
 
-         ResourceType resourceType = new ResourceType
-         {
-            Name = Some.Random.String(),
-         };
+         ResourceType resourceType = Some.Random.ResourceType();
 
          BusinessService businessService = new BusinessService
          {
             Name = Some.Random.String()
          };
 
-         Environment environment = new Environment
-         {
-            Name = Some.Random.String(),
-            EnvironmentKey = Some.Random.Guid(),
-            IsDeleted = false,
-            Owner = Some.Random.Guid()
-         };
+         Environment environment = Some.Random.Environment();
 
          EnvironmentResourceBinding environmentResourceBinding = new EnvironmentResourceBinding
          {
