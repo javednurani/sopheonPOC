@@ -3,7 +3,6 @@ using System.IO;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.Azure.Functions.Worker.Http;
 using Moq;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
@@ -22,8 +21,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       Mock<HttpRequestData> _request;
 
       Mock<IEnvironmentRepository> _mockEnvironmentRepository;
-
-      IMapper _mapper;
 
       HttpResponseDataBuilder _responseBuilder;
 
@@ -123,12 +120,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          // EnvironmentRepository Mock
          _mockEnvironmentRepository = new Mock<IEnvironmentRepository>();
 
-         // AutoMapper config
-         MapperConfiguration config = new MapperConfiguration(cfg =>
-         {
-            cfg.AddProfile(new MappingProfile());
-         });
-         _mapper = config.CreateMapper();
+         SetupAutoMapper();
 
          _responseBuilder = new HttpResponseDataBuilder();
 

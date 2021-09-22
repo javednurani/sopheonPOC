@@ -2,6 +2,7 @@
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
    public class FunctionUnitTestBase
    {
       protected Mock<FunctionContext> _context;
+      protected IMapper _mapper;
 
       #region HTTP Helpers
       protected async Task<string> GetResponseBody(HttpResponseData response)
@@ -40,6 +42,15 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          _context = new Mock<FunctionContext>();
          _context.SetupProperty(c => c.InstanceServices, serviceProvider);
+      }
+
+      protected void SetupAutoMapper()
+      {
+         MapperConfiguration config = new MapperConfiguration(cfg =>
+         {
+            cfg.AddProfile(new MappingProfile());
+         });
+         _mapper = config.CreateMapper();
       }
       #endregion // Test Setup
    }

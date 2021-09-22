@@ -3,7 +3,6 @@ using System.IO;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.Azure.Functions.Worker.Http;
 using Moq;
 using Sopheon.CloudNative.Environments.Domain.Queries;
@@ -21,8 +20,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
       Mock<IEnvironmentQueries> _mockEnvironmentQueries;
       HttpResponseDataBuilder _responseBuilder;
-
-      IMapper _mapper;
 
       public GetResourceUrisByBusinessServiceDependency_Run_UnitTests()
       {
@@ -114,12 +111,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          _mockEnvironmentQueries = new Mock<IEnvironmentQueries>();
 
-         // AutoMapper config
-         MapperConfiguration config = new MapperConfiguration(cfg =>
-         {
-            cfg.AddProfile(new MappingProfile());
-         });
-         _mapper = config.CreateMapper();
+         SetupAutoMapper();
 
          _responseBuilder = new HttpResponseDataBuilder();
 
