@@ -1,9 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Sopheon.CloudNative.Environments.Domain.Exceptions;
-using Sopheon.CloudNative.Environments.Domain.Queries;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Sopheon.CloudNative.Environments.Domain.Queries;
 
 namespace Sopheon.CloudNative.Environments.Data
 {
@@ -19,8 +18,7 @@ namespace Sopheon.CloudNative.Environments.Data
       public async Task<IEnumerable<string>> GetResourceUrisByBusinessServiceDependency(string businessServiceName, string dependencyName)
       {
          return await _context.EnvironmentResourceBindings
-            .Where(erb =>
-               erb.BusinessServiceDependency.DependencyName.Equals(dependencyName)
+            .Where(erb => erb.BusinessServiceDependency.DependencyName.Equals(dependencyName)
                && erb.BusinessServiceDependency.BusinessService.Name.Equals(businessServiceName))
             .Select(erb => erb.Resource.Uri)
             .ToArrayAsync();

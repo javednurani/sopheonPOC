@@ -70,7 +70,7 @@ namespace Sopheon.CloudNative.Environments.Functions
             Route = "businessService/{businessServiceKey}/getEnvironmentResourceBindingUris({dependencyKey})")] HttpRequestData req,
           FunctionContext context, string businessServiceKey, string dependencyKey)
       {
-         var logger = context.GetLogger(nameof(GetEnvironments));
+         var logger = context.GetLogger(nameof(GetResourceUrisByBusinessServiceDependency));
          try
          {
             // TODO, move validation logic to a reusable class?
