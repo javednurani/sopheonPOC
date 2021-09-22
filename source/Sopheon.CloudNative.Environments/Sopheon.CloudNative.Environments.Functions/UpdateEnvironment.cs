@@ -42,6 +42,11 @@ namespace Sopheon.CloudNative.Environments.Functions
          Summary = "Update an Environment",
          Description = "Update an Environment's properties. Anything except IsDeleted, EnvironmentKey, and EnvironmentId can be changed.",
          Visibility = OpenApiVisibilityType.Important)]
+      [OpenApiParameter(name: "key",
+         Type = typeof(Guid),
+         Required = true,
+         Description = "The key of the Environment to update.",
+         Summary = "The key of the Environment to update.")]
       [OpenApiRequestBody(contentType: "application/json",
          bodyType: typeof(EnvironmentDto),
          Required = true,
@@ -84,7 +89,9 @@ namespace Sopheon.CloudNative.Environments.Functions
                logger.LogInformation(StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID);
                return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID);
             }
-            EnvironmentDto data = JsonSerializer.Deserialize<EnvironmentDto>(requestBody);
+            
+            // TODO: deserialize options
+            EnvironmentDto data = JsonSerializer.Deserialize<EnvironmentDto>(requestBody, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
             ValidationResult validationResult = await _validator.ValidateAsync(data);
             if (!validationResult.IsValid)
