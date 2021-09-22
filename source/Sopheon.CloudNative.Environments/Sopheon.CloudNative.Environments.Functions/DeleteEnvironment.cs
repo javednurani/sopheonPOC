@@ -31,6 +31,11 @@ namespace Sopheon.CloudNative.Environments.Functions
          Summary = "Delete an Environment",
          Description = "Delete an Environment by EnvironmentKey",
          Visibility = OpenApiVisibilityType.Important)]
+      [OpenApiParameter(name: "key",
+         Type = typeof(Guid),
+         Required = true,
+         Description = "The key of the Environment to delete.",
+         Summary = "The key of the Environment to delete.")]
       [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NoContent,
          Summary = StringConstants.RESPONSE_SUMMARY_204,
          Description = StringConstants.RESPONSE_DESCRIPTION_204)]
