@@ -1,17 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests
 {
-   public class Environments_HappyPath
+   public class Environments_HappyPath : FunctionIntegrationTest
    {
-
-      readonly Environments_OpenApiClient _sut = new Environments_OpenApiClient(new HttpClient());
-
       [FunctionFact]
       public async Task HappyPath_AllFunctions()
       {
