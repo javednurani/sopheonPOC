@@ -23,5 +23,15 @@ namespace Sopheon.CloudNative.Environments.Data
             .Select(erb => erb.Resource.Uri)
             .ToArrayAsync();
       }
+
+      public async Task<string> GetSpecificResourceUri(string environmentKey, string businessServiceName, string dependencyName)
+      {
+         var environmentResourceBinding = await _context.EnvironmentResourceBindings
+            .FirstOrDefaultAsync(erb => erb.Environment.EnvironmentKey.Equals(environmentKey)  // odd that erb has FK on EnvironmentId when we utilize EnvironnmentKey.  erb.EnvironmentKey vs erb.Environment.EnvironmentKey
+            && erb.BusinessServiceDependency.DependencyName == dependencyName
+            && erb.BusinessServiceDependency.BusinessService.Name == businessServiceName); // another one, we reference BusinessService.Name when the FK is on BusinessServiceId. erb.BusinessServiceName vs erb.BusinessService.BusinessServiceDependency.Name
+
+         return environmentResourceBinding.Resource.Uri;
+      }
    }
 }
