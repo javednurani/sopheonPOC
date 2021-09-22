@@ -30,21 +30,25 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       public async void Run_HappyPath_UrisReturned()
       {
          // Arrange
+         string businessServiceName = Some.Random.String();
+         string dependencyName = Some.Random.String();
+
+         IEnumerable<string> resourceUris = new List<string>
+         {
+            Some.Random.String(),
+            Some.Random.String(),
+            Some.Random.String(),
+         };
+
          _mockEnvironmentQueries
             .Setup(m => m.GetResourceUrisByBusinessServiceDependency(It.IsAny<string>(), It.IsAny<string>()))
             .Returns(() =>
             {
-               IEnumerable<string> resourceUris = new List<string>
-               {
-                  "someUri1",
-                  "someUri2",
-                  "someUri3"
-               };
                return Task.FromResult(resourceUris);
             });
 
          // Act
-         HttpResponseData result = await Sut.Run(_request.Object, _context.Object, "asdf", "asdf");
+         HttpResponseData result = await Sut.Run(_request.Object, _context.Object, businessServiceName, dependencyName);
          result.Body.Position = 0;
 
          // Assert
@@ -55,8 +59,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          List<string> resourceUriResponse = JsonSerializer.Deserialize<List<string>>(responseBody);
 
          Assert.NotEmpty(resourceUriResponse);
+         Assert.Equal(resourceUris, resourceUriResponse);
 
-         _mockEnvironmentQueries.Verify(m => m.GetResourceUrisByBusinessServiceDependency("asdf", "asdf"), Times.Once());
+         _mockEnvironmentQueries.Verify(m => m.GetResourceUrisByBusinessServiceDependency(businessServiceName, dependencyName), Times.Once());
       }
 
       [Fact]
