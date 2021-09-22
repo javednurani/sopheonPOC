@@ -9,7 +9,7 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
    {
       public void Configure(EntityTypeBuilder<BusinessServiceDependency> builder)
       {
-         builder.Property(bsd => bsd.Id).HasColumnName(GetEntityId());
+         builder.Property(bsd => bsd.Id).HasColumnName(GetIdColumnName<BusinessServiceDependency>());
 
          builder.Property(bsd => bsd.DependencyName).HasMaxLength(ModelConstraints.NAME_LENGTH);
 

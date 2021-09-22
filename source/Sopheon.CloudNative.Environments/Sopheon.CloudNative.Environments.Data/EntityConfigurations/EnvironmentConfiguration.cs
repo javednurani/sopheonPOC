@@ -9,7 +9,7 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
    {
       public void Configure(EntityTypeBuilder<Environment> builder)
       {
-         builder.Property(e => e.Id).HasColumnName(GetEntityId());
+         builder.Property(e => e.Id).HasColumnName(GetIdColumnName<Environment>());
 
          builder.HasIndex(e => e.EnvironmentKey).IsUnique();
 

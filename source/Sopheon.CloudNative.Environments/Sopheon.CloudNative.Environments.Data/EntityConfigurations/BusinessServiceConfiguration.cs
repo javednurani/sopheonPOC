@@ -9,7 +9,7 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
    {
       public void Configure(EntityTypeBuilder<BusinessService> builder)
       {
-         builder.Property(bs => bs.Id).HasColumnName(GetEntityId());
+         builder.Property(bs => bs.Id).HasColumnName(GetIdColumnName<BusinessService>());
 
          builder.HasIndex(bs => bs.Name).IsUnique();
 

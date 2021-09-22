@@ -3,9 +3,9 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
 {
    public class BaseConfiguration
    {
-      public string GetEntityId()
+      public string GetIdColumnName<T>()
       {
-         return this.GetType().Name +"Id";
+         return typeof(T).Name +"Id";
       }
    }
 }
