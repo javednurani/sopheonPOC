@@ -2,14 +2,19 @@
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 {
    public class FunctionUnitTestBase
    {
+      protected Mock<FunctionContext> _context;
 
+      #region HTTP Helpers
       protected async Task<string> GetResponseBody(HttpResponseData response)
       {
          response.Body.Position = 0;
@@ -24,5 +29,18 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          request.Setup(r => r.Body).Returns(bodyStream);
       }
+      #endregion // HTTP Helpers
+
+      #region Test Setup
+      protected void SetupFunctionContext()
+      {
+         ServiceCollection serviceCollection = new ServiceCollection();
+         serviceCollection.AddScoped<ILoggerFactory, LoggerFactory>();
+         ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
+
+         _context = new Mock<FunctionContext>();
+         _context.SetupProperty(c => c.InstanceServices, serviceProvider);
+      }
+      #endregion // Test Setup
    }
 }

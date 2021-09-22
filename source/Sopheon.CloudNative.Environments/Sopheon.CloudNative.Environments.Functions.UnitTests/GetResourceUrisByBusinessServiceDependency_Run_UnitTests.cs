@@ -4,10 +4,7 @@ using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Moq;
 using Sopheon.CloudNative.Environments.Domain.Queries;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
@@ -20,7 +17,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
    {
       GetResourceUrisByBusinessServiceDependency Sut;
 
-      Mock<FunctionContext> _context;
       Mock<HttpRequestData> _request;
 
       Mock<IEnvironmentQueries> _mockEnvironmentQueries;
@@ -102,13 +98,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
       private void TestSetup()
       {
-         // FunctionContext
-         ServiceCollection serviceCollection = new ServiceCollection();
-         serviceCollection.AddScoped<ILoggerFactory, LoggerFactory>();
-         ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
-
-         _context = new Mock<FunctionContext>();
-         _context.SetupProperty(c => c.InstanceServices, serviceProvider);
+         SetupFunctionContext();
 
          // HttpRequestData
          _request = new Mock<HttpRequestData>(_context.Object);

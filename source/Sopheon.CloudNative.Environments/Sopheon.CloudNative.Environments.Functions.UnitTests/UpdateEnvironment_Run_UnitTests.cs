@@ -1,9 +1,11 @@
-﻿using AutoMapper;
+﻿using System;
+using System.IO;
+using System.Net;
+using System.Text.Json;
+using System.Threading.Tasks;
+using AutoMapper;
 using FluentValidation;
-using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Moq;
 using Sopheon.CloudNative.Environments.Domain.Exceptions;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
@@ -11,11 +13,6 @@ using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Functions.Models;
 using Sopheon.CloudNative.Environments.Functions.Validators;
 using Sopheon.CloudNative.Environments.Testing.Common;
-using System;
-using System.IO;
-using System.Net;
-using System.Text.Json;
-using System.Threading.Tasks;
 using Xunit;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
@@ -26,7 +23,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
    {
       UpdateEnvironment Sut;
 
-      Mock<FunctionContext> _context;
       Mock<HttpRequestData> _request;
 
       Mock<IEnvironmentRepository> _mockEnvironmentRepository;
@@ -192,13 +188,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
       private void TestSetup()
       {
-         // FunctionContext
-         ServiceCollection serviceCollection = new ServiceCollection();
-         serviceCollection.AddScoped<ILoggerFactory, LoggerFactory>();
-         ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
-
-         _context = new Mock<FunctionContext>();
-         _context.SetupProperty(c => c.InstanceServices, serviceProvider);
+         SetupFunctionContext();
 
          // HttpRequestData
          _request = new Mock<HttpRequestData>(_context.Object);
