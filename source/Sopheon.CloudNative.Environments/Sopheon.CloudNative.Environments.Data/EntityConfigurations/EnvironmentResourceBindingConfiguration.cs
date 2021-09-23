@@ -8,7 +8,8 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
    {
       public void Configure(EntityTypeBuilder<EnvironmentResourceBinding> builder)
       {
-         builder.Property(erb => erb.Id).HasColumnName(GetIdColumnName<EnvironmentResourceBinding>());
+         builder.Property(erb => erb.Id)
+            .HasColumnName(GetIdColumnName<EnvironmentResourceBinding>());
 
          builder.HasOne(erb => erb.Environment)
             .WithMany(e => e.EnvironmentResourceBindings)

@@ -9,13 +9,18 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
    {
       public void Configure(EntityTypeBuilder<Resource> builder)
       {
-         builder.Property(r => r.Id).HasColumnName(GetIdColumnName<Resource>());
+         builder.Property(r => r.Id)
+            .HasColumnName(GetIdColumnName<Resource>());
 
-         builder.Property(r => r.Name).HasMaxLength(ModelConstraints.NAME_LENGTH);
+         builder.Property(r => r.Name)
+            .HasMaxLength(ModelConstraints.NAME_LENGTH);
 
-         builder.Property(r => r.Uri).HasMaxLength(ModelConstraints.URI_LENGTH);
+         builder.Property(r => r.Uri)
+            .HasMaxLength(ModelConstraints.URI_LENGTH)
+            .IsRequired();
 
-         builder.HasIndex(r => r.Uri).IsUnique();
+         builder.HasIndex(r => r.Uri)
+            .IsUnique();
 
          builder.HasOne(r => r.ResourceType)
             .WithMany(rt => rt.Resources)
