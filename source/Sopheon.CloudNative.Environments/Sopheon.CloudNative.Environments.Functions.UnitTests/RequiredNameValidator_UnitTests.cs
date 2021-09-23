@@ -21,7 +21,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       }
 
       [Fact]
-      public void ValidEnvironment_Success()
+      public void ValidName_Success()
       {
          string requiredString = Some.Random.String();
 
