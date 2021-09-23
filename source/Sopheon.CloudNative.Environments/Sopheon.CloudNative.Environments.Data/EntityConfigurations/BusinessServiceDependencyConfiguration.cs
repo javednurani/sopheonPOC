@@ -9,9 +9,12 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
    {
       public void Configure(EntityTypeBuilder<BusinessServiceDependency> builder)
       {
-         builder.Property(bsd => bsd.Id).HasColumnName(GetIdColumnName<BusinessServiceDependency>());
+         builder.Property(bsd => bsd.Id)
+            .HasColumnName(GetIdColumnName<BusinessServiceDependency>());
 
-         builder.Property(bsd => bsd.DependencyName).HasMaxLength(ModelConstraints.NAME_LENGTH);
+         builder.Property(bsd => bsd.DependencyName)
+            .HasMaxLength(ModelConstraints.NAME_LENGTH)
+            .IsRequired();
 
          builder.HasOne(bsd => bsd.BusinessService)
            .WithMany(bs => bs.BusinessServiceDependencies)
@@ -22,6 +25,9 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
             .WithMany(rt => rt.BusinessServiceDependencies)
             .HasForeignKey(bsd => bsd.ResourceTypeId)
             .OnDelete(DeleteBehavior.Restrict);
+
+         builder.HasIndex(bsd => new { bsd.BusinessServiceId, bsd.DependencyName })
+            .IsUnique();
       }
    }
 }

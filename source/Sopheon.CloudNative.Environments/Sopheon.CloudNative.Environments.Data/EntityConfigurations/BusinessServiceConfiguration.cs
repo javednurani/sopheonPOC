@@ -9,11 +9,15 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
    {
       public void Configure(EntityTypeBuilder<BusinessService> builder)
       {
-         builder.Property(bs => bs.Id).HasColumnName(GetIdColumnName<BusinessService>());
+         builder.Property(bs => bs.Id)
+            .HasColumnName(GetIdColumnName<BusinessService>());
 
-         builder.HasIndex(bs => bs.Name).IsUnique();
+         builder.HasIndex(bs => bs.Name)
+            .IsUnique();
 
-         builder.Property(bs => bs.Name).HasMaxLength(ModelConstraints.NAME_LENGTH);
+         builder.Property(bs => bs.Name)
+            .HasMaxLength(ModelConstraints.NAME_LENGTH)
+            .IsRequired();
       }
    }
 }

@@ -16,12 +16,6 @@ namespace Sopheon.CloudNative.Environments.Domain.Models
          set;
       }
 
-      public string Name
-      {
-         get;
-         set;
-      }
-
       public string Uri
       {
          get;

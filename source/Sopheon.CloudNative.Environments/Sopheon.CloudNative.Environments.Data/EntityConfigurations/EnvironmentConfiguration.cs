@@ -9,13 +9,21 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
    {
       public void Configure(EntityTypeBuilder<Environment> builder)
       {
-         builder.Property(e => e.Id).HasColumnName(GetIdColumnName<Environment>());
+         builder.Property(e => e.Id)
+            .HasColumnName(GetIdColumnName<Environment>());
 
-         builder.HasIndex(e => e.EnvironmentKey).IsUnique();
+         builder.HasIndex(e => e.EnvironmentKey)
+            .IsUnique();
 
-         builder.Property(e => e.Name).HasMaxLength(ModelConstraints.NAME_LENGTH);
+         builder.Property(e => e.EnvironmentKey)
+            .IsRequired();
 
-         builder.Property(e => e.Description).HasMaxLength(ModelConstraints.DESCRIPTION_LENGTH);
+         builder.Property(e => e.Name)
+            .HasMaxLength(ModelConstraints.NAME_LENGTH)
+            .IsRequired();
+
+         builder.Property(e => e.Description)
+            .HasMaxLength(ModelConstraints.DESCRIPTION_LENGTH);
       }
    }
 }
