@@ -28,7 +28,7 @@ namespace Sopheon.CloudNative.Environments.Data
 
       public async Task<string> GetSpecificResourceUri(Guid environmentKey, string businessServiceName, string dependencyName)
       {
-         var resourceUri = await _context.EnvironmentResourceBindings
+         string resourceUri = await _context.EnvironmentResourceBindings
             .Where(erb => erb.Environment.EnvironmentKey == environmentKey 
             && erb.BusinessServiceDependency.DependencyName == dependencyName
             && erb.BusinessServiceDependency.BusinessService.Name == businessServiceName)
