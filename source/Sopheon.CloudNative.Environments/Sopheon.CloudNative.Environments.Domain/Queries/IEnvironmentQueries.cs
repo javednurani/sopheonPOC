@@ -19,9 +19,9 @@ namespace Sopheon.CloudNative.Environments.Domain.Queries
       /// <summary>
       /// Returns URI for a specific resources that have been allocated to a specified environment
       /// </summary>
-      /// <param name="environmentKey">Environment key, string</param>
-      /// <param name="businessServiceName">Business Service name/key, string</param>
-      /// <param name="dependencyName">Business Service Dependency name/key, string</param>
+      /// <param name="environmentKey">Environment key</param>
+      /// <param name="businessServiceName">BusinessService name</param>
+      /// <param name="dependencyName">BusinessServiceDependency name</param>
       /// <returns>URI of a resource that matches the keys/names provided</returns>
       Task<string> GetSpecificResourceUri(Guid environmentKey, string businessServiceName, string dependencyName);
    }
