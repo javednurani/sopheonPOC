@@ -207,49 +207,5 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
          // Assert
          Assert.Empty(resourceUris);
       }
-
-      [Fact]
-      public async Task GetResourceUrisByBusinessServiceDependency_BothParametersEmptyStrings_NothingReturned()
-      {
-         using var context = new EnvironmentContext(_dbContextOptions);
-
-         // Arrange
-
-         ResourceType resourceType = Some.Random.ResourceType();
-
-         BusinessService businessService = new BusinessService
-         {
-            Name = Some.Random.String()
-         };
-
-         Environment environment = Some.Random.Environment();
-
-         EnvironmentResourceBinding environmentResourceBinding = new EnvironmentResourceBinding
-         {
-            Environment = environment,
-            Resource = new Resource
-            {
-               Name = Some.Random.String(),
-               Uri = Some.Random.String(),
-               ResourceType = resourceType,
-            },
-            BusinessServiceDependency = new BusinessServiceDependency
-            {
-               DependencyName = Some.Random.String(),
-               BusinessService = businessService,
-               ResourceType = resourceType,
-            },
-         };
-
-         context.Add(environmentResourceBinding);
-         await context.SaveChangesAsync();
-
-         // Act
-         var sut = new EFEnvironmentQueries(context);
-         var resourceUris = await sut.GetResourceUrisByBusinessServiceDependency(string.Empty, string.Empty);
-
-         // Assert
-         Assert.Empty(resourceUris);
-      }
    }
 }

@@ -18,8 +18,8 @@ namespace Sopheon.CloudNative.Environments.Data
       public async Task<IEnumerable<string>> GetResourceUrisByBusinessServiceDependency(string businessServiceName, string dependencyName)
       {
          return await _context.EnvironmentResourceBindings
-            .Where(erb => erb.BusinessServiceDependency.DependencyName.Equals(dependencyName)
-               && erb.BusinessServiceDependency.BusinessService.Name.Equals(businessServiceName))
+            .Where(erb => erb.BusinessServiceDependency.DependencyName == dependencyName
+               && erb.BusinessServiceDependency.BusinessService.Name == businessServiceName)
             .Select(erb => erb.Resource.Uri)
             .ToArrayAsync();
       }
