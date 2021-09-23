@@ -70,8 +70,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
          try
          {
-            // TODO: deserialize options
-            EnvironmentDto data = JsonSerializer.Deserialize<EnvironmentDto>(requestBody, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            EnvironmentDto data = JsonSerializer.Deserialize<EnvironmentDto>(requestBody, SerializationSettings.JsonSerializerOptions);
 
             ValidationResult validationResult = await _validator.ValidateAsync(data);
             if(!validationResult.IsValid)
