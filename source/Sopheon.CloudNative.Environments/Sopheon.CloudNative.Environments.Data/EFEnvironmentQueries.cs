@@ -35,7 +35,7 @@ namespace Sopheon.CloudNative.Environments.Data
             .Select(erb => erb.Resource.Uri)
             .FirstOrDefaultAsync(); 
 
-         if(resourceUri == null)
+         if(string.IsNullOrEmpty(resourceUri))
          {
             throw new EntityNotFoundException();
          }
