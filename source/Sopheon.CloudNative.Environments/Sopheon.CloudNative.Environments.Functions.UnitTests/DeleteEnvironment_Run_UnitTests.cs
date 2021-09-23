@@ -1,25 +1,21 @@
-﻿using Microsoft.Azure.Functions.Worker;
+﻿using System;
+using System.IO;
+using System.Net;
+using System.Threading.Tasks;
 using Microsoft.Azure.Functions.Worker.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Moq;
 using Sopheon.CloudNative.Environments.Domain.Exceptions;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Testing.Common;
-using System;
-using System.IO;
-using System.Net;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 {
-   public class DeleteEnvironment_Run_UnitTests
+   public class DeleteEnvironment_Run_UnitTests : FunctionUnitTestBase
    {
       DeleteEnvironment Sut;
 
-      Mock<FunctionContext> _context;
       Mock<HttpRequestData> _request;
 
       Mock<IEnvironmentRepository> _mockEnvironmentRepository;
@@ -120,13 +116,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
       private void TestSetup()
       {
-         // FunctionContext
-         ServiceCollection serviceCollection = new ServiceCollection();
-         serviceCollection.AddScoped<ILoggerFactory, LoggerFactory>();
-         ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
-
-         _context = new Mock<FunctionContext>();
-         _context.SetupProperty(c => c.InstanceServices, serviceProvider);
+         SetupFunctionContext();
 
          // HttpRequestData
          _request = new Mock<HttpRequestData>(_context.Object);

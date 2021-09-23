@@ -3,11 +3,7 @@ using System.IO;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Moq;
 using Sopheon.CloudNative.Environments.Domain.Queries;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
@@ -20,13 +16,10 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
    {
       GetResourceUrisByBusinessServiceDependency Sut;
 
-      Mock<FunctionContext> _context;
       Mock<HttpRequestData> _request;
 
       Mock<IEnvironmentQueries> _mockEnvironmentQueries;
       HttpResponseDataBuilder _responseBuilder;
-
-      IMapper _mapper;
 
       public GetResourceUrisByBusinessServiceDependency_Run_UnitTests()
       {
@@ -37,21 +30,25 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       public async void Run_HappyPath_UrisReturned()
       {
          // Arrange
+         string businessServiceName = Some.Random.String();
+         string dependencyName = Some.Random.String();
+
+         IEnumerable<string> resourceUris = new List<string>
+         {
+            Some.Random.String(),
+            Some.Random.String(),
+            Some.Random.String(),
+         };
+
          _mockEnvironmentQueries
             .Setup(m => m.GetResourceUrisByBusinessServiceDependency(It.IsAny<string>(), It.IsAny<string>()))
             .Returns(() =>
             {
-               IEnumerable<string> resourceUris = new List<string>
-               {
-                  "someUri1",
-                  "someUri2",
-                  "someUri3"
-               };
                return Task.FromResult(resourceUris);
             });
 
          // Act
-         HttpResponseData result = await Sut.Run(_request.Object, _context.Object, "asdf", "asdf");
+         HttpResponseData result = await Sut.Run(_request.Object, _context.Object, businessServiceName, dependencyName);
          result.Body.Position = 0;
 
          // Assert
@@ -62,8 +59,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          List<string> resourceUriResponse = JsonSerializer.Deserialize<List<string>>(responseBody);
 
          Assert.NotEmpty(resourceUriResponse);
+         Assert.Equal(resourceUris, resourceUriResponse);
 
-         _mockEnvironmentQueries.Verify(m => m.GetResourceUrisByBusinessServiceDependency("asdf", "asdf"), Times.Once());
+         _mockEnvironmentQueries.Verify(m => m.GetResourceUrisByBusinessServiceDependency(businessServiceName, dependencyName), Times.Once());
       }
 
       [Fact]
@@ -102,13 +100,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
       private void TestSetup()
       {
-         // FunctionContext
-         ServiceCollection serviceCollection = new ServiceCollection();
-         serviceCollection.AddScoped<ILoggerFactory, LoggerFactory>();
-         ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
-
-         _context = new Mock<FunctionContext>();
-         _context.SetupProperty(c => c.InstanceServices, serviceProvider);
+         SetupFunctionContext();
 
          // HttpRequestData
          _request = new Mock<HttpRequestData>(_context.Object);
@@ -124,12 +116,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          _mockEnvironmentQueries = new Mock<IEnvironmentQueries>();
 
-         // AutoMapper config
-         MapperConfiguration config = new MapperConfiguration(cfg =>
-         {
-            cfg.AddProfile(new MappingProfile());
-         });
-         _mapper = config.CreateMapper();
+         SetupAutoMapper();
 
          _responseBuilder = new HttpResponseDataBuilder();
 

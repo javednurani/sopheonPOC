@@ -32,19 +32,19 @@ namespace Sopheon.CloudNative.Environments.Functions
       [Function(nameof(GetResourceUrisByBusinessServiceDependency))]
       [OpenApiOperation(operationId: nameof(GetResourceUrisByBusinessServiceDependency),
          tags: new[] { nameof(Environment), nameof(Resource), nameof(BusinessService), nameof(BusinessServiceDependency), nameof(EnvironmentResourceBinding) },
-         Summary = "",
-         Description = "",
+         Summary = "Get Resource URIs for a BusinessServiceDependency, across Environments",
+         Description = "Get Resource URIs for a BusinessServiceDependency, across Environments",
          Visibility = OpenApiVisibilityType.Important)]
-      [OpenApiParameter(name: "businessServiceKey",
-         Type = typeof(Guid),
+      [OpenApiParameter(name: "businessServiceName",
+         Type = typeof(string),
          Required = true,
-         Description = "The key of the BusinessService",
-         Summary = "The key of the BusinessService")]
-      [OpenApiParameter(name: "dependencyKey",
-         Type = typeof(Guid),
+         Description = "The name of the BusinessService",
+         Summary = "The name of the BusinessService")]
+      [OpenApiParameter(name: "dependencyName",
+         Type = typeof(string),
          Required = true,
-         Description = "The key of the BusinessServiceDependency",
-         Summary = "The key of the BusinessServiceDependency")]
+         Description = "The name of the BusinessServiceDependency",
+         Summary = "The name of the BusinessServiceDependency")]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK,
          contentType: StringConstants.CONTENT_TYPE_APP_JSON,
          bodyType: typeof(IEnumerable<string>),
@@ -67,20 +67,20 @@ namespace Sopheon.CloudNative.Environments.Functions
          Description = StringConstants.RESPONSE_DESCRIPTION_500)]
       public async Task<HttpResponseData> Run(
           [HttpTrigger(AuthorizationLevel.Anonymous, "get", 
-            Route = "businessService/{businessServiceKey}/getEnvironmentResourceBindingUris({dependencyKey})")] HttpRequestData req,
-          FunctionContext context, string businessServiceKey, string dependencyKey)
+            Route = "businessService/{businessServiceName}/getEnvironmentResourceBindingUris({dependencyName})")] HttpRequestData req,
+          FunctionContext context, string businessServiceName, string dependencyName)
       {
          var logger = context.GetLogger(nameof(GetResourceUrisByBusinessServiceDependency));
          try
          {
             // TODO, move validation logic to a reusable class?
-            if (string.IsNullOrEmpty(businessServiceKey) || string.IsNullOrEmpty(dependencyKey))
+            if (string.IsNullOrEmpty(businessServiceName) || string.IsNullOrEmpty(dependencyName))
             {
                logger.LogInformation(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_MISSING);
                return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_MISSING);
             }
 
-            IEnumerable<string> resourceUris = await _environmentQueries.GetResourceUrisByBusinessServiceDependency(businessServiceKey, dependencyKey);
+            IEnumerable<string> resourceUris = await _environmentQueries.GetResourceUrisByBusinessServiceDependency(businessServiceName, dependencyName);
 
             return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.OK, resourceUris);
          }
