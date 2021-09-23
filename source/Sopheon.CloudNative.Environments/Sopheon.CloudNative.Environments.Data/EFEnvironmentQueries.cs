@@ -33,7 +33,7 @@ namespace Sopheon.CloudNative.Environments.Data
             && erb.BusinessServiceDependency.DependencyName == dependencyName
             && erb.BusinessServiceDependency.BusinessService.Name == businessServiceName)
             .Select(erb => erb.Resource.Uri)
-            .FirstOrDefaultAsync(); 
+            .SingleOrDefaultAsync(); 
 
          if(string.IsNullOrEmpty(resourceUri))
          {
