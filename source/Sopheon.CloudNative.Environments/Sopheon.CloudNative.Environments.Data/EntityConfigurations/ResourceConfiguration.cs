@@ -12,9 +12,6 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
          builder.Property(r => r.Id)
             .HasColumnName(GetIdColumnName<Resource>());
 
-         builder.Property(r => r.Name)
-            .HasMaxLength(ModelConstraints.NAME_LENGTH);
-
          builder.Property(r => r.Uri)
             .HasMaxLength(ModelConstraints.URI_LENGTH)
             .IsRequired();
