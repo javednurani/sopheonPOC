@@ -13,7 +13,8 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests
       {
          try
          {
-            var result = await _sut.GetSpecificResourceUriAsync(Some.Random.Guid(), Some.Random.String(), Some.Random.String());
+            //bool test = _sut.ReadResponseAsString;
+            var result = await _sut.GetSpecificResourceUriAsync(_environmentKey, _businessServiceName, _businessServiceDependencyName);
          }
          catch (Exception ex)
          {
