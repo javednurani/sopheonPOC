@@ -7,6 +7,7 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Moq;
 using Sopheon.CloudNative.Environments.Domain.Queries;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
+using Sopheon.CloudNative.Environments.Functions.Validators;
 using Sopheon.CloudNative.Environments.Testing.Common;
 using Xunit;
 
@@ -19,6 +20,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       Mock<HttpRequestData> _request;
 
       Mock<IEnvironmentQueries> _mockEnvironmentQueries;
+      IRequiredStringValidator _validator;
       HttpResponseDataBuilder _responseBuilder;
 
       public GetResourceUrisByBusinessServiceDependency_Run_UnitTests()
@@ -118,10 +120,11 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          SetupAutoMapper();
 
+         _validator = new RequiredNameValidator();
          _responseBuilder = new HttpResponseDataBuilder();
 
          // create Sut
-         Sut = new GetResourceUrisByBusinessServiceDependency(_mockEnvironmentQueries.Object, _mapper, _responseBuilder);
+         Sut = new GetResourceUrisByBusinessServiceDependency(_mockEnvironmentQueries.Object, _validator, _mapper, _responseBuilder);
       }
    }
 }

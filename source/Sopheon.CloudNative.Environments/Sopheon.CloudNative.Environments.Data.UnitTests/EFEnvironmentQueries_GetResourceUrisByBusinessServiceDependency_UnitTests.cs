@@ -55,7 +55,6 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
                Environment = environment1,
                Resource = new Resource
                {
-                  Name = Some.Random.String(),
                   Uri = resourceUri1,
                   ResourceType = resourceType,
                },
@@ -71,7 +70,6 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
                Environment = environment2,
                Resource = new Resource
                {
-                  Name = Some.Random.String(),
                   Uri = resourceUri2,
                   ResourceType = resourceType,
                },
@@ -88,7 +86,6 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
                Environment = environment1,
                Resource = new Resource
                {
-                  Name = Some.Random.String(),
                   Uri = resourceUri3,
                   ResourceType = resourceType,
                },
@@ -138,7 +135,6 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
             Environment = environment,
             Resource = new Resource
             {
-               Name = Some.Random.String(),
                Uri = Some.Random.String(),
                ResourceType = resourceType,
             },
@@ -185,7 +181,6 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
             Environment = environment,
             Resource = new Resource
             {
-               Name = Some.Random.String(),
                Uri = Some.Random.String(),
                ResourceType = resourceType,
             },
