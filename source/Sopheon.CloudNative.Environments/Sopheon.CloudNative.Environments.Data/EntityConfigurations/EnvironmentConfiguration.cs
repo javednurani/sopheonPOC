@@ -15,6 +15,9 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
          builder.HasIndex(e => e.EnvironmentKey)
             .IsUnique();
 
+         builder.Property(e => e.EnvironmentKey)
+            .IsRequired();
+
          builder.Property(e => e.Name)
             .HasMaxLength(ModelConstraints.NAME_LENGTH)
             .IsRequired();
