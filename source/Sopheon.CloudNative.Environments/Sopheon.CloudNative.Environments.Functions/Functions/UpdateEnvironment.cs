@@ -90,8 +90,7 @@ namespace Sopheon.CloudNative.Environments.Functions
                return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID);
             }
             
-            // TODO: deserialize options
-            EnvironmentDto data = JsonSerializer.Deserialize<EnvironmentDto>(requestBody, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            EnvironmentDto data = JsonSerializer.Deserialize<EnvironmentDto>(requestBody, SerializationSettings.JsonSerializerOptions);
 
             ValidationResult validationResult = await _validator.ValidateAsync(data);
             if (!validationResult.IsValid)

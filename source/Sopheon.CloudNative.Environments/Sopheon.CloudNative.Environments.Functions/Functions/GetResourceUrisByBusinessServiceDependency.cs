@@ -34,7 +34,7 @@ namespace Sopheon.CloudNative.Environments.Functions
 
       [Function(nameof(GetResourceUrisByBusinessServiceDependency))]
       [OpenApiOperation(operationId: nameof(GetResourceUrisByBusinessServiceDependency),
-         tags: new[] { nameof(Environment), nameof(Resource), nameof(BusinessService), nameof(BusinessServiceDependency), nameof(EnvironmentResourceBinding) },
+         tags: new[] { "Resources" },
          Summary = "Get Resource URIs for a BusinessServiceDependency, across Environments",
          Description = "Get Resource URIs for a BusinessServiceDependency, across Environments",
          Visibility = OpenApiVisibilityType.Important)]

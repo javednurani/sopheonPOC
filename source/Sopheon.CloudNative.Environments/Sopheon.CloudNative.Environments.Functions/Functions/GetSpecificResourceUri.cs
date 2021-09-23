@@ -1,18 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
 using Sopheon.CloudNative.Environments.Domain.Exceptions;
 using Sopheon.CloudNative.Environments.Domain.Queries;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
@@ -35,7 +30,7 @@ namespace Sopheon.CloudNative.Environments.Functions
 
       [Function(nameof(GetSpecificResourceUri))]
       [OpenApiOperation(operationId: nameof(GetSpecificResourceUri),
-         tags: new[] { "Environments", "Resources", "BusinessServiceDependencies", "EnvironmentResourceBindings" },
+         tags: new[] { "Resources" },
          Summary = "",
          Description = "",
          Visibility = OpenApiVisibilityType.Important)]
