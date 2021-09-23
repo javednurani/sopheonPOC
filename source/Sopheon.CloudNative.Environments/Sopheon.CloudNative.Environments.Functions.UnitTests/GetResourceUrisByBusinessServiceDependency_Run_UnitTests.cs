@@ -120,7 +120,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          SetupAutoMapper();
 
-         _validator = new RequiredNameValidator();
+         _validator = new RequiredStringValidator();
          _responseBuilder = new HttpResponseDataBuilder();
 
          // create Sut

@@ -65,7 +65,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          Description = StringConstants.RESPONSE_DESCRIPTION_500)]
       public async Task<HttpResponseData> Run(
           [HttpTrigger(AuthorizationLevel.Anonymous, "get", 
-            Route = "businessService/{businessServiceName}/getEnvironmentResourceBindingUris({dependencyName})")] HttpRequestData req,
+            Route = "BusinessService/{businessServiceName}/GetEnvironmentResourceBindingUris({dependencyName})")] HttpRequestData req,
           FunctionContext context, string businessServiceName, string dependencyName)
       {
          var logger = context.GetLogger(nameof(GetResourceUrisByBusinessServiceDependency));
