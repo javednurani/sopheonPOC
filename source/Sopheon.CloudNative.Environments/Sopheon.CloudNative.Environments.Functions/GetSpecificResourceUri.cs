@@ -55,7 +55,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          Description = "The name of the BusinessServiceDependency",
          Summary = "The name of the BusinessServiceDependency")]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK,
-         contentType: StringConstants.CONTENT_TYPE_APP_JSON,
+         contentType: StringConstants.CONTENT_TYPE_TEXT_PLAIN,
          bodyType: typeof(string),
          Summary = StringConstants.RESPONSE_SUMMARY_200,
          Description = StringConstants.RESPONSE_DESCRIPTION_200)]
@@ -91,7 +91,7 @@ namespace Sopheon.CloudNative.Environments.Functions
 
             string resourceUri = await _environmentQueries.GetSpecificResourceUri(environmentKey, businessServiceName, dependencyName);
 
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.OK, resourceUri);
+            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.OK, resourceUri);
          }
          catch (EntityNotFoundException ex)
          {

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
@@ -34,6 +34,11 @@
 
   <ItemGroup>
     <OpenApiReference Include="OpenApiDefinitions\Environments_OpenApi.json" CodeGenerator="NSwagCSharp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sopheon.CloudNative.Environments.Domain\Sopheon.CloudNative.Environments.Domain.csproj" />
+    <ProjectReference Include="..\Sopheon.CloudNative.Environments.Testing.Common\Sopheon.CloudNative.Environments.Testing.Common.csproj" />
   </ItemGroup>
 
 </Project>

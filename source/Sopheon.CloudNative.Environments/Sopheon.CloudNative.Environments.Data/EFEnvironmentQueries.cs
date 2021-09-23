@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Sopheon.CloudNative.Environments.Domain.Exceptions;
 using Sopheon.CloudNative.Environments.Domain.Queries;
 
 namespace Sopheon.CloudNative.Environments.Data
@@ -31,6 +32,11 @@ namespace Sopheon.CloudNative.Environments.Data
             .FirstOrDefaultAsync(erb => erb.Environment.EnvironmentKey == environmentKey 
             && erb.BusinessServiceDependency.DependencyName == dependencyName
             && erb.BusinessServiceDependency.BusinessService.Name == businessServiceName); 
+
+         if(environmentResourceBinding == null)
+         {
+            throw new EntityNotFoundException();
+         }
 
          return environmentResourceBinding.Resource.Uri;
       }
