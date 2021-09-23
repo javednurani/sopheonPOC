@@ -75,7 +75,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_MISSING, responseBody);
+         Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID, responseBody);
 
          _mockEnvironmentQueries.Verify(m => m.GetSpecificResourceUri(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never());
       }
@@ -92,7 +92,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_MISSING, responseBody);
+         Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID, responseBody);
 
          _mockEnvironmentQueries.Verify(m => m.GetSpecificResourceUri(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never());
       }
@@ -109,7 +109,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_MISSING, responseBody);
+         Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID, responseBody);
 
          _mockEnvironmentQueries.Verify(m => m.GetSpecificResourceUri(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never());
       }
