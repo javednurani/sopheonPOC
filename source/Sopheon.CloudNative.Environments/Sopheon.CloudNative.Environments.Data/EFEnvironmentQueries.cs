@@ -28,17 +28,19 @@ namespace Sopheon.CloudNative.Environments.Data
 
       public async Task<string> GetSpecificResourceUri(Guid environmentKey, string businessServiceName, string dependencyName)
       {
-         var environmentResourceBinding = await _context.EnvironmentResourceBindings
-            .FirstOrDefaultAsync(erb => erb.Environment.EnvironmentKey == environmentKey 
+         var resourceUri = await _context.EnvironmentResourceBindings
+            .Where(erb => erb.Environment.EnvironmentKey == environmentKey 
             && erb.BusinessServiceDependency.DependencyName == dependencyName
-            && erb.BusinessServiceDependency.BusinessService.Name == businessServiceName); 
+            && erb.BusinessServiceDependency.BusinessService.Name == businessServiceName)
+            .Select(erb => erb.Resource.Uri)
+            .FirstOrDefaultAsync(); 
 
-         if(environmentResourceBinding == null)
+         if(resourceUri == null)
          {
             throw new EntityNotFoundException();
          }
 
-         return environmentResourceBinding.Resource.Uri;
+         return resourceUri;
       }
    }
 }
