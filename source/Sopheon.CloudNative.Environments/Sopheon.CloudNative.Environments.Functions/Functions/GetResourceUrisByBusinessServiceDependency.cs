@@ -20,11 +20,11 @@ namespace Sopheon.CloudNative.Environments.Functions
    public class GetResourceUrisByBusinessServiceDependency
    {
       private readonly IEnvironmentQueries _environmentQueries;
-      private readonly IRequiredStringValidator _validator;
+      private readonly IRequiredNameValidator _validator;
       private IMapper _mapper;
       private readonly HttpResponseDataBuilder _responseBuilder;
 
-      public GetResourceUrisByBusinessServiceDependency(IEnvironmentQueries environmentQueries, IRequiredStringValidator validator, IMapper mapper, HttpResponseDataBuilder responseBuilder)
+      public GetResourceUrisByBusinessServiceDependency(IEnvironmentQueries environmentQueries, IRequiredNameValidator validator, IMapper mapper, HttpResponseDataBuilder responseBuilder)
       {
          _environmentQueries = environmentQueries;
          _validator = validator;
@@ -76,8 +76,8 @@ namespace Sopheon.CloudNative.Environments.Functions
 
             if (!validationResultBusinessServiceName.IsValid || !validationResultDependencyname.IsValid)
             {
-               logger.LogInformation(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_MISSING);
-               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_MISSING);
+               logger.LogInformation(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID);
+               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID);
             }
 
             IEnumerable<string> resourceUris = await _environmentQueries.GetResourceUrisByBusinessServiceDependency(businessServiceName, dependencyName);

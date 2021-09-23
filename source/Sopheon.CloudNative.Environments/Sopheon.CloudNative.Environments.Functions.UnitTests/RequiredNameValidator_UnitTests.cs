@@ -1,13 +1,14 @@
 ﻿using FluentValidation.TestHelper;
+using Sopheon.CloudNative.Environments.Domain;
 using Sopheon.CloudNative.Environments.Functions.Validators;
 using Sopheon.CloudNative.Environments.Testing.Common;
 using Xunit;
 
 namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 {
-   public class RequiredStringValidator_UnitTests
+   public class RequiredNameValidator_UnitTests
    {
-      private RequiredStringValidator _sut = new RequiredStringValidator();
+      private RequiredNameValidator _sut = new RequiredNameValidator();
 
       [Theory]
       [InlineData("")]
@@ -27,6 +28,16 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          TestValidationResult<string> result = _sut.TestValidate(requiredString);
 
          result.ShouldNotHaveAnyValidationErrors();
+      }
+
+      [Fact]
+      public void NameTooLong_ReturnsCorrectValidationError()
+      {
+         string longName = Some.Random.String(ModelConstraints.NAME_LENGTH + 1);
+
+         TestValidationResult<string> result = _sut.TestValidate(longName);
+
+         result.ShouldHaveValidationErrorFor(x => x);
       }
    }
 }

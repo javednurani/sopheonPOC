@@ -57,7 +57,7 @@ namespace Sopheon.CloudNative.Environments.Functions
                services.AddScoped<IEnvironmentRepository, EFEnvironmentRepository>();
                services.AddScoped<IEnvironmentQueries, EFEnvironmentQueries>();
                services.AddScoped<IValidator<EnvironmentDto>, EnvironmentDtoValidator>();
-               services.AddScoped<IRequiredStringValidator, RequiredStringValidator>();
+               services.AddScoped<IRequiredNameValidator, RequiredNameValidator>();
                
                services.AddScoped<HttpResponseDataBuilder>();
             })

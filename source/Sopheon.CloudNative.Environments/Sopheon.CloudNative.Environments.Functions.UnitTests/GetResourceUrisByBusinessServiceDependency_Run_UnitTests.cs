@@ -20,7 +20,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       Mock<HttpRequestData> _request;
 
       Mock<IEnvironmentQueries> _mockEnvironmentQueries;
-      IRequiredStringValidator _validator;
+      IRequiredNameValidator _validator;
       HttpResponseDataBuilder _responseBuilder;
 
       public GetResourceUrisByBusinessServiceDependency_Run_UnitTests()
@@ -78,7 +78,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_MISSING, responseBody);
+         Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID, responseBody);
 
          _mockEnvironmentQueries.Verify(m => m.GetResourceUrisByBusinessServiceDependency(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
       }
@@ -95,7 +95,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_MISSING, responseBody);
+         Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID, responseBody);
 
          _mockEnvironmentQueries.Verify(m => m.GetResourceUrisByBusinessServiceDependency(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
       }
@@ -120,7 +120,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          SetupAutoMapper();
 
-         _validator = new RequiredStringValidator();
+         _validator = new RequiredNameValidator();
          _responseBuilder = new HttpResponseDataBuilder();
 
          // create Sut
