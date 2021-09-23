@@ -42,6 +42,11 @@ namespace Sopheon.CloudNative.Environments.Functions
          Summary = "Update an Environment",
          Description = "Update an Environment's properties. Anything except IsDeleted, EnvironmentKey, and EnvironmentId can be changed.",
          Visibility = OpenApiVisibilityType.Important)]
+      [OpenApiParameter(name: "key",
+         Type = typeof(Guid),
+         Required = true,
+         Description = "The key of the Environment to update.",
+         Summary = "The key of the Environment to update.")]
       [OpenApiRequestBody(contentType: "application/json",
          bodyType: typeof(EnvironmentDto),
          Required = true,

@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Sopheon.CloudNative.Environments.Data;
 using Sopheon.CloudNative.Environments.Testing.Common;
 using Xunit;
 
