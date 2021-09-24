@@ -758,6 +758,73 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "GET Resources",
+			"item": [
+				{
+					"name": "GET Resource URIs by BusinessServiceDependency",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code\", function() {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/BusinessService/{{businessServiceName}}/GetEnvironmentResourceBindingUris({{dependencyName}})",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"BusinessService",
+								"{{businessServiceName}}",
+								"GetEnvironmentResourceBindingUris({{dependencyName}})"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Specific Resource URI",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code\", function() {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/GetEnvironmentResourceBindingUri({{environmentKey}}, {{businessServiceName}}, {{dependencyName}})",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"GetEnvironmentResourceBindingUri({{environmentKey}}, {{businessServiceName}}, {{dependencyName}})"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
