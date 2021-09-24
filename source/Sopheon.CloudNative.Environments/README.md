@@ -51,12 +51,13 @@ TODO: flesh this out.  This section should explain any design decisions or imple
 # POC Branch Info
 GOALS:
 1. All automated tests for solution together in VS Test Explorer
-2. Ability to safely run tests all at any time and get meaningful results
+2. Ability to safely run all tests in any development environment state and get meaningful results
 
 DETAILS:
 - Both unit and integration test projects side-by-side in test explorer presents challenges
-  - we don't want a bunch of failures if the docker database is not up and running, for example
-  - ee want always green and yellow (inconclusive)
+	- Developers might not always have a full system up and running locally at all times
+	- failures due to a system being unavailable for testing are meaningless and erode confidence
+	- we want always green or yellow (inconclusive) test results
 - Unit tests have controlled dependencies, so they should always run (quickly!)
 - Integration tests should check if their dependencies are available
 	- if dependencies are not available, skip tests with meaningful message
@@ -68,6 +69,6 @@ DETAILS:
 		- skip if functions are not up and running
 	- data-dependent tests
 		- dependent on standard test data being present in environment
-		- inherit the "functions up and running" answer from stand-alone tests for free
+			- inherit the "functions are up and running" answer from stand-alone tests for free
 		- check for the presence of the necessary test data
-		- skip if test data not present
+		- skip if test data is not present
