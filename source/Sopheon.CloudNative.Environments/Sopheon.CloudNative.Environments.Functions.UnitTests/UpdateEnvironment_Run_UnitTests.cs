@@ -97,8 +97,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          // HTTP response
          string responseBody = await GetResponseBody(result);
+         ExceptionDto exceptionResponse = JsonSerializer.Deserialize<ExceptionDto>(responseBody);
 
-         Assert.Equal("The EnvironmentKey must be a valid Guid", responseBody);
+         Assert.Equal("The EnvironmentKey must be a valid Guid", exceptionResponse.Message);
       }
 
       [Fact]
@@ -124,8 +125,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          // HTTP response
          string responseBody = await GetResponseBody(result);
+         ExceptionDto exceptionResponse = JsonSerializer.Deserialize<ExceptionDto>(responseBody);
 
-         Assert.Equal("'Name' must not be empty.", responseBody);
+         Assert.Equal("'Name' must not be empty.", exceptionResponse.Message);
       }
 
       [Fact]
@@ -151,8 +153,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          // HTTP response
          string responseBody = await GetResponseBody(result);
+         ExceptionDto exceptionResponse = JsonSerializer.Deserialize<ExceptionDto>(responseBody);
 
-         Assert.Equal("'Owner' must not be empty.", responseBody);
+         Assert.Equal("'Owner' must not be empty.", exceptionResponse.Message);
       }
 
       [Fact]
@@ -179,7 +182,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.NotNull(result);
          Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
          string responseBody = await GetResponseBody(result);
-         Assert.Equal(mockExceptionMessage, responseBody);
+         ExceptionDto exceptionResponse = JsonSerializer.Deserialize<ExceptionDto>(responseBody);
+
+         Assert.Equal(mockExceptionMessage, exceptionResponse.Message);
       }
 
       //TODO: Different mock to return not found and test EntityNotFoundException? Is this valuable to us? Better in a repository unit test?
