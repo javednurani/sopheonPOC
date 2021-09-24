@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Sopheon.CloudNative.Environments.Functions.IntegrationTests.Infrastructure;
 using Xunit;
 
 namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.StandAlone

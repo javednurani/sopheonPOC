@@ -2,7 +2,7 @@ using System;
 using System.Net.Http;
 using Xunit;
 
-namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.Infrastructure
+namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests
 {
    /// <summary>
    /// The purpose of this class is to conditionally skip a function integration test at runtime
@@ -14,7 +14,7 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.Infrastruc
    {
       private static readonly HttpClient _httpClient = new HttpClient();
       protected static readonly string _url = "http://localhost:7071/openapi/1.0";  // TODO: where should this url live?
-      protected static string _skipMessage = null;
+      protected static string _functionSkipReason = null;
 
       static FunctionFact()
       {
@@ -26,7 +26,7 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.Infrastruc
          }
          catch (Exception ex)
          {
-            _skipMessage = $"Functions dont seem to be running at '{_url}'" +
+            _functionSkipReason = $"Functions don't seem to be running at '{_url}'" +
                Environment.NewLine +
                ex.Message;
          }
@@ -35,7 +35,7 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.Infrastruc
       public FunctionFact()
       {
          // info: this will execute once per test class, but it's just pulling the static value
-         this.Skip = _skipMessage;
+         this.Skip = _functionSkipReason;
       }
    }
 }

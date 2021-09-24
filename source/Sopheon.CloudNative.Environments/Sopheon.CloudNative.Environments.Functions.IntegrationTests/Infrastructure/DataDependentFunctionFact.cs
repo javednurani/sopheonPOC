@@ -16,12 +16,16 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.Infrastruc
    {
       // TODO: consolidate this key
       private static Guid _environmentKey = new Guid("EBA2CCBB-89D3-45E3-BF90-2DB160BF1552");
+      private static string _dataDepSkipReason = null;   // need to have our own value, otherwise we will set for all FunctionFacts!
 
       static DataDependentFunctionFact()
       {
          // info: static so this will only execute once per total/overall test run
 
-         if (_skipMessage == null)
+         // inherit skip reason from base Function class
+         _dataDepSkipReason = _functionSkipReason;
+
+         if (_dataDepSkipReason == null)
          {
             // no reason to skip test yet!
 
@@ -29,9 +33,15 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.Infrastruc
 
             if (!environments.Any(env => env.EnvironmentKey == _environmentKey))
             {
-               _skipMessage = $"Functions are running at '{_url}', but necessary test data has not been seeded.";
+               _dataDepSkipReason = $"Functions are running at '{_url}', but necessary test data has not been seeded.";
             }
          }
+      }
+
+      public DataDependentFunctionFact()
+      {
+         // info: this will execute once per test class, but it's just pulling the (local) static value
+         this.Skip = _dataDepSkipReason;
       }
    }
 }
