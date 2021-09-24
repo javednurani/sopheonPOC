@@ -40,7 +40,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          Summary = StringConstants.RESPONSE_SUMMARY_200,
          Description = StringConstants.RESPONSE_DESCRIPTION_200)]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError,
-         contentType: StringConstants.CONTENT_TYPE_TEXT_PLAIN,
+         contentType: StringConstants.CONTENT_TYPE_APP_JSON,
          bodyType: typeof(string),
          Summary = StringConstants.RESPONSE_SUMMARY_500,
          Description = StringConstants.RESPONSE_DESCRIPTION_500)]
@@ -57,8 +57,13 @@ namespace Sopheon.CloudNative.Environments.Functions
          }
          catch (Exception ex)
          {
+            ExceptionDto exception = new ExceptionDto
+            {
+               StatusCode = (int)HttpStatusCode.InternalServerError,
+               Message = StringConstants.RESPONSE_GENERIC_ERROR,
+            };
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR);
+            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.InternalServerError, exception);
          }
       }
    }

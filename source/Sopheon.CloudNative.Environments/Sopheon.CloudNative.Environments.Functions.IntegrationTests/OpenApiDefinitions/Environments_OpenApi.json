@@ -44,7 +44,7 @@
           "400": {
             "description": "400 Bad Request response, with error message in response body",
             "content": {
-              "text/plain": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
@@ -55,7 +55,7 @@
           "500": {
             "description": "500 Internal Server Error response, with error message in response body",
             "content": {
-              "text/plain": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
@@ -91,7 +91,7 @@
           "500": {
             "description": "500 Internal Server Error response, with error message in response body",
             "content": {
-              "text/plain": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
@@ -128,7 +128,7 @@
           "404": {
             "description": "404 Not Found response, with error message in response body",
             "content": {
-              "text/plain": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
@@ -139,7 +139,7 @@
           "400": {
             "description": "400 Bad Request response, with error message in response body",
             "content": {
-              "text/plain": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
@@ -150,7 +150,7 @@
           "500": {
             "description": "500 Internal Server Error response, with error message in response body",
             "content": {
-              "text/plain": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
@@ -211,7 +211,7 @@
           "400": {
             "description": "400 Bad Request response, with error message in response body",
             "content": {
-              "text/plain": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
@@ -222,7 +222,7 @@
           "404": {
             "description": "404 Not Found response, with error message in response body",
             "content": {
-              "text/plain": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
@@ -233,7 +233,7 @@
           "500": {
             "description": "500 Internal Server Error response, with error message in response body",
             "content": {
-              "text/plain": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
@@ -245,40 +245,34 @@
         "x-ms-visibility": "important"
       }
     },
-    "/businessService/{businessServiceKey}/getEnvironmentResourceBindingUris({dependencyKey})": {
+    "/BusinessService/{businessServiceName}/GetEnvironmentResourceBindingUris({dependencyName})": {
       "get": {
         "tags": [
-          "Environment",
-          "Resource",
-          "BusinessService",
-          "BusinessServiceDependency",
-          "EnvironmentResourceBinding"
+          "Resources"
         ],
-        "summary": "",
-        "description": "",
+        "summary": "Get Resource URIs for a BusinessServiceDependency, across Environments",
+        "description": "Get Resource URIs for a BusinessServiceDependency, across Environments",
         "operationId": "GetResourceUrisByBusinessServiceDependency",
         "parameters": [
           {
-            "name": "businessServiceKey",
+            "name": "businessServiceName",
             "in": "path",
-            "description": "The key of the BusinessService",
+            "description": "The name of the BusinessService",
             "required": true,
             "schema": {
-              "type": "string",
-              "format": "uuid"
+              "type": "string"
             },
-            "x-ms-summary": "The key of the BusinessService"
+            "x-ms-summary": "The name of the BusinessService"
           },
           {
-            "name": "dependencyKey",
+            "name": "dependencyName",
             "in": "path",
-            "description": "The key of the BusinessServiceDependency",
+            "description": "The name of the BusinessServiceDependency",
             "required": true,
             "schema": {
-              "type": "string",
-              "format": "uuid"
+              "type": "string"
             },
-            "x-ms-summary": "The key of the BusinessServiceDependency"
+            "x-ms-summary": "The name of the BusinessServiceDependency"
           }
         ],
         "responses": {
@@ -296,21 +290,10 @@
             },
             "x-ms-summary": "200 OK response"
           },
-          "404": {
-            "description": "404 Not Found response, with error message in response body",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
-            "x-ms-summary": "404 Not Found response"
-          },
           "400": {
             "description": "400 Bad Request response, with error message in response body",
             "content": {
-              "text/plain": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
@@ -321,7 +304,7 @@
           "500": {
             "description": "500 Internal Server Error response, with error message in response body",
             "content": {
-              "text/plain": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
@@ -336,10 +319,7 @@
     "/GetEnvironmentResourceBindingUri({environmentKey}, {businessServiceName}, {dependencyName})": {
       "get": {
         "tags": [
-          "Environments",
-          "Resources",
-          "BusinessServiceDependencies",
-          "EnvironmentResourceBindings"
+          "Resources"
         ],
         "summary": "",
         "description": "",
@@ -381,7 +361,7 @@
           "200": {
             "description": "200 OK response, with Dto in response body",
             "content": {
-              "text/plain": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
@@ -392,7 +372,7 @@
           "404": {
             "description": "404 Not Found response, with error message in response body",
             "content": {
-              "text/plain": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
@@ -403,7 +383,7 @@
           "400": {
             "description": "400 Bad Request response, with error message in response body",
             "content": {
-              "text/plain": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
@@ -414,7 +394,7 @@
           "500": {
             "description": "500 Internal Server Error response, with error message in response body",
             "content": {
-              "text/plain": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
