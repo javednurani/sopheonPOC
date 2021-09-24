@@ -1,4 +1,6 @@
-﻿namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests
+﻿using Sopheon.CloudNative.Environments.Functions.IntegrationTests.Infrastructure;
+
+namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.StandAlone
 {
    public class GetResourceUrisByBusinessServiceDependency_Tests : FunctionIntegrationTest
    {

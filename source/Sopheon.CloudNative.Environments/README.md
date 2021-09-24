@@ -47,3 +47,27 @@ npm run prune
 
 # Design Decisions
 TODO: flesh this out.  This section should explain any design decisions or implementation details that might throw a newly onboarded dev for a loop.
+
+# POC Branch Info
+GOALS:
+1. All automated tests for solution together in VS Test Explorer
+2. Ability to safely run tests all at any time and get meaningful results
+
+DETAILS:
+- Both unit and integration test projects side-by-side in test explorer presents challenges
+  - we don't want a bunch of failures if the docker database is not up and running, for example
+  - ee want always green and yellow (inconclusive)
+- Unit tests have controlled dependencies, so they should always run (quickly!)
+- Integration tests should check if their dependencies are available
+	- if dependencies are not available, skip tests with meaningful message
+	- this should be done as performantly as possible to avoid test execution bloat
+- 2 types of integration tests: "stand-alone" and "data-dependent"
+	- stand-alone tests
+		- only dependent on the functions being up and running
+		- CRUD their own data
+		- skip if functions are not up and running
+	- data-dependent tests
+		- dependent on standard test data being present in environment
+		- inherit the "functions up and running" answer from stand-alone tests for free
+		- check for the presence of the necessary test data
+		- skip if test data not present
