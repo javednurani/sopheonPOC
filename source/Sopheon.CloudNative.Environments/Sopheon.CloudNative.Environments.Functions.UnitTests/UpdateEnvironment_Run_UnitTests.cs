@@ -97,9 +97,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          // HTTP response
          string responseBody = await GetResponseBody(result);
-         ErrorDto exceptionResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
+         ErrorDto errorResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
 
-         Assert.Equal("The EnvironmentKey must be a valid Guid", exceptionResponse.Message);
+         Assert.Equal("The EnvironmentKey must be a valid Guid", errorResponse.Message);
       }
 
       [Fact]
@@ -125,9 +125,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          // HTTP response
          string responseBody = await GetResponseBody(result);
-         ErrorDto exceptionResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
+         ErrorDto errorResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
 
-         Assert.Equal("'Name' must not be empty.", exceptionResponse.Message);
+         Assert.Equal("'Name' must not be empty.", errorResponse.Message);
       }
 
       [Fact]
@@ -153,9 +153,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          // HTTP response
          string responseBody = await GetResponseBody(result);
-         ErrorDto exceptionResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
+         ErrorDto errorResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
 
-         Assert.Equal("'Owner' must not be empty.", exceptionResponse.Message);
+         Assert.Equal("'Owner' must not be empty.", errorResponse.Message);
       }
 
       [Fact]
@@ -182,9 +182,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.NotNull(result);
          Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
          string responseBody = await GetResponseBody(result);
-         ErrorDto exceptionResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
+         ErrorDto errorResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
 
-         Assert.Equal(mockExceptionMessage, exceptionResponse.Message);
+         Assert.Equal(mockExceptionMessage, errorResponse.Message);
       }
 
       //TODO: Different mock to return not found and test EntityNotFoundException? Is this valuable to us? Better in a repository unit test?

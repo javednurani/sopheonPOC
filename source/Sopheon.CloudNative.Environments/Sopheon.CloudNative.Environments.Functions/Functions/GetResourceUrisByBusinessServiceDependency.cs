@@ -76,13 +76,13 @@ namespace Sopheon.CloudNative.Environments.Functions
 
             if (!validationResultBusinessServiceName.IsValid || !validationResultDependencyname.IsValid)
             {
-               ErrorDto exception = new ErrorDto
+               ErrorDto error = new ErrorDto
                {
                   StatusCode = (int)HttpStatusCode.BadRequest,
                   Message = StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID,
                };
                logger.LogInformation(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID);
-               return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.BadRequest, exception);
+               return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.BadRequest, error);
             }
 
             IEnumerable<string> resourceUris = await _environmentQueries.GetResourceUrisByBusinessServiceDependency(businessServiceName, dependencyName);
@@ -92,13 +92,13 @@ namespace Sopheon.CloudNative.Environments.Functions
          }
          catch (Exception ex)
          {
-            ErrorDto exception = new ErrorDto
+            ErrorDto error = new ErrorDto
             {
                StatusCode = (int)HttpStatusCode.InternalServerError,
                Message = StringConstants.RESPONSE_GENERIC_ERROR,
             };
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.InternalServerError, exception);
+            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.InternalServerError, error);
          }
       }
    }

@@ -76,9 +76,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         ErrorDto exceptionResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
+         ErrorDto errorResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
 
-         Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID, exceptionResponse.Message);
+         Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID, errorResponse.Message);
 
          _mockEnvironmentQueries.Verify(m => m.GetSpecificResourceUri(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never());
       }
@@ -95,9 +95,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         ErrorDto exceptionResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
+         ErrorDto errorResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
 
-         Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID, exceptionResponse.Message);
+         Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID, errorResponse.Message);
 
          _mockEnvironmentQueries.Verify(m => m.GetSpecificResourceUri(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never());
       }
@@ -114,9 +114,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         ErrorDto exceptionResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
+         ErrorDto errorResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
 
-         Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID, exceptionResponse.Message);
+         Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID, errorResponse.Message);
 
          _mockEnvironmentQueries.Verify(m => m.GetSpecificResourceUri(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never());
       }
