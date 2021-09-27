@@ -76,7 +76,7 @@ namespace Sopheon.CloudNative.Environments.Functions
           [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "environments/{key}")] HttpRequestData req,
           FunctionContext context, string key)
       {
-         var logger = context.GetLogger(nameof(UpdateEnvironment));
+         ILogger logger = context.GetLogger(nameof(UpdateEnvironment));
 
          string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
 

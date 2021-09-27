@@ -48,7 +48,7 @@ namespace Sopheon.CloudNative.Environments.Functions
           [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "environments")] HttpRequestData req,
           FunctionContext context)
       {
-         var logger = context.GetLogger(nameof(GetEnvironments));
+         ILogger logger = context.GetLogger(nameof(GetEnvironments));
          try
          {
             IEnumerable<Environment> environments = await _environmentRepository.GetEnvironments();

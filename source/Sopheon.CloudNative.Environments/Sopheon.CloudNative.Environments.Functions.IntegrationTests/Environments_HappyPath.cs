@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -10,8 +11,8 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests
       public async Task HappyPath_AllFunctions()
       {
          // create an environment
-         var createDto = new EnvironmentDto { Name = "ZachIntegrationTest", Description = "TestDescription", Owner = Guid.NewGuid() };
-         var createdEnv = await _sut.CreateEnvironmentAsync(createDto);
+         EnvironmentDto createDto = new EnvironmentDto { Name = "ZachIntegrationTest", Description = "TestDescription", Owner = Guid.NewGuid() };
+         EnvironmentDto createdEnv = await _sut.CreateEnvironmentAsync(createDto);
 
          // update environment
          createdEnv.Name = "ZachIntegrationTest_Updated";
@@ -21,7 +22,7 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests
          await _sut.DeleteEnvironmentAsync(createdEnv.EnvironmentKey);
 
          // get evironments - verify deleted
-         var environments = await _sut.GetEnvironmentsAsync();
+         ICollection<EnvironmentDto> environments = await _sut.GetEnvironmentsAsync();
          Assert.DoesNotContain(environments, e => e.EnvironmentKey == createdEnv.EnvironmentKey);
       }
    }

@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Sopheon.CloudNative.Environments.Domain.Models;
 using Sopheon.CloudNative.Environments.Testing.Common;
 using Xunit;
 
@@ -13,7 +15,7 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
 
       public EFEnvironmentRepository_GetEnvironments_UnitTests()
       {
-         var builder = new DbContextOptionsBuilder<EnvironmentContext>();
+         DbContextOptionsBuilder<EnvironmentContext> builder = new DbContextOptionsBuilder<EnvironmentContext>();
          builder.UseInMemoryDatabase(nameof(EFEnvironmentRepository_GetEnvironments_UnitTests));
          _dbContextOptions = builder.Options;
       }
@@ -21,14 +23,14 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
       [Fact]
       public async Task GetEnvironments_HappyPath_DeletedFilteredAsync()
       {
-         using var context = new EnvironmentContext(_dbContextOptions);
+         using EnvironmentContext context = new EnvironmentContext(_dbContextOptions);
 
          // Arrange - seed test data
          context.AddRange(new[] { Some.Random.Environment(false), Some.Random.Environment(false), Some.Random.Environment(true) });
          context.SaveChanges();
 
          // Act
-         var environments = await new EFEnvironmentRepository(context).GetEnvironments();
+         IEnumerable<Environment> environments = await new EFEnvironmentRepository(context).GetEnvironments();
 
          // Assert
          Assert.Equal(2, environments.Count());
@@ -37,14 +39,14 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
       [Fact]
       public async Task GetEnvironments_HappyPath_AllDeletedFilteredAsync()
       {
-         using var context = new EnvironmentContext(_dbContextOptions);
+         using EnvironmentContext context = new EnvironmentContext(_dbContextOptions);
 
          // Arrange - seed test data
          context.AddRange(new[] { Some.Random.Environment(true), Some.Random.Environment(true), Some.Random.Environment(true) });
          context.SaveChanges();
 
          // Act
-         var environments = await new EFEnvironmentRepository(context).GetEnvironments();
+         IEnumerable<Environment> environments = await new EFEnvironmentRepository(context).GetEnvironments();
 
          // Assert
          Assert.Empty(environments);

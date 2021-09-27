@@ -65,7 +65,7 @@ namespace Sopheon.CloudNative.Environments.Functions
           [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "environments")] HttpRequestData req,
           FunctionContext context)
       {
-         var logger = context.GetLogger(nameof(CreateEnvironment));
+         ILogger logger = context.GetLogger(nameof(CreateEnvironment));
 
          string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
          try
