@@ -42,17 +42,17 @@ namespace Sopheon.CloudNative.Environments.Functions
          Description = StringConstants.RESPONSE_DESCRIPTION_204)]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.NotFound,
          contentType: StringConstants.CONTENT_TYPE_APP_JSON,
-         bodyType: typeof(ExceptionDto),
+         bodyType: typeof(ErrorDto),
          Summary = StringConstants.RESPONSE_SUMMARY_404,
          Description = StringConstants.RESPONSE_DESCRIPTION_404)]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest,
          contentType: StringConstants.CONTENT_TYPE_APP_JSON,
-         bodyType: typeof(ExceptionDto),
+         bodyType: typeof(ErrorDto),
          Summary = StringConstants.RESPONSE_SUMMARY_400,
          Description = StringConstants.RESPONSE_DESCRIPTION_400)]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError,
          contentType: StringConstants.CONTENT_TYPE_APP_JSON,
-         bodyType: typeof(ExceptionDto),
+         bodyType: typeof(ErrorDto),
          Summary = StringConstants.RESPONSE_SUMMARY_500,
          Description = StringConstants.RESPONSE_DESCRIPTION_500)]
 
@@ -68,7 +68,7 @@ namespace Sopheon.CloudNative.Environments.Functions
             bool validKey = Guid.TryParse(key, out environmentKey);
             if (!validKey || environmentKey == Guid.Empty)
             {
-               ExceptionDto exception = new ExceptionDto
+               ErrorDto exception = new ErrorDto
                {
                   StatusCode = (int)HttpStatusCode.BadRequest,
                   Message = StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID,
@@ -83,7 +83,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          }
          catch (EntityNotFoundException ex)
          {
-            ExceptionDto exception = new ExceptionDto
+            ErrorDto exception = new ErrorDto
             {
                StatusCode = (int)HttpStatusCode.NotFound,
                Message = ex.Message,
@@ -93,7 +93,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          }
          catch (Exception ex)
          {
-            ExceptionDto exception = new ExceptionDto
+            ErrorDto exception = new ErrorDto
             {
                StatusCode = (int)HttpStatusCode.InternalServerError,
                Message = StringConstants.RESPONSE_GENERIC_ERROR,

@@ -1,4 +1,4 @@
-﻿using Sopheon.CloudNative.Environments.Domain.Exceptions;
+﻿using Sopheon.CloudNative.Environments.Functions.Models;
 using Sopheon.CloudNative.Environments.Testing.Common;
 using System;
 using Xunit;
@@ -17,7 +17,7 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests
       [FunctionFact]
       public async void HappyPathNotFound_GetSpecificResourceUri()
       {
-         await Assert.ThrowsAsync<ApiException<ExceptionDto>>(() =>  _sut.GetSpecificResourceUriAsync(Some.Random.Guid(), Some.Random.String(), Some.Random.String()));
+         await Assert.ThrowsAsync<ApiException<ErrorDto>>(() =>  _sut.GetSpecificResourceUriAsync(Some.Random.Guid(), Some.Random.String(), Some.Random.String()));
       }
    }
 }

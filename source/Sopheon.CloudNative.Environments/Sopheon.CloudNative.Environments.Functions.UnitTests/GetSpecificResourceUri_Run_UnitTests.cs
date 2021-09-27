@@ -76,7 +76,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         ExceptionDto exceptionResponse = JsonSerializer.Deserialize<ExceptionDto>(responseBody);
+         ErrorDto exceptionResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
 
          Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID, exceptionResponse.Message);
 
@@ -95,7 +95,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         ExceptionDto exceptionResponse = JsonSerializer.Deserialize<ExceptionDto>(responseBody);
+         ErrorDto exceptionResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
 
          Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID, exceptionResponse.Message);
 
@@ -114,7 +114,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         ExceptionDto exceptionResponse = JsonSerializer.Deserialize<ExceptionDto>(responseBody);
+         ErrorDto exceptionResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
 
          Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID, exceptionResponse.Message);
 

@@ -38,6 +38,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sopheon.CloudNative.Environments.Domain\Sopheon.CloudNative.Environments.Domain.csproj" />
+    <ProjectReference Include="..\Sopheon.CloudNative.Environments.Functions\Sopheon.CloudNative.Environments.Functions.csproj" />
     <ProjectReference Include="..\Sopheon.CloudNative.Environments.Testing.Common\Sopheon.CloudNative.Environments.Testing.Common.csproj" />
   </ItemGroup>
 

@@ -52,12 +52,12 @@ namespace Sopheon.CloudNative.Environments.Functions
          Description = StringConstants.RESPONSE_DESCRIPTION_201)]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest,
          contentType: StringConstants.CONTENT_TYPE_APP_JSON,
-         bodyType: typeof(ExceptionDto),
+         bodyType: typeof(ErrorDto),
          Summary = StringConstants.RESPONSE_SUMMARY_400,
          Description = StringConstants.RESPONSE_DESCRIPTION_400)]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError,
          contentType: StringConstants.CONTENT_TYPE_APP_JSON,
-         bodyType: typeof(ExceptionDto),
+         bodyType: typeof(ErrorDto),
          Summary = StringConstants.RESPONSE_SUMMARY_500,
          Description = StringConstants.RESPONSE_DESCRIPTION_500)]
 
@@ -76,7 +76,7 @@ namespace Sopheon.CloudNative.Environments.Functions
             if(!validationResult.IsValid)
             {
                string validationFailureMessage = validationResult.ToString();
-               ExceptionDto exception = new ExceptionDto
+               ErrorDto exception = new ErrorDto
                {
                   StatusCode = (int)HttpStatusCode.BadRequest,
                   Message = validationFailureMessage,
@@ -98,7 +98,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          }
          catch (JsonException ex)
          {
-            ExceptionDto exception = new ExceptionDto
+            ErrorDto exception = new ErrorDto
             {
                StatusCode = (int)HttpStatusCode.BadRequest,
                Message = StringConstants.RESPONSE_REQUEST_BODY_INVALID,
@@ -108,7 +108,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          }
          catch (Exception ex)
          {
-            ExceptionDto exception = new ExceptionDto
+            ErrorDto exception = new ErrorDto
             {
                StatusCode = (int)HttpStatusCode.InternalServerError,
                Message = StringConstants.RESPONSE_GENERIC_ERROR,

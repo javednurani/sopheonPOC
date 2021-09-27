@@ -1,6 +1,6 @@
 ﻿namespace Sopheon.CloudNative.Environments.Functions.Models
 {
-   public class ExceptionDto
+   public class ErrorDto
    {
       public int StatusCode
       {

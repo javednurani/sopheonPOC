@@ -97,7 +97,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          // HTTP response
          string responseBody = await GetResponseBody(result);
-         ExceptionDto exceptionResponse = JsonSerializer.Deserialize<ExceptionDto>(responseBody);
+         ErrorDto exceptionResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
 
          Assert.Equal("The EnvironmentKey must be a valid Guid", exceptionResponse.Message);
       }
@@ -125,7 +125,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          // HTTP response
          string responseBody = await GetResponseBody(result);
-         ExceptionDto exceptionResponse = JsonSerializer.Deserialize<ExceptionDto>(responseBody);
+         ErrorDto exceptionResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
 
          Assert.Equal("'Name' must not be empty.", exceptionResponse.Message);
       }
@@ -153,7 +153,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          // HTTP response
          string responseBody = await GetResponseBody(result);
-         ExceptionDto exceptionResponse = JsonSerializer.Deserialize<ExceptionDto>(responseBody);
+         ErrorDto exceptionResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
 
          Assert.Equal("'Owner' must not be empty.", exceptionResponse.Message);
       }
@@ -182,7 +182,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.NotNull(result);
          Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
          string responseBody = await GetResponseBody(result);
-         ExceptionDto exceptionResponse = JsonSerializer.Deserialize<ExceptionDto>(responseBody);
+         ErrorDto exceptionResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
 
          Assert.Equal(mockExceptionMessage, exceptionResponse.Message);
       }
