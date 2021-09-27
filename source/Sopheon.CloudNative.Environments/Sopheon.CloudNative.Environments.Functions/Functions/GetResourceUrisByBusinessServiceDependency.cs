@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -49,17 +50,17 @@ namespace Sopheon.CloudNative.Environments.Functions
          Summary = "The name of the BusinessServiceDependency")]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK,
          contentType: StringConstants.CONTENT_TYPE_APP_JSON,
-         bodyType: typeof(IEnumerable<string>),
+         bodyType: typeof(IEnumerable<ResourceUriDto>),
          Summary = StringConstants.RESPONSE_SUMMARY_200,
          Description = StringConstants.RESPONSE_DESCRIPTION_200)]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest,
          contentType: StringConstants.CONTENT_TYPE_APP_JSON,
-         bodyType: typeof(string),
+         bodyType: typeof(ExceptionDto),
          Summary = StringConstants.RESPONSE_SUMMARY_400,
          Description = StringConstants.RESPONSE_DESCRIPTION_400)]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError,
          contentType: StringConstants.CONTENT_TYPE_APP_JSON,
-         bodyType: typeof(string),
+         bodyType: typeof(ExceptionDto),
          Summary = StringConstants.RESPONSE_SUMMARY_500,
          Description = StringConstants.RESPONSE_DESCRIPTION_500)]
       public async Task<HttpResponseData> Run(
@@ -85,8 +86,9 @@ namespace Sopheon.CloudNative.Environments.Functions
             }
 
             IEnumerable<string> resourceUris = await _environmentQueries.GetResourceUrisByBusinessServiceDependency(businessServiceName, dependencyName);
+            IEnumerable<ResourceUriDto> result = resourceUris.Select(r => new ResourceUriDto { Uri = r });
 
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.OK, resourceUris);
+            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.OK, result);
          }
          catch (Exception ex)
          {

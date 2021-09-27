@@ -46,7 +46,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/exceptionDto"
                 }
               }
             },
@@ -57,7 +57,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/exceptionDto"
                 }
               }
             },
@@ -93,7 +93,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/exceptionDto"
                 }
               }
             },
@@ -130,7 +130,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/exceptionDto"
                 }
               }
             },
@@ -141,7 +141,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/exceptionDto"
                 }
               }
             },
@@ -152,7 +152,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/exceptionDto"
                 }
               }
             },
@@ -213,7 +213,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/exceptionDto"
                 }
               }
             },
@@ -224,7 +224,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/exceptionDto"
                 }
               }
             },
@@ -235,7 +235,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/exceptionDto"
                 }
               }
             },
@@ -283,7 +283,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "string"
+                    "$ref": "#/components/schemas/resourceUriDto"
                   }
                 }
               }
@@ -295,7 +295,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/exceptionDto"
                 }
               }
             },
@@ -306,7 +306,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/exceptionDto"
                 }
               }
             },
@@ -363,7 +363,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/resourceUriDto"
                 }
               }
             },
@@ -374,7 +374,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/exceptionDto"
                 }
               }
             },
@@ -385,7 +385,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/exceptionDto"
                 }
               }
             },
@@ -396,7 +396,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/exceptionDto"
                 }
               }
             },
@@ -425,6 +425,26 @@
           "owner": {
             "type": "string",
             "format": "uuid"
+          }
+        }
+      },
+      "exceptionDto": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "resourceUriDto": {
+        "type": "object",
+        "properties": {
+          "uri": {
+            "type": "string"
           }
         }
       }

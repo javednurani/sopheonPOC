@@ -52,12 +52,12 @@ namespace Sopheon.CloudNative.Environments.Functions
          Description = StringConstants.RESPONSE_DESCRIPTION_201)]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest,
          contentType: StringConstants.CONTENT_TYPE_APP_JSON,
-         bodyType: typeof(string),
+         bodyType: typeof(ExceptionDto),
          Summary = StringConstants.RESPONSE_SUMMARY_400,
          Description = StringConstants.RESPONSE_DESCRIPTION_400)]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError,
          contentType: StringConstants.CONTENT_TYPE_APP_JSON,
-         bodyType: typeof(string),
+         bodyType: typeof(ExceptionDto),
          Summary = StringConstants.RESPONSE_SUMMARY_500,
          Description = StringConstants.RESPONSE_DESCRIPTION_500)]
 

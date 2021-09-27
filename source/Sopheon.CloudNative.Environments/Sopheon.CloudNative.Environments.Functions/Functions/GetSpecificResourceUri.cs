@@ -52,22 +52,22 @@ namespace Sopheon.CloudNative.Environments.Functions
          Summary = "The name of the BusinessServiceDependency")]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK,
          contentType: StringConstants.CONTENT_TYPE_APP_JSON,
-         bodyType: typeof(string),
+         bodyType: typeof(ResourceUriDto),
          Summary = StringConstants.RESPONSE_SUMMARY_200,
          Description = StringConstants.RESPONSE_DESCRIPTION_200)]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.NotFound,
          contentType: StringConstants.CONTENT_TYPE_APP_JSON,
-         bodyType: typeof(string),
+         bodyType: typeof(ExceptionDto),
          Summary = StringConstants.RESPONSE_SUMMARY_404,
          Description = StringConstants.RESPONSE_DESCRIPTION_404)]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest,
          contentType: StringConstants.CONTENT_TYPE_APP_JSON,
-         bodyType: typeof(string),
+         bodyType: typeof(ExceptionDto),
          Summary = StringConstants.RESPONSE_SUMMARY_400,
          Description = StringConstants.RESPONSE_DESCRIPTION_400)]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError,
          contentType: StringConstants.CONTENT_TYPE_APP_JSON,
-         bodyType: typeof(string),
+         bodyType: typeof(ExceptionDto),
          Summary = StringConstants.RESPONSE_SUMMARY_500,
          Description = StringConstants.RESPONSE_DESCRIPTION_500)]
       public async Task<HttpResponseData> Run(
@@ -92,7 +92,12 @@ namespace Sopheon.CloudNative.Environments.Functions
 
             string resourceUri = await _environmentQueries.GetSpecificResourceUri(environmentKey, businessServiceName, dependencyName);
 
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.OK, resourceUri); //TODO DTO HERE?
+            ResourceUriDto dto = new ResourceUriDto
+            {
+               Uri = resourceUri
+            };
+
+            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.OK, dto);
          }
          catch (EntityNotFoundException ex)
          {
