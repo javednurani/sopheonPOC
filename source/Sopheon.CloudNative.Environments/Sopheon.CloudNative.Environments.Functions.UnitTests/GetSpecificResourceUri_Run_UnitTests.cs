@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Sopheon.CloudNative.Environments.Domain.Queries;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
+using Sopheon.CloudNative.Environments.Functions.Models;
 using Sopheon.CloudNative.Environments.Testing.Common;
 using Xunit;
 
@@ -56,9 +57,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.OK, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         //string resourceUriResponse = JsonSerializer.Deserialize<string>(responseBody);  // Uncomment once we change response types back to json
+         ResourceUriDto resourceUriResponse = JsonSerializer.Deserialize<ResourceUriDto>(responseBody);  
 
-         Assert.NotEmpty(responseBody);
+         Assert.NotEmpty(resourceUriResponse.Uri);
 
          _mockEnvironmentQueries.Verify(m => m.GetSpecificResourceUri(testGuid, "asdf", "asdf"), Times.Once());
       }
@@ -75,7 +76,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID, responseBody);
+         ErrorDto exceptionResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
+
+         Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID, exceptionResponse.Message);
 
          _mockEnvironmentQueries.Verify(m => m.GetSpecificResourceUri(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never());
       }
@@ -92,7 +95,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID, responseBody);
+         ErrorDto exceptionResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
+
+         Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID, exceptionResponse.Message);
 
          _mockEnvironmentQueries.Verify(m => m.GetSpecificResourceUri(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never());
       }
@@ -109,7 +114,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID, responseBody);
+         ErrorDto exceptionResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
+
+         Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID, exceptionResponse.Message);
 
          _mockEnvironmentQueries.Verify(m => m.GetSpecificResourceUri(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never());
       }

@@ -57,18 +57,18 @@ namespace Sopheon.CloudNative.Environments.Functions
          Summary = StringConstants.RESPONSE_SUMMARY_200,
          Description = StringConstants.RESPONSE_DESCRIPTION_200)]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest,
-         contentType: StringConstants.CONTENT_TYPE_TEXT_PLAIN,
-         bodyType: typeof(string),
+         contentType: StringConstants.CONTENT_TYPE_APP_JSON,
+         bodyType: typeof(ErrorDto),
          Summary = StringConstants.RESPONSE_SUMMARY_400,
          Description = StringConstants.RESPONSE_DESCRIPTION_400)]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.NotFound,
-         contentType: StringConstants.CONTENT_TYPE_TEXT_PLAIN,
-         bodyType: typeof(string),
+         contentType: StringConstants.CONTENT_TYPE_APP_JSON,
+         bodyType: typeof(ErrorDto),
          Summary = StringConstants.RESPONSE_SUMMARY_404,
          Description = StringConstants.RESPONSE_DESCRIPTION_404)]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError,
-         contentType: StringConstants.CONTENT_TYPE_TEXT_PLAIN,
-         bodyType: typeof(string),
+         contentType: StringConstants.CONTENT_TYPE_APP_JSON,
+         bodyType: typeof(ErrorDto),
          Summary = StringConstants.RESPONSE_SUMMARY_500,
          Description = StringConstants.RESPONSE_DESCRIPTION_500)]
 
@@ -86,8 +86,13 @@ namespace Sopheon.CloudNative.Environments.Functions
             bool validKey = Guid.TryParse(key, out environmentKey);
             if (!validKey || environmentKey == Guid.Empty)
             {
+               ErrorDto exception = new ErrorDto
+               {
+                  StatusCode = (int)HttpStatusCode.BadRequest,
+                  Message = StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID,
+               };
                logger.LogInformation(StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID);
-               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID);
+               return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.BadRequest, exception);
             }
             
             EnvironmentDto data = JsonSerializer.Deserialize<EnvironmentDto>(requestBody, SerializationSettings.JsonSerializerOptions);
@@ -96,8 +101,13 @@ namespace Sopheon.CloudNative.Environments.Functions
             if (!validationResult.IsValid)
             {
                string validationFailureMessage = validationResult.ToString();
+               ErrorDto exception = new ErrorDto
+               {
+                  StatusCode = (int)HttpStatusCode.BadRequest,
+                  Message = validationFailureMessage,
+               };
                logger.LogInformation(validationFailureMessage);
-               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, validationFailureMessage);
+               return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.BadRequest, exception);
             }
 
             Environment environment = new Environment
@@ -113,18 +123,33 @@ namespace Sopheon.CloudNative.Environments.Functions
          }
          catch (JsonException ex)
          {
+            ErrorDto exception = new ErrorDto
+            {
+               StatusCode = (int)HttpStatusCode.BadRequest,
+               Message = StringConstants.RESPONSE_REQUEST_BODY_INVALID,
+            };
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_BODY_INVALID);
+            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.BadRequest, exception);
          }
          catch (EntityNotFoundException ex)
          {
+            ErrorDto exception = new ErrorDto
+            {
+               StatusCode = (int)HttpStatusCode.NotFound,
+               Message = ex.Message,
+            };
             logger.LogInformation(ex.Message);
-            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.NotFound, ex.Message);
+            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.NotFound, exception);
          }
          catch (Exception ex)
          {
+            ErrorDto exception = new ErrorDto
+            {
+               StatusCode = (int)HttpStatusCode.InternalServerError,
+               Message = StringConstants.RESPONSE_GENERIC_ERROR,
+            };
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR);
+            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.InternalServerError, exception);
          }
       }
    }
