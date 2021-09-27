@@ -16,7 +16,7 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
 
       public EFEnvironmentRepository_DeleteEnvironment_UnitTests()
       {
-         var builder = new DbContextOptionsBuilder<EnvironmentContext>();
+         DbContextOptionsBuilder<EnvironmentContext> builder = new DbContextOptionsBuilder<EnvironmentContext>();
          builder.UseInMemoryDatabase(nameof(EFEnvironmentRepository_DeleteEnvironment_UnitTests));
          _dbContextOptions = builder.Options;
       }
@@ -24,7 +24,7 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
       [Fact]
       public async Task DeleteEnvironment_HappyPath_IsDeletedTrue()
       {
-         using var context = new EnvironmentContext(_dbContextOptions);
+         using EnvironmentContext context = new EnvironmentContext(_dbContextOptions);
 
          // Arrange
          Guid keyToDelete = Some.Random.Guid();
@@ -44,7 +44,7 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
       [Fact]
       public async Task DeleteEnvironment_HappyPath_SoftDeleteIsPersisted()
       {
-         using var context = new EnvironmentContext(_dbContextOptions);
+         using EnvironmentContext context = new EnvironmentContext(_dbContextOptions);
 
          // Arrange
          Guid keyToDelete = Some.Random.Guid();
@@ -56,7 +56,7 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
          await new EFEnvironmentRepository(context).DeleteEnvironment(keyToDelete);
 
          // reset environment context, which will only contain persisted data from original context
-         using var context2 = new EnvironmentContext(_dbContextOptions);
+         using EnvironmentContext context2 = new EnvironmentContext(_dbContextOptions);
          Environment deletedEnvironment = await context2.Environments.SingleOrDefaultAsync(env => env.EnvironmentKey == keyToDelete);
 
          // Assert
@@ -67,7 +67,7 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
       [Fact]
       public async Task DeleteEnvironment_EnvironmentNotFound_ByKey_EntityNotFoundException()
       {
-         using var context = new EnvironmentContext(_dbContextOptions);
+         using EnvironmentContext context = new EnvironmentContext(_dbContextOptions);
 
          // Arrange
          // find by key will fail
@@ -84,7 +84,7 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
       [Fact]
       public async Task DeleteEnvironment_EnvironmentNotFound_IsDeleted_EntityNotFoundException()
       {
-         using var context = new EnvironmentContext(_dbContextOptions);
+         using EnvironmentContext context = new EnvironmentContext(_dbContextOptions);
 
          // Arrange
          Guid deletedKey = Some.Random.Guid();
@@ -96,7 +96,7 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
          });
          context.SaveChanges();
 
-         var sut = new EFEnvironmentRepository(context);
+         EFEnvironmentRepository sut = new EFEnvironmentRepository(context);
 
          // Act + Assert
          await Assert.ThrowsAsync<EntityNotFoundException>(() => sut.DeleteEnvironment(deletedKey));

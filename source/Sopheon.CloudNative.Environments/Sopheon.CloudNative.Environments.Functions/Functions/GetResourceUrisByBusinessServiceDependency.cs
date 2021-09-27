@@ -68,7 +68,7 @@ namespace Sopheon.CloudNative.Environments.Functions
             Route = "BusinessService/{businessServiceName}/GetEnvironmentResourceBindingUris({dependencyName})")] HttpRequestData req,
           FunctionContext context, string businessServiceName, string dependencyName)
       {
-         var logger = context.GetLogger(nameof(GetResourceUrisByBusinessServiceDependency));
+         ILogger logger = context.GetLogger(nameof(GetResourceUrisByBusinessServiceDependency));
          try
          {
             ValidationResult validationResultBusinessServiceName = await _validator.ValidateAsync(businessServiceName);

@@ -60,7 +60,7 @@ namespace Sopheon.CloudNative.Environments.Functions
           [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "environments/{key}")] HttpRequestData req,
           FunctionContext context, string key)
       {
-         var logger = context.GetLogger(nameof(DeleteEnvironment));
+         ILogger logger = context.GetLogger(nameof(DeleteEnvironment));
 
          try
          {

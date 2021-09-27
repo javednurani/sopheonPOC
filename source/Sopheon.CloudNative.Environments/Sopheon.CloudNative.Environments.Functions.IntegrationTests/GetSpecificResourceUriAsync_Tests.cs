@@ -11,7 +11,7 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests
       public async void HappyPath_GetSpecificResourceUri()
       {
          // TODO replace with actual seed data
-         var result = await _sut.GetSpecificResourceUriAsync(Guid.Parse("11111111-1111-1111-1111-111111111111"), "Demo Business Service", "Demo Dependency Name");
+         ResourceUriDto result = await _sut.GetSpecificResourceUriAsync(Guid.Parse("11111111-1111-1111-1111-111111111111"), "Demo Business Service", "Demo Dependency Name");
          Assert.NotEmpty(result.Uri);
       }
       [FunctionFact]

@@ -75,7 +75,7 @@ namespace Sopheon.CloudNative.Environments.Functions
             Route = "GetEnvironmentResourceBindingUri({environmentKey}, {businessServiceName}, {dependencyName})")] HttpRequestData req,
           FunctionContext context, Guid environmentKey, string businessServiceName, string dependencyName)
       {
-         var logger = context.GetLogger(nameof(GetSpecificResourceUri));
+         ILogger logger = context.GetLogger(nameof(GetSpecificResourceUri));
          try
          {
             // TODO, other validation eg minLength?
