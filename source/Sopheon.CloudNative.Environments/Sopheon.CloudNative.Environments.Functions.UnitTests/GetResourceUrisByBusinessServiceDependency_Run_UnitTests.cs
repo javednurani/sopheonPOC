@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -59,10 +60,11 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.OK, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         List<string> resourceUriResponse = JsonSerializer.Deserialize<List<string>>(responseBody);
+         List<ResourceUriDto> resourceUriResponse = JsonSerializer.Deserialize<List<ResourceUriDto>>(responseBody);
+         IEnumerable<string> resourceUrisReturned = resourceUriResponse.Select(r => r.Uri);
 
          Assert.NotEmpty(resourceUriResponse);
-         Assert.Equal(resourceUris, resourceUriResponse);
+         Assert.Equal(resourceUris, resourceUrisReturned);
 
          _mockEnvironmentQueries.Verify(m => m.GetResourceUrisByBusinessServiceDependency(businessServiceName, dependencyName), Times.Once());
       }

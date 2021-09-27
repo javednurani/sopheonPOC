@@ -57,9 +57,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.OK, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         string resourceUriResponse = JsonSerializer.Deserialize<string>(responseBody);  
+         ResourceUriDto resourceUriResponse = JsonSerializer.Deserialize<ResourceUriDto>(responseBody);  
 
-         Assert.NotEmpty(resourceUriResponse);
+         Assert.NotEmpty(resourceUriResponse.Uri);
 
          _mockEnvironmentQueries.Verify(m => m.GetSpecificResourceUri(testGuid, "asdf", "asdf"), Times.Once());
       }
