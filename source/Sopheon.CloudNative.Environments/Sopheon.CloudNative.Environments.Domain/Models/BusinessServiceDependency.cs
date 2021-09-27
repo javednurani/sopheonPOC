@@ -23,13 +23,13 @@ namespace Sopheon.CloudNative.Environments.Domain.Models
          set;
       }
 
-      public int ResourceTypeId
+      public int DomainResourceTypeId
       {
          get;
          set;
       }
 
-      public virtual ResourceType ResourceType
+      public virtual DomainResourceType DomainResourceType
       {
          get;
          set;

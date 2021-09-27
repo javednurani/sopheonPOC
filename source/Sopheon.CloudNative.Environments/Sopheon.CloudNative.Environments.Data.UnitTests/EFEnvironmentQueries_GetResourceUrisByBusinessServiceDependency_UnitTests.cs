@@ -36,7 +36,7 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
          string resourceUri2 = Some.Random.String();
          string resourceUri3 = Some.Random.String();
 
-         ResourceType resourceType = Some.Random.ResourceType();
+         DomainResourceType domainResourceType = Some.Random.DomainResourceType();
 
          BusinessService businessService = new BusinessService
          {
@@ -56,13 +56,13 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
                Resource = new Resource
                {
                   Uri = resourceUri1,
-                  ResourceType = resourceType,
+                  DomainResourceType = domainResourceType,
                },
                BusinessServiceDependency = new BusinessServiceDependency
                {
                   DependencyName = dependencyName1,
                   BusinessService = businessService,
-                  ResourceType = resourceType,
+                  DomainResourceType = domainResourceType,
                },
             },
             new EnvironmentResourceBinding
@@ -71,13 +71,13 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
                Resource = new Resource
                {
                   Uri = resourceUri2,
-                  ResourceType = resourceType,
+                  DomainResourceType = domainResourceType,
                },
                BusinessServiceDependency = new BusinessServiceDependency
                {
                   DependencyName = dependencyName1,
                   BusinessService = businessService,
-                  ResourceType = resourceType,
+                  DomainResourceType = domainResourceType,
                },
             },
             // 1 EnvironmentResourceBinding for BusinessServiceDependency having Name = dependencyName2
@@ -87,13 +87,13 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
                Resource = new Resource
                {
                   Uri = resourceUri3,
-                  ResourceType = resourceType,
+                  DomainResourceType = domainResourceType,
                },
                BusinessServiceDependency = new BusinessServiceDependency
                {
                   DependencyName = dependencyName2,
                   BusinessService = businessService,
-                  ResourceType = resourceType,
+                  DomainResourceType = domainResourceType,
                },
             }
          };
@@ -121,7 +121,7 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
 
          string dependencyName = Some.Random.String();
 
-         ResourceType resourceType = Some.Random.ResourceType();
+         DomainResourceType domainResourceType = Some.Random.DomainResourceType();
 
          BusinessService businessService = new BusinessService
          {
@@ -136,13 +136,13 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
             Resource = new Resource
             {
                Uri = Some.Random.String(),
-               ResourceType = resourceType,
+               DomainResourceType = domainResourceType,
             },
             BusinessServiceDependency = new BusinessServiceDependency
             {
                DependencyName = dependencyName,
                BusinessService = businessService,
-               ResourceType = resourceType,
+               DomainResourceType = domainResourceType,
             },
          };
 
@@ -167,7 +167,7 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
 
          string dependencyName = Some.Random.String();
 
-         ResourceType resourceType = Some.Random.ResourceType();
+         DomainResourceType domainResourceType = Some.Random.DomainResourceType();
 
          BusinessService businessService = new BusinessService
          {
@@ -182,13 +182,13 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
             Resource = new Resource
             {
                Uri = Some.Random.String(),
-               ResourceType = resourceType,
+               DomainResourceType = domainResourceType,
             },
             BusinessServiceDependency = new BusinessServiceDependency
             {
                DependencyName = Some.Random.String(),
                BusinessService = businessService,
-               ResourceType = resourceType,
+               DomainResourceType = domainResourceType,
             },
          };
 

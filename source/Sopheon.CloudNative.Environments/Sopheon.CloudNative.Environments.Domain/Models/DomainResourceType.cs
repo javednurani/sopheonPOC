@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Sopheon.CloudNative.Environments.Domain.Models
 {
-   public class ResourceType : Entity
+   public class DomainResourceType : Entity
    {
       public string Name
       {

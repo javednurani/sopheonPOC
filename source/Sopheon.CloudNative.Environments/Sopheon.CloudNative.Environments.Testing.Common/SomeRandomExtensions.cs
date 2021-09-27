@@ -22,9 +22,9 @@ namespace Sopheon.CloudNative.Environments.Testing.Common
          };
       }
 
-      public static ResourceType ResourceType(this SomeRandom someRandom)
+      public static DomainResourceType DomainResourceType(this SomeRandom someRandom)
       {
-         return new ResourceType
+         return new DomainResourceType
          {
             Name = someRandom.String(),
          };
