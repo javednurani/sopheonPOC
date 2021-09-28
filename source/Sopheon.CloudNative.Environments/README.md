@@ -52,26 +52,10 @@ npm run prune
 
 ## Updating OpenAPI Spec locally
  - OpenAPI is specified in the form of data annotations above our REST API Functions.
- - The information provided in these data annotations is used to build out our help documentation, our integration tests, and our swagger client.
-   - OpenApiOperation
-     - Tags are used to categorisze functions in the generated doc
-   - OpenApiParameter
-     - typeof(ParameterType)
-       - int, string, guid, ect
-     - required: true/false
-   - OpenApiRequestBody
-     -  contentType: app/json (or the string constant referencing this string)
-       - We try to return a Dto object in the form of JSON in response bodies
-     - bodyType: typeof(RequestDto)
-     - required: true/false
-   - OpenApiResponseWithBody
-     - contentType: app/json (or the string constant referencing this string)
-       - We try to return a Dto object in the form of JSON in response bodies
-     - bodyType: typeof(ReturnedDto)
-   - OpenApiResponseWithoutBody
+ - The information provided in these data annotations is used to build out our help documentation, our integration tests, and our swagger client
  - To view the content generated from the OpenAPI annotations, you must run the project by right clicking it in solution explorer, select debug > start new instance.
    -  After the function has started it will output the endpoints for the functions and swagger docs in the console
-   -  On the Swagger page you can try out your functions to see if they perform as expected 
+   -  On the Swagger page (http://localhost:7071/swagger/ui) you can try out your functions to see if they perform as expected
  -  OpenAPI powering integration tests
     -  If you visit http://localhost:7071/openapi/1.0 (or some other port and version number) you can then save the JSON to the Functions.IntegrationTests project OpenApiDefinitions\ folder
     -  This JSON file is used to build out a client for our integration tests to call our funcitons.
