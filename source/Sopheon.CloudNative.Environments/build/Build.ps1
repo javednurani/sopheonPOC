@@ -1,6 +1,9 @@
 Import-Module "$($env:System_DefaultWorkingDirectory)\DevOps\PowerShell\CloudNative.Common.psm1";
 $EnvironmentsUtilityProject = "$($env:System_DefaultWorkingDirectory)\source\Sopheon.CloudNative.Environments\Sopheon.CloudNative.Environments.Utility\Sopheon.CloudNative.Environments.Utility.csproj";
 $EnvironmentsUtilityDataSeeder = "$($env:System_DefaultWorkingDirectory)\source\Sopheon.CloudNative.Environments\EnvironmentsUtility\EnvironmentsUtility.exe";
+$DatabaseName = "EnvironmentManagement";
+
+
 Copy-Item -Path "$($env:System_DefaultWorkingDirectory)\source\Sopheon.CloudNative.Environments\deploy\*" -Destination $env:Build_ArtifactStagingDirectory;
 
 Set-Location -Path "$($env:System_DefaultWorkingDirectory)\source\Sopheon.CloudNative.Environments";
@@ -24,12 +27,26 @@ $IntegrationTestProjects = Get-Item -Path "$($env:System_DefaultWorkingDirectory
 
 dotnet publish $EnvironmentsUtilityProject -r win-x64 -p:PublishSingleFile=true /p:PublishTrimmed=true /p:Version=1.0.1 /p:IncludeNativeLibrariesForSelfExtract=true /p:DebugType=none --self-contained true -o ./EnvironmentsUtility;
 
-& $EnvironmentsUtilityDataSeeder -Database Local
+#Create database - 
+Write-Host "...Creating local database: $DatabaseName for integration tests...";
+Invoke-Sqlcmd -ServerInstance . -UserName sa -Password $env:LocalDatabaseEnigma -Query "CREATE DATABASE $DatabaseName";
+
+#Migrate database - 
+Write-Host "...Running Migration Script on local database: $DatabaseName...";
+Invoke-Sqlcmd -ServerInstance . -Username sa -Password $env:LocalDatabaseEnigma -InputFile "$($env:Build_ArtifactStagingDirectory)\scripts.sql";
+
+#Seed Database - 
+Write-Host "...Seeding local database: $DatabaseName...";
+& $EnvironmentsUtilityDataSeeder -Database Local;
 
 Foreach($file in $IntegrationTestProjects) {
     Write-Host "...Running integration tests on $($file.Name)..."
     dotnet test $file.FullName -p:CollectCoverage=true -p:CoverletOutput=$OutputCoveragePath -p:CoverletOutputFormat="json%2cCobertura" -p:MergeWith="$($OutputCoveragePath)\coverage.json" --logger:"xunit;LogFilePath=$($OutputCoveragePath)\$($file.Name.Replace('.csproj', '')).xml" -p:Exclude="[*]Sopheon.CloudNative.Environments.Data.Migrations.*"
 }
+
+#Clean up Database - 
+Write-Host "...Cleaning up database: $DatabaseName...";
+Invoke-Sqlcmd -ServerInstance . -UserName sa -Password $env:LocalDatabaseEnigma -Query "DROP DATABASE $DatabaseName";
 
 #Setup for Unit Tests here --
 $TestProjects = Get-Item -Path "$($env:System_DefaultWorkingDirectory)\source\Sopheon.CloudNative.Environments\**\*.UnitTests.csproj";
@@ -37,7 +54,7 @@ $TestProjects = Get-Item -Path "$($env:System_DefaultWorkingDirectory)\source\So
 Write-Host "...Number of UnitTest projects found: $($TestProjects.Length)...";
 
 Foreach($file in $TestProjects) {
-    Write-Host "...Running unit tests on $($file.Name)..."
+    Write-Host "...Running unit tests on $($file.Name)...";
     dotnet test $file.FullName -p:CollectCoverage=true -p:CoverletOutput=$OutputCoveragePath -p:CoverletOutputFormat="json%2cCobertura" -p:MergeWith="$($OutputCoveragePath)\coverage.json" --logger:"xunit;LogFilePath=$($OutputCoveragePath)\$($file.Name.Replace('.csproj', '')).xml" -p:Exclude="[*]Sopheon.CloudNative.Environments.Data.Migrations.*"
 }
 
