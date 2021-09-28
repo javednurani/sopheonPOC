@@ -50,41 +50,23 @@ npm run prune
   - Run with the following option: func start --dotnet-isolated-debug
   - Note PID of function, and attach to "dotnet.exe" process with that PID
 
-## Updating OpenAPI Spec locally
+## Running Automated Tests Locally
+ - Test Explorer contains a mix of unit and integration test projects
+ - You should be safe to run all tests in Test Explorer and get meaningful results
+ - Integration tests should check if their dependencies are available in order to be tested, and skip if not
+ - Any test failures should represent real failures
+
+# How To's
+
+## Update Integration Test OpenAPI client
  - OpenAPI is specified in the form of data annotations above our REST API Functions.
  - The information provided in these data annotations is used to build out our help documentation, our integration tests, and our swagger client
  - To view the content generated from the OpenAPI annotations, you must run the project by right clicking it in solution explorer, select debug > start new instance.
    -  After the function has started it will output the endpoints for the functions and swagger docs in the console
    -  On the Swagger page (http://localhost:7071/swagger/ui) you can try out your functions to see if they perform as expected
- -  OpenAPI powering integration tests
+ -  Integration tests using an OpenAPI client
     -  If you visit http://localhost:7071/openapi/1.0 (or some other port and version number) you can then save the JSON to the Functions.IntegrationTests project OpenApiDefinitions\ folder
-    -  This JSON file is used to build out a client for our integration tests to call our funcitons.
-       -  Becuase of this, it is important to have typings correct on all parameters and returned types, otherwise this can cause a test to fail even if the actual code is perfectly fine.
+    -  On build, Visual Studio will use this file to generate a client, which is then used bythe integation test.
 
 # Design Decisions
 TODO: flesh this out.  This section should explain any design decisions or implementation details that might throw a newly onboarded dev for a loop.
-
-# POC Branch Info
-GOALS:
-1. All automated tests for solution together in VS Test Explorer
-2. Ability to safely run all tests in any development environment state and get meaningful results
-
-DETAILS:
-- Both unit and integration test projects side-by-side in test explorer presents challenges
-	- Developers might not always have a full system up and running locally at all times
-	- failures due to a system being unavailable for testing are meaningless and erode confidence
-	- we want always green or yellow (inconclusive) test results
-- Unit tests have controlled dependencies, so they should always run (quickly!)
-- Integration tests should check if their dependencies are available
-	- if dependencies are not available, skip tests with meaningful message
-	- this should be done as performantly as possible to avoid test execution bloat
-- 2 types of integration tests: "stand-alone" and "data-dependent"
-	- stand-alone tests
-		- only dependent on the functions being up and running
-		- CRUD their own data
-		- skip if functions are not up and running
-	- data-dependent tests
-		- dependent on standard test data being present in environment
-			- inherit the "functions are up and running" answer from stand-alone tests for free
-		- check for the presence of the necessary test data
-		- skip if test data is not present
