@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sopheon.CloudNative.Environments.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -14,8 +15,7 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.Infrastruc
    /// </summary>
    public class DataDependentFunctionFact : FunctionFact
    {
-      // TODO: consolidate this key
-      private static Guid _environmentKey = new Guid("11111111-1111-1111-1111-111111111111");
+      private static Guid _environmentKey = TestData.EnvironmentKey1;
       private static string _dataDepSkipReason = null;   // need to have our own value, otherwise we will set for all FunctionFacts!
 
       static DataDependentFunctionFact()
