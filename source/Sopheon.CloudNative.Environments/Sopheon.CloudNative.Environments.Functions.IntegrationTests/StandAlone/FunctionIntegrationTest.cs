@@ -1,8 +1,8 @@
 ﻿using System.Net.Http;
 
-namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests
+namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.StandAlone
 {
-   public class FunctionIntegrationTest
+   public abstract class FunctionIntegrationTest
    {
       protected readonly Environments_OpenApiClient _sut = new Environments_OpenApiClient(new HttpClient());
    }
