@@ -1,49 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Sopheon.CloudNative.Environments.Data.Migrations
 {
-    public partial class AddEntities : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
                 name: "ENV");
-
-            migrationBuilder.RenameTable(
-                name: "Environments",
-                newName: "Environments",
-                newSchema: "ENV");
-
-            migrationBuilder.RenameColumn(
-                name: "EnvironmentID",
-                schema: "ENV",
-                table: "Environments",
-                newName: "EnvironmentId");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Name",
-                schema: "ENV",
-                table: "Environments",
-                type: "nvarchar(64)",
-                maxLength: 64,
-                nullable: false,
-                defaultValue: "",
-                oldClrType: typeof(string),
-                oldType: "nvarchar(64)",
-                oldMaxLength: 64,
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Description",
-                schema: "ENV",
-                table: "Environments",
-                type: "nvarchar(1024)",
-                maxLength: 1024,
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(1000)",
-                oldMaxLength: 1000,
-                oldNullable: true);
 
             migrationBuilder.CreateTable(
                 name: "BusinessServices",
@@ -64,13 +29,31 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
                 schema: "ENV",
                 columns: table => new
                 {
-                    ResourceTypeId = table.Column<int>(type: "int", nullable: false)
+                    DomainResourceTypeId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DomainResourceTypes", x => x.ResourceTypeId);
+                    table.PrimaryKey("PK_DomainResourceTypes", x => x.DomainResourceTypeId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Environments",
+                schema: "ENV",
+                columns: table => new
+                {
+                    EnvironmentId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EnvironmentKey = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Owner = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Environments", x => x.EnvironmentId);
                 });
 
             migrationBuilder.CreateTable(
@@ -82,7 +65,7 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DependencyName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
                     BusinessServiceId = table.Column<int>(type: "int", nullable: false),
-                    ResourceTypeId = table.Column<int>(type: "int", nullable: false)
+                    DomainResourceTypeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -95,11 +78,11 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
                         principalColumn: "BusinessServiceId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_BusinessServiceDependencies_DomainResourceTypes_ResourceTypeId",
-                        column: x => x.ResourceTypeId,
+                        name: "FK_BusinessServiceDependencies_DomainResourceTypes_DomainResourceTypeId",
+                        column: x => x.DomainResourceTypeId,
                         principalSchema: "ENV",
                         principalTable: "DomainResourceTypes",
-                        principalColumn: "ResourceTypeId",
+                        principalColumn: "DomainResourceTypeId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -110,18 +93,18 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
                 {
                     ResourceId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ResourceTypeId = table.Column<int>(type: "int", nullable: false),
+                    DomainResourceTypeId = table.Column<int>(type: "int", nullable: false),
                     Uri = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Resources", x => x.ResourceId);
                     table.ForeignKey(
-                        name: "FK_Resources_DomainResourceTypes_ResourceTypeId",
-                        column: x => x.ResourceTypeId,
+                        name: "FK_Resources_DomainResourceTypes_DomainResourceTypeId",
+                        column: x => x.DomainResourceTypeId,
                         principalSchema: "ENV",
                         principalTable: "DomainResourceTypes",
-                        principalColumn: "ResourceTypeId",
+                        principalColumn: "DomainResourceTypeId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -170,10 +153,10 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_BusinessServiceDependencies_ResourceTypeId",
+                name: "IX_BusinessServiceDependencies_DomainResourceTypeId",
                 schema: "ENV",
                 table: "BusinessServiceDependencies",
-                column: "ResourceTypeId");
+                column: "DomainResourceTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BusinessServices_Name",
@@ -202,10 +185,17 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
                 column: "ResourceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Resources_ResourceTypeId",
+                name: "IX_Environments_EnvironmentKey",
+                schema: "ENV",
+                table: "Environments",
+                column: "EnvironmentKey",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Resources_DomainResourceTypeId",
                 schema: "ENV",
                 table: "Resources",
-                column: "ResourceTypeId");
+                column: "DomainResourceTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Resources_Uri",
@@ -226,6 +216,10 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
                 schema: "ENV");
 
             migrationBuilder.DropTable(
+                name: "Environments",
+                schema: "ENV");
+
+            migrationBuilder.DropTable(
                 name: "Resources",
                 schema: "ENV");
 
@@ -236,37 +230,6 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
             migrationBuilder.DropTable(
                 name: "DomainResourceTypes",
                 schema: "ENV");
-
-            migrationBuilder.RenameTable(
-                name: "Environments",
-                schema: "ENV",
-                newName: "Environments");
-
-            migrationBuilder.RenameColumn(
-                name: "EnvironmentId",
-                table: "Environments",
-                newName: "EnvironmentID");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Name",
-                table: "Environments",
-                type: "nvarchar(64)",
-                maxLength: 64,
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(64)",
-                oldMaxLength: 64);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Description",
-                table: "Environments",
-                type: "nvarchar(1000)",
-                maxLength: 1000,
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(1024)",
-                oldMaxLength: 1024,
-                oldNullable: true);
         }
     }
 }
