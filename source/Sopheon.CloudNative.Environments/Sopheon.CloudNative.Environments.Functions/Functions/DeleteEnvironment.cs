@@ -68,13 +68,13 @@ namespace Sopheon.CloudNative.Environments.Functions
             bool validKey = Guid.TryParse(key, out environmentKey);
             if (!validKey || environmentKey == Guid.Empty)
             {
-               ErrorDto exception = new ErrorDto
+               ErrorDto error = new ErrorDto
                {
                   StatusCode = (int)HttpStatusCode.BadRequest,
                   Message = StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID,
                };
                logger.LogInformation(StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID);
-               return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.BadRequest, exception);
+               return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.BadRequest, error);
             }
 
             await _environmentRepository.DeleteEnvironment(environmentKey);
@@ -83,23 +83,23 @@ namespace Sopheon.CloudNative.Environments.Functions
          }
          catch (EntityNotFoundException ex)
          {
-            ErrorDto exception = new ErrorDto
+            ErrorDto error = new ErrorDto
             {
                StatusCode = (int)HttpStatusCode.NotFound,
                Message = ex.Message,
             };
             logger.LogInformation(ex.Message);
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.NotFound, exception);
+            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.NotFound, error);
          }
          catch (Exception ex)
          {
-            ErrorDto exception = new ErrorDto
+            ErrorDto error = new ErrorDto
             {
                StatusCode = (int)HttpStatusCode.InternalServerError,
                Message = StringConstants.RESPONSE_GENERIC_ERROR,
             };
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.InternalServerError, exception);
+            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.InternalServerError, error);
          }
       }
    }

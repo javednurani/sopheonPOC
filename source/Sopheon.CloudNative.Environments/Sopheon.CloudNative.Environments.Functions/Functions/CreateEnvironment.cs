@@ -76,13 +76,13 @@ namespace Sopheon.CloudNative.Environments.Functions
             if(!validationResult.IsValid)
             {
                string validationFailureMessage = validationResult.ToString();
-               ErrorDto exception = new ErrorDto
+               ErrorDto error = new ErrorDto
                {
                   StatusCode = (int)HttpStatusCode.BadRequest,
                   Message = validationFailureMessage,
                };
                logger.LogInformation(validationFailureMessage);
-               return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.BadRequest, exception);
+               return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.BadRequest, error);
             }
 
             Environment environment = new Environment
@@ -98,23 +98,23 @@ namespace Sopheon.CloudNative.Environments.Functions
          }
          catch (JsonException ex)
          {
-            ErrorDto exception = new ErrorDto
+            ErrorDto error = new ErrorDto
             {
                StatusCode = (int)HttpStatusCode.BadRequest,
                Message = StringConstants.RESPONSE_REQUEST_BODY_INVALID,
             };
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.BadRequest, exception);
+            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.BadRequest, error);
          }
          catch (Exception ex)
          {
-            ErrorDto exception = new ErrorDto
+            ErrorDto error = new ErrorDto
             {
                StatusCode = (int)HttpStatusCode.InternalServerError,
                Message = StringConstants.RESPONSE_GENERIC_ERROR,
             };
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.InternalServerError, exception);
+            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.InternalServerError, error);
          }
       }
    }
