@@ -15,7 +15,7 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.Infrastruc
    public class DataDependentFunctionFact : FunctionFact
    {
       // TODO: consolidate this key
-      private static Guid _environmentKey = new Guid("EBA2CCBB-89D3-45E3-BF90-2DB160BF1552");
+      private static Guid _environmentKey = new Guid("11111111-1111-1111-1111-111111111111");
       private static string _dataDepSkipReason = null;   // need to have our own value, otherwise we will set for all FunctionFacts!
 
       static DataDependentFunctionFact()

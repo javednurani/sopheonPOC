@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using Sopheon.CloudNative.Environments.Functions.IntegrationTests.StandAlone;
+using Sopheon.CloudNative.Environments.Functions.IntegrationTests.Infrastructure;
 using Xunit;
 
-namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests
+namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.DataDependent
 {
-   public class GetResourceUrisByBusinessServiceDependency_Tests : FunctionIntegrationTest
+   public class GetResourceUrisByBusinessServiceDependency_Tests : DataDependentFunctionIntegrationTest
    {
-      [FunctionFact]
+      [DataDependentFunctionFact]
       public async void HappyPath_GetResourceUrisByBusinessServiceDependency()
       {
          // TODO replace with actual seed data
