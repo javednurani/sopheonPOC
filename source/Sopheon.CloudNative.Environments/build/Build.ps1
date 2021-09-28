@@ -36,7 +36,7 @@ $Process = Start-Process powershell -WorkingDirectory $env:System_DefaultWorking
 Start-Sleep -Seconds 10;
 
 #This is the func.exe process. We need to capture this object and we close this out. (Tip: This is the long running process mentioned above)
-$SubProcess = Get-Process -Name func;
+#$SubProcess = Get-Process -Name func;
 
 #Create database - 
 Write-Host "...Creating local database: $DatabaseName for integration tests...";
@@ -70,7 +70,8 @@ Foreach($file in $TestProjects) {
 
 #Tear down the integration tests setup -
 if(-not $Process.HasExited) {
-    $SubProcess.Kill();
+    #$SubProcess.Kill();
+    $Process.Kill();
 }
 
 # Zip/Archive Scripts 
