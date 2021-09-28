@@ -19,9 +19,9 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
          builder.HasIndex(r => r.Uri)
             .IsUnique();
 
-         builder.HasOne(r => r.ResourceType)
+         builder.HasOne(r => r.DomainResourceType)
             .WithMany(rt => rt.Resources)
-            .HasForeignKey(r => r.ResourceTypeId)
+            .HasForeignKey(r => r.DomainResourceTypeId)
             .OnDelete(DeleteBehavior.Restrict);
       }
    }

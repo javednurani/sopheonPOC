@@ -16,7 +16,7 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
 
       public EFEnvironmentQueries_GetResourceUrisByBusinessServiceDependency_UnitTests()
       {
-         var builder = new DbContextOptionsBuilder<EnvironmentContext>();
+         DbContextOptionsBuilder<EnvironmentContext> builder = new DbContextOptionsBuilder<EnvironmentContext>();
          builder.UseInMemoryDatabase(nameof(EFEnvironmentQueries_GetResourceUrisByBusinessServiceDependency_UnitTests));
          _dbContextOptions = builder.Options;
       }
@@ -24,7 +24,7 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
       [Fact]
       public async Task GetResourceUrisByBusinessServiceDependency_HappyPath_ResourceUrisReturned()
       {
-         using var context = new EnvironmentContext(_dbContextOptions);
+         using EnvironmentContext context = new EnvironmentContext(_dbContextOptions);
 
          // Arrange
          string businessServiceName = Some.Random.String();
@@ -36,7 +36,7 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
          string resourceUri2 = Some.Random.String();
          string resourceUri3 = Some.Random.String();
 
-         ResourceType resourceType = Some.Random.ResourceType();
+         DomainResourceType domainResourceType = Some.Random.DomainResourceType();
 
          BusinessService businessService = new BusinessService
          {
@@ -56,13 +56,13 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
                Resource = new Resource
                {
                   Uri = resourceUri1,
-                  ResourceType = resourceType,
+                  DomainResourceType = domainResourceType,
                },
                BusinessServiceDependency = new BusinessServiceDependency
                {
                   DependencyName = dependencyName1,
                   BusinessService = businessService,
-                  ResourceType = resourceType,
+                  DomainResourceType = domainResourceType,
                },
             },
             new EnvironmentResourceBinding
@@ -71,13 +71,13 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
                Resource = new Resource
                {
                   Uri = resourceUri2,
-                  ResourceType = resourceType,
+                  DomainResourceType = domainResourceType,
                },
                BusinessServiceDependency = new BusinessServiceDependency
                {
                   DependencyName = dependencyName1,
                   BusinessService = businessService,
-                  ResourceType = resourceType,
+                  DomainResourceType = domainResourceType,
                },
             },
             // 1 EnvironmentResourceBinding for BusinessServiceDependency having Name = dependencyName2
@@ -87,13 +87,13 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
                Resource = new Resource
                {
                   Uri = resourceUri3,
-                  ResourceType = resourceType,
+                  DomainResourceType = domainResourceType,
                },
                BusinessServiceDependency = new BusinessServiceDependency
                {
                   DependencyName = dependencyName2,
                   BusinessService = businessService,
-                  ResourceType = resourceType,
+                  DomainResourceType = domainResourceType,
                },
             }
          };
@@ -102,8 +102,8 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
          await context.SaveChangesAsync();
 
          // Act
-         var sut = new EFEnvironmentQueries(context);
-         var resourceUris = await sut.GetResourceUrisByBusinessServiceDependency(businessServiceName, dependencyName1);
+         EFEnvironmentQueries sut = new EFEnvironmentQueries(context);
+         IEnumerable<string> resourceUris = await sut.GetResourceUrisByBusinessServiceDependency(businessServiceName, dependencyName1);
 
          // Assert
          Assert.Equal(2, resourceUris.Count());
@@ -114,14 +114,14 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
       [Fact]
       public async Task GetResourceUrisByBusinessServiceDependency_BusinessServiceNotFound_NothingReturned()
       {
-         using var context = new EnvironmentContext(_dbContextOptions);
+         using EnvironmentContext context = new EnvironmentContext(_dbContextOptions);
 
          // Arrange
          string businessServiceName = Some.Random.String();
 
          string dependencyName = Some.Random.String();
 
-         ResourceType resourceType = Some.Random.ResourceType();
+         DomainResourceType domainResourceType = Some.Random.DomainResourceType();
 
          BusinessService businessService = new BusinessService
          {
@@ -136,13 +136,13 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
             Resource = new Resource
             {
                Uri = Some.Random.String(),
-               ResourceType = resourceType,
+               DomainResourceType = domainResourceType,
             },
             BusinessServiceDependency = new BusinessServiceDependency
             {
                DependencyName = dependencyName,
                BusinessService = businessService,
-               ResourceType = resourceType,
+               DomainResourceType = domainResourceType,
             },
          };
 
@@ -150,8 +150,8 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
          await context.SaveChangesAsync();
 
          // Act
-         var sut = new EFEnvironmentQueries(context);
-         var resourceUris = await sut.GetResourceUrisByBusinessServiceDependency(businessServiceName, dependencyName);
+         EFEnvironmentQueries sut = new EFEnvironmentQueries(context);
+         IEnumerable<string> resourceUris = await sut.GetResourceUrisByBusinessServiceDependency(businessServiceName, dependencyName);
 
          // Assert
          Assert.Empty(resourceUris);
@@ -160,14 +160,14 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
       [Fact]
       public async Task GetResourceUrisByBusinessServiceDependency_BusinessServiceDependencyNotFound_NothingReturned()
       {
-         using var context = new EnvironmentContext(_dbContextOptions);
+         using EnvironmentContext context = new EnvironmentContext(_dbContextOptions);
 
          // Arrange
          string businessServiceName = Some.Random.String();
 
          string dependencyName = Some.Random.String();
 
-         ResourceType resourceType = Some.Random.ResourceType();
+         DomainResourceType domainResourceType = Some.Random.DomainResourceType();
 
          BusinessService businessService = new BusinessService
          {
@@ -182,13 +182,13 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
             Resource = new Resource
             {
                Uri = Some.Random.String(),
-               ResourceType = resourceType,
+               DomainResourceType = domainResourceType,
             },
             BusinessServiceDependency = new BusinessServiceDependency
             {
                DependencyName = Some.Random.String(),
                BusinessService = businessService,
-               ResourceType = resourceType,
+               DomainResourceType = domainResourceType,
             },
          };
 
@@ -196,8 +196,8 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
          await context.SaveChangesAsync();
 
          // Act
-         var sut = new EFEnvironmentQueries(context);
-         var resourceUris = await sut.GetResourceUrisByBusinessServiceDependency(businessServiceName, dependencyName);
+         EFEnvironmentQueries sut = new EFEnvironmentQueries(context);
+         IEnumerable<string> resourceUris = await sut.GetResourceUrisByBusinessServiceDependency(businessServiceName, dependencyName);
 
          // Assert
          Assert.Empty(resourceUris);

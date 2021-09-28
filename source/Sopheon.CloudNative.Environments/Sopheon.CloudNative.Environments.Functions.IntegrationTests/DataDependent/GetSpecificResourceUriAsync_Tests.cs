@@ -1,21 +1,19 @@
-﻿using System;
+﻿using Sopheon.CloudNative.Environments.Functions.Models;
+using Sopheon.CloudNative.Environments.Testing.Common;
+using System;
 using Sopheon.CloudNative.Environments.Functions.IntegrationTests.Infrastructure;
+using Xunit;
 
 namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.DataDependent
 {
    public class GetSpecificResourceUriAsync_Tests : DataDependentFunctionIntegrationTest
    {
-      //TODO Add happy path test once seed data is added to story CLOUD-1827
-      [DataDependentFunctionFact]
-      public async void HappyPathNotFound_GetSpecificResourceUri()
+      [FunctionFact]
+      public async void HappyPath_GetSpecificResourceUri()
       {
-         try
-         {
-            var result = await _sut.GetSpecificResourceUriAsync(_environmentKey, _businessServiceName, _businessServiceDependencyName);
-         }
-         catch (Exception ex)
-         {
-         }
+         // TODO replace with actual seed data
+         ResourceUriDto result = await _sut.GetSpecificResourceUriAsync(Guid.Parse("11111111-1111-1111-1111-111111111111"), "Demo Business Service", "Demo Dependency Name");
+         Assert.NotEmpty(result.Uri);
       }
 
 

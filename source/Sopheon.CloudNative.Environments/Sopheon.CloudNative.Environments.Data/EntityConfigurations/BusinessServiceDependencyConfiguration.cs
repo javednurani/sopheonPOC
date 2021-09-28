@@ -21,9 +21,9 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
            .HasForeignKey(bsd => bsd.BusinessServiceId)
            .OnDelete(DeleteBehavior.Restrict);
 
-         builder.HasOne(bsd => bsd.ResourceType)
+         builder.HasOne(bsd => bsd.DomainResourceType)
             .WithMany(rt => rt.BusinessServiceDependencies)
-            .HasForeignKey(bsd => bsd.ResourceTypeId)
+            .HasForeignKey(bsd => bsd.DomainResourceTypeId)
             .OnDelete(DeleteBehavior.Restrict);
 
          builder.HasIndex(bsd => new { bsd.BusinessServiceId, bsd.DependencyName })
