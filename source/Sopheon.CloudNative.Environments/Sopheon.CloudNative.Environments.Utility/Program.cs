@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Sopheon.CloudNative.Environments.Data;
 using Sopheon.CloudNative.Environments.Domain.Models;
@@ -10,11 +11,17 @@ namespace Sopheon.CloudNative.Environments.Utility
    [ExcludeFromCodeCoverage]
    class Program
    {
+	   private static string _databaseConnection = "";
       static async System.Threading.Tasks.Task Main(string[] args)
       {
-         DbContextOptions<EnvironmentContext> _dbContextOptions =
+	      if (args.Any(arg => arg == "-Database"))
+	      {
+		      _databaseConnection = System.Environment.GetEnvironmentVariable("LocalDatabaseConnectionString");
+	      }
+
+      DbContextOptions<EnvironmentContext> _dbContextOptions =
             new DbContextOptionsBuilder<EnvironmentContext>()
-               .UseSqlServer("YOUR_CONN_STRING_HERE")
+               .UseSqlServer(_databaseConnection)
                .Options;
 
          using var context = new EnvironmentContext(_dbContextOptions);
