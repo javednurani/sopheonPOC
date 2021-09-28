@@ -1,6 +1,6 @@
 Import-Module "$($env:System_DefaultWorkingDirectory)\DevOps\PowerShell\CloudNative.Common.psm1";
 $EnvironmentsUtilityProject = "$($env:System_DefaultWorkingDirectory)\source\Sopheon.CloudNative.Environments\Sopheon.CloudNative.Environments.Utility\Sopheon.CloudNative.Environments.Utility.csproj";
-$EnvironmentsUtilityDataSeeder = ".\EnvironmentsUtility\EnvironmentsUtility.exe";
+$EnvironmentsUtilityDataSeeder = "$($env:System_DefaultWorkingDirectory)\source\Sopheon.CloudNative.Environments\EnvironmentsUtility\EnvironmentsUtility.exe";
 Copy-Item -Path "$($env:System_DefaultWorkingDirectory)\source\Sopheon.CloudNative.Environments\deploy\*" -Destination $env:Build_ArtifactStagingDirectory;
 
 Set-Location -Path "$($env:System_DefaultWorkingDirectory)\source\Sopheon.CloudNative.Environments";
