@@ -27,7 +27,7 @@ $IntegrationTestProjects = Get-Item -Path "$($env:System_DefaultWorkingDirectory
 
 dotnet publish $EnvironmentsUtilityProject -r win-x64 -p:PublishSingleFile=true /p:PublishTrimmed=true /p:Version=1.0.1 /p:IncludeNativeLibrariesForSelfExtract=true /p:DebugType=none --self-contained true -o ./EnvironmentsUtility;
 
-$FuncProcess = start powershell {Set-Location "$($env:System_DefaultWorkingDirectory)\source\Sopheon.CloudNative.Environments\Sopheon.CloudNative.Environments.Functions"; func start}
+start powershell {Set-Location "$($env:System_DefaultWorkingDirectory)\source\Sopheon.CloudNative.Environments\Sopheon.CloudNative.Environments.Functions"; func start;}
 Start-Sleep -Seconds 5
 #Create database - 
 Write-Host "...Creating local database: $DatabaseName for integration tests...";
@@ -50,7 +50,6 @@ Foreach($file in $IntegrationTestProjects) {
 Write-Host "...Cleaning up database: $DatabaseName...";
 Invoke-Sqlcmd -ServerInstance . -UserName sa -Password $env:LocalDatabaseEnigma -Query "DROP DATABASE $DatabaseName";
 
-$FuncProcess.Kill();
 
 #Setup for Unit Tests here --
 $TestProjects = Get-Item -Path "$($env:System_DefaultWorkingDirectory)\source\Sopheon.CloudNative.Environments\**\*.UnitTests.csproj";
