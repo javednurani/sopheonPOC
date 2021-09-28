@@ -21,11 +21,11 @@ namespace Sopheon.CloudNative.Environments.Utility
 
          if (!await context.Environments.AnyAsync())
          {
-            ResourceType resourceType1 = new ResourceType
+            DomainResourceType resourceType1 = new DomainResourceType
             {
                Name = "AZURE_SQL_DATABASE"
             };
-            ResourceType resourceType2 = new ResourceType
+            DomainResourceType resourceType2 = new DomainResourceType
             {
                Name = "AZURE_BLOB_STORAGE"
             };
@@ -33,25 +33,25 @@ namespace Sopheon.CloudNative.Environments.Utility
             Resource resource1 = new Resource
             {
                Uri = "https://hammer-prod-sql.database.windows.net",
-               ResourceType = resourceType1
+               DomainResourceType = resourceType1
             };
 
             Resource resource2 = new Resource
             {
                Uri = "https://stark-prod-sql.database.windows.net",
-               ResourceType = resourceType1
+               DomainResourceType = resourceType1
             };
 
             Resource resource3 = new Resource
             {
                Uri = "https://hammer-prod-storage.web.core.windows.net",
-               ResourceType = resourceType2
+               DomainResourceType = resourceType2
             };
 
             Resource resource4 = new Resource
             {
                Uri = "https://stark-prod-storage.web.core.windows.net",
-               ResourceType = resourceType2
+               DomainResourceType = resourceType2
             };
 
             BusinessService businessService1 = new BusinessService
@@ -85,19 +85,19 @@ namespace Sopheon.CloudNative.Environments.Utility
             {
                DependencyName = "PRODUCT_DATASTORE",
                BusinessService = businessService1,
-               ResourceType = resourceType1
+               DomainResourceType = resourceType1
             };
             BusinessServiceDependency businessServiceDependency2 = new BusinessServiceDependency
             {
                DependencyName = "COMMENT_DATASTORE",
                BusinessService = businessService2,
-               ResourceType = resourceType1
+               DomainResourceType = resourceType1
             };
             BusinessServiceDependency businessServiceDependency3 = new BusinessServiceDependency
             {
                DependencyName = "PRODUCT_MEDIASTORE",
                BusinessService = businessService1,
-               ResourceType = resourceType2
+               DomainResourceType = resourceType2
             };
 
 
