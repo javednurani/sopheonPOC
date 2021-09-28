@@ -13,7 +13,7 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
 
       public EFEnvironmentRepository_AddEnvironment_UnitTests()
       {
-         var builder = new DbContextOptionsBuilder<EnvironmentContext>();
+         DbContextOptionsBuilder<EnvironmentContext> builder = new DbContextOptionsBuilder<EnvironmentContext>();
          builder.UseInMemoryDatabase(nameof(EFEnvironmentRepository_AddEnvironment_UnitTests));
          _dbContextOptions = builder.Options;
       }
@@ -21,7 +21,7 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
       [Fact]
       public async Task AddEnvironment_HappyPath_EnvironmentReturnedWithKey()
       {
-         using var context = new EnvironmentContext(_dbContextOptions);
+         using EnvironmentContext context = new EnvironmentContext(_dbContextOptions);
 
          // Arrange
          Environment environment = new Environment
@@ -45,7 +45,7 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
       [Fact]
       public async Task AddEnvironment_HappyPath_EnvironmentUpdateIsPersisted()
       {
-         using var context = new EnvironmentContext(_dbContextOptions);
+         using EnvironmentContext context = new EnvironmentContext(_dbContextOptions);
 
          // Arrange
          Environment environment = Some.Random.Environment();
@@ -55,7 +55,7 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
          await sut.AddEnvironment(environment);
 
          // reset environment context, which will only contain persisted data from original context
-         using var context2 = new EnvironmentContext(_dbContextOptions);
+         using EnvironmentContext context2 = new EnvironmentContext(_dbContextOptions);
          Environment retrievedEnvironment = context2.Environments.Single(e => e.EnvironmentKey == environment.EnvironmentKey);
 
          // Assert

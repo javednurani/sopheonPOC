@@ -1,12 +1,17 @@
-﻿namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests
+﻿using System.Collections.Generic;
+using Xunit;
+
+namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests
 {
    public class GetResourceUrisByBusinessServiceDependency_Tests : FunctionIntegrationTest
    {
       [FunctionFact]
-      public void Test()
+      public async void HappyPath_GetResourceUrisByBusinessServiceDependency()
       {
-         // TODO: need paramters defined in openAPI spec?
-         //var result = await _sut.GetResourceUrisByBusinessServiceDependencyAsync()
+         // TODO replace with actual seed data
+         ICollection<ResourceUriDto> results = await _sut.GetResourceUrisByBusinessServiceDependencyAsync("PRODUCT_SERVICE", "PRODUCT_DATASTORE");
+         Assert.NotNull(results);
+         Assert.True(results.Count == 2); // TODO adjust per actual seed data
       }
    }
 }

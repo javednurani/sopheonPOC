@@ -5,12 +5,12 @@ using Sopheon.CloudNative.Environments.Domain.Models;
 
 namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
 {
-   public class ResourceTypeConfiguration : BaseConfiguration, IEntityTypeConfiguration<ResourceType>
+   public class DomainResourceTypeConfiguration : BaseConfiguration, IEntityTypeConfiguration<DomainResourceType>
    {
-      public void Configure(EntityTypeBuilder<ResourceType> builder)
+      public void Configure(EntityTypeBuilder<DomainResourceType> builder)
       {
          builder.Property(rt => rt.Id)
-            .HasColumnName(GetIdColumnName<ResourceType>());
+            .HasColumnName(GetIdColumnName<DomainResourceType>());
 
          builder.Property(rt => rt.Name)
             .HasMaxLength(ModelConstraints.NAME_LENGTH)

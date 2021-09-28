@@ -90,7 +90,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         Assert.Equal($"'{nameof(EnvironmentDto.Name)}' must not be empty.", responseBody);
+         ErrorDto errorResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
+
+         Assert.Equal($"'{nameof(EnvironmentDto.Name)}' must not be empty.", errorResponse.Message);
       }
 
       [Fact]
@@ -113,7 +115,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         Assert.Equal($"'{nameof(EnvironmentDto.Owner)}' must not be empty.", responseBody);
+         ErrorDto errorResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
+
+         Assert.Equal($"'{nameof(EnvironmentDto.Owner)}' must not be empty.", errorResponse.Message);
       }
 
       [Fact]
@@ -137,7 +141,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         Assert.Equal(StringConstants.RESPONSE_REQUEST_BODY_INVALID, responseBody);
+         ErrorDto errorResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
+
+         Assert.Equal(StringConstants.RESPONSE_REQUEST_BODY_INVALID, errorResponse.Message);
       }
 
 

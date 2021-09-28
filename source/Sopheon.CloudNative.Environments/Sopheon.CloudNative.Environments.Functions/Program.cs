@@ -22,7 +22,7 @@ namespace Sopheon.CloudNative.Environments.Functions
    {
       static Task Main(string[] args)
       {
-         var host = new HostBuilder()
+         IHost host = new HostBuilder()
             .ConfigureAppConfiguration((hostContext, builder) =>
             {
                builder.AddCommandLine(args);

@@ -41,7 +41,7 @@ namespace Sopheon.CloudNative.Environments.Data
          set;
       }
 
-      public virtual DbSet<ResourceType> DomainResourceTypes
+      public virtual DbSet<DomainResourceType> DomainResourceTypes
       {
          get;
          set;
