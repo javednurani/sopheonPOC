@@ -33,7 +33,7 @@ npm run prune
 ## Running the Environments database locally
 - TODO: flesh this out
 - In "Package Manager Console", ensure "Data" project is selected
-- Runt he following commmand:  Script-Migration -Idempotent
+- Run the following commmand:  Script-Migration -Idempotent
 
 ## Running Azure Functions locally
 - TODO: flesh this out
@@ -68,9 +68,9 @@ npm run prune
    -  After the function has started it will output the endpoints for the functions and swagger docs in the console
    -  On the Swagger page you can try out your functions to see if they perform as expected 
  -  OpenAPI powering integration tests
-   -  If you visit http://localhost:7071/openapi/1.0 (or some other port and version number) you can then save the JSON to the Functions.IntegrationTests project OpenApiDefinitions\ folder
-   -  This JSON file is used to build out a client for our integration tests to call our funcitons.
-      -  Becuase of this, it is important to have typings correct on all parameters and returned types, otherwise this can cause a test to fail even if the actual code is perfectly fine.
+    -  If you visit http://localhost:7071/openapi/1.0 (or some other port and version number) you can then save the JSON to the Functions.IntegrationTests project OpenApiDefinitions\ folder
+    -  This JSON file is used to build out a client for our integration tests to call our funcitons.
+       -  Becuase of this, it is important to have typings correct on all parameters and returned types, otherwise this can cause a test to fail even if the actual code is perfectly fine.
 
 # Design Decisions
-TODO: flesh this out.  This section should explain any design decisions or implementation details that might throw a newly onboarded dev for a loop.
+TODO: flesh this out.  This section should explain any design decisions or implementation details that might throw a newly onboarded dev for a loop. 
