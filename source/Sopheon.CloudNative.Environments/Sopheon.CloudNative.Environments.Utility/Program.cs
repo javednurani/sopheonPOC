@@ -32,7 +32,7 @@ namespace Sopheon.CloudNative.Environments.Utility
 
             Resource resource1 = new Resource
             {
-               Uri = "https://hammer-prod-sql.database.windows.net",
+               Uri = TestData.RESOURCE_URI_1,
                DomainResourceType = resourceType1
             };
 
@@ -56,7 +56,7 @@ namespace Sopheon.CloudNative.Environments.Utility
 
             BusinessService businessService1 = new BusinessService
             {
-               Name = "PRODUCT_SERVICE"
+               Name = TestData.BUSINESS_SERVICE_NAME_1
             };
             BusinessService businessService2 = new BusinessService
             {
@@ -67,7 +67,7 @@ namespace Sopheon.CloudNative.Environments.Utility
             {
                Name = "Hammer Production",
                Description = "Hammer Corp production environment",
-               EnvironmentKey = Guid.NewGuid(),
+               EnvironmentKey = TestData.EnvironmentKey1,
                Owner = Guid.NewGuid(),
                IsDeleted = false
             };
@@ -83,7 +83,7 @@ namespace Sopheon.CloudNative.Environments.Utility
 
             BusinessServiceDependency businessServiceDependency1 = new BusinessServiceDependency
             {
-               DependencyName = "PRODUCT_DATASTORE",
+               DependencyName = TestData.DEPENDENCY_NAME_1,
                BusinessService = businessService1,
                DomainResourceType = resourceType1
             };
