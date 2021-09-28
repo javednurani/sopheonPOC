@@ -37,6 +37,11 @@ npm run prune
 
 ## Running Azure Functions locally
 - TODO: flesh this out
+- Set up connection strings in user secrets
+  - Right click the functions project and select "Manage User Secrets"
+  - Edit the secrets.json that was created/opened.
+  - Configure "EnvironmentsSqlConnectionString" with a connection string to your local database
+  - This file is local only and never comitted so it is safe to store a password here
 - In "Developer Powershell", navigate to the "Sopheon.CloudNative.Environments.Functions" folder
 - Run the following command: func start
 - To verify functions are up and running, you navigate to the following url in a browser
