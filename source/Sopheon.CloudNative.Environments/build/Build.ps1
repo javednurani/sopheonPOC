@@ -30,7 +30,7 @@ dotnet publish $EnvironmentsUtilityProject -r win-x64 -p:PublishSingleFile=true 
 
 #Start up the func.exe using func start. This will spin up the functions to run at a local instance (Part of Azure Function Core Tools)
 #This has to be ran separately as it is a long running process and would thread block us here...
-$Process = Start-Process powershell -WorkingDirectory "$env:System_DefaultWorkingDirectory" {Set-Location ".\source\Sopheon.CloudNative.Environments\Sopheon.CloudNative.Environments.Functions"; func start;} -PassThru -Verbose;
+$Process = Start-Process powershell -WorkingDirectory "$env:System_DefaultWorkingDirectory" -NoNewWindow {Set-Location ".\source\Sopheon.CloudNative.Environments\Sopheon.CloudNative.Environments.Functions"; func start;} -PassThru -Verbose;
 
 Write-Host $Process.HasExited;
 #Wait 10 seconds to let the Func app start up
