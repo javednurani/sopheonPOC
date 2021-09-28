@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "411ab52e-20dc-4f8e-83ce-da0b2d1d107c",
+		"_postman_id": "5aca268e-572e-4639-aad7-4c586fd8390f",
 		"name": "Stratus Environment Functions",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -108,7 +108,9 @@
 									"});\r",
 									"\r",
 									"pm.test(\"Missing owner repsonse body\", function () {\r",
-									"    pm.expect(pm.response.text()).to.eql(\"'Owner' must not be empty.\");\r",
+									"     var jsonData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(jsonData.Message).to.eql(\"'Owner' must not be empty.\");\r",
 									"});\r",
 									""
 								],
@@ -152,7 +154,9 @@
 									"});\r",
 									"\r",
 									"pm.test(\"Missing name repsonse body\", function () {\r",
-									"    pm.expect(pm.response.text()).to.eql(\"'Name' must not be empty.\");\r",
+									"         var jsonData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(jsonData.Message).to.eql(\"'Name' must not be empty.\");\r",
 									"});\r",
 									""
 								],
@@ -336,7 +340,9 @@
 									"});\r",
 									"\r",
 									"pm.test(\"Missing owner repsonse body\", function () {\r",
-									"    pm.expect(pm.response.text()).to.eql(\"'Name' must not be empty.\");\r",
+									"         var jsonData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(jsonData.Message).to.eql(\"'Name' must not be empty.\");\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -380,7 +386,9 @@
 									"});\r",
 									"\r",
 									"pm.test(\"Missing owner repsonse body\", function () {\r",
-									"    pm.expect(pm.response.text()).to.eql(\"'Owner' must not be empty.\");\r",
+									"    var jsonData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(jsonData.Message).to.eql(\"'Owner' must not be empty.\");\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -424,7 +432,8 @@
 									"});\r",
 									"\r",
 									"pm.test(\"Missing owner repsonse body\", function () {\r",
-									"    pm.expect(pm.response.text()).to.match(/^An Environment was not found with a key: [{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$/);\r",
+									"    var jsonData = pm.response.json(); \r",
+									"    pm.expect(jsonData.Message).to.match(/^An Environment was not found with a key: [{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$/);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -468,7 +477,9 @@
 									"});\r",
 									"\r",
 									"pm.test(\"Missing owner repsonse body\", function () {\r",
-									"    pm.expect(pm.response.text()).to.eql(\"The EnvironmentKey must be a valid Guid\");\r",
+									"    var jsonData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(jsonData.Message).to.eql(\"The EnvironmentKey must be a valid Guid\");\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -512,7 +523,9 @@
 									"});\r",
 									"\r",
 									"pm.test(\"Missing owner repsonse body\", function () {\r",
-									"    pm.expect(pm.response.text()).to.eql(\"Request body was invalid.\");\r",
+									"    var jsonData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(jsonData.Message).to.eql(\"Request body was invalid.\");\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -556,7 +569,9 @@
 									"});\r",
 									"\r",
 									"pm.test(\"Missing owner repsonse body\", function () {\r",
-									"    pm.expect(pm.response.text()).to.eql(\"Request body was invalid.\");\r",
+									"    var jsonData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(jsonData.Message).to.eql(\"Request body was invalid.\");\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -643,8 +658,10 @@
 									"\r",
 									"pm.test(\"same key 2nd request response body text\", function() {\r",
 									"    // TODO to.eql(\"An Environment was not found with a key: {{environmentKey}}\");\r",
-									"    pm.expect(pm.response.text()).to.contain(\"An Environment was not found with a key: \");\r",
-									"    pm.expect(pm.response.text()).to.match(/^An Environment was not found with a key: [{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$/);\r",
+									"    var jsonData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(jsonData.Message).to.contain(\"An Environment was not found with a key: \");\r",
+									"    pm.expect(jsonData.Message).to.match(/^An Environment was not found with a key: [{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$/);\r",
 									"})"
 								],
 								"type": "text/javascript"
@@ -680,8 +697,10 @@
 									"\r",
 									"pm.test(\"Non-Guid Key response body text\", function() {\r",
 									"    // TODO to.eql(\"An Environment was not found with a key: {{environmentKey}}.toLower()\");\r",
-									"    pm.expect(pm.response.text()).to.contain(\"An Environment was not found with a key: \");\r",
-									"    pm.expect(pm.response.text()).to.match(/^An Environment was not found with a key: [{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$/);\r",
+									"    var jsonData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(jsonData.Message).to.contain(\"An Environment was not found with a key: \");\r",
+									"    pm.expect(jsonData.Message).to.match(/^An Environment was not found with a key: [{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$/);\r",
 									"})"
 								],
 								"type": "text/javascript"
@@ -725,7 +744,9 @@
 									"});\r",
 									"\r",
 									"pm.test(\"Non-Guid Key response body text\", function() {\r",
-									"    pm.expect(pm.response.text()).to.eql(\"The EnvironmentKey must be a valid Guid\");\r",
+									"    var jsonData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(jsonData.Message).to.eql(\"The EnvironmentKey must be a valid Guid\");\r",
 									"})"
 								],
 								"type": "text/javascript"
