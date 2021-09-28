@@ -24,7 +24,7 @@ $IntegrationTestProjects = Get-Item -Path "$($env:System_DefaultWorkingDirectory
 
 dotnet publish $EnvironmentsUtilityProject -r win-x64 -p:PublishSingleFile=true /p:PublishTrimmed=true /p:Version=1.0.1 /p:IncludeNativeLibrariesForSelfExtract=true /p:DebugType=none --self-contained true -o ./EnvironmentsUtility;
 
-& $EnvironmentsUtilityDataSeeder 
+& $EnvironmentsUtilityDataSeeder -Database Local
 
 Foreach($file in $IntegrationTestProjects) {
     Write-Host "...Running integration tests on $($file.Name)..."
