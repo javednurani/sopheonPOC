@@ -43,7 +43,7 @@ namespace Sopheon.CloudNative.Environments.Functions
 
                // Add Custom Services
                string connString = string.Empty;
-               if (hostContext.HostingEnvironment.IsProduction())
+               if (hostContext.HostingEnvironment.IsProduction() || hostContext.HostingEnvironment.IsEnvironment("CIAgent"))
                {
                   connString = Environment.GetEnvironmentVariable("SQLCONNSTR_EnvironmentsSqlConnectionString");
                }
