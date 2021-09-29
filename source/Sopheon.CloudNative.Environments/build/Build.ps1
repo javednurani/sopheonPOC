@@ -17,22 +17,18 @@ Write-Host "...Running dotnet ef migrations...";
 dotnet ef migrations script -p "Sopheon.CloudNative.Environments.Data\Sopheon.CloudNative.Environments.Data.csproj" -o "$($env:Build_ArtifactStagingDirectory)\scripts.sql" -i;
 Check-LastExitCode;
 
-Write-Host "...Running dotnet publish on Functions.csproj";
-
-dotnet publish "Sopheon.CloudNative.Environments.Functions\Sopheon.CloudNative.Environments.Functions.csproj" -o ".\PublishOutput\";
-Check-LastExitCode;
-
 #Setup for Integration tests here --
 $IntegrationTestProjects = Get-Item -Path "$($env:System_DefaultWorkingDirectory)\source\Sopheon.CloudNative.Environments\**\*.IntegrationTests.csproj";
 
 dotnet publish $EnvironmentsUtilityProject -r win-x64 -p:PublishSingleFile=true /p:PublishTrimmed=true /p:Version=1.0.1 /p:IncludeNativeLibrariesForSelfExtract=true /p:DebugType=none --self-contained true -o ./EnvironmentsUtility;
+Check-LastExitCode;
+
+#build out the functions for prod mode but not publish
+dotnet build "Sopheon.CloudNative.Environments.Functions\Sopheon.CloudNative.Environments.Functions.csproj" --configuration Release
 
 #Start up the func.exe using func start. This will spin up the functions to run at a local instance (Part of Azure Function Core Tools)
 #This has to be ran separately as it is a long running process and would thread block us here...
-$Process = Start-Process powershell -WorkingDirectory "$env:System_DefaultWorkingDirectory" {Set-Location ".\source\Sopheon.CloudNative.Environments\Sopheon.CloudNative.Environments.Functions"; & """C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe""" start;} -PassThru -Verbose;
-# Set-Location ".\source\Sopheon.CloudNative.Environments\Sopheon.CloudNative.Environments.Functions";
-# $Process = Start-Process $AzureFuncExe -WorkingDirectory "$env:System_DefaultWorkingDirectory" -NoNewWindow -ArgumentList start -PassThru -Verbose;
-# Set-Location -Path "$($env:System_DefaultWorkingDirectory)\source\Sopheon.CloudNative.Environments";
+$Process = Start-Process powershell -WorkingDirectory "$env:System_DefaultWorkingDirectory" {Set-Location ".\source\Sopheon.CloudNative.Environments\Sopheon.CloudNative.Environments.Functions"; & """C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe""" start --no-build;} -PassThru -Verbose;
 
 Write-Host $Process.HasExited;
 #Wait 10 seconds to let the Func app start up
@@ -77,8 +73,14 @@ if(-not $Process.HasExited) {
     $Process.Kill();
 }
 
+#All migrations and tests are done...let's publish it!
+Write-Host "...Running dotnet publish on Functions.csproj";
+dotnet publish "Sopheon.CloudNative.Environments.Functions\Sopheon.CloudNative.Environments.Functions.csproj" -o ".\PublishOutput\";
+Check-LastExitCode;
+
 # Zip/Archive Scripts 
 Write-Host "Zipping Artfacts for Environment Management...";
 & $ZipUtil "a" "-tzip" "$($env:Build_ArtifactStagingDirectory)\EnvironmentManagement" ".\PublishOutput\*" "-xr!build" "-xr!deploy";
+Check-LastExitCode;
 
 Write-Host "Zipping Complete!";
