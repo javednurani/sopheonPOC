@@ -1,0 +1,453 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "OpenAPI Document on Azure Functions",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:7071"
+    }
+  ],
+  "paths": {
+    "/environments": {
+      "post": {
+        "tags": [
+          "Environments"
+        ],
+        "summary": "Create an Environment",
+        "description": "Create an Environment, with required and optional properties",
+        "operationId": "CreateEnvironment",
+        "requestBody": {
+          "description": "Environment object to be created. Name and Owner required, Description optional",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/environmentDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "201 Created response, with Dto in response body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/environmentDto"
+                }
+              }
+            },
+            "x-ms-summary": "201 Created response"
+          },
+          "400": {
+            "description": "400 Bad Request response, with error message in response body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorDto"
+                }
+              }
+            },
+            "x-ms-summary": "400 Bad Request response"
+          },
+          "500": {
+            "description": "500 Internal Server Error response, with error message in response body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorDto"
+                }
+              }
+            },
+            "x-ms-summary": "500 Internal Server Error response"
+          }
+        },
+        "x-ms-visibility": "important"
+      },
+      "get": {
+        "tags": [
+          "Environments"
+        ],
+        "summary": "Get all Environments",
+        "description": "Get all Environments that are not deleted",
+        "operationId": "GetEnvironments",
+        "responses": {
+          "200": {
+            "description": "200 OK response, with Dto in response body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/environmentDto"
+                  }
+                }
+              }
+            },
+            "x-ms-summary": "200 OK response"
+          },
+          "500": {
+            "description": "500 Internal Server Error response, with error message in response body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorDto"
+                }
+              }
+            },
+            "x-ms-summary": "500 Internal Server Error response"
+          }
+        },
+        "x-ms-visibility": "important"
+      }
+    },
+    "/environments/{key}": {
+      "delete": {
+        "tags": [
+          "Environments"
+        ],
+        "summary": "Delete an Environment",
+        "description": "Delete an Environment by EnvironmentKey",
+        "operationId": "DeleteEnvironment",
+        "parameters": [
+          {
+            "name": "key",
+            "in": "path",
+            "description": "The key of the Environment to delete.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "x-ms-summary": "The key of the Environment to delete."
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "404 Not Found response, with error message in response body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorDto"
+                }
+              }
+            },
+            "x-ms-summary": "404 Not Found response"
+          },
+          "400": {
+            "description": "400 Bad Request response, with error message in response body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorDto"
+                }
+              }
+            },
+            "x-ms-summary": "400 Bad Request response"
+          },
+          "500": {
+            "description": "500 Internal Server Error response, with error message in response body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorDto"
+                }
+              }
+            },
+            "x-ms-summary": "500 Internal Server Error response"
+          },
+          "204": {
+            "description": "204 No Content response, with no response body",
+            "x-ms-summary": "204 No Content response"
+          }
+        },
+        "x-ms-visibility": "important"
+      },
+      "put": {
+        "tags": [
+          "Environments"
+        ],
+        "summary": "Update an Environment",
+        "description": "Update an Environment's properties. Anything except IsDeleted, EnvironmentKey, and EnvironmentId can be changed.",
+        "operationId": "UpdateEnvironment",
+        "parameters": [
+          {
+            "name": "key",
+            "in": "path",
+            "description": "The key of the Environment to update.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "x-ms-summary": "The key of the Environment to update."
+          }
+        ],
+        "requestBody": {
+          "description": "Environment object to be updated.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/environmentDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "200 OK response, with Dto in response body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/environmentDto"
+                }
+              }
+            },
+            "x-ms-summary": "200 OK response"
+          },
+          "400": {
+            "description": "400 Bad Request response, with error message in response body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorDto"
+                }
+              }
+            },
+            "x-ms-summary": "400 Bad Request response"
+          },
+          "404": {
+            "description": "404 Not Found response, with error message in response body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorDto"
+                }
+              }
+            },
+            "x-ms-summary": "404 Not Found response"
+          },
+          "500": {
+            "description": "500 Internal Server Error response, with error message in response body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorDto"
+                }
+              }
+            },
+            "x-ms-summary": "500 Internal Server Error response"
+          }
+        },
+        "x-ms-visibility": "important"
+      }
+    },
+    "/BusinessService/{businessServiceName}/GetEnvironmentResourceBindingUris({dependencyName})": {
+      "get": {
+        "tags": [
+          "Resources"
+        ],
+        "summary": "Get Resource URIs for a BusinessServiceDependency, across Environments",
+        "description": "Get Resource URIs for a BusinessServiceDependency, across Environments",
+        "operationId": "GetResourceUrisByBusinessServiceDependency",
+        "parameters": [
+          {
+            "name": "businessServiceName",
+            "in": "path",
+            "description": "The name of the BusinessService",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-ms-summary": "The name of the BusinessService"
+          },
+          {
+            "name": "dependencyName",
+            "in": "path",
+            "description": "The name of the BusinessServiceDependency",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-ms-summary": "The name of the BusinessServiceDependency"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 OK response, with Dto in response body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/resourceUriDto"
+                  }
+                }
+              }
+            },
+            "x-ms-summary": "200 OK response"
+          },
+          "400": {
+            "description": "400 Bad Request response, with error message in response body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorDto"
+                }
+              }
+            },
+            "x-ms-summary": "400 Bad Request response"
+          },
+          "500": {
+            "description": "500 Internal Server Error response, with error message in response body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorDto"
+                }
+              }
+            },
+            "x-ms-summary": "500 Internal Server Error response"
+          }
+        },
+        "x-ms-visibility": "important"
+      }
+    },
+    "/GetEnvironmentResourceBindingUri({environmentKey}, {businessServiceName}, {dependencyName})": {
+      "get": {
+        "tags": [
+          "Resources"
+        ],
+        "summary": "",
+        "description": "",
+        "operationId": "GetSpecificResourceUri",
+        "parameters": [
+          {
+            "name": "environmentKey",
+            "in": "path",
+            "description": "The key of the Environment",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "x-ms-summary": "The key of the Environment"
+          },
+          {
+            "name": "businessServiceName",
+            "in": "path",
+            "description": "The name of the BusinessService",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-ms-summary": "The name of the BusinessService"
+          },
+          {
+            "name": "dependencyName",
+            "in": "path",
+            "description": "The name of the BusinessServiceDependency",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-ms-summary": "The name of the BusinessServiceDependency"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 OK response, with Dto in response body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/resourceUriDto"
+                }
+              }
+            },
+            "x-ms-summary": "200 OK response"
+          },
+          "404": {
+            "description": "404 Not Found response, with error message in response body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorDto"
+                }
+              }
+            },
+            "x-ms-summary": "404 Not Found response"
+          },
+          "400": {
+            "description": "400 Bad Request response, with error message in response body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorDto"
+                }
+              }
+            },
+            "x-ms-summary": "400 Bad Request response"
+          },
+          "500": {
+            "description": "500 Internal Server Error response, with error message in response body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorDto"
+                }
+              }
+            },
+            "x-ms-summary": "500 Internal Server Error response"
+          }
+        },
+        "x-ms-visibility": "important"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "environmentDto": {
+        "type": "object",
+        "properties": {
+          "environmentKey": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "errorDto": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "resourceUriDto": {
+        "type": "object",
+        "properties": {
+          "uri": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

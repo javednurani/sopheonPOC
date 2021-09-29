@@ -10,6 +10,7 @@ using Microsoft.OpenApi.Models;
 using Sopheon.CloudNative.Environments.Domain.Exceptions;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
+using Sopheon.CloudNative.Environments.Functions.Models;
 using HttpTriggerAttribute = Microsoft.Azure.Functions.Worker.HttpTriggerAttribute;
 
 namespace Sopheon.CloudNative.Environments.Functions
@@ -31,22 +32,27 @@ namespace Sopheon.CloudNative.Environments.Functions
          Summary = "Delete an Environment",
          Description = "Delete an Environment by EnvironmentKey",
          Visibility = OpenApiVisibilityType.Important)]
+      [OpenApiParameter(name: "key",
+         Type = typeof(Guid),
+         Required = true,
+         Description = "The key of the Environment to delete.",
+         Summary = "The key of the Environment to delete.")]
       [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NoContent,
          Summary = StringConstants.RESPONSE_SUMMARY_204,
          Description = StringConstants.RESPONSE_DESCRIPTION_204)]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.NotFound,
-         contentType: StringConstants.CONTENT_TYPE_TEXT_PLAIN,
-         bodyType: typeof(string),
+         contentType: StringConstants.CONTENT_TYPE_APP_JSON,
+         bodyType: typeof(ErrorDto),
          Summary = StringConstants.RESPONSE_SUMMARY_404,
          Description = StringConstants.RESPONSE_DESCRIPTION_404)]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest,
-         contentType: StringConstants.CONTENT_TYPE_TEXT_PLAIN,
-         bodyType: typeof(string),
+         contentType: StringConstants.CONTENT_TYPE_APP_JSON,
+         bodyType: typeof(ErrorDto),
          Summary = StringConstants.RESPONSE_SUMMARY_400,
          Description = StringConstants.RESPONSE_DESCRIPTION_400)]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError,
-         contentType: StringConstants.CONTENT_TYPE_TEXT_PLAIN,
-         bodyType: typeof(string),
+         contentType: StringConstants.CONTENT_TYPE_APP_JSON,
+         bodyType: typeof(ErrorDto),
          Summary = StringConstants.RESPONSE_SUMMARY_500,
          Description = StringConstants.RESPONSE_DESCRIPTION_500)]
 
@@ -54,7 +60,7 @@ namespace Sopheon.CloudNative.Environments.Functions
           [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "environments/{key}")] HttpRequestData req,
           FunctionContext context, string key)
       {
-         var logger = context.GetLogger(nameof(DeleteEnvironment));
+         ILogger logger = context.GetLogger(nameof(DeleteEnvironment));
 
          try
          {
@@ -62,8 +68,13 @@ namespace Sopheon.CloudNative.Environments.Functions
             bool validKey = Guid.TryParse(key, out environmentKey);
             if (!validKey || environmentKey == Guid.Empty)
             {
+               ErrorDto error = new ErrorDto
+               {
+                  StatusCode = (int)HttpStatusCode.BadRequest,
+                  Message = StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID,
+               };
                logger.LogInformation(StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID);
-               return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID);
+               return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.BadRequest, error);
             }
 
             await _environmentRepository.DeleteEnvironment(environmentKey);
@@ -72,13 +83,23 @@ namespace Sopheon.CloudNative.Environments.Functions
          }
          catch (EntityNotFoundException ex)
          {
+            ErrorDto error = new ErrorDto
+            {
+               StatusCode = (int)HttpStatusCode.NotFound,
+               Message = ex.Message,
+            };
             logger.LogInformation(ex.Message);
-            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.NotFound, ex.Message);
+            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.NotFound, error);
          }
          catch (Exception ex)
          {
+            ErrorDto error = new ErrorDto
+            {
+               StatusCode = (int)HttpStatusCode.InternalServerError,
+               Message = StringConstants.RESPONSE_GENERIC_ERROR,
+            };
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithStringBody(req, HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR);
+            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.InternalServerError, error);
          }
       }
    }

@@ -33,10 +33,15 @@ npm run prune
 ## Running the Environments database locally
 - TODO: flesh this out
 - In "Package Manager Console", ensure "Data" project is selected
-- Runt he following commmand:  Script-Migration -Idempotent
+- Run the following commmand:  Script-Migration -Idempotent
 
 ## Running Azure Functions locally
 - TODO: flesh this out
+- Set up connection strings in user secrets
+  - Right click the functions project and select "Manage User Secrets"
+  - Edit the secrets.json that was created/opened.
+  - Configure "EnvironmentsSqlConnectionString" with a connection string to your local database
+  - This file is local only and never comitted so it is safe to store a password here
 - In "Developer Powershell", navigate to the "Sopheon.CloudNative.Environments.Functions" folder
 - Run the following command: func start
 - To verify functions are up and running, you navigate to the following url in a browser
@@ -44,6 +49,24 @@ npm run prune
 - To debug local azure functions
   - Run with the following option: func start --dotnet-isolated-debug
   - Note PID of function, and attach to "dotnet.exe" process with that PID
+
+## Running Automated Tests Locally
+ - Test Explorer contains a mix of unit and integration test projects
+ - You should be safe to run all tests in Test Explorer and get meaningful results
+ - Integration tests should check if their dependencies are available in order to be tested, and skip if not
+ - Any test failures should represent real failures
+
+# How To's
+
+## Update Integration Test OpenAPI client
+ - OpenAPI is specified in the form of data annotations above our REST API Functions.
+ - The information provided in these data annotations is used to build out our help documentation, our integration tests, and our swagger client
+ - To view the content generated from the OpenAPI annotations, you must run the project by right clicking it in solution explorer, select debug > start new instance.
+   -  After the function has started it will output the endpoints for the functions and swagger docs in the console
+   -  On the Swagger page (http://localhost:7071/swagger/ui) you can try out your functions to see if they perform as expected
+ -  Integration tests using an OpenAPI client
+    -  If you visit http://localhost:7071/openapi/1.0 (or some other port and version number) you can then save the JSON to the Functions.IntegrationTests project OpenApiDefinitions\ folder
+    -  On build, Visual Studio will use this file to generate a client, which is then used bythe integation test.
 
 # Design Decisions
 TODO: flesh this out.  This section should explain any design decisions or implementation details that might throw a newly onboarded dev for a loop.

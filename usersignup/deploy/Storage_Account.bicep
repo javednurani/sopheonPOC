@@ -61,7 +61,7 @@ resource StaticWebpage_Storage_BlobService_b2cassetsContainer 'Microsoft.Storage
   properties: {
     defaultEncryptionScope: '$account-encryption-key'
     denyEncryptionScopeOverride: false
-    publicAccess: 'None'
+    publicAccess: 'Blob'
   }
   dependsOn: [
     StaticWebpage_StorageAccount

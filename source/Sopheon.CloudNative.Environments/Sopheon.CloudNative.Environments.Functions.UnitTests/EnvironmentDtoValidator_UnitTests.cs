@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentValidation.TestHelper;
+using Sopheon.CloudNative.Environments.Domain;
 using Sopheon.CloudNative.Environments.Functions.Models;
 using Sopheon.CloudNative.Environments.Functions.Validators;
 using Sopheon.CloudNative.Environments.Testing.Common;
@@ -37,8 +38,8 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       {
          EnvironmentDto env = new EnvironmentDto
          {
-            Name = Some.Random.String(65),
-            Description = Some.Random.String(1001),
+            Name = Some.Random.String(ModelConstraints.NAME_LENGTH + 1),
+            Description = Some.Random.String(ModelConstraints.DESCRIPTION_LENGTH + 1),  
             Owner = Some.Random.Guid()
          };
 

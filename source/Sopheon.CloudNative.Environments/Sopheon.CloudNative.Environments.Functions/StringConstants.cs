@@ -26,5 +26,6 @@
       public const string RESPONSE_REQUEST_BODY_INVALID = "Request body was invalid.";
       public const string RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID = "The EnvironmentKey must be a valid Guid";
       public const string RESPONSE_GENERIC_ERROR = "Something went wrong. Please try again later.";
+      public const string RESPONSE_REQUEST_PATH_PARAMETER_INVALID = "A required path parameter was invalid or missing. Check the request path/route.";
    }
 }

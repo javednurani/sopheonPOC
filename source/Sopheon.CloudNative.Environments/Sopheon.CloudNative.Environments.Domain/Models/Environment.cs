@@ -1,15 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Sopheon.CloudNative.Environments.Domain.Models
 {
-   public class Environment
+   public class Environment : Entity
    {
-      public int EnvironmentID
-      {
-         get;
-         set;
-      }
-
       public Guid EnvironmentKey
       {
          get;
@@ -35,6 +30,12 @@ namespace Sopheon.CloudNative.Environments.Domain.Models
       }
 
       public bool IsDeleted
+      {
+         get;
+         set;
+      }
+
+      public virtual ICollection<EnvironmentResourceBinding> EnvironmentResourceBindings
       {
          get;
          set;
