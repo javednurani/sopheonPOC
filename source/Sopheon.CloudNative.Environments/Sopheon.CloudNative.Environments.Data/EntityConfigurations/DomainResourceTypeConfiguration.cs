@@ -15,6 +15,10 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
          builder.Property(rt => rt.Name)
             .HasMaxLength(ModelConstraints.NAME_LENGTH)
             .IsRequired();
+
+         builder.HasData(new DomainResourceType {
+            Name = "Azure SQL Database"
+         });
       }
    }
 }
