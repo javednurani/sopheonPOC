@@ -30,8 +30,8 @@ Check-LastExitCode;
 #This has to be ran separately as it is a long running process and would thread block us here...
 $Process = Start-Process powershell -WorkingDirectory "$env:System_DefaultWorkingDirectory" -NoNewWindow  {
     Set-Location ".\source\Sopheon.CloudNative.Environments\Sopheon.CloudNative.Environments.Functions"; 
-    & "C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe" settings add SQLCONNSTR_EnvironmentsSqlConnectionString "$($DatabaseConnect)";
-    & "C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe" start;
+    & """C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe""" settings add SQLCONNSTR_EnvironmentsSqlConnectionString "$($DatabaseConnect)";
+    & """C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe""" start;
     } -PassThru -Verbose;
 
 
