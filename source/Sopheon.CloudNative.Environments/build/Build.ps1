@@ -28,9 +28,9 @@ Check-LastExitCode;
 
 #Start up the func.exe using func start. This will spin up the functions to run at a local instance (Part of Azure Function Core Tools)
 #This has to be ran separately as it is a long running process and would thread block us here...
-$Process = Start-Process powershell -WorkingDirectory "$env:System_DefaultWorkingDirectory" -ArgumentList $DatabaseConnect {
+$Process = Start-Process powershell -WorkingDirectory "$env:System_DefaultWorkingDirectory"  {
     Set-Location ".\source\Sopheon.CloudNative.Environments\Sopheon.CloudNative.Environments.Functions"; 
-    * """C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe""" settings add SQLCONNSTR_EnvironmentsSqlConnectionString $DatabseConnect
+    * """C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe""" settings add SQLCONNSTR_EnvironmentsSqlConnectionString $DatabaseConnect
     & """C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe""" start;
     } -PassThru -Verbose;
 
