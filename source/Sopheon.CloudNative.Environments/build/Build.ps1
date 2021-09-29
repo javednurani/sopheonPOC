@@ -10,19 +10,17 @@ Copy-Item -Path "$($env:System_DefaultWorkingDirectory)\source\Sopheon.CloudNati
 
 Set-Location -Path "$($env:System_DefaultWorkingDirectory)\source\Sopheon.CloudNative.Environments";
 
-New-Item -Path .\PublishOutput -ItemType directory;
-
 $OutputCoveragePath = "$($env:System_DefaultWorkingDirectory)\source\Sopheon.CloudNative.Environments\TestResults\";
 
 Write-Host "...Running dotnet ef migrations...";
 
 #dotnet ef migrations script -p "Sopheon.CloudNative.Environments.Data\Sopheon.CloudNative.Environments.Data.csproj" -o "$($env:Build_ArtifactStagingDirectory)\scripts.sql" -i;
-Check-LastExitCode;
+#Check-LastExitCode;
 
 Write-Host "...Running dotnet publish on Functions.csproj";
 
 #dotnet publish "Sopheon.CloudNative.Environments.Functions\Sopheon.CloudNative.Environments.Functions.csproj" -o ".\PublishOutput\";
-Check-LastExitCode;
+#Check-LastExitCode;
 
 #Setup for Integration tests here --
 $IntegrationTestProjects = Get-Item -Path "$($env:System_DefaultWorkingDirectory)\source\Sopheon.CloudNative.Environments\**\*.IntegrationTests.csproj";
