@@ -14,18 +14,18 @@ $OutputCoveragePath = "$($env:System_DefaultWorkingDirectory)\source\Sopheon.Clo
 
 Write-Host "...Running dotnet ef migrations...";
 
-#dotnet ef migrations script -p "Sopheon.CloudNative.Environments.Data\Sopheon.CloudNative.Environments.Data.csproj" -o "$($env:Build_ArtifactStagingDirectory)\scripts.sql" -i;
-#Check-LastExitCode;
+dotnet ef migrations script -p "Sopheon.CloudNative.Environments.Data\Sopheon.CloudNative.Environments.Data.csproj" -o "$($env:Build_ArtifactStagingDirectory)\scripts.sql" -i;
+Check-LastExitCode;
 
 Write-Host "...Running dotnet publish on Functions.csproj";
 
-#dotnet publish "Sopheon.CloudNative.Environments.Functions\Sopheon.CloudNative.Environments.Functions.csproj" -o ".\PublishOutput\";
-#Check-LastExitCode;
+dotnet publish "Sopheon.CloudNative.Environments.Functions\Sopheon.CloudNative.Environments.Functions.csproj" -o ".\PublishOutput\";
+Check-LastExitCode;
 
 #Setup for Integration tests here --
 $IntegrationTestProjects = Get-Item -Path "$($env:System_DefaultWorkingDirectory)\source\Sopheon.CloudNative.Environments\**\*.IntegrationTests.csproj";
 
-#dotnet publish $EnvironmentsUtilityProject -r win-x64 -p:PublishSingleFile=true /p:PublishTrimmed=true /p:Version=1.0.1 /p:IncludeNativeLibrariesForSelfExtract=true /p:DebugType=none --self-contained true -o ./EnvironmentsUtility;
+dotnet publish $EnvironmentsUtilityProject -r win-x64 -p:PublishSingleFile=true /p:PublishTrimmed=true /p:Version=1.0.1 /p:IncludeNativeLibrariesForSelfExtract=true /p:DebugType=none --self-contained true -o ./EnvironmentsUtility;
 
 #Start up the func.exe using func start. This will spin up the functions to run at a local instance (Part of Azure Function Core Tools)
 #This has to be ran separately as it is a long running process and would thread block us here...
