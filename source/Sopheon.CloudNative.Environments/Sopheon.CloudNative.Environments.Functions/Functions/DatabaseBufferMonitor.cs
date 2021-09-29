@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Management.Fluent;
 using Microsoft.Azure.Management.ResourceManager.Fluent;
@@ -30,8 +30,10 @@ namespace Sopheon.CloudNative.Environments.Functions
             logger.LogInformation($"Authenticated!");
 
             // check buffer capacity
+            const int BUFFER_CAPACITY = 50;
+
             // case 1 - single server, single elastic pool 
-            var sqlServer = await azure.SqlServers.GetByIdAsync("...");
+            ISqlServer sqlServer = await azure.SqlServers.GetByIdAsync("...");
 
             // case 2 - single server, multiple elastic pools
             // case 3 - multiple servers, multiple elastic pool 
@@ -39,15 +41,26 @@ namespace Sopheon.CloudNative.Environments.Functions
             IReadOnlyList<ISqlElasticPool> elasticPools = await azure.SqlServers.ElasticPools
                .ListBySqlServerAsync("...", "...");
 
-            //var databases = await azure.SqlServers.Databases.ListBySqlServerAsync();
+            IEnumerable<ISqlElasticPool> linqDemo = elasticPools.Where(x => x.Parent.Name == "sqlServerName");
+
+            IReadOnlyList<ISqlDatabase> databases = await azure.SqlServers.Databases.ListBySqlServerAsync("", "");
 
             // return if satisfied
+            if (databases.Count >= BUFFER_CAPACITY)
+            {
+               logger.LogInformation($"Sufficient database buffer capacity. Exiting {nameof(DatabaseBufferMonitor)}...");
+            }
 
             // calculate what to deploy?
+            // 1. database resource labels
+            // 2. ENV records (Resources, EnvironmentResourceBindings)
+
 
             // create deployment
+            // https://docs.microsoft.com/en-us/azure/azure-resource-manager/
 
             // write ENV.Resources records?
+
 
          }
          catch (Exception ex)
@@ -73,6 +86,5 @@ namespace Sopheon.CloudNative.Environments.Functions
             .Authenticate(credentials)
             .WithSubscription("...");
       }
-
    }
 }
