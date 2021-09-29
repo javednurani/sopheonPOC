@@ -4,7 +4,7 @@ $EnvironmentsUtilityDataSeeder = "$($env:System_DefaultWorkingDirectory)\source\
 #TODO: Does this need to be configurable....
 $DatabaseName = "EnvironmentManagement";
 $AzureFuncExe = "C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe"
-
+$DatabaseConnect = $env:LocalDatabaseConnectionString
 
 Copy-Item -Path "$($env:System_DefaultWorkingDirectory)\source\Sopheon.CloudNative.Environments\deploy\*" -Destination $env:Build_ArtifactStagingDirectory;
 
@@ -28,9 +28,9 @@ dotnet build "Sopheon.CloudNative.Environments.Functions\Sopheon.CloudNative.Env
 
 #Start up the func.exe using func start. This will spin up the functions to run at a local instance (Part of Azure Function Core Tools)
 #This has to be ran separately as it is a long running process and would thread block us here...
-$Process = Start-Process powershell -WorkingDirectory "$env:System_DefaultWorkingDirectory" {
+$Process = Start-Process powershell -WorkingDirectory "$env:System_DefaultWorkingDirectory" -ArgumentList $DatabaseConnect {
     Set-Location ".\source\Sopheon.CloudNative.Environments\Sopheon.CloudNative.Environments.Functions"; 
-    * """C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe""" settings add AZURE_FUNCTIONS_ENVIRONMENT CIAgent
+    * """C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe""" settings add SQLCONNSTR_EnvironmentsSqlConnectionString $DatabseConnect
     & """C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe""" start --no-build;
     } -PassThru -Verbose;
 
