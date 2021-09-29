@@ -22,14 +22,6 @@ namespace Sopheon.CloudNative.Environments.Utility
 
          if (!await context.Environments.AnyAsync())
          {
-            // We might want to have all seeded resource types available but not yet.
-            //ResourceTypes[] resourceTypes = (ResourceTypes[])Enum.GetValues(typeof(ResourceTypes));
-            //IEnumerable<DomainResourceType> domainResourceTypes = resourceTypes.Select(r => new DomainResourceType
-            //{
-            //   Id = (int)r,
-            //   Name = r.ToString()
-            //});
-
             DomainResourceType azureSqlResourceType = await context.DomainResourceTypes.FirstAsync(d => d.Id == (int)ResourceTypes.AzureSqlDb);
 
             Resource resource1 = new Resource
