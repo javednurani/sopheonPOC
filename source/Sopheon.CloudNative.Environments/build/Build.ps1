@@ -30,7 +30,7 @@ Check-LastExitCode;
 #This has to be ran separately as it is a long running process and would thread block us here...
 $Process = Start-Process powershell -WorkingDirectory "$env:System_DefaultWorkingDirectory" -NoNewWindow  {
     Set-Location ".\source\Sopheon.CloudNative.Environments\Sopheon.CloudNative.Environments.Functions"; 
-    & """C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe""" settings add SQLCONNSTR_EnvironmentsSqlConnectionString "$($DatabaseConnect)" --verbose;
+    & """C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe""" settings add SQLCONNSTR_EnvironmentsSqlConnectionString """$($DatabaseConnect)""" --verbose;
     & """C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe""" start --verbose;
     } -PassThru -Verbose;
 
@@ -40,7 +40,7 @@ Write-Host $Process.HasExited;
 Start-Sleep -Seconds 10;
 
 #This is the func.exe process. We need to capture this object and we close this out. (Tip: This is the long running process mentioned above)
-#$SubProcess = Get-Process -Name func;
+$SubProcess = Get-Process -Name func;
 
 #Create database - 
 Write-Host "...Creating local database: $DatabaseName for integration tests...";
@@ -74,7 +74,7 @@ Foreach($file in $TestProjects) {
 
 #Tear down the integration tests setup -
 if(-not $Process.HasExited) {
-    #$SubProcess.Kill();
+    $SubProcess.Kill();
     $Process.Kill();
 }
 

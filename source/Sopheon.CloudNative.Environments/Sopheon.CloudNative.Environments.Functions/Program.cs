@@ -43,14 +43,14 @@ namespace Sopheon.CloudNative.Environments.Functions
 
                // Add Custom Services
                string connString = string.Empty;
-               if (hostContext.HostingEnvironment.IsProduction() || hostContext.HostingEnvironment.IsEnvironment("CIAgent"))
-               {
+               //if (hostContext.HostingEnvironment.IsProduction())
+               //{
                   connString = Environment.GetEnvironmentVariable("SQLCONNSTR_EnvironmentsSqlConnectionString");
-               }
-               if (hostContext.HostingEnvironment.IsDevelopment())
-               {
-                  connString = hostContext.Configuration["SQLCONNSTR_EnvironmentsSqlConnectionString"];
-               }
+               //}
+               //if (hostContext.HostingEnvironment.IsDevelopment())
+               //{
+               //   connString = hostContext.Configuration["SQLCONNSTR_EnvironmentsSqlConnectionString"];
+               //}
                services.AddDbContext<EnvironmentContext>(options => options.UseSqlServer(connString));
                services.AddAutoMapper(typeof(Program));
 
