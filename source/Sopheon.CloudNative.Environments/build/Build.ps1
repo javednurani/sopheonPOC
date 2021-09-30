@@ -28,7 +28,7 @@ Check-LastExitCode;
 
 #Start up the func.exe using func start. This will spin up the functions to run at a local instance (Part of Azure Function Core Tools)
 #This has to be ran separately as it is a long running process and would thread block us here...
-$Process = Start-Process powershell -WorkingDirectory "$env:System_DefaultWorkingDirectory" -NoNewWindow  {
+$Process = Start-Process powershell -WorkingDirectory "$env:System_DefaultWorkingDirectory" {
     Set-Location ".\source\Sopheon.CloudNative.Environments\Sopheon.CloudNative.Environments.Functions";
     #& """C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe""" settings add environment CIAgent --verbose;
     & """C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe""" start --verbose;
@@ -36,6 +36,7 @@ $Process = Start-Process powershell -WorkingDirectory "$env:System_DefaultWorkin
 
 
 Write-Host $Process.HasExited;
+Start-Sleep -Seconds 7;
 #Wait 10 seconds to let the Func app start up
 
 #This is the func.exe process. We need to capture this object and we close this out. (Tip: This is the long running process mentioned above)
@@ -53,7 +54,7 @@ Invoke-Sqlcmd -ServerInstance . -Username sa -Password $env:LocalDatabaseEnigma 
 Write-Host "...Seeding local database: $DatabaseName...";
 & $EnvironmentsUtilityDataSeeder -Database Local;
 
-Start-Sleep -Seconds 7;
+
 Foreach($file in $IntegrationTestProjects) {
     Write-Host "...Running integration tests on $($file.Name)...";
     dotnet test $file.FullName -p:CollectCoverage=true -p:CoverletOutput=$OutputCoveragePath -p:CoverletOutputFormat="json%2cCobertura" -p:MergeWith="$($OutputCoveragePath)\coverage.json" --logger:"xunit;LogFilePath=$($OutputCoveragePath)\$($file.Name.Replace('.csproj', '')).xml" -p:Exclude="[*]Sopheon.CloudNative.Environments.Data.Migrations.*"
