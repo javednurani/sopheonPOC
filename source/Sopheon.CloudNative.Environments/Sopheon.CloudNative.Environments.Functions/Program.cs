@@ -17,53 +17,60 @@ using Sopheon.CloudNative.Environments.Functions.Validators;
 
 namespace Sopheon.CloudNative.Environments.Functions
 {
-   [ExcludeFromCodeCoverage]
-   class Program
-   {
-      static Task Main(string[] args)
-      {
-         IHost host = new HostBuilder()
-            .ConfigureAppConfiguration((hostContext, builder) =>
-            {
-               builder.AddCommandLine(args);
-               if (hostContext.HostingEnvironment.IsDevelopment())
-               {
-                  builder.AddUserSecrets<Program>();
-               }
-            })
-            .ConfigureFunctionsWorkerDefaults()
-            .ConfigureOpenApi()
-            .ConfigureServices((hostContext, services) =>
-            {
-               // Add Logging
-               services.AddLogging();
+	[ExcludeFromCodeCoverage]
+	class Program
+	{
+		static Task Main(string[] args)
+		{
+			IHost host = new HostBuilder()
+			   .ConfigureAppConfiguration((hostContext, builder) =>
+			   {
+				   builder.AddCommandLine(args);
+				   if (hostContext.HostingEnvironment.IsDevelopment())
+				   {
+					   builder.AddUserSecrets<Program>();
+				   }
+			   })
+			   .ConfigureFunctionsWorkerDefaults()
+			   .ConfigureOpenApi()
+			   .ConfigureServices((hostContext, services) =>
+			   {
+				// Add Logging
+				services.AddLogging();
 
-               // Add HttpClient
-               services.AddHttpClient();
+				// Add HttpClient
+				services.AddHttpClient();
 
-               // Add Custom Services
-               string connString = string.Empty;
-               //if (hostContext.HostingEnvironment.IsProduction())
-               //{
-                  //connString = Environment.GetEnvironmentVariable("SQLCONNSTR_EnvironmentsSqlConnectionString");
-               //}
-               //if (hostContext.HostingEnvironment.IsDevelopment())
-               //{
-                  connString = hostContext.Configuration["SQLCONNSTR_EnvironmentsSqlConnectionString"];
-               //}
-               services.AddDbContext<EnvironmentContext>(options => options.UseSqlServer(connString));
-               services.AddAutoMapper(typeof(Program));
+				// Add Custom Services
+				string connString = string.Empty;
+				if (hostContext.HostingEnvironment.IsProduction())
+				{
+					connString = Environment.GetEnvironmentVariable("SQLCONNSTR_EnvironmentsSqlConnectionString");
+				}
 
-               services.AddScoped<IEnvironmentRepository, EFEnvironmentRepository>();
-               services.AddScoped<IEnvironmentQueries, EFEnvironmentQueries>();
-               services.AddScoped<IValidator<EnvironmentDto>, EnvironmentDtoValidator>();
-               services.AddScoped<IRequiredNameValidator, RequiredNameValidator>();
-               
-               services.AddScoped<HttpResponseDataBuilder>();
-            })
-            .Build();
+				if (hostContext.HostingEnvironment.IsEnvironment("CIAgent"))
+				{
+					Console.WriteLine("************************************************");
+					Console.WriteLine("Detected in Continuous Integration Agent");
+					Console.WriteLine("************************************************");
+				}
+				//if (hostContext.HostingEnvironment.IsDevelopment())
+				//{
+				//	connString = hostContext.Configuration["SQLCONNSTR_EnvironmentsSqlConnectionString"];
+				//}
+				services.AddDbContext<EnvironmentContext>(options => options.UseSqlServer(connString));
+				   services.AddAutoMapper(typeof(Program));
 
-         return host.RunAsync();
-      }
-   }
+				   services.AddScoped<IEnvironmentRepository, EFEnvironmentRepository>();
+				   services.AddScoped<IEnvironmentQueries, EFEnvironmentQueries>();
+				   services.AddScoped<IValidator<EnvironmentDto>, EnvironmentDtoValidator>();
+				   services.AddScoped<IRequiredNameValidator, RequiredNameValidator>();
+
+				   services.AddScoped<HttpResponseDataBuilder>();
+			   })
+			   .Build();
+
+			return host.RunAsync();
+		}
+	}
 }
