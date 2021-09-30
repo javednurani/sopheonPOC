@@ -44,11 +44,11 @@ $SubProcess = Get-Process -Name func;
 
 #Create database - 
 Write-Host "...Creating local database: $DatabaseName for integration tests...";
-Invoke-Sqlcmd -ServerInstance . -UserName sa -Password $env:LocalDatabaseEnigma -Query "CREATE DATABASE $DatabaseName";
+Invoke-Sqlcmd -ServerInstance . -UserName sa -Password "$($env:LocalDatabaseEnigma)" -Query "CREATE DATABASE $DatabaseName";
 
 #Migrate database - 
 Write-Host "...Running Migration Script on local database: $DatabaseName...";
-Invoke-Sqlcmd -ServerInstance . -Username sa -Password $env:LocalDatabaseEnigma  -Database $DatabaseName -InputFile "$($env:Build_ArtifactStagingDirectory)\scripts.sql";
+Invoke-Sqlcmd -ServerInstance . -Username sa -Password "$($env:LocalDatabaseEnigma)"  -Database $DatabaseName -InputFile "$($env:Build_ArtifactStagingDirectory)\scripts.sql";
 
 #Seed Database - 
 Write-Host "...Seeding local database: $DatabaseName...";
