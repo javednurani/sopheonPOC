@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Management.Fluent;
 using Microsoft.Azure.Management.ResourceManager.Fluent;
 using Microsoft.Azure.Management.ResourceManager.Fluent.Authentication;
+using Microsoft.Azure.Management.ResourceManager.Fluent.Core;
 using Microsoft.Azure.Management.Sql.Fluent;
 using Microsoft.Extensions.Logging;
 
@@ -12,56 +14,96 @@ namespace Sopheon.CloudNative.Environments.Functions
 {
    public static class DatabaseBufferMonitor
    {
-      private const string NCRONTAB_EVERY_SECOND = "* * * * * *";
-      private const string NCRONTAB_EVERY_5_SECONDS = "*/5 * * * * *";
+      private const int BUFFER_CAPACITY = 5;
+
+      // timer schedules
+      private const string NCRONTAB_EVERY_10_SECONDS = "*/10 * * * * *";
       private const string NCRONTAB_EVERY_MINUTE = "0 * * * * *";
+      private const string NCRONTAB_EVERY_5_MINUTES = "0 */5 * * * *";
+      private const string NCRONTAB_EVERY_DAY = "0 0 0 * * *";
+      // known issue https://github.com/Azure/azure-functions-dotnet-worker/issues/534
+
+      // buffered database indicator
+      // TODO post Cloud-1474: ENV.Resources and ENV.EnvironmentResourceBindings could be used as buffer indicator, instead of Tags on Azure SQL Databases
+      // TODO Cloud-1474: when we create a buffered DB, it should be tagged as CustomerProvisionedDatabase = NotAssigned
+      private const string CUSTOMER_PROVISIONED_DATABASE_TAG_NAME = "CustomerProvisionedDatabase"; // Tag Name/key for Azure Resouce (Azure SQL database)
+      private const string CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_INITIAL = "NotAssigned"; // databases with this Tag Value are part of buffer
+      private const string CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_ASSIGNED = "AssignedToCustomer"; // not part of buffer
 
       [Function(nameof(DatabaseBufferMonitor))]
-      public static async void Run([TimerTrigger(NCRONTAB_EVERY_MINUTE)] TimerInfo myTimer, FunctionContext context)
+      public static async Task Run([TimerTrigger(NCRONTAB_EVERY_DAY)] TimerInfo myTimer, FunctionContext context)
       {
          ILogger logger = context.GetLogger(nameof(DatabaseBufferMonitor));
-         logger.LogInformation($"{nameof(DatabaseBufferMonitor)} Timer trigger function executed at: {DateTime.Now}");
+
+         logger.LogInformation($"{nameof(DatabaseBufferMonitor)} TimerTrigger Function executed at: {DateTime.Now}");
+         if (myTimer.IsPastDue)
+         {
+            logger.LogInformation($"TimerInfo.IsPastDue");
+         }
 
          try
          {
-            // TODO 9/30 https://github.com/Azure/azure-functions-dotnet-worker/issues/534
+            IAzure azure = await AuthenticateWithAzureServicePrincipal(logger);
+            logger.LogInformation($"Authenticated with Service Principal to Subscription: {azure.SubscriptionId}!");
 
-            IAzure azure = AuthenticateWithAzureServicePrincipal(logger);
-            logger.LogInformation($"Authenticated!");
+            // Azure resources
+            string SUBSCRIPTION_ID = Environment.GetEnvironmentVariable("SubscriptionId");
+            string RESOURCE_GROUP_NAME = Environment.GetEnvironmentVariable("ResourceGroupName");
+            string SQL_SERVER_NAME = Environment.GetEnvironmentVariable("SqlServerName");
 
-            // check buffer capacity
-            const int BUFFER_CAPACITY = 50;
+            #region BufferCapacity
+            ISqlServer sqlServer = await azure.SqlServers
+                     .GetByIdAsync($"/subscriptions/{SUBSCRIPTION_ID}/resourceGroups/{RESOURCE_GROUP_NAME}/providers/Microsoft.Sql/servers/{SQL_SERVER_NAME}");
 
-            // case 1 - single server, single elastic pool 
-            ISqlServer sqlServer = await azure.SqlServers.GetByIdAsync("...");
+            List<ISqlDatabase> notAssigned = new List<ISqlDatabase>();
+            List<ISqlDatabase> assignedToCustomer = new List<ISqlDatabase>();
 
-            // case 2 - single server, multiple elastic pools
-            // case 3 - multiple servers, multiple elastic pool 
+            IReadOnlyList<ISqlDatabase> allDatabasesOnServer = await azure.SqlServers.Databases.ListBySqlServerAsync(sqlServer);
 
-            IReadOnlyList<ISqlElasticPool> elasticPools = await azure.SqlServers.ElasticPools
-               .ListBySqlServerAsync("...", "...");
-
-            IEnumerable<ISqlElasticPool> linqDemo = elasticPools.Where(x => x.Parent.Name == "sqlServerName");
-
-            IReadOnlyList<ISqlDatabase> databases = await azure.SqlServers.Databases.ListBySqlServerAsync("", "");
-
-            // return if satisfied
-            if (databases.Count >= BUFFER_CAPACITY)
+            // categorize CustomerProvisionedDatabase tagged databases by tag value
+            foreach (var database in allDatabasesOnServer) // TODO: optimize search?
             {
-               logger.LogInformation($"Sufficient database buffer capacity. Exiting {nameof(DatabaseBufferMonitor)}...");
+               ISqlDatabase databaseWithDetails = await azure.SqlServers.Databases.GetBySqlServerAsync(sqlServer, database.Name);
+
+               // has CustomerProvisionedDatabase tag
+               string tagValue;
+               if (databaseWithDetails.Tags != null && databaseWithDetails.Tags.TryGetValue(CUSTOMER_PROVISIONED_DATABASE_TAG_NAME, out tagValue))
+               {
+                  // CustomerProvisionedDatabase : NotAssigned
+                  if (tagValue == CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_INITIAL)
+                  {
+                     notAssigned.Add(databaseWithDetails);
+                  }
+                  // CustomerProvisionedDatabase : AssignedToCustomer
+                  else if (tagValue == CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_ASSIGNED)
+                  {
+                     assignedToCustomer.Add(databaseWithDetails);
+                  }
+               }
             }
 
-            // calculate what to deploy?
-            // 1. database resource labels
-            // 2. ENV records (Resources, EnvironmentResourceBindings)
+            if (notAssigned.Count() >= BUFFER_CAPACITY)
+            {
+               logger.LogInformation($"Sufficient database buffer capacity. Exiting {nameof(DatabaseBufferMonitor)}...");
+               return;
+            }
+            #endregion // BufferCapacity
 
+            #region ExistingDeployments
+            // TODO: return on some deployment conditions - provisioningStatus / tags etc
+            IPagedCollection<IDeployment> deploymentsForResourceGroup = await azure.Deployments.ListByResourceGroupAsync(RESOURCE_GROUP_NAME);
+            #endregion // ExistingDeployments
+
+            #region CreateDeployment
+            // TODO: calculate what to deploy?
+            IReadOnlyList<ISqlElasticPool> elasticPools = await azure.SqlServers.ElasticPools
+               .ListBySqlServerAsync(RESOURCE_GROUP_NAME, SQL_SERVER_NAME);
 
             // create deployment
             // https://docs.microsoft.com/en-us/azure/azure-resource-manager/
+            #endregion // CreateDeployment
 
-            // write ENV.Resources records?
-
-
+            // TODO: write ENV.Resources records?
          }
          catch (Exception ex)
          {
@@ -69,7 +111,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          }
       }
 
-      private static IAzure AuthenticateWithAzureServicePrincipal(ILogger logger)
+      private static async Task<IAzure> AuthenticateWithAzureServicePrincipal(ILogger logger)
       {
          // authenticate with Service Principal credentials
          logger.LogInformation("Fetching Service Principal credentials");
@@ -82,9 +124,9 @@ namespace Sopheon.CloudNative.Environments.Functions
 
          logger.LogInformation($"Authenticating with Azure...");
 
-         return Microsoft.Azure.Management.Fluent.Azure
+         return await Microsoft.Azure.Management.Fluent.Azure
             .Authenticate(credentials)
-            .WithSubscription("...");
+            .WithDefaultSubscriptionAsync();
       }
    }
 }
