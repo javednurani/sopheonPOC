@@ -47,17 +47,10 @@ namespace Sopheon.CloudNative.Environments.Functions
 					{
 						connString = Environment.GetEnvironmentVariable("SQLCONNSTR_EnvironmentsSqlConnectionString");
 					}
-
-					if (hostContext.HostingEnvironment.IsEnvironment("CIAgent"))
-					{
-						Console.WriteLine("************************************************");
-						Console.WriteLine("Detected in Continuous Integration Agent");
-						Console.WriteLine("************************************************");
-						connString = Environment.GetEnvironmentVariable("SQLCONNSTR_EnvironmentsSqlConnectionString");
-					}
 					if (hostContext.HostingEnvironment.IsDevelopment())
 					{
 						//connString = hostContext.Configuration["SQLCONNSTR_EnvironmentsSqlConnectionString"];
+						connString = Environment.GetEnvironmentVariable("SQLCONNSTR_EnvironmentsSqlConnectionString");
 					}
 					services.AddDbContext<EnvironmentContext>(options => options.UseSqlServer(connString));
 					services.AddAutoMapper(typeof(Program));
