@@ -4,7 +4,7 @@ $EnvironmentsUtilityDataSeeder = "$($env:System_DefaultWorkingDirectory)\source\
 #TODO: Does this need to be configurable....
 $DatabaseName = "EnvironmentManagement";
 $AzureFuncExe = "C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe"
-$DatabaseConnect = $env:LocalDatabaseConnectionString
+$DatabaseConnect = "$($env:LocalDatabaseConnectionString)"
 
 Copy-Item -Path "$($env:System_DefaultWorkingDirectory)\source\Sopheon.CloudNative.Environments\deploy\*" -Destination $env:Build_ArtifactStagingDirectory;
 
@@ -30,7 +30,7 @@ Check-LastExitCode;
 #This has to be ran separately as it is a long running process and would thread block us here...
 $Process = Start-Process powershell -WorkingDirectory "$env:System_DefaultWorkingDirectory" -NoNewWindow  {
     Set-Location ".\source\Sopheon.CloudNative.Environments\Sopheon.CloudNative.Environments.Functions";
-    & """C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe""" settings add SQLCONNSTR_EnvironmentsSqlConnectionString """$($DatabaseConnect)""" --verbose;
+    & """C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe""" settings add SQLCONNSTR_EnvironmentsSqlConnectionString "$($DatabaseConnect)" --verbose;
     & """C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe""" start --verbose;
     } -PassThru -Verbose;
 
