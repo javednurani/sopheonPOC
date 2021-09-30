@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Sopheon.CloudNative.Environments.Functions.IntegrationTests.Infrastructure;
+using Sopheon.CloudNative.Environments.Utility;
 using Xunit;
 
 namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.DataDependent
