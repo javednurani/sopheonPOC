@@ -48,7 +48,7 @@ Invoke-Sqlcmd -ServerInstance . -UserName sa -Password $env:LocalDatabaseEnigma 
 
 #Migrate database - 
 Write-Host "...Running Migration Script on local database: $DatabaseName...";
-Invoke-Sqlcmd -ServerInstance . -Username sa -Password $env:LocalDatabaseEnigma  -Databse $DatabaseName -InputFile "$($env:Build_ArtifactStagingDirectory)\scripts.sql";
+Invoke-Sqlcmd -ServerInstance . -Username sa -Password $env:LocalDatabaseEnigma  -Database $DatabaseName -InputFile "$($env:Build_ArtifactStagingDirectory)\scripts.sql";
 
 #Seed Database - 
 Write-Host "...Seeding local database: $DatabaseName...";
