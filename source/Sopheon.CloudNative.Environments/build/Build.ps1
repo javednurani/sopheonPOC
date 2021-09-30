@@ -28,41 +28,41 @@ Check-LastExitCode;
 
 #Start up the func.exe using func start. This will spin up the functions to run at a local instance (Part of Azure Function Core Tools)
 #This has to be ran separately as it is a long running process and would thread block us here...
-$Process = Start-Process powershell -WorkingDirectory "$env:System_DefaultWorkingDirectory" {
-    Set-Location ".\source\Sopheon.CloudNative.Environments\Sopheon.CloudNative.Environments.Functions";
-    #& """C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe""" settings add environment CIAgent --verbose;
-    & """C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe""" start --verbose;
-    } -PassThru -Verbose;
+# $Process = Start-Process powershell -WorkingDirectory "$env:System_DefaultWorkingDirectory" {
+#     Set-Location ".\source\Sopheon.CloudNative.Environments\Sopheon.CloudNative.Environments.Functions";
+#     #& """C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe""" settings add environment CIAgent --verbose;
+#     & """C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe""" start --verbose;
+#     } -PassThru -Verbose;
 
 
-Write-Host $Process.HasExited;
-Start-Sleep -Seconds 7;
-#Wait 10 seconds to let the Func app start up
+# Write-Host $Process.HasExited;
+# Start-Sleep -Seconds 7;
+# #Wait 10 seconds to let the Func app start up
 
-#This is the func.exe process. We need to capture this object and we close this out. (Tip: This is the long running process mentioned above)
-$SubProcess = Get-Process -Name func;
+# #This is the func.exe process. We need to capture this object and we close this out. (Tip: This is the long running process mentioned above)
+# $SubProcess = Get-Process -Name func;
 
-#Create database - 
-Write-Host "...Creating local database: $DatabaseName for integration tests...";
-Invoke-Sqlcmd -ServerInstance . -UserName sa -Password "$($env:LocalDatabaseEnigma)" -Query "CREATE DATABASE $DatabaseName";
+# #Create database - 
+# Write-Host "...Creating local database: $DatabaseName for integration tests...";
+# Invoke-Sqlcmd -ServerInstance . -UserName sa -Password "$($env:LocalDatabaseEnigma)" -Query "CREATE DATABASE $DatabaseName";
 
-#Migrate database - 
-Write-Host "...Running Migration Script on local database: $DatabaseName...";
-Invoke-Sqlcmd -ServerInstance . -Username sa -Password "$($env:LocalDatabaseEnigma)"  -Database $DatabaseName -InputFile "$($env:Build_ArtifactStagingDirectory)\scripts.sql";
+# #Migrate database - 
+# Write-Host "...Running Migration Script on local database: $DatabaseName...";
+# Invoke-Sqlcmd -ServerInstance . -Username sa -Password "$($env:LocalDatabaseEnigma)"  -Database $DatabaseName -InputFile "$($env:Build_ArtifactStagingDirectory)\scripts.sql";
 
-#Seed Database - 
-Write-Host "...Seeding local database: $DatabaseName...";
-& $EnvironmentsUtilityDataSeeder -Database Local;
+# #Seed Database - 
+# Write-Host "...Seeding local database: $DatabaseName...";
+# & $EnvironmentsUtilityDataSeeder -Database Local;
 
 
-Foreach($file in $IntegrationTestProjects) {
-    Write-Host "...Running integration tests on $($file.Name)...";
-    dotnet test $file.FullName -p:CollectCoverage=true -p:CoverletOutput=$OutputCoveragePath -p:CoverletOutputFormat="json%2cCobertura" -p:MergeWith="$($OutputCoveragePath)\coverage.json" --logger:"xunit;LogFilePath=$($OutputCoveragePath)\$($file.Name.Replace('.csproj', '')).xml" -p:Exclude="[*]Sopheon.CloudNative.Environments.Data.Migrations.*"
-}
+# Foreach($file in $IntegrationTestProjects) {
+#     Write-Host "...Running integration tests on $($file.Name)...";
+#     dotnet test $file.FullName -p:CollectCoverage=true -p:CoverletOutput=$OutputCoveragePath -p:CoverletOutputFormat="json%2cCobertura" -p:MergeWith="$($OutputCoveragePath)\coverage.json" --logger:"xunit;LogFilePath=$($OutputCoveragePath)\$($file.Name.Replace('.csproj', '')).xml" -p:Exclude="[*]Sopheon.CloudNative.Environments.Data.Migrations.*"
+# }
 
-#Clean up Database - 
-Write-Host "...Cleaning up database: $DatabaseName...";
-Invoke-Sqlcmd -ServerInstance . -UserName sa -Password $env:LocalDatabaseEnigma -Query "DROP DATABASE $DatabaseName";
+# #Clean up Database - 
+# Write-Host "...Cleaning up database: $DatabaseName...";
+# Invoke-Sqlcmd -ServerInstance . -UserName sa -Password $env:LocalDatabaseEnigma -Query "DROP DATABASE $DatabaseName";
 
 #Setup for Unit Tests here -
 $TestProjects = Get-Item -Path "$($env:System_DefaultWorkingDirectory)\source\Sopheon.CloudNative.Environments\**\*.UnitTests.csproj";
@@ -73,11 +73,11 @@ Foreach($file in $TestProjects) {
     dotnet test $file.FullName -p:CollectCoverage=true -p:CoverletOutput=$OutputCoveragePath -p:CoverletOutputFormat="json%2cCobertura" -p:MergeWith="$($OutputCoveragePath)\coverage.json" --logger:"xunit;LogFilePath=$($OutputCoveragePath)\$($file.Name.Replace('.csproj', '')).xml" -p:Exclude="[*]Sopheon.CloudNative.Environments.Data.Migrations.*"
 }
 
-#Tear down the integration tests setup -
-if(-not $Process.HasExited) {
-    $SubProcess.Kill();
-    $Process.Kill();
-}
+# #Tear down the integration tests setup -
+# if(-not $Process.HasExited) {
+#     $SubProcess.Kill();
+#     $Process.Kill();
+# }
 
 #All migrations and tests are done...let's publish it!
 Write-Host "...Running dotnet publish on Functions.csproj";
