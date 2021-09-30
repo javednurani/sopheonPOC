@@ -10,8 +10,8 @@ using Sopheon.CloudNative.Environments.Data;
 namespace Sopheon.CloudNative.Environments.Data.Migrations
 {
     [DbContext(typeof(EnvironmentContext))]
-    [Migration("20210923174223_AddEntities")]
-    partial class AddEntities
+    [Migration("20210928195633_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -59,17 +59,35 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
-                    b.Property<int>("ResourceTypeId")
+                    b.Property<int>("DomainResourceTypeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ResourceTypeId");
+                    b.HasIndex("DomainResourceTypeId");
 
                     b.HasIndex("BusinessServiceId", "DependencyName")
                         .IsUnique();
 
                     b.ToTable("BusinessServiceDependencies");
+                });
+
+            modelBuilder.Entity("Sopheon.CloudNative.Environments.Domain.Models.DomainResourceType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("DomainResourceTypeId")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DomainResourceTypes");
                 });
 
             modelBuilder.Entity("Sopheon.CloudNative.Environments.Domain.Models.Environment", b =>
@@ -143,7 +161,7 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
                         .HasColumnName("ResourceId")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ResourceTypeId")
+                    b.Property<int>("DomainResourceTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Uri")
@@ -153,30 +171,12 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ResourceTypeId");
+                    b.HasIndex("DomainResourceTypeId");
 
                     b.HasIndex("Uri")
                         .IsUnique();
 
                     b.ToTable("Resources");
-                });
-
-            modelBuilder.Entity("Sopheon.CloudNative.Environments.Domain.Models.ResourceType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("ResourceTypeId")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DomainResourceTypes");
                 });
 
             modelBuilder.Entity("Sopheon.CloudNative.Environments.Domain.Models.BusinessServiceDependency", b =>
@@ -187,15 +187,15 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Sopheon.CloudNative.Environments.Domain.Models.ResourceType", "ResourceType")
+                    b.HasOne("Sopheon.CloudNative.Environments.Domain.Models.DomainResourceType", "DomainResourceType")
                         .WithMany("BusinessServiceDependencies")
-                        .HasForeignKey("ResourceTypeId")
+                        .HasForeignKey("DomainResourceTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("BusinessService");
 
-                    b.Navigation("ResourceType");
+                    b.Navigation("DomainResourceType");
                 });
 
             modelBuilder.Entity("Sopheon.CloudNative.Environments.Domain.Models.EnvironmentResourceBinding", b =>
@@ -227,13 +227,13 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
 
             modelBuilder.Entity("Sopheon.CloudNative.Environments.Domain.Models.Resource", b =>
                 {
-                    b.HasOne("Sopheon.CloudNative.Environments.Domain.Models.ResourceType", "ResourceType")
+                    b.HasOne("Sopheon.CloudNative.Environments.Domain.Models.DomainResourceType", "DomainResourceType")
                         .WithMany("Resources")
-                        .HasForeignKey("ResourceTypeId")
+                        .HasForeignKey("DomainResourceTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("ResourceType");
+                    b.Navigation("DomainResourceType");
                 });
 
             modelBuilder.Entity("Sopheon.CloudNative.Environments.Domain.Models.BusinessService", b =>
@@ -246,6 +246,13 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
                     b.Navigation("EnvironmentResourceBindings");
                 });
 
+            modelBuilder.Entity("Sopheon.CloudNative.Environments.Domain.Models.DomainResourceType", b =>
+                {
+                    b.Navigation("BusinessServiceDependencies");
+
+                    b.Navigation("Resources");
+                });
+
             modelBuilder.Entity("Sopheon.CloudNative.Environments.Domain.Models.Environment", b =>
                 {
                     b.Navigation("EnvironmentResourceBindings");
@@ -254,13 +261,6 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
             modelBuilder.Entity("Sopheon.CloudNative.Environments.Domain.Models.Resource", b =>
                 {
                     b.Navigation("EnvironmentResourceBindings");
-                });
-
-            modelBuilder.Entity("Sopheon.CloudNative.Environments.Domain.Models.ResourceType", b =>
-                {
-                    b.Navigation("BusinessServiceDependencies");
-
-                    b.Navigation("Resources");
                 });
 #pragma warning restore 612, 618
         }

@@ -74,7 +74,7 @@ namespace Sopheon.CloudNative.Environments.Utility
             {
                Name = "Hammer Production",
                Description = "Hammer Corp production environment",
-               EnvironmentKey = TestData.EnvironmentKey1,
+               EnvironmentKey = Guid.Parse("11111111-1111-1111-1111-111111111111"), // TODO: consolidate
                Owner = Guid.NewGuid(),
                IsDeleted = false
             };

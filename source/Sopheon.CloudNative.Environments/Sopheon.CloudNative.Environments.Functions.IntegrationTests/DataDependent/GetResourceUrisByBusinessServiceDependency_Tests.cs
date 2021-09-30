@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using Sopheon.CloudNative.Environments.Utility;
+using Sopheon.CloudNative.Environments.Functions.IntegrationTests.Infrastructure;
 using Xunit;
 
-namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests
+namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.DataDependent
 {
-   public class GetResourceUrisByBusinessServiceDependency_Tests : FunctionIntegrationTest
+   public class GetResourceUrisByBusinessServiceDependency_Tests : DataDependentFunctionIntegrationTest
    {
-      [FunctionFact]
+      [DataDependentFunctionFact]
       public async void HappyPath_GetResourceUrisByBusinessServiceDependency()
       {
          ICollection<ResourceUriDto> results = await _sut.GetResourceUrisByBusinessServiceDependencyAsync(TestData.BUSINESS_SERVICE_NAME_1, TestData.DEPENDENCY_NAME_1);

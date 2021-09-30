@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests
+namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.StandAlone
 {
    public class Environments_HappyPath : FunctionIntegrationTest
    {
