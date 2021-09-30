@@ -6,9 +6,10 @@ using Sopheon.CloudNative.Environments.Data;
 using Sopheon.CloudNative.Environments.Domain.Models;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
+[assembly:ExcludeFromCodeCoverage]
 namespace Sopheon.CloudNative.Environments.Utility
 {
-   [ExcludeFromCodeCoverage]
+
    class Program
    {
 	   private static string _databaseConnection = "";
