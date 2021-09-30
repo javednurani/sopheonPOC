@@ -28,19 +28,19 @@ Check-LastExitCode;
 
 #Start up the func.exe using func start. This will spin up the functions to run at a local instance (Part of Azure Function Core Tools)
 #This has to be ran separately as it is a long running process and would thread block us here...
-$Process = Start-Process powershell -WorkingDirectory "$env:System_DefaultWorkingDirectory" {
-    Set-Location ".\source\Sopheon.CloudNative.Environments\Sopheon.CloudNative.Environments.Functions";
-    #& """C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe""" settings add environment CIAgent --verbose;
-    & """C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe""" start --verbose;
-    } -PassThru -Verbose;
+# $Process = Start-Process powershell -WorkingDirectory "$env:System_DefaultWorkingDirectory" {
+#     Set-Location ".\source\Sopheon.CloudNative.Environments\Sopheon.CloudNative.Environments.Functions";
+#     #& """C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe""" settings add environment CIAgent --verbose;
+#     & """C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe""" start --verbose;
+#     } -PassThru -Verbose;
 
 
-Write-Host $Process.HasExited;
-Start-Sleep -Seconds 7;
+# Write-Host $Process.HasExited;
+# Start-Sleep -Seconds 7;
 #Wait 10 seconds to let the Func app start up
 
 #This is the func.exe process. We need to capture this object and we close this out. (Tip: This is the long running process mentioned above)
-$SubProcess = Get-Process -Name func;
+# $SubProcess = Get-Process -Name func;
 
 #Create database - 
 Write-Host "...Creating local database: $DatabaseName for integration tests...";
@@ -74,10 +74,10 @@ Foreach($file in $TestProjects) {
 }
 
 #Tear down the integration tests setup -
-if(-not $Process.HasExited) {
-    $SubProcess.Kill();
-    $Process.Kill();
-}
+# if(-not $Process.HasExited) {
+#     $SubProcess.Kill();
+#     $Process.Kill();
+# }
 
 #All migrations and tests are done...let's publish it!
 Write-Host "...Running dotnet publish on Functions.csproj";
