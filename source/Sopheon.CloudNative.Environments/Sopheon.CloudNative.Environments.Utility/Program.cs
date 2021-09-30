@@ -65,6 +65,10 @@ namespace Sopheon.CloudNative.Environments.Utility
             int result = await context.SaveChangesAsync();
             Console.WriteLine(result + " entries written to the database.");
          }
+         else
+         {
+            Console.WriteLine("0 entries written. Database is not empty.");
+         }
       }
    }
 }
