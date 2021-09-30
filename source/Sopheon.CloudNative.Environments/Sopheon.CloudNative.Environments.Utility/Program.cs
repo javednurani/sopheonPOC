@@ -1,20 +1,28 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Sopheon.CloudNative.Environments.Data;
 using Sopheon.CloudNative.Environments.Domain.Models;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
+[assembly:ExcludeFromCodeCoverage]
 namespace Sopheon.CloudNative.Environments.Utility
 {
-   [ExcludeFromCodeCoverage]
+
    class Program
    {
+	   private static string _databaseConnection = "";
       static async System.Threading.Tasks.Task Main(string[] args)
       {
-         DbContextOptions<EnvironmentContext> _dbContextOptions =
+	      if (args.Any(arg => arg == "-Database"))
+	      {
+		      _databaseConnection = System.Environment.GetEnvironmentVariable("LocalDatabaseConnectionString");
+	      }
+
+      DbContextOptions<EnvironmentContext> _dbContextOptions =
             new DbContextOptionsBuilder<EnvironmentContext>()
-               .UseSqlServer("YOUR_CONN_STRING_HERE")
+               .UseSqlServer(_databaseConnection)
                .Options;
 
          using var context = new EnvironmentContext(_dbContextOptions);
@@ -32,7 +40,7 @@ namespace Sopheon.CloudNative.Environments.Utility
 
             Resource resource1 = new Resource
             {
-               Uri = "https://hammer-prod-sql.database.windows.net",
+               Uri = TestData.RESOURCE_URI_1,
                DomainResourceType = resourceType1
             };
 
@@ -56,7 +64,7 @@ namespace Sopheon.CloudNative.Environments.Utility
 
             BusinessService businessService1 = new BusinessService
             {
-               Name = "PRODUCT_SERVICE"
+               Name = TestData.BUSINESS_SERVICE_NAME_1
             };
             BusinessService businessService2 = new BusinessService
             {
@@ -83,7 +91,7 @@ namespace Sopheon.CloudNative.Environments.Utility
 
             BusinessServiceDependency businessServiceDependency1 = new BusinessServiceDependency
             {
-               DependencyName = "PRODUCT_DATASTORE",
+               DependencyName = TestData.DEPENDENCY_NAME_1,
                BusinessService = businessService1,
                DomainResourceType = resourceType1
             };
