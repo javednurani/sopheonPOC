@@ -12,7 +12,7 @@ namespace Sopheon.CloudNative.Environments.Utility
    class Program
    {
       static async System.Threading.Tasks.Task Main(string[] args)
-      {
+      {       
          DbContextOptions<EnvironmentContext> _dbContextOptions =
             new DbContextOptionsBuilder<EnvironmentContext>()
                .UseSqlServer("YOUR_CONN_STRING_HERE")
@@ -62,7 +62,8 @@ namespace Sopheon.CloudNative.Environments.Utility
             };
 
             context.EnvironmentResourceBindings.AddRange(environmentResourceBindings);
-            await context.SaveChangesAsync();
+            int result = await context.SaveChangesAsync();
+            Console.WriteLine(result + " entries written to the database.");
          }
       }
    }
