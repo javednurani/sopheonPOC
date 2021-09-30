@@ -37,7 +37,6 @@ $Process = Start-Process powershell -WorkingDirectory "$env:System_DefaultWorkin
 
 Write-Host $Process.HasExited;
 #Wait 10 seconds to let the Func app start up
-Start-Sleep -Seconds 10;
 
 #This is the func.exe process. We need to capture this object and we close this out. (Tip: This is the long running process mentioned above)
 $SubProcess = Get-Process -Name func;
@@ -54,6 +53,7 @@ Invoke-Sqlcmd -ServerInstance . -Username sa -Password $env:LocalDatabaseEnigma 
 Write-Host "...Seeding local database: $DatabaseName...";
 & $EnvironmentsUtilityDataSeeder -Database Local;
 
+Start-Sleep -Seconds 7;
 Foreach($file in $IntegrationTestProjects) {
     Write-Host "...Running integration tests on $($file.Name)...";
     dotnet test $file.FullName -p:CollectCoverage=true -p:CoverletOutput=$OutputCoveragePath -p:CoverletOutputFormat="json%2cCobertura" -p:MergeWith="$($OutputCoveragePath)\coverage.json" --logger:"xunit;LogFilePath=$($OutputCoveragePath)\$($file.Name.Replace('.csproj', '')).xml" -p:Exclude="[*]Sopheon.CloudNative.Environments.Data.Migrations.*"
