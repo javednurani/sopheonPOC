@@ -1,10 +1,6 @@
 ﻿using Azure.Core.Serialization;
 using Microsoft.Azure.Functions.Worker.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Sopheon.CloudNative.Environments.Functions.Helpers

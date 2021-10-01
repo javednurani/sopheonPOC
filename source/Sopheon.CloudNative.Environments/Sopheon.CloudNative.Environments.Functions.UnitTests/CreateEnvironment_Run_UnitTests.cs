@@ -3,12 +3,8 @@ using System.IO;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
-using AutoMapper;
 using FluentValidation;
-using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Moq;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
@@ -24,13 +20,11 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
    {
       CreateEnvironment Sut;
 
-      Mock<FunctionContext> _context;
       Mock<HttpRequestData> _request;
 
       Mock<IEnvironmentRepository> _mockEnvironmentRepository;
       HttpResponseDataBuilder _responseBuilder;
 
-      IMapper _mapper;
       IValidator<EnvironmentDto> _validator;
 
       public CreateEnvironment_Run_UnitTests()
@@ -96,7 +90,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         Assert.Equal($"'{nameof(EnvironmentDto.Name)}' must not be empty.", responseBody);
+         ErrorDto errorResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
+
+         Assert.Equal($"'{nameof(EnvironmentDto.Name)}' must not be empty.", errorResponse.Message);
       }
 
       [Fact]
@@ -119,7 +115,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         Assert.Equal($"'{nameof(EnvironmentDto.Owner)}' must not be empty.", responseBody);
+         ErrorDto errorResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
+
+         Assert.Equal($"'{nameof(EnvironmentDto.Owner)}' must not be empty.", errorResponse.Message);
       }
 
       [Fact]
@@ -143,19 +141,15 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         Assert.Equal(StringConstants.RESPONSE_REQUEST_BODY_INVALID, responseBody);
+         ErrorDto errorResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
+
+         Assert.Equal(StringConstants.RESPONSE_REQUEST_BODY_INVALID, errorResponse.Message);
       }
 
 
       private void TestSetup()
       {
-         // FunctionContext
-         ServiceCollection serviceCollection = new ServiceCollection();
-         serviceCollection.AddScoped<ILoggerFactory, LoggerFactory>();
-         ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
-
-         _context = new Mock<FunctionContext>();
-         _context.SetupProperty(c => c.InstanceServices, serviceProvider);
+         SetupFunctionContext();
 
          // HttpRequestData
          _request = new Mock<HttpRequestData>(_context.Object);
@@ -176,12 +170,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
             return Task.FromResult(e);
          });
 
-         // AutoMapper config
-         MapperConfiguration config = new MapperConfiguration(cfg =>
-         {
-            cfg.AddProfile(new MappingProfile());
-         });
-         _mapper = config.CreateMapper();
+         SetupAutoMapper();
 
          _validator = new EnvironmentDtoValidator();
          _responseBuilder = new HttpResponseDataBuilder();

@@ -1,4 +1,5 @@
-﻿using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
+﻿using Sopheon.CloudNative.Environments.Domain.Models;
+using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
 namespace Sopheon.CloudNative.Environments.Testing.Common
 {
@@ -13,11 +14,19 @@ namespace Sopheon.CloudNative.Environments.Testing.Common
          return new Environment
          {
             EnvironmentKey = someRandom.Guid(),
-            EnvironmentID = someRandom.Int(),
+            Id = someRandom.Int(),
             Owner = someRandom.Guid(),
             Name = someRandom.String(),
             Description = someRandom.String(),
             IsDeleted = isDeleted
+         };
+      }
+
+      public static DomainResourceType DomainResourceType(this SomeRandom someRandom)
+      {
+         return new DomainResourceType
+         {
+            Name = someRandom.String(),
          };
       }
    }
