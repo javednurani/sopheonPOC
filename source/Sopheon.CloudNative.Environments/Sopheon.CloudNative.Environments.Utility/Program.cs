@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Sopheon.CloudNative.Environments.Data;
 using Sopheon.CloudNative.Environments.Domain.Enums;
 using Sopheon.CloudNative.Environments.Domain.Models;
@@ -13,18 +16,48 @@ namespace Sopheon.CloudNative.Environments.Utility
 
    class Program
    {
-	   private static string _databaseConnection = "";
+      private static string _databaseConnection = "";
+      public static IConfigurationRoot Configuration { get; set; }
       static async System.Threading.Tasks.Task Main(string[] args)
       {
-	      if (args.Any(arg => arg == "-Database"))
-	      {
-		      _databaseConnection = System.Environment.GetEnvironmentVariable("LocalDatabaseConnectionString");
-	      }
 
-      DbContextOptions<EnvironmentContext> _dbContextOptions =
-            new DbContextOptionsBuilder<EnvironmentContext>()
-               .UseSqlServer(_databaseConnection)
-               .Options;
+         if (args.Any(arg => arg == "-Database"))
+         {
+            _databaseConnection = System.Environment.GetEnvironmentVariable("LocalDatabaseConnectionString");
+         }
+
+         //if not running in pipeline, set _databaseConnection to value from user secrets
+         if (string.IsNullOrEmpty(_databaseConnection))
+         {
+            var devEnvironmentVariable = System.Environment.GetEnvironmentVariable("NETCORE_ENVIRONMENT");
+            var isDevelopment = string.IsNullOrEmpty(devEnvironmentVariable) || devEnvironmentVariable.ToLower() == "development";
+            //Determines the working environment as IHostingEnvironment is unavailable in a console app
+
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddEnvironmentVariables();
+
+            if (isDevelopment) //only add secrets in development
+            {
+               builder.AddUserSecrets<UserSecretManager>();
+            }
+
+            Configuration = builder.Build();
+
+            var services = new ServiceCollection()
+               .Configure<UserSecretManager>(Configuration.GetSection(nameof(UserSecretManager)))
+               .AddOptions()
+               .BuildServiceProvider();
+
+            services.GetService<UserSecretManager>();
+         }
+
+         DbContextOptions<EnvironmentContext> _dbContextOptions =
+               new DbContextOptionsBuilder<EnvironmentContext>()
+                  .UseSqlServer(_databaseConnection)
+                  .Options;
+
 
          using var context = new EnvironmentContext(_dbContextOptions);
 
@@ -35,7 +68,7 @@ namespace Sopheon.CloudNative.Environments.Utility
             Resource resource1 = new Resource
             {
                Uri = TestData.RESOURCE_URI_1,
-               DomainResourceType = resourceType1
+               DomainResourceType = azureSqlResourceType
             };
 
             BusinessService businessService1 = new BusinessService
