@@ -45,12 +45,20 @@ namespace Sopheon.CloudNative.Environments.Utility
 
             Configuration = builder.Build();
 
-            var services = new ServiceCollection()
+            IServiceCollection services = new ServiceCollection();
+            services
                .Configure<UserSecretManager>(Configuration.GetSection(nameof(UserSecretManager)))
                .AddOptions()
+               .AddLogging()
+               .AddSingleton<ISecretRevealer, SecretRevealer>()
                .BuildServiceProvider();
 
-            services.GetService<UserSecretManager>();
+            var serviceProvider = services.BuildServiceProvider();
+
+            // Get the service you need - DI will handle any dependencies - in this case IOptions<SecretStuff>
+            var revealer = serviceProvider.GetService<ISecretRevealer>();
+
+            _databaseConnection = revealer.RevealLocalConnectionString();
          }
 
          DbContextOptions<EnvironmentContext> _dbContextOptions =

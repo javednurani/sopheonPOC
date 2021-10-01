@@ -8,7 +8,7 @@ namespace Sopheon.CloudNative.Environments.Utility
 {
    public class UserSecretManager
    {
-      public string SQLCONNSTR_EnvironmentsSqlConnectionString
+      public string LocalDatabaseConnectionString
       {
          get;
          set;
