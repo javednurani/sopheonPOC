@@ -12,7 +12,7 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.DataDepend
       {
          ICollection<ResourceUriDto> results = await _sut.GetResourceUrisByBusinessServiceDependencyAsync(TestData.BUSINESS_SERVICE_NAME_1, TestData.DEPENDENCY_NAME_1);
          Assert.NotNull(results);
-         Assert.True(results.Count == 2);
+         Assert.Equal(1, results.Count);
          Assert.Contains(results, r => r.Uri == TestData.RESOURCE_URI_1);
       }
    }
