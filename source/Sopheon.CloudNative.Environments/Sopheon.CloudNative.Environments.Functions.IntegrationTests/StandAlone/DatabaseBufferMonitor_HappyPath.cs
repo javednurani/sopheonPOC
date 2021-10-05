@@ -9,7 +9,7 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.StandAlone
 {
    public class DatabaseBufferMonitor_HappyPath : FunctionFact // TODO FunctionFact 'localhost:7071 availability check' depends on OpenAPI usage
    {
-      [Fact]
+      [FunctionFact]
       public async Task HappyPath()
       {
          HttpResponseMessage response = await RunTimerTriggerFunction(nameof(DatabaseBufferMonitor));
