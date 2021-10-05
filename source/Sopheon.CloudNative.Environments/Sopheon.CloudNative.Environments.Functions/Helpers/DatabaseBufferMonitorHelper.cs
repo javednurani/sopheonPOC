@@ -20,13 +20,17 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
       private const string CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_ASSIGNED = "AssignedToCustomer"; // not part of buffer
       private const int BUFFER_CAPACITY = 5;
 
-      // TODO: how to get logger instance?  passed in from caller?  get new instance from context?
-      ILogger logger;
+      ILogger<DatabaseBufferMonitorHelper> _logger;
+
+      public DatabaseBufferMonitorHelper(ILogger<DatabaseBufferMonitorHelper> logger)
+      {
+         _logger = logger;
+      }
 
       public async Task<bool> CheckHasDatabaseThreshold()
       {
-         IAzure azure = await AuthenticateWithAzureServicePrincipal(logger);
-         logger.LogInformation($"Authenticated with Service Principal to Subscription: {azure.SubscriptionId}!");
+         IAzure azure = await AuthenticateWithAzureServicePrincipal(_logger);
+         _logger.LogInformation($"Authenticated with Service Principal to Subscription: {azure.SubscriptionId}!");
 
          string subscriptionId = Environment.GetEnvironmentVariable("AzSubscriptionId");
          string resourceGroupName = Environment.GetEnvironmentVariable("AzResourceGroupName");
@@ -66,7 +70,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          if (notAssigned.Count() >= BUFFER_CAPACITY)
          {
             // TODO: update message
-            logger.LogInformation($"Sufficient database buffer capacity. Exiting {nameof(DatabaseBufferMonitor)}...");
+            _logger.LogInformation($"Sufficient database buffer capacity. Exiting {nameof(DatabaseBufferMonitor)}...");
 
             // TODO: what to return
             return true;
