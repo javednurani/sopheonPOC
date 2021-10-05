@@ -4,6 +4,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using FluentValidation;
 using Microsoft.Azure.Functions.Worker.Extensions.OpenApi.Extensions;
+using Microsoft.Azure.Management.Fluent;
+using Microsoft.Azure.Management.ResourceManager.Fluent;
+using Microsoft.Azure.Management.ResourceManager.Fluent.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +20,7 @@ using Sopheon.CloudNative.Environments.Functions.Validators;
 
 namespace Sopheon.CloudNative.Environments.Functions
 {
-	[ExcludeFromCodeCoverage]
+   [ExcludeFromCodeCoverage]
 	class Program
 	{
 		static Task Main(string[] args)
@@ -50,8 +53,8 @@ namespace Sopheon.CloudNative.Environments.Functions
 					if (hostContext.HostingEnvironment.IsDevelopment())
 					{
 						connString =
-							hostContext.Configuration["SQLCONNSTR_EnvironmentsSqlConnectionString"] ??				// local dev
-							Environment.GetEnvironmentVariable("SQLCONNSTR_EnvironmentsSqlConnectionString");	// CI pipeline
+							hostContext.Configuration["SQLCONNSTR_EnvironmentsSqlConnectionString"] ??          // local dev
+							Environment.GetEnvironmentVariable("SQLCONNSTR_EnvironmentsSqlConnectionString");   // CI pipeline
 					}
 					services.AddDbContext<EnvironmentContext>(options => options.UseSqlServer(connString));
 					services.AddAutoMapper(typeof(Program));
@@ -61,12 +64,32 @@ namespace Sopheon.CloudNative.Environments.Functions
 					services.AddScoped<IValidator<EnvironmentDto>, EnvironmentDtoValidator>();
 					services.AddScoped<IRequiredNameValidator, RequiredNameValidator>();
 					services.AddScoped<IDatabaseBufferMonitorHelper, DatabaseBufferMonitorHelper>();
-
 					services.AddScoped<HttpResponseDataBuilder>();
+					services.AddScoped<IAzure>(sp => GetAzureInstance());	// TODO: async?
 				})
 				.Build();
 
 			return host.RunAsync();
 		}
-	}
+
+		private static IAzure GetAzureInstance()
+		{
+			// TODO: does this execute multiple times?  do we want a single instance of IAzure?
+
+			// authenticate with Service Principal credentials
+			//logger.LogInformation("Fetching Service Principal credentials");
+			string clientId = Environment.GetEnvironmentVariable("AzSpClientId");
+			string clientSecret = Environment.GetEnvironmentVariable("AzSpClientSecret");
+			string tenantId = Environment.GetEnvironmentVariable("AzSpTenantId");
+
+			AzureCredentials credentials = SdkContext.AzureCredentialsFactory
+				.FromServicePrincipal(clientId, clientSecret, tenantId, environment: AzureEnvironment.AzureGlobalCloud);
+
+			//logger.LogInformation($"Authenticating with Azure...");
+
+			return Microsoft.Azure.Management.Fluent.Azure
+				.Authenticate(credentials)
+				.WithDefaultSubscription();	// TODO: can we use the async method?  having trouble consuming in Main
+		}
+   }
 }
