@@ -15,12 +15,6 @@ namespace Sopheon.CloudNative.Environments.Functions
 {
    public class DatabaseBufferMonitor
    {
-      // timer schedules
-      private const string NCRONTAB_EVERY_10_SECONDS = "*/10 * * * * *";
-      private const string NCRONTAB_EVERY_MINUTE = "0 * * * * *";
-      private const string NCRONTAB_EVERY_5_MINUTES = "0 */5 * * * *";
-      private const string NCRONTAB_EVERY_DAY = "0 0 0 * * *";
-      // known issue https://github.com/Azure/azure-functions-dotnet-worker/issues/534
 
       private IDatabaseBufferMonitorHelper _dbBufferMonitorHelper;
 
@@ -31,7 +25,7 @@ namespace Sopheon.CloudNative.Environments.Functions
 
       [Function(nameof(DatabaseBufferMonitor))]
       public async Task Run(
-         [TimerTrigger(NCRONTAB_EVERY_DAY)] TimerInfo myTimer, // TODO: what schedule?
+         [TimerTrigger("%DatabaseBufferTimer%")] TimerInfo myTimer, // TODO: what schedule?
          FunctionContext context)
       {
          // TODO: get Logger<T> injected?
