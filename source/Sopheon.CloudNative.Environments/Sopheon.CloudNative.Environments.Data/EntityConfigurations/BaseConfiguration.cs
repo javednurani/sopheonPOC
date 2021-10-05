@@ -5,7 +5,7 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
    {
       public string GetIdColumnName<T>()
       {
-         return typeof(T).Name +"Id";
+         return typeof(T).Name + "Id";
       }
    }
 }
