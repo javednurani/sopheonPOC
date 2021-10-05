@@ -74,6 +74,8 @@ namespace Sopheon.CloudNative.Environments.Functions
 
 		private static IAzure GetAzureInstance()
 		{
+			// TODO: does this execute multiple times?  do we want a single instance of IAzure?
+
 			// authenticate with Service Principal credentials
 			//logger.LogInformation("Fetching Service Principal credentials");
 			string clientId = Environment.GetEnvironmentVariable("AzSpClientId");
