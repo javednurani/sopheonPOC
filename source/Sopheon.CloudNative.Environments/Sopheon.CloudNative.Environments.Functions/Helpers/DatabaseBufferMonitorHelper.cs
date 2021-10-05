@@ -20,35 +20,36 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
       private const string CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_ASSIGNED = "AssignedToCustomer"; // not part of buffer
       private const int BUFFER_CAPACITY = 5;
 
-      ILogger<DatabaseBufferMonitorHelper> _logger;
+      private readonly ILogger<DatabaseBufferMonitorHelper> _logger;
+      private readonly IAzure _azure;
 
-      public DatabaseBufferMonitorHelper(ILogger<DatabaseBufferMonitorHelper> logger)
+      public DatabaseBufferMonitorHelper(ILogger<DatabaseBufferMonitorHelper> logger, IAzure azure)
       {
          _logger = logger;
+         _azure = azure;
       }
 
       public async Task<bool> CheckHasDatabaseThreshold()
       {
-         IAzure azure = await AuthenticateWithAzureServicePrincipal(_logger);
-         _logger.LogInformation($"Authenticated with Service Principal to Subscription: {azure.SubscriptionId}!");
+         _logger.LogInformation($"Authenticated with Service Principal to Subscription: {_azure.SubscriptionId}!");
 
          string subscriptionId = Environment.GetEnvironmentVariable("AzSubscriptionId");
          string resourceGroupName = Environment.GetEnvironmentVariable("AzResourceGroupName");
          string sqlServerName = Environment.GetEnvironmentVariable("AzSqlServerName");
 
          #region BufferCapacity
-         ISqlServer sqlServer = await azure.SqlServers
+         ISqlServer sqlServer = await _azure.SqlServers
                   .GetByIdAsync($"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Sql/servers/{sqlServerName}");
 
          List<ISqlDatabase> notAssigned = new List<ISqlDatabase>();
          List<ISqlDatabase> assignedToCustomer = new List<ISqlDatabase>();
 
-         IReadOnlyList<ISqlDatabase> allDatabasesOnServer = await azure.SqlServers.Databases.ListBySqlServerAsync(sqlServer);
+         IReadOnlyList<ISqlDatabase> allDatabasesOnServer = await _azure.SqlServers.Databases.ListBySqlServerAsync(sqlServer);
 
          // categorize CustomerProvisionedDatabase tagged databases by tag value
          foreach (var database in allDatabasesOnServer) // TODO: optimize search?
          {
-            ISqlDatabase databaseWithDetails = await azure.SqlServers.Databases.GetBySqlServerAsync(sqlServer, database.Name);
+            ISqlDatabase databaseWithDetails = await _azure.SqlServers.Databases.GetBySqlServerAsync(sqlServer, database.Name);
 
             // has CustomerProvisionedDatabase tag
             string tagValue;
@@ -89,14 +90,14 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          #region ExistingDeployments
 
          // TODO: return on some deployment conditions - provisioningStatus / tags etc
-         IPagedCollection<IDeployment> deploymentsForResourceGroup = await azure.Deployments.ListByResourceGroupAsync(resourceGroupName);
+         IPagedCollection<IDeployment> deploymentsForResourceGroup = await _azure.Deployments.ListByResourceGroupAsync(resourceGroupName);
 
          #endregion // ExistingDeployments
 
          #region CreateDeployment
 
          // TODO: calculate what to deploy?
-         IReadOnlyList<ISqlElasticPool> elasticPools = await azure.SqlServers.ElasticPools
+         IReadOnlyList<ISqlElasticPool> elasticPools = await _azure.SqlServers.ElasticPools
             .ListBySqlServerAsync(resourceGroupName, sqlServerName);
 
          // create deployment
@@ -108,24 +109,6 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
 
          // TODO: what to return?
          return true;
-      }
-
-      private static async Task<IAzure> AuthenticateWithAzureServicePrincipal(ILogger logger)
-      {
-         // authenticate with Service Principal credentials
-         logger.LogInformation("Fetching Service Principal credentials");
-         string clientId = Environment.GetEnvironmentVariable("AzSpClientId");
-         string clientSecret = Environment.GetEnvironmentVariable("AzSpClientSecret");
-         string tenantId = Environment.GetEnvironmentVariable("AzSpTenantId");
-
-         AzureCredentials credentials = SdkContext.AzureCredentialsFactory
-            .FromServicePrincipal(clientId, clientSecret, tenantId, environment: AzureEnvironment.AzureGlobalCloud);
-
-         logger.LogInformation($"Authenticating with Azure...");
-
-         return await Microsoft.Azure.Management.Fluent.Azure
-            .Authenticate(credentials)
-            .WithDefaultSubscriptionAsync();
       }
    }
 }
