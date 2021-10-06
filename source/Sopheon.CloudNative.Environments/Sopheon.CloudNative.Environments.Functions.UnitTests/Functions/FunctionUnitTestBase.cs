@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace Sopheon.CloudNative.Environments.Functions.UnitTests
+namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 {
    public class FunctionUnitTestBase
    {

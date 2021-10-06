@@ -16,7 +16,7 @@ using Sopheon.CloudNative.Environments.Functions.Models;
 using Sopheon.CloudNative.Environments.Testing.Common;
 using Xunit;
 
-namespace Sopheon.CloudNative.Environments.Functions.UnitTests
+namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 {
    public class GetSpecificResourceUri_Run_UnitTests : FunctionUnitTestBase
    {

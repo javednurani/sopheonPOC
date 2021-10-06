@@ -16,17 +16,15 @@ using Xunit;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
 
-namespace Sopheon.CloudNative.Environments.Functions.UnitTests
+namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 {
    public class UpdateEnvironment_Run_UnitTests : FunctionUnitTestBase
    {
       UpdateEnvironment Sut;
 
       Mock<HttpRequestData> _request;
-
       Mock<IEnvironmentRepository> _mockEnvironmentRepository;
       HttpResponseDataBuilder _responseBuilder;
-
       IValidator<EnvironmentDto> _validator;
 
       public UpdateEnvironment_Run_UnitTests()
@@ -186,8 +184,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
 
          Assert.Equal(mockExceptionMessage, errorResponse.Message);
       }
-
-      //TODO: Different mock to return not found and test EntityNotFoundException? Is this valuable to us? Better in a repository unit test?
 
       private void TestSetup()
       {

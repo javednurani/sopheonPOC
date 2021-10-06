@@ -12,7 +12,7 @@ using Sopheon.CloudNative.Environments.Testing.Common;
 using Xunit;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
-namespace Sopheon.CloudNative.Environments.Functions.UnitTests
+namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 {
    public class GetEnvironments_Run_UnitTests : FunctionUnitTestBase
    {

@@ -1,6 +1,6 @@
 ﻿using Xunit;
 
-namespace Sopheon.CloudNative.Environments.Functions.UnitTests
+namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 {
    public class DatabaseBufferMonitor_Run_UnitTests : FunctionUnitTestBase
    {
