@@ -37,7 +37,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
             .Returns(Task.FromResult(mockDb.Object));
          mockDbOperations
             .Setup(dbo => dbo.ListBySqlServerAsync(It.IsAny<ISqlServer>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.FromResult<IReadOnlyList<ISqlDatabase>>(new List<ISqlDatabase> { mockDb.Object }.AsReadOnly()));
+            .Returns(Task.FromResult<IReadOnlyList<ISqlDatabase>>(new List<ISqlDatabase> { mockDb.Object }.AsReadOnly())); // could add more dbs here to get inside exit early switch
          mockSqlServers.Setup(s => s.Databases).Returns(mockDbOperations.Object);
          mockSqlServers.Setup(s => s.ElasticPools).Returns(new Mock<ISqlElasticPoolOperations>().Object);
 
