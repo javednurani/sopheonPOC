@@ -105,13 +105,16 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          // https://docs.microsoft.com/en-us/azure/azure-resource-manager/
 
          // https://github.com/Azure-Samples/resources-dotnet-deploy-using-arm-template
-         _azure.Deployments
+         IDeployment deployment = _azure.Deployments
             .Define(null)
             .WithExistingResourceGroup("")
             .WithTemplateLink(null, null)
             .WithParameters(default(object))
             .WithMode(default(DeploymentMode))
-            .Create();
+            .Create();  // TODO: async?
+
+         // TODO: need to check provision state?
+         //deployment.ProvisioningState
 
          #endregion // CreateDeployment
 
