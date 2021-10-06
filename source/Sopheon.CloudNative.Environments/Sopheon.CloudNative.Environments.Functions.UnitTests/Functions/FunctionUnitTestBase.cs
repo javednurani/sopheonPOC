@@ -19,7 +19,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 {
    public class FunctionUnitTestBase
    {
-      // TODO: rename casing
       protected Mock<FunctionContext> _context;
       protected IMapper _mapper;
       protected Mock<HttpRequestData> _request;
