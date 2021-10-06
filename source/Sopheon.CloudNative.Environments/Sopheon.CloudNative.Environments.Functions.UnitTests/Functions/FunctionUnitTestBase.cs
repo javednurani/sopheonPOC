@@ -9,6 +9,7 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Sopheon.CloudNative.Environments.Domain.Queries;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Functions.Models;
@@ -25,12 +26,14 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       protected Mock<IEnvironmentRepository> _mockEnvironmentRepository;
       protected HttpResponseDataBuilder _responseBuilder;
       protected IValidator<EnvironmentDto> _environmentDtoValidator;
+      protected Mock<IEnvironmentQueries> _mockEnvironmentQueries;
 
       public FunctionUnitTestBase()
       {
          _mockEnvironmentRepository = new Mock<IEnvironmentRepository>();
          _responseBuilder = new HttpResponseDataBuilder();
          _environmentDtoValidator = new EnvironmentDtoValidator();
+         _mockEnvironmentQueries = new Mock<IEnvironmentQueries>();
 
          SetupFunctionContext();
          SetupAutoMapper();
