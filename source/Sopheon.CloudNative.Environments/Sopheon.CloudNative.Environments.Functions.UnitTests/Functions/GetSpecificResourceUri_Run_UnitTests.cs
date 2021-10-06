@@ -119,14 +119,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 
       private void TestSetup()
       {
-         // FunctionContext
-         ServiceCollection serviceCollection = new ServiceCollection();
-         serviceCollection.AddScoped<ILoggerFactory, LoggerFactory>();
-         ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
-
-         _context = new Mock<FunctionContext>();
-         _context.SetupProperty(c => c.InstanceServices, serviceProvider);
-
          // HttpRequestData
          _request = new Mock<HttpRequestData>(_context.Object);
 

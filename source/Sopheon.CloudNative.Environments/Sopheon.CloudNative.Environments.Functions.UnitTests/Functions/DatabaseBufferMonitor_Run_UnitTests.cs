@@ -6,7 +6,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
    {
       public DatabaseBufferMonitor_Run_UnitTests()
       {
-         TestSetup();
       }
 
       [Fact]
@@ -17,11 +16,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 
          //Assert
          Assert.True(true);
-      }
-
-      private void TestSetup()
-      {
-         SetupFunctionContext();
       }
    }
 }

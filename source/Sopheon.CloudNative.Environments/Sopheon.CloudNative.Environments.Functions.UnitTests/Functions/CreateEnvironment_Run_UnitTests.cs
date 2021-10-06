@@ -149,8 +149,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 
       private void TestSetup()
       {
-         SetupFunctionContext();
-
          // HttpRequestData
          _request = new Mock<HttpRequestData>(_context.Object);
 

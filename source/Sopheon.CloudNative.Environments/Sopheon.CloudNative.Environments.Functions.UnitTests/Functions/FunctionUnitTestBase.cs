@@ -16,6 +16,11 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       protected Mock<FunctionContext> _context;
       protected IMapper _mapper;
 
+      public FunctionUnitTestBase()
+      {
+         SetupFunctionContext();
+      }
+
       #region HTTP Helpers
       protected async Task<string> GetResponseBody(HttpResponseData response)
       {
@@ -34,7 +39,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       #endregion // HTTP Helpers
 
       #region Test Setup
-      protected void SetupFunctionContext()
+      private void SetupFunctionContext()
       {
          ServiceCollection serviceCollection = new ServiceCollection();
          serviceCollection.AddScoped<ILoggerFactory, LoggerFactory>();
