@@ -13,17 +13,18 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 {
    public class FunctionUnitTestBase
    {
+      // TODO: rename casing
       protected Mock<FunctionContext> _context;
       protected IMapper _mapper;
+      protected Mock<HttpRequestData> _request;
 
       public FunctionUnitTestBase()
       {
          SetupFunctionContext();
-
          SetupAutoMapper();
+         SetupHttpRequestResponse();
       }
 
-      #region HTTP Helpers
       protected async Task<string> GetResponseBody(HttpResponseData response)
       {
          response.Body.Position = 0;
@@ -38,9 +39,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 
          request.Setup(r => r.Body).Returns(bodyStream);
       }
-      #endregion // HTTP Helpers
 
-      #region Test Setup
       private void SetupFunctionContext()
       {
          ServiceCollection serviceCollection = new ServiceCollection();
@@ -59,6 +58,19 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          });
          _mapper = config.CreateMapper();
       }
-      #endregion // Test Setup
+
+      private void SetupHttpRequestResponse()
+      {
+         _request = new Mock<HttpRequestData>(_context.Object);
+
+         _request.Setup(r => r.CreateResponse()).Returns(() =>
+         {
+            Mock<HttpResponseData> response = new Mock<HttpResponseData>(_context.Object);
+            response.SetupProperty(r => r.Headers, new HttpHeadersCollection());
+            response.SetupProperty(r => r.StatusCode);
+            response.SetupProperty(r => r.Body, new MemoryStream());
+            return response.Object;
+         });
+      }
    }
 }

@@ -18,10 +18,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
    {
       GetEnvironments Sut;
 
-      Mock<HttpRequestData> _request;
-
       Mock<IEnvironmentRepository> _mockEnvironmentRepository;
-
       HttpResponseDataBuilder _responseBuilder;
 
       public GetEnvironments_Run_UnitTests()
@@ -103,18 +100,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 
       private void TestSetup()
       {
-         // HttpRequestData
-         _request = new Mock<HttpRequestData>(_context.Object);
-
-         _request.Setup(r => r.CreateResponse()).Returns(() =>
-         {
-            Mock<HttpResponseData> response = new Mock<HttpResponseData>(_context.Object);
-            response.SetupProperty(r => r.Headers, new HttpHeadersCollection());
-            response.SetupProperty(r => r.StatusCode);
-            response.SetupProperty(r => r.Body, new MemoryStream());
-            return response.Object;
-         });
-
          // EnvironmentRepository Mock
          _mockEnvironmentRepository = new Mock<IEnvironmentRepository>();
 
