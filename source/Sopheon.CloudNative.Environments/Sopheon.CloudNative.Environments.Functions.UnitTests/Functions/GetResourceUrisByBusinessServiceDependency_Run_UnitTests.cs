@@ -1,13 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Azure.Functions.Worker.Http;
 using Moq;
-using Sopheon.CloudNative.Environments.Domain.Queries;
-using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Functions.Models;
 using Sopheon.CloudNative.Environments.Functions.Validators;
 using Sopheon.CloudNative.Environments.Testing.Common;

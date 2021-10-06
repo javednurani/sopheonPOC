@@ -1,15 +1,10 @@
 ﻿using System;
-using System.IO;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
-using FluentValidation;
 using Microsoft.Azure.Functions.Worker.Http;
 using Moq;
-using Sopheon.CloudNative.Environments.Domain.Repositories;
-using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Functions.Models;
-using Sopheon.CloudNative.Environments.Functions.Validators;
 using Sopheon.CloudNative.Environments.Testing.Common;
 using Xunit;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
