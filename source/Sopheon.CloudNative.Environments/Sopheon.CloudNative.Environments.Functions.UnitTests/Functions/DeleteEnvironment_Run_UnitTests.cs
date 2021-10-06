@@ -16,7 +16,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
    {
       DeleteEnvironment Sut;
 
-      Mock<IEnvironmentRepository> _mockEnvironmentRepository;
       HttpResponseDataBuilder _responseBuilder;
 
       public DeleteEnvironment_Run_UnitTests()
@@ -114,8 +113,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 
       private void TestSetup()
       {
-         _mockEnvironmentRepository = new Mock<IEnvironmentRepository>();
-
          _responseBuilder = new HttpResponseDataBuilder();
 
          // create Sut

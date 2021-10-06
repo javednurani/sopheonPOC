@@ -8,6 +8,7 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Sopheon.CloudNative.Environments.Domain.Repositories;
 
 namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 {
@@ -17,9 +18,11 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       protected Mock<FunctionContext> _context;
       protected IMapper _mapper;
       protected Mock<HttpRequestData> _request;
+      protected Mock<IEnvironmentRepository> _mockEnvironmentRepository;
 
       public FunctionUnitTestBase()
       {
+         _mockEnvironmentRepository = new Mock<IEnvironmentRepository>();
          SetupFunctionContext();
          SetupAutoMapper();
          SetupHttpRequestResponse();

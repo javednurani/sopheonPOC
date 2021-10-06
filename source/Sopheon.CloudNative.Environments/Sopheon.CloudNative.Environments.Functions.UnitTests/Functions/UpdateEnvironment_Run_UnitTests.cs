@@ -22,7 +22,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
    {
       UpdateEnvironment Sut;
 
-      Mock<IEnvironmentRepository> _mockEnvironmentRepository;
       HttpResponseDataBuilder _responseBuilder;
       IValidator<EnvironmentDto> _validator;
 
@@ -186,8 +185,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 
       private void TestSetup()
       {
-         // EnvironmentRepository Mock
-         _mockEnvironmentRepository = new Mock<IEnvironmentRepository>();
          _mockEnvironmentRepository.Setup(m => m.UpdateEnvironment(It.IsAny<Environment>())).Returns((Environment e) =>
          {
             return Task.FromResult(e);
