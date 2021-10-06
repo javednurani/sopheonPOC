@@ -18,7 +18,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 
       public DeleteEnvironment_Run_UnitTests()
       {
-         TestSetup();
+         Sut = new DeleteEnvironment(_mockEnvironmentRepository.Object, _responseBuilder);
       }
 
       [Fact]
@@ -107,12 +107,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          _mockEnvironmentRepository.Verify(m => m.DeleteEnvironment(It.Is<Guid>(x =>
             x.ToString() == keyToDelete
          )), Times.Once());
-      }
-
-      private void TestSetup()
-      {
-         // create Sut
-         Sut = new DeleteEnvironment(_mockEnvironmentRepository.Object, _responseBuilder);
       }
    }
 }

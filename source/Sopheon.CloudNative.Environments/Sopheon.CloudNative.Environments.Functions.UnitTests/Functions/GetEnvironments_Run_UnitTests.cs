@@ -20,7 +20,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 
       public GetEnvironments_Run_UnitTests()
       {
-         TestSetup();
+         Sut = new GetEnvironments(_mockEnvironmentRepository.Object, _mapper, _responseBuilder);
       }
 
       [Fact]
@@ -93,12 +93,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          string responseBody = await GetResponseBody(result);
          List<EnvironmentDto> environmentResponse = JsonSerializer.Deserialize<List<EnvironmentDto>>(responseBody);
          Assert.Empty(environmentResponse);
-      }
-
-      private void TestSetup()
-      {
-         // create Sut
-         Sut = new GetEnvironments(_mockEnvironmentRepository.Object, _mapper, _responseBuilder);
       }
    }
 }

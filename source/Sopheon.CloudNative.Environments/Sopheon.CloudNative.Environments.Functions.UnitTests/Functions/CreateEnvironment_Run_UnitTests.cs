@@ -22,7 +22,12 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 
       public CreateEnvironment_Run_UnitTests()
       {
-         TestSetup();
+         _mockEnvironmentRepository.Setup(m => m.AddEnvironment(It.IsAny<Environment>())).Returns((Environment e) =>
+         {
+            return Task.FromResult(e);
+         });
+
+         Sut = new CreateEnvironment(_mockEnvironmentRepository.Object, _mapper, _environmentDtoValidator, _responseBuilder);
       }
 
       [Fact]
@@ -137,18 +142,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          ErrorDto errorResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
 
          Assert.Equal(StringConstants.RESPONSE_REQUEST_BODY_INVALID, errorResponse.Message);
-      }
-
-
-      private void TestSetup()
-      {
-         _mockEnvironmentRepository.Setup(m => m.AddEnvironment(It.IsAny<Environment>())).Returns((Environment e) =>
-         {
-            return Task.FromResult(e);
-         });
-
-         // create Sut
-         Sut = new CreateEnvironment(_mockEnvironmentRepository.Object, _mapper, _environmentDtoValidator, _responseBuilder);
       }
    }
 }

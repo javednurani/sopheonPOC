@@ -24,7 +24,8 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 
       public GetSpecificResourceUri_Run_UnitTests()
       {
-         TestSetup();
+         // create Sut
+         Sut = new GetSpecificResourceUri(_mockEnvironmentQueries.Object, _mapper, _responseBuilder);
       }
 
       [Fact]
@@ -111,12 +112,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID, errorResponse.Message);
 
          _mockEnvironmentQueries.Verify(m => m.GetSpecificResourceUri(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never());
-      }
-
-      private void TestSetup()
-      {
-         // create Sut
-         Sut = new GetSpecificResourceUri(_mockEnvironmentQueries.Object, _mapper, _responseBuilder);
       }
    }
 }

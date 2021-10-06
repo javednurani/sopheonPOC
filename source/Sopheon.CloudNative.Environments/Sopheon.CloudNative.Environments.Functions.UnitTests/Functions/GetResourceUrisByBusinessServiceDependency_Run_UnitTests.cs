@@ -23,7 +23,10 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 
       public GetResourceUrisByBusinessServiceDependency_Run_UnitTests()
       {
-         TestSetup();
+         _validator = new RequiredNameValidator();
+
+         // create Sut
+         Sut = new GetResourceUrisByBusinessServiceDependency(_mockEnvironmentQueries.Object, _validator, _mapper, _responseBuilder);
       }
 
       [Fact]
@@ -101,14 +104,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID, errorResponse.Message);
 
          _mockEnvironmentQueries.Verify(m => m.GetResourceUrisByBusinessServiceDependency(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
-      }
-
-      private void TestSetup()
-      {
-         _validator = new RequiredNameValidator();
-
-         // create Sut
-         Sut = new GetResourceUrisByBusinessServiceDependency(_mockEnvironmentQueries.Object, _validator, _mapper, _responseBuilder);
       }
    }
 }
