@@ -106,11 +106,11 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
 
          // https://github.com/Azure-Samples/resources-dotnet-deploy-using-arm-template
          IDeployment deployment = _azure.Deployments
-            .Define(null)
-            .WithExistingResourceGroup("")
-            .WithTemplateLink(null, null)
-            .WithParameters(default(object))
-            .WithMode(default(DeploymentMode))
+            .Define(name: null)
+            .WithExistingResourceGroup(groupName: null)
+            .WithTemplateLink(uri: null, contentVersion: null)
+            .WithParameters(parameters: default(object))
+            .WithMode(mode: default(DeploymentMode))
             .Create();  // TODO: async?
 
          // TODO: need to check provision state?
