@@ -168,8 +168,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
             return Task.FromResult(e);
          });
 
-         SetupAutoMapper();
-
          _validator = new EnvironmentDtoValidator();
          _responseBuilder = new HttpResponseDataBuilder();
 

@@ -19,6 +19,8 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       public FunctionUnitTestBase()
       {
          SetupFunctionContext();
+
+         SetupAutoMapper();
       }
 
       #region HTTP Helpers
@@ -49,7 +51,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          _context.SetupProperty(c => c.InstanceServices, serviceProvider);
       }
 
-      protected void SetupAutoMapper()
+      private void SetupAutoMapper()
       {
          MapperConfiguration config = new MapperConfiguration(cfg =>
          {

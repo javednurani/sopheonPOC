@@ -123,8 +123,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 
          _mockEnvironmentQueries = new Mock<IEnvironmentQueries>();
 
-         SetupAutoMapper();
-
          _validator = new RequiredNameValidator();
          _responseBuilder = new HttpResponseDataBuilder();
 

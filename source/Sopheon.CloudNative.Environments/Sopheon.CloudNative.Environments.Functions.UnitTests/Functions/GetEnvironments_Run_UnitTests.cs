@@ -118,8 +118,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          // EnvironmentRepository Mock
          _mockEnvironmentRepository = new Mock<IEnvironmentRepository>();
 
-         SetupAutoMapper();
-
          _responseBuilder = new HttpResponseDataBuilder();
 
          // create Sut
