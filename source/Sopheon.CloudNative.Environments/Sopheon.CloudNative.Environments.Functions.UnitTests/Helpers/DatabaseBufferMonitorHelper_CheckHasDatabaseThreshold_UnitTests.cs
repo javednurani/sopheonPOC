@@ -12,7 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Sopheon.CloudNative.Environments.Functions.UnitTests
+namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
 {
    public class DatabaseBufferMonitorHelper_CheckHasDatabaseThreshold_UnitTests
    {

@@ -1,37 +1,31 @@
 ﻿using System;
-using System.IO;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
-using FluentValidation;
 using Microsoft.Azure.Functions.Worker.Http;
 using Moq;
 using Sopheon.CloudNative.Environments.Domain.Exceptions;
-using Sopheon.CloudNative.Environments.Domain.Repositories;
-using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Functions.Models;
-using Sopheon.CloudNative.Environments.Functions.Validators;
 using Sopheon.CloudNative.Environments.Testing.Common;
 using Xunit;
 using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
 
-namespace Sopheon.CloudNative.Environments.Functions.UnitTests
+namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 {
    public class UpdateEnvironment_Run_UnitTests : FunctionUnitTestBase
    {
       UpdateEnvironment Sut;
 
-      Mock<HttpRequestData> _request;
-
-      Mock<IEnvironmentRepository> _mockEnvironmentRepository;
-      HttpResponseDataBuilder _responseBuilder;
-
-      IValidator<EnvironmentDto> _validator;
-
       public UpdateEnvironment_Run_UnitTests()
       {
-         TestSetup();
+         _mockEnvironmentRepository.Setup(m => m.UpdateEnvironment(It.IsAny<Environment>())).Returns((Environment e) =>
+         {
+            return Task.FromResult(e);
+         });
+
+         // create Sut
+         Sut = new UpdateEnvironment(_mockEnvironmentRepository.Object, _mapper, _environmentDtoValidator, _responseBuilder);
       }
 
       [Fact]
@@ -185,40 +179,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          ErrorDto errorResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
 
          Assert.Equal(mockExceptionMessage, errorResponse.Message);
-      }
-
-      //TODO: Different mock to return not found and test EntityNotFoundException? Is this valuable to us? Better in a repository unit test?
-
-      private void TestSetup()
-      {
-         SetupFunctionContext();
-
-         // HttpRequestData
-         _request = new Mock<HttpRequestData>(_context.Object);
-
-         _request.Setup(r => r.CreateResponse()).Returns(() =>
-         {
-            Mock<HttpResponseData> response = new Mock<HttpResponseData>(_context.Object);
-            response.SetupProperty(r => r.Headers, new HttpHeadersCollection());
-            response.SetupProperty(r => r.StatusCode);
-            response.SetupProperty(r => r.Body, new MemoryStream());
-            return response.Object;
-         });
-
-         // EnvironmentRepository Mock
-         _mockEnvironmentRepository = new Mock<IEnvironmentRepository>();
-         _mockEnvironmentRepository.Setup(m => m.UpdateEnvironment(It.IsAny<Environment>())).Returns((Environment e) =>
-         {
-            return Task.FromResult(e);
-         });
-
-         SetupAutoMapper();
-
-         _validator = new EnvironmentDtoValidator();
-         _responseBuilder = new HttpResponseDataBuilder();
-
-         // create Sut
-         Sut = new UpdateEnvironment(_mockEnvironmentRepository.Object, _mapper, _validator, _responseBuilder);
       }
    }
 }
