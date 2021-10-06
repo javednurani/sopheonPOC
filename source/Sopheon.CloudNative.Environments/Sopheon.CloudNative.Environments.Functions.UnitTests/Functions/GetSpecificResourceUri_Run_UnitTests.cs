@@ -118,13 +118,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       {
          _mockEnvironmentQueries = new Mock<IEnvironmentQueries>();
 
-         // AutoMapper config
-         MapperConfiguration config = new MapperConfiguration(cfg =>
-         {
-            cfg.AddProfile(new MappingProfile());
-         });
-         _mapper = config.CreateMapper();
-
          // create Sut
          Sut = new GetSpecificResourceUri(_mockEnvironmentQueries.Object, _mapper, _responseBuilder);
       }

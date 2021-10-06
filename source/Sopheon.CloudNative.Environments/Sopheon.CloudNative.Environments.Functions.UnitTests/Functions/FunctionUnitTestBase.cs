@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
+using FluentValidation;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +11,8 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
+using Sopheon.CloudNative.Environments.Functions.Models;
+using Sopheon.CloudNative.Environments.Functions.Validators;
 
 namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 {
@@ -21,11 +24,14 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       protected Mock<HttpRequestData> _request;
       protected Mock<IEnvironmentRepository> _mockEnvironmentRepository;
       protected HttpResponseDataBuilder _responseBuilder;
+      protected IValidator<EnvironmentDto> _environmentDtoValidator;
 
       public FunctionUnitTestBase()
       {
          _mockEnvironmentRepository = new Mock<IEnvironmentRepository>();
          _responseBuilder = new HttpResponseDataBuilder();
+         _environmentDtoValidator = new EnvironmentDtoValidator();
+
          SetupFunctionContext();
          SetupAutoMapper();
          SetupHttpRequestResponse();
