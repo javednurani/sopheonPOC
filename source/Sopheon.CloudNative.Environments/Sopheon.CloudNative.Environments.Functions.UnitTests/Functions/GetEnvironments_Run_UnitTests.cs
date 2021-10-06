@@ -18,8 +18,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
    {
       GetEnvironments Sut;
 
-      HttpResponseDataBuilder _responseBuilder;
-
       public GetEnvironments_Run_UnitTests()
       {
          TestSetup();
@@ -99,8 +97,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 
       private void TestSetup()
       {
-         _responseBuilder = new HttpResponseDataBuilder();
-
          // create Sut
          Sut = new GetEnvironments(_mockEnvironmentRepository.Object, _mapper, _responseBuilder);
       }

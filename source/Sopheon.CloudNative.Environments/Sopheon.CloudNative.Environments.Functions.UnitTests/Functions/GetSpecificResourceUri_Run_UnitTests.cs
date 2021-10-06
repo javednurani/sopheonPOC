@@ -22,7 +22,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
    {
       GetSpecificResourceUri Sut;
       Mock<IEnvironmentQueries> _mockEnvironmentQueries;
-      HttpResponseDataBuilder _responseBuilder;
 
       public GetSpecificResourceUri_Run_UnitTests()
       {
@@ -125,8 +124,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
             cfg.AddProfile(new MappingProfile());
          });
          _mapper = config.CreateMapper();
-
-         _responseBuilder = new HttpResponseDataBuilder();
 
          // create Sut
          Sut = new GetSpecificResourceUri(_mockEnvironmentQueries.Object, _mapper, _responseBuilder);

@@ -20,7 +20,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
    {
       CreateEnvironment Sut;
 
-      HttpResponseDataBuilder _responseBuilder;
       IValidator<EnvironmentDto> _validator;
 
       public CreateEnvironment_Run_UnitTests()
@@ -145,14 +144,12 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 
       private void TestSetup()
       {
-         // EnvironmentRepository Mock
          _mockEnvironmentRepository.Setup(m => m.AddEnvironment(It.IsAny<Environment>())).Returns((Environment e) =>
          {
             return Task.FromResult(e);
          });
 
          _validator = new EnvironmentDtoValidator();
-         _responseBuilder = new HttpResponseDataBuilder();
 
          // create Sut
          Sut = new CreateEnvironment(_mockEnvironmentRepository.Object, _mapper, _validator, _responseBuilder);

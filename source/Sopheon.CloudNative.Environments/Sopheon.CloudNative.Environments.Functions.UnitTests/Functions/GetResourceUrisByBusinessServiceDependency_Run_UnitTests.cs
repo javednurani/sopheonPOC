@@ -21,7 +21,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 
       Mock<IEnvironmentQueries> _mockEnvironmentQueries;
       IRequiredNameValidator _validator;
-      HttpResponseDataBuilder _responseBuilder;
 
       public GetResourceUrisByBusinessServiceDependency_Run_UnitTests()
       {
@@ -110,7 +109,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          _mockEnvironmentQueries = new Mock<IEnvironmentQueries>();
 
          _validator = new RequiredNameValidator();
-         _responseBuilder = new HttpResponseDataBuilder();
 
          // create Sut
          Sut = new GetResourceUrisByBusinessServiceDependency(_mockEnvironmentQueries.Object, _validator, _mapper, _responseBuilder);
