@@ -22,13 +22,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
    {
       GetSpecificResourceUri Sut;
 
-      Mock<FunctionContext> _context;
       Mock<HttpRequestData> _request;
-
       Mock<IEnvironmentQueries> _mockEnvironmentQueries;
       HttpResponseDataBuilder _responseBuilder;
-
-      IMapper _mapper;
 
       public GetSpecificResourceUri_Run_UnitTests()
       {
