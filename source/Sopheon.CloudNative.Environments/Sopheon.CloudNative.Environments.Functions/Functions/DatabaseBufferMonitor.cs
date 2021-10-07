@@ -10,6 +10,10 @@ namespace Sopheon.CloudNative.Environments.Functions
 {
    public class DatabaseBufferMonitor
    {
+      // TODO: consolidate to constants?
+      public static string SERVER_NAME_TOKEN = "^SqlServerName^";
+      public static string ADMINISTRATOR_LOGIN_ENIGMA_TOKEN = "^SqlAdminEngima^";
+
       private IDatabaseBufferMonitorHelper _dbBufferMonitorHelper;
 
       public DatabaseBufferMonitor(IDatabaseBufferMonitorHelper dbBufferMonitorHelper)
@@ -28,10 +32,10 @@ namespace Sopheon.CloudNative.Environments.Functions
          logger.LogInformation($"{nameof(DatabaseBufferMonitor)} TimerTrigger Function executed at: {DateTime.Now}");
 
          // TODO: value in logging this?
-         if (myTimer.IsPastDue)
-         {
-            logger.LogInformation($"TimerInfo.IsPastDue");
-         }
+         //if (myTimer.IsPastDue)
+         //{
+         //   logger.LogInformation($"TimerInfo.IsPastDue");
+         //}
 
          try
          {
@@ -40,14 +44,20 @@ namespace Sopheon.CloudNative.Environments.Functions
             string sqlServerName = Environment.GetEnvironmentVariable("AzSqlServerName");
 
             // TODO: get database password from key vault
+            string adminLoginEnigma = string.Empty;
 
             // TODO: string replace SqlServerName and password into json template
+            jsonTemplateData = jsonTemplateData
+               .Replace(SERVER_NAME_TOKEN, sqlServerName)
+               .Replace(ADMINISTRATOR_LOGIN_ENIGMA_TOKEN, adminLoginEnigma);
 
-            await _dbBufferMonitorHelper.CheckHasDatabaseThreshold(subscriptionId, resourceGroupName, sqlServerName, jsonTemplateData);
+            _= await _dbBufferMonitorHelper.CheckHasDatabaseThreshold(subscriptionId, resourceGroupName, sqlServerName, jsonTemplateData);
          }
          catch (Exception ex)
          {
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
+
+            // TODO: throw?  return something?  we could silently fail other than log statements
          }
       }
    }
