@@ -10,7 +10,6 @@ using Microsoft.Azure.Management.Sql.Fluent;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
-using Sopheon.CloudNative.Environments.Testing.Common;
 using Xunit;
 
 namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
