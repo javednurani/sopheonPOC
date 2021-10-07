@@ -10,6 +10,7 @@ using Microsoft.Azure.Management.Sql.Fluent;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
+using Sopheon.CloudNative.Environments.Testing.Common;
 using Xunit;
 
 namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
@@ -39,7 +40,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          Mock<IWithCreate> deploymentMock = SetupMockDeployment();
 
          // Act
-         _ = await _sut.CheckHasDatabaseThreshold();
+         _ = await _sut.CheckHasDatabaseThreshold(Some.Random.String());
 
          // Assert
          deploymentMock.Verify(wc => wc.Create(), Times.Never, "Should not have created deployment!");
@@ -54,9 +55,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          SetupMockDatabases(4);
 
          Mock<IWithCreate> deploymentMock = SetupMockDeployment();
-
+         
          // Act
-         _ = await _sut.CheckHasDatabaseThreshold();
+         _ = await _sut.CheckHasDatabaseThreshold(Some.Random.String());
 
          // Assert
          deploymentMock.Verify(wc => wc.Create(), Times.Once, "Should have created deployment!");

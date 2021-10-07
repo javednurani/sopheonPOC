@@ -39,7 +39,7 @@ namespace Sopheon.CloudNative.Environments.Functions
 
          try
          {
-            await _dbBufferMonitorHelper.CheckHasDatabaseThreshold();
+            await _dbBufferMonitorHelper.CheckHasDatabaseThreshold(Environment.GetEnvironmentVariable("AzResourceGroupName"));
          }
          catch (Exception ex)
          {

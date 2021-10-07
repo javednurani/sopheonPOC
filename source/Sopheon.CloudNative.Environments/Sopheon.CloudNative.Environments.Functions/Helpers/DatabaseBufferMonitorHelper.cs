@@ -30,12 +30,11 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          _azure = azure;
       }
 
-      public async Task<bool> CheckHasDatabaseThreshold()
+      public async Task<bool> CheckHasDatabaseThreshold(string resourceGroupName)
       {
          _logger.LogInformation($"Authenticated with Service Principal to Subscription: {_azure.SubscriptionId}!");
 
          string subscriptionId = Environment.GetEnvironmentVariable("AzSubscriptionId");
-         string resourceGroupName = Environment.GetEnvironmentVariable("AzResourceGroupName");
          string sqlServerName = Environment.GetEnvironmentVariable("AzSqlServerName");
 
          #region BufferCapacity
