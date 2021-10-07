@@ -6,6 +6,7 @@ using Microsoft.Azure.Management.Fluent;
 using Microsoft.Azure.Management.ResourceManager.Fluent;
 using Microsoft.Azure.Management.ResourceManager.Fluent.Authentication;
 using Microsoft.Azure.Management.ResourceManager.Fluent.Core;
+using Microsoft.Azure.Management.ResourceManager.Fluent.Models;
 using Microsoft.Azure.Management.Sql.Fluent;
 using Microsoft.Extensions.Logging;
 
@@ -18,7 +19,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
       private const string CUSTOMER_PROVISIONED_DATABASE_TAG_NAME = "CustomerProvisionedDatabase"; // Tag Name/key for Azure Resouce (Azure SQL database)
       private const string CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_INITIAL = "NotAssigned"; // databases with this Tag Value are part of buffer
       private const string CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_ASSIGNED = "AssignedToCustomer"; // not part of buffer
-      private const int BUFFER_CAPACITY = 5;
+      private const int BUFFER_MIN_CAPACITY = 5;
 
       private readonly ILogger<DatabaseBufferMonitorHelper> _logger;
       private readonly IAzure _azure;
@@ -42,7 +43,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
                   .GetByIdAsync($"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Sql/servers/{sqlServerName}");
 
          List<ISqlDatabase> notAssigned = new List<ISqlDatabase>();
-         List<ISqlDatabase> assignedToCustomer = new List<ISqlDatabase>();
+         List<ISqlDatabase> assignedToCustomer = new List<ISqlDatabase>(); // TODO: doo weneed this?
 
          IReadOnlyList<ISqlDatabase> allDatabasesOnServer = await _azure.SqlServers.Databases.ListBySqlServerAsync(sqlServer);
 
@@ -68,7 +69,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
             }
          }
 
-         if (notAssigned.Count() >= BUFFER_CAPACITY)
+         if (notAssigned.Count() >= BUFFER_MIN_CAPACITY)
          {
             // TODO: update message
             _logger.LogInformation($"Sufficient database buffer capacity. Exiting {nameof(DatabaseBufferMonitor)}...");
@@ -100,8 +101,20 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          IReadOnlyList<ISqlElasticPool> elasticPools = await _azure.SqlServers.ElasticPools
             .ListBySqlServerAsync(resourceGroupName, sqlServerName);
 
-         // create deployment
+         // TODO: create deployment
          // https://docs.microsoft.com/en-us/azure/azure-resource-manager/
+
+         // https://github.com/Azure-Samples/resources-dotnet-deploy-using-arm-template
+         IDeployment deployment = _azure.Deployments
+            .Define(name: null)
+            .WithExistingResourceGroup(groupName: null)
+            .WithTemplateLink(uri: null, contentVersion: null)
+            .WithParameters(parameters: default(object))
+            .WithMode(mode: default(DeploymentMode))
+            .Create();  // TODO: async?
+
+         // TODO: need to check provision state?
+         //deployment.ProvisioningState
 
          #endregion // CreateDeployment
 
