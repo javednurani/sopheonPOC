@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sopheon.CloudNative.Environments.Testing.Common;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
@@ -11,11 +12,11 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.StandAlone
       public async Task HappyPath_AllFunctions()
       {
          // create an environment
-         EnvironmentDto createDto = new EnvironmentDto { Name = "ZachIntegrationTest", Description = "TestDescription", Owner = Guid.NewGuid() };
+         EnvironmentDto createDto = new EnvironmentDto { Name = Some.Random.String(), Description = Some.Random.String(), Owner = Some.Random.Guid() };
          EnvironmentDto createdEnv = await _sut.CreateEnvironmentAsync(createDto);
 
          // update environment
-         createdEnv.Name = "ZachIntegrationTest_Updated";
+         createdEnv.Name = Some.Random.String();
          await _sut.UpdateEnvironmentAsync(createdEnv.EnvironmentKey, createdEnv);
 
          // delete environment
