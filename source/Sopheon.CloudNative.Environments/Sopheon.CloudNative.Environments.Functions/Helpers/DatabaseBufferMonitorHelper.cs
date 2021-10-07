@@ -103,7 +103,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          // https://github.com/Azure-Samples/resources-dotnet-deploy-using-arm-template
          IDeployment deployment = _azure.Deployments
             .Define(name: null)
-            .WithExistingResourceGroup(groupName: null)
+            .WithExistingResourceGroup(groupName: resourceGroupName)
             .WithTemplate(deploymentTemplateJson)
             .WithParameters(parameters: default(object))
             .WithMode(mode: default(DeploymentMode))
