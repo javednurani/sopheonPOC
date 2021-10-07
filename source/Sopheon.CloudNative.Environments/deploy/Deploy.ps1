@@ -25,4 +25,4 @@ az functionapp deployment source config-zip --name $ResourceGroup.ToLower() --re
 
 az bicep build --file "$($PSScriptRoot)\ElasticPool_Database_Buffer.bicep";
 
-az storage blob upload --container-name 'armTemplates' --name 'ElasticPoolWithBuffer/ElasticPool_Database_Buffer.json' --account-name $FunctionAppStorageAccountName --file "$($PSScriptRoot)\ElasticPool_Database_Buffer.json";
+az storage blob upload --container-name 'armtemplates' --name 'ElasticPoolWithBuffer/ElasticPool_Database_Buffer.json' --account-name $FunctionAppStorageAccountName --file "$($PSScriptRoot)\ElasticPool_Database_Buffer.json";
