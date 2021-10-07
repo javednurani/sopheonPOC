@@ -28,15 +28,15 @@ resource SqlServer_Pool 'Microsoft.Sql/servers/elasticPools@2020-08-01-preview' 
   name: '${SqlServer.name}/${poolName}'
   location: location
   sku: {
-    name: 'BasicPool'
-    tier: 'Basic'
+    name: 'StandardPool'
+    tier: 'Standard'
     capacity: bufferCapacity
   }
   properties: {
     maxSizeBytes: 5242880000
     perDatabaseSettings: {
       minCapacity: 0
-      maxCapacity: 5
+      maxCapacity: 10
     }
     zoneRedundant: false
   }
@@ -47,7 +47,7 @@ resource SqlServer_SqlDBName 'Microsoft.Sql/servers/databases@2020-08-01-preview
   location: location
   sku: {
     name: 'ElasticPool'
-    tier: 'Basic'
+    tier: 'Standard'
     capacity: 0
   }
   properties: {
