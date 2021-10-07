@@ -12,7 +12,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       public void DatabaseBufferMonitor_Run_HappyPath()
       {
          // Arrange + Act
-         new DatabaseBufferMonitor(null).Run(null, _context.Object);
+         new DatabaseBufferMonitor(null).Run(null, null, _context.Object);
 
          //Assert
          Assert.True(true);
