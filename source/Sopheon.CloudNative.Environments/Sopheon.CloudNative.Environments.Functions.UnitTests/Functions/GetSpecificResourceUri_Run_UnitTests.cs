@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.Azure.Functions.Worker.Http;
 using Moq;
 using Sopheon.CloudNative.Environments.Domain.Exceptions;
-using Sopheon.CloudNative.Environments.Domain.Queries;
-using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Functions.Models;
 using Sopheon.CloudNative.Environments.Testing.Common;
 using Xunit;
