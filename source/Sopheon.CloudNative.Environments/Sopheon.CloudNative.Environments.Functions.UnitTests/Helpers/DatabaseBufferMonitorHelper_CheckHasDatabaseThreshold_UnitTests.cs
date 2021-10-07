@@ -40,7 +40,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          Mock<IWithCreate> deploymentMock = SetupMockDeployment();
 
          // Act
-         _ = await _sut.CheckHasDatabaseThreshold(Some.Random.String());
+         _ = await _sut.CheckHasDatabaseThreshold(null, null, null, null);
 
          // Assert
          deploymentMock.Verify(wc => wc.Create(), Times.Never, "Should not have created deployment!");
@@ -57,7 +57,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          Mock<IWithCreate> deploymentMock = SetupMockDeployment();
          
          // Act
-         _ = await _sut.CheckHasDatabaseThreshold(Some.Random.String());
+         _ = await _sut.CheckHasDatabaseThreshold(null, null, null, null);
 
          // Assert
          deploymentMock.Verify(wc => wc.Create(), Times.Once, "Should have created deployment!");
@@ -95,7 +95,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          Mock<IWithTemplate> mockWithTemplate = new Mock<IWithTemplate>();
          mockBlank.Setup(b => b.WithExistingResourceGroup(It.IsAny<string>())).Returns(mockWithTemplate.Object);
          Mock<IWithParameters> mockWithParameters = new Mock<IWithParameters>();
-         mockWithTemplate.Setup(wt => wt.WithTemplateLink(It.IsAny<string>(), It.IsAny<string>())).Returns(mockWithParameters.Object);
+         mockWithTemplate.Setup(wt => wt.WithTemplate(It.IsAny<string>())).Returns(mockWithParameters.Object);
          Mock<IWithMode> mockWithMode = new Mock<IWithMode>();
          mockWithParameters.Setup(wp => wp.WithParameters(It.IsAny<object>())).Returns(mockWithMode.Object);
          Mock<IWithCreate> mockWithCreate = new Mock<IWithCreate>();

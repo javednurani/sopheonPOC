@@ -30,19 +30,16 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          _azure = azure;
       }
 
-      public async Task<bool> CheckHasDatabaseThreshold(string resourceGroupName)
+      public async Task<bool> CheckHasDatabaseThreshold(string subscriptionId, string resourceGroupName, string sqlServerName, string deploymentTemplateJson)
       {
          _logger.LogInformation($"Authenticated with Service Principal to Subscription: {_azure.SubscriptionId}!");
-
-         string subscriptionId = Environment.GetEnvironmentVariable("AzSubscriptionId");
-         string sqlServerName = Environment.GetEnvironmentVariable("AzSqlServerName");
 
          #region BufferCapacity
          ISqlServer sqlServer = await _azure.SqlServers
                   .GetByIdAsync($"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Sql/servers/{sqlServerName}");
 
          List<ISqlDatabase> notAssigned = new List<ISqlDatabase>();
-         List<ISqlDatabase> assignedToCustomer = new List<ISqlDatabase>(); // TODO: doo weneed this?
+         List<ISqlDatabase> assignedToCustomer = new List<ISqlDatabase>(); // TODO: do we need this?
 
          IReadOnlyList<ISqlDatabase> allDatabasesOnServer = await _azure.SqlServers.Databases.ListBySqlServerAsync(sqlServer);
 
@@ -107,7 +104,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          IDeployment deployment = _azure.Deployments
             .Define(name: null)
             .WithExistingResourceGroup(groupName: null)
-            .WithTemplateLink(uri: null, contentVersion: null)
+            .WithTemplate(deploymentTemplateJson)
             .WithParameters(parameters: default(object))
             .WithMode(mode: default(DeploymentMode))
             .Create();  // TODO: async?
