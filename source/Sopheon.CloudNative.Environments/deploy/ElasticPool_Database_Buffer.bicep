@@ -2,7 +2,7 @@
 param serverName string = '^SqlServerName^'
 
 @description('The name of the SQL Elastic Pool')
-param poolName string = '^SqlElasticPoolName^'
+param poolName string = uniqueString(utcNow())
 
 @description('The administrator username of the SQL logical server.')
 param administratorLogin string = 'sopheon'
