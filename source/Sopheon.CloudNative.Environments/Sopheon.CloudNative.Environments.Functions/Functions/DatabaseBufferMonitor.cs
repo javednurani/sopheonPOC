@@ -1,20 +1,50 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Management.Fluent;
+using Microsoft.Azure.Management.ResourceManager.Fluent;
+using Microsoft.Azure.Management.ResourceManager.Fluent.Authentication;
+using Microsoft.Azure.Management.ResourceManager.Fluent.Core;
+using Microsoft.Azure.Management.Sql.Fluent;
 using Microsoft.Extensions.Logging;
+using Sopheon.CloudNative.Environments.Functions.Helpers;
 
 namespace Sopheon.CloudNative.Environments.Functions
 {
-   public static class DatabaseBufferMonitor
+   public class DatabaseBufferMonitor
    {
-      private const string NCRONTAB_EVERY_SECOND = "* * * * * *";
-      private const string NCRONTAB_EVERY_5_SECONDS = "*/5 * * * * *";
-      private const string NCRONTAB_EVERY_MINUTE = "0 * * * * *";
+
+      private IDatabaseBufferMonitorHelper _dbBufferMonitorHelper;
+
+      public DatabaseBufferMonitor(IDatabaseBufferMonitorHelper dbBufferMonitorHelper)
+      {
+         _dbBufferMonitorHelper = dbBufferMonitorHelper;
+      }
 
       [Function(nameof(DatabaseBufferMonitor))]
-      public static void Run([TimerTrigger(NCRONTAB_EVERY_MINUTE)] TimerInfo myTimer, FunctionContext context)
+      public async Task Run(
+         [TimerTrigger("%DatabaseBufferTimer%")] TimerInfo myTimer, // TODO: what schedule?
+         FunctionContext context)
       {
+         // TODO: get Logger<T> injected?
          ILogger logger = context.GetLogger(nameof(DatabaseBufferMonitor));
-         logger.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+
+         logger.LogInformation($"{nameof(DatabaseBufferMonitor)} TimerTrigger Function executed at: {DateTime.Now}");
+         if (myTimer.IsPastDue)
+         {
+            logger.LogInformation($"TimerInfo.IsPastDue");
+         }
+
+         try
+         {
+            await _dbBufferMonitorHelper.CheckHasDatabaseThreshold();
+         }
+         catch (Exception ex)
+         {
+            logger.LogInformation($"{ex.GetType()} : {ex.Message}");
+         }
       }
    }
 }

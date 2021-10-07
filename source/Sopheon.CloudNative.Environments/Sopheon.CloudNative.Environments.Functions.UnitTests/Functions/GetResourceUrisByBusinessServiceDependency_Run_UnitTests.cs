@@ -1,33 +1,29 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Azure.Functions.Worker.Http;
 using Moq;
-using Sopheon.CloudNative.Environments.Domain.Queries;
-using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Functions.Models;
 using Sopheon.CloudNative.Environments.Functions.Validators;
 using Sopheon.CloudNative.Environments.Testing.Common;
 using Xunit;
 
-namespace Sopheon.CloudNative.Environments.Functions.UnitTests
+namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 {
    public class GetResourceUrisByBusinessServiceDependency_Run_UnitTests : FunctionUnitTestBase
    {
       GetResourceUrisByBusinessServiceDependency Sut;
 
-      Mock<HttpRequestData> _request;
-
-      Mock<IEnvironmentQueries> _mockEnvironmentQueries;
       IRequiredNameValidator _validator;
-      HttpResponseDataBuilder _responseBuilder;
 
       public GetResourceUrisByBusinessServiceDependency_Run_UnitTests()
       {
-         TestSetup();
+         _validator = new RequiredNameValidator();
+
+         // create Sut
+         Sut = new GetResourceUrisByBusinessServiceDependency(_mockEnvironmentQueries.Object, _validator, _mapper, _responseBuilder);
       }
 
       [Fact]
@@ -105,33 +101,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID, errorResponse.Message);
 
          _mockEnvironmentQueries.Verify(m => m.GetResourceUrisByBusinessServiceDependency(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
-      }
-
-      private void TestSetup()
-      {
-         SetupFunctionContext();
-
-         // HttpRequestData
-         _request = new Mock<HttpRequestData>(_context.Object);
-
-         _request.Setup(r => r.CreateResponse()).Returns(() =>
-         {
-            Mock<HttpResponseData> response = new Mock<HttpResponseData>(_context.Object);
-            response.SetupProperty(r => r.Headers, new HttpHeadersCollection());
-            response.SetupProperty(r => r.StatusCode);
-            response.SetupProperty(r => r.Body, new MemoryStream());
-            return response.Object;
-         });
-
-         _mockEnvironmentQueries = new Mock<IEnvironmentQueries>();
-
-         SetupAutoMapper();
-
-         _validator = new RequiredNameValidator();
-         _responseBuilder = new HttpResponseDataBuilder();
-
-         // create Sut
-         Sut = new GetResourceUrisByBusinessServiceDependency(_mockEnvironmentQueries.Object, _validator, _mapper, _responseBuilder);
       }
    }
 }

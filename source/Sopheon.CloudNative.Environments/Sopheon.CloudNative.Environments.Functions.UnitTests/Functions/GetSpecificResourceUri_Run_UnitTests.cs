@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Moq;
 using Sopheon.CloudNative.Environments.Domain.Exceptions;
 using Sopheon.CloudNative.Environments.Domain.Queries;
@@ -17,23 +11,16 @@ using Sopheon.CloudNative.Environments.Functions.Models;
 using Sopheon.CloudNative.Environments.Testing.Common;
 using Xunit;
 
-namespace Sopheon.CloudNative.Environments.Functions.UnitTests
+namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 {
    public class GetSpecificResourceUri_Run_UnitTests : FunctionUnitTestBase
    {
       GetSpecificResourceUri Sut;
 
-      Mock<FunctionContext> _context;
-      Mock<HttpRequestData> _request;
-
-      Mock<IEnvironmentQueries> _mockEnvironmentQueries;
-      HttpResponseDataBuilder _responseBuilder;
-
-      IMapper _mapper;
-
       public GetSpecificResourceUri_Run_UnitTests()
       {
-         TestSetup();
+         // create Sut
+         Sut = new GetSpecificResourceUri(_mockEnvironmentQueries.Object, _mapper, _responseBuilder);
       }
 
       [Fact]
@@ -150,43 +137,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          Assert.Equal(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID, errorResponse.Message);
 
          _mockEnvironmentQueries.Verify(m => m.GetSpecificResourceUri(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never());
-      }
-
-      private void TestSetup()
-      {
-         // FunctionContext
-         ServiceCollection serviceCollection = new ServiceCollection();
-         serviceCollection.AddScoped<ILoggerFactory, LoggerFactory>();
-         ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
-
-         _context = new Mock<FunctionContext>();
-         _context.SetupProperty(c => c.InstanceServices, serviceProvider);
-
-         // HttpRequestData
-         _request = new Mock<HttpRequestData>(_context.Object);
-
-         _request.Setup(r => r.CreateResponse()).Returns(() =>
-         {
-            Mock<HttpResponseData> response = new Mock<HttpResponseData>(_context.Object);
-            response.SetupProperty(r => r.Headers, new HttpHeadersCollection());
-            response.SetupProperty(r => r.StatusCode);
-            response.SetupProperty(r => r.Body, new MemoryStream());
-            return response.Object;
-         });
-
-         _mockEnvironmentQueries = new Mock<IEnvironmentQueries>();
-
-         // AutoMapper config
-         MapperConfiguration config = new MapperConfiguration(cfg =>
-         {
-            cfg.AddProfile(new MappingProfile());
-         });
-         _mapper = config.CreateMapper();
-
-         _responseBuilder = new HttpResponseDataBuilder();
-
-         // create Sut
-         Sut = new GetSpecificResourceUri(_mockEnvironmentQueries.Object, _mapper, _responseBuilder);
       }
    }
 }
