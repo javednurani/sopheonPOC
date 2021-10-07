@@ -1,9 +1,6 @@
 @description('The name of the SQL logical server.')
 param serverName string = '^SqlServerName^'
 
-@description('The name of the SQL Database.')
-param sqlDBName string = '^SqlServerDatabaseName^'
-
 @description('The name of the SQL Elastic Pool')
 param poolName string = '^SqlElasticPoolName^'
 
@@ -46,7 +43,7 @@ resource SqlServer_Pool 'Microsoft.Sql/servers/elasticPools@2020-08-01-preview' 
 }
 
 resource SqlServer_SqlDBName 'Microsoft.Sql/servers/databases@2020-08-01-preview' = [for i in range(0, bufferCapacity): {
-  name: '${SqlServer.name}/${sqlDBName}-${i}'
+  name: '${SqlServer.name}/${uniqueString(resourceGroup().id, SqlServer_Pool.name)}-${i}'
   location: location
   sku: {
     name: 'ElasticPool'
