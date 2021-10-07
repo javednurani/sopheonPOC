@@ -94,6 +94,14 @@ resource EnvironmentsFunctionApp 'Microsoft.Web/sites@2021-01-15' = {
           name: 'FUNCTIONS_EXTENSION_VERSION'
           value: '~3'
         }
+        {
+          name: 'DatabaseBufferCapacity'
+          value: '100'
+        }
+        {
+          name: 'DatabaseBufferTimer'
+          value: '0 * * * * *'
+        }
       ]
     }
   }
