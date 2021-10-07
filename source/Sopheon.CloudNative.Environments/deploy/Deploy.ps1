@@ -1,11 +1,11 @@
 #Adding blank comments to avoid bad artifact generation
 
 $ResourceGroup = "Stratus-$($env:Environment)";
-$FunctionAppStorageAccountName = "stratus$($env:Environment.ToLower())envfuncapp"
+$FunctionAppStorageAccountName = "stratus$($env:Environment.ToLower())envfuncapp";
 
 $azureKeyVault = "Cloud-DevOps";
-if ($env:AzureEnvironment -eq "Prod"){
-    $azureKeyVault = "Prod-Cloud-DevOps"
+if ($env:AzureEnvironment -eq "Prod") {
+    $azureKeyVault = "Prod-Cloud-DevOps";
 }
 
 $SqlAdminEnigma = (az keyvault secret show --vault-name $azureKeyVault --name "SqlServerAdminEnigma" --query value).Replace('"', '');
@@ -21,8 +21,8 @@ Write-Host "Removing Firewall Rule";
 az sql server firewall-rule delete --name DeployMachine --resource-group $ResourceGroup --server $ResourceGroup.ToLower();
 
 #upload function app
-az functionapp deployment source config-zip --name $ResourceGroup.ToLower() --resource-group $ResourceGroup --src "_StratusEnvironmentManagement\EnvironmentManagement\EnvironmentManagement.zip"
+az functionapp deployment source config-zip --name $ResourceGroup.ToLower() --resource-group $ResourceGroup --src "_StratusEnvironmentManagement\EnvironmentManagement\EnvironmentManagement.zip";
 
-az bicep build --file .\ElasticPool_Database_Buffer.bicep
+az bicep build --file "$($PSScriptRoot)\ElasticPool_Database_Buffer.bicep";
 
 az storage blob upload --destination 'armTemplates' --destination-path 'ElasticPoolWithBuffer/' --account-name $FunctionAppStorageAccountName --source "$($PSScriptRoot)\ElasticPool_Database_Buffer.json";
