@@ -48,7 +48,7 @@ resource EnvironmentFunctionApp_Storage_BlobService 'Microsoft.Storage/storageAc
 }
 
 resource StaticWebpage_Storage_BlobService_ArmTemplateContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-04-01' = {
-  name: '${EnvironmentFunctionApp_Storage_BlobService.name}/armTemplates'
+  name: '${EnvironmentFunctionApp_Storage_BlobService.name}/armtemplates'
   properties: {
     defaultEncryptionScope: '$account-encryption-key'
     denyEncryptionScopeOverride: false
