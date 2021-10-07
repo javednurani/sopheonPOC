@@ -54,7 +54,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          SetupMockDatabases(4);
 
          Mock<IWithCreate> deploymentMock = SetupMockDeployment();
-
+         
          // Act
          _ = await _sut.CheckHasDatabaseThreshold(null, null, null, null);
 
