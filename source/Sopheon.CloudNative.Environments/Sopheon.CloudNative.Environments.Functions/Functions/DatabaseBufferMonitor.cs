@@ -1,8 +1,6 @@
 using System;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Azure.Functions.Worker;
-using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
 
@@ -24,7 +22,7 @@ namespace Sopheon.CloudNative.Environments.Functions
       [Function(nameof(DatabaseBufferMonitor))]
       public async Task Run(
          [TimerTrigger("%DatabaseBufferTimer%")] TimerInfo myTimer,
-         [Blob("TODO", FileAccess.Read, Connection = "TODO")] string jsonTemplateData,
+         [BlobInput("TODO BLOB PATH", Connection = "TODO BLOB CONNECTION")] string jsonTemplateData,
          FunctionContext context)
       {
          ILogger logger = context.GetLogger(nameof(DatabaseBufferMonitor));
