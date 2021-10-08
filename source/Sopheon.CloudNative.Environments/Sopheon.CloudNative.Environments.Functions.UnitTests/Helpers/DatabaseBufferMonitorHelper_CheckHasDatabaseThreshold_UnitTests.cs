@@ -29,7 +29,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
       }
 
       [Fact]
-      public async void CheckHasDatabaseThreshold_EnoughUnassignedDatabasesExist_DeploymentIsNotCreated()
+      public async Task CheckHasDatabaseThreshold_EnoughUnassignedDatabasesExist_DeploymentIsNotCreated()
       {
          // Arrange
 
@@ -46,7 +46,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
       }
 
       [Fact]
-      public async void CheckHasDatabaseThreshold_NotEnoughUnassignedDatabasesExist_DeploymentIsCreated()
+      public async Task CheckHasDatabaseThreshold_NotEnoughUnassignedDatabasesExist_DeploymentIsCreated()
       {
          // Arrange
 
