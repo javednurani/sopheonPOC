@@ -21,7 +21,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async void Run_HappyPath_EnvironmentsReturned()
+      public async Task Run_HappyPath_EnvironmentsReturned()
       {
          // Arrange
          _mockEnvironmentRepository.Setup(m => m.GetEnvironments()).Returns(() =>
@@ -66,7 +66,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async void Run_HappyPath_NoneReturned()
+      public async Task Run_HappyPath_NoneReturned()
       {
          // Arrange
          _mockEnvironmentRepository.Setup(m => m.GetEnvironments()).Returns(() =>

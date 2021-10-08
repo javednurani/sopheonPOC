@@ -22,7 +22,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async void Run_HappyPath_UriReturned()
+      public async Task Run_HappyPath_UriReturned()
       {
          // Arrange
          Guid testGuid = Some.Random.Guid();
@@ -54,7 +54,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async void Run_RandomData_NotFound()
+      public async Task Run_RandomData_NotFound()
       {
          // Arrange
          Guid testGuid = Some.Random.Guid();
@@ -81,7 +81,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async void Run_EnvironmentKeyIsEmptyGuid_BadRequest()
+      public async Task Run_EnvironmentKeyIsEmptyGuid_BadRequest()
       {
          // Arrange + Act
          HttpResponseData result = await Sut.Run(_request.Object, _context.Object, Guid.Empty, Some.Random.String(), Some.Random.String());
@@ -100,7 +100,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async void Run_BusinessServiceNameIsEmptyString_BadRequest()
+      public async Task Run_BusinessServiceNameIsEmptyString_BadRequest()
       {
          // Arrange + Act
          HttpResponseData result = await Sut.Run(_request.Object, _context.Object, Some.Random.Guid(), string.Empty, Some.Random.String());
@@ -119,7 +119,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async void Run_DependencyNameIsEmptyString_BadRequest()
+      public async Task Run_DependencyNameIsEmptyString_BadRequest()
       {
          // Arrange + Act
          HttpResponseData result = await Sut.Run(_request.Object, _context.Object, Some.Random.Guid(), Some.Random.String(), string.Empty);

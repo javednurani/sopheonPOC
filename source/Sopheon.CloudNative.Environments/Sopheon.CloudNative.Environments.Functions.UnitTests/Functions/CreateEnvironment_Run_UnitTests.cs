@@ -26,7 +26,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async void Run_HappyPath_ReturnsCreated()
+      public async Task Run_HappyPath_ReturnsCreated()
       {
          // Arrange
          EnvironmentDto environmentRequest = new EnvironmentDto
@@ -64,7 +64,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async void Run_RequestMissingName_ReturnsBadRequest()
+      public async Task Run_RequestMissingName_ReturnsBadRequest()
       {
          // Arrange
          SetRequestBody(_request,
@@ -89,7 +89,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async void Run_RequestMissingOwner_ReturnsBadRequest()
+      public async Task Run_RequestMissingOwner_ReturnsBadRequest()
       {
          // Arrange
          SetRequestBody(_request,
@@ -114,7 +114,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async void Run_OwnerNotValidGuid_ReturnsBadRequest()
+      public async Task Run_OwnerNotValidGuid_ReturnsBadRequest()
       {
          // Arrange
          SetRequestBody(_request,

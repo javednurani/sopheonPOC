@@ -29,7 +29,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async void Run_HappyPath_ReturnsOK()
+      public async Task Run_HappyPath_ReturnsOK()
       {
          Guid environmentKey = Some.Random.Guid();
          // Arrange
@@ -68,7 +68,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async void Run_NonGuidKey_ReturnsBadRequest()
+      public async Task Run_NonGuidKey_ReturnsBadRequest()
       {
          // Arrange
          string environmentKey = Some.Random.String();
@@ -97,7 +97,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async void Run_NameMissing_ReturnsBadRequest()
+      public async Task Run_NameMissing_ReturnsBadRequest()
       {
          // Arrange         
          Guid environmentKey = Some.Random.Guid();
@@ -125,7 +125,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async void Run_OwnerMissing_ReturnsBadRequest()
+      public async Task Run_OwnerMissing_ReturnsBadRequest()
       {
          // Arrange         
          Guid environmentKey = Some.Random.Guid();
@@ -153,7 +153,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async void Run_EnvironmentDoesNotExist_ReturnsBadRequest()
+      public async Task Run_EnvironmentDoesNotExist_ReturnsBadRequest()
       {
          // Arrange         
          Guid environmentKey = Some.Random.Guid();
