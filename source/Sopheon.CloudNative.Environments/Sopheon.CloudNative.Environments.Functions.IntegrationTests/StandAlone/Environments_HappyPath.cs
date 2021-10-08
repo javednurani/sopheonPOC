@@ -1,7 +1,7 @@
-﻿using Sopheon.CloudNative.Environments.Testing.Common;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Sopheon.CloudNative.Environments.Functions.IntegrationTests.Infrastructure;
+using Sopheon.CloudNative.Environments.Testing.Common;
 using Xunit;
 
 namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.StandAlone
