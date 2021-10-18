@@ -11,11 +11,13 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
    {
       private DatabaseBufferMonitor _sut;
       private Mock<IDatabaseBufferMonitorHelper> _mockMonitorHelper;
+      
 
       public DatabaseBufferMonitor_Run_UnitTests()
       {
          _mockMonitorHelper = new Mock<IDatabaseBufferMonitorHelper>();
-         _sut = new DatabaseBufferMonitor(_mockMonitorHelper.Object);
+         
+         _sut = new DatabaseBufferMonitor(_mockMonitorHelper.Object, null);
       }
 
       [Fact]

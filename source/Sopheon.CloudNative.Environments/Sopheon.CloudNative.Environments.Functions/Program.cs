@@ -2,6 +2,9 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 using FluentValidation;
 using Microsoft.Azure.Functions.Worker.Extensions.OpenApi.Extensions;
 using Microsoft.Azure.Management.Fluent;
@@ -20,26 +23,37 @@ using Sopheon.CloudNative.Environments.Functions.Validators;
 
 namespace Sopheon.CloudNative.Environments.Functions
 {
-   [ExcludeFromCodeCoverage]
-	class Program
-	{
-		static Task Main(string[] args)
-		{
-			IHost host = new HostBuilder()
-				.ConfigureAppConfiguration((hostContext, builder) =>
-				{
-					builder.AddCommandLine(args);
-					if (hostContext.HostingEnvironment.IsDevelopment())
-					{
-						builder.AddUserSecrets<Program>();
-					}
-				})
-				.ConfigureFunctionsWorkerDefaults()
-				.ConfigureOpenApi()
-				.ConfigureServices((hostContext, services) =>
-				{
-					// Add Logging
-					services.AddLogging();
+	[ExcludeFromCodeCoverage]
+   class Program
+   {
+      private static Lazy<IAzure> _lazyAzureClient = new Lazy<IAzure>(GetAzureInstance);
+
+      static Task Main(string[] args)
+      {
+         IHost host = new HostBuilder()
+            .ConfigureAppConfiguration((hostContext, builder) =>
+            {
+               builder.AddCommandLine(args);
+               if (hostContext.HostingEnvironment.IsDevelopment())
+               {
+                  builder.AddUserSecrets<Program>();
+               }
+               if (hostContext.HostingEnvironment.IsProduction())
+               {
+                  var keyVaultName = Environment.GetEnvironmentVariable("KeyVaultName");
+                  var builtConfig = builder.Build();
+                  var secretClient = new SecretClient(
+                      new Uri($"https://{keyVaultName}.vault.azure.net/"),
+                      new DefaultAzureCredential());
+                  builder.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
+               }
+            })
+            .ConfigureFunctionsWorkerDefaults()
+            .ConfigureOpenApi()
+            .ConfigureServices((hostContext, services) =>
+            {
+               // Add Logging
+               services.AddLogging();
 
 					// Add HttpClient
 					services.AddHttpClient();

@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
 
@@ -10,13 +11,17 @@ namespace Sopheon.CloudNative.Environments.Functions
    {
       // TODO: consolidate to constants?
       public static string SERVER_NAME_TOKEN = "^SqlServerName^";
-      public static string ADMINISTRATOR_LOGIN_ENIGMA_TOKEN = "^SqlAdminEngima^";
+      //public static string ADMINISTRATOR_LOGIN_ENIGMA_TOKEN = "^SqlAdminEngima^";
+      public static string ADMINISTRATOR_LOGIN_ENIGMA_TOKEN;
 
       private IDatabaseBufferMonitorHelper _dbBufferMonitorHelper;
-
-      public DatabaseBufferMonitor(IDatabaseBufferMonitorHelper dbBufferMonitorHelper)
+      private readonly IConfiguration _configuration;
+      
+      public DatabaseBufferMonitor(IDatabaseBufferMonitorHelper dbBufferMonitorHelper, IConfiguration configuration)
       {
          _dbBufferMonitorHelper = dbBufferMonitorHelper;
+         _configuration = configuration;
+         ADMINISTRATOR_LOGIN_ENIGMA_TOKEN = configuration["SqlServerAdminEnigma"];
       }
 
       [Function(nameof(DatabaseBufferMonitor))]
