@@ -38,6 +38,27 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   }
 }
 
+resource EnvironmentFunctionApp_Storage_BlobService 'Microsoft.Storage/storageAccounts/blobServices@2021-04-01' = {
+  name: '${storageAccount.name}/default'
+  properties: {
+    deleteRetentionPolicy: {
+      enabled: false
+    }
+  }
+}
+
+resource StaticWebpage_Storage_BlobService_ArmTemplateContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-04-01' = {
+  name: '${EnvironmentFunctionApp_Storage_BlobService.name}/armtemplates'
+  properties: {
+    defaultEncryptionScope: '$account-encryption-key'
+    denyEncryptionScopeOverride: false
+    publicAccess: 'Blob'
+  }
+  dependsOn: [
+    storageAccount
+  ]
+}
+
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: appInsightsName
   location: location
