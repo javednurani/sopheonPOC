@@ -11,8 +11,7 @@ namespace Sopheon.CloudNative.Environments.Functions
    {
       // TODO: consolidate to constants?
       public static string SERVER_NAME_TOKEN = "^SqlServerName^";
-      //public static string ADMINISTRATOR_LOGIN_ENIGMA_TOKEN = "^SqlAdminEngima^";
-      public static string ADMINISTRATOR_LOGIN_ENIGMA_TOKEN;
+      public static string ADMINISTRATOR_LOGIN_ENIGMA_TOKEN = "^SqlAdminEngima^";
 
       private IDatabaseBufferMonitorHelper _dbBufferMonitorHelper;
       private readonly IConfiguration _configuration;
@@ -21,7 +20,6 @@ namespace Sopheon.CloudNative.Environments.Functions
       {
          _dbBufferMonitorHelper = dbBufferMonitorHelper;
          _configuration = configuration;
-         ADMINISTRATOR_LOGIN_ENIGMA_TOKEN = configuration["SqlServerAdminEnigma"];
       }
 
       [Function(nameof(DatabaseBufferMonitor))]
@@ -46,8 +44,8 @@ namespace Sopheon.CloudNative.Environments.Functions
             string resourceGroupName = Environment.GetEnvironmentVariable("AzResourceGroupName");
             string sqlServerName = Environment.GetEnvironmentVariable("AzSqlServerName");
 
-            // TODO: get database password from key vault
-            string adminLoginEnigma = string.Empty;
+            // Pull admin enigma from app config (user secrets or key vault)
+            string adminLoginEnigma = _configuration["SqlServerAdminEnigma"];
 
             // TODO: string replace SqlServerName and password into json template
             jsonTemplateData = jsonTemplateData
