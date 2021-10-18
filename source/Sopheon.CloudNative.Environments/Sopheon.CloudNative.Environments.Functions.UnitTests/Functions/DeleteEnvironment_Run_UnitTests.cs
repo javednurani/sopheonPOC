@@ -19,7 +19,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async void Run_HappyPath_ReturnsNoContent()
+      public async Task Run_HappyPath_ReturnsNoContent()
       {
          // Arrange
          _mockEnvironmentRepository.Setup(m => m.DeleteEnvironment(It.IsAny<Guid>())).Returns(() =>
@@ -44,7 +44,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async void Run_KeyIsInvalidGuid_ReturnsBadRequest()
+      public async Task Run_KeyIsInvalidGuid_ReturnsBadRequest()
       {
          // Arrange
          string keyToDelete = Some.Random.String();
@@ -59,7 +59,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async void Run_EntityNotFound_ReturnsNotFound()
+      public async Task Run_EntityNotFound_ReturnsNotFound()
       {
          // Arrange
          _mockEnvironmentRepository
@@ -83,7 +83,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async void Run_GeneralException_ReturnsServerError()
+      public async Task Run_GeneralException_ReturnsServerError()
       {
          // Arrange
          _mockEnvironmentRepository

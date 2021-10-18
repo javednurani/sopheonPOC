@@ -27,7 +27,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async void Run_HappyPath_UrisReturned()
+      public async Task Run_HappyPath_UrisReturned()
       {
          // Arrange
          string businessServiceName = Some.Random.String();
@@ -66,7 +66,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async void Run_BusinessServiceKeyIsEmptyString_BadRequest()
+      public async Task Run_BusinessServiceKeyIsEmptyString_BadRequest()
       {
          // Arrange + Act
          HttpResponseData result = await Sut.Run(_request.Object, _context.Object, string.Empty, Some.Random.String());
@@ -85,7 +85,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async void Run_DependencyKeyIsEmptyString_BadRequest()
+      public async Task Run_DependencyKeyIsEmptyString_BadRequest()
       {
          // Arrange + Act
          HttpResponseData result = await Sut.Run(_request.Object, _context.Object, Some.Random.String(), string.Empty);

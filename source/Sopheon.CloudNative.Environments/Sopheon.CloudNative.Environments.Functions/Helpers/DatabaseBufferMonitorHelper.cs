@@ -106,7 +106,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
             .WithExistingResourceGroup(resourceGroupName)
             .WithTemplate(deploymentTemplateJson)
             .WithParameters(default(object))
-            .WithMode(default(DeploymentMode))
+            .WithMode(DeploymentMode.Incremental)
             .Create();  // TODO: async?
 
          // TODO: need to check provision state?

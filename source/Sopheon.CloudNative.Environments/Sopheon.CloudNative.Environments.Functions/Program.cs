@@ -55,53 +55,53 @@ namespace Sopheon.CloudNative.Environments.Functions
                // Add Logging
                services.AddLogging();
 
-					// Add HttpClient
-					services.AddHttpClient();
+               // Add HttpClient
+               services.AddHttpClient();
 
-					// Add Custom Services
-					string connString = string.Empty;
-					if (hostContext.HostingEnvironment.IsProduction())
-					{
-						connString = Environment.GetEnvironmentVariable("SQLCONNSTR_EnvironmentsSqlConnectionString");
-					}
-					if (hostContext.HostingEnvironment.IsDevelopment())
-					{
-						connString =
-							hostContext.Configuration["SQLCONNSTR_EnvironmentsSqlConnectionString"] ??          // local dev
-							Environment.GetEnvironmentVariable("SQLCONNSTR_EnvironmentsSqlConnectionString");   // CI pipeline
-					}
-					services.AddDbContext<EnvironmentContext>(options => options.UseSqlServer(connString));
-					services.AddAutoMapper(typeof(Program));
+               // Add Custom Services
+               string connString = string.Empty;
+               if (hostContext.HostingEnvironment.IsProduction())
+               {
+                  connString = Environment.GetEnvironmentVariable("SQLCONNSTR_EnvironmentsSqlConnectionString");
+               }
+               if (hostContext.HostingEnvironment.IsDevelopment())
+               {
+                  connString =
+                     hostContext.Configuration["SQLCONNSTR_EnvironmentsSqlConnectionString"] ??          // local dev
+                     Environment.GetEnvironmentVariable("SQLCONNSTR_EnvironmentsSqlConnectionString");   // CI pipeline
+               }
+               services.AddDbContext<EnvironmentContext>(options => options.UseSqlServer(connString));
+               services.AddAutoMapper(typeof(Program));
 
-					services.AddScoped<IEnvironmentRepository, EFEnvironmentRepository>();
-					services.AddScoped<IEnvironmentQueries, EFEnvironmentQueries>();
-					services.AddScoped<IValidator<EnvironmentDto>, EnvironmentDtoValidator>();
-					services.AddScoped<IRequiredNameValidator, RequiredNameValidator>();
-					services.AddScoped<IDatabaseBufferMonitorHelper, DatabaseBufferMonitorHelper>();
-					services.AddScoped<HttpResponseDataBuilder>();
-					services.AddScoped<IAzure>(sp => GetAzureInstance());	// TODO: async?
-				})
-				.Build();
+               services.AddScoped<IEnvironmentRepository, EFEnvironmentRepository>();
+               services.AddScoped<IEnvironmentQueries, EFEnvironmentQueries>();
+               services.AddScoped<IValidator<EnvironmentDto>, EnvironmentDtoValidator>();
+               services.AddScoped<IRequiredNameValidator, RequiredNameValidator>();
+               services.AddScoped<IDatabaseBufferMonitorHelper, DatabaseBufferMonitorHelper>();
+               services.AddScoped<HttpResponseDataBuilder>();
+               services.AddScoped<IAzure>(sp => _lazyAzureClient.Value);   // single instance shared across functions
+            })
+            .Build();
 
-			return host.RunAsync();
-		}
+         return host.RunAsync();
+      }
 
-		private static IAzure GetAzureInstance()
-		{
-			// authenticate with Service Principal credentials
-			//logger.LogInformation("Fetching Service Principal credentials");
-			string clientId = Environment.GetEnvironmentVariable("AzSpClientId");
-			string clientSecret = Environment.GetEnvironmentVariable("AzSpClientSecret");
-			string tenantId = Environment.GetEnvironmentVariable("AzSpTenantId");
+      private static IAzure GetAzureInstance()
+      {
+         // authenticate with Service Principal credentials
+         //logger.LogInformation("Fetching Service Principal credentials");
+         string clientId = Environment.GetEnvironmentVariable("AzSpClientId");
+         string clientSecret = Environment.GetEnvironmentVariable("AzSpClientSecret");
+         string tenantId = Environment.GetEnvironmentVariable("AzSpTenantId");
 
-			AzureCredentials credentials = SdkContext.AzureCredentialsFactory
-				.FromServicePrincipal(clientId, clientSecret, tenantId, environment: AzureEnvironment.AzureGlobalCloud);
+         AzureCredentials credentials = SdkContext.AzureCredentialsFactory
+            .FromServicePrincipal(clientId, clientSecret, tenantId, environment: AzureEnvironment.AzureGlobalCloud);
 
-			//logger.LogInformation($"Authenticating with Azure...");
+         //logger.LogInformation($"Authenticating with Azure...");
 
-			return Microsoft.Azure.Management.Fluent.Azure
-				.Authenticate(credentials)
-				.WithDefaultSubscription();	// TODO: can we use the async method?  having trouble consuming in Main
-		}
+         return Microsoft.Azure.Management.Fluent.Azure
+            .Authenticate(credentials)
+            .WithDefaultSubscription();	// TODO: can we use the async method?  having trouble consuming in Main
+      }
    }
 }
