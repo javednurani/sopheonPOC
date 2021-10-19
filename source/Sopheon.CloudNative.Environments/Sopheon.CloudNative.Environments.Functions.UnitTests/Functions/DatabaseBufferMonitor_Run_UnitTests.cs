@@ -1,5 +1,6 @@
 ﻿using System;
-using Microsoft.Azure.Functions.Worker;
+using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Testing.Common;
@@ -11,13 +12,20 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
    {
       private DatabaseBufferMonitor _sut;
       private Mock<IDatabaseBufferMonitorHelper> _mockMonitorHelper;
-      
+      private IConfiguration _configuration;
 
       public DatabaseBufferMonitor_Run_UnitTests()
       {
          _mockMonitorHelper = new Mock<IDatabaseBufferMonitorHelper>();
          
-         _sut = new DatabaseBufferMonitor(_mockMonitorHelper.Object, null);
+         Dictionary<string, string> inMemorySettings = new Dictionary<string, string> {
+             {"SqlServerAdminEnigma", Some.Random.String()}, 
+         };
+         _configuration = new ConfigurationBuilder()
+             .AddInMemoryCollection(inMemorySettings)
+             .Build();
+
+         _sut = new DatabaseBufferMonitor(_mockMonitorHelper.Object, _configuration);
       }
 
       [Fact]
@@ -37,10 +45,8 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       {
          // Arrange
          string sqlServerName = Some.Random.String();
-         string adminEnigma = string.Empty;
-
+         string adminEnigma = _configuration["SqlServerAdminEnigma"];
          Environment.SetEnvironmentVariable("AzSqlServerName", sqlServerName);
-         // TODO: update once this adminEnigma is retrieved in SUT
 
          string template = $"{DatabaseBufferMonitor.SERVER_NAME_TOKEN}{DatabaseBufferMonitor.ADMINISTRATOR_LOGIN_ENIGMA_TOKEN}";
 
