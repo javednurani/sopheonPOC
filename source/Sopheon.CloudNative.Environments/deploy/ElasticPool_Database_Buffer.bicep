@@ -44,6 +44,9 @@ resource SqlServer_Pool 'Microsoft.Sql/servers/elasticPools@2020-08-01-preview' 
 resource SqlServer_SqlDBName 'Microsoft.Sql/servers/databases@2020-08-01-preview' = [for i in range(0, bufferCapacity): {
   name: '${SqlServer.name}/${uniqueString(resourceGroup().id, SqlServer_Pool.name)}-${i}'
   location: location
+  tags: {
+    CustomerProvisionedDatabase: 'NotAssigned'
+  }
   sku: {
     name: 'ElasticPool'
     tier: 'Standard'
