@@ -12,7 +12,7 @@ namespace Sopheon.CloudNative.Environments.Functions
       public static string SERVER_NAME_TOKEN = "^SqlServerName^";
       public static string ADMINISTRATOR_LOGIN_ENIGMA_TOKEN = "^SqlAdminEngima^";
 
-      public const string INPUT_BINDING_BLOB_PATH = "armtemplates/ElasticPoolWithBuffer/ElasticPool_Database_Buffer.json";
+      private const string INPUT_BINDING_BLOB_PATH = "armtemplates/ElasticPoolWithBuffer/ElasticPool_Database_Buffer.json";
 
       private IDatabaseBufferMonitorHelper _dbBufferMonitorHelper;
 
