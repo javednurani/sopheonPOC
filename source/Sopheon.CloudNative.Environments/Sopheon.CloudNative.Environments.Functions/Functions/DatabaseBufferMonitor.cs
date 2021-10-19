@@ -13,6 +13,8 @@ namespace Sopheon.CloudNative.Environments.Functions
       public static string SERVER_NAME_TOKEN = "^SqlServerName^";
       public static string ADMINISTRATOR_LOGIN_ENIGMA_TOKEN = "^SqlAdminEngima^";
 
+      private const string INPUT_BINDING_BLOB_PATH = "armtemplates/ElasticPoolWithBuffer/ElasticPool_Database_Buffer.json";
+
       private IDatabaseBufferMonitorHelper _dbBufferMonitorHelper;
       private readonly IConfiguration _configuration;
       
@@ -25,7 +27,7 @@ namespace Sopheon.CloudNative.Environments.Functions
       [Function(nameof(DatabaseBufferMonitor))]
       public async Task Run(
          [TimerTrigger("%DatabaseBufferTimer%")] TimerInfo myTimer,
-         [BlobInput("TODO BLOB PATH", Connection = "TODO BLOB CONNECTION")] string jsonTemplateData,
+         [BlobInput(INPUT_BINDING_BLOB_PATH)] string jsonTemplateData,
          FunctionContext context)
       {
          ILogger logger = context.GetLogger(nameof(DatabaseBufferMonitor));
