@@ -33,10 +33,9 @@ resource SqlServer_Pool 'Microsoft.Sql/servers/elasticPools@2020-08-01-preview' 
     capacity: bufferCapacity
   }
   properties: {
-    maxSizeBytes: 5242880000
     perDatabaseSettings: {
       minCapacity: 0
-      maxCapacity: 10
+      maxCapacity: 100
     }
     zoneRedundant: false
   }
