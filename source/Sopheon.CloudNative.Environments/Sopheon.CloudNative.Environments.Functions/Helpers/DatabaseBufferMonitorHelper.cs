@@ -100,7 +100,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          // TODO: create deployment
          // https://docs.microsoft.com/en-us/azure/azure-resource-manager/
 
-         // https://github.com/Azure-Samples/resources-dotnet-deploy-using-arm-
+         // https://github.com/Azure-Samples/resources-dotnet-deploy-using-arm-template
          _logger.LogInformation("Creating new deployment");
             
          IDeployment deployment = _azure.Deployments
