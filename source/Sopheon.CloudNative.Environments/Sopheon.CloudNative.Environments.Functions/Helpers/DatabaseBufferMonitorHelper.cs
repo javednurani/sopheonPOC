@@ -100,26 +100,18 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          // TODO: create deployment
          // https://docs.microsoft.com/en-us/azure/azure-resource-manager/
 
-         // https://github.com/Azure-Samples/resources-dotnet-deploy-using-arm-template
-
-         try
-         {
-            _logger.LogInformation("Creating new deployment");
+         // https://github.com/Azure-Samples/resources-dotnet-deploy-using-arm-
+         _logger.LogInformation("Creating new deployment");
             
-            IDeployment deployment = _azure.Deployments
-               .Define(nameof(DatabaseBufferMonitor) + "_Deployment_" + DateTime.UtcNow.ToString("yyyyMMddTHHmmss"))
-               .WithExistingResourceGroup(resourceGroupName)
-               .WithTemplate(deploymentTemplateJson)
-               .WithParameters("{ }")
-               .WithMode(DeploymentMode.Incremental)
-               .Create();  // TODO: async?
+         IDeployment deployment = _azure.Deployments
+            .Define(nameof(DatabaseBufferMonitor) + "_Deployment_" + DateTime.UtcNow.ToString("yyyyMMddTHHmmss"))
+            .WithExistingResourceGroup(resourceGroupName)
+            .WithTemplate(deploymentTemplateJson)
+            .WithParameters("{ }")
+            .WithMode(DeploymentMode.Incremental)
+            .Create();  // TODO: async?
             
-            _logger.LogInformation($"Deployment: {deployment.Name} was created successfully.");
-         }
-         catch(Exception ex)
-         {
-            _logger.LogError(ex.Message);
-         }
+         _logger.LogInformation($"Deployment: {deployment.Name} was created successfully.");
 
          // TODO: need to check provision state?
          //deployment.ProvisioningState
