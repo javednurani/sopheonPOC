@@ -2,6 +2,9 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 using FluentValidation;
 using Microsoft.Azure.Functions.Worker.Extensions.OpenApi.Extensions;
 using Microsoft.Azure.Management.Fluent;
@@ -20,7 +23,7 @@ using Sopheon.CloudNative.Environments.Functions.Validators;
 
 namespace Sopheon.CloudNative.Environments.Functions
 {
-   [ExcludeFromCodeCoverage]
+	[ExcludeFromCodeCoverage]
    class Program
    {
       private static Lazy<IAzure> _lazyAzureClient = new Lazy<IAzure>(GetAzureInstance);
@@ -34,6 +37,15 @@ namespace Sopheon.CloudNative.Environments.Functions
                if (hostContext.HostingEnvironment.IsDevelopment())
                {
                   builder.AddUserSecrets<Program>();
+               }
+               if (hostContext.HostingEnvironment.IsProduction())
+               {
+                  var keyVaultName = Environment.GetEnvironmentVariable("KeyVaultName");
+                  var builtConfig = builder.Build();
+                  var secretClient = new SecretClient(
+                      new Uri($"https://{keyVaultName}.vault.azure.net/"),
+                      new DefaultAzureCredential());
+                  builder.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
                }
             })
             .ConfigureFunctionsWorkerDefaults()

@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
 
@@ -15,10 +16,12 @@ namespace Sopheon.CloudNative.Environments.Functions
       private const string INPUT_BINDING_BLOB_PATH = "armtemplates/ElasticPoolWithBuffer/ElasticPool_Database_Buffer.json";
 
       private IDatabaseBufferMonitorHelper _dbBufferMonitorHelper;
-
-      public DatabaseBufferMonitor(IDatabaseBufferMonitorHelper dbBufferMonitorHelper)
+      private readonly IConfiguration _configuration;
+      
+      public DatabaseBufferMonitor(IDatabaseBufferMonitorHelper dbBufferMonitorHelper, IConfiguration configuration)
       {
          _dbBufferMonitorHelper = dbBufferMonitorHelper;
+         _configuration = configuration;
       }
 
       [Function(nameof(DatabaseBufferMonitor))]
@@ -43,8 +46,8 @@ namespace Sopheon.CloudNative.Environments.Functions
             string resourceGroupName = Environment.GetEnvironmentVariable("AzResourceGroupName");
             string sqlServerName = Environment.GetEnvironmentVariable("AzSqlServerName");
 
-            // TODO: get database password from key vault
-            string adminLoginEnigma = string.Empty;
+            // Pull admin enigma from app config (user secrets or key vault)
+            string adminLoginEnigma = _configuration["SqlServerAdminEnigma"];
 
             // TODO: string replace SqlServerName and password into json template
             jsonTemplateData = jsonTemplateData
