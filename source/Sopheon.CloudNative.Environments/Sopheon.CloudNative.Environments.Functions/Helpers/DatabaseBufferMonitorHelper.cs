@@ -101,17 +101,18 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          // https://docs.microsoft.com/en-us/azure/azure-resource-manager/
 
          // https://github.com/Azure-Samples/resources-dotnet-deploy-using-arm-template
-         _logger.LogInformation("Creating new deployment");
+         string deploymentName = nameof(DatabaseBufferMonitor) + "_Deployment_" + DateTime.UtcNow.ToString("yyyyMMddTHHmmss");
+         _logger.LogInformation($"Creating new deployment: {deploymentName}");
             
          IDeployment deployment = _azure.Deployments
-            .Define(nameof(DatabaseBufferMonitor) + "_Deployment_" + DateTime.UtcNow.ToString("yyyyMMddTHHmmss"))
+            .Define(deploymentName)
             .WithExistingResourceGroup(resourceGroupName)
             .WithTemplate(deploymentTemplateJson)
             .WithParameters("{ }")
             .WithMode(DeploymentMode.Incremental)
             .Create();  // TODO: async?
             
-         _logger.LogInformation($"Deployment: {deployment.Name} was created successfully.");
+         _logger.LogInformation($"Deployment: {deploymentName} was created successfully.");
 
          // TODO: need to check provision state?
          //deployment.ProvisioningState

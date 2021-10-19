@@ -10,6 +10,7 @@ using Microsoft.Azure.Management.Sql.Fluent;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
+using Sopheon.CloudNative.Environments.Testing.Common;
 using Xunit;
 
 namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
@@ -39,7 +40,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          Mock<IWithCreate> deploymentMock = SetupMockDeployment();
 
          // Act
-         _ = await _sut.CheckHasDatabaseThreshold(null, null, null, null);
+         _ = await _sut.CheckHasDatabaseThreshold(Some.Random.String(), Some.Random.String(), Some.Random.String(), Some.Random.String());
 
          // Assert
          deploymentMock.Verify(wc => wc.Create(), Times.Never, "Should not have created deployment!");
@@ -56,7 +57,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          Mock<IWithCreate> deploymentMock = SetupMockDeployment();
          
          // Act
-         _ = await _sut.CheckHasDatabaseThreshold(null, null, null, null);
+         _ = await _sut.CheckHasDatabaseThreshold(Some.Random.String(), Some.Random.String(), Some.Random.String(), Some.Random.String());
 
          // Assert
          deploymentMock.Verify(wc => wc.Create(), Times.Once, "Should have created deployment!");
@@ -96,7 +97,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          Mock<IWithParameters> mockWithParameters = new Mock<IWithParameters>();
          mockWithTemplate.Setup(wt => wt.WithTemplate(It.IsAny<string>())).Returns(mockWithParameters.Object);
          Mock<IWithMode> mockWithMode = new Mock<IWithMode>();
-         mockWithParameters.Setup(wp => wp.WithParameters(It.IsAny<object>())).Returns(mockWithMode.Object);
+         mockWithParameters.Setup(wp => wp.WithParameters(It.IsAny<string>())).Returns(mockWithMode.Object);
          Mock<IWithCreate> mockWithCreate = new Mock<IWithCreate>();
          mockWithMode.Setup(wm => wm.WithMode(It.IsAny<DeploymentMode>())).Returns(mockWithCreate.Object);
 
