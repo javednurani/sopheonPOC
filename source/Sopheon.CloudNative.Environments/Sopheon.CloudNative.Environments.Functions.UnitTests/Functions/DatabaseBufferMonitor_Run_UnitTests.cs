@@ -37,7 +37,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          _sut.Run(null, string.Empty, _context.Object);
 
          // Assert
-         _mockMonitorHelper.Verify(mh => mh.CheckHasDatabaseThreshold(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+         _mockMonitorHelper.Verify(mh => mh.EnsureDatabaseBufferAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
       }
 
       [Fact]
@@ -57,7 +57,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          string expectedFormattedJson = template
             .Replace(DatabaseBufferMonitor.SERVER_NAME_TOKEN, sqlServerName)
             .Replace(DatabaseBufferMonitor.ADMINISTRATOR_LOGIN_ENIGMA_TOKEN, adminEnigma);
-         _mockMonitorHelper.Verify(mh => mh.CheckHasDatabaseThreshold(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), expectedFormattedJson), Times.Once);
+         _mockMonitorHelper.Verify(mh => mh.EnsureDatabaseBufferAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), expectedFormattedJson), Times.Once);
       }
    }
 }
