@@ -31,6 +31,40 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
       }
 
       [Fact]
+      public async Task CheckHasDatabaseThreshold_HappyPath_DeploymentIsCreated()
+      {
+         // Arrange
+
+         // 4 unassigned databases means we need to deploymore databases
+         SetupMockDatabases(4);
+
+         Mock<IWithCreate> deploymentMock = SetupMockDeployment(); // activeDeploymentsExistForResourceGroup = false
+
+         // Act
+         _ = await _sut.CheckHasDatabaseThreshold(Some.Random.String(), Some.Random.String(), Some.Random.String(), Some.Random.String());
+
+         // Assert
+         deploymentMock.Verify(wc => wc.Create(), Times.Once, "Should have created deployment!");
+      }
+
+      [Fact]
+      public async Task CheckHasDatabaseThreshold_ActiveDeploymentExists_DeploymentIsNotCreated()
+      {
+         // Arrange
+
+         // 4 unassigned databases means we need to deploy more databases
+         SetupMockDatabases(4);
+
+         Mock<IWithCreate> deploymentMock = SetupMockDeployment(existingDeploymentIsActive: true);
+
+         // Act
+         _ = await _sut.CheckHasDatabaseThreshold(Some.Random.String(), Some.Random.String(), Some.Random.String(), Some.Random.String());
+
+         // Assert
+         deploymentMock.Verify(wc => wc.Create(), Times.Never, "Should not have created deployment!");
+      }
+
+      [Fact]
       public async Task CheckHasDatabaseThreshold_EnoughUnassignedDatabasesExist_DeploymentIsNotCreated()
       {
          // Arrange
@@ -48,23 +82,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
       }
 
       [Fact]
-      public async Task CheckHasDatabaseThreshold_NotEnoughUnassignedDatabasesExist_DeploymentIsCreated()
-      {
-         // Arrange
-
-         // 4 unassigned databases means we need to deploymore databases
-         SetupMockDatabases(4);
-
-         Mock<IWithCreate> deploymentMock = SetupMockDeployment();
-
-         // Act
-         _ = await _sut.CheckHasDatabaseThreshold(Some.Random.String(), Some.Random.String(), Some.Random.String(), Some.Random.String());
-
-         // Assert
-         deploymentMock.Verify(wc => wc.Create(), Times.Once, "Should have created deployment!");
-      }
-
-      [Fact]
       public async Task CheckHasDatabaseThreshold_DatabaseDeletedDuringCheck_DeletedDatabaseTagsNotChecked()
       {
          // Arrange
@@ -79,40 +96,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
 
          // Assert
          deploymentMock.Verify(wc => wc.Create(), Times.Once, "Should have created deployment!");
-      }
-
-      [Fact]
-      public async Task CheckHasDatabaseThreshold_NoActiveDeployments_DeploymentIsCreated()
-      {
-         // Arrange
-
-         // 4 unassigned databases means we need to deploy more databases
-         SetupMockDatabases(4);
-
-         Mock<IWithCreate> deploymentMock = SetupMockDeployment(); // activeDeploymentsExistForResourceGroup = false
-
-         // Act
-         await _sut.CheckHasDatabaseThreshold(Some.Random.String(), Some.Random.String(), Some.Random.String(), Some.Random.String());
-
-         // Assert
-         deploymentMock.Verify(wc => wc.Create(), Times.Once, "Should have created deployment!");
-      }
-
-      [Fact]
-      public async Task CheckHasDatabaseThreshold_ActiveDeploymentExists_DeploymentIsNotCreated()
-      {
-         // Arrange
-
-         // 4 unassigned databases means we need to deploy more databases
-         SetupMockDatabases(4);
-
-         Mock<IWithCreate> deploymentMock = SetupMockDeployment(true); // activeDeploymentsExistForResourceGroup = true
-
-         // Act
-         _ = await _sut.CheckHasDatabaseThreshold(Some.Random.String(), Some.Random.String(), Some.Random.String(), Some.Random.String());
-
-         // Assert
-         deploymentMock.Verify(wc => wc.Create(), Times.Never, "Should not have created deployment!");
       }
 
       private void SetupMockDatabases(int numUnassignedDatabases, bool databasesDeleted = false)

@@ -20,6 +20,17 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
       private const string CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_ASSIGNED = "AssignedToCustomer"; // not part of buffer
       private const int BUFFER_MIN_CAPACITY = 5;
 
+      // TODO - identify ProvisioningState lifecycle, confirm this list
+      private readonly ProvisioningState[] _activeProvisioningStates = new ProvisioningState[]
+      {
+            ProvisioningState.Accepted,
+            ProvisioningState.Created,
+            ProvisioningState.Creating,
+            ProvisioningState.Ready,
+            ProvisioningState.Running,
+            ProvisioningState.Updating
+      };
+
       private readonly ILogger<DatabaseBufferMonitorHelper> _logger;
       private readonly IAzure _azure;
 
@@ -86,20 +97,9 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          #region ExistingDeployments
          IPagedCollection<IDeployment> deploymentsForResourceGroup = await _azure.Deployments.ListByResourceGroupAsync(resourceGroupName);
 
-         // TODO - identify ProvisioningState lifecycle, confirm this list
-         ProvisioningState[] activeProvisioningStates = new ProvisioningState[]
-         {
-            ProvisioningState.Accepted,
-            ProvisioningState.Created,
-            ProvisioningState.Creating,
-            ProvisioningState.Ready,
-            ProvisioningState.Running,
-            ProvisioningState.Updating
-         };
-
          if (deploymentsForResourceGroup.Any(d =>
             d.Name.Contains(nameof(DatabaseBufferMonitor)) &&
-            activeProvisioningStates.Contains(d.ProvisioningState)))
+            _activeProvisioningStates.Contains(d.ProvisioningState)))
          {
             return true; // TODO, what to return
          }
