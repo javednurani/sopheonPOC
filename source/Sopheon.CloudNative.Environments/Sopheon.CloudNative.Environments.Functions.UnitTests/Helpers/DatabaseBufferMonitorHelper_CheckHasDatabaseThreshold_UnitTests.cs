@@ -63,7 +63,24 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          deploymentMock.Verify(wc => wc.Create(), Times.Once, "Should have created deployment!");
       }
 
-      private void SetupMockDatabases(int numUnassignedDatabases)
+      [Fact]
+      public async Task CheckHasDatabaseThreshold_DatabaseDeletedDuringCheck_DeletedDatabaseTagsNotChecked()
+      {
+         // Arrange
+
+         // 10 unassigned but deleted dbs means we need to deploy more becuase they no longer exist
+         SetupMockDatabases(10, true);
+
+         Mock<IWithCreate> deploymentMock = SetupMockDeployment();
+
+         // Act
+         _ = await _sut.CheckHasDatabaseThreshold(Some.Random.String(), Some.Random.String(), Some.Random.String(), Some.Random.String());
+
+         // Assert
+         deploymentMock.Verify(wc => wc.Create(), Times.Once, "Should have created deployment!");
+      }
+
+      private void SetupMockDatabases(int numUnassignedDatabases, bool databasesDeleted = false)
       {
          Mock<ISqlServers> mockSqlServers = new Mock<ISqlServers>();
          Mock<ISqlDatabaseOperations> mockDbOperations = new Mock<ISqlDatabaseOperations>();
@@ -76,9 +93,12 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          var expectedValue = "NotAssigned";
          mockDbTags.Setup(t => t.TryGetValue(It.IsAny<string>(), out expectedValue)).Returns(true);
          mockDb.Setup(db => db.Tags).Returns(mockDbTags.Object);
-         mockDbOperations
-            .Setup(dbo => dbo.GetBySqlServerAsync(It.IsAny<ISqlServer>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.FromResult(mockDb.Object));
+         if (!databasesDeleted)
+         { 
+            mockDbOperations
+               .Setup(dbo => dbo.GetBySqlServerAsync(It.IsAny<ISqlServer>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+               .Returns(Task.FromResult(mockDb.Object));
+         }
          mockDbOperations
             .Setup(dbo => dbo.ListBySqlServerAsync(It.IsAny<ISqlServer>(), It.IsAny<CancellationToken>()))
             .Returns(Task.FromResult<IReadOnlyList<ISqlDatabase>>(unassignedDatabases.AsReadOnly()));
