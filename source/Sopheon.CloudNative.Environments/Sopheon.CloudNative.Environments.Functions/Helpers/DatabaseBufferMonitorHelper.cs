@@ -30,8 +30,6 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
             ProvisioningState.Updating
       };
 
-      
-      private readonly int bufferCapacity = int.Parse(Environment.GetEnvironmentVariable("DatabaseBufferCapacity"));
       private readonly ILogger<DatabaseBufferMonitorHelper> _logger;
       private readonly IAzure _azure;
 
@@ -76,7 +74,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
             }
          }
 
-         if (notAssigned.Count() >= bufferCapacity)
+         if (notAssigned.Count() >= int.Parse(Environment.GetEnvironmentVariable("DatabaseBufferCapacity")))
          {
             // TODO: update message
             _logger.LogInformation($"Sufficient database buffer capacity. Exiting {nameof(DatabaseBufferMonitor)}...");

@@ -26,7 +26,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
       {
          _logger = new Mock<ILogger<DatabaseBufferMonitorHelper>>();
          _azure = new Mock<IAzure>();
-
+         System.Environment.SetEnvironmentVariable("DatabaseBufferCapacity", "5");
          _sut = new DatabaseBufferMonitorHelper(_logger.Object, _azure.Object);
       }
 
