@@ -69,7 +69,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          // Arrange
 
          // 10 unassigned but deleted dbs means we need to deploy more becuase they no longer exist
-         SetupMockDeletedDatabases(10);
+         SetupMockDatabases(10, true);
 
          Mock<IWithCreate> deploymentMock = SetupMockDeployment();
 
@@ -80,7 +80,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          deploymentMock.Verify(wc => wc.Create(), Times.Once, "Should have created deployment!");
       }
 
-      private void SetupMockDeletedDatabases(int numUnassignedDatabases)
+      private void SetupMockDatabases(int numUnassignedDatabases, bool databasesDeleted = false)
       {
          Mock<ISqlServers> mockSqlServers = new Mock<ISqlServers>();
          Mock<ISqlDatabaseOperations> mockDbOperations = new Mock<ISqlDatabaseOperations>();
@@ -93,32 +93,12 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          var expectedValue = "NotAssigned";
          mockDbTags.Setup(t => t.TryGetValue(It.IsAny<string>(), out expectedValue)).Returns(true);
          mockDb.Setup(db => db.Tags).Returns(mockDbTags.Object);
-         mockDbOperations
-            .Setup(dbo => dbo.GetBySqlServerAsync(It.IsAny<ISqlServer>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.FromResult<ISqlDatabase>(null));  // Return null when getting specific db, indicating that it no longer exists on the sql server
-         mockDbOperations
-            .Setup(dbo => dbo.ListBySqlServerAsync(It.IsAny<ISqlServer>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.FromResult<IReadOnlyList<ISqlDatabase>>(unassignedDatabases.AsReadOnly()));
-         mockSqlServers.Setup(s => s.Databases).Returns(mockDbOperations.Object);
-         mockSqlServers.Setup(s => s.ElasticPools).Returns(new Mock<ISqlElasticPoolOperations>().Object);
-      }
-
-      private void SetupMockDatabases(int numUnassignedDatabases)
-      {
-         Mock<ISqlServers> mockSqlServers = new Mock<ISqlServers>();
-         Mock<ISqlDatabaseOperations> mockDbOperations = new Mock<ISqlDatabaseOperations>();
-         Mock<ISqlDatabase> mockDb = new Mock<ISqlDatabase>();
-         Mock<IReadOnlyDictionary<string, string>> mockDbTags = new Mock<IReadOnlyDictionary<string, string>>();
-
-         List<ISqlDatabase> unassignedDatabases = new List<ISqlDatabase>(Enumerable.Repeat(mockDb.Object, numUnassignedDatabases));
-
-         _azure.Setup(a => a.SqlServers).Returns(mockSqlServers.Object);
-         var expectedValue = "NotAssigned";
-         mockDbTags.Setup(t => t.TryGetValue(It.IsAny<string>(), out expectedValue)).Returns(true);
-         mockDb.Setup(db => db.Tags).Returns(mockDbTags.Object);
-         mockDbOperations
-            .Setup(dbo => dbo.GetBySqlServerAsync(It.IsAny<ISqlServer>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.FromResult(mockDb.Object));
+         if (!databasesDeleted)
+         { 
+            mockDbOperations
+               .Setup(dbo => dbo.GetBySqlServerAsync(It.IsAny<ISqlServer>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+               .Returns(Task.FromResult(mockDb.Object));
+         }
          mockDbOperations
             .Setup(dbo => dbo.ListBySqlServerAsync(It.IsAny<ISqlServer>(), It.IsAny<CancellationToken>()))
             .Returns(Task.FromResult<IReadOnlyList<ISqlDatabase>>(unassignedDatabases.AsReadOnly()));
