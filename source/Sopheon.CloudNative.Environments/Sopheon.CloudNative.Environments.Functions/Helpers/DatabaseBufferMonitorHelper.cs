@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure.Management.Fluent;
 using Microsoft.Azure.Management.ResourceManager.Fluent;
-using Microsoft.Azure.Management.ResourceManager.Fluent.Authentication;
 using Microsoft.Azure.Management.ResourceManager.Fluent.Core;
 using Microsoft.Azure.Management.ResourceManager.Fluent.Models;
 using Microsoft.Azure.Management.Sql.Fluent;
@@ -20,6 +19,17 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
       private const string CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_INITIAL = "NotAssigned"; // databases with this Tag Value are part of buffer
       private const string CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_ASSIGNED = "AssignedToCustomer"; // not part of buffer
       private const int BUFFER_MIN_CAPACITY = 5;
+
+      // TODO - identify ProvisioningState lifecycle, confirm this list
+      private readonly ProvisioningState[] _activeProvisioningStates = new ProvisioningState[]
+      {
+            ProvisioningState.Accepted,
+            ProvisioningState.Created,
+            ProvisioningState.Creating,
+            ProvisioningState.Ready,
+            ProvisioningState.Running,
+            ProvisioningState.Updating
+      };
 
       private readonly ILogger<DatabaseBufferMonitorHelper> _logger;
       private readonly IAzure _azure;
@@ -72,10 +82,14 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          #endregion // BufferCapacityAlternate
 
          #region ExistingDeployments
-
-         // TODO: return on some deployment conditions - provisioningStatus / tags etc
          IPagedCollection<IDeployment> deploymentsForResourceGroup = await _azure.Deployments.ListByResourceGroupAsync(resourceGroupName);
 
+         if (deploymentsForResourceGroup.Any(d =>
+            d.Name.Contains(nameof(DatabaseBufferMonitor)) &&
+            _activeProvisioningStates.Contains(d.ProvisioningState)))
+         {
+            return;
+         }
          #endregion // ExistingDeployments
 
          #region CreateDeployment

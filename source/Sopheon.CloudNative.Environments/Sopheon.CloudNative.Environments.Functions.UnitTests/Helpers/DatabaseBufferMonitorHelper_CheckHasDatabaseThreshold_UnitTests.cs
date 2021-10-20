@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.Management.Fluent;
 using Microsoft.Azure.Management.ResourceManager.Fluent;
+using Microsoft.Azure.Management.ResourceManager.Fluent.Core;
 using Microsoft.Azure.Management.ResourceManager.Fluent.Deployment.Definition;
 using Microsoft.Azure.Management.ResourceManager.Fluent.Models;
 using Microsoft.Azure.Management.Sql.Fluent;
@@ -30,14 +31,31 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
       }
 
       [Fact]
-      public async Task CheckHasDatabaseThreshold_EnoughUnassignedDatabasesExist_DeploymentIsNotCreated()
+      public async Task CheckHasDatabaseThreshold_HappyPath_DeploymentIsCreated()
       {
          // Arrange
 
-         // 5 unassigned databases means no need to run deployment
-         SetupMockDatabases(5);
+         // 4 unassigned databases means we need to deploymore databases
+         SetupMockDatabases(4);
 
-         Mock<IWithCreate> deploymentMock = SetupMockDeployment();
+         Mock<IWithCreate> deploymentMock = SetupMockDeployment(); // activeDeploymentsExistForResourceGroup = false
+
+         // Act
+         await _sut.EnsureDatabaseBufferAsync(Some.Random.String(), Some.Random.String(), Some.Random.String(), Some.Random.String());
+
+         // Assert
+         deploymentMock.Verify(wc => wc.CreateAsync(default(CancellationToken), true), Times.Once, "Should have created deployment!");
+      }
+
+      [Fact]
+      public async Task CheckHasDatabaseThreshold_ActiveDeploymentExists_DeploymentIsNotCreated()
+      {
+         // Arrange
+
+         // 4 unassigned databases means we need to deploy more databases
+         SetupMockDatabases(4);
+
+         Mock<IWithCreate> deploymentMock = SetupMockDeployment(existingDeploymentIsActive: true);
 
          // Act
          await _sut.EnsureDatabaseBufferAsync(Some.Random.String(), Some.Random.String(), Some.Random.String(), Some.Random.String());
@@ -47,15 +65,15 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
       }
 
       [Fact]
-      public async Task CheckHasDatabaseThreshold_NotEnoughUnassignedDatabasesExist_DeploymentIsCreated()
+      public async Task CheckHasDatabaseThreshold_EnoughUnassignedDatabasesExist_DeploymentIsNotCreated()
       {
          // Arrange
 
-         // 4 unassigned databases means we need to deploy more databases
+         // 4 unassigned databases means we need to deploymore databases
          SetupMockDatabases(4);
 
          Mock<IWithCreate> deploymentMock = SetupMockDeployment();
-         
+
          // Act
          await _sut.EnsureDatabaseBufferAsync(Some.Random.String(), Some.Random.String(), Some.Random.String(), Some.Random.String());
 
@@ -106,18 +124,39 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          mockSqlServers.Setup(s => s.ElasticPools).Returns(new Mock<ISqlElasticPoolOperations>().Object);
       }
 
-      private Mock<IWithCreate> SetupMockDeployment()
+      private Mock<IWithCreate> SetupMockDeployment(bool existingDeploymentIsActive = false)
       {
          Mock<IDeployments> mockDeployments = new Mock<IDeployments>();
          _azure.Setup(a => a.Deployments).Returns(mockDeployments.Object);
+
+         Mock<IDeployment> existingDeployment = new Mock<IDeployment>();
+         existingDeployment.Setup(d => d.Name).Returns($"{nameof(DatabaseBufferMonitor)}_{Some.Random.String()}");
+         existingDeployment
+            .Setup(d => d.ProvisioningState)
+            .Returns(
+               existingDeploymentIsActive
+                  ? ProvisioningState.Accepted
+                  : ProvisioningState.Succeeded);
+
+         IPagedCollection<IDeployment> deploymentsFromResourceGroup =
+            PagedCollection<IDeployment, IDeployment>.CreateFromEnumerable(new List<IDeployment> { existingDeployment.Object });
+
+         mockDeployments
+            .Setup(d => d.ListByResourceGroupAsync(It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.FromResult(deploymentsFromResourceGroup));
+
          Mock<IBlank> mockBlank = new Mock<IBlank>();
          mockDeployments.Setup(d => d.Define(It.IsAny<string>())).Returns(mockBlank.Object);
+
          Mock<IWithTemplate> mockWithTemplate = new Mock<IWithTemplate>();
          mockBlank.Setup(b => b.WithExistingResourceGroup(It.IsAny<string>())).Returns(mockWithTemplate.Object);
+
          Mock<IWithParameters> mockWithParameters = new Mock<IWithParameters>();
          mockWithTemplate.Setup(wt => wt.WithTemplate(It.IsAny<string>())).Returns(mockWithParameters.Object);
+
          Mock<IWithMode> mockWithMode = new Mock<IWithMode>();
          mockWithParameters.Setup(wp => wp.WithParameters(It.IsAny<string>())).Returns(mockWithMode.Object);
+
          Mock<IWithCreate> mockWithCreate = new Mock<IWithCreate>();
          mockWithMode.Setup(wm => wm.WithMode(It.IsAny<DeploymentMode>())).Returns(mockWithCreate.Object);
 
