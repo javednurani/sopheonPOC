@@ -64,7 +64,12 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
             }
          }
 
-         if (notAssigned.Count() >= int.Parse(Environment.GetEnvironmentVariable("DatabaseBufferCapacity")))
+         bool validCapacity = int.TryParse(Environment.GetEnvironmentVariable("DatabaseBufferCapacity"), out int databaseBufferCapacity);
+         if (!validCapacity)
+         {
+            throw new ArgumentException("DatabaseBufferCapacity is misconfigured, could not parse to an integer");
+         }
+         if (notAssigned.Count() >= databaseBufferCapacity)
          {
             _logger.LogInformation($"Sufficient database buffer capacity. Exiting {nameof(DatabaseBufferMonitor)}...");
             return;

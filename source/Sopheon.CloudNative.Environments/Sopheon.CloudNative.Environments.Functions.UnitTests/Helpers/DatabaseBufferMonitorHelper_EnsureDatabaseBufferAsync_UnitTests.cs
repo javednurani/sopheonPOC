@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -96,6 +97,23 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
 
          // Assert
          deploymentMock.Verify(wc => wc.CreateAsync(default(CancellationToken), true), Times.Once, "Should have created deployment!");
+      }
+
+      [Fact]
+      public async Task EnsureDatabaseBufferAsync_DatabaseBufferCapacityInvalid_ExceptionThrownNoDeployment()
+      {
+         // Arrange
+         System.Environment.SetEnvironmentVariable("DatabaseBufferCapacity", "badValue");
+         // 10 unassigned but deleted dbs means we need to deploy more becuase they no longer exist
+         SetupMockDatabases(4);
+
+         Mock<IWithCreate> deploymentMock = SetupMockDeployment();
+
+         // Act
+
+         // Assert
+         await Assert.ThrowsAsync<ArgumentException>(() => _sut.EnsureDatabaseBufferAsync(Some.Random.String(), Some.Random.String(), Some.Random.String(), Some.Random.String()));
+         deploymentMock.Verify(wc => wc.CreateAsync(default(CancellationToken), true), Times.Never, "Should not have created deployment!");
       }
 
       private void SetupMockDatabases(int numUnassignedDatabases, bool databasesDeleted = false)
