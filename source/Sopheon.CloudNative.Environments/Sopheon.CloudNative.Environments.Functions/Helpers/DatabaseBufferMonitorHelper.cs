@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure.Management.Fluent;
 using Microsoft.Azure.Management.ResourceManager.Fluent;
-using Microsoft.Azure.Management.ResourceManager.Fluent.Authentication;
 using Microsoft.Azure.Management.ResourceManager.Fluent.Core;
 using Microsoft.Azure.Management.ResourceManager.Fluent.Models;
 using Microsoft.Azure.Management.Sql.Fluent;
@@ -85,10 +84,25 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          #endregion // BufferCapacityAlternate
 
          #region ExistingDeployments
-
-         // TODO: return on some deployment conditions - provisioningStatus / tags etc
          IPagedCollection<IDeployment> deploymentsForResourceGroup = await _azure.Deployments.ListByResourceGroupAsync(resourceGroupName);
 
+         // TODO - identify ProvisioningState lifecycle, confirm this list
+         ProvisioningState[] activeProvisioningStates = new ProvisioningState[]
+         {
+            ProvisioningState.Accepted,
+            ProvisioningState.Created,
+            ProvisioningState.Creating,
+            ProvisioningState.Ready,
+            ProvisioningState.Running,
+            ProvisioningState.Updating
+         };
+
+         if (deploymentsForResourceGroup.Any(d =>
+            d.Name.Contains(nameof(DatabaseBufferMonitor)) &&
+            activeProvisioningStates.Contains(d.ProvisioningState)))
+         {
+            return true; // TODO, what to return
+         }
          #endregion // ExistingDeployments
 
          #region CreateDeployment
