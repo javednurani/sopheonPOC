@@ -95,11 +95,15 @@ namespace Sopheon.CloudNative.Environments.Functions
          string tenantId = Environment.GetEnvironmentVariable("AzSpTenantId");
 
          AzureCredentials credentials = SdkContext.AzureCredentialsFactory
-            .FromServicePrincipal(clientId, clientSecret, tenantId, environment: AzureEnvironment.AzureGlobalCloud);
+#if DEBUG
+			.FromServicePrincipal(clientId, clientSecret, tenantId, environment: AzureEnvironment.AzureGlobalCloud);
+#else
+			.FromSystemAssignedManagedServiceIdentity(MSIResourceType.AppService, AzureEnvironment.AzureGlobalCloud, tenantId);
+#endif
 
-         //logger.LogInformation($"Authenticating with Azure...");
+            //logger.LogInformation($"Authenticating with Azure...");
 
-         return Microsoft.Azure.Management.Fluent.Azure
+            return Microsoft.Azure.Management.Fluent.Azure
             .Authenticate(credentials)
             .WithDefaultSubscription();	// TODO: can we use the async method?  having trouble consuming in Main
       }

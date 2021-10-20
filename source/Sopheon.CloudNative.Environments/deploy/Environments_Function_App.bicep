@@ -129,6 +129,10 @@ resource EnvironmentsFunctionApp 'Microsoft.Web/sites@2021-01-15' = {
           name: 'KeyVaultName'
           value: keyVaultName
         }
+        {
+          name: 'AzSpTenantId'
+          value: tenant().tenantId
+        }
       ]
     }
   }
