@@ -50,7 +50,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
 
             // has CustomerProvisionedDatabase tag
             string tagValue;
-            if (databaseWithDetails.Tags != null && databaseWithDetails.Tags.TryGetValue(CUSTOMER_PROVISIONED_DATABASE_TAG_NAME, out tagValue))
+            if (databaseWithDetails != null && databaseWithDetails.Tags != null && databaseWithDetails.Tags.TryGetValue(CUSTOMER_PROVISIONED_DATABASE_TAG_NAME, out tagValue))
             {
                // CustomerProvisionedDatabase : NotAssigned
                if (tagValue == CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_INITIAL)
