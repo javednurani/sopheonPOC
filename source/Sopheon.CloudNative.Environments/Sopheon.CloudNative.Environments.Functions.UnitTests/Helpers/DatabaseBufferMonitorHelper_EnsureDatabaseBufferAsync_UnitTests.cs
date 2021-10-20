@@ -16,13 +16,13 @@ using Xunit;
 
 namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
 {
-   public class DatabaseBufferMonitorHelper_CheckHasDatabaseThreshold_UnitTests
+   public class DatabaseBufferMonitorHelper_EnsureDatabaseBufferAsync_UnitTests
    {
       private DatabaseBufferMonitorHelper _sut;
       private Mock<ILogger<DatabaseBufferMonitorHelper>> _logger;
       private Mock<IAzure> _azure;
 
-      public DatabaseBufferMonitorHelper_CheckHasDatabaseThreshold_UnitTests()
+      public DatabaseBufferMonitorHelper_EnsureDatabaseBufferAsync_UnitTests()
       {
          _logger = new Mock<ILogger<DatabaseBufferMonitorHelper>>();
          _azure = new Mock<IAzure>();
@@ -31,7 +31,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
       }
 
       [Fact]
-      public async Task CheckHasDatabaseThreshold_HappyPath_DeploymentIsCreated()
+      public async Task EnsureDatabaseBufferAsync_HappyPath_DeploymentIsCreated()
       {
          // Arrange
 
@@ -41,14 +41,14 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          Mock<IWithCreate> deploymentMock = SetupMockDeployment(); // activeDeploymentsExistForResourceGroup = false
 
          // Act
-         _ = await _sut.CheckHasDatabaseThreshold(Some.Random.String(), Some.Random.String(), Some.Random.String(), Some.Random.String());
+         await _sut.EnsureDatabaseBufferAsync(Some.Random.String(), Some.Random.String(), Some.Random.String(), Some.Random.String());
 
          // Assert
-         deploymentMock.Verify(wc => wc.Create(), Times.Once, "Should have created deployment!");
+         deploymentMock.Verify(wc => wc.CreateAsync(default(CancellationToken), true), Times.Once, "Should have created deployment!");
       }
 
       [Fact]
-      public async Task CheckHasDatabaseThreshold_ActiveDeploymentExists_DeploymentIsNotCreated()
+      public async Task EnsureDatabaseBufferAsync_ActiveDeploymentExists_DeploymentIsNotCreated()
       {
          // Arrange
 
@@ -58,14 +58,14 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          Mock<IWithCreate> deploymentMock = SetupMockDeployment(existingDeploymentIsActive: true);
 
          // Act
-         _ = await _sut.CheckHasDatabaseThreshold(Some.Random.String(), Some.Random.String(), Some.Random.String(), Some.Random.String());
+         await _sut.EnsureDatabaseBufferAsync(Some.Random.String(), Some.Random.String(), Some.Random.String(), Some.Random.String());
 
          // Assert
-         deploymentMock.Verify(wc => wc.Create(), Times.Never, "Should not have created deployment!");
+         deploymentMock.Verify(wc => wc.CreateAsync(default(CancellationToken), true), Times.Never, "Should not have created deployment!");
       }
 
       [Fact]
-      public async Task CheckHasDatabaseThreshold_EnoughUnassignedDatabasesExist_DeploymentIsNotCreated()
+      public async Task EnsureDatabaseBufferAsync_EnoughUnassignedDatabasesExist_DeploymentIsNotCreated()
       {
          // Arrange
 
@@ -75,14 +75,14 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          Mock<IWithCreate> deploymentMock = SetupMockDeployment();
 
          // Act
-         _ = await _sut.CheckHasDatabaseThreshold(Some.Random.String(), Some.Random.String(), Some.Random.String(), Some.Random.String());
+         await _sut.EnsureDatabaseBufferAsync(Some.Random.String(), Some.Random.String(), Some.Random.String(), Some.Random.String());
 
          // Assert
-         deploymentMock.Verify(wc => wc.Create(), Times.Never, "Should not have created deployment!");
+         deploymentMock.Verify(wc => wc.CreateAsync(default(CancellationToken), true), Times.Never, "Should not have created deployment!");
       }
 
       [Fact]
-      public async Task CheckHasDatabaseThreshold_DatabaseDeletedDuringCheck_DeletedDatabaseTagsNotChecked()
+      public async Task EnsureDatabaseBufferAsync_DatabaseDeletedDuringCheck_DeletedDatabaseTagsNotChecked()
       {
          // Arrange
 
@@ -92,10 +92,10 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          Mock<IWithCreate> deploymentMock = SetupMockDeployment();
 
          // Act
-         _ = await _sut.CheckHasDatabaseThreshold(Some.Random.String(), Some.Random.String(), Some.Random.String(), Some.Random.String());
+         await _sut.EnsureDatabaseBufferAsync(Some.Random.String(), Some.Random.String(), Some.Random.String(), Some.Random.String());
 
          // Assert
-         deploymentMock.Verify(wc => wc.Create(), Times.Once, "Should have created deployment!");
+         deploymentMock.Verify(wc => wc.CreateAsync(default(CancellationToken), true), Times.Once, "Should have created deployment!");
       }
 
       private void SetupMockDatabases(int numUnassignedDatabases, bool databasesDeleted = false)

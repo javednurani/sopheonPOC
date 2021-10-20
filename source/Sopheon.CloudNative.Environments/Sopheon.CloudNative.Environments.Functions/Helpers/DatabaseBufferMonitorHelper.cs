@@ -39,7 +39,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          _azure = azure;
       }
 
-      public async Task<bool> CheckHasDatabaseThreshold(string subscriptionId, string resourceGroupName, string sqlServerName, string deploymentTemplateJson)
+      public async Task EnsureDatabaseBufferAsync(string subscriptionId, string resourceGroupName, string sqlServerName, string deploymentTemplateJson)
       {
          _logger.LogInformation($"Authenticated with Service Principal to Subscription: {_azure.SubscriptionId}!");
 
@@ -48,7 +48,6 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
                   .GetByIdAsync($"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Sql/servers/{sqlServerName}");
 
          List<ISqlDatabase> notAssigned = new List<ISqlDatabase>();
-         List<ISqlDatabase> assignedToCustomer = new List<ISqlDatabase>(); // TODO: do we need this?
 
          IReadOnlyList<ISqlDatabase> allDatabasesOnServer = await _azure.SqlServers.Databases.ListBySqlServerAsync(sqlServer);
 
@@ -58,29 +57,17 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
             ISqlDatabase databaseWithDetails = await _azure.SqlServers.Databases.GetBySqlServerAsync(sqlServer, database.Name);
 
             // has CustomerProvisionedDatabase tag
-            string tagValue = null;
-            if (databaseWithDetails?.Tags?.TryGetValue(CUSTOMER_PROVISIONED_DATABASE_TAG_NAME, out tagValue) ?? false)
+            if (databaseWithDetails?.Tags?.TryGetValue(CUSTOMER_PROVISIONED_DATABASE_TAG_NAME, out string tagValue) ?? false
+               && tagValue == CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_INITIAL)
             {
-               // CustomerProvisionedDatabase : NotAssigned
-               if (tagValue == CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_INITIAL)
-               {
-                  notAssigned.Add(databaseWithDetails);
-               }
-               // CustomerProvisionedDatabase : AssignedToCustomer
-               else if (tagValue == CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_ASSIGNED)
-               {
-                  assignedToCustomer.Add(databaseWithDetails);
-               }
+               notAssigned.Add(databaseWithDetails);
             }
          }
 
          if (notAssigned.Count() >= int.Parse(Environment.GetEnvironmentVariable("DatabaseBufferCapacity")))
          {
-            // TODO: update message
             _logger.LogInformation($"Sufficient database buffer capacity. Exiting {nameof(DatabaseBufferMonitor)}...");
-
-            // TODO: what to return
-            return true;
+            return;
          }
          #endregion // BufferCapacity
 
@@ -100,42 +87,25 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
             d.Name.Contains(nameof(DatabaseBufferMonitor)) &&
             _activeProvisioningStates.Contains(d.ProvisioningState)))
          {
-            return true; // TODO, what to return
+            return;
          }
          #endregion // ExistingDeployments
 
          #region CreateDeployment
-
-         // TODO: calculate what to deploy?
-         IReadOnlyList<ISqlElasticPool> elasticPools = await _azure.SqlServers.ElasticPools
-            .ListBySqlServerAsync(resourceGroupName, sqlServerName);
-
-         // TODO: create deployment
-         // https://docs.microsoft.com/en-us/azure/azure-resource-manager/
-
-         // https://github.com/Azure-Samples/resources-dotnet-deploy-using-arm-template
-         string deploymentName = nameof(DatabaseBufferMonitor) + "_Deployment_" + DateTime.UtcNow.ToString("yyyyMMddTHHmmss");
+         string deploymentName = $"{nameof(DatabaseBufferMonitor)}_Deployment_{DateTime.UtcNow.ToString("yyyyMMddTHHmmss")}";
          _logger.LogInformation($"Creating new deployment: {deploymentName}");
             
-         IDeployment deployment = _azure.Deployments
+         IDeployment deployment = await _azure.Deployments
             .Define(deploymentName)
             .WithExistingResourceGroup(resourceGroupName)
             .WithTemplate(deploymentTemplateJson)
             .WithParameters("{ }")
             .WithMode(DeploymentMode.Incremental)
-            .Create();  // TODO: async?
+            .CreateAsync();
             
          _logger.LogInformation($"Deployment: {deploymentName} was created successfully.");
 
-         // TODO: need to check provision state?
-         //deployment.ProvisioningState
-
          #endregion // CreateDeployment
-
-         // TODO: write ENV.Resources records?
-
-         // TODO: what to return?
-         return true;
       }
    }
 }

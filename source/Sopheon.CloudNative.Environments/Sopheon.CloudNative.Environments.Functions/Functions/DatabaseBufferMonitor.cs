@@ -54,7 +54,7 @@ namespace Sopheon.CloudNative.Environments.Functions
                .Replace(SERVER_NAME_TOKEN, sqlServerName)
                .Replace(ADMINISTRATOR_LOGIN_ENIGMA_TOKEN, adminLoginEnigma);
 
-            _= await _dbBufferMonitorHelper.CheckHasDatabaseThreshold(subscriptionId, resourceGroupName, sqlServerName, jsonTemplateData);
+            await _dbBufferMonitorHelper.EnsureDatabaseBufferAsync(subscriptionId, resourceGroupName, sqlServerName, jsonTemplateData);
          }
          catch (Exception ex)
          {
