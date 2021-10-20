@@ -16,13 +16,13 @@ using Xunit;
 
 namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
 {
-   public class DatabaseBufferMonitorHelper_CheckHasDatabaseThreshold_UnitTests
+   public class DatabaseBufferMonitorHelper_EnsureDatabaseBufferAsync_UnitTests
    {
       private DatabaseBufferMonitorHelper _sut;
       private Mock<ILogger<DatabaseBufferMonitorHelper>> _logger;
       private Mock<IAzure> _azure;
 
-      public DatabaseBufferMonitorHelper_CheckHasDatabaseThreshold_UnitTests()
+      public DatabaseBufferMonitorHelper_EnsureDatabaseBufferAsync_UnitTests()
       {
          _logger = new Mock<ILogger<DatabaseBufferMonitorHelper>>();
          _azure = new Mock<IAzure>();
@@ -31,7 +31,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
       }
 
       [Fact]
-      public async Task CheckHasDatabaseThreshold_HappyPath_DeploymentIsCreated()
+      public async Task EnsureDatabaseBufferAsync_HappyPath_DeploymentIsCreated()
       {
          // Arrange
 
@@ -48,7 +48,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
       }
 
       [Fact]
-      public async Task CheckHasDatabaseThreshold_ActiveDeploymentExists_DeploymentIsNotCreated()
+      public async Task EnsureDatabaseBufferAsync_ActiveDeploymentExists_DeploymentIsNotCreated()
       {
          // Arrange
 
@@ -65,7 +65,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
       }
 
       [Fact]
-      public async Task CheckHasDatabaseThreshold_EnoughUnassignedDatabasesExist_DeploymentIsNotCreated()
+      public async Task EnsureDatabaseBufferAsync_EnoughUnassignedDatabasesExist_DeploymentIsNotCreated()
       {
          // Arrange
 
@@ -82,7 +82,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
       }
 
       [Fact]
-      public async Task CheckHasDatabaseThreshold_DatabaseDeletedDuringCheck_DeletedDatabaseTagsNotChecked()
+      public async Task EnsureDatabaseBufferAsync_DatabaseDeletedDuringCheck_DeletedDatabaseTagsNotChecked()
       {
          // Arrange
 
