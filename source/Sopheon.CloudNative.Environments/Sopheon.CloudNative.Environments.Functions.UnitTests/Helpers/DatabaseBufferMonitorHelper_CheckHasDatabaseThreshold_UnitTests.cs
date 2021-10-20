@@ -69,7 +69,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          // Arrange
 
          // 10 unassigned but deleted dbs means we need to deploy more becuase they no longer exist
-         SetupMockDeletedDatabase(10);
+         SetupMockDeletedDatabases(10);
 
          Mock<IWithCreate> deploymentMock = SetupMockDeployment();
 
@@ -80,7 +80,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          deploymentMock.Verify(wc => wc.Create(), Times.Once, "Should have created deployment!");
       }
 
-      private void SetupMockDeletedDatabase(int numUnassignedDatabases)
+      private void SetupMockDeletedDatabases(int numUnassignedDatabases)
       {
          Mock<ISqlServers> mockSqlServers = new Mock<ISqlServers>();
          Mock<ISqlDatabaseOperations> mockDbOperations = new Mock<ISqlDatabaseOperations>();
