@@ -69,8 +69,8 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
       {
          // Arrange
 
-         // 4 unassigned databases means we need to deploymore databases
-         SetupMockDatabases(4);
+         // 5 unassigned databases means no need to run deployment
+         SetupMockDatabases(5);
 
          Mock<IWithCreate> deploymentMock = SetupMockDeployment();
 
@@ -78,7 +78,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          await _sut.EnsureDatabaseBufferAsync(Some.Random.String(), Some.Random.String(), Some.Random.String(), Some.Random.String());
 
          // Assert
-         deploymentMock.Verify(wc => wc.CreateAsync(default(CancellationToken), true), Times.Once, "Should have created deployment!");
+         deploymentMock.Verify(wc => wc.CreateAsync(default(CancellationToken), true), Times.Never, "Should not have created deployment!");
       }
 
       [Fact]
