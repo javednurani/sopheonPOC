@@ -42,12 +42,42 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
 
       public async Task EnsureDatabaseBufferAsync(string subscriptionId, string resourceGroupName, string sqlServerName, string deploymentTemplateJson)
       {
-         _logger.LogInformation($"Authenticated with Service Principal to Subscription: {_azure.SubscriptionId}!");
-
-         #region BufferCapacity
          ISqlServer sqlServer = await _azure.SqlServers
                   .GetByIdAsync($"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Sql/servers/{sqlServerName}");
 
+         int bufferCount = await CheckBufferCount(sqlServer);
+
+         if (bufferCount >= BUFFER_MIN_CAPACITY)
+         {
+            _logger.LogInformation($"Sufficient database buffer capacity. Exiting {nameof(DatabaseBufferMonitor)}...");
+            return;
+         }
+
+         IPagedCollection<IDeployment> deploymentsForResourceGroup = await _azure.Deployments.ListByResourceGroupAsync(resourceGroupName);
+
+         if (deploymentsForResourceGroup.Any(d =>
+            d.Name.Contains(nameof(DatabaseBufferMonitor)) &&
+            _activeProvisioningStates.Contains(d.ProvisioningState)))
+         {
+            return;
+         }
+
+         string deploymentName = $"{nameof(DatabaseBufferMonitor)}_Deployment_{DateTime.UtcNow.ToString("yyyyMMddTHHmmss")}";
+         _logger.LogInformation($"Creating new deployment: {deploymentName}");
+
+         IDeployment deployment = await _azure.Deployments
+            .Define(deploymentName)
+            .WithExistingResourceGroup(resourceGroupName)
+            .WithTemplate(deploymentTemplateJson)
+            .WithParameters("{ }")
+            .WithMode(DeploymentMode.Incremental)
+            .CreateAsync();
+
+         _logger.LogInformation($"Deployment: {deploymentName} was created successfully.");
+      }
+
+      private async Task<int> CheckBufferCount(ISqlServer sqlServer)
+      {
          List<ISqlDatabase> notAssigned = new List<ISqlDatabase>();
 
          IReadOnlyList<ISqlDatabase> allDatabasesOnServer = await _azure.SqlServers.Databases.ListBySqlServerAsync(sqlServer);
@@ -65,48 +95,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
             }
          }
 
-         if (notAssigned.Count() >= BUFFER_MIN_CAPACITY)
-         {
-            _logger.LogInformation($"Sufficient database buffer capacity. Exiting {nameof(DatabaseBufferMonitor)}...");
-            return;
-         }
-         #endregion // BufferCapacity
-
-         #region BufferCapacityAlternate
-
-         // track buffer capacity using ENV database tables ENV.Resources and ENV.EnvironmentResourcesBindings
-         // add records to ENV.Resources table as DatabaseBufferMonitor creates Azure SQL Databases
-         // search for buffer databases by finding ENV.Resources records that are of correct DomainResourceType and not referenced in ENV.EnvironmentResourceBindings
-         // OR, track 'Assigned to Customer' status on ENV.Resources table
-
-         #endregion // BufferCapacityAlternate
-
-         #region ExistingDeployments
-         IPagedCollection<IDeployment> deploymentsForResourceGroup = await _azure.Deployments.ListByResourceGroupAsync(resourceGroupName);
-
-         if (deploymentsForResourceGroup.Any(d =>
-            d.Name.Contains(nameof(DatabaseBufferMonitor)) &&
-            _activeProvisioningStates.Contains(d.ProvisioningState)))
-         {
-            return;
-         }
-         #endregion // ExistingDeployments
-
-         #region CreateDeployment
-         string deploymentName = $"{nameof(DatabaseBufferMonitor)}_Deployment_{DateTime.UtcNow.ToString("yyyyMMddTHHmmss")}";
-         _logger.LogInformation($"Creating new deployment: {deploymentName}");
-            
-         IDeployment deployment = await _azure.Deployments
-            .Define(deploymentName)
-            .WithExistingResourceGroup(resourceGroupName)
-            .WithTemplate(deploymentTemplateJson)
-            .WithParameters("{ }")
-            .WithMode(DeploymentMode.Incremental)
-            .CreateAsync();
-            
-         _logger.LogInformation($"Deployment: {deploymentName} was created successfully.");
-
-         #endregion // CreateDeployment
+         return notAssigned.Count;
       }
    }
 }
