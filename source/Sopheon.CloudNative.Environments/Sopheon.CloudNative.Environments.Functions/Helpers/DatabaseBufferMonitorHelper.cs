@@ -48,8 +48,8 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
             ISqlDatabase databaseWithDetails = await _azure.SqlServers.Databases.GetBySqlServerAsync(sqlServer, database.Name);
 
             // has CustomerProvisionedDatabase tag
-            string tagValue;
-            if (databaseWithDetails.Tags != null && databaseWithDetails.Tags.TryGetValue(CUSTOMER_PROVISIONED_DATABASE_TAG_NAME, out tagValue))
+            string tagValue = null;
+            if (databaseWithDetails?.Tags?.TryGetValue(CUSTOMER_PROVISIONED_DATABASE_TAG_NAME, out tagValue) ?? false)
             {
                // CustomerProvisionedDatabase : NotAssigned
                if (tagValue == CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_INITIAL)

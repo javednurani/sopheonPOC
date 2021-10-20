@@ -12,6 +12,8 @@ param webServerFarm_Name string = '^WebServerFarmName^'
 
 var functionRuntime = 'dotnet-isolated'
 
+var keyVaultName = resourceGroup().name
+
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   name: storageAccountName
   location: location
@@ -122,6 +124,10 @@ resource EnvironmentsFunctionApp 'Microsoft.Web/sites@2021-01-15' = {
         {
           name: 'DatabaseBufferTimer'
           value: '0 * * * * *'
+        }
+        {
+          name: 'KeyVaultName'
+          value: keyVaultName
         }
       ]
     }
