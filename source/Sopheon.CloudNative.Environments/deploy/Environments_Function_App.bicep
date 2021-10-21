@@ -10,6 +10,8 @@ param storageAccountName string = '^EnvironmentFunctionStorageAccountName^'
 
 param webServerFarm_Name string = '^WebServerFarmName^'
 
+param sqlServer_Name string = '^SqlServerName^'
+
 var functionRuntime = 'dotnet-isolated'
 
 var keyVaultName = resourceGroup().name
@@ -128,6 +130,18 @@ resource EnvironmentsFunctionApp 'Microsoft.Web/sites@2021-01-15' = {
         {
           name: 'KeyVaultName'
           value: keyVaultName
+        }
+        {
+          name: 'AzSpTenantId'
+          value: tenant().tenantId
+        }
+        {
+          name: 'AzResourceGroupName'
+          value: resourceGroup().name
+        }
+        {
+          name: 'AzSqlServerName'
+          value: sqlServer_Name
         }
       ]
     }
