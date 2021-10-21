@@ -48,8 +48,8 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
             return;
          }
 
-         bool ongoingDeployement = await IsOngoingDeployment(resourceGroupName);
-         if (ongoingDeployement)
+         bool ongoingDeployment = await IsOngoingDeployment(resourceGroupName);
+         if (ongoingDeployment)
          {
             _logger.LogInformation($"Ongoing database deployment. Exiting {nameof(DatabaseBufferMonitor)}...");
             return;
