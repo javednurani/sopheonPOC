@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
@@ -10,9 +11,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 {
    public class DatabaseBufferMonitor_Run_UnitTests : FunctionUnitTestBase
    {
-      private DatabaseBufferMonitor _sut;
-      private Mock<IDatabaseBufferMonitorHelper> _mockMonitorHelper;
-      private IConfiguration _configuration;
+      private readonly DatabaseBufferMonitor _sut;
+      private readonly Mock<IDatabaseBufferMonitorHelper> _mockMonitorHelper;
+      private readonly IConfiguration _configuration;
 
       public DatabaseBufferMonitor_Run_UnitTests()
       {
@@ -29,34 +30,34 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public void DatabaseBufferMonitor_Run_HappyPath()
+      public async Task DatabaseBufferMonitor_Run_HappyPathAsync()
       {
          // Arrange
 
          // Act
-         _sut.Run(null, string.Empty, _context.Object);
+         await _sut.Run(null, string.Empty, _context.Object);
 
          // Assert
          _mockMonitorHelper.Verify(mh => mh.EnsureDatabaseBufferAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
       }
 
       [Fact]
-      public void DatabaseBufferMonitor_Run_ReplacesTemplateCorrectly()
+      public async Task DatabaseBufferMonitor_Run_ReplacesTemplateCorrectlyAsync()
       {
          // Arrange
          string sqlServerName = Some.Random.String();
          string adminEnigma = _configuration["SqlServerAdminEnigma"];
          Environment.SetEnvironmentVariable("AzSqlServerName", sqlServerName);
 
-         string template = $"{DatabaseBufferMonitor.SERVER_NAME_TOKEN}{DatabaseBufferMonitor.ADMINISTRATOR_LOGIN_ENIGMA_TOKEN}";
+         string template = $"{StringConstants.SERVER_NAME_TOKEN}{StringConstants.ADMINISTRATOR_LOGIN_ENIGMA_TOKEN}";
 
          // Act
-         _sut.Run(null, template, _context.Object);
+         await _sut.Run(null, template, _context.Object);
 
          // Assert
          string expectedFormattedJson = template
-            .Replace(DatabaseBufferMonitor.SERVER_NAME_TOKEN, sqlServerName)
-            .Replace(DatabaseBufferMonitor.ADMINISTRATOR_LOGIN_ENIGMA_TOKEN, adminEnigma);
+            .Replace(StringConstants.SERVER_NAME_TOKEN, sqlServerName)
+            .Replace(StringConstants.ADMINISTRATOR_LOGIN_ENIGMA_TOKEN, adminEnigma);
          _mockMonitorHelper.Verify(mh => mh.EnsureDatabaseBufferAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), expectedFormattedJson), Times.Once);
       }
    }
