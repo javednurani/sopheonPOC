@@ -23,10 +23,10 @@ using Sopheon.CloudNative.Environments.Functions.Validators;
 
 namespace Sopheon.CloudNative.Environments.Functions
 {
-	[ExcludeFromCodeCoverage]
+   [ExcludeFromCodeCoverage]
    class Program
    {
-      private static Lazy<IAzure> _lazyAzureClient = new Lazy<IAzure>(GetAzureInstance);
+      private static Lazy<IAzure> _lazyAzureClient;
 
       static Task Main(string[] args)
       {
@@ -79,6 +79,8 @@ namespace Sopheon.CloudNative.Environments.Functions
                services.AddScoped<IRequiredNameValidator, RequiredNameValidator>();
                services.AddScoped<IDatabaseBufferMonitorHelper, DatabaseBufferMonitorHelper>();
                services.AddScoped<HttpResponseDataBuilder>();
+
+               _lazyAzureClient = new Lazy<IAzure>(GetAzureInstance(hostContext.HostingEnvironment.IsProduction()));
                services.AddScoped<IAzure>(sp => _lazyAzureClient.Value);   // single instance shared across functions
             })
             .Build();
@@ -86,24 +88,28 @@ namespace Sopheon.CloudNative.Environments.Functions
          return host.RunAsync();
       }
 
-      private static IAzure GetAzureInstance()
+      private static IAzure GetAzureInstance(bool isProd)
       {
+
          // authenticate with Service Principal credentials
          //logger.LogInformation("Fetching Service Principal credentials");
          string clientId = Environment.GetEnvironmentVariable("AzSpClientId");
          string clientSecret = Environment.GetEnvironmentVariable("AzSpClientSecret");
          string tenantId = Environment.GetEnvironmentVariable("AzSpTenantId");
 
-         AzureCredentials credentials = SdkContext.AzureCredentialsFactory
-#if DEBUG
-			.FromServicePrincipal(clientId, clientSecret, tenantId, environment: AzureEnvironment.AzureGlobalCloud);
-#else
-			.FromSystemAssignedManagedServiceIdentity(MSIResourceType.AppService, AzureEnvironment.AzureGlobalCloud, tenantId);
-#endif
+         AzureCredentials credentials;
+         if (isProd)
+         {
+            credentials = SdkContext.AzureCredentialsFactory
+               .FromSystemAssignedManagedServiceIdentity(MSIResourceType.AppService, AzureEnvironment.AzureGlobalCloud, tenantId);
+         }
+         else
+         {
+            credentials = SdkContext.AzureCredentialsFactory
+               .FromServicePrincipal(clientId, clientSecret, tenantId, environment: AzureEnvironment.AzureGlobalCloud);
+         }
 
-            //logger.LogInformation($"Authenticating with Azure...");
-
-            return Microsoft.Azure.Management.Fluent.Azure
+         return Microsoft.Azure.Management.Fluent.Azure
             .Authenticate(credentials)
             .WithDefaultSubscription();	// TODO: can we use the async method?  having trouble consuming in Main
       }
