@@ -79,8 +79,8 @@ namespace Sopheon.CloudNative.Environments.Functions
                services.AddScoped<IRequiredNameValidator, RequiredNameValidator>();
                services.AddScoped<IDatabaseBufferMonitorHelper, DatabaseBufferMonitorHelper>();
                services.AddScoped<HttpResponseDataBuilder>();
-
-               _lazyAzureClient = new Lazy<IAzure>(GetAzureInstance(hostContext.HostingEnvironment.IsProduction()));
+               
+               _lazyAzureClient = new Lazy<IAzure>(GetAzureInstance(hostContext));
                services.AddScoped<IAzure>(sp => _lazyAzureClient.Value);   // single instance shared across functions
             })
             .Build();
@@ -88,23 +88,21 @@ namespace Sopheon.CloudNative.Environments.Functions
          return host.RunAsync();
       }
 
-      private static IAzure GetAzureInstance(bool isProd)
+      private static IAzure GetAzureInstance(HostBuilderContext hostContext)
       {
-
-         // authenticate with Service Principal credentials
-         //logger.LogInformation("Fetching Service Principal credentials");
-         string clientId = Environment.GetEnvironmentVariable("AzSpClientId");
-         string clientSecret = Environment.GetEnvironmentVariable("AzSpClientSecret");
          string tenantId = Environment.GetEnvironmentVariable("AzSpTenantId");
 
          AzureCredentials credentials;
-         if (isProd)
+         if (hostContext.HostingEnvironment.IsProduction())
          {
             credentials = SdkContext.AzureCredentialsFactory
                .FromSystemAssignedManagedServiceIdentity(MSIResourceType.AppService, AzureEnvironment.AzureGlobalCloud, tenantId);
          }
          else
          {
+            // authenticate with Service Principal credentials
+            string clientId = Environment.GetEnvironmentVariable("AzSpClientId");
+            string clientSecret = hostContext.Configuration["AzSpClientSecret"];
             credentials = SdkContext.AzureCredentialsFactory
                .FromServicePrincipal(clientId, clientSecret, tenantId, environment: AzureEnvironment.AzureGlobalCloud);
          }

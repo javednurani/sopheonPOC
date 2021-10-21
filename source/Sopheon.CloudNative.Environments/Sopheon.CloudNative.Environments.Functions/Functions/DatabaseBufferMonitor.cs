@@ -49,7 +49,7 @@ namespace Sopheon.CloudNative.Environments.Functions
             // Pull admin enigma from app config (user secrets or key vault)
             string adminLoginEnigma = _configuration["SqlServerAdminEnigma"];
 
-            // TODO: string replace SqlServerName and password into json template
+            //TODO check for null on jsonTemplateData in case the template is not found.
             jsonTemplateData = jsonTemplateData
                .Replace(SERVER_NAME_TOKEN, sqlServerName)
                .Replace(ADMINISTRATOR_LOGIN_ENIGMA_TOKEN, adminLoginEnigma);
