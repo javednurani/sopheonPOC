@@ -41,8 +41,27 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
 
       public async Task EnsureDatabaseBufferAsync(string subscriptionId, string resourceGroupName, string sqlServerName, string deploymentTemplateJson)
       {
+         bool enoughDatabasesExist = await DoEnoughDatabasesExist(subscriptionId, resourceGroupName, sqlServerName);
+         if (enoughDatabasesExist)
+         {
+            _logger.LogInformation($"Sufficient database buffer capacity. Exiting {nameof(DatabaseBufferMonitor)}...");
+            return;
+         }
+
+         bool ongoingDeployement = await IsOngoingDeployment(resourceGroupName);
+         if (ongoingDeployement)
+         {
+            _logger.LogInformation($"Ongoing database deployment. Exiting {nameof(DatabaseBufferMonitor)}...");
+            return;
+         }
+
+         await PerformDeployment(resourceGroupName, deploymentTemplateJson);
+      }
+
+      private async Task<bool> DoEnoughDatabasesExist(string subscriptionId, string resourceGroupName, string sqlServerName)
+      {
          ISqlServer sqlServer = await _azure.SqlServers
-                  .GetByIdAsync($"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Sql/servers/{sqlServerName}");
+                           .GetByIdAsync($"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Sql/servers/{sqlServerName}");
 
          bool validCapacity = int.TryParse(Environment.GetEnvironmentVariable("DatabaseBufferCapacity"), out int databaseBufferCapacity);
          if (!validCapacity)
@@ -51,33 +70,8 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          }
 
          int bufferCount = await CheckBufferCount(sqlServer);
-         if (bufferCount >= databaseBufferCapacity)
-         {
-            _logger.LogInformation($"Sufficient database buffer capacity. Exiting {nameof(DatabaseBufferMonitor)}...");
-            return;
-         }
-
-         IPagedCollection<IDeployment> deploymentsForResourceGroup = await _azure.Deployments.ListByResourceGroupAsync(resourceGroupName);
-
-         if (deploymentsForResourceGroup.Any(d =>
-            d.Name.Contains(nameof(DatabaseBufferMonitor)) &&
-            _activeProvisioningStates.Contains(d.ProvisioningState)))
-         {
-            return;
-         }
-
-         string deploymentName = $"{nameof(DatabaseBufferMonitor)}_Deployment_{DateTime.UtcNow.ToString("yyyyMMddTHHmmss")}";
-         _logger.LogInformation($"Creating new deployment: {deploymentName}");
-
-         IDeployment deployment = await _azure.Deployments
-            .Define(deploymentName)
-            .WithExistingResourceGroup(resourceGroupName)
-            .WithTemplate(deploymentTemplateJson)
-            .WithParameters("{ }")
-            .WithMode(DeploymentMode.Incremental)
-            .CreateAsync();
-
-         _logger.LogInformation($"Deployment: {deploymentName} was created successfully.");
+         bool enoughDatabasesExist = bufferCount >= databaseBufferCapacity;
+         return enoughDatabasesExist;
       }
 
       private async Task<int> CheckBufferCount(ISqlServer sqlServer)
@@ -100,6 +94,32 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          }
 
          return notAssigned.Count;
+      }
+
+      private async Task<bool> IsOngoingDeployment(string resourceGroupName)
+      {
+         IPagedCollection<IDeployment> deploymentsForResourceGroup = await _azure.Deployments.ListByResourceGroupAsync(resourceGroupName);
+
+         bool ongoingDeployement = deploymentsForResourceGroup.Any(d =>
+                        d.Name.Contains(nameof(DatabaseBufferMonitor)) &&
+                        _activeProvisioningStates.Contains(d.ProvisioningState));
+         return ongoingDeployement;
+      }
+
+      private async Task PerformDeployment(string resourceGroupName, string deploymentTemplateJson)
+      {
+         string deploymentName = $"{nameof(DatabaseBufferMonitor)}_Deployment_{DateTime.UtcNow.ToString("yyyyMMddTHHmmss")}";
+         _logger.LogInformation($"Creating new deployment: {deploymentName}");
+
+         IDeployment deployment = await _azure.Deployments
+            .Define(deploymentName)
+            .WithExistingResourceGroup(resourceGroupName)
+            .WithTemplate(deploymentTemplateJson)
+            .WithParameters("{ }")
+            .WithMode(DeploymentMode.Incremental)
+            .CreateAsync();
+
+         _logger.LogInformation($"Deployment: {deploymentName} was created successfully.");
       }
    }
 }
