@@ -70,8 +70,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          }
 
          int bufferCount = await CheckBufferCount(sqlServer);
-         bool enoughDatabasesExist = bufferCount >= databaseBufferCapacity;
-         return enoughDatabasesExist;
+         return bufferCount >= databaseBufferCapacity;
       }
 
       private async Task<int> CheckBufferCount(ISqlServer sqlServer)
@@ -100,10 +99,9 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
       {
          IPagedCollection<IDeployment> deploymentsForResourceGroup = await _azure.Deployments.ListByResourceGroupAsync(resourceGroupName);
 
-         bool ongoingDeployement = deploymentsForResourceGroup.Any(d =>
-                        d.Name.Contains(nameof(DatabaseBufferMonitor)) &&
-                        _activeProvisioningStates.Contains(d.ProvisioningState));
-         return ongoingDeployement;
+         return deploymentsForResourceGroup.Any(d =>
+            d.Name.Contains(nameof(DatabaseBufferMonitor)) &&
+            _activeProvisioningStates.Contains(d.ProvisioningState));
       }
 
       private async Task PerformDeployment(string resourceGroupName, string deploymentTemplateJson)
