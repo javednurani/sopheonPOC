@@ -29,7 +29,7 @@
       public const string RESPONSE_REQUEST_PATH_PARAMETER_INVALID = "A required path parameter was invalid or missing. Check the request path/route.";
 
       // replacement tokens
-      public static string SERVER_NAME_TOKEN = "^SqlServerName^";
-      public static string ADMINISTRATOR_LOGIN_ENIGMA_TOKEN = "^SqlAdminEngima^";
+      public static readonly string SERVER_NAME_TOKEN = "^SqlServerName^";
+      public static readonly string ADMINISTRATOR_LOGIN_ENIGMA_TOKEN = "^SqlAdminEngima^";
    }
 }
