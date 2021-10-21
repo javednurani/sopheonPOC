@@ -18,7 +18,6 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
       private const string CUSTOMER_PROVISIONED_DATABASE_TAG_NAME = "CustomerProvisionedDatabase"; // Tag Name/key for Azure Resouce (Azure SQL database)
       private const string CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_INITIAL = "NotAssigned"; // databases with this Tag Value are part of buffer
       private const string CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_ASSIGNED = "AssignedToCustomer"; // not part of buffer
-      private const int BUFFER_MIN_CAPACITY = 5;
 
       // TODO - identify ProvisioningState lifecycle, confirm this list
       private readonly ProvisioningState[] _activeProvisioningStates = new ProvisioningState[]
@@ -45,9 +44,14 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          ISqlServer sqlServer = await _azure.SqlServers
                   .GetByIdAsync($"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Sql/servers/{sqlServerName}");
 
-         int bufferCount = await CheckBufferCount(sqlServer);
+         bool validCapacity = int.TryParse(Environment.GetEnvironmentVariable("DatabaseBufferCapacity"), out int databaseBufferCapacity);
+         if (!validCapacity)
+         {
+            throw new ArgumentException("DatabaseBufferCapacity is misconfigured, could not parse to an integer");
+         }
 
-         if (bufferCount >= BUFFER_MIN_CAPACITY)
+         int bufferCount = await CheckBufferCount(sqlServer);
+         if (bufferCount >= databaseBufferCapacity)
          {
             _logger.LogInformation($"Sufficient database buffer capacity. Exiting {nameof(DatabaseBufferMonitor)}...");
             return;

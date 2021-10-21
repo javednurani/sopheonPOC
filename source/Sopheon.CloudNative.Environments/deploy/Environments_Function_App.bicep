@@ -119,11 +119,11 @@ resource EnvironmentsFunctionApp 'Microsoft.Web/sites@2021-01-15' = {
         }
         {
           name: 'DatabaseBufferCapacity'
-          value: '100'
+          value: '^DatabaseBufferCapacity^'
         }
         {
           name: 'DatabaseBufferTimer'
-          value: '0 * * * * *'
+          value: '^DatabaseBufferTimerCron^'
         }
         {
           name: 'KeyVaultName'
