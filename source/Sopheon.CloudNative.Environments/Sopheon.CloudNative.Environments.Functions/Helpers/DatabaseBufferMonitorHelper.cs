@@ -41,8 +41,8 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
 
       public async Task EnsureDatabaseBufferAsync(string subscriptionId, string resourceGroupName, string sqlServerName, string deploymentTemplateJson)
       {
-         bool enoughDatabasesExist = await DoEnoughDatabasesExist(subscriptionId, resourceGroupName, sqlServerName);
-         if (enoughDatabasesExist)
+         bool hasSufficientDatabaseBuffer = await HasSufficientDatabaseBuffer(subscriptionId, resourceGroupName, sqlServerName);
+         if (hasSufficientDatabaseBuffer)
          {
             _logger.LogInformation($"Sufficient database buffer capacity. Exiting {nameof(DatabaseBufferMonitor)}...");
             return;
@@ -56,21 +56,6 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          }
 
          await PerformDeployment(resourceGroupName, deploymentTemplateJson);
-      }
-
-      private async Task<bool> DoEnoughDatabasesExist(string subscriptionId, string resourceGroupName, string sqlServerName)
-      {
-         ISqlServer sqlServer = await _azure.SqlServers
-                           .GetByIdAsync($"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Sql/servers/{sqlServerName}");
-
-         bool validCapacity = int.TryParse(Environment.GetEnvironmentVariable("DatabaseBufferCapacity"), out int databaseBufferCapacity);
-         if (!validCapacity)
-         {
-            throw new ArgumentException("DatabaseBufferCapacity is misconfigured, could not parse to an integer");
-         }
-
-         int bufferCount = await CheckBufferCount(sqlServer);
-         return bufferCount >= databaseBufferCapacity;
       }
 
       private async Task<int> CheckBufferCount(ISqlServer sqlServer)
@@ -93,6 +78,21 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          }
 
          return notAssigned.Count;
+      }
+
+      private async Task<bool> HasSufficientDatabaseBuffer(string subscriptionId, string resourceGroupName, string sqlServerName)
+      {
+         ISqlServer sqlServer = await _azure.SqlServers
+                           .GetByIdAsync($"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Sql/servers/{sqlServerName}");
+
+         bool validCapacity = int.TryParse(Environment.GetEnvironmentVariable("DatabaseBufferCapacity"), out int databaseBufferCapacity);
+         if (!validCapacity)
+         {
+            throw new ArgumentException("DatabaseBufferCapacity is misconfigured, could not parse to an integer");
+         }
+
+         int bufferCount = await CheckBufferCount(sqlServer);
+         return bufferCount >= databaseBufferCapacity;
       }
 
       private async Task<bool> IsOngoingDeployment(string resourceGroupName)
