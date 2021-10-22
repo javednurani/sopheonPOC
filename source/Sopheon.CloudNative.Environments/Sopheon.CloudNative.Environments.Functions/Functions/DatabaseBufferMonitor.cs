@@ -46,8 +46,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          catch (Exception ex)
          {
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-
-            // TODO: throw?  return something?  we could silently fail other than log statements
+            throw;
          }
       }
    }

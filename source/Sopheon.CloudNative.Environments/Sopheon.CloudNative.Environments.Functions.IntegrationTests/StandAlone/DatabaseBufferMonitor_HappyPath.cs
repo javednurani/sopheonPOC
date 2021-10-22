@@ -13,18 +13,18 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.StandAlone
       [FunctionFact]
       public async Task HappyPath()
       {
-         HttpResponseMessage response = await RunTimerTriggerFunction(nameof(DatabaseBufferMonitor));
+         HttpResponseMessage response = await ExecuteTimerTriggerFunction(nameof(DatabaseBufferMonitor));
 
          Assert.Equal(HttpStatusCode.Accepted, response.StatusCode);
       }
 
-      private async Task<HttpResponseMessage> RunTimerTriggerFunction(string functionName)
+      private static async Task<HttpResponseMessage> ExecuteTimerTriggerFunction(string functionName)
       {
          string url = $"http://localhost:7071/admin/functions/{functionName}";
+         string json = JsonSerializer.Serialize(new { input = "test" });
+         StringContent content = new(json, Encoding.UTF8, "application/json");
 
-         using HttpClient client = new HttpClient();
-         return await client.PostAsync(url,
-            new StringContent(JsonSerializer.Serialize(new { input = "test" }), Encoding.UTF8, "application/json"));
+         return await new HttpClient().PostAsync(url, content);
       }
    }
 }

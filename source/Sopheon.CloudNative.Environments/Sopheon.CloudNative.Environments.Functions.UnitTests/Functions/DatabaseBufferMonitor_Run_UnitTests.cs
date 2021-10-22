@@ -30,7 +30,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async Task DatabaseBufferMonitor_Run_HappyPathAsync()
+      public async Task Run_HappyPath_CallsHelperOnce()
       {
          // Arrange
 
@@ -42,7 +42,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async Task DatabaseBufferMonitor_Run_ReplacesTemplateCorrectlyAsync()
+      public async Task Run_HappyPath_ReplacesTemplateCorrectly()
       {
          // Arrange
          string sqlServerName = Some.Random.String();
@@ -59,6 +59,20 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
             .Replace(StringConstants.SERVER_NAME_TOKEN, sqlServerName)
             .Replace(StringConstants.ADMINISTRATOR_LOGIN_ENIGMA_TOKEN, adminEnigma);
          _mockMonitorHelper.Verify(mh => mh.EnsureDatabaseBufferAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), expectedFormattedJson), Times.Once);
+      }
+
+      [Fact]
+      public async Task Run_ExceptionThrownByDependency_RethrowsException()
+      {
+         // Arrange
+         string exceptionMessage = Some.Random.String();
+         Exception ex = new Exception(exceptionMessage);
+         _mockMonitorHelper.Setup(mh => mh.EnsureDatabaseBufferAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+            .ThrowsAsync(ex);
+
+         // Act + Assert
+         Exception actualException = await Assert.ThrowsAsync<Exception>(() => _sut.Run(null, string.Empty, _context.Object));
+         Assert.Equal(exceptionMessage, actualException.Message);
       }
    }
 }
