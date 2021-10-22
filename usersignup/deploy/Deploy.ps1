@@ -2,7 +2,7 @@ $ZipUtil = "C:\Program Files\7-Zip\7z.exe";
 $B2CAssets = "$($env:System_DefaultWorkingDirectory)\B2CAssets";
 $Scripts = "$($env:System_DefaultWorkingDirectory)\Scripts";
 $Environment = $env:Environment;
-$StorageAccountName = "stratuswebsite$($Environment.ToLower())";
+$StorageAccountName = "stratus$($Environment.ToLower())b2c";
 
 try {    
     $ErrorActionPreference = 'Stop'

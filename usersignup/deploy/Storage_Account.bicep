@@ -41,15 +41,34 @@ resource StaticWebpage_Storage_BlobService 'Microsoft.Storage/storageAccounts/bl
     deleteRetentionPolicy: {
       enabled: false
     }
+    cors: {
+      corsRules: [
+        {
+            allowedOrigins: [
+                'https://stratusb2cdev.b2clogin.com'
+            ]
+            allowedMethods: [
+                'GET'
+                'OPTIONS'
+            ]
+            maxAgeInSeconds: 200
+            exposedHeaders: [
+                '*'
+            ]
+            allowedHeaders: [
+                '*'
+            ]
+        }
+      ]
+    }
   }
 }
 
-resource StaticWebpage_Storage_BlobService_WebContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-04-01' = {
+resource StaticWebpage_Storage_BlobService_webContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-04-01' = {
   name: '${StaticWebpage_Storage_BlobService.name}/$web'
   properties: {
     defaultEncryptionScope: '$account-encryption-key'
     denyEncryptionScopeOverride: false
-    publicAccess: 'None'
   }
   dependsOn: [
     StaticWebpage_StorageAccount
