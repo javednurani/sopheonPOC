@@ -36,6 +36,10 @@ namespace Sopheon.CloudNative.Environments.Functions
             string sqlServerName = Environment.GetEnvironmentVariable("AzSqlServerName");
             string adminLoginEnigma = _configuration["SqlServerAdminEnigma"]; // Pull admin enigma from app config (user secrets or key vault)
 
+            if(string.IsNullOrEmpty(jsonTemplateData))
+            {
+               throw new NullReferenceException($"File was not found in blob storage at path: {INPUT_BINDING_BLOB_PATH}");
+            }
             jsonTemplateData = jsonTemplateData
                .Replace(StringConstants.SERVER_NAME_TOKEN, sqlServerName)
                .Replace(StringConstants.ADMINISTRATOR_LOGIN_ENIGMA_TOKEN, adminLoginEnigma);

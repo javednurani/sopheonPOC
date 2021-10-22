@@ -35,7 +35,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          // Arrange
 
          // Act
-         await _sut.Run(null, string.Empty, _context.Object);
+         await _sut.Run(null, Some.Random.String(), _context.Object);
 
          // Assert
          _mockMonitorHelper.Verify(mh => mh.EnsureDatabaseBufferAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
@@ -60,5 +60,14 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
             .Replace(StringConstants.ADMINISTRATOR_LOGIN_ENIGMA_TOKEN, adminEnigma);
          _mockMonitorHelper.Verify(mh => mh.EnsureDatabaseBufferAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), expectedFormattedJson), Times.Once);
       }
+
+      [Fact]
+      public async Task DatabaseBufferMonitor_Run_TemplateNotFoundThrowsException()
+      {
+         // Arrange, Act, and Assert
+         // Passing in null to our run represents the BlobInput attribute unsuccessfully finding a file at INPUT_BINDING_BLOB_PATH
+         await Assert.ThrowsAsync<NullReferenceException>( () => _sut.Run(null, null, _context.Object));
+      }
+
    }
 }
