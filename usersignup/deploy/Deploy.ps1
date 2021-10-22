@@ -24,11 +24,6 @@ try {
     az storage blob delete-batch --account-name $StorageAccountName --source 'b2cassets'
 
     # Upload related B2C Assets to Blob Storage
-    Write-Host "Uploading Marketing Page to blob storage";
-    $MarketingUploadResults = az storage blob upload --container-name '$web' --account-name $StorageAccountName --file "$($B2CAssets)\website\index.html" --name index.html --auth-mode login;
-    $MarketingUploadResults;
-    Check-LastExitCode;
-    Write-Host "Complete! Transfered files to Storage Account Blob: "'$web';
 
     Write-Host "Uploading Profile Update blob storage";
     $MarketingUploadResults = az storage blob upload-batch --destination 'b2cassets' --account-name $StorageAccountName --source "$($B2CAssets)/azureResources/ProfileUpdate" --auth-mode login;

@@ -1,5 +1,7 @@
 $ZipUtil = "C:\Program Files\7-Zip\7z.exe";
 $ShellApp = "$($env:System_DefaultWorkingDirectory)/ShellApp";
+$MarketingPage = "$($env:System_DefaultWorkingDirectory)/MarketingPage";
+
 $Environment = $env:Environment;
 $StorageAccountName = "stratuswebsite$($Environment.ToLower())";
 
@@ -8,8 +10,16 @@ try {
     # Zip/Archive Scripts 
     Write-Host "Zipping Artfacts for ShellApp...";
     & $ZipUtil "x" "$($PSScriptRoot)/ShellTrial_*.zip" "-o$($ShellApp)";
+    & $ZipUtil "x" "$($PSScriptRoot)/MarketingPage_*.zip" "-o$($MarketingPage)";
 
     & "$($env:System_DefaultWorkingDirectory)/_TokenConfigurationManagement/TokenConfigManagement/TokenReplacer.exe" replace -c "$($env:System_DefaultWorkingDirectory)/_StratusShellApp/ShellApp/Browser_Shell_Configuration.json" -f "$ShellApp/*"  -e $Environment
+
+
+    Write-Host "Uploading Marketing Page to blob storage";
+    $MarketingUploadResults = az storage blob upload --container-name '$web' --account-name $StorageAccountName --file "$($MarketingPage)\index.html" --name index.html --auth-mode login;
+    $MarketingUploadResults;
+    Check-LastExitCode;
+    Write-Host "Complete! Transfered files to Storage Account Blob: "'$web';
 
     Write-Output "Deleting existing web app files to reduce blob size"
     $DeleteStorage = az storage blob delete-batch --account-name $StorageAccountName --source '$web' --pattern 'WebApp/*' --auth-mode login;
