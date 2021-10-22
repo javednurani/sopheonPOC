@@ -17,8 +17,7 @@ try {
 
     Write-Host "Uploading Marketing Page to blob storage";
     $MarketingUploadResults = az storage blob upload --container-name '$web' --account-name $StorageAccountName --file "$($MarketingPage)\index.html" --name index.html --auth-mode login;
-    $MarketingUploadResults;
-    Check-LastExitCode;
+    $MarketingUploadResults;    
     Write-Host "Complete! Transfered files to Storage Account Blob: "'$web';
 
     Write-Output "Deleting existing web app files to reduce blob size"
