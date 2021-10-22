@@ -76,17 +76,17 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async Task DatabaseBufferMonitor_Run_TemplateNotFoundThrowsException()
+      public async Task Run_TemplateNotFound_ThrowsArgumentNullException()
       {
          // Arrange
-         string expectedMessage = "File was not found in blob storage at path: armtemplates/ElasticPoolWithBuffer/ElasticPool_Database_Buffer.json";
+         ArgumentNullException expectedException = new ArgumentNullException("jsonTemplateData", string.Concat(StringConstants.BLOB_FILE_NOT_FOUND, StringConstants.ELASTICPOOL_DATABASE_BUFFER_BLOB_PATH));
 
          //Act
          // Passing in null to our run represents the BlobInput attribute unsuccessfully finding a file at INPUT_BINDING_BLOB_PATH
-         Exception actualMessage = await Assert.ThrowsAsync<NullReferenceException>( () => _sut.Run(null, null, _context.Object));
+         Exception ex = await Assert.ThrowsAsync<ArgumentNullException>( () => _sut.Run(null, null, _context.Object));
 
          // Assert
-         Assert.Equal(expectedMessage, actualMessage.Message);
+         Assert.Equal(expectedException.Message, ex.Message);
       }
 
    }
