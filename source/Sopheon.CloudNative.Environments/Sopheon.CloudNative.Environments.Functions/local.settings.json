@@ -1,7 +1,7 @@
 {
   "IsEncrypted": false,
   "Values": {
-    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true", // TODO: determine whether we use emulator or secrets to point to actual storage
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
     "KeyVaultName": "stratus-dev",
     "DatabaseBufferTimer": "0 * * * * *", // every minute
