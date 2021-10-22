@@ -30,7 +30,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async Task DatabaseBufferMonitor_Run_HappyPathAsync()
+      public async Task Run_HappyPath_CallsHelperOnce()
       {
          // Arrange
 
@@ -42,7 +42,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async Task DatabaseBufferMonitor_Run_ReplacesTemplateCorrectlyAsync()
+      public async Task Run_HappyPath_ReplacesTemplateCorrectly()
       {
          // Arrange
          string sqlServerName = Some.Random.String();
@@ -62,11 +62,31 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
+      public async Task Run_ExceptionThrownByDependency_RethrowsException()
+      {
+         // Arrange
+         string exceptionMessage = Some.Random.String();
+         Exception ex = new Exception(exceptionMessage);
+         _mockMonitorHelper.Setup(mh => mh.EnsureDatabaseBufferAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+            .ThrowsAsync(ex);
+
+         // Act + Assert
+         Exception actualException = await Assert.ThrowsAsync<Exception>(() => _sut.Run(null, Some.Random.String(), _context.Object));
+         Assert.Equal(exceptionMessage, actualException.Message);
+      }
+
+      [Fact]
       public async Task DatabaseBufferMonitor_Run_TemplateNotFoundThrowsException()
       {
-         // Arrange, Act, and Assert
+         // Arrange
+         string expectedMessage = "File was not found in blob storage at path: armtemplates/ElasticPoolWithBuffer/ElasticPool_Database_Buffer.json";
+
+         //Act
          // Passing in null to our run represents the BlobInput attribute unsuccessfully finding a file at INPUT_BINDING_BLOB_PATH
-         await Assert.ThrowsAsync<NullReferenceException>( () => _sut.Run(null, null, _context.Object));
+         Exception actualMessage = await Assert.ThrowsAsync<NullReferenceException>( () => _sut.Run(null, null, _context.Object));
+
+         // Assert
+         Assert.Equal(expectedMessage, actualMessage.Message);
       }
 
    }
