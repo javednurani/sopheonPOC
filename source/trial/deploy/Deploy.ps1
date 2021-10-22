@@ -12,7 +12,8 @@ try {
     & $ZipUtil "x" "$($PSScriptRoot)/ShellTrial_*.zip" "-o$($ShellApp)";
     & $ZipUtil "x" "$($PSScriptRoot)/MarketingPage_*.zip" "-o$($MarketingPage)";
 
-    & "$($env:System_DefaultWorkingDirectory)/_TokenConfigurationManagement/TokenConfigManagement/TokenReplacer.exe" replace -c "$($env:System_DefaultWorkingDirectory)/_StratusShellApp/ShellApp/Browser_Shell_Configuration.json" -f "$ShellApp/*"  -e $Environment
+    & "$($env:System_DefaultWorkingDirectory)\_TokenConfigurationManagement\TokenConfigManagement\TokenReplacer.exe" replace -c "$($env:System_DefaultWorkingDirectory)\_StratusShellApp\ShellApp\Browser_Shell_Configuration.json" -f "$ShellApp\*"  -e $Environment
+    & "$($env:System_DefaultWorkingDirectory)\_TokenConfigurationManagement\TokenConfigManagement\TokenReplacer.exe" replace -c "$($env:System_DefaultWorkingDirectory)\_StratusShellApp\ShellApp\Browser_Shell_Configuration.json" -f "$MarketingPage\*"  -e $Environment
 
 
     Write-Host "Uploading Marketing Page to blob storage";
