@@ -100,11 +100,11 @@ See also: https://pluto/display/PDP/Azure+Functions+and+Entity+Framework+Local+D
   - Open Powershell 7 .../stratus/source/Sopheon.CloudNative.Environments/Sopheon.CloudNative.Environments.Functions
   - Run the following command to start the local Azure Functions runtime: 'func start'
     - See: https://docs.microsoft.com/en-us/azure/azure-functions/functions-run-local
-  - To verify functions are up and running, you navigate to the following url in a browser
-  - http://localhost:7071/Environments
+  - To verify functions are up and running, navigate to the following url in a browser
+    - http://localhost:7071/Environments
   - To debug local azure functions
     - Run with the following option: func start --dotnet-isolated-debug
-    - Note PID of function, and attach to "dotnet.exe" process with that PID
+    - Note PID of function, and in Visual Studio, Debug > Attach To Process to "dotnet.exe" process with that PID
 
 ## Running Automated Tests Locally
  - Test Explorer contains a mix of unit and integration test projects
