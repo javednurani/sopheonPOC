@@ -35,7 +35,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          // Arrange
 
          // Act
-         await _sut.Run(null, string.Empty, _context.Object);
+         await _sut.Run(null, Some.Random.String(), _context.Object);
 
          // Assert
          _mockMonitorHelper.Verify(mh => mh.EnsureDatabaseBufferAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
@@ -71,8 +71,23 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
             .ThrowsAsync(ex);
 
          // Act + Assert
-         Exception actualException = await Assert.ThrowsAsync<Exception>(() => _sut.Run(null, string.Empty, _context.Object));
+         Exception actualException = await Assert.ThrowsAsync<Exception>(() => _sut.Run(null, Some.Random.String(), _context.Object));
          Assert.Equal(exceptionMessage, actualException.Message);
       }
+
+      [Fact]
+      public async Task Run_TemplateNotFound_ThrowsArgumentNullException()
+      {
+         // Arrange
+         ArgumentNullException expectedException = new ArgumentNullException("jsonTemplateData", string.Concat(StringConstants.BLOB_FILE_NOT_FOUND, StringConstants.ELASTICPOOL_DATABASE_BUFFER_BLOB_PATH));
+
+         //Act
+         // Passing in null to our run represents the BlobInput attribute unsuccessfully finding a file at INPUT_BINDING_BLOB_PATH
+         Exception ex = await Assert.ThrowsAsync<ArgumentNullException>( () => _sut.Run(null, null, _context.Object));
+
+         // Assert
+         Assert.Equal(expectedException.Message, ex.Message);
+      }
+
    }
 }

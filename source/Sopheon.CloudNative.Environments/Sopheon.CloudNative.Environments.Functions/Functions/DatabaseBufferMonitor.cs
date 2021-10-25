@@ -9,8 +9,6 @@ namespace Sopheon.CloudNative.Environments.Functions
 {
    public class DatabaseBufferMonitor
    {
-      private const string INPUT_BINDING_BLOB_PATH = "armtemplates/ElasticPoolWithBuffer/ElasticPool_Database_Buffer.json";
-
       private readonly IConfiguration _configuration;
       private readonly IDatabaseBufferMonitorHelper _dbBufferMonitorHelper;
 
@@ -23,7 +21,7 @@ namespace Sopheon.CloudNative.Environments.Functions
       [Function(nameof(DatabaseBufferMonitor))]
       public async Task Run(
          [TimerTrigger("%DatabaseBufferTimer%")] TimerInfo myTimer,
-         [BlobInput(INPUT_BINDING_BLOB_PATH)] string jsonTemplateData,
+         [BlobInput(StringConstants.ELASTICPOOL_DATABASE_BUFFER_BLOB_PATH)] string jsonTemplateData, // TODO: Experiment with connection parameter and serets to always reference azure blob storage
          FunctionContext context)
       {
          ILogger logger = context.GetLogger(nameof(DatabaseBufferMonitor));
@@ -31,12 +29,15 @@ namespace Sopheon.CloudNative.Environments.Functions
 
          try
          {
+            if(string.IsNullOrEmpty(jsonTemplateData))
+            {
+               throw new ArgumentNullException("jsonTemplateData", string.Concat(StringConstants.BLOB_FILE_NOT_FOUND, StringConstants.ELASTICPOOL_DATABASE_BUFFER_BLOB_PATH));
+            }
             string subscriptionId = Environment.GetEnvironmentVariable("AzSubscriptionId");
             string resourceGroupName = Environment.GetEnvironmentVariable("AzResourceGroupName");
             string sqlServerName = Environment.GetEnvironmentVariable("AzSqlServerName");
             string adminLoginEnigma = _configuration["SqlServerAdminEnigma"]; // Pull admin enigma from app config (user secrets or key vault)
 
-            //TODO check for null on jsonTemplateData in case the template is not found.
             jsonTemplateData = jsonTemplateData
                .Replace(StringConstants.SERVER_NAME_TOKEN, sqlServerName)
                .Replace(StringConstants.ADMINISTRATOR_LOGIN_ENIGMA_TOKEN, adminLoginEnigma);
