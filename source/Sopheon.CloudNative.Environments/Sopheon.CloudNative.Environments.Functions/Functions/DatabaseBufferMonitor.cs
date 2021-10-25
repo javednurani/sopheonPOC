@@ -21,7 +21,7 @@ namespace Sopheon.CloudNative.Environments.Functions
       [Function(nameof(DatabaseBufferMonitor))]
       public async Task Run(
          [TimerTrigger("%DatabaseBufferTimer%")] TimerInfo myTimer,
-         [BlobInput(StringConstants.ELASTICPOOL_DATABASE_BUFFER_BLOB_PATH)] string jsonTemplateData, // TODO: Experiment with connection parameter and serets to always reference azure blob storage
+         [BlobInput(StringConstants.ELASTICPOOL_DATABASE_BUFFER_BLOB_PATH)] string jsonTemplateData, // TODO: Experiment with connection parameter and secrets to always reference azure blob storage
          FunctionContext context)
       {
          ILogger logger = context.GetLogger(nameof(DatabaseBufferMonitor));

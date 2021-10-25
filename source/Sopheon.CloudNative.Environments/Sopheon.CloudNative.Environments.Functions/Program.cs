@@ -109,7 +109,7 @@ namespace Sopheon.CloudNative.Environments.Functions
 
          return Microsoft.Azure.Management.Fluent.Azure
             .Authenticate(credentials)
-            .WithDefaultSubscription();	// TODO: can we use the async method?  having trouble consuming in Main
+            .WithDefaultSubscription();
       }
    }
 }

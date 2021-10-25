@@ -13,12 +13,6 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
 {
    public class DatabaseBufferMonitorHelper : IDatabaseBufferMonitorHelper
    {
-      // buffered database indicator using Azure Tags
-      // TODO Cloud-1474: when we create a buffered DB, it should be tagged as CustomerProvisionedDatabase = NotAssigned
-      private const string CUSTOMER_PROVISIONED_DATABASE_TAG_NAME = "CustomerProvisionedDatabase"; // Tag Name/key for Azure Resouce (Azure SQL database)
-      private const string CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_INITIAL = "NotAssigned"; // databases with this Tag Value are part of buffer
-      private const string CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_ASSIGNED = "AssignedToCustomer"; // not part of buffer
-
       private readonly ProvisioningState[] _activeProvisioningStates = new ProvisioningState[]
       {
             ProvisioningState.Accepted,
@@ -60,13 +54,13 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          IReadOnlyList<ISqlDatabase> allDatabasesOnServer = await _azure.SqlServers.Databases.ListBySqlServerAsync(sqlServer);
 
          // categorize CustomerProvisionedDatabase tagged databases by tag value
-         foreach (var database in allDatabasesOnServer) // TODO: optimize search?
+         foreach (var database in allDatabasesOnServer)
          {
             ISqlDatabase databaseWithDetails = await _azure.SqlServers.Databases.GetBySqlServerAsync(sqlServer, database.Name);
 
             // has CustomerProvisionedDatabase tag
-            if (databaseWithDetails?.Tags?.TryGetValue(CUSTOMER_PROVISIONED_DATABASE_TAG_NAME, out string tagValue) ?? false
-               && tagValue == CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_INITIAL)
+            if (databaseWithDetails?.Tags?.TryGetValue(StringConstants.CUSTOMER_PROVISIONED_DATABASE_TAG_NAME, out string tagValue) ?? false
+               && tagValue == StringConstants.CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_INITIAL)
             {
                notAssigned.Add(databaseWithDetails);
             }

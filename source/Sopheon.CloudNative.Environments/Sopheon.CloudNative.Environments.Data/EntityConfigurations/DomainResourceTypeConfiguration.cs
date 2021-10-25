@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Sopheon.CloudNative.Environments.Domain;
 using Sopheon.CloudNative.Environments.Domain.Enums;
 using Sopheon.CloudNative.Environments.Domain.Models;
-using System;
-using System.Linq;
 
 namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
 {

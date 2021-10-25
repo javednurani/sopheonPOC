@@ -5,7 +5,7 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.Infrastruc
 {
    public class FunctionFactDependencyChecker : IDependencyChecker
    {
-      private static readonly string _url = "http://localhost:7071/openapi/1.0";  // TODO: where should this url live?
+      private static readonly string _url = "http://localhost:7071/openapi/1.0";
       private static readonly Lazy<DependencyCheckResult> lazyResult = new(CheckDependencyInternal);
 
       private static DependencyCheckResult CheckDependencyInternal()
