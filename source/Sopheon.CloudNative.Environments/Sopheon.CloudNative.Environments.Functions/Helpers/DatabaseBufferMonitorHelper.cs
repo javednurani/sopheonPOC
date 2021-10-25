@@ -19,15 +19,10 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
       private const string CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_INITIAL = "NotAssigned"; // databases with this Tag Value are part of buffer
       private const string CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_ASSIGNED = "AssignedToCustomer"; // not part of buffer
 
-      // TODO - identify ProvisioningState lifecycle, confirm this list
       private readonly ProvisioningState[] _activeProvisioningStates = new ProvisioningState[]
       {
             ProvisioningState.Accepted,
-            ProvisioningState.Created,
-            ProvisioningState.Creating,
-            ProvisioningState.Ready,
-            ProvisioningState.Running,
-            ProvisioningState.Updating
+            ProvisioningState.Running
       };
 
       private readonly ILogger<DatabaseBufferMonitorHelper> _logger;
