@@ -45,7 +45,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
       }
 
       [HttpGet("{key}/Items")]
-      public async Task<IActionResult> GetItems(string key) 
+      public async Task<IActionResult> GetItems(string key)
       {
          var query = _dbContext.Products
              .AsNoTracking()
@@ -60,7 +60,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
       [HttpPatch("{key}")]
       public async Task<IActionResult> Patch(string key, [FromBody] JsonPatchDocument<ProductPatchDto> patchDocument)
       {
-         if (patchDocument.Operations.Count == 0) 
+         if (patchDocument.Operations.Count == 0)
          {
             return NoContent();
          }
@@ -68,7 +68,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
          //ClaimsPrincipal user = HttpContext.User;
          var test = await _dbContext.Products.ToListAsync();
          Product productFromDatabase = await _dbContext.Products.SingleOrDefaultAsync(p => p.Key == key);
-         if (productFromDatabase == null) 
+         if (productFromDatabase == null)
          {
             return NotFound();
          }
@@ -94,7 +94,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
          {
             Name = Guid.NewGuid().ToString(),
             Key = Guid.NewGuid().ToString(),
-            Items = new List<ProductItem>() 
+            Items = new List<ProductItem>()
             {
                new ProductItem()
                {

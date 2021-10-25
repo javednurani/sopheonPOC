@@ -28,6 +28,6 @@ namespace Sopheon.CloudNative.Products.Utilities
       /// <param name="cancellationToken"></param>
       /// <returns></returns>
       public static ValueTask<TValue> DeserializeAnonymousTypeAsync<TValue>(Stream stream, TValue anonymousTypeObject, JsonSerializerOptions options = default, CancellationToken cancellationToken = default)
-          => JsonSerializer.DeserializeAsync<TValue>(stream, options, cancellationToken); 
+          => JsonSerializer.DeserializeAsync<TValue>(stream, options, cancellationToken);
    }
 }

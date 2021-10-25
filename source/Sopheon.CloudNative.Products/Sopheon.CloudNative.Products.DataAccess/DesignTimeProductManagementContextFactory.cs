@@ -1,7 +1,6 @@
-﻿using Sopheon.CloudNative.Products.Domain;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using System.Diagnostics;
+using Sopheon.CloudNative.Products.Domain;
 
 namespace Sopheon.CloudNative.Products.DataAccess
 {

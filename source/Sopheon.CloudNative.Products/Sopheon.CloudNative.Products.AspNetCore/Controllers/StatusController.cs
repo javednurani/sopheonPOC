@@ -1,12 +1,12 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Sopheon.CloudNative.Products.AspNetCore.Models;
 using Sopheon.CloudNative.Products.Domain;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
 {
@@ -16,7 +16,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
       private readonly ProductManagementContext _dbContext;
       private readonly IMapper _mapper;
 
-      public StatusController(ILogger<StatusController> logger, 
+      public StatusController(ILogger<StatusController> logger,
          ProductManagementContext dbContext,
          IMapper mapper)
       {

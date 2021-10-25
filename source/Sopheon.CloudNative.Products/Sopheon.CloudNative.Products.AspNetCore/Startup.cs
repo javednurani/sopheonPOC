@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -19,8 +20,6 @@ using Sopheon.CloudNative.Products.AspNetCore.Policies;
 using Sopheon.CloudNative.Products.AspNetCore.Policies.Handlers;
 using Sopheon.CloudNative.Products.AspNetCore.Policies.Requirements;
 using Sopheon.CloudNative.Products.Domain;
-using Microsoft.AspNetCore.Http.Extensions;
-using System.Threading.Tasks;
 
 namespace Sopheon.CloudNative.Products.AspNetCore
 {
@@ -37,7 +36,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore
       {
          { "openid", "openid"},
          { "offline_access", "Refresh Token"},
-         { "profile", "profile"} 
+         { "profile", "profile"}
       };
 
       public Startup(IConfiguration configuration,
@@ -76,10 +75,10 @@ namespace Sopheon.CloudNative.Products.AspNetCore
             .AddHealthChecks()//
             .AddCheck<EnvironmentCatalogHealthCheck>(nameof(EnvironmentCatalogHealthCheck), tags: new[] { "tenant-directory" })
             .AddCheck<EnvironmentDatabaseHealthCheck>(nameof(EnvironmentDatabaseHealthCheck), tags: new[] { "environment-specific" });
-            //.AddCheck("Example", () =>
-            //   HealthCheckResult.Healthy("Example is OK!"), tags: new[] { "example" })
-            //.AddCheck("Examples", () =>
-            //   HealthCheckResult.Healthy("Example is OKs!"), tags: new[] { "examples" });
+         //.AddCheck("Example", () =>
+         //   HealthCheckResult.Healthy("Example is OK!"), tags: new[] { "example" })
+         //.AddCheck("Examples", () =>
+         //   HealthCheckResult.Healthy("Example is OKs!"), tags: new[] { "examples" });
 
          services.AddAuthorization(options =>
          {
@@ -202,7 +201,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore
             {
                Predicate = (check) => check.Tags.Contains("environment-specific"),
                ResponseWriter = WriteHealthResponse
-            }).AllowAnonymous(); 
+            }).AllowAnonymous();
 
             endpoints.MapControllers();
          });

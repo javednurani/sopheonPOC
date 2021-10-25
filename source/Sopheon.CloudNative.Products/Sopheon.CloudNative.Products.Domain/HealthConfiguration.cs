@@ -2,7 +2,7 @@
 
 namespace Sopheon.CloudNative.Products.Domain
 {
-   public enum HealthReviewPeriods 
+   public enum HealthReviewPeriods
    {
       NoPeriodicReviewScheduled = 0,
       Weekly = 1,

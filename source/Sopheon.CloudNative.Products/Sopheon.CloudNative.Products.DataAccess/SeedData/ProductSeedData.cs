@@ -1,6 +1,6 @@
-﻿using Sopheon.CloudNative.Products.Domain;
-using System;
+﻿using System;
 using System.Linq;
+using Sopheon.CloudNative.Products.Domain;
 
 namespace Sopheon.CloudNative.Products.DataAccess.SeedData
 {
@@ -37,7 +37,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.SeedData
                      }).ToArray();
       }
 
-      private static Status[] GetSystemManagedStatuses() 
+      private static Status[] GetSystemManagedStatuses()
       {
          return Enum.GetValues(typeof(SystemManagedStatusIds))
                         .Cast<SystemManagedStatusIds>()

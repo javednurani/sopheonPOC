@@ -5,7 +5,7 @@ namespace Sopheon.CloudNative.Products.Utilities.Tests
    public class UnitTest1
    {
       [Fact]
-      public void Fact() 
+      public void Fact()
       {
       }
 

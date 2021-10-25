@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -10,8 +12,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Sopheon.CloudNative.Products.Api.Models;
 using Sopheon.CloudNative.Products.Domain;
-using System.Linq;
-using System.Linq.Expressions;
 
 namespace Sopheon.CloudNative.Products.Functions
 {

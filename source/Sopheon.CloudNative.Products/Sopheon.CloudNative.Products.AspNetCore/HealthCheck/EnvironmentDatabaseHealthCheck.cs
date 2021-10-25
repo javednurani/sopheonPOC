@@ -1,8 +1,8 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Sopheon.CloudNative.Products.AspNetCore.HealthCheck
 {
@@ -10,7 +10,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.HealthCheck
    {
       private readonly IEnvironmentSqlConnectionStringProvider _environmentSqlConnectionStringProvider;
 
-      public EnvironmentDatabaseHealthCheck(IEnvironmentSqlConnectionStringProvider environmentSqlConnectionStringProvider) 
+      public EnvironmentDatabaseHealthCheck(IEnvironmentSqlConnectionStringProvider environmentSqlConnectionStringProvider)
       {
          _environmentSqlConnectionStringProvider = environmentSqlConnectionStringProvider;
       }

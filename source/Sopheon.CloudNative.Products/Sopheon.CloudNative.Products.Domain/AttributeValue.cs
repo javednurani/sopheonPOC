@@ -54,7 +54,7 @@ namespace Sopheon.CloudNative.Products.Domain
       public decimal? Value;
    }
 
-   public interface IAttributeContainer 
+   public interface IAttributeContainer
    {
       List<Int32AttributeValue> IntAttributeValues { get; set; }
 
@@ -67,7 +67,7 @@ namespace Sopheon.CloudNative.Products.Domain
       List<MoneyAttributeValue> MoneyAttributeValues { get; set; }
    }
 
-   public class MoneyAttributeValue : IAttributeValue<MoneyValue> 
+   public class MoneyAttributeValue : IAttributeValue<MoneyValue>
    {
       /// <summary>
       /// Foreign Key to Attribute Type

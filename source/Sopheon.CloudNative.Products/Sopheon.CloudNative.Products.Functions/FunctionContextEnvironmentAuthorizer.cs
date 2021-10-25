@@ -5,7 +5,7 @@ using Microsoft.Azure.Functions.Worker;
 
 namespace Sopheon.CloudNative.Products.Functions
 {
-   public class FunctionContextEnvironmentAuthorizer : IEnvironmentConnectionAuthorizer<FunctionContext> 
+   public class FunctionContextEnvironmentAuthorizer : IEnvironmentConnectionAuthorizer<FunctionContext>
    {
       private string _connectionString;
 
@@ -14,9 +14,9 @@ namespace Sopheon.CloudNative.Products.Functions
          return TryAuthorizeConnection(context, out _connectionString);
       }
 
-      public string GetEnvironmentConnectionString() 
+      public string GetEnvironmentConnectionString()
       {
-         if (_connectionString == null) 
+         if (_connectionString == null)
          {
             throw new Exception("Connection details for environment not authorized for function context.");
          }
@@ -24,7 +24,7 @@ namespace Sopheon.CloudNative.Products.Functions
          return _connectionString;
       }
 
-      private bool TryAuthorizeConnection(FunctionContext context, out string connectionString) 
+      private bool TryAuthorizeConnection(FunctionContext context, out string connectionString)
       {
          // Mock out retrieval; this could be a request to an external service
          Dictionary<string, string> catalog = new Dictionary<string, string>

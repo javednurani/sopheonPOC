@@ -54,7 +54,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
       public decimal? Value;
    }
 
-   public interface IAttributeContainer 
+   public interface IAttributeContainer
    {
       List<Int32AttributeValueDto> IntAttributeValues { get; set; }
 
@@ -67,7 +67,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
       List<MoneyAttributeValueDto> MoneyAttributeValues { get; set; }
    }
 
-   public class MoneyAttributeValueDto : IAttributeValueDto<MoneyValueDto> 
+   public class MoneyAttributeValueDto : IAttributeValueDto<MoneyValueDto>
    {
       /// <summary>
       /// Foreign Key to Attribute Type

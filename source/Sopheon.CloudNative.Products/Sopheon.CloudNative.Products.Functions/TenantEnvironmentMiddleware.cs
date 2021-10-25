@@ -9,7 +9,7 @@ namespace Sopheon.CloudNative.Products.Functions
    {
       private readonly AzureAdJwtBearerValidation _azureADJwtBearerValidation;
 
-      public TenantEnvironmentMiddleware(AzureAdJwtBearerValidation azureADJwtBearerValidation) 
+      public TenantEnvironmentMiddleware(AzureAdJwtBearerValidation azureADJwtBearerValidation)
       {
          _azureADJwtBearerValidation = azureADJwtBearerValidation;
       }

@@ -15,7 +15,7 @@ namespace Sopheon.CloudNative.Products.Functions
          Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
 #endif
          var host = new HostBuilder()
-            .ConfigureAppConfiguration(c => 
+            .ConfigureAppConfiguration(c =>
             {
                c.AddJsonFile("settings.json", optional: true, reloadOnChange: true);
             })

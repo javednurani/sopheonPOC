@@ -4,12 +4,12 @@ using Sopheon.CloudNative.Products.Domain;
 
 namespace Sopheon.CloudNative.Products.DataAccess.EntityConfiguration
 {
-	public class ProductItemConfiguration : IEntityTypeConfiguration<ProductItem>
-	{
-		public void Configure(EntityTypeBuilder<ProductItem> builder)
-		{
-			ConfigureOwnedAttributeProperties<ProductItem>(builder);
-		}
+   public class ProductItemConfiguration : IEntityTypeConfiguration<ProductItem>
+   {
+      public void Configure(EntityTypeBuilder<ProductItem> builder)
+      {
+         ConfigureOwnedAttributeProperties<ProductItem>(builder);
+      }
 
       private static void ConfigureOwnedAttributeProperties<TAttributeContainer>(EntityTypeBuilder<TAttributeContainer> builder) where TAttributeContainer : class, IAttributeContainer
       {

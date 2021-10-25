@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Configuration;
-using Sopheon.CloudNative.Products.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
+using Sopheon.CloudNative.Products.Utilities;
 
 namespace Sopheon.CloudNative.Products.AspNetCore
 {
@@ -34,7 +34,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore
 
          string cacheKey = $"{nameof(EnvironmentSqlConnectionStringProvider)}.{nameof(GetConnectionStringAsync)}:{environmentKey}";
 
-         if (!_memoryCache.TryGetValue(cacheKey, out string connectionString)) 
+         if (!_memoryCache.TryGetValue(cacheKey, out string connectionString))
          {
             connectionString = await LookupConnectionString(environmentKey);
             _memoryCache.Set(cacheKey, connectionString, DateTimeOffset.Now.AddMinutes(10));
@@ -107,7 +107,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore
          environmentDatabaseCatalog = new Dictionary<string, string>(environmentDatabaseCatalog, StringComparer.OrdinalIgnoreCase);
 
          string result = environmentDatabaseCatalog.TryGetValue(_tenantEnvironmentIdentificationService.GetEnvironmentIdentifier(_httpContext), out string connectionString) ? connectionString : null;
-         
+
          return Task.FromResult(result);
       }
    }

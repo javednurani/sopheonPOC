@@ -9,7 +9,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Policies.Handlers
    {
       private readonly IEnvironmentIdentificationService _environmentIdentificationService;
 
-      public EnvironmentOwnerHandler(IEnvironmentIdentificationService environmentIdentificationService) 
+      public EnvironmentOwnerHandler(IEnvironmentIdentificationService environmentIdentificationService)
       {
          _environmentIdentificationService = environmentIdentificationService;
       }

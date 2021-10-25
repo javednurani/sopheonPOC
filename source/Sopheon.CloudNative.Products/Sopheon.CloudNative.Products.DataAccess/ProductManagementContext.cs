@@ -59,7 +59,7 @@ namespace Sopheon.CloudNative.Products.Domain
 
       protected override void OnModelCreating(ModelBuilder modelBuilder)
       {
-         modelBuilder.HasDefaultSchema(DEFAULT_SCHEMA); 
+         modelBuilder.HasDefaultSchema(DEFAULT_SCHEMA);
 
          modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProductManagementContext).Assembly);
 

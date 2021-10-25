@@ -18,7 +18,7 @@
 
       public string ShortName { get; set; }
 
-      public bool IsSystem() 
+      public bool IsSystem()
       {
          return AttributeId < 0;
       }
