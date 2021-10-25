@@ -104,7 +104,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
             .WithTemplate(deploymentTemplateJson)
             .WithParameters("{ }")
             .WithMode(DeploymentMode.Incremental)
-            .CreateAsync();
+            .BeginCreateAsync();
 
          _logger.LogInformation($"Deployment: {deploymentName} was created successfully.");
       }
