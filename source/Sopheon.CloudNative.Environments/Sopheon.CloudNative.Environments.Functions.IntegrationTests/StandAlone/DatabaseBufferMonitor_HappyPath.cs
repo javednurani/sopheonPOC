@@ -21,8 +21,8 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.StandAlone
       private static async Task<HttpResponseMessage> ExecuteTimerTriggerFunction(string functionName)
       {
          string url = $"http://localhost:7071/admin/functions/{functionName}";
-         string json = JsonSerializer.Serialize(new { input = "test" });
-         StringContent content = new(json, Encoding.UTF8, "application/json");
+         string json = JsonSerializer.Serialize(new { });
+         StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
          return await new HttpClient().PostAsync(url, content);
       }
