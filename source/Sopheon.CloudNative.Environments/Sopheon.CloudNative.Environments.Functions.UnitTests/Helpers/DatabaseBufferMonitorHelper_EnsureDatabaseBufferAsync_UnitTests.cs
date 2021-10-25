@@ -45,7 +45,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          await _sut.EnsureDatabaseBufferAsync(Some.Random.String(), Some.Random.String(), Some.Random.String(), Some.Random.String());
 
          // Assert
-         deploymentMock.Verify(wc => wc.CreateAsync(default(CancellationToken), true), Times.Once, "Should have created deployment!");
+         deploymentMock.Verify(wc => wc.BeginCreateAsync(default(CancellationToken)), Times.Once, "Should have created deployment!");
       }
 
       [Fact]
@@ -62,7 +62,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          await _sut.EnsureDatabaseBufferAsync(Some.Random.String(), Some.Random.String(), Some.Random.String(), Some.Random.String());
 
          // Assert
-         deploymentMock.Verify(wc => wc.CreateAsync(default(CancellationToken), true), Times.Never, "Should not have created deployment!");
+         deploymentMock.Verify(wc => wc.BeginCreateAsync(default(CancellationToken)), Times.Never, "Should not have created deployment!");
       }
 
       [Fact]
@@ -79,7 +79,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          await _sut.EnsureDatabaseBufferAsync(Some.Random.String(), Some.Random.String(), Some.Random.String(), Some.Random.String());
 
          // Assert
-         deploymentMock.Verify(wc => wc.CreateAsync(default(CancellationToken), true), Times.Never, "Should not have created deployment!");
+         deploymentMock.Verify(wc => wc.BeginCreateAsync(default(CancellationToken)), Times.Never, "Should not have created deployment!");
       }
 
       [Fact]
@@ -96,7 +96,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          await _sut.EnsureDatabaseBufferAsync(Some.Random.String(), Some.Random.String(), Some.Random.String(), Some.Random.String());
 
          // Assert
-         deploymentMock.Verify(wc => wc.CreateAsync(default(CancellationToken), true), Times.Once, "Should have created deployment!");
+         deploymentMock.Verify(wc => wc.BeginCreateAsync(default(CancellationToken)), Times.Once, "Should have created deployment!");
       }
 
       [Fact]
@@ -113,7 +113,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
 
          // Assert
          await Assert.ThrowsAsync<ArgumentException>(() => _sut.EnsureDatabaseBufferAsync(Some.Random.String(), Some.Random.String(), Some.Random.String(), Some.Random.String()));
-         deploymentMock.Verify(wc => wc.CreateAsync(default(CancellationToken), true), Times.Never, "Should not have created deployment!");
+         deploymentMock.Verify(wc => wc.BeginCreateAsync(default(CancellationToken)), Times.Never, "Should not have created deployment!");
       }
 
       private void SetupMockDatabases(int numUnassignedDatabases, bool databasesDeleted = false)
