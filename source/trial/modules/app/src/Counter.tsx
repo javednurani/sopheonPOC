@@ -1,5 +1,5 @@
 import { Stack } from '@fluentui/react';
-import Button from '@sopheon/controls/dist/components/Button';
+import { Button } from '@sopheon/controls';
 import React, { CSSProperties } from 'react';
 import { useIntl } from 'react-intl';
 
