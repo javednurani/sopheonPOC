@@ -47,6 +47,7 @@ module EnvironmentFunction 'Environments_Function_App.bicep' = {
     appInsightsName: appInsightsName
     functionAppName: environmentFunctionApp_Name
     webServerFarm_Name: webServerFarm_Name
+    sqlServer_Name: toLower(sqlServer_name)
   }
 }
 

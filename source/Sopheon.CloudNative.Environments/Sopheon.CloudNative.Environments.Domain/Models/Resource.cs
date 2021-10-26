@@ -10,13 +10,13 @@ namespace Sopheon.CloudNative.Environments.Domain.Models
          set;
       }
 
-      public virtual DomainResourceType DomainResourceType
+      public string Uri
       {
          get;
          set;
       }
 
-      public string Uri
+      public virtual DomainResourceType DomainResourceType
       {
          get;
          set;

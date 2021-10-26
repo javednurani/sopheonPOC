@@ -1,8 +1,16 @@
 {
   "IsEncrypted": false,
   "Values": {
-    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true", // TODO: determine whether we use emulator or secrets to point to actual storage
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
     "KeyVaultName": "stratus-dev",
+    "DatabaseBufferTimer": "0 * * * * *", // every minute
+    "AzureWebJobs.DatabaseBufferMonitor.Disabled": true,
+    "DatabaseBufferCapacity": 50,
+    "AzSpClientId": "94a11ce8-2cab-4d8e-8729-a509c2ae40a9",
+    "AzSpTenantId": "5767b0c7-d26a-4724-8f99-35323734361b",
+    "AzSubscriptionId": "1c4bef1d-8a40-4a6d-96d6-764bb466ac46",
+    "AzResourceGroupName": "stratus-dev",
+    "AzSqlServerName": "stratus-dev"
   },
 }

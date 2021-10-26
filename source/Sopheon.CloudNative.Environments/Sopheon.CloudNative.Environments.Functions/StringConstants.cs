@@ -27,5 +27,13 @@
       public const string RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID = "The EnvironmentKey must be a valid Guid";
       public const string RESPONSE_GENERIC_ERROR = "Something went wrong. Please try again later.";
       public const string RESPONSE_REQUEST_PATH_PARAMETER_INVALID = "A required path parameter was invalid or missing. Check the request path/route.";
+      public const string BLOB_FILE_NOT_FOUND = "No file was found in blob storage at path: ";
+      public const string ELASTICPOOL_DATABASE_BUFFER_BLOB_PATH = "armtemplates/ElasticPoolWithBuffer/ElasticPool_Database_Buffer.json";
+      // buffered database indicator using Azure Tags
+      public const string CUSTOMER_PROVISIONED_DATABASE_TAG_NAME = "CustomerProvisionedDatabase"; // Tag Name/key for Azure Resouce (Azure SQL database)
+      public const string CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_INITIAL = "NotAssigned"; // databases with this Tag Value are part of buffer
+      // replacement tokens
+      public static readonly string SERVER_NAME_TOKEN = "^SqlServerName^";
+      public static readonly string ADMINISTRATOR_LOGIN_ENIGMA_TOKEN = "^SqlAdminEngima^";
    }
 }

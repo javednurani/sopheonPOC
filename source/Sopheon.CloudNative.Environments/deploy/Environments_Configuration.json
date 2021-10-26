@@ -1,0 +1,16 @@
+{
+  "Tokens": [
+    {
+      "TokenDisplayName": "DatabaseBufferCapacity",
+      "Pattern": "^DatabaseBufferCapacity^",
+      "EnvironmentVariableName": "DatabaseBufferCapacity",
+      "IsKeyVaultSecret": false
+    },
+    {
+      "TokenDisplayName": "DatabaseBufferTimer",
+      "Pattern": "^DatabaseBufferTimerCron^",
+      "EnvironmentVariableName": "DatabaseBufferTimer",
+      "IsKeyVaultSecret": false
+    }
+  ]
+}
