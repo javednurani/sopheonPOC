@@ -15,11 +15,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sopheon.CloudNative.Products.Utilities", "Sopheon.CloudNative.Products.Utilities\Sopheon.CloudNative.Products.Utilities.csproj", "{CFD3700A-9B5F-4FF5-8F56-F1290229C68F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sopheon.CloudNative.Utilities.Tests", "Sopheon.CloudNative.Products.Utilities.Tests\Sopheon.CloudNative.Utilities.Tests.csproj", "{9DCEFC60-ECED-4005-B03A-A2DF40EC1562}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sopheon.CloudNative.Products.Utilities.Tests", "Sopheon.CloudNative.Products.Utilities.Tests\Sopheon.CloudNative.Products.Utilities.Tests.csproj", "{9DCEFC60-ECED-4005-B03A-A2DF40EC1562}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sopheon.CloudNative.Products.AspNetCore", "Sopheon.CloudNative.Products.AspNetCore\Sopheon.CloudNative.Products.AspNetCore.csproj", "{E93F0B8F-1293-408D-AD5A-01ACC9867480}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sopheon.CloudNative.Products.AspNetCore.UnitTests", "Sopheon.CloudNative.Products.AspNetCore.UnitTests\Sopheon.CloudNative.Products.AspNetCore.UnitTests.csproj", "{533BD0F6-95FD-48F9-B37A-C6DC1E7FC6BC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Development Resources", "Development Resources", "{5B25AAA3-48AC-4625-9324-5B3D90DCA4AD}"
+	ProjectSection(SolutionItems) = preProject
+		README.MD = README.MD
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

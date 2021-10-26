@@ -16,16 +16,19 @@ namespace Sopheon.CloudNative.Products.AspNetCore
       private readonly IEnvironmentIdentificationService _tenantEnvironmentIdentificationService;
       private readonly IHttpClientFactory _clientFactory;
       private readonly IMemoryCache _memoryCache;
+      private readonly IConfiguration _configRoot;
 
       public EnvironmentSqlConnectionStringProvider(IHttpContextAccessor accessor,
          IEnvironmentIdentificationService tenantEnvironmentIdentificationService,
          IHttpClientFactory clientFactory,
-         IMemoryCache memoryCache)
+         IMemoryCache memoryCache,
+         IConfiguration configRoot)
       {
          _httpContext = accessor.HttpContext;
          _tenantEnvironmentIdentificationService = tenantEnvironmentIdentificationService;
          _clientFactory = clientFactory;
          _memoryCache = memoryCache;
+         _configRoot = configRoot;
       }
 
       public async Task<string> GetConnectionStringAsync()
@@ -45,14 +48,11 @@ namespace Sopheon.CloudNative.Products.AspNetCore
 
       private async Task<string> LookupConnectionString(string environmentKey)
       {
-         // TODO: Call Environment Lookup Azure Function: https://stratus-qa.azurewebsites.net​/GetEnvironmentResourceBindingUri({environmentKey},{businessServiceName},{dependencyName})
-
-         string apiUrl = "http://localhost:7071/GetEnvironmentResourceBindingUri";
+         string apiUrl = _configRoot.GetValue<string>("ServiceUrls:GetEnvironmentResourceBindingUri"); 
          string businessServiceName = "ProductManagement";
          string dependencyName = "SqlDatabase";
-         //http://localhost:7071/GetEnvironmentResourceBindingUri(34117853-734d-44d3-aec7-9267e9e5e545,ProductManagement,SqlDatabase)
-         //http://localhost:7071/GetEnvironmentResourceBindingUri(34117853-734d-44d3-aec7-9267e9e5e545,%20ProductManagement,%20SqlDatabase)
          string requestUrl = $"{apiUrl}({environmentKey}, {businessServiceName}, {dependencyName})";
+
          string connectionString = await CallCatalogService(requestUrl); // TODO: Retry and Backoff Logic
          return connectionString;
       }
