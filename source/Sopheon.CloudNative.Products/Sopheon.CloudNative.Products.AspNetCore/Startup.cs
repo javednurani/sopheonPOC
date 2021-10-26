@@ -146,8 +146,19 @@ namespace Sopheon.CloudNative.Products.AspNetCore
             services.AddScoped<IEnvironmentSqlConnectionStringProvider, DevelopmentTimeEnvironmentSqlConnectionStringProvider>();
          }
 
+         if (_env.IsDevelopment())
+         {
+            services.AddCors(options =>
+            {
+               options.AddDefaultPolicy(builder =>
+               {
+                  builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
+               });
+            });
+         }
+
          services.AddScoped<IAuthorizationHandler, EnvironmentOwnerHandler>();
-         //services.AddScoped<IAuthorizationHandler, SopheonSupportEnvironmentAccessHandler>(); // TODO: Add handling for support access scenario
+         //services.AddScoped<IAuthorizationHandler, SopheonSupportEnvironmentAccessHandler>(); // TODO: Add handling for support access scenario, or potentially local dev scenarios
 
          // Entity Framework
          services.AddDbContext<ProductManagementContext>((serviceProvider, optionsBuilder) =>
@@ -180,6 +191,11 @@ namespace Sopheon.CloudNative.Products.AspNetCore
                c.OAuthScopeSeparator(" ");
                c.OAuthUsePkce();
             });
+
+            if (env.IsDevelopment())
+            {
+               app.UseCors();
+            }
          }
 
          app.UseHttpsRedirection();

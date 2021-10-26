@@ -3,6 +3,10 @@
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
-    "KeyVaultName": "stratus-dev",
+    "KeyVaultName": "stratus-dev"
   },
+  "Host": {
+    "CORS": "*",
+    "CORSCredentials": false
+  }
 }
