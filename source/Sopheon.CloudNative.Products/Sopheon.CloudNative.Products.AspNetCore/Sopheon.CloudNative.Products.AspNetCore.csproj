@@ -20,5 +20,10 @@
     <ProjectReference Include="..\Sopheon.CloudNative.Products.DataAccess\Sopheon.CloudNative.Products.DataAccess.csproj" />
     <ProjectReference Include="..\Sopheon.CloudNative.Products.Utilities\Sopheon.CloudNative.Products.Utilities.csproj" />
   </ItemGroup>
-
+  
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)' == 'Debug' ">
+    <Exec Command="dotnet tool restore&#xD;&#xA;set ASPNETCORE_ENVIRONMENT=Development&#xD;&#xA;dotnet swagger tofile --output &quot;$(OutputPath)\swagger.json&quot; $(OutputPath)\$(AssemblyName).dll v1" />
+    <Exec Command="set ASPNETCORE_ENVIRONMENT=Development" />
+    <Exec Command="set ASPNETCORE_ENVIRONMENT=development dotnet swagger tofile --output &quot;$(OutputPath)\swagger.json&quot; $(OutputPath)\$(AssemblyName).dll v1 " />
+  </Target>
 </Project>

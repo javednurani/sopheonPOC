@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -45,7 +46,11 @@ namespace Sopheon.CloudNative.Products.AspNetCore
          Configuration = configuration;
          _env = env;
 
-         _scopes.Add(Configuration.GetValue<string>("AzureAdB2C:ClientId"), "Access the api as the signed-in user");
+         string clientIdScope = Configuration.GetValue<string>("AzureAdB2C:ClientId");
+         if (!string.IsNullOrEmpty(clientIdScope)) 
+         {
+            _scopes.Add(clientIdScope, "Access the api as the signed-in user");
+         }
       }
 
       public IConfiguration Configuration { get; }
@@ -94,12 +99,22 @@ namespace Sopheon.CloudNative.Products.AspNetCore
 
          services.AddSwaggerGen(c =>
          {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Sopheon.CloudNative.Products.AspNetCore", Version = "v1" });
+            // If new Swagger Docs are added, update the build action
+            c.SwaggerDoc("v1", new OpenApiInfo 
+            { 
+               Title = "Sopheon.CloudNative.Products.AspNetCore", 
+               Version = "v1",
+               Description = "",
+               TermsOfService = new Uri("https://www.sopheon.com/"),
+               //License
+            });
 
+            Uri authorizationUrl = new Uri($"{Configuration.GetValue<string>("AzureAdB2C:Instance")}/{Configuration.GetValue<string>("AzureAdB2C:Domain")}/{Configuration.GetValue<string>("AzureAdB2C:SignUpSignInPolicyId")}/oauth2/v2.0/authorize"); // ex: https://<b2c_tenant_name>.b2clogin.com/<b2c_tenant_name>.onmicrosoft.com/oauth2/v2.0/authorize?p=b2c_1_susi_v2
+            Uri tokenUrl = new Uri($"{Configuration.GetValue<string>("AzureAdB2C:Instance")}/{Configuration.GetValue<string>("AzureAdB2C:Domain")}/{Configuration.GetValue<string>("AzureAdB2C:SignUpSignInPolicyId")}/oauth2/v2.0/token"); // ex: https://<b2c_tenant_name>.b2clogin.com/<b2c_tenant_name>.onmicrosoft.com/oauth2/v2.0/token?p=b2c_1_susi_v2
+            
             c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
             {
                Name = "Authorization",
-               //Type = SecuritySchemeType.Http, // Must manually enter bearer token
                Type = SecuritySchemeType.OAuth2,
                //Type = SecuritySchemeType.OpenIdConnect,
                //OpenIdConnectUrl = new Uri($"{Configuration.GetValue<string>("AzureAdB2C:Instance")}/{Configuration.GetValue<string>("AzureAdB2C:Domain")}/v2.0/.well-known/openid-configuration?p={Configuration.GetValue<string>("AzureAdB2C:SignUpSignInPolicyId")}"),
@@ -111,8 +126,8 @@ namespace Sopheon.CloudNative.Products.AspNetCore
                {
                   AuthorizationCode = new OpenApiOAuthFlow
                   {
-                     AuthorizationUrl = new Uri($"{Configuration.GetValue<string>("AzureAdB2C:Instance")}/{Configuration.GetValue<string>("AzureAdB2C:Domain")}/{Configuration.GetValue<string>("AzureAdB2C:SignUpSignInPolicyId")}/oauth2/v2.0/authorize"), // ex: https://<b2c_tenant_name>.b2clogin.com/<b2c_tenant_name>.onmicrosoft.com/oauth2/v2.0/authorize?p=b2c_1_susi_v2
-                     TokenUrl = new Uri($"{Configuration.GetValue<string>("AzureAdB2C:Instance")}/{Configuration.GetValue<string>("AzureAdB2C:Domain")}/{Configuration.GetValue<string>("AzureAdB2C:SignUpSignInPolicyId")}/oauth2/v2.0/token"), // ex: https://<b2c_tenant_name>.b2clogin.com/<b2c_tenant_name>.onmicrosoft.com/oauth2/v2.0/token?p=b2c_1_susi_v2
+                     AuthorizationUrl = authorizationUrl,
+                     TokenUrl = tokenUrl,
                      Scopes = _scopes
                   }
                }
@@ -192,10 +207,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore
                c.OAuthUsePkce();
             });
 
-            if (env.IsDevelopment())
-            {
-               app.UseCors();
-            }
+            app.UseCors();
          }
 
          app.UseHttpsRedirection();
