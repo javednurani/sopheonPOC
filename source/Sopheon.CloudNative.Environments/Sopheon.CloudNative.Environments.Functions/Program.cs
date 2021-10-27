@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Sopheon.CloudNative.Environments.Data;
+using Sopheon.CloudNative.Environments.Domain.Commands;
 using Sopheon.CloudNative.Environments.Domain.Queries;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
@@ -75,9 +76,11 @@ namespace Sopheon.CloudNative.Environments.Functions
 
                services.AddScoped<IEnvironmentRepository, EFEnvironmentRepository>();
                services.AddScoped<IEnvironmentQueries, EFEnvironmentQueries>();
+               services.AddScoped<IEnvironmentCommands, EFEnvironmentCommands>();
                services.AddScoped<IValidator<EnvironmentDto>, EnvironmentDtoValidator>();
                services.AddScoped<IRequiredNameValidator, RequiredNameValidator>();
                services.AddScoped<IDatabaseBufferMonitorHelper, DatabaseBufferMonitorHelper>();
+               services.AddScoped<IResourceAllocationHelper, ResourceAllocationHelper>();
                services.AddScoped<HttpResponseDataBuilder>();
                
                _lazyAzureClient = new Lazy<IAzure>(GetAzureInstance(hostContext));

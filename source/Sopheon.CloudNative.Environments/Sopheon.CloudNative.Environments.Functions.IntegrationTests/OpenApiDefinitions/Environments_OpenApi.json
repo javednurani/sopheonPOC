@@ -405,6 +405,76 @@
         },
         "x-ms-visibility": "important"
       }
+    },
+    "/AllocateSqlDatabaseSharedByServicesToEnvironment({environmentKey})": {
+      "post": {
+        "tags": [
+          "EnvironmentResourceBindings"
+        ],
+        "summary": "Allocate a Resource for an Environment, and create a set of EnvironmentResourceBindings (satisfying all BusinessServiceDependencies) for that Environment & Resource",
+        "description": "Allocate a Resource for an Environment, and create a set of EnvironmentResourceBindings (satisfying all BusinessServiceDependencies) for that Environment & Resource",
+        "operationId": "AllocateSqlDatabaseSharedByServicesToEnvironment",
+        "parameters": [
+          {
+            "name": "environmentKey",
+            "in": "path",
+            "description": "The EnvironmentKey of the Environment",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "x-ms-summary": "The EnvironmentKey of the Environment"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "201 Created response, with Dto in response body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/resourceAllocationResponseDto"
+                }
+              }
+            },
+            "x-ms-summary": "201 Created response"
+          },
+          "404": {
+            "description": "404 Not Found response, with error message in response body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorDto"
+                }
+              }
+            },
+            "x-ms-summary": "404 Not Found response"
+          },
+          "400": {
+            "description": "400 Bad Request response, with error message in response body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorDto"
+                }
+              }
+            },
+            "x-ms-summary": "400 Bad Request response"
+          },
+          "500": {
+            "description": "500 Internal Server Error response, with error message in response body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorDto"
+                }
+              }
+            },
+            "x-ms-summary": "500 Internal Server Error response"
+          }
+        },
+        "x-ms-visibility": "important"
+      }
     }
   },
   "components": {
@@ -435,6 +505,14 @@
             "type": "integer",
             "format": "int32"
           },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "resourceAllocationResponseDto": {
+        "type": "object",
+        "properties": {
           "message": {
             "type": "string"
           }
