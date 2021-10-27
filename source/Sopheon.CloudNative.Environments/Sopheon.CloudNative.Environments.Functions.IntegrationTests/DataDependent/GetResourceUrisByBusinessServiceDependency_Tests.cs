@@ -9,7 +9,7 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.DataDepend
    public class GetResourceUrisByBusinessServiceDependency_Tests : DataDependentFunctionIntegrationTest
    {
       [DataDependentFunctionFact]
-      public async Task HappyPath_GetResourceUrisByBusinessServiceDependency()
+      public async Task GetResourceUrisByBusinessServiceDependency_HappyPath()
       {
          ICollection<ResourceUriDto> results = await _sut.GetResourceUrisByBusinessServiceDependencyAsync(TestData.BUSINESS_SERVICE_NAME_1, TestData.DEPENDENCY_NAME_1);
          Assert.NotNull(results);

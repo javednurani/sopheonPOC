@@ -9,15 +9,15 @@ using Xunit;
 
 namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 {
-   public class ResourceAllocator_Run_UnitTests : FunctionUnitTestBase
+   public class AllocateSqlDatabaseSharedByServicesToEnvironment_Run_UnitTests : FunctionUnitTestBase
    {
-      private readonly ResourceAllocator _sut;
-      private readonly Mock<IResourceAllocatorHelper> _mockAllocatorHelper;
+      private readonly AllocateSqlDatabaseSharedByServicesToEnvironment _sut;
+      private readonly Mock<IResourceAllocationHelper> _mockAllocatorHelper;
 
-      public ResourceAllocator_Run_UnitTests()
+      public AllocateSqlDatabaseSharedByServicesToEnvironment_Run_UnitTests()
       {
-         _mockAllocatorHelper = new Mock<IResourceAllocatorHelper>();
-         _sut = new ResourceAllocator(_mockAllocatorHelper.Object, _responseBuilder);
+         _mockAllocatorHelper = new Mock<IResourceAllocationHelper>();
+         _sut = new AllocateSqlDatabaseSharedByServicesToEnvironment(_mockAllocatorHelper.Object, _responseBuilder);
       }
 
       [Fact]
@@ -30,7 +30,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 
          // Assert
          Assert.NotNull(result);
-         _mockAllocatorHelper.Verify(mh => mh.AllocateResourcesForEnvironment(It.IsAny<Guid>()), Times.Once);
+         _mockAllocatorHelper.Verify(mh => mh.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(It.IsAny<Guid>()), Times.Once);
       }
    }
 }

@@ -8,7 +8,7 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.DataDepend
    public class GetSpecificResourceUriAsync_Tests : DataDependentFunctionIntegrationTest
    {
       [DataDependentFunctionFact]
-      public async Task HappyPath_GetSpecificResourceUri()
+      public async Task GetSpecificResourceUri_HappyPath()
       {
          ResourceUriDto result = await _sut.GetSpecificResourceUriAsync(TestData.EnvironmentKey1, TestData.BUSINESS_SERVICE_NAME_1, TestData.DEPENDENCY_NAME_1);
          Assert.NotEmpty(result.Uri);

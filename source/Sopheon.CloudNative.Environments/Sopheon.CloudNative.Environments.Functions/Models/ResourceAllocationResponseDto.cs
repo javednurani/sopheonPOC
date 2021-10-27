@@ -1,6 +1,6 @@
 ﻿namespace Sopheon.CloudNative.Environments.Functions.Models
 {
-   public class ResourceAllocatorResponseDto
+   public class ResourceAllocationResponseDto
    {
       public string Message
       {

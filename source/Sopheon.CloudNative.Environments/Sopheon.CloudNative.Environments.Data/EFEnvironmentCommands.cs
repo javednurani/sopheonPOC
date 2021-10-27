@@ -15,7 +15,7 @@ namespace Sopheon.CloudNative.Environments.Data
          _context = context;
       }
 
-      public async Task AllocateResourcesForEnvironment(Guid environmentKey)
+      public async Task AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(Guid environmentKey)
       {
          Environment entityEnvironment = await _context.Environments.SingleEnvironmentAsync(environmentKey);
       }

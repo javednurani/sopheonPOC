@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Sopheon.CloudNative.Environments.Domain.Commands
+namespace Sopheon.CloudNative.Environments.Functions.Helpers
 {
-   public interface IEnvironmentCommands
+   public interface IResourceAllocationHelper
    {
       Task AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(Guid environmentKey);
    }

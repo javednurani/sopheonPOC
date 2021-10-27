@@ -80,7 +80,7 @@ namespace Sopheon.CloudNative.Environments.Functions
                services.AddScoped<IValidator<EnvironmentDto>, EnvironmentDtoValidator>();
                services.AddScoped<IRequiredNameValidator, RequiredNameValidator>();
                services.AddScoped<IDatabaseBufferMonitorHelper, DatabaseBufferMonitorHelper>();
-               services.AddScoped<IResourceAllocatorHelper, ResourceAllocatorHelper>();
+               services.AddScoped<IResourceAllocationHelper, ResourceAllocationHelper>();
                services.AddScoped<HttpResponseDataBuilder>();
                
                _lazyAzureClient = new Lazy<IAzure>(GetAzureInstance(hostContext));

@@ -12,19 +12,19 @@ using Sopheon.CloudNative.Environments.Functions.Models;
 
 namespace Sopheon.CloudNative.Environments.Functions.Functions
 {
-   public class ResourceAllocator
+   public class AllocateSqlDatabaseSharedByServicesToEnvironment
    {
-      private readonly IResourceAllocatorHelper _resourceAllocatorHelper;
+      private readonly IResourceAllocationHelper _resourceAllocationHelper;
       private readonly HttpResponseDataBuilder _responseBuilder;
 
-      public ResourceAllocator(IResourceAllocatorHelper resourceAllocatorHelper, HttpResponseDataBuilder responseBuilder)
+      public AllocateSqlDatabaseSharedByServicesToEnvironment(IResourceAllocationHelper resourceAllocationHelper, HttpResponseDataBuilder responseBuilder)
       {
-         _resourceAllocatorHelper = resourceAllocatorHelper;
+         _resourceAllocationHelper = resourceAllocationHelper;
          _responseBuilder = responseBuilder;
       }
 
-      [Function(nameof(ResourceAllocator))]
-      [OpenApiOperation(operationId: nameof(ResourceAllocator),
+      [Function(nameof(AllocateSqlDatabaseSharedByServicesToEnvironment))]
+      [OpenApiOperation(operationId: nameof(AllocateSqlDatabaseSharedByServicesToEnvironment),
          tags: new[] { "EnvironmentResourceBindings" },
          Summary = "Allocate a Resource for an Environment, and create a set of EnvironmentResourceBindings (satisfying all BusinessServiceDependencies) for that Environment & Resource",
          Description = "Allocate a Resource for an Environment, and create a set of EnvironmentResourceBindings (satisfying all BusinessServiceDependencies) for that Environment & Resource",
@@ -36,7 +36,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Functions
          Summary = "The EnvironmentKey of the Environment")]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.Created,
          contentType: StringConstants.CONTENT_TYPE_APP_JSON,
-         bodyType: typeof(ResourceAllocatorResponseDto),
+         bodyType: typeof(ResourceAllocationResponseDto),
          Summary = StringConstants.RESPONSE_SUMMARY_201,
          Description = StringConstants.RESPONSE_DESCRIPTION_201)]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.NotFound,
@@ -56,15 +56,14 @@ namespace Sopheon.CloudNative.Environments.Functions.Functions
          Description = StringConstants.RESPONSE_DESCRIPTION_500)]
       public async Task<HttpResponseData> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post",
-            Route = "AllocateResourcesForEnvironment({environmentKey})")] HttpRequestData req,
+            Route = "AllocateSqlDatabaseSharedByServicesToEnvironment({environmentKey})")] HttpRequestData req,
             FunctionContext context, string environmentKey)
       {
-         ILogger logger = context.GetLogger(nameof(ResourceAllocator));
-         logger.LogInformation($"{nameof(ResourceAllocator)} Steel Thread");
+         ILogger logger = context.GetLogger(nameof(AllocateSqlDatabaseSharedByServicesToEnvironment));
+         logger.LogInformation($"Executing Function {nameof(AllocateSqlDatabaseSharedByServicesToEnvironment)}");
 
          try
          {
-            // TODO, consolidate duplication around 'valid Guid' between ResourceAllocator and DeleteEnvironment
             Guid parsedEnvironmentKey;
             bool validKey = Guid.TryParse(environmentKey, out parsedEnvironmentKey);
             if (!validKey || parsedEnvironmentKey == Guid.Empty)
@@ -78,12 +77,11 @@ namespace Sopheon.CloudNative.Environments.Functions.Functions
                return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.BadRequest, error);
             }
 
-            await _resourceAllocatorHelper.AllocateResourcesForEnvironment(parsedEnvironmentKey);
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.Created, new ResourceAllocatorResponseDto { Message = "steel thread"});
+            await _resourceAllocationHelper.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(parsedEnvironmentKey);
+            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.Created, new ResourceAllocationResponseDto { Message = "TODO"});
          }
          catch (Exception ex)
          {
-            // TODO consolidate duplicated Exception handling between HttpTrigger Functions
             ErrorDto error = new ErrorDto
             {
                StatusCode = (int)HttpStatusCode.InternalServerError,

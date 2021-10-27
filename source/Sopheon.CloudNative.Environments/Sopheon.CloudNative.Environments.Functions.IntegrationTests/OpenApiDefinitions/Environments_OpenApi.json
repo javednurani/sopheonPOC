@@ -406,14 +406,14 @@
         "x-ms-visibility": "important"
       }
     },
-    "/AllocateResourcesForEnvironment({environmentKey})": {
+    "/AllocateSqlDatabaseSharedByServicesToEnvironment({environmentKey})": {
       "post": {
         "tags": [
           "EnvironmentResourceBindings"
         ],
         "summary": "Allocate a Resource for an Environment, and create a set of EnvironmentResourceBindings (satisfying all BusinessServiceDependencies) for that Environment & Resource",
         "description": "Allocate a Resource for an Environment, and create a set of EnvironmentResourceBindings (satisfying all BusinessServiceDependencies) for that Environment & Resource",
-        "operationId": "ResourceAllocator",
+        "operationId": "AllocateSqlDatabaseSharedByServicesToEnvironment",
         "parameters": [
           {
             "name": "environmentKey",
@@ -433,7 +433,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/resourceAllocatorResponseDto"
+                  "$ref": "#/components/schemas/resourceAllocationResponseDto"
                 }
               }
             },
@@ -510,7 +510,7 @@
           }
         }
       },
-      "resourceAllocatorResponseDto": {
+      "resourceAllocationResponseDto": {
         "type": "object",
         "properties": {
           "message": {

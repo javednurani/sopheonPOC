@@ -11,19 +11,19 @@ using Environment = Sopheon.CloudNative.Environments.Domain.Models.Environment;
 
 namespace Sopheon.CloudNative.Environments.Data.UnitTests
 {
-   public class EFEnvironmentCommands_AllocateResourcesForEnvironment_UnitTests
+   public class EFEnvironmentCommands_AllocateSqlDatabaseSharedByServicesToEnvironmentAsync_UnitTests
    {
       DbContextOptions<EnvironmentContext> _dbContextOptions;
 
-      public EFEnvironmentCommands_AllocateResourcesForEnvironment_UnitTests()
+      public EFEnvironmentCommands_AllocateSqlDatabaseSharedByServicesToEnvironmentAsync_UnitTests()
       {
          DbContextOptionsBuilder<EnvironmentContext> builder = new DbContextOptionsBuilder<EnvironmentContext>();
-         builder.UseInMemoryDatabase(nameof(EFEnvironmentCommands_AllocateResourcesForEnvironment_UnitTests));
+         builder.UseInMemoryDatabase(nameof(EFEnvironmentCommands_AllocateSqlDatabaseSharedByServicesToEnvironmentAsync_UnitTests));
          _dbContextOptions = builder.Options;
       }
 
       [Fact]
-      public async Task AllocateResourcesForEnvironment_HappyPath_EnvironmentReturned()
+      public async Task AllocateSqlDatabaseSharedByServicesToEnvironmentAsync_HappyPath_EnvironmentReturned()
       {
          using EnvironmentContext context = new EnvironmentContext(_dbContextOptions);
 
@@ -37,11 +37,11 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
 
          // Act + Assert
          // No Exception implies success
-         await sut.AllocateResourcesForEnvironment(environment.EnvironmentKey);
+         await sut.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environment.EnvironmentKey);
       }
 
       [Fact]
-      public async Task AllocateResourcesForEnvironment_EnvironmentNotFound_ThrowsException()
+      public async Task AllocateSqlDatabaseSharedByServicesToEnvironmentAsync_EnvironmentNotFound_ThrowsException()
       {
          using EnvironmentContext context = new EnvironmentContext(_dbContextOptions);
 
@@ -54,7 +54,7 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
          EFEnvironmentCommands sut = new EFEnvironmentCommands(context);
 
          // Act + Assert
-         await Assert.ThrowsAsync<EntityNotFoundException>(() => sut.AllocateResourcesForEnvironment(Some.Random.Guid()));
+         await Assert.ThrowsAsync<EntityNotFoundException>(() => sut.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(Some.Random.Guid()));
       }
    }
 }
