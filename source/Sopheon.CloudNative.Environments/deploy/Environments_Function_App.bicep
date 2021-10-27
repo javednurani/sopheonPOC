@@ -10,7 +10,11 @@ param storageAccountName string = '^EnvironmentFunctionStorageAccountName^'
 
 param webServerFarm_Name string = '^WebServerFarmName^'
 
+param sqlServer_Name string = '^SqlServerName^'
+
 var functionRuntime = 'dotnet-isolated'
+
+var keyVaultName = resourceGroup().name
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   name: storageAccountName
@@ -36,6 +40,27 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
     }
     accessTier: 'Hot'
   }
+}
+
+resource EnvironmentFunctionApp_Storage_BlobService 'Microsoft.Storage/storageAccounts/blobServices@2021-04-01' = {
+  name: '${storageAccount.name}/default'
+  properties: {
+    deleteRetentionPolicy: {
+      enabled: false
+    }
+  }
+}
+
+resource StaticWebpage_Storage_BlobService_ArmTemplateContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-04-01' = {
+  name: '${EnvironmentFunctionApp_Storage_BlobService.name}/armtemplates'
+  properties: {
+    defaultEncryptionScope: '$account-encryption-key'
+    denyEncryptionScopeOverride: false
+    publicAccess: 'Blob'
+  }
+  dependsOn: [
+    storageAccount
+  ]
 }
 
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
@@ -93,6 +118,30 @@ resource EnvironmentsFunctionApp 'Microsoft.Web/sites@2021-01-15' = {
         {
           name: 'FUNCTIONS_EXTENSION_VERSION'
           value: '~3'
+        }
+        {
+          name: 'DatabaseBufferCapacity'
+          value: '^DatabaseBufferCapacity^'
+        }
+        {
+          name: 'DatabaseBufferTimer'
+          value: '^DatabaseBufferTimerCron^'
+        }
+        {
+          name: 'KeyVaultName'
+          value: keyVaultName
+        }
+        {
+          name: 'AzSpTenantId'
+          value: tenant().tenantId
+        }
+        {
+          name: 'AzResourceGroupName'
+          value: resourceGroup().name
+        }
+        {
+          name: 'AzSqlServerName'
+          value: sqlServer_Name
         }
       ]
     }

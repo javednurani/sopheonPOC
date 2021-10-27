@@ -8,25 +8,25 @@
          set;
       }
 
-      public virtual Environment Environment
-      {
-         get;
-         set;
-      }
-
       public int ResourceId
       {
          get;
          set;
       }
 
-      public virtual Resource Resource
+      public int BusinessServiceDependencyId
       {
          get;
          set;
       }
 
-      public int BusinessServiceDependencyId
+      public virtual Environment Environment
+      {
+         get;
+         set;
+      }
+
+      public virtual Resource Resource
       {
          get;
          set;

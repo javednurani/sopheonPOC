@@ -6,7 +6,7 @@ param location string = resourceGroup().location
 
 // Storage Account module
 module SpaStorageAccount 'Storage_Account.bicep' = {
-  name: 'Website-Storage'
+  name: 'B2CAssets-Storage'
   params: {
     location: location
     storageAccounts_name: storageAccounts_name
