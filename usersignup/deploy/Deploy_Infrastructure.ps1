@@ -8,7 +8,7 @@ Param(
 $DeploymentName = "ADO-Deployment";
 
 $ResourceGroupValue = "Stratus-$($Environment)";
-$StorageAccountNameValue = "stratuswebsite$($Environment.ToLower())";
+$StorageAccountNameValue = "stratus$($Environment.ToLower())b2c";
 
 $MasterTemplate = "$($PSScriptRoot)\Master_Template.bicep";
 $MasterParametersTemplate = "$($PSScriptRoot)\Master_Template_Parameters.json";
@@ -42,7 +42,7 @@ Write-Host "Master Template Deployment: $($MasterTemplateDeploy)";
 
 Write-Host "Enabling Static Website properties...";
 # updates a storage account to be a static website setup with auth-mode as login
-$StaticWebsiteEnabled = az storage blob service-properties update --account-name $StorageAccountNameValue --static-website --404-document WebApp/index.html --index-document index.html --auth-mode login --query "staticWebsite.enabled";
+$StaticWebsiteEnabled = az storage blob service-properties update --account-name $StorageAccountNameValue --static-website --404-document TermsOfService/index.html --index-document index.html --auth-mode login --query "staticWebsite.enabled";
 Write-Host "Static Website enabled: $($StaticWebsiteEnabled) on Storage Account: $($StorageAccountNameValue)";
 
 Write-Host "Infrastructure deployment complete!";

@@ -34,5 +34,7 @@ npm run test -- --ci --reporters=jest-junit --reporters=default --coverage --cov
 # Zip/Archive Scripts 
 Write-Host "Zipping Artfacts for Shell Trial...";
 & $ZipUtil "a" "-tzip" "$($env:Build_ArtifactStagingDirectory)\ShellTrial_$($env:Build_BuildId)" "$($env:System_DefaultWorkingDirectory)\source\trial\modules\shell\dist\*" "-xr!build" "-xr!deploy";
+& $ZipUtil "a" "-tzip" "$($env:Build_ArtifactStagingDirectory)\MarketingPage_$($env:Build_BuildId)" "$($env:System_DefaultWorkingDirectory)\source\trial\website\*" "-xr!build" "-xr!deploy";
+
 
 Write-Host "Zipping Complete!";

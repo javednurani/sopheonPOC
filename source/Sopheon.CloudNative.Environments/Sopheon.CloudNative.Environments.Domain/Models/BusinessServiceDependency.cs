@@ -17,13 +17,13 @@ namespace Sopheon.CloudNative.Environments.Domain.Models
          set;
       }
 
-      public virtual BusinessService BusinessService
+      public int DomainResourceTypeId
       {
          get;
          set;
       }
 
-      public int DomainResourceTypeId
+      public virtual BusinessService BusinessService
       {
          get;
          set;

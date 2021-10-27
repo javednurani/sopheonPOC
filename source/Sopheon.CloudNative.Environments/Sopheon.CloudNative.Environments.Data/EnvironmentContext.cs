@@ -35,19 +35,7 @@ namespace Sopheon.CloudNative.Environments.Data
          modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
       }
 
-      public virtual DbSet<Environment> Environments
-      {
-         get;
-         set;
-      }
-
-      public virtual DbSet<DomainResourceType> DomainResourceTypes
-      {
-         get;
-         set;
-      }
-      
-      public virtual DbSet<Resource> Resources
+      public virtual DbSet<BusinessServiceDependency> BusinessServiceDependencies
       {
          get;
          set;
@@ -59,13 +47,25 @@ namespace Sopheon.CloudNative.Environments.Data
          set;
       }
 
-      public virtual DbSet<BusinessServiceDependency> BusinessServiceDependencies
+      public virtual DbSet<DomainResourceType> DomainResourceTypes
       {
          get;
          set;
       }
 
+
       public virtual DbSet<EnvironmentResourceBinding> EnvironmentResourceBindings
+      {
+         get;
+         set;
+      }
+      public virtual DbSet<Environment> Environments
+      {
+         get;
+         set;
+      }
+      
+      public virtual DbSet<Resource> Resources
       {
          get;
          set;

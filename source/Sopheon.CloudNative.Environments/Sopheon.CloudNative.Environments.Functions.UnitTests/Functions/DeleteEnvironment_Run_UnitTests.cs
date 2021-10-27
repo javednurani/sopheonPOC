@@ -1,33 +1,25 @@
 ﻿using System;
-using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Azure.Functions.Worker.Http;
 using Moq;
 using Sopheon.CloudNative.Environments.Domain.Exceptions;
-using Sopheon.CloudNative.Environments.Domain.Repositories;
-using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Testing.Common;
 using Xunit;
 
-namespace Sopheon.CloudNative.Environments.Functions.UnitTests
+namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 {
    public class DeleteEnvironment_Run_UnitTests : FunctionUnitTestBase
    {
       DeleteEnvironment Sut;
 
-      Mock<HttpRequestData> _request;
-
-      Mock<IEnvironmentRepository> _mockEnvironmentRepository;
-      HttpResponseDataBuilder _responseBuilder;
-
       public DeleteEnvironment_Run_UnitTests()
       {
-         TestSetup();
+         Sut = new DeleteEnvironment(_mockEnvironmentRepository.Object, _responseBuilder);
       }
 
       [Fact]
-      public async void Run_HappyPath_ReturnsNoContent()
+      public async Task Run_HappyPath_ReturnsNoContent()
       {
          // Arrange
          _mockEnvironmentRepository.Setup(m => m.DeleteEnvironment(It.IsAny<Guid>())).Returns(() =>
@@ -52,7 +44,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       }
 
       [Fact]
-      public async void Run_KeyIsInvalidGuid_ReturnsBadRequest()
+      public async Task Run_KeyIsInvalidGuid_ReturnsBadRequest()
       {
          // Arrange
          string keyToDelete = Some.Random.String();
@@ -67,7 +59,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       }
 
       [Fact]
-      public async void Run_EntityNotFound_ReturnsNotFound()
+      public async Task Run_EntityNotFound_ReturnsNotFound()
       {
          // Arrange
          _mockEnvironmentRepository
@@ -91,7 +83,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
       }
 
       [Fact]
-      public async void Run_GeneralException_ReturnsServerError()
+      public async Task Run_GeneralException_ReturnsServerError()
       {
          // Arrange
          _mockEnvironmentRepository
@@ -112,30 +104,6 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests
          _mockEnvironmentRepository.Verify(m => m.DeleteEnvironment(It.Is<Guid>(x =>
             x.ToString() == keyToDelete
          )), Times.Once());
-      }
-
-      private void TestSetup()
-      {
-         SetupFunctionContext();
-
-         // HttpRequestData
-         _request = new Mock<HttpRequestData>(_context.Object);
-
-         _request.Setup(r => r.CreateResponse()).Returns(() =>
-         {
-            Mock<HttpResponseData> response = new Mock<HttpResponseData>(_context.Object);
-            response.SetupProperty(r => r.Headers, new HttpHeadersCollection());
-            response.SetupProperty(r => r.StatusCode);
-            response.SetupProperty(r => r.Body, new MemoryStream());
-            return response.Object;
-         });
-
-         _mockEnvironmentRepository = new Mock<IEnvironmentRepository>();
-
-         _responseBuilder = new HttpResponseDataBuilder();
-
-         // create Sut
-         Sut = new DeleteEnvironment(_mockEnvironmentRepository.Object, _responseBuilder);
       }
    }
 }

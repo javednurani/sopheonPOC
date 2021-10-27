@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sopheon.CloudNative.Environments.Data;
 
 namespace Sopheon.CloudNative.Environments.Data.Migrations
 {
     [DbContext(typeof(EnvironmentContext))]
-    partial class EnvironmentContextModelSnapshot : ModelSnapshot
+    [Migration("20210929192658_DomainResourceType_Add_AzureSqlDb")]
+    partial class DomainResourceType_Add_AzureSqlDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,13 +41,6 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("BusinessServices");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "ProductManagement"
-                        });
                 });
 
             modelBuilder.Entity("Sopheon.CloudNative.Environments.Domain.Models.BusinessServiceDependency", b =>
@@ -75,15 +70,6 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("BusinessServiceDependencies");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            BusinessServiceId = 1,
-                            DependencyName = "SqlDatabase",
-                            DomainResourceTypeId = 1
-                        });
                 });
 
             modelBuilder.Entity("Sopheon.CloudNative.Environments.Domain.Models.DomainResourceType", b =>

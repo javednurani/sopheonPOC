@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "5aca268e-572e-4639-aad7-4c586fd8390f",
+		"_postman_id": "74faf587-2e33-4c36-9118-494fb3f11f8a",
 		"name": "Stratus Environment Functions",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -840,6 +840,39 @@
 							],
 							"path": [
 								"GetEnvironmentResourceBindingUri({{environmentKey}}, {{businessServiceName}}, {{dependencyName}})"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "POST DatabaseBufferMonitor",
+			"item": [
+				{
+					"name": "TimerTrigger Admin Endpoint",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"input\": \"test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/functions/DatabaseBufferMonitor",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"functions",
+								"DatabaseBufferMonitor"
 							]
 						}
 					},
