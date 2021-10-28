@@ -132,6 +132,10 @@ resource ProductManagementWebApp 'Microsoft.Web/sites@2021-02-01' = {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
           value: '${appInsights.properties.InstrumentationKey}'
         }
+        {
+          name: 'ASPNETCORE_ENVIRONMENT'
+          value: 'development'
+        }
       ]
     }
     scmSiteAlsoStopped: false
@@ -249,9 +253,4 @@ resource sites_StratusProductManagement_Dev_name_sites_StratusProductManagement_
     siteName: 'StratusProductManagement-${env}' //TODO: Configure for TokenReplace
     hostNameType: 'Verified'
   }
-}
-
-resource sites_StratusProductManagement_Dev_name_Microsoft_AspNetCore_AzureAppServices_SiteExtension 'Microsoft.Web/sites/siteextensions@2021-02-01' = {
-  parent: ProductManagementWebApp
-  name: 'Microsoft.AspNetCore.AzureAppServices.SiteExtension'
 }
