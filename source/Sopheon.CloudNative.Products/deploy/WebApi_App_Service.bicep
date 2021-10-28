@@ -152,22 +152,6 @@ resource ProductManagementWebApp 'Microsoft.Web/sites@2021-02-01' = {
   }
 }
 
-resource sites_StratusProductManagement_Dev_name_ftp 'Microsoft.Web/sites/basicPublishingCredentialsPolicies@2021-02-01' = {
-  parent: ProductManagementWebApp
-  name: 'ftp'
-  properties: {
-    allow: true
-  }
-}
-
-resource sites_StratusProductManagement_Dev_name_scm 'Microsoft.Web/sites/basicPublishingCredentialsPolicies@2021-02-01' = {
-  parent: ProductManagementWebApp
-  name: 'scm'
-  properties: {
-    allow: true
-  }
-}
-
 resource sites_StratusProductManagement_Dev_name_web 'Microsoft.Web/sites/config@2021-02-01' = {
   parent: ProductManagementWebApp
   name: 'web'
