@@ -77,7 +77,7 @@ namespace Sopheon.CloudNative.Environments.Functions
             {
                string validationMessage = validationResult.ToString();
                logger.LogInformation(validationMessage);
-               return await _responseBuilder.BuildWithErrorBody(req, new ErrorDto(HttpStatusCode.BadRequest, validationMessage));
+               return await _responseBuilder.BuildWithErrorBodyAsync(req, new ErrorDto(HttpStatusCode.BadRequest, validationMessage));
 
             }
 
@@ -90,17 +90,17 @@ namespace Sopheon.CloudNative.Environments.Functions
 
             // TODO: environments that already exist with name?
             environment = await _environmentRepository.AddEnvironment(environment);
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.Created, _mapper.Map<EnvironmentDto>(environment));
+            return await _responseBuilder.BuildWithJsonBodyAsync(req, HttpStatusCode.Created, _mapper.Map<EnvironmentDto>(environment));
          }
          catch (JsonException ex)
          {
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithErrorBody(req, new ErrorDto(HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_BODY_INVALID));
+            return await _responseBuilder.BuildWithErrorBodyAsync(req, new ErrorDto(HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_BODY_INVALID));
          }
          catch (Exception ex)
          {
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithErrorBody(req, new ErrorDto(HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR));
+            return await _responseBuilder.BuildWithErrorBodyAsync(req, new ErrorDto(HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR));
          }
       }
    }

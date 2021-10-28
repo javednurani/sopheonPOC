@@ -53,12 +53,12 @@ namespace Sopheon.CloudNative.Environments.Functions
          {
             IEnumerable<Environment> environments = await _environmentRepository.GetEnvironments();
 
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.OK, _mapper.Map<IEnumerable<EnvironmentDto>>(environments));
+            return await _responseBuilder.BuildWithJsonBodyAsync(req, HttpStatusCode.OK, _mapper.Map<IEnumerable<EnvironmentDto>>(environments));
          }
          catch (Exception ex)
          {
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithErrorBody(req, new ErrorDto(HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR));
+            return await _responseBuilder.BuildWithErrorBodyAsync(req, new ErrorDto(HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR));
          }
       }
    }

@@ -77,18 +77,18 @@ namespace Sopheon.CloudNative.Environments.Functions
             if (!validationResultBusinessServiceName.IsValid || !validationResultDependencyname.IsValid)
             {
                logger.LogInformation(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID);
-               return await _responseBuilder.BuildWithErrorBody(req, new ErrorDto(HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID));
+               return await _responseBuilder.BuildWithErrorBodyAsync(req, new ErrorDto(HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID));
             }
 
             IEnumerable<string> resourceUris = await _environmentQueries.GetResourceUrisByBusinessServiceDependency(businessServiceName, dependencyName);
             IEnumerable<ResourceUriDto> result = resourceUris.Select(r => new ResourceUriDto { Uri = r });
 
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.OK, result);
+            return await _responseBuilder.BuildWithJsonBodyAsync(req, HttpStatusCode.OK, result);
          }
          catch (Exception ex)
          {
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithErrorBody(req, new ErrorDto(HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR));
+            return await _responseBuilder.BuildWithErrorBodyAsync(req, new ErrorDto(HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR));
          }
       }
    }

@@ -82,7 +82,7 @@ namespace Sopheon.CloudNative.Environments.Functions
             if (Guid.Empty.Equals(environmentKey) || string.IsNullOrEmpty(businessServiceName) || string.IsNullOrEmpty(dependencyName))
             {
                logger.LogInformation(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID);
-               return await _responseBuilder.BuildWithErrorBody(req, new ErrorDto(HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID));
+               return await _responseBuilder.BuildWithErrorBodyAsync(req, new ErrorDto(HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID));
             }
 
             string resourceUri = await _environmentQueries.GetSpecificResourceUri(environmentKey, businessServiceName, dependencyName);
@@ -92,17 +92,17 @@ namespace Sopheon.CloudNative.Environments.Functions
                Uri = resourceUri
             };
 
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.OK, dto);
+            return await _responseBuilder.BuildWithJsonBodyAsync(req, HttpStatusCode.OK, dto);
          }
          catch (EntityNotFoundException ex)
          {
             logger.LogInformation(ex.Message);
-            return await _responseBuilder.BuildWithErrorBody(req, new ErrorDto(HttpStatusCode.NotFound, ex.Message));
+            return await _responseBuilder.BuildWithErrorBodyAsync(req, new ErrorDto(HttpStatusCode.NotFound, ex.Message));
          }
          catch (Exception ex)
          {
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithErrorBody(req, new ErrorDto(HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR));
+            return await _responseBuilder.BuildWithErrorBodyAsync(req, new ErrorDto(HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR));
          }
       }
    }
