@@ -1,6 +1,6 @@
 Import-Module "$env:System_DefaultWorkingDirectory\DevOps\PowerShell\CloudNative.Common.psm1";
 $ProductManagementProject = "$env:System_DefaultWorkingDirectory\source\Sopheon.CloudNative.Products\Sopheon.CloudNative.Products.AspNetCore\Sopheon.CloudNative.Products.AspNetCore.csproj";
-$ProductsDataAccessProject = "$env:System_DefaultWorkingDirectory\source\Sopheon.CloudNative.Products\Shopheon.CloudNative.Products.DataAccess\Sopheon.CloudNative.Products.DataAccess.csproj";
+$ProductsDataAccessProject = "$env:System_DefaultWorkingDirectory\source\Sopheon.CloudNative.Products\Sopheon.CloudNative.Products.DataAccess\Sopheon.CloudNative.Products.DataAccess.csproj";
 $ProductsSourcePath = "$env:System_DefaultWorkingDirectory\source\Sopheon.CloudNative.Products";
 
 #TODO: Does this need to be configurable....
@@ -14,7 +14,7 @@ $OutputCoveragePath = "$ProductsSourcePath\TestResults\";
 
 Write-Host "...Running dotnet ef migrations...";
 
-dotnet ef migrations script -p $ProductsDataAccessProject -o "$env:Build_ArtifactStagingDirectory\products_migration.sql" -i;
+dotnet ef migrations script -p $ProductsDataAccessProject -o "$env:Build_ArtifactStagingDirectory\products_migration.sql" -i -- --connectionstring "Server=.;Database=TenantBlankEnv;Integrated Security=true;"
 Check-LastExitCode;
 
 #Setup for Unit Tests here -
@@ -27,8 +27,12 @@ Foreach($file in $TestProjects) {
 }
 
 #All migrations and tests are done...let's publish it!
+
 Write-Host "...Running dotnet publish on Functions.csproj";
 dotnet publish $ProductManagementProject -c Release -o ".\PublishOutput\";
+Check-LastExitCode;
+
+dotnet swagger tofile --output $env:Build_ArtifactStagingDirectory\swagger.json .\PublishOutput\Sopheon.CloudNative.Products.AspNetCore.dll v1
 Check-LastExitCode;
 
 # Zip/Archive Scripts 
