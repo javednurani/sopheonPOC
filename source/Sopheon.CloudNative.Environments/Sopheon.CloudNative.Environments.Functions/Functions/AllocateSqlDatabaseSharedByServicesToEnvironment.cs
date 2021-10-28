@@ -68,13 +68,8 @@ namespace Sopheon.CloudNative.Environments.Functions.Functions
             bool validKey = Guid.TryParse(environmentKey, out parsedEnvironmentKey);
             if (!validKey || parsedEnvironmentKey == Guid.Empty)
             {
-               ErrorDto error = new ErrorDto
-               {
-                  StatusCode = (int)HttpStatusCode.BadRequest,
-                  Message = StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID,
-               };
                logger.LogInformation(StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID);
-               return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.BadRequest, error);
+               return await _responseBuilder.BuildWithErrorBody(req, new ErrorDto(HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID));
             }
 
             await _resourceAllocationHelper.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(parsedEnvironmentKey);
@@ -82,13 +77,8 @@ namespace Sopheon.CloudNative.Environments.Functions.Functions
          }
          catch (Exception ex)
          {
-            ErrorDto error = new ErrorDto
-            {
-               StatusCode = (int)HttpStatusCode.InternalServerError,
-               Message = StringConstants.RESPONSE_GENERIC_ERROR,
-            };
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.InternalServerError, error);
+            return await _responseBuilder.BuildWithErrorBody(req, new ErrorDto(HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR));
          }
       }
    }

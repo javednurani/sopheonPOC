@@ -75,14 +75,10 @@ namespace Sopheon.CloudNative.Environments.Functions
             ValidationResult validationResult = await _validator.ValidateAsync(data);
             if(!validationResult.IsValid)
             {
-               string validationFailureMessage = validationResult.ToString();
-               ErrorDto error = new ErrorDto
-               {
-                  StatusCode = (int)HttpStatusCode.BadRequest,
-                  Message = validationFailureMessage,
-               };
-               logger.LogInformation(validationFailureMessage);
-               return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.BadRequest, error);
+               string validationMessage = validationResult.ToString();
+               logger.LogInformation(validationMessage);
+               return await _responseBuilder.BuildWithErrorBody(req, new ErrorDto(HttpStatusCode.BadRequest, validationMessage));
+
             }
 
             Environment environment = new Environment
@@ -98,23 +94,13 @@ namespace Sopheon.CloudNative.Environments.Functions
          }
          catch (JsonException ex)
          {
-            ErrorDto error = new ErrorDto
-            {
-               StatusCode = (int)HttpStatusCode.BadRequest,
-               Message = StringConstants.RESPONSE_REQUEST_BODY_INVALID,
-            };
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.BadRequest, error);
+            return await _responseBuilder.BuildWithErrorBody(req, new ErrorDto(HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_BODY_INVALID));
          }
          catch (Exception ex)
          {
-            ErrorDto error = new ErrorDto
-            {
-               StatusCode = (int)HttpStatusCode.InternalServerError,
-               Message = StringConstants.RESPONSE_GENERIC_ERROR,
-            };
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.InternalServerError, error);
+            return await _responseBuilder.BuildWithErrorBody(req, new ErrorDto(HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR));
          }
       }
    }
