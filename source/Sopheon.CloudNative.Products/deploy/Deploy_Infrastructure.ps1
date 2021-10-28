@@ -4,10 +4,10 @@ Param(
     [Parameter(Mandatory = $false)][string]$Environment = $env:Environment
 )
 # Deploy Azure Resources for release definitions to talk to
-$azureKeyVault = "Cloud-DevOps";
-if ($env:AzureEnvironment -eq "Prod"){
-    $azureKeyVault = "Prod-Cloud-DevOps"
-}
+# $azureKeyVault = "Cloud-DevOps";
+# if ($env:AzureEnvironment -eq "Prod"){
+#     $azureKeyVault = "Prod-Cloud-DevOps"
+# }
 
 $DeploymentName = "ADO-Deployment";
 
@@ -21,6 +21,7 @@ $MasterParametersTemplate = "$($PSScriptRoot)\Master_Template_Parameters.json";
 
 
 Write-Host "Replacing tokens on Master Template...";
+$masterTemplateContent = Get-Content $masterTemplateContent -raw;
 $masterTemplateContent = $masterTemplateContent.Replace('^AppInsightsName^', $AppInsightsName).Replace('^WebApiProductsAppName^', $WebApiAppServiceName);
 $masterTemplateContent = $masterTemplateContent.Replace('^WebApiProductsStorageAccountName^', $WebApiAppStorageAccountName).Replace('^Environment^', $Environment);
 Set-Content -Value $masterTemplateContent -Path $MasterTemplate;
