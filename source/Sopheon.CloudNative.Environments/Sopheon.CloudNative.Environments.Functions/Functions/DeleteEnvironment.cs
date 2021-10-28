@@ -58,15 +58,13 @@ namespace Sopheon.CloudNative.Environments.Functions
 
       public async Task<HttpResponseData> Run(
           [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "environments/{key}")] HttpRequestData req,
-          FunctionContext context, string key)
+          FunctionContext context, Guid key)
       {
          ILogger logger = context.GetLogger(nameof(DeleteEnvironment));
 
          try
          {
-            Guid environmentKey;
-            bool validKey = Guid.TryParse(key, out environmentKey);
-            if (!validKey || environmentKey == Guid.Empty)
+            if (key == Guid.Empty)
             {
                ErrorDto error = new ErrorDto
                {
@@ -77,7 +75,7 @@ namespace Sopheon.CloudNative.Environments.Functions
                return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.BadRequest, error);
             }
 
-            await _environmentRepository.DeleteEnvironment(environmentKey);
+            await _environmentRepository.DeleteEnvironment(key);
             // TODO: soft delete, 202 Accepted vs 204 No Content
             return _responseBuilder.BuildWithoutBody(req, HttpStatusCode.NoContent);
          }

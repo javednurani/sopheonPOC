@@ -57,16 +57,14 @@ namespace Sopheon.CloudNative.Environments.Functions.Functions
       public async Task<HttpResponseData> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post",
             Route = "AllocateSqlDatabaseSharedByServicesToEnvironment({environmentKey})")] HttpRequestData req,
-            FunctionContext context, string environmentKey)
+            FunctionContext context, Guid environmentKey)
       {
          ILogger logger = context.GetLogger(nameof(AllocateSqlDatabaseSharedByServicesToEnvironment));
          logger.LogInformation($"Executing Function {nameof(AllocateSqlDatabaseSharedByServicesToEnvironment)}");
 
          try
          {
-            Guid parsedEnvironmentKey;
-            bool validKey = Guid.TryParse(environmentKey, out parsedEnvironmentKey);
-            if (!validKey || parsedEnvironmentKey == Guid.Empty)
+            if (environmentKey.Equals(Guid.Empty))
             {
                ErrorDto error = new ErrorDto
                {
@@ -77,7 +75,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Functions
                return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.BadRequest, error);
             }
 
-            await _resourceAllocationHelper.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(parsedEnvironmentKey);
+            await _resourceAllocationHelper.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environmentKey);
             return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.Created, new ResourceAllocationResponseDto { Message = "TODO"});
          }
          catch (Exception ex)

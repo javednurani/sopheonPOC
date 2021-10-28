@@ -74,7 +74,7 @@ namespace Sopheon.CloudNative.Environments.Functions
 
       public async Task<HttpResponseData> Run(
           [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "environments/{key}")] HttpRequestData req,
-          FunctionContext context, string key)
+          FunctionContext context, Guid key)
       {
          ILogger logger = context.GetLogger(nameof(UpdateEnvironment));
 
@@ -82,9 +82,7 @@ namespace Sopheon.CloudNative.Environments.Functions
 
          try
          {
-            Guid environmentKey;
-            bool validKey = Guid.TryParse(key, out environmentKey);
-            if (!validKey || environmentKey == Guid.Empty)
+            if (key == Guid.Empty)
             {
                ErrorDto error = new ErrorDto
                {
@@ -112,7 +110,7 @@ namespace Sopheon.CloudNative.Environments.Functions
 
             Environment environment = new Environment
             {
-               EnvironmentKey = environmentKey,
+               EnvironmentKey = key,
                Name = data.Name,
                Owner = data.Owner,
                Description = data.Description ?? string.Empty,
