@@ -223,7 +223,7 @@ resource sites_StratusProductManagement_Dev_name_web 'Microsoft.Web/sites/config
     ftpsState: 'AllAllowed'
     preWarmedInstanceCount: 0
     functionAppScaleLimit: 0
-    healthCheckPath: '/swagger/ui'
+    healthCheckPath: '/health'
     functionsRuntimeScaleMonitoringEnabled: false
     minimumElasticInstanceCount: 1
     azureStorageAccounts: {}
