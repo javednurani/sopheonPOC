@@ -23,6 +23,11 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
             .WithMany(rt => rt.Resources)
             .HasForeignKey(r => r.DomainResourceTypeId)
             .OnDelete(DeleteBehavior.Restrict);
+
+         builder.HasOne(r => r.DedicatedEnvironmentResource)
+            .WithOne(der => der.Resource)
+            .HasForeignKey<DedicatedEnvironmentResource>(der => der.ResourceId)
+            .OnDelete(DeleteBehavior.Restrict);
       }
    }
 }
