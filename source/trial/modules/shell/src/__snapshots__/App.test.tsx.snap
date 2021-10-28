@@ -1,290 +1,589 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Testing the App component App snapshot render test 1`] = `
+exports[`Testing the App component App snapshot dark theme render test 1`] = `
 <div
-  className="App"
-  style={
-    Object {
-      "height": "100vh",
-      "textAlign": "center",
-    }
-  }
+  className="root-160"
 >
   <div
-    className="ms-Stack css-120"
+    className="App"
+    style={
+      Object {
+        "height": "100vh",
+        "textAlign": "center",
+      }
+    }
   >
     <div
-      className="ms-StackItem css-121"
+      className="ms-Stack css-120"
     >
-      <div>
-        <header
-          role="banner"
-          style={
-            Object {
-              "borderBottom": "1px solid",
-              "borderBottomColor": "#2c3d4a",
-              "marginTop": "8px",
+      <div
+        className="ms-StackItem css-121"
+      >
+        <div>
+          <header
+            role="banner"
+            style={
+              Object {
+                "borderBottom": "1px solid",
+                "borderBottomColor": "#868686",
+                "marginTop": "8px",
+              }
             }
-          }
-        >
-          <div
-            className="ms-Stack css-122"
           >
             <div
-              className="ms-StackItem css-121"
+              className="ms-Stack css-122"
             >
               <div
-                key=".0"
-                style={
-                  Object {
-                    "margin": "5px",
-                  }
-                }
-                title="Lucy"
-              >
-                <ReactComponent
-                  style={
-                    Object {
-                      "fill": "#33596f",
-                      "height": "100%",
-                      "maxHeight": "100px",
-                      "maxWidth": "100px",
-                      "minHeight": "25px",
-                      "minWidth": "25px",
-                      "overflow": "visible",
-                      "stroke": "#33596f",
-                      "width": "100%",
-                    }
-                  }
-                />
-              </div>
-            </div>
-            <div
-              className="ms-StackItem css-121"
-            >
-              <nav
-                role="navigation"
-              >
-                <a
-                  href="/app"
-                  onClick={[Function]}
-                  style={
-                    Object {
-                      "color": "#33596f",
-                      "fontSize": "20px",
-                    }
-                  }
-                >
-                  App
-                </a>
-              </nav>
-            </div>
-            <div
-              className="ms-StackItem css-123"
-            >
-              <h1
-                className="page-title"
-                id="page-title"
-                key=".0"
-              >
-                Template Title
-              </h1>
-            </div>
-            <div
-              className="ms-StackItem css-121"
-            >
-              <div
-                className="ms-Stack css-124"
+                className="ms-StackItem css-121"
               >
                 <div
-                  className="ms-StackItem css-121"
+                  key=".0"
+                  style={
+                    Object {
+                      "margin": "5px",
+                    }
+                  }
+                  title="Lucy"
                 >
-                  Array [
-                    "",
-                    Array [
-                      <button
-                        className="ms-Button ms-Button--default root-125"
-                        data-is-focusable={true}
-                        onClick={[Function]}
-                        onKeyDown={[Function]}
-                        onKeyPress={[Function]}
-                        onKeyUp={[Function]}
-                        onMouseDown={[Function]}
-                        onMouseUp={[Function]}
-                        type="button"
-                      >
-                        <span
-                          className="ms-Button-flexContainer flexContainer-126"
-                          data-automationid="splitbuttonprimary"
-                        >
-                          <span
-                            className="ms-Button-textContainer textContainer-127"
-                          >
-                            <span
-                              className="ms-Button-label label-129"
-                              id="id__12"
-                              key="id__12"
-                            >
-                              Log In
-                            </span>
-                          </span>
-                        </span>
-                      </button>,
-                      "",
-                    ],
-                  ]
+                  <ReactComponent
+                    style={
+                      Object {
+                        "fill": "#61a39f",
+                        "height": "100%",
+                        "maxHeight": "100px",
+                        "maxWidth": "100px",
+                        "minHeight": "25px",
+                        "minWidth": "25px",
+                        "overflow": "visible",
+                        "stroke": "#61a39f",
+                        "width": "100%",
+                      }
+                    }
+                  />
                 </div>
+              </div>
+              <div
+                className="ms-StackItem css-121"
+              >
+                <nav
+                  role="navigation"
+                >
+                  <a
+                    href="/app"
+                    onClick={[Function]}
+                    style={
+                      Object {
+                        "color": "#61a39f",
+                        "fontSize": "20px",
+                      }
+                    }
+                  >
+                    App
+                  </a>
+                </nav>
+              </div>
+              <div
+                className="ms-StackItem css-123"
+              >
+                <h1
+                  className="page-title"
+                  id="page-title"
+                  key=".0"
+                >
+                  Template Title
+                </h1>
+              </div>
+              <div
+                className="ms-StackItem css-121"
+              >
                 <div
-                  className="ms-StackItem css-121"
+                  className="ms-Stack css-124"
                 >
                   <div
-                    className="ms-Stack css-133"
+                    className="ms-StackItem css-121"
                   >
-                    Dark Theme
-                    <div
-                      className="ms-Toggle is-enabled root-134"
-                    >
-                      <div
-                        className="ms-Toggle-innerContainer container-136"
-                      >
+                    Array [
+                      "",
+                      Array [
                         <button
-                          aria-checked={false}
-                          aria-label="Dark Theme"
-                          className="ms-Toggle-background pill-137"
+                          className="ms-Button ms-Button--default root-162"
                           data-is-focusable={true}
-                          id="Toggle15"
-                          onChange={[Function]}
                           onClick={[Function]}
-                          role="switch"
+                          onKeyDown={[Function]}
+                          onKeyPress={[Function]}
+                          onKeyUp={[Function]}
+                          onMouseDown={[Function]}
+                          onMouseUp={[Function]}
                           type="button"
                         >
                           <span
-                            className="ms-Toggle-thumb thumb-138"
-                          />
-                        </button>
+                            className="ms-Button-flexContainer flexContainer-126"
+                            data-automationid="splitbuttonprimary"
+                          >
+                            <span
+                              className="ms-Button-textContainer textContainer-127"
+                            >
+                              <span
+                                className="ms-Button-label label-129"
+                                id="id__18"
+                                key="id__18"
+                              >
+                                Log In
+                              </span>
+                            </span>
+                          </span>
+                        </button>,
+                        "",
+                      ],
+                    ]
+                  </div>
+                  <div
+                    className="ms-StackItem css-121"
+                  >
+                    <div
+                      className="ms-Stack css-133"
+                    >
+                      Dark Theme
+                      <div
+                        className="ms-Toggle is-enabled root-134"
+                      >
+                        <div
+                          className="ms-Toggle-innerContainer container-136"
+                        >
+                          <button
+                            aria-checked={false}
+                            aria-label="Dark Theme"
+                            className="ms-Toggle-background pill-163"
+                            data-is-focusable={true}
+                            id="Toggle21"
+                            onChange={[Function]}
+                            onClick={[Function]}
+                            role="switch"
+                            type="button"
+                          >
+                            <span
+                              className="ms-Toggle-thumb thumb-164"
+                            />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </header>
-      </div>
-    </div>
-    <div
-      className="ms-StackItem css-121"
-    />
-    <div
-      className="ms-StackItem css-142"
-    >
-      <main
-        key=".0"
-        role="main"
-        style={
-          Object {
-            "height": "100%",
-            "position": "relative",
-          }
-        }
-      >
-        <div
-          className="ms-ScrollablePane root-143"
-        >
-          <div
-            className="stickyAbove-145"
-            style={
-              Object {
-                "height": 0,
-                "left": "0",
-                "right": "0px",
-                "top": "0",
-              }
-            }
-          />
-          <div
-            className="ms-ScrollablePane--contentContainer contentContainer-144"
-            data-is-scrollable={true}
-          />
-          <div
-            className="stickyBelow-146"
-            style={
-              Object {
-                "bottom": "0px",
-                "height": 0,
-                "left": "0",
-                "right": "0px",
-              }
-            }
-          >
-            <div
-              className="stickyBelowItems-147"
-            />
-          </div>
+          </header>
         </div>
-      </main>
-    </div>
-    <div
-      className="ms-StackItem css-121"
-    >
-      <div>
-        <footer
-          role="contentinfo"
+      </div>
+      <div
+        className="ms-StackItem css-121"
+      />
+      <div
+        className="ms-StackItem css-142"
+      >
+        <main
+          key=".0"
+          role="main"
           style={
             Object {
-              "borderTop": "1px solid",
-              "borderTopColor": "#2c3d4a",
-              "padding": "10px",
-              "textAlign": "start",
+              "height": "100%",
+              "position": "relative",
             }
           }
         >
           <div
-            className="ms-Stack css-122"
+            className="ms-ScrollablePane root-143"
           >
             <div
-              className="ms-StackItem css-148"
-            >
-              RSS Feeds | Sitemap | Privacy | Legal | Contact Us :: Copyright 2020-2021 Sopheon. All Rights Reserved
-            </div>
+              className="stickyAbove-145"
+              style={
+                Object {
+                  "height": 0,
+                  "left": "0",
+                  "right": "0px",
+                  "top": "0",
+                }
+              }
+            />
             <div
-              className="ms-StackItem css-149"
+              className="ms-ScrollablePane--contentContainer contentContainer-144"
+              data-is-scrollable={true}
+            />
+            <div
+              className="stickyBelow-146"
+              style={
+                Object {
+                  "bottom": "0px",
+                  "height": 0,
+                  "left": "0",
+                  "right": "0px",
+                }
+              }
             >
-              <span
-                key=".0"
-              >
-                <i
-                  aria-hidden="true"
-                  className="root-151"
-                  data-icon-name="LikeSolid"
-                >
-                  
-                </i>
-                <i
-                  aria-hidden="true"
-                  className="root-153"
-                  data-icon-name="CommentSolid"
-                >
-                  
-                </i>
-                <i
-                  aria-hidden="true"
-                  className="root-155"
-                  data-icon-name="LinkedInLogo"
-                >
-                  
-                </i>
-                <i
-                  aria-hidden="true"
-                  className="root-157"
-                  data-icon-name="TeamsLogo"
-                >
-                  
-                </i>
-              </span>
+              <div
+                className="stickyBelowItems-147"
+              />
             </div>
           </div>
-        </footer>
+        </main>
+      </div>
+      <div
+        className="ms-StackItem css-121"
+      >
+        <div>
+          <footer
+            role="contentinfo"
+            style={
+              Object {
+                "borderTop": "1px solid",
+                "borderTopColor": "#868686",
+                "padding": "10px",
+                "textAlign": "start",
+              }
+            }
+          >
+            <div
+              className="ms-Stack css-122"
+            >
+              <div
+                className="ms-StackItem css-148"
+              >
+                RSS Feeds | Sitemap | Privacy | Legal | Contact Us :: Copyright 2020-2021 Sopheon. All Rights Reserved
+              </div>
+              <div
+                className="ms-StackItem css-149"
+              >
+                <span
+                  key=".0"
+                >
+                  <i
+                    aria-hidden="true"
+                    className="root-151"
+                    data-icon-name="LikeSolid"
+                  >
+                    
+                  </i>
+                  <i
+                    aria-hidden="true"
+                    className="root-153"
+                    data-icon-name="CommentSolid"
+                  >
+                    
+                  </i>
+                  <i
+                    aria-hidden="true"
+                    className="root-155"
+                    data-icon-name="LinkedInLogo"
+                  >
+                    
+                  </i>
+                  <i
+                    aria-hidden="true"
+                    className="root-157"
+                    data-icon-name="TeamsLogo"
+                  >
+                    
+                  </i>
+                </span>
+              </div>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Testing the App component App snapshot light theme render test 1`] = `
+<div
+  className="root-158"
+>
+  <div
+    className="App"
+    style={
+      Object {
+        "height": "100vh",
+        "textAlign": "center",
+      }
+    }
+  >
+    <div
+      className="ms-Stack css-120"
+    >
+      <div
+        className="ms-StackItem css-121"
+      >
+        <div>
+          <header
+            role="banner"
+            style={
+              Object {
+                "borderBottom": "1px solid",
+                "borderBottomColor": "#2c3d4a",
+                "marginTop": "8px",
+              }
+            }
+          >
+            <div
+              className="ms-Stack css-122"
+            >
+              <div
+                className="ms-StackItem css-121"
+              >
+                <div
+                  key=".0"
+                  style={
+                    Object {
+                      "margin": "5px",
+                    }
+                  }
+                  title="Lucy"
+                >
+                  <ReactComponent
+                    style={
+                      Object {
+                        "fill": "#33596f",
+                        "height": "100%",
+                        "maxHeight": "100px",
+                        "maxWidth": "100px",
+                        "minHeight": "25px",
+                        "minWidth": "25px",
+                        "overflow": "visible",
+                        "stroke": "#33596f",
+                        "width": "100%",
+                      }
+                    }
+                  />
+                </div>
+              </div>
+              <div
+                className="ms-StackItem css-121"
+              >
+                <nav
+                  role="navigation"
+                >
+                  <a
+                    href="/app"
+                    onClick={[Function]}
+                    style={
+                      Object {
+                        "color": "#33596f",
+                        "fontSize": "20px",
+                      }
+                    }
+                  >
+                    App
+                  </a>
+                </nav>
+              </div>
+              <div
+                className="ms-StackItem css-123"
+              >
+                <h1
+                  className="page-title"
+                  id="page-title"
+                  key=".0"
+                >
+                  Template Title
+                </h1>
+              </div>
+              <div
+                className="ms-StackItem css-121"
+              >
+                <div
+                  className="ms-Stack css-124"
+                >
+                  <div
+                    className="ms-StackItem css-121"
+                  >
+                    Array [
+                      "",
+                      Array [
+                        <button
+                          className="ms-Button ms-Button--default root-125"
+                          data-is-focusable={true}
+                          onClick={[Function]}
+                          onKeyDown={[Function]}
+                          onKeyPress={[Function]}
+                          onKeyUp={[Function]}
+                          onMouseDown={[Function]}
+                          onMouseUp={[Function]}
+                          type="button"
+                        >
+                          <span
+                            className="ms-Button-flexContainer flexContainer-126"
+                            data-automationid="splitbuttonprimary"
+                          >
+                            <span
+                              className="ms-Button-textContainer textContainer-127"
+                            >
+                              <span
+                                className="ms-Button-label label-129"
+                                id="id__12"
+                                key="id__12"
+                              >
+                                Log In
+                              </span>
+                            </span>
+                          </span>
+                        </button>,
+                        "",
+                      ],
+                    ]
+                  </div>
+                  <div
+                    className="ms-StackItem css-121"
+                  >
+                    <div
+                      className="ms-Stack css-133"
+                    >
+                      Dark Theme
+                      <div
+                        className="ms-Toggle is-enabled root-134"
+                      >
+                        <div
+                          className="ms-Toggle-innerContainer container-136"
+                        >
+                          <button
+                            aria-checked={false}
+                            aria-label="Dark Theme"
+                            className="ms-Toggle-background pill-137"
+                            data-is-focusable={true}
+                            id="Toggle15"
+                            onChange={[Function]}
+                            onClick={[Function]}
+                            role="switch"
+                            type="button"
+                          >
+                            <span
+                              className="ms-Toggle-thumb thumb-138"
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </header>
+        </div>
+      </div>
+      <div
+        className="ms-StackItem css-121"
+      />
+      <div
+        className="ms-StackItem css-142"
+      >
+        <main
+          key=".0"
+          role="main"
+          style={
+            Object {
+              "height": "100%",
+              "position": "relative",
+            }
+          }
+        >
+          <div
+            className="ms-ScrollablePane root-143"
+          >
+            <div
+              className="stickyAbove-145"
+              style={
+                Object {
+                  "height": 0,
+                  "left": "0",
+                  "right": "0px",
+                  "top": "0",
+                }
+              }
+            />
+            <div
+              className="ms-ScrollablePane--contentContainer contentContainer-144"
+              data-is-scrollable={true}
+            />
+            <div
+              className="stickyBelow-146"
+              style={
+                Object {
+                  "bottom": "0px",
+                  "height": 0,
+                  "left": "0",
+                  "right": "0px",
+                }
+              }
+            >
+              <div
+                className="stickyBelowItems-147"
+              />
+            </div>
+          </div>
+        </main>
+      </div>
+      <div
+        className="ms-StackItem css-121"
+      >
+        <div>
+          <footer
+            role="contentinfo"
+            style={
+              Object {
+                "borderTop": "1px solid",
+                "borderTopColor": "#2c3d4a",
+                "padding": "10px",
+                "textAlign": "start",
+              }
+            }
+          >
+            <div
+              className="ms-Stack css-122"
+            >
+              <div
+                className="ms-StackItem css-148"
+              >
+                RSS Feeds | Sitemap | Privacy | Legal | Contact Us :: Copyright 2020-2021 Sopheon. All Rights Reserved
+              </div>
+              <div
+                className="ms-StackItem css-149"
+              >
+                <span
+                  key=".0"
+                >
+                  <i
+                    aria-hidden="true"
+                    className="root-151"
+                    data-icon-name="LikeSolid"
+                  >
+                    
+                  </i>
+                  <i
+                    aria-hidden="true"
+                    className="root-153"
+                    data-icon-name="CommentSolid"
+                  >
+                    
+                  </i>
+                  <i
+                    aria-hidden="true"
+                    className="root-155"
+                    data-icon-name="LinkedInLogo"
+                  >
+                    
+                  </i>
+                  <i
+                    aria-hidden="true"
+                    className="root-157"
+                    data-icon-name="TeamsLogo"
+                  >
+                    
+                  </i>
+                </span>
+              </div>
+            </div>
+          </footer>
+        </div>
       </div>
     </div>
   </div>
