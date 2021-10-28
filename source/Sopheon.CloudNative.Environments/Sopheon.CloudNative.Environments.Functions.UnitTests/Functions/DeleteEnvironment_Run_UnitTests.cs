@@ -27,7 +27,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
             return Task.CompletedTask;
          });
 
-         string keyToDelete = Guid.NewGuid().ToString();
+         Guid keyToDelete = Guid.NewGuid();
 
          // Act
          HttpResponseData result = await Sut.Run(_request.Object, _context.Object, keyToDelete);
@@ -39,15 +39,15 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 
          // EF
          _mockEnvironmentRepository.Verify(m => m.DeleteEnvironment(It.Is<Guid>(x =>
-            x.ToString() == keyToDelete
+            x == keyToDelete
          )), Times.Once());
       }
 
       [Fact]
-      public async Task Run_KeyIsInvalidGuid_ReturnsBadRequest()
+      public async Task Run_EmptyEnvironmentKey_ReturnsBadRequest()
       {
          // Arrange
-         string keyToDelete = Some.Random.String();
+         Guid keyToDelete = Guid.Empty;
 
          // Act
          HttpResponseData result = await Sut.Run(_request.Object, _context.Object, keyToDelete);
@@ -66,7 +66,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
             .Setup(m => m.DeleteEnvironment(It.IsAny<Guid>()))
             .Throws(new EntityNotFoundException());
 
-         string keyToDelete = Guid.NewGuid().ToString();
+         Guid keyToDelete = Guid.NewGuid();
 
          // Act
          HttpResponseData result = await Sut.Run(_request.Object, _context.Object, keyToDelete);
@@ -78,7 +78,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 
          // EF
          _mockEnvironmentRepository.Verify(m => m.DeleteEnvironment(It.Is<Guid>(x =>
-            x.ToString() == keyToDelete
+            x == keyToDelete
          )), Times.Once());
       }
 
@@ -90,7 +90,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
             .Setup(m => m.DeleteEnvironment(It.IsAny<Guid>()))
             .Throws(new Exception());
 
-         string keyToDelete = Guid.NewGuid().ToString();
+         Guid keyToDelete = Guid.NewGuid();
 
          // Act
          HttpResponseData result = await Sut.Run(_request.Object, _context.Object, keyToDelete);
@@ -102,7 +102,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 
          // EF
          _mockEnvironmentRepository.Verify(m => m.DeleteEnvironment(It.Is<Guid>(x =>
-            x.ToString() == keyToDelete
+            x == keyToDelete
          )), Times.Once());
       }
    }

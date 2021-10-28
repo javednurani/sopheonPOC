@@ -43,7 +43,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          SetRequestBody(_request, environmentRequest);
 
          // Act
-         HttpResponseData result = await Sut.Run(_request.Object, _context.Object, environmentKey.ToString());
+         HttpResponseData result = await Sut.Run(_request.Object, _context.Object, environmentKey);
          result.Body.Position = 0;
 
          // Assert
@@ -68,10 +68,10 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       }
 
       [Fact]
-      public async Task Run_NonGuidKey_ReturnsBadRequest()
+      public async Task Run_EmptyEnvironmentKey_ReturnsBadRequest()
       {
          // Arrange
-         string environmentKey = Some.Random.String();
+         Guid environmentKey = Guid.Empty;
          EnvironmentDto environmentRequest = new EnvironmentDto
          {
             Name = Some.Random.String(),
@@ -82,7 +82,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          SetRequestBody(_request, environmentRequest);
 
          // Act
-         HttpResponseData result = await Sut.Run(_request.Object, _context.Object, environmentKey.ToString());
+         HttpResponseData result = await Sut.Run(_request.Object, _context.Object, environmentKey);
          result.Body.Position = 0;
 
          // Assert
@@ -110,7 +110,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          SetRequestBody(_request, environmentRequest);
 
          // Act
-         HttpResponseData result = await Sut.Run(_request.Object, _context.Object, environmentKey.ToString());
+         HttpResponseData result = await Sut.Run(_request.Object, _context.Object, environmentKey);
          result.Body.Position = 0;
 
          // Assert
@@ -138,7 +138,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          SetRequestBody(_request, environmentRequest);
 
          // Act
-         HttpResponseData result = await Sut.Run(_request.Object, _context.Object, environmentKey.ToString());
+         HttpResponseData result = await Sut.Run(_request.Object, _context.Object, environmentKey);
          result.Body.Position = 0;
 
          // Assert
@@ -169,7 +169,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          _mockEnvironmentRepository.Setup(er => er.UpdateEnvironment(It.IsAny<Environment>())).Throws(new EntityNotFoundException(mockExceptionMessage));
 
          // Act
-         HttpResponseData result = await Sut.Run(_request.Object, _context.Object, environmentKey.ToString());
+         HttpResponseData result = await Sut.Run(_request.Object, _context.Object, environmentKey);
          result.Body.Position = 0;
 
          // Assert

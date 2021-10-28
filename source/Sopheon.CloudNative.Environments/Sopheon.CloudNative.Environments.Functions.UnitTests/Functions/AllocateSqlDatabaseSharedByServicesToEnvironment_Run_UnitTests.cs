@@ -26,7 +26,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          // Arrange
 
          // Act
-         HttpResponseData result = await _sut.Run(_request.Object, _context.Object, Some.Random.Guid().ToString());
+         HttpResponseData result = await _sut.Run(_request.Object, _context.Object, Some.Random.Guid());
 
          // Assert
          Assert.NotNull(result);
