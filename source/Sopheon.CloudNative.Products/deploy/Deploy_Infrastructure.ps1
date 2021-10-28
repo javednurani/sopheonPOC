@@ -21,7 +21,7 @@ $MasterParametersTemplate = "$($PSScriptRoot)\Master_Template_Parameters.json";
 
 
 Write-Host "Replacing tokens on Master Template...";
-$masterTemplateContent = Get-Content $masterTemplateContent -raw;
+$masterTemplateContent = Get-Content $MasterTemplate -raw;
 $masterTemplateContent = $masterTemplateContent.Replace('^AppInsightsName^', $AppInsightsName).Replace('^WebApiProductsAppName^', $WebApiAppServiceName);
 $masterTemplateContent = $masterTemplateContent.Replace('^WebApiProductsStorageAccountName^', $WebApiAppStorageAccountName).Replace('^Environment^', $Environment);
 Set-Content -Value $masterTemplateContent -Path $MasterTemplate;
