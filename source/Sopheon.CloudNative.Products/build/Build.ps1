@@ -27,8 +27,12 @@ Foreach($file in $TestProjects) {
 }
 
 #All migrations and tests are done...let's publish it!
+
 Write-Host "...Running dotnet publish on Functions.csproj";
 dotnet publish $ProductManagementProject -c Release -o ".\PublishOutput\";
+Check-LastExitCode;
+
+dotnet swagger tofile --output $env:Build_ArtifactStagingDirectory\swagger.json .\PublishOutput\Sopheon.CloudNative.Products.AspNetCore.dll v1
 Check-LastExitCode;
 
 # Zip/Archive Scripts 
