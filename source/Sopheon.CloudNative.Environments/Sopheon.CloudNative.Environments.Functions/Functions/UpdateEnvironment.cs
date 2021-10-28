@@ -42,7 +42,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          Summary = "Update an Environment",
          Description = "Update an Environment's properties. Anything except IsDeleted, EnvironmentKey, and EnvironmentId can be changed.",
          Visibility = OpenApiVisibilityType.Important)]
-      [OpenApiParameter(name: "key",
+      [OpenApiParameter(name: "environmentKey",
          Type = typeof(Guid),
          Required = true,
          Description = "The key of the Environment to update.",
@@ -73,8 +73,8 @@ namespace Sopheon.CloudNative.Environments.Functions
          Description = StringConstants.RESPONSE_DESCRIPTION_500)]
 
       public async Task<HttpResponseData> Run(
-          [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "environments/{key}")] HttpRequestData req,
-          FunctionContext context, Guid key)
+          [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "environments/{environmentKey}")] HttpRequestData req,
+          FunctionContext context, Guid environmentKey)
       {
          ILogger logger = context.GetLogger(nameof(UpdateEnvironment));
 
@@ -82,7 +82,7 @@ namespace Sopheon.CloudNative.Environments.Functions
 
          try
          {
-            if (key == Guid.Empty)
+            if (environmentKey == Guid.Empty)
             {
                ErrorDto error = new ErrorDto
                {
@@ -110,7 +110,7 @@ namespace Sopheon.CloudNative.Environments.Functions
 
             Environment environment = new Environment
             {
-               EnvironmentKey = key,
+               EnvironmentKey = environmentKey,
                Name = data.Name,
                Owner = data.Owner,
                Description = data.Description ?? string.Empty,

@@ -103,7 +103,7 @@
         "x-ms-visibility": "important"
       }
     },
-    "/environments/{key}": {
+    "/environments/{environmentKey}": {
       "delete": {
         "tags": [
           "Environments"
@@ -113,7 +113,7 @@
         "operationId": "DeleteEnvironment",
         "parameters": [
           {
-            "name": "key",
+            "name": "environmentKey",
             "in": "path",
             "description": "The key of the Environment to delete.",
             "required": true,
@@ -174,7 +174,7 @@
         "operationId": "UpdateEnvironment",
         "parameters": [
           {
-            "name": "key",
+            "name": "environmentKey",
             "in": "path",
             "description": "The key of the Environment to update.",
             "required": true,

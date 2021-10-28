@@ -32,7 +32,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          Summary = "Delete an Environment",
          Description = "Delete an Environment by EnvironmentKey",
          Visibility = OpenApiVisibilityType.Important)]
-      [OpenApiParameter(name: "key",
+      [OpenApiParameter(name: "environmentKey",
          Type = typeof(Guid),
          Required = true,
          Description = "The key of the Environment to delete.",
@@ -57,14 +57,14 @@ namespace Sopheon.CloudNative.Environments.Functions
          Description = StringConstants.RESPONSE_DESCRIPTION_500)]
 
       public async Task<HttpResponseData> Run(
-          [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "environments/{key}")] HttpRequestData req,
-          FunctionContext context, Guid key)
+          [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "environments/{environmentKey}")] HttpRequestData req,
+          FunctionContext context, Guid environmentKey)
       {
          ILogger logger = context.GetLogger(nameof(DeleteEnvironment));
 
          try
          {
-            if (key == Guid.Empty)
+            if (environmentKey == Guid.Empty)
             {
                ErrorDto error = new ErrorDto
                {
@@ -75,7 +75,7 @@ namespace Sopheon.CloudNative.Environments.Functions
                return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.BadRequest, error);
             }
 
-            await _environmentRepository.DeleteEnvironment(key);
+            await _environmentRepository.DeleteEnvironment(environmentKey);
             // TODO: soft delete, 202 Accepted vs 204 No Content
             return _responseBuilder.BuildWithoutBody(req, HttpStatusCode.NoContent);
          }
