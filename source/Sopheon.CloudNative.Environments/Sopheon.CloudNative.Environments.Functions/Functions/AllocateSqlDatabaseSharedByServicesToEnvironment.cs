@@ -71,7 +71,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Functions
             }
 
             await _resourceAllocationHelper.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environmentKey);
-            return await _responseBuilder.BuildWithJsonBodyAsync(req, HttpStatusCode.Created, new ResourceAllocationResponseDto { Message = "TODO"});
+            return await _responseBuilder.BuildWithJsonBodyAsync(req, HttpStatusCode.Created, new ResourceAllocationResponseDto { Message = "TODO" });
          }
          catch (Exception ex)
          {
