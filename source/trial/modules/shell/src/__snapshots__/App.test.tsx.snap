@@ -22,7 +22,7 @@ exports[`Testing the App component App snapshot render test 1`] = `
           style={
             Object {
               "borderBottom": "1px solid",
-              "borderBottomColor": "#373737",
+              "borderBottomColor": "#2c3d4a",
               "marginTop": "8px",
             }
           }
@@ -45,14 +45,14 @@ exports[`Testing the App component App snapshot render test 1`] = `
                 <ReactComponent
                   style={
                     Object {
-                      "fill": "#72379e",
+                      "fill": "#33596f",
                       "height": "100%",
                       "maxHeight": "100px",
                       "maxWidth": "100px",
                       "minHeight": "25px",
                       "minWidth": "25px",
                       "overflow": "visible",
-                      "stroke": "#72379e",
+                      "stroke": "#33596f",
                       "width": "100%",
                     }
                   }
@@ -70,7 +70,7 @@ exports[`Testing the App component App snapshot render test 1`] = `
                   onClick={[Function]}
                   style={
                     Object {
-                      "color": "#72379e",
+                      "color": "#33596f",
                       "fontSize": "20px",
                     }
                   }
@@ -233,7 +233,7 @@ exports[`Testing the App component App snapshot render test 1`] = `
           style={
             Object {
               "borderTop": "1px solid",
-              "borderTopColor": "#373737",
+              "borderTopColor": "#2c3d4a",
               "padding": "10px",
               "textAlign": "start",
             }
