@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "webApiProductsAppName": {
-            "value":"^StorageAccountName^"            
+            "value":"^WebApiProductsAppName^"            
         },
         "webApiProductsAppStorageName": {
-            "value": "^KeyVaultName^"
+            "value": "^WebApiProductsStorageAccountName^"
         },
         "appInsightsName": {
             "value": "^AppInsightsName^"
