@@ -57,13 +57,8 @@ namespace Sopheon.CloudNative.Environments.Functions
          }
          catch (Exception ex)
          {
-            ErrorDto error = new ErrorDto
-            {
-               StatusCode = (int)HttpStatusCode.InternalServerError,
-               Message = StringConstants.RESPONSE_GENERIC_ERROR,
-            };
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.InternalServerError, error);
+            return await _responseBuilder.BuildWithErrorBody(req, new ErrorDto(HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR));
          }
       }
    }
