@@ -12,7 +12,7 @@ Param(
 $DeploymentName = "ADO-Deployment";
 
 $ResourceGroupValue = "Stratus-$($Environment)";
-$WebApiAppServiceName = $ResourceGroupValue.ToLower();
+$WebApiAppServiceName = "stratus-productmanagement-$Environment"
 $WebApiAppStorageAccountName = "stratus$($Environment.ToLower())webapiapp"
 $AppInsightsName = $ResourceGroupValue;
 

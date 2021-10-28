@@ -11,7 +11,7 @@ param location string = resourceGroup().location
 param env string = '^Environment^'
 
 module EnvironmentFunction 'WebApi_App_Service.bicep' = {
-  name: 'Function-App-Deployment'
+  name: 'Products-WebApi-App-Deployment'
   params: {
     location: location
     storageAccountName: webApiProductsAppStorageName
