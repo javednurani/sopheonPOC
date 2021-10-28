@@ -106,12 +106,12 @@ resource ProductManagementWebApp 'Microsoft.Web/sites@2021-02-01' = {
     enabled: true
     hostNameSslStates: [
       {
-        name: 'stratusproductmanagement-dev.azurewebsites.net'
+        name: '${webAppName}.azurewebsites.net'
         sslState: 'Disabled'
         hostType: 'Standard'
       }
       {
-        name: 'stratusproductmanagement-dev.scm.azurewebsites.net'
+        name: '${webAppName}.scm.azurewebsites.net'
         sslState: 'Disabled'
         hostType: 'Repository'
       }
@@ -244,7 +244,7 @@ resource sites_StratusProductManagement_Dev_name_web 'Microsoft.Web/sites/config
 
 resource sites_StratusProductManagement_Dev_name_sites_StratusProductManagement_Dev_name_azurewebsites_net 'Microsoft.Web/sites/hostNameBindings@2021-02-01' = {
   parent: ProductManagementWebApp
-  name: '${ProductManagementWebApp}.azurewebsites.net'
+  name: '${ProductManagementWebApp.name}.azurewebsites.net'
   properties: {
     siteName: 'StratusProductManagement-${env}' //TODO: Configure for TokenReplace
     hostNameType: 'Verified'
@@ -255,5 +255,3 @@ resource sites_StratusProductManagement_Dev_name_Microsoft_AspNetCore_AzureAppSe
   parent: ProductManagementWebApp
   name: 'Microsoft.AspNetCore.AzureAppServices.SiteExtension'
 }
-
-
