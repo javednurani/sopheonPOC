@@ -1,6 +1,6 @@
 Import-Module "$env:System_DefaultWorkingDirectory\DevOps\PowerShell\CloudNative.Common.psm1";
 $ProductManagementProject = "$env:System_DefaultWorkingDirectory\source\Sopheon.CloudNative.Products\Sopheon.CloudNative.Products.AspNetCore\Sopheon.CloudNative.Products.AspNetCore.csproj";
-$ProductsDataAccessProject = "$env:System_DefaultWorkingDirectory\source\Sopheon.CloudNative.Products\Shopheon.CloudNative.Products.DataAccess\Sopheon.CloudNative.Products.DataAccess.csproj";
+$ProductsDataAccessProject = "$env:System_DefaultWorkingDirectory\source\Sopheon.CloudNative.Products\Sopheon.CloudNative.Products.DataAccess\Sopheon.CloudNative.Products.DataAccess.csproj";
 $ProductsSourcePath = "$env:System_DefaultWorkingDirectory\source\Sopheon.CloudNative.Products";
 
 #TODO: Does this need to be configurable....
