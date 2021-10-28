@@ -18,13 +18,13 @@ namespace Sopheon.CloudNative.Environments.Functions.Models
       public HttpStatusCode StatusCode
       {
          get;
-         set;
+         init;
       }
 
       public string Message
       {
          get;
-         set;
+         init;
       }
    }
 }

@@ -8,7 +8,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
 {
    public class HttpResponseDataBuilder
    {
-      public async Task<HttpResponseData> BuildWithJsonBody<T>(HttpRequestData request, HttpStatusCode statusCode, T body)
+      public async Task<HttpResponseData> BuildWithJsonBodyAsync<T>(HttpRequestData request, HttpStatusCode statusCode, T body)
       {
          HttpResponseData createdResponse = request.CreateResponse();
 
@@ -18,7 +18,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          return createdResponse;
       }
 
-      public async Task<HttpResponseData> BuildWithErrorBody(HttpRequestData request, ErrorDto error)
+      public async Task<HttpResponseData> BuildWithErrorBodyAsync(HttpRequestData request, ErrorDto error)
       {
          HttpResponseData createdResponse = request.CreateResponse();
 
@@ -28,7 +28,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          return createdResponse;
       }
 
-      public async Task<HttpResponseData> BuildWithStringBody(HttpRequestData request, HttpStatusCode statusCode, string body)
+      public async Task<HttpResponseData> BuildWithStringBodyAsync(HttpRequestData request, HttpStatusCode statusCode, string body)
       {
          HttpResponseData missingNameResponse = request.CreateResponse(statusCode);
          await missingNameResponse.WriteStringAsync(body);
