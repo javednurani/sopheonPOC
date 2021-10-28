@@ -4,7 +4,6 @@ namespace Sopheon.CloudNative.Environments.Functions.Models
 {
    public class ErrorDto
    {
-      
       /// <summary>
       /// DTO representing an error or exception response to a request for a JSON return type
       /// </summary>
