@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Sopheon.CloudNative.Environments.Functions.IntegrationTests.Infrastructure;
-using Sopheon.CloudNative.Environments.Utility;
+using Sopheon.CloudNative.Environments.Utility.TestData;
 using Xunit;
 
 namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.DataDependent
@@ -10,7 +10,7 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.DataDepend
       [DataDependentFunctionFact]
       public async Task AllocateSqlDatabaseSharedByServicesToEnvironment_HappyPath()
       {
-         ResourceAllocationResponseDto result = await _sut.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(TestData.EnvironmentKey1);
+         ResourceAllocationResponseDto result = await _sut.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(TestDataConstants.EnvironmentKey1);
          Assert.Equal("TODO", result.Message);
       }
    }
