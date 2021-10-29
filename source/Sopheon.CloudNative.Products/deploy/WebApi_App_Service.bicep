@@ -23,7 +23,7 @@ resource AppService_PlanPortal 'Microsoft.Web/serverfarms@2020-06-01' = {
   sku: {
     name: sku
   }
-  kind: 'windows'
+  kind: 'app'
   properties: {
     reserved: true
   }
@@ -39,6 +39,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
     publicNetworkAccessForQuery: 'Enabled'
   }
 }
+
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   name: storageAccountName
   location: location
@@ -130,7 +131,43 @@ resource ProductManagementWebApp 'Microsoft.Web/sites@2021-02-01' = {
       appSettings: [
         {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-          value: '${appInsights.properties.InstrumentationKey}'
+          value: appInsights.properties.InstrumentationKey
+        }
+        {
+          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+          value: appInsights.properties.ConnectionString
+        }
+        {
+          name: 'ApplicationInsightsAgent_EXTENSION_VERSION'
+          value: '~2'
+        }
+        {
+          name: 'XDT_MicrosoftApplicationInsights_Mode'
+          value: 'default'
+        }
+        {
+          name: 'DIAGNOSTICS_AZUREBLOBCONTAINERSASURL'
+          value: 'https://stratusprdmgtdev.blob.core.windows.net/applogs?sv=2020-08-04&ss=b&srt=s&sp=rwdlacx&se=2021-10-30T00:17:28Z&st=2021-10-29T16:17:28Z&spr=https&sig=rnwg6m%2BFrO%2BVStAiYXFdBrzbl2P%2FFLjn0q%2Bil4iNKco%3D'
+        }
+        {
+          name: 'DIAGNOSTICS_AZUREBLOBRETENTIONINDAYS'
+          value: '90'
+        }
+        {
+          name: 'WEBSITE_HTTPLOGGING_CONTAINER_URL'
+          value: 'https://stratusprdmgtdev.blob.core.windows.net/serverlogs?sv=2020-08-04&ss=b&srt=s&sp=rwdlacx&se=2021-10-30T00:17:28Z&st=2021-10-29T16:17:28Z&spr=https&sig=rnwg6m%2BFrO%2BVStAiYXFdBrzbl2P%2FFLjn0q%2Bil4iNKco%3D'
+        }
+        {
+          name: 'WEBSITE_HTTPLOGGING_RETENTION_DAYS'
+          value: '90'
+        }
+        {
+          name: 'WEBSITE_HEALTHCHECK_MAXPINGFAILURES'
+          value: '10'
+        }
+        {
+          name: 'ServiceUrls:GetEnvironmentResourceBindingUri'
+          value: 'https://stratus-dev.azurewebsites.net/GetEnvironmentResourceBindingUri'
         }
         {
           name: 'ASPNETCORE_ENVIRONMENT'
