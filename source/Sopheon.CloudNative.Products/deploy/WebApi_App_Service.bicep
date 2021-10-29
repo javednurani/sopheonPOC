@@ -7,8 +7,11 @@ param webAppName string = '^AppServiceName^'
 @description('the name of the App Insights for SPA')
 param appInsightsName string = '^AppInsightsName^'
 
-@description('The SKU of App Service Plan.')
-param sku string = 'S1'
+@description('The SKU CODE of App Service Plan.')
+param skuCode string = 'S1'
+
+@description('The SKU name of the App Service Plan.')
+param sku string = 'Standard'
 
 @description('The location of where to deploy the resource')
 param location string = resourceGroup().location
@@ -20,12 +23,9 @@ var appServicePlanPortalName_var = '${webAppName}-appserviceplan'
 resource AppService_PlanPortal 'Microsoft.Web/serverfarms@2020-06-01' = {
   name: appServicePlanPortalName_var
   location: location
-  kind: 'windows'
   sku: {
-    name: sku
-  }
-  properties: {
-    reserved: true
+    tier: sku
+    name: skuCode
   }
 }
 
