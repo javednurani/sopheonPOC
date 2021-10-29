@@ -25,7 +25,6 @@ exports[`Testing the App component App snapshot dark theme render test 1`] = `
             style={
               Object {
                 "borderBottom": "1px solid",
-                "borderBottomColor": "#868686",
                 "marginTop": "8px",
               }
             }
@@ -236,7 +235,6 @@ exports[`Testing the App component App snapshot dark theme render test 1`] = `
             style={
               Object {
                 "borderTop": "1px solid",
-                "borderTopColor": "#868686",
                 "padding": "10px",
                 "textAlign": "start",
               }
@@ -320,7 +318,6 @@ exports[`Testing the App component App snapshot light theme render test 1`] = `
             style={
               Object {
                 "borderBottom": "1px solid",
-                "borderBottomColor": "#2c3d4a",
                 "marginTop": "8px",
               }
             }
@@ -531,7 +528,6 @@ exports[`Testing the App component App snapshot light theme render test 1`] = `
             style={
               Object {
                 "borderTop": "1px solid",
-                "borderTopColor": "#2c3d4a",
                 "padding": "10px",
                 "textAlign": "start",
               }
