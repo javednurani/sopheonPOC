@@ -166,10 +166,6 @@ resource ProductManagementWebApp 'Microsoft.Web/sites@2021-02-01' = {
           value: '10'
         }
         {
-          name: 'ServiceUrls:GetEnvironmentResourceBindingUri'
-          value: 'https://stratus-dev.azurewebsites.net/GetEnvironmentResourceBindingUri'
-        }
-        {
           name: 'ASPNETCORE_ENVIRONMENT'
           value: 'development'
         }
