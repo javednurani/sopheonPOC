@@ -1,7 +1,7 @@
 @description('The name of the Environment Function App')
-param webApiProductsApp_Name string = '^WebApiProductsAppName^'
+param webApiProductsAppName string = '^WebApiProductsAppName^'
 
-param webApiProductsAppStorage_name string = '^WebApiProductsStorageAccountName^'
+param webApiProductsAppStorageName string = '^WebApiProductsStorageAccountName^'
 
 param appInsightsName string = '^AppInsightsName^'
 
@@ -11,13 +11,13 @@ param location string = resourceGroup().location
 param env string = '^Environment^'
 
 module EnvironmentFunction 'WebApi_App_Service.bicep' = {
-  name: 'Function-App-Deployment'
+  name: 'Products-WebApi-App-Deployment'
   params: {
     location: location
-    storageAccountName: webApiProductsAppStorage_name
+    storageAccountName: webApiProductsAppStorageName
     env: env
     appInsightsName: appInsightsName
-    webAppName: webApiProductsApp_Name
+    webAppName: webApiProductsAppName
  }
 }
 
