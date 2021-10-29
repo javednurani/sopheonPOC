@@ -4,16 +4,14 @@ namespace Sopheon.CloudNative.Environments.Utility.TestData
 {
    public static class TestDataConstants
    {
-      public const string BUSINESS_SERVICE_NAME_1 = "PRODUCT_SERVICE";
-      public const string BUSINESS_SERVICE_NAME_2 = "PLANNING_SERVICE";
+      public const string DEPENDENCY_NAME_1 = "ProductManagementSqlDatastore";
 
-      public const string DEPENDENCY_NAME_1 = "PRODUCT_SQL_DATASTORE";
-      public const string DEPENDENCY_NAME_2 = "PLANNING_SQL_DATASTORE";
-
-      public const string RESOURCE_URI_1 = "https://resource1.database.windows.net";
-      public const string RESOURCE_URI_2 = "https://resource2.database.windows.net";
-      public const string RESOURCE_URI_3 = "https://resource3.database.windows.net";
-      public const string RESOURCE_URI_4 = "https://resource4.database.windows.net";
+      public const string RESOURCE_URI_1 = "Server=https://customerDbServer1.database.windows.net; Database=dwjksg5cydttc-11;";
+      public const string RESOURCE_URI_2 = "Server=https://customerDbServer1.database.windows.net; Database=dwjksg5cydttc-74;";
+      public const string RESOURCE_URI_3 = "Server=https://customerDbServer1.database.windows.net; Database=dwjksg5cydttc-26;";
+      public const string RESOURCE_URI_4 = "Server=https://customerDbServer2.database.windows.net; Database=sfkdmh7bies5s-96;";
+      public const string RESOURCE_URI_5 = "DefaultEndpointsProtocol=https;AccountName=sharedCustomerStorage1;EndpointSuffix=core.windows.net";
+      public const string RESOURCE_URI_6 = "DefaultEndpointsProtocol=https;AccountName=sharedCustomerStorage2;EndpointSuffix=core.windows.net";
 
       private static readonly Guid _environmentKey1 = Guid.Parse("00000000-0000-0000-0000-000000000001");
       private static readonly Guid _environmentKey2 = Guid.Parse("00000000-0000-0000-0000-000000000002");

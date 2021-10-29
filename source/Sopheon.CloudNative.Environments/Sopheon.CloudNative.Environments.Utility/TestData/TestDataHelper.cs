@@ -23,8 +23,16 @@ namespace Sopheon.CloudNative.Environments.Utility.TestData
 
          if (!await context.Environments.AnyAsync())
          {
-            // ENV.DomainResourceTypes table is populated through Migrations
+            // Fetch Domain data from tables populated through Migrations
+
+            // ENV.DomainResourceTypes 
             DomainResourceType azureSqlResourceType = await context.DomainResourceTypes.FirstAsync(d => d.Id == (int)ResourceTypes.AzureSqlDb);
+            DomainResourceType azureBlobResourceType = await context.DomainResourceTypes.FirstAsync(d => d.Id == (int)ResourceTypes.AzureBlobStorage);
+
+            // ENV.BusinessServices
+            BusinessService productManagementService = await context.BusinessServices.FirstAsync(bs => bs.Id == (int)BusinessServices.ProductManagement);
+
+            // Populate Test data with TestDataConstants
 
             // ENV.Resources
 
@@ -52,16 +60,16 @@ namespace Sopheon.CloudNative.Environments.Utility.TestData
                DomainResourceType = azureSqlResourceType
             };
 
-            // ENV.BusinessServices
-
-            BusinessService businessService1 = new BusinessService
+            Resource resource5 = new Resource
             {
-               Name = TestDataConstants.BUSINESS_SERVICE_NAME_1
+               Uri = TestDataConstants.RESOURCE_URI_5,
+               DomainResourceType = azureBlobResourceType
             };
 
-            BusinessService businessService2 = new BusinessService
+            Resource resource6 = new Resource
             {
-               Name = TestDataConstants.BUSINESS_SERVICE_NAME_2
+               Uri = TestDataConstants.RESOURCE_URI_6,
+               DomainResourceType = azureBlobResourceType
             };
 
             // ENV.Environments
@@ -86,27 +94,24 @@ namespace Sopheon.CloudNative.Environments.Utility.TestData
 
             Environment environment3 = new Environment
             {
-               Name = "Hammer Preview",
-               Description = "Hammer Corp preview/UAT environment",
+               Name = "Acme Production",
+               Description = "Acme Corp production environment",
                EnvironmentKey = TestDataConstants.EnvironmentKey3,
                Owner = Guid.NewGuid(),
                IsDeleted = false
             };
 
+            // Relational Entities
+
+            // ENV.BusinesServiceDependencies
             BusinessServiceDependency businessServiceDependency1 = new BusinessServiceDependency
             {
                DependencyName = TestDataConstants.DEPENDENCY_NAME_1,
-               BusinessService = businessService1,
+               BusinessService = productManagementService,
                DomainResourceType = azureSqlResourceType
             };
 
-            BusinessServiceDependency businessServiceDependency2 = new BusinessServiceDependency
-            {
-               DependencyName = TestDataConstants.DEPENDENCY_NAME_2,
-               BusinessService = businessService2,
-               DomainResourceType = azureSqlResourceType
-            };
-
+            // ENV.EnvironmentResourceBindings
             EnvironmentResourceBinding[] environmentResourceBindings = new EnvironmentResourceBinding[]
             {
                new EnvironmentResourceBinding
@@ -117,24 +122,13 @@ namespace Sopheon.CloudNative.Environments.Utility.TestData
                },
                new EnvironmentResourceBinding
                {
-                  Environment = environment1,
-                  Resource = resource1,
-                  BusinessServiceDependency = businessServiceDependency2
-               },
-               new EnvironmentResourceBinding
-               {
                   Environment = environment2,
                   Resource = resource2,
                   BusinessServiceDependency = businessServiceDependency1
-               },
-               new EnvironmentResourceBinding
-               {
-                  Environment = environment2,
-                  Resource = resource2,
-                  BusinessServiceDependency = businessServiceDependency2
-               },
+               }
             };
 
+            // ENV.DedicatedEnvironmentResources
             DedicatedEnvironmentResource[] dedicatedEnvironmentResources = new DedicatedEnvironmentResource[]
             {
                new DedicatedEnvironmentResource
@@ -149,13 +143,14 @@ namespace Sopheon.CloudNative.Environments.Utility.TestData
                },
             };
 
-            // Adding EnvironmentResourceBindings will add related Entities (Environments, Resources, BusinessServices, BusinessServiceDependencies
+            // Adding EnvironmentResourceBindings will add related Entities (Environments, Resources, BusinessServices, BusinessServiceDependencies)
             context.EnvironmentResourceBindings.AddRange(environmentResourceBindings);
             context.DedicatedEnvironmentResources.AddRange(dedicatedEnvironmentResources);
 
-            // Environments and Resources with no bindings are not included in EnvironmentResourceBindings, and need to be added individually
+            // Environments and Resources not included in any EnvironmentResourceBindings need to be added individually
             context.Environments.Add(environment3);
-            context.Resources.AddRange(resource3, resource4);
+            context.Resources.AddRange(resource3, resource4, resource5, resource6);
+
             int result = await context.SaveChangesAsync();
             Console.WriteLine(result + " entries written to the database.");
          }
