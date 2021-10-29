@@ -2,7 +2,7 @@ import { DatePicker as FluentDatePicker } from '@fluentui/react';
 import React from 'react';
 
 export type DatePickerProps = {
-  value?: Date;
+  value?: Date | string;
   disabled?: boolean;
 };
 

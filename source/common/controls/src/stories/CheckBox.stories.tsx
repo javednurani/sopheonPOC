@@ -33,8 +33,8 @@ export default {
 
 const Template: Story<CheckBoxProps> = args => <CheckBox {...args} />;
 
-export const Primary = Template.bind({});
-Primary.args = { label: 'Random checkbox' };
+export const DefaultWithLabel = Template.bind({});
+DefaultWithLabel.args = { label: 'Random checkbox' };
 
 export const NoLabel = Template.bind({});
 NoLabel.args = {};
