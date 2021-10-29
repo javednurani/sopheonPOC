@@ -67,7 +67,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Functions
             if (environmentKey.Equals(Guid.Empty))
             {
                logger.LogInformation(StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID);
-               return await _responseBuilder.BuildWithErrorBodyAsync(req, new ErrorDto(HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID));
+               return await _responseBuilder.BuildWithErrorBodyAsync(req, new ErrorDto((int)HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID));
             }
 
             await _resourceAllocationHelper.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environmentKey);
@@ -76,7 +76,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Functions
          catch (Exception ex)
          {
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithErrorBodyAsync(req, new ErrorDto(HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR));
+            return await _responseBuilder.BuildWithErrorBodyAsync(req, new ErrorDto((int)HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR));
          }
       }
    }

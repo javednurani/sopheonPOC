@@ -77,7 +77,7 @@ namespace Sopheon.CloudNative.Environments.Functions
             {
                string validationMessage = validationResult.ToString();
                logger.LogInformation(validationMessage);
-               return await _responseBuilder.BuildWithErrorBodyAsync(req, new ErrorDto(HttpStatusCode.BadRequest, validationMessage));
+               return await _responseBuilder.BuildWithErrorBodyAsync(req, new ErrorDto((int)(int)HttpStatusCode.BadRequest, validationMessage));
 
             }
 
@@ -95,12 +95,12 @@ namespace Sopheon.CloudNative.Environments.Functions
          catch (JsonException ex)
          {
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithErrorBodyAsync(req, new ErrorDto(HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_BODY_INVALID));
+            return await _responseBuilder.BuildWithErrorBodyAsync(req, new ErrorDto((int)(int)HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_BODY_INVALID));
          }
          catch (Exception ex)
          {
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithErrorBodyAsync(req, new ErrorDto(HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR));
+            return await _responseBuilder.BuildWithErrorBodyAsync(req, new ErrorDto((int)(int)HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR));
          }
       }
    }
