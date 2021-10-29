@@ -32,7 +32,7 @@ Write-Host "...Running dotnet publish on Functions.csproj";
 dotnet publish $ProductManagementProject -c Release -o ".\PublishOutput\";
 Check-LastExitCode;
 
-dotnet restore
+dotnet tool restore
 dotnet swagger tofile --output $env:Build_ArtifactStagingDirectory\swagger.json .\PublishOutput\Sopheon.CloudNative.Products.AspNetCore.dll v1
 Check-LastExitCode;
 
