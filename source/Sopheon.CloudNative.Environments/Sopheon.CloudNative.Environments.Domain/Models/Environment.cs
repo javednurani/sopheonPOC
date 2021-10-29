@@ -40,5 +40,11 @@ namespace Sopheon.CloudNative.Environments.Domain.Models
          get;
          set;
       }
+
+      public virtual ICollection<DedicatedEnvironmentResource> DedicatedEnvironmentResources
+      {
+         get;
+         set;
+      }
    }
 }
