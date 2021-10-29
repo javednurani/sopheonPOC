@@ -6,12 +6,26 @@ import TextBox, { TextBoxProps } from '../components/TextBox';
 export default {
   title: 'Components/TextBox',
   component: TextBox,
+  argTypes: {
+    value: {
+      control: { type: 'text' },
+    },
+    multiline: {
+      control: { type: 'boolean' },
+      defaultValue: false,
+    },
+    disabled: {
+      control: { type: 'boolean' },
+      defaultValue: false,
+    },
+    onChange: { action: 'changed' },
+  },
 } as Meta;
 
 const Template: Story<TextBoxProps> = args => <TextBox {...args} />;
 
 export const Primary = Template.bind({});
-Primary.args = { value: 'THis is text' };
+Primary.args = { value: 'This is text' };
 
 export const TextArea = Template.bind({});
 TextArea.args = { multiline: true, value: 'this is a description' };

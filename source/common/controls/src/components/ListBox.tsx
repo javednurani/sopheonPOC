@@ -1,17 +1,15 @@
+import { Dropdown, IDropdownOption } from '@fluentui/react';
 import React from 'react';
 
 export type ListBoxProps = {
-  variant?: string;
-  label: string;
+  options: IDropdownOption[];
+  disabled?: boolean;
+  multiple?: boolean;
+  onChange?: () => void;
 };
 
-const ListBox: React.FC<ListBoxProps> = ({ variant, label }): JSX.Element => {
-  switch (variant) {
-    case 'link':
-      return <button style={{ border: 'none', textDecoration: 'underline', background: 'transparent' }}>{label}</button>;
-    default:
-      return <button type="button">{label}</button>;
-  }
-};
+const ListBox: React.FC<ListBoxProps> = ({ options, disabled, multiple, onChange }): JSX.Element => (
+  <Dropdown options={options} disabled={disabled} multiSelect={multiple} onChange={onChange}></Dropdown>
+);
 
 export default ListBox;

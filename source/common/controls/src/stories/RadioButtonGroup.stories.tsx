@@ -1,3 +1,4 @@
+import { IChoiceGroupOption } from '@fluentui/react';
 import { Meta, Story } from '@storybook/react';
 import React from 'react';
 
@@ -6,12 +7,28 @@ import RadioButtonGroup, { RadioButtonGroupProps } from '../components/RadioButt
 export default {
   title: 'Components/RadioButtonGroup',
   component: RadioButtonGroup,
+  argTypes: {
+    options: { control: { type: 'object' } },
+    selectedKey: { control: { type: 'text' }, defaultValue: '' },
+    disabled: {
+      control: { type: 'boolean' },
+      defaultValue: false,
+    },
+    //onChange: { action: 'changed' },
+  },
 } as Meta;
 
 const Template: Story<RadioButtonGroupProps> = args => <RadioButtonGroup {...args} />;
 
-export const Primary = Template.bind({});
-Primary.args = { label: 'I am Primary' };
+const listOptions: IChoiceGroupOption[] = [
+  { key: 'A', text: 'Option A' },
+  { key: 'B', text: 'Option B' },
+  { key: 'C', text: 'Option C', disabled: true },
+  { key: 'D', text: 'Option D' },
+];
 
-export const Link = Template.bind({});
-Link.args = { variant: 'link', label: 'I am a link' };
+export const Primary = Template.bind({});
+Primary.args = { options: listOptions, selectedKey: 'B' };
+
+export const Disabled = Template.bind({});
+Disabled.args = { options: listOptions, selectedKey: 'A', disabled: true };

@@ -22,7 +22,13 @@ const Button: React.FC<ButtonProps> = ({ variant, label, primary, icon, disabled
         </ActionButton>
       );
     case 'icon':
-      return <IconButton iconProps={iconProps} disabled={disabled} onClick={onClick} />;
+      return label ? (
+        <ActionButton iconProps={iconProps} disabled={disabled} onClick={onClick}>
+          {label}
+        </ActionButton>
+      ) : (
+        <IconButton iconProps={iconProps} disabled={disabled} onClick={onClick} />
+      );
     default:
       return primary ? (
         <PrimaryButton iconProps={iconProps} disabled={disabled} onClick={onClick}>

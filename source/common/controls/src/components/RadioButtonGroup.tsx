@@ -1,17 +1,15 @@
+import { ChoiceGroup, IChoiceGroupOption } from '@fluentui/react';
 import React from 'react';
 
 export type RadioButtonGroupProps = {
-  variant?: string;
-  label: string;
+  options: IChoiceGroupOption[];
+  disabled?: boolean;
+  selectedKey?: string;
+  onChange?: () => void;
 };
 
-const RadioButtonGroup: React.FC<RadioButtonGroupProps> = ({ variant, label }): JSX.Element => {
-  switch (variant) {
-    case 'link':
-      return <button style={{ border: 'none', textDecoration: 'underline', background: 'transparent' }}>{label}</button>;
-    default:
-      return <button type="button">{label}</button>;
-  }
-};
+const RadioButtonGroup: React.FC<RadioButtonGroupProps> = ({ options, selectedKey, disabled, onChange }): JSX.Element => (
+  <ChoiceGroup defaultSelectedKey={selectedKey} options={options} disabled={disabled} onChange={onChange} />
+);
 
 export default RadioButtonGroup;

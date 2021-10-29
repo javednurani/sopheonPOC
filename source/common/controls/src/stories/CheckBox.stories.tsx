@@ -6,7 +6,29 @@ import CheckBox, { CheckBoxProps } from '../components/CheckBox';
 export default {
   title: 'Components/CheckBox',
   component: CheckBox,
-  argTypes: { onChange: { action: 'change' } },
+  argTypes: {
+    label: {
+      control: { type: 'text' },
+      defaultValue: '',
+    },
+    labelSide: {
+      options: ['left', 'right'],
+      control: { type: 'radio' },
+    },
+    disabled: {
+      control: { type: 'boolean' },
+      defaultValue: false,
+    },
+    checked: {
+      control: { type: 'boolean' },
+      defaultValue: false,
+    },
+    triState: {
+      control: { type: 'boolean' },
+      defaultValue: false,
+    },
+    onChange: { action: 'change' },
+  },
 } as Meta;
 
 const Template: Story<CheckBoxProps> = args => <CheckBox {...args} />;

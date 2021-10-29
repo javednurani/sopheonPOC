@@ -6,7 +6,32 @@ import Button, { ButtonProps } from '../components/Button';
 export default {
   title: 'Components/Button',
   component: Button,
-  argTypes: { onClick: { action: 'clicked' } },
+  argTypes: {
+    variant: {
+      options: ['icon', 'link'],
+      control: { type: 'radio' },
+      defaultValue: '',
+    },
+    icon: {
+      control: { type: 'text' },
+      defaultValue: '',
+    },
+    label: {
+      control: { type: 'text' },
+      defaultValue: '',
+    },
+    disabled: {
+      control: { type: 'boolean' },
+      defaultValue: false,
+    },
+    primary: {
+      control: { type: 'boolean' },
+      defaultValue: false,
+    },
+    onClick: {
+      action: 'clicked',
+    },
+  },
 } as Meta;
 
 const Template: Story<ButtonProps> = args => <Button {...args} />;
@@ -28,6 +53,9 @@ SecondaryWithIcon.args = { primary: false, label: 'I am Secondary', icon: 'Cance
 
 export const IconOnly = Template.bind({});
 IconOnly.args = { variant: 'icon', icon: 'Emoji' };
+
+export const IconWithText = Template.bind({});
+IconWithText.args = { variant: 'icon', icon: 'Delete', label: 'Remove' };
 
 export const Link = Template.bind({});
 Link.args = { variant: 'link', label: 'I am a link' };

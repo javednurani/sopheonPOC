@@ -7,6 +7,18 @@ import DropDownList, { DropDownListProps } from '../components/DropDownList';
 export default {
   title: 'Components/DropDownList',
   component: DropDownList,
+  argTypes: {
+    disabled: {
+      control: { type: 'boolean' },
+      defaultValue: false,
+    },
+    multiple: {
+      control: { type: 'boolean' },
+      defaultValue: false,
+    },
+    options: { control: { type: 'object' } },
+    onChange: { action: 'changed' },
+  },
 } as Meta;
 
 const Template: Story<DropDownListProps> = args => <DropDownList {...args} />;
