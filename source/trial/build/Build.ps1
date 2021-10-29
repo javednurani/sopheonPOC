@@ -3,14 +3,6 @@ Import-Module "$($env:System_DefaultWorkingDirectory)\DevOps\PowerShell\CloudNat
 Copy-Item -Path "$($env:System_DefaultWorkingDirectory)\source\trial\deploy\*" -Destination "$($env:Build_ArtifactStagingDirectory)";
 
 # Set location to packages shell-api
-Set-Location -Path "$($env:System_DefaultWorkingDirectory)\common\controls";
-Write-Host "Location set for shared packages 'Sopheon Common Controls'";
-npm install
-
-Write-Host "Building package.json at Sopheon Common Controls location"
-npm run build
-
-# Set location to packages shell-api
 Set-Location -Path "$($env:System_DefaultWorkingDirectory)\source\trial\packages\shell-api";
 Write-Host "Location set for shared packages 'Shell-Api'";
 npm install
