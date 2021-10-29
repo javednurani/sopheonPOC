@@ -23,7 +23,7 @@ resource AppService_PlanPortal 'Microsoft.Web/serverfarms@2020-06-01' = {
   sku: {
     name: sku
   }
-  kind: 'app'
+  kind: 'windows'
   properties: {
     reserved: true
   }
@@ -156,6 +156,10 @@ resource ProductManagementWebApp 'Microsoft.Web/sites@2021-02-01' = {
         {
           name: 'WEBSITE_HTTPLOGGING_CONTAINER_URL'
           value: 'https://stratusprdmgtdev.blob.core.windows.net/serverlogs?sv=2020-08-04&ss=b&srt=s&sp=rwdlacx&se=2021-10-30T00:17:28Z&st=2021-10-29T16:17:28Z&spr=https&sig=rnwg6m%2BFrO%2BVStAiYXFdBrzbl2P%2FFLjn0q%2Bil4iNKco%3D'
+        }
+        {
+          name: 'ServiceUrls:GetEnvironmentResourceBindingUri'
+          value: 'http://stratus-dev.azurewebsites.net/GetEnvironmentResourceBindingUri'
         }
         {
           name: 'WEBSITE_HTTPLOGGING_RETENTION_DAYS'
