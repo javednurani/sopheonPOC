@@ -2,10 +2,6 @@
 {
    public class ResourceAllocationResponseDto
    {
-      public string Message
-      {
-         get;
-         set;
-      }
+      // TODO: any properties needed here?
    }
 }

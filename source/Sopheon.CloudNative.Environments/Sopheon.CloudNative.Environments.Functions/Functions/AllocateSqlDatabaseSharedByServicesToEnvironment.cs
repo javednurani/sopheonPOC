@@ -26,8 +26,8 @@ namespace Sopheon.CloudNative.Environments.Functions.Functions
       [Function(nameof(AllocateSqlDatabaseSharedByServicesToEnvironment))]
       [OpenApiOperation(operationId: nameof(AllocateSqlDatabaseSharedByServicesToEnvironment),
          tags: new[] { "EnvironmentResourceBindings" },
-         Summary = "Allocate a Resource for an Environment, and create a set of EnvironmentResourceBindings (satisfying all BusinessServiceDependencies) for that Environment & Resource",
-         Description = "Allocate a Resource for an Environment, and create a set of EnvironmentResourceBindings (satisfying all BusinessServiceDependencies) for that Environment & Resource",
+         Summary = "Allocate a SQL Database resource, which can be shared by multiple services, to an Environment",
+         Description = "Allocate a SQL Database resource, which can be shared by multiple services, to an Environment",
          Visibility = OpenApiVisibilityType.Important)]
       [OpenApiParameter(name: "environmentKey",
          Type = typeof(Guid),
@@ -71,7 +71,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Functions
             }
 
             await _resourceAllocationHelper.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environmentKey);
-            return await _responseBuilder.BuildWithJsonBodyAsync(req, HttpStatusCode.Created, new ResourceAllocationResponseDto { Message = "TODO" });
+            return await _responseBuilder.BuildWithJsonBodyAsync(req, HttpStatusCode.Created, new ResourceAllocationResponseDto());
          }
          catch (Exception ex)
          {

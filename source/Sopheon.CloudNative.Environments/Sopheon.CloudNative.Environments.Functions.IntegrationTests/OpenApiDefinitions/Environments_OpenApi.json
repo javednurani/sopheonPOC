@@ -411,8 +411,8 @@
         "tags": [
           "EnvironmentResourceBindings"
         ],
-        "summary": "Allocate a Resource for an Environment, and create a set of EnvironmentResourceBindings (satisfying all BusinessServiceDependencies) for that Environment & Resource",
-        "description": "Allocate a Resource for an Environment, and create a set of EnvironmentResourceBindings (satisfying all BusinessServiceDependencies) for that Environment & Resource",
+        "summary": "Allocate a SQL Database resource, which can be shared by multiple services, to an Environment",
+        "description": "Allocate a SQL Database resource, which can be shared by multiple services, to an Environment",
         "operationId": "AllocateSqlDatabaseSharedByServicesToEnvironment",
         "parameters": [
           {
@@ -511,12 +511,7 @@
         }
       },
       "resourceAllocationResponseDto": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string"
-          }
-        }
+        "type": "object"
       },
       "resourceUriDto": {
         "type": "object",

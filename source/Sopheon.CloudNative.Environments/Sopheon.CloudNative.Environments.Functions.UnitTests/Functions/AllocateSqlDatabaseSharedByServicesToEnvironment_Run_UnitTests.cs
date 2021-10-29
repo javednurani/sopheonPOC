@@ -65,7 +65,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         ResourceAllocationResponseDto errorResponse = JsonSerializer.Deserialize<ResourceAllocationResponseDto>(responseBody);
+         ErrorDto errorResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
          Assert.Equal(StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID, errorResponse.Message);
       }
 
@@ -85,7 +85,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          Assert.Equal(HttpStatusCode.InternalServerError, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         ResourceAllocationResponseDto errorResponse = JsonSerializer.Deserialize<ResourceAllocationResponseDto>(responseBody);
+         ErrorDto errorResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
          Assert.Equal(StringConstants.RESPONSE_GENERIC_ERROR, errorResponse.Message);
       }
    }
