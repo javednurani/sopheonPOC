@@ -158,20 +158,8 @@ resource ProductManagementWebApp 'Microsoft.Web/sites@2021-02-01' = {
           value: 'default'
         }
         {
-          name: 'DIAGNOSTICS_AZUREBLOBCONTAINERSASURL'
-          value: 'https://stratusprdmgtdev.blob.core.windows.net/applogs?sv=2020-08-04&ss=b&srt=s&sp=rwdlacx&se=2021-10-30T00:17:28Z&st=2021-10-29T16:17:28Z&spr=https&sig=rnwg6m%2BFrO%2BVStAiYXFdBrzbl2P%2FFLjn0q%2Bil4iNKco%3D'
-        }
-        {
-          name: 'DIAGNOSTICS_AZUREBLOBRETENTIONINDAYS'
-          value: '90'
-        }
-        {
-          name: 'WEBSITE_HTTPLOGGING_CONTAINER_URL'
-          value: 'https://stratusprdmgtdev.blob.core.windows.net/serverlogs?sv=2020-08-04&ss=b&srt=s&sp=rwdlacx&se=2021-10-30T00:17:28Z&st=2021-10-29T16:17:28Z&spr=https&sig=rnwg6m%2BFrO%2BVStAiYXFdBrzbl2P%2FFLjn0q%2Bil4iNKco%3D'
-        }
-        {
           name: 'ServiceUrls:GetEnvironmentResourceBindingUri'
-          value: 'http://stratus-dev.azurewebsites.net/GetEnvironmentResourceBindingUri'
+          value: 'http://${toLower(resourceGroup().name)}.azurewebsites.net/GetEnvironmentResourceBindingUri'
         }
         {
           name: 'WEBSITE_HTTPLOGGING_RETENTION_DAYS'
@@ -200,10 +188,10 @@ resource sites_StratusProductManagement_Dev_name_web 'Microsoft.Web/sites/config
     requestTracingExpirationTime: '12/31/9999 11:59:00 PM'
     remoteDebuggingEnabled: false
     remoteDebuggingVersion: 'VS2019'
-    httpLoggingEnabled: true
+    httpLoggingEnabled: false
     acrUseManagedIdentityCreds: false
     logsDirectorySizeLimit: 35
-    detailedErrorLoggingEnabled: true
+    detailedErrorLoggingEnabled: false
     publishingUsername: '$StratusProductManagement-${env}'
     scmType: 'None'
     use32BitWorkerProcess: true
