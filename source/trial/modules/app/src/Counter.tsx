@@ -1,5 +1,4 @@
-import { Stack } from '@fluentui/react';
-import { Button } from '@sopheon/controls';
+import { IconButton, IIconProps, PrimaryButton, Stack } from '@fluentui/react';
 import React, { CSSProperties } from 'react';
 import { useIntl } from 'react-intl';
 
@@ -15,6 +14,9 @@ const Counter: React.FunctionComponent<CounterProps> = ({
 }: CounterProps) => {
   const { formatMessage } = useIntl();
 
+  const addIcon: IIconProps = { iconName: 'Add' };
+  const subtractIcon: IIconProps = { iconName: 'Remove' };
+
   const countStyles: CSSProperties = {
     fontSize: '48px',
   };
@@ -25,10 +27,10 @@ const Counter: React.FunctionComponent<CounterProps> = ({
         {counterValue}
       </span>
       <Stack horizontal>
-        <Button variant="icon" icon="Add" aria-label={formatMessage({ id: 'aria.increment' })} onClick={() => incrementCounter()} />
-        <Button variant="icon" icon="Remove" aria-label={formatMessage({ id: 'aria.decrement' })} onClick={() => decrementCounter()} />
-        <Button
-          label={formatMessage({ id: 'app.add5' })}
+        <IconButton iconProps={addIcon} aria-label={formatMessage({ id: 'aria.increment' })} onClick={() => incrementCounter()} />
+        <IconButton iconProps={subtractIcon} aria-label={formatMessage({ id: 'aria.decrement' })} onClick={() => decrementCounter()} />
+        <PrimaryButton
+          text={formatMessage({ id: 'app.add5' })}
           aria-label={formatMessage({ id: 'app.add5_aria' })}
           onClick={() => incrementCounterAsync()}
         />
