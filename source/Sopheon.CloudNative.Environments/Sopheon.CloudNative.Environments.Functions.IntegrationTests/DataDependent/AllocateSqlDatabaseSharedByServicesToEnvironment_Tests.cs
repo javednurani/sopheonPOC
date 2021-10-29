@@ -11,7 +11,7 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.DataDepend
       public async Task AllocateSqlDatabaseSharedByServicesToEnvironment_HappyPath()
       {
          ResourceAllocationResponseDto result = await _sut.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(TestData.EnvironmentKey1);
-         Assert.Equal("TODO", result.Message);
+         Assert.NotNull(result);
       }
    }
 }
