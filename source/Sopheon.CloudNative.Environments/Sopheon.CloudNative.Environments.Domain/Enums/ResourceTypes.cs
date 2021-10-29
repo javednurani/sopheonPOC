@@ -1,10 +1,10 @@
-﻿
-using System.ComponentModel.DataAnnotations;
+﻿using Sopheon.CloudNative.Environments.Domain.Infrastructure;
 
 namespace Sopheon.CloudNative.Environments.Domain.Enums
 {
    public enum ResourceTypes
    {
-      AzureSqlDb = 1,
+      [Dedicated(true)]
+      AzureSqlDb = 1
    }
 }
