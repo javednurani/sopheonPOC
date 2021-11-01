@@ -39,6 +39,10 @@ namespace Sopheon.CloudNative.Environments.Data
             _context.DedicatedEnvironmentResources.Add(dedicatedEnvironmentResource);
             await _context.SaveChangesAsync();
          }
+         catch (EntityNotFoundException)
+         {
+            throw;
+         }
          catch (Exception ex) // TODO only catch SqlExceptions thrown by the specific constraint violations
          {
             throw new CommandFailedException("TODO");
