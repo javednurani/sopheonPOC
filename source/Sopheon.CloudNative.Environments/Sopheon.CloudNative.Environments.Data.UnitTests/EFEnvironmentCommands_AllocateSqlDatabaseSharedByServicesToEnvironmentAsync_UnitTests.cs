@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Sopheon.CloudNative.Environments.Domain.Exceptions;
 using Sopheon.CloudNative.Environments.Testing.Common;
@@ -40,7 +36,7 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
          await sut.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environment.EnvironmentKey, Some.Random.String());
       }
 
-      [Fact (Skip = "Cloud-1960 in progress")]
+      [Fact]
       public async Task AllocateSqlDatabaseSharedByServicesToEnvironmentAsync_EnvironmentNotFound_ThrowsException()
       {
          using EnvironmentContext context = new EnvironmentContext(_dbContextOptions);
