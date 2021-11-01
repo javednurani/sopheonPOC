@@ -13,7 +13,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 {
    public class CreateEnvironment_Run_UnitTests : FunctionUnitTestBase
    {
-      CreateEnvironment Sut;
+      private readonly CreateEnvironment Sut;
 
       public CreateEnvironment_Run_UnitTests()
       {
@@ -29,7 +29,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       public async Task Run_HappyPath_ReturnsCreated()
       {
          // Arrange
-         EnvironmentDto environmentRequest = new EnvironmentDto
+         EnvironmentDto environmentRequest = new()
          {
             Name = Some.Random.String(),
             Owner = Some.Random.Guid(),

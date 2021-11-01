@@ -15,7 +15,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 {
    public class UpdateEnvironment_Run_UnitTests : FunctionUnitTestBase
    {
-      UpdateEnvironment Sut;
+      private readonly UpdateEnvironment Sut;
 
       public UpdateEnvironment_Run_UnitTests()
       {
@@ -33,7 +33,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       {
          Guid environmentKey = Some.Random.Guid();
          // Arrange
-         EnvironmentDto environmentRequest = new EnvironmentDto
+         EnvironmentDto environmentRequest = new()
          {
             Name = Some.Random.String(),
             Owner = Some.Random.Guid(),
@@ -72,7 +72,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       {
          // Arrange
          Guid environmentKey = Guid.Empty;
-         EnvironmentDto environmentRequest = new EnvironmentDto
+         EnvironmentDto environmentRequest = new()
          {
             Name = Some.Random.String(),
             Owner = Some.Random.Guid(),
@@ -101,7 +101,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       {
          // Arrange         
          Guid environmentKey = Some.Random.Guid();
-         EnvironmentDto environmentRequest = new EnvironmentDto
+         EnvironmentDto environmentRequest = new()
          {
             Owner = Some.Random.Guid(),
             Description = Some.Random.String()
@@ -129,7 +129,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       {
          // Arrange         
          Guid environmentKey = Some.Random.Guid();
-         EnvironmentDto environmentRequest = new EnvironmentDto
+         EnvironmentDto environmentRequest = new()
          {
             Name = Some.Random.String(),
             Description = Some.Random.String()
@@ -157,7 +157,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       {
          // Arrange         
          Guid environmentKey = Some.Random.Guid();
-         EnvironmentDto environmentRequest = new EnvironmentDto
+         EnvironmentDto environmentRequest = new()
          {
             Name = Some.Random.String(),
             Description = Some.Random.String(),

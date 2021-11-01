@@ -73,18 +73,18 @@ namespace Sopheon.CloudNative.Environments.Utility
          {
             DomainResourceType azureSqlResourceType = await context.DomainResourceTypes.FirstAsync(d => d.Id == (int)ResourceTypes.AzureSqlDb);
 
-            Resource resource1 = new Resource
+            Resource resource1 = new()
             {
                Uri = TestData.RESOURCE_URI_1,
                DomainResourceType = azureSqlResourceType
             };
 
-            BusinessService businessService1 = new BusinessService
+            BusinessService businessService1 = new()
             {
                Name = TestData.BUSINESS_SERVICE_NAME_1
             };
 
-            Environment environment1 = new Environment
+            Environment environment1 = new()
             {
                Name = "Hammer Production",
                Description = "Hammer Corp production environment",
@@ -93,7 +93,7 @@ namespace Sopheon.CloudNative.Environments.Utility
                IsDeleted = false
             };
 
-            BusinessServiceDependency businessServiceDependency1 = new BusinessServiceDependency
+            BusinessServiceDependency businessServiceDependency1 = new()
             {
                DependencyName = TestData.DEPENDENCY_NAME_1,
                BusinessService = businessService1,

@@ -81,7 +81,7 @@ namespace Sopheon.CloudNative.Environments.Functions
 
             }
 
-            Environment environment = new Environment
+            Environment environment = new()
             {
                Name = data.Name,
                Owner = data.Owner,

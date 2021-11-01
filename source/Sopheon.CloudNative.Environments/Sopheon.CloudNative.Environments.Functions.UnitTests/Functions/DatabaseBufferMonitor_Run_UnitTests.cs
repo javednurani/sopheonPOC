@@ -18,9 +18,10 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       public DatabaseBufferMonitor_Run_UnitTests()
       {
          _mockMonitorHelper = new Mock<IDatabaseBufferMonitorHelper>();
-         
-         Dictionary<string, string> inMemorySettings = new Dictionary<string, string> {
-             {"SqlServerAdminEnigma", Some.Random.String()}, 
+
+         Dictionary<string, string> inMemorySettings = new()
+         {
+            { "SqlServerAdminEnigma", Some.Random.String() },
          };
          _configuration = new ConfigurationBuilder()
              .AddInMemoryCollection(inMemorySettings)
@@ -66,7 +67,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       {
          // Arrange
          string exceptionMessage = Some.Random.String();
-         Exception ex = new Exception(exceptionMessage);
+         Exception ex = new(exceptionMessage);
          _mockMonitorHelper.Setup(mh => mh.EnsureDatabaseBufferAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
             .ThrowsAsync(ex);
 
@@ -79,11 +80,11 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       public async Task Run_TemplateNotFound_ThrowsArgumentNullException()
       {
          // Arrange
-         ArgumentNullException expectedException = new ArgumentNullException("jsonTemplateData", string.Concat(StringConstants.BLOB_FILE_NOT_FOUND, StringConstants.ELASTICPOOL_DATABASE_BUFFER_BLOB_PATH));
+         ArgumentNullException expectedException = new("jsonTemplateData", string.Concat(StringConstants.BLOB_FILE_NOT_FOUND, StringConstants.ELASTICPOOL_DATABASE_BUFFER_BLOB_PATH));
 
          //Act
          // Passing in null to our run represents the BlobInput attribute unsuccessfully finding a file at INPUT_BINDING_BLOB_PATH
-         Exception ex = await Assert.ThrowsAsync<ArgumentNullException>( () => _sut.Run(null, null, _context.Object));
+         Exception ex = await Assert.ThrowsAsync<ArgumentNullException>(() => _sut.Run(null, null, _context.Object));
 
          // Assert
          Assert.Equal(expectedException.Message, ex.Message);

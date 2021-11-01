@@ -49,7 +49,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
 
       private async Task<int> CheckBufferCount(ISqlServer sqlServer)
       {
-         List<ISqlDatabase> notAssigned = new List<ISqlDatabase>();
+         List<ISqlDatabase> notAssigned = new();
 
          IReadOnlyList<ISqlDatabase> allDatabasesOnServer = await _azure.SqlServers.Databases.ListBySqlServerAsync(sqlServer);
 
@@ -58,8 +58,12 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          {
             ISqlDatabase databaseWithDetails = await _azure.SqlServers.Databases.GetBySqlServerAsync(sqlServer, database.Name);
 
+            if (databaseWithDetails?.Tags == null)
+            {
+               _logger.LogError($"Database details for '{database.Name}' were not found on Azure SQL Server: {sqlServer.Name}");
+            }
             // has CustomerProvisionedDatabase tag
-            if (databaseWithDetails?.Tags?.TryGetValue(StringConstants.CUSTOMER_PROVISIONED_DATABASE_TAG_NAME, out string tagValue) ?? false
+            if (databaseWithDetails.Tags.TryGetValue(StringConstants.CUSTOMER_PROVISIONED_DATABASE_TAG_NAME, out string tagValue)
                && tagValue == StringConstants.CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_INITIAL)
             {
                notAssigned.Add(databaseWithDetails);
@@ -95,7 +99,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
 
       private async Task PerformDeployment(string resourceGroupName, string deploymentTemplateJson)
       {
-         string deploymentName = $"{nameof(DatabaseBufferMonitor)}_Deployment_{DateTime.UtcNow.ToString("yyyyMMddTHHmmss")}";
+         string deploymentName = $"{nameof(DatabaseBufferMonitor)}_Deployment_{DateTime.UtcNow:yyyyMMddTHHmmss}";
          _logger.LogInformation($"Creating new deployment: {deploymentName}");
 
          IDeployment deployment = await _azure.Deployments

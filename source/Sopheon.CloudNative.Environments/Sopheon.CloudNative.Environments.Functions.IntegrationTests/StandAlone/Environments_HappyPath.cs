@@ -12,7 +12,7 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.StandAlone
       public async Task HappyPath_AllFunctions()
       {
          // create an environment
-         EnvironmentDto createDto = new EnvironmentDto { Name = Some.Random.String(), Description = Some.Random.String(), Owner = Some.Random.Guid() };
+         EnvironmentDto createDto = new() { Name = Some.Random.String(), Description = Some.Random.String(), Owner = Some.Random.Guid() };
          EnvironmentDto createdEnv = await _sut.CreateEnvironmentAsync(createDto);
 
          // update environment

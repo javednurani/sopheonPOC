@@ -31,7 +31,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          {
             if(string.IsNullOrEmpty(jsonTemplateData))
             {
-               throw new ArgumentNullException("jsonTemplateData", string.Concat(StringConstants.BLOB_FILE_NOT_FOUND, StringConstants.ELASTICPOOL_DATABASE_BUFFER_BLOB_PATH));
+               throw new ArgumentNullException(nameof(jsonTemplateData), string.Concat(StringConstants.BLOB_FILE_NOT_FOUND, StringConstants.ELASTICPOOL_DATABASE_BUFFER_BLOB_PATH));
             }
             string subscriptionId = Environment.GetEnvironmentVariable("AzSubscriptionId");
             string resourceGroupName = Environment.GetEnvironmentVariable("AzResourceGroupName");
