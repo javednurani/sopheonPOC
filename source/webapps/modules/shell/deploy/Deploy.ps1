@@ -1,6 +1,6 @@
 $ZipUtil = "C:\Program Files\7-Zip\7z.exe";
-$ShellApp = "$($env:System_DefaultWorkingDirectory)/_StratusShellApp/ShellApp";
-$MarketingPage = "$($env:System_DefaultWorkingDirectory)/_StratusShellApp/MarketingPage";
+$ShellApp = "$($env:System_DefaultWorkingDirectory)/ShellApp";
+$MarketingPage = "$($env:System_DefaultWorkingDirectory)/MarketingPage";
 
 $Environment = $env:Environment;
 $StorageAccountName = "stratuswebsite$($Environment.ToLower())";
@@ -9,7 +9,7 @@ try {
     $ErrorActionPreference = 'Stop'
     # Zip/Archive Scripts 
     Write-Host "Zipping Artfacts for ShellApp...";
-    & $ZipUtil "x" "$($PSScriptRoot)/ShellTrial_*.zip" "-o$($ShellApp)";
+    & $ZipUtil "x" "$($PSScriptRoot)/Shell_*.zip" "-o$($ShellApp)";
     & $ZipUtil "x" "$($PSScriptRoot)/MarketingPage_*.zip" "-o$($MarketingPage)";
 
     & "$($env:System_DefaultWorkingDirectory)\_TokenConfigurationManagement\TokenConfigManagement\TokenReplacer.exe" replace -c "$($env:System_DefaultWorkingDirectory)\_StratusShellApp\ShellApp\Browser_Shell_Configuration.json" -f "$ShellApp\*"  -e $Environment
