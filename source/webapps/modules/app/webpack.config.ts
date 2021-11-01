@@ -1,15 +1,15 @@
 import merge from 'webpack-merge';
 
-import { DEBUG_MODE } from './build/config';
-import common from './build/webpack.common';
-import data from './build/webpack.data';
-import devServer from './build/webpack.devServer';
-import fonts from './build/webpack.fonts';
-import html from './build/webpack.html';
-import images from './build/webpack.images';
-import javascript from './build/webpack.javascript';
-import optimize from './build/webpack.optimize';
-import styles from './build/webpack.styles';
+import { DEBUG_MODE } from './webpack/config';
+import common from './webpack/webpack.common';
+import data from './webpack/webpack.data';
+import devServer from './webpack/webpack.devServer';
+import fonts from './webpack/webpack.fonts';
+import html from './webpack/webpack.html';
+import images from './webpack/webpack.images';
+import javascript from './webpack/webpack.javascript';
+import optimize from './webpack/webpack.optimize';
+import styles from './webpack/webpack.styles';
 
 export default !DEBUG_MODE
   ? merge(common(), html(), javascript(), styles(), images(), fonts(), data(), optimize())

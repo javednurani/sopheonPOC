@@ -1,5 +1,5 @@
 $ZipUtil = "C:\Program Files\7-Zip\7z.exe";
-$ShellApp = "$($env:System_DefaultWorkingDirectory)/ShellApp";
+$ShellApp = "$($env:System_DefaultWorkingDirectory)/Shell";
 $MarketingPage = "$($env:System_DefaultWorkingDirectory)/MarketingPage";
 
 $Environment = $env:Environment;
