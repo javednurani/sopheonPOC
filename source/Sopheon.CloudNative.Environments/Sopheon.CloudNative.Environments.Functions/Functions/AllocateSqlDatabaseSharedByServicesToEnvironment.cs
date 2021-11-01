@@ -26,8 +26,8 @@ namespace Sopheon.CloudNative.Environments.Functions.Functions
       [Function(nameof(AllocateSqlDatabaseSharedByServicesToEnvironment))]
       [OpenApiOperation(operationId: nameof(AllocateSqlDatabaseSharedByServicesToEnvironment),
          tags: new[] { "EnvironmentResourceBindings" },
-         Summary = "Allocate a Resource for an Environment, and create a set of EnvironmentResourceBindings (satisfying all BusinessServiceDependencies) for that Environment & Resource",
-         Description = "Allocate a Resource for an Environment, and create a set of EnvironmentResourceBindings (satisfying all BusinessServiceDependencies) for that Environment & Resource",
+         Summary = "Allocate a SQL Database resource, which can be shared by multiple services, to an Environment",
+         Description = "Allocate a SQL Database resource, which can be shared by multiple services, to an Environment",
          Visibility = OpenApiVisibilityType.Important)]
       [OpenApiParameter(name: "environmentKey",
          Type = typeof(Guid),
@@ -67,16 +67,16 @@ namespace Sopheon.CloudNative.Environments.Functions.Functions
             if (environmentKey.Equals(Guid.Empty))
             {
                logger.LogInformation(StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID);
-               return await _responseBuilder.BuildWithErrorBodyAsync(req, new ErrorDto(HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID));
+               return await _responseBuilder.BuildWithErrorBodyAsync(req, HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID);
             }
 
             await _resourceAllocationHelper.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environmentKey);
-            return await _responseBuilder.BuildWithJsonBodyAsync(req, HttpStatusCode.Created, new ResourceAllocationResponseDto { Message = "TODO"});
+            return await _responseBuilder.BuildWithJsonBodyAsync(req, HttpStatusCode.Created, new ResourceAllocationResponseDto());
          }
          catch (Exception ex)
          {
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithErrorBodyAsync(req, new ErrorDto(HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR));
+            return await _responseBuilder.BuildWithErrorBodyAsync(req, HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR);
          }
       }
    }

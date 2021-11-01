@@ -18,13 +18,15 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          return createdResponse;
       }
 
-      public async Task<HttpResponseData> BuildWithErrorBodyAsync(HttpRequestData request, ErrorDto error)
+      public async Task<HttpResponseData> BuildWithErrorBodyAsync(HttpRequestData request, HttpStatusCode httpStatusCode, string message)
       {
+         ErrorDto error = new ErrorDto((int)httpStatusCode, message);
+
          HttpResponseData createdResponse = request.CreateResponse();
 
          // Cloud-1487, need to provide instance of Azure.Core.Serialization.ObjectSerializer
          // host config in Program.cs main() doesn't run in unit test context, so doesn't provide an ObjectSerializer
-         await createdResponse.WriteAsJsonAsync(error, new JsonObjectSerializer(), error.StatusCode);
+         await createdResponse.WriteAsJsonAsync(error, new JsonObjectSerializer(), (HttpStatusCode)error.HttpStatusCode);
          return createdResponse;
       }
 
