@@ -14,9 +14,6 @@ namespace Sopheon.CloudNative.Environments.Data
 {
    public class EFEnvironmentCommands : IEnvironmentCommands
    {
-      // Azure SQL DB Allocation writes 2 ENV DB records: ENV.Resources record & ENV.DedicatedEnvironmentResources record
-      private const int RESOURCE_RECORDS_WRITTEN = 2;
-
       private readonly EnvironmentContext _context;
 
       public EFEnvironmentCommands(EnvironmentContext context)
@@ -53,15 +50,7 @@ namespace Sopheon.CloudNative.Environments.Data
             _context.DedicatedEnvironmentResources.Add(dedicatedEnvironmentResource);
             _context.EnvironmentResourceBindings.AddRange(environmentResourceBindings);
 
-            int entriesWritten = await _context.SaveChangesAsync();
-
-            // expect to write an ENV.EnvironmentResourceBinding record per BusinessServiceDepency plus Resource records
-            int expectedNumberOfEntries = businessServiceDependencies.Length + RESOURCE_RECORDS_WRITTEN;
-
-            if (entriesWritten != expectedNumberOfEntries) // TODO, is this valuable, (or valid?)
-            {
-               throw new CommandFailedException($"{nameof(AllocateSqlDatabaseSharedByServicesToEnvironmentAsync)} EF Command did not write expected number of entries to DB.");
-            }
+            await _context.SaveChangesAsync();
          }
          catch (DbUpdateException ex)
          {
