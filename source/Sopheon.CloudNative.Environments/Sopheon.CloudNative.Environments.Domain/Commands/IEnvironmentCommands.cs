@@ -5,6 +5,6 @@ namespace Sopheon.CloudNative.Environments.Domain.Commands
 {
    public interface IEnvironmentCommands
    {
-      Task AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(Guid environmentKey);
+      Task AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(Guid environmentKey, string resourceUri);
    }
 }
