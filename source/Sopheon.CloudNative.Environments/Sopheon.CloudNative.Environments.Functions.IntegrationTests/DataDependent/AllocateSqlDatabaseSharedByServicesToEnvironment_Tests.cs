@@ -7,7 +7,7 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.DataDepend
 {
    public class AllocateSqlDatabaseSharedByServicesToEnvironment_Tests : DataDependentFunctionIntegrationTest
    {
-      [DataDependentFunctionFact]
+      [DataDependentFunctionFact (Skip = "Cloud-1960 in progress")]
       public async Task AllocateSqlDatabaseSharedByServicesToEnvironment_HappyPath()
       {
          ResourceAllocationResponseDto result = await _sut.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(TestDataConstants.EnvironmentKey1);
