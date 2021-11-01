@@ -1,6 +1,6 @@
 $ZipUtil = "C:\Program Files\7-Zip\7z.exe";
-$ShellApp = "$($env:System_DefaultWorkingDirectory)/ShellApp";
-$MarketingPage = "$($env:System_DefaultWorkingDirectory)/MarketingPage";
+$ShellApp = "$($env:System_DefaultWorkingDirectory)/_StratusShellApp/ShellApp";
+$MarketingPage = "$($env:System_DefaultWorkingDirectory)/_StratusShellApp/MarketingPage";
 
 $Environment = $env:Environment;
 $StorageAccountName = "stratuswebsite$($Environment.ToLower())";
