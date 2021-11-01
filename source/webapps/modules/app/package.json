@@ -2,8 +2,8 @@
   "name": "app-module",
   "version": "0.1.0",
   "private": true,
-  "author": "Peter Takes <peter.takes@sopheon.com>",
-  "copyright": "Copyright © 2001-2020 Sopheon PLC. All rights reserved.",
+  "author": "Sopheon PLC",
+  "copyright": "Copyright © 2001-2021 Sopheon PLC. All rights reserved.",
   "scripts": {
     "start": "cross-env NODE_ENV=development SSL_PFX_FILE=$HOME/.aspnet/https/aspnetapp.pfx nodemon --watch ./*.ts --watch ./*.json --watch build --ext ts --exec \"webpack serve --mode development\"",
     "build": "cross-env NODE_ENV=production webpack --mode production",

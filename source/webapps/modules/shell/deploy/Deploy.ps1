@@ -17,18 +17,18 @@ try {
 
 
     Write-Host "Uploading Marketing Page to blob storage";
-    $MarketingUploadResults = az storage blob upload --container-name '$web' --account-name $StorageAccountName --file "$($MarketingPage)\index.html" --name index.html --auth-mode login;
+    $MarketingUploadResults = az storage blob upload --container-name '$web' --account-name $StorageAccountName --file "$($MarketingPage)\index.html" --name 'Marketing/index.html' --auth-mode login;
     $MarketingUploadResults;    
     Write-Host "Complete! Transfered files to Storage Account Blob: "'$web';
 
     Write-Output "Deleting existing web app files to reduce blob size"
-    $DeleteStorage = az storage blob delete-batch --account-name $StorageAccountName --source '$web' --pattern 'WebApp/*' --auth-mode login;
+    $DeleteStorage = az storage blob delete-batch --account-name $StorageAccountName --source '$web' --pattern '[!app1&&!TermsOfService&&!Marketing]*' --auth-mode login;
     $DeleteStorage;
 
-    Write-Host "Uploading Marketing Page to blob storage";
-    $ShellAppUploadResults = az storage blob upload-batch --destination '$web' --destination-path 'WebApp/' --account-name $StorageAccountName --source "$($ShellApp)";
+    Write-Host "Uploading Shell to blob storage";
+    $ShellAppUploadResults = az storage blob upload-batch --destination '$web' --account-name $StorageAccountName --source "$($ShellApp)";
     $ShellAppUploadResults;
-    Write-Host "Complete! Transfered files to Storage Account Blob: "'$web/WebApp';
+    Write-Host "Complete! Transfered files to Storage Account Blob: "'$web';
 }
 catch {
     Write-Host "ERROR: ";

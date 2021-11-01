@@ -23,7 +23,6 @@ resource CDN_Profile_Endpoint 'Microsoft.Cdn/profiles/endpoints@2020-09-01' = {
   location: 'Global'
   properties: {
     originHostHeader: profile_endpoint_origin
-    originPath: '/WebApp'
     contentTypesToCompress: [
       'application/eot'
       'application/font'
@@ -138,6 +137,7 @@ resource CDN_Profile_Marketing_Endpoint 'Microsoft.Cdn/profiles/endpoints@2020-0
   location: 'Global'
   properties: {
     originHostHeader: profile_endpoint_origin
+    originPath: 'Marketing/'
     contentTypesToCompress: [
       'application/eot'
       'application/font'
