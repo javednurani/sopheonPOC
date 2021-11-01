@@ -29,14 +29,15 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          // Arrange
 
          // Act
-         HttpResponseData result = await _sut.Run(_request.Object, _context.Object, Guid.Empty);
+         HttpResponseData result = await _sut.Run(_request.Object, _context.Object, Some.Random.Guid());
 
          // Assert
          Assert.NotNull(result);
-         Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
+         Assert.Equal(HttpStatusCode.Created, result.StatusCode);
 
          string responseBody = await GetResponseBody(result);
-         ResourceAllocationResponseDto errorResponse = JsonSerializer.Deserialize<ResourceAllocationResponseDto>(responseBody);
+         ResourceAllocationResponseDto response = JsonSerializer.Deserialize<ResourceAllocationResponseDto>(responseBody);
+         Assert.NotNull(response);
       }
 
       [Fact]
