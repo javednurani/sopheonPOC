@@ -70,8 +70,11 @@ namespace Sopheon.CloudNative.Environments.Functions.Functions
                return await _responseBuilder.BuildWithErrorBodyAsync(req, HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID);
             }
 
-            // TODO: params
-            await _resourceAllocationHelper.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environmentKey, null, null, null);
+            string subscriptionId = Environment.GetEnvironmentVariable("AzSubscriptionId");
+            string resourceGroupName = Environment.GetEnvironmentVariable("AzResourceGroupName");
+            string sqlServerName = Environment.GetEnvironmentVariable("AzSqlServerName");
+
+            await _resourceAllocationHelper.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environmentKey, subscriptionId, resourceGroupName, sqlServerName);
             return await _responseBuilder.BuildWithJsonBodyAsync(req, HttpStatusCode.Created, new ResourceAllocationResponseDto());
          }
          catch (Exception ex)
