@@ -11,7 +11,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 {
    public class DeleteEnvironment_Run_UnitTests : FunctionUnitTestBase
    {
-      DeleteEnvironment Sut;
+      private readonly DeleteEnvironment Sut;
 
       public DeleteEnvironment_Run_UnitTests()
       {

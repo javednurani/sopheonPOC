@@ -18,7 +18,7 @@ namespace Sopheon.CloudNative.Environments.Functions
    public class GetEnvironments
    {
       private readonly IEnvironmentRepository _environmentRepository;
-      private IMapper _mapper;
+      private readonly IMapper _mapper;
       private readonly HttpResponseDataBuilder _responseBuilder;
 
       public GetEnvironments(IEnvironmentRepository environmentRepository, IMapper mapper, HttpResponseDataBuilder responseBuilder)
