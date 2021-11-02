@@ -39,7 +39,11 @@ https://pluto/display/PDP/Developing+Cloud+Native+Applications
 2. Install **[Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)**.
 3. Install **[Visual Studio Code](https://code.visualstudio.com/)**.
 4. Install recommended **Visual Studio Code extensions**. You will be prompted to install the extensions after opening starter kit in Visiual Studio Code.
-5. **Install Node Packages**: `npm install`
+5. Install Lerna globally if not already done: `npm install lerna -g`
+6. Install Sopheon packages using `lerna exec --parallel --no-bail --scope @sopheon/* 'npm i && npm run build'`
+7. Install Sopheon modules using `lerna exec --parallel --no-bail --scope *-module 'npm i && npm run build'`
+8. **Install Node Packages**: `npm install`
+9. Start dev environment: `npm start`
 
 - project structure / framework features:
   - HTTP client (fetch or Axios)
