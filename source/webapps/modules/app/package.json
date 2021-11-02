@@ -17,6 +17,7 @@
     "@fluentui/theme": "^2.0.2",
     "@sopheon/shared-ui": "file:../../packages/shared-ui",
     "@sopheon/shell-api": "file:../../packages/shell-api",
+    "@sopheon/controls": "file:../../../common/controls",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-intl": "^5.13.4",
