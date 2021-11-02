@@ -50,7 +50,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
 
       private async Task<int> CheckBufferCount(ISqlServer sqlServer)
       {
-         List<ISqlDatabase> notAssigned = new();
+         List<ISqlDatabase> notAssigned = new List<ISqlDatabase>();
 
          IReadOnlyList<ISqlDatabase> allDatabasesOnServer = await _azure.SqlServers.Databases.ListBySqlServerAsync(sqlServer);
 

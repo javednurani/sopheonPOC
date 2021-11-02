@@ -98,7 +98,7 @@ namespace Sopheon.CloudNative.Environments.Functions
                return await _responseBuilder.BuildWithErrorBodyAsync(req, HttpStatusCode.BadRequest, validationFailureMessage);
             }
 
-            Environment environment = new()
+            Environment environment = new Environment()
             {
                EnvironmentKey = environmentKey,
                Name = data.Name,

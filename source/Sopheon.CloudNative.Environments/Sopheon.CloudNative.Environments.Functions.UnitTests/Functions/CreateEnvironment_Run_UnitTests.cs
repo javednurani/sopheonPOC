@@ -29,7 +29,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       public async Task Run_HappyPath_ReturnsCreated()
       {
          // Arrange
-         EnvironmentDto environmentRequest = new()
+         EnvironmentDto environmentRequest = new EnvironmentDto()
          {
             Name = Some.Random.String(),
             Owner = Some.Random.Guid(),

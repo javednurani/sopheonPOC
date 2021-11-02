@@ -19,7 +19,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       {
          _mockMonitorHelper = new Mock<IDatabaseBufferMonitorHelper>();
 
-         Dictionary<string, string> inMemorySettings = new()
+         Dictionary<string, string> inMemorySettings = new Dictionary<string, string>()
          {
             { "SqlServerAdminEnigma", Some.Random.String() },
          };

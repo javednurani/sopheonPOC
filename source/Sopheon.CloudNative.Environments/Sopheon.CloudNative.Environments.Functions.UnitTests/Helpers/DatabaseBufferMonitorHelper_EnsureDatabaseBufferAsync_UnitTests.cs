@@ -132,13 +132,13 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
 
       private void SetupMockDatabases(int numUnassignedDatabases, bool databasesDeleted = false, bool serverNotFound = false)
       {
-         Mock<ISqlServer> mockSqlServer = new();
-         Mock<ISqlServers> mockSqlServers = new();
-         Mock<ISqlDatabaseOperations> mockDbOperations = new();
-         Mock<ISqlDatabase> mockDb = new();
-         Mock<IReadOnlyDictionary<string, string>> mockDbTags = new();
+         Mock<ISqlServer> mockSqlServer = new Mock<ISqlServer>();
+         Mock<ISqlServers> mockSqlServers = new Mock<ISqlServers>();
+         Mock<ISqlDatabaseOperations> mockDbOperations = new Mock<ISqlDatabaseOperations>();
+         Mock<ISqlDatabase> mockDb = new Mock<ISqlDatabase>();
+         Mock<IReadOnlyDictionary<string, string>> mockDbTags = new Mock<IReadOnlyDictionary<string, string>>();
 
-         List<ISqlDatabase> unassignedDatabases = new(Enumerable.Repeat(mockDb.Object, numUnassignedDatabases));
+         List<ISqlDatabase> unassignedDatabases = new List<ISqlDatabase>(Enumerable.Repeat(mockDb.Object, numUnassignedDatabases));
 
          _azure.Setup(a => a.SqlServers).Returns(mockSqlServers.Object);
          var expectedValue = "NotAssigned";
