@@ -12,8 +12,8 @@ try {
     & $ZipUtil "x" "$($PSScriptRoot)/Shell_*.zip" "-o$($ShellApp)";
     & $ZipUtil "x" "$($PSScriptRoot)/MarketingPage_*.zip" "-o$($MarketingPage)";
 
-    & "$($env:System_DefaultWorkingDirectory)\_TokenConfigurationManagement\TokenConfigManagement\TokenReplacer.exe" replace -c "$($env:System_DefaultWorkingDirectory)\_StratusShellApp\ShellApp\Browser_Shell_Configuration.json" -f "$ShellApp\*"  -e $Environment
-    & "$($env:System_DefaultWorkingDirectory)\_TokenConfigurationManagement\TokenConfigManagement\TokenReplacer.exe" replace -c "$($env:System_DefaultWorkingDirectory)\_StratusShellApp\ShellApp\Browser_Shell_Configuration.json" -f "$MarketingPage\*"  -e $Environment
+    & "$($env:System_DefaultWorkingDirectory)\_TokenConfigurationManagement\TokenConfigManagement\TokenReplacer.exe" replace -c "$($env:System_DefaultWorkingDirectory)\_StratusShellApp\Shell\Browser_Shell_Configuration.json" -f "$ShellApp\*"  -e $Environment
+    & "$($env:System_DefaultWorkingDirectory)\_TokenConfigurationManagement\TokenConfigManagement\TokenReplacer.exe" replace -c "$($env:System_DefaultWorkingDirectory)\_StratusShellApp\Shell\Browser_Shell_Configuration.json" -f "$MarketingPage\*"  -e $Environment
 
     Write-Host "Uploading Marketing Page to blob storage";
     $MarketingUploadResults = az storage blob upload --container-name '$web' --account-name $StorageAccountName --file "$($MarketingPage)\index.html" --name 'Marketing/index.html' --auth-mode login;
