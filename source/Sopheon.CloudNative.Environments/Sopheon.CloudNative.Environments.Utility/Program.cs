@@ -55,8 +55,8 @@ namespace Sopheon.CloudNative.Environments.Utility
             var revealer = serviceProvider.GetService<ISecretRevealer>();
 
             _databaseConnection = revealer.RevealLocalConnectionString();
-
          }
+
          await TestDataHelper.SeedTestDataAsync(_databaseConnection);
       }
    }
