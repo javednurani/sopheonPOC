@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Sopheon.CloudNative.Environments.Data.SeedData;
 using Sopheon.CloudNative.Environments.Domain;
 using Sopheon.CloudNative.Environments.Domain.Models;
 
@@ -18,6 +19,8 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
          builder.Property(bs => bs.Name)
             .HasMaxLength(ModelConstraints.NAME_LENGTH)
             .IsRequired();
+
+         builder.HasData(EnvironmentSeedData.BusinessServices);
       }
    }
 }

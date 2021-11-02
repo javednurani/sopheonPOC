@@ -13,4 +13,8 @@
     "AzResourceGroupName": "stratus-dev",
     "AzSqlServerName": "stratus-dev"
   },
+  "Host": {
+    "CORS": "*",
+    "CORSCredentials": false
+  }
 }
