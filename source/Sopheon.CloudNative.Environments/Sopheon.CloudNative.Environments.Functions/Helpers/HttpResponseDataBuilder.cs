@@ -20,7 +20,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
 
       public async Task<HttpResponseData> BuildWithErrorBodyAsync(HttpRequestData request, HttpStatusCode httpStatusCode, string message)
       {
-         ErrorDto error = new((int)httpStatusCode, message);
+         ErrorDto error = new ErrorDto((int)httpStatusCode, message);
 
          HttpResponseData createdResponse = request.CreateResponse();
 

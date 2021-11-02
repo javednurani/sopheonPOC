@@ -72,7 +72,12 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       {
          // Arrange
          Guid environmentKey = Guid.Empty;
-         EnvironmentDto environmentRequest = new EnvironmentDto() { Name = Some.Random.String(), Owner = Some.Random.Guid(), Description = Some.Random.String() };
+         EnvironmentDto environmentRequest = new EnvironmentDto
+         { 
+            Name = Some.Random.String(), 
+            Owner = Some.Random.Guid(), 
+            Description = Some.Random.String() 
+         };
 
          SetRequestBody(_request, environmentRequest);
 
@@ -152,7 +157,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       {
          // Arrange         
          Guid environmentKey = Some.Random.Guid();
-         EnvironmentDto environmentRequest = new EnvironmentDto 
+         EnvironmentDto environmentRequest = new EnvironmentDto
          { 
             Name = Some.Random.String(), 
             Description = Some.Random.String(), 
