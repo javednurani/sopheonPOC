@@ -33,7 +33,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       {
          Guid environmentKey = Some.Random.Guid();
          // Arrange
-         EnvironmentDto environmentRequest = new EnvironmentDto()
+         EnvironmentDto environmentRequest = new EnvironmentDto
          {
             Name = Some.Random.String(),
             Owner = Some.Random.Guid(),
@@ -96,7 +96,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       {
          // Arrange         
          Guid environmentKey = Some.Random.Guid();
-         EnvironmentDto environmentRequest = new EnvironmentDto()
+         EnvironmentDto environmentRequest = new EnvironmentDto
          {
             Owner = Some.Random.Guid(),
             Description = Some.Random.String()
@@ -124,7 +124,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       {
          // Arrange         
          Guid environmentKey = Some.Random.Guid();
-         EnvironmentDto environmentRequest = new EnvironmentDto()
+         EnvironmentDto environmentRequest = new EnvironmentDto
          {
             Name = Some.Random.String(),
             Description = Some.Random.String()
@@ -152,7 +152,12 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       {
          // Arrange         
          Guid environmentKey = Some.Random.Guid();
-         EnvironmentDto environmentRequest = new EnvironmentDto() { Name = Some.Random.String(), Description = Some.Random.String(), Owner = Some.Random.Guid() };
+         EnvironmentDto environmentRequest = new EnvironmentDto 
+         { 
+            Name = Some.Random.String(), 
+            Description = Some.Random.String(), 
+            Owner = Some.Random.Guid() 
+         };
 
          SetRequestBody(_request, environmentRequest);
          string mockExceptionMessage = Some.Random.String();

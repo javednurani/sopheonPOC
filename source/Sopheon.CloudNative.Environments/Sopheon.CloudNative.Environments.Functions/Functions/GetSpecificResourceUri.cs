@@ -87,7 +87,7 @@ namespace Sopheon.CloudNative.Environments.Functions
 
             string resourceUri = await _environmentQueries.GetSpecificResourceUri(environmentKey, businessServiceName, dependencyName);
 
-            ResourceUriDto dto = new ResourceUriDto()
+            ResourceUriDto dto = new ResourceUriDto
             {
                Uri = resourceUri
             };
