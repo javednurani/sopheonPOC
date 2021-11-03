@@ -19,7 +19,7 @@ namespace Sopheon.CloudNative.Environments.Functions
    {
 
       private readonly IEnvironmentQueries _environmentQueries;
-      private IMapper _mapper;
+      private readonly IMapper _mapper;
       private readonly HttpResponseDataBuilder _responseBuilder;
 
       public GetSpecificResourceUri(IEnvironmentQueries environmentQueries, IMapper mapper, HttpResponseDataBuilder responseBuilder)

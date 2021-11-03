@@ -35,6 +35,22 @@ namespace Sopheon.CloudNative.Environments.Data
             .ToArrayAsync();
       }
 
+      public async Task<IEnumerable<Environment>> GetEnvironmentsMatchingExactFilters(Guid? ownerIdentifier)
+      {
+         var query = _context.Environments
+            .Where(env => !env.IsDeleted);
+
+         if (ownerIdentifier.HasValue)
+         {
+            query = query
+               .Where(env => env.Owner.Equals(ownerIdentifier));
+         }
+
+         return await query
+            .AsNoTracking()
+            .ToArrayAsync();
+      }
+
       public async Task DeleteEnvironment(Guid environmentKey)
       {
          Environment entityEnvironment = await _context.Environments.SingleEnvironmentAsync(environmentKey);
