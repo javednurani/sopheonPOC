@@ -18,7 +18,7 @@ namespace Sopheon.CloudNative.Environments.Functions
    public class GetEnvironments
    {
       private readonly IEnvironmentRepository _environmentRepository;
-      private IMapper _mapper;
+      private readonly IMapper _mapper;
       private readonly HttpResponseDataBuilder _responseBuilder;
 
       public GetEnvironments(IEnvironmentRepository environmentRepository, IMapper mapper, HttpResponseDataBuilder responseBuilder)
@@ -34,6 +34,12 @@ namespace Sopheon.CloudNative.Environments.Functions
          Summary = "Get all Environments",
          Description = "Get all Environments that are not deleted",
          Visibility = OpenApiVisibilityType.Important)]
+      [OpenApiParameter(name: "owner",
+         Type = typeof(Guid?),
+         Required = false,
+         Description = "The key of the owning user to search for.",
+         In = Microsoft.OpenApi.Models.ParameterLocation.Query,
+         Summary = "The key of of the owning user to search for.")]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK,
          contentType: StringConstants.CONTENT_TYPE_APP_JSON,
          bodyType: typeof(IEnumerable<EnvironmentDto>),
@@ -46,12 +52,13 @@ namespace Sopheon.CloudNative.Environments.Functions
          Description = StringConstants.RESPONSE_DESCRIPTION_500)]
       public async Task<HttpResponseData> Run(
           [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "environments")] HttpRequestData req,
+           Guid? owner,
           FunctionContext context)
       {
          ILogger logger = context.GetLogger(nameof(GetEnvironments));
          try
          {
-            IEnumerable<Environment> environments = await _environmentRepository.GetEnvironments();
+            IEnumerable<Environment> environments = await _environmentRepository.GetEnvironmentsMatchingExactFilters(owner);
 
             return await _responseBuilder.BuildWithJsonBodyAsync(req, HttpStatusCode.OK, _mapper.Map<IEnumerable<EnvironmentDto>>(environments));
          }

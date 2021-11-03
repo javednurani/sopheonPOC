@@ -21,6 +21,13 @@ namespace Sopheon.CloudNative.Environments.Domain.Repositories
       Task<IEnumerable<Environment>> GetEnvironments();
 
       /// <summary>
+      /// Get a list of Environments matching the explicit filter(s)
+      /// </summary>
+      /// <param name="ownerIdentifier"></param>
+      /// <returns></returns>
+      Task<IEnumerable<Environment>> GetEnvironmentsMatchingExactFilters(Guid? ownerIdentifier);
+
+      /// <summary>
       /// Soft Deletes an Environment
       /// </summary>
       /// <param name="environment">Environment entity with EnvironmentKey, to be soft deleted</param>

@@ -21,7 +21,7 @@ namespace Sopheon.CloudNative.Environments.Functions
    {
       private readonly IEnvironmentQueries _environmentQueries;
       private readonly IRequiredNameValidator _validator;
-      private IMapper _mapper;
+      private readonly IMapper _mapper;
       private readonly HttpResponseDataBuilder _responseBuilder;
 
       public GetResourceUrisByBusinessServiceDependency(IEnvironmentQueries environmentQueries, IRequiredNameValidator validator, IMapper mapper, HttpResponseDataBuilder responseBuilder)

@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Sopheon.CloudNative.Environments.Data.Extensions;
 using Sopheon.CloudNative.Environments.Domain.Commands;
 using Sopheon.CloudNative.Environments.Domain.Enums;
@@ -20,28 +23,42 @@ namespace Sopheon.CloudNative.Environments.Data
 
       public async Task AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(Guid environmentKey, string resourceUri)
       {
-         Resource azureSqlDatabaseResource = new Resource
-         {
-            DomainResourceTypeId = (int)ResourceTypes.AzureSqlDb,
-            Uri = resourceUri
-         };
-
          try
          {
-            Environment entityEnvironment = await _context.Environments.SingleEnvironmentAsync(environmentKey);
+            Resource azureSqlDatabaseResource = new Resource
+            {
+               DomainResourceTypeId = (int)ResourceTypes.AzureSqlDb,
+               Uri = resourceUri
+            };
+
+            Environment environment = await _context.Environments
+               .SingleEnvironmentAsync(environmentKey);
+
+            BusinessServiceDependency[] azureSqlDbBusinessServiceDependencies = await _context.BusinessServiceDependencies
+               .Where(bsd => bsd.DomainResourceTypeId == (int)ResourceTypes.AzureSqlDb)
+               .ToArrayAsync();
 
             DedicatedEnvironmentResource dedicatedEnvironmentResource = new DedicatedEnvironmentResource
             {
-               Environment = entityEnvironment,
+               Environment = environment,
                Resource = azureSqlDatabaseResource
             };
 
+            IEnumerable<EnvironmentResourceBinding> environmentResourceBindings = azureSqlDbBusinessServiceDependencies.Select(bsd => new EnvironmentResourceBinding
+            {
+               BusinessServiceDependency = bsd,
+               Environment = environment,
+               Resource = azureSqlDatabaseResource
+            });
+
             _context.DedicatedEnvironmentResources.Add(dedicatedEnvironmentResource);
+            _context.EnvironmentResourceBindings.AddRange(environmentResourceBindings);
+
             await _context.SaveChangesAsync();
          }
-         catch (Exception ex) // TODO only catch SqlExceptions thrown by the specific constraint violations
+         catch (DbUpdateException ex)
          {
-            throw new CommandFailedException("TODO");
+            throw new CommandFailedException($"{nameof(AllocateSqlDatabaseSharedByServicesToEnvironmentAsync)} Command failed", ex);
          }
       }
    }

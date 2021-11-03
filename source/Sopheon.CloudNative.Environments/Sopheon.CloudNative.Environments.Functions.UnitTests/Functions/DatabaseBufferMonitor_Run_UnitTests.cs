@@ -18,9 +18,10 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       public DatabaseBufferMonitor_Run_UnitTests()
       {
          _mockMonitorHelper = new Mock<IDatabaseBufferMonitorHelper>();
-         
-         Dictionary<string, string> inMemorySettings = new Dictionary<string, string> {
-             {"SqlServerAdminEnigma", Some.Random.String()}, 
+
+         Dictionary<string, string> inMemorySettings = new Dictionary<string, string>
+         {
+            { "SqlServerAdminEnigma", Some.Random.String() },
          };
          _configuration = new ConfigurationBuilder()
              .AddInMemoryCollection(inMemorySettings)
@@ -83,7 +84,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 
          //Act
          // Passing in null to our run represents the BlobInput attribute unsuccessfully finding a file at INPUT_BINDING_BLOB_PATH
-         Exception ex = await Assert.ThrowsAsync<ArgumentNullException>( () => _sut.Run(null, null, _context.Object));
+         Exception ex = await Assert.ThrowsAsync<ArgumentNullException>(() => _sut.Run(null, null, _context.Object));
 
          // Assert
          Assert.Equal(expectedException.Message, ex.Message);
