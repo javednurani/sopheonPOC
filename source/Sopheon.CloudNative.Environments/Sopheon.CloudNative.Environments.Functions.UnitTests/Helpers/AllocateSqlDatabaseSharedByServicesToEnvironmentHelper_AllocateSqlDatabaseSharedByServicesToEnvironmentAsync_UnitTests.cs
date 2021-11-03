@@ -7,6 +7,7 @@ using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Testing.Common;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -18,14 +19,20 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
       private readonly ResourceAllocationHelper _sut;
       private readonly Mock<IEnvironmentCommands> _mockEnvironmentCommands;
       private readonly Mock<IAzure> _mockAzure;
+      private readonly Mock<IHttpClientFactory> _mockHttpClientFactory;
+      private readonly Mock<HttpClient> _mockHttpClient;
 
       public AllocateSqlDatabaseSharedByServicesToEnvironmentHelper_AllocateSqlDatabaseSharedByServicesToEnvironmentAsync_UnitTests()
       {
          _mockEnvironmentCommands = new Mock<IEnvironmentCommands>();
          _mockAzure = new Mock<IAzure>();
+         _mockHttpClientFactory = new Mock<IHttpClientFactory>();
+         _mockHttpClient = new Mock<HttpClient>();
+         _mockHttpClientFactory.Setup(m => m.CreateClient("TODO")).Returns(_mockHttpClient.Object);
 
          _sut = new ResourceAllocationHelper(
             new Mock<ILogger<ResourceAllocationHelper>>().Object,
+            _mockHttpClientFactory.Object,
             _mockAzure.Object,
             _mockEnvironmentCommands.Object);
       }
@@ -65,6 +72,8 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          mockDbOperations
             .Setup(dbo => dbo.GetBySqlServerAsync(It.IsAny<ISqlServer>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .Returns(Task.FromResult(mockDatabase.Object));
+
+         _mockHttpClient.Setup(m => m.SendAsync(It.IsAny<HttpRequestMessage>(), It.IsAny<CancellationToken>())).ReturnsAsync(new HttpResponseMessage());
 
          // Act
          Guid environmentKey = Some.Random.Guid();

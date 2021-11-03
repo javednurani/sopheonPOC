@@ -57,7 +57,7 @@ namespace Sopheon.CloudNative.Environments.Functions
                services.AddLogging();
 
                // Add HttpClient
-               services.AddHttpClient();
+               services.AddHttpClient();  // TODO: configure one for Azure REST API?
 
                // Add Custom Services
                string connString = string.Empty;

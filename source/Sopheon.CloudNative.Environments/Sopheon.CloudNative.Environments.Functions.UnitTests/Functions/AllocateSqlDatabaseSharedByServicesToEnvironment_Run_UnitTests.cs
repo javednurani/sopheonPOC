@@ -50,7 +50,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          HttpResponseData result = await _sut.Run(_request.Object, _context.Object, environmentKey);
 
          // Assert
-         _mockAllocatorHelper.Verify(mh => mh.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environmentKey, null, null, null), Times.Once);
+         _mockAllocatorHelper.Verify(mh => mh.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environmentKey, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
       }
 
       [Fact]
@@ -75,7 +75,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       {
          // Arrange
          _mockAllocatorHelper
-            .Setup(mh => mh.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(It.IsAny<Guid>(), null, null, null))
+            .Setup(mh => mh.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
             .ThrowsAsync(new Exception());
 
          // Act
