@@ -4,7 +4,7 @@ namespace Sopheon.CloudNative.Environments.Utility.TestData
 {
    public static class TestDataConstants
    {
-      public const string DEPENDENCY_NAME_1 = "ProductManagementSqlDatastore";
+      public const string DEPENDENCY_NAME_1 = "ProductManagementSqlDatastore"; // TODO CLOUD-2037 lift BSD to Domain pattern*
 
       public const string RESOURCE_URI_1 = "Server=https://customerDbServer1.database.windows.net; Database=dwjksg5cydttc-11;";
       public const string RESOURCE_URI_2 = "Server=https://customerDbServer1.database.windows.net; Database=dwjksg5cydttc-74;";

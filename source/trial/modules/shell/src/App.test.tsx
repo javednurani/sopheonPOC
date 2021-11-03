@@ -1,4 +1,5 @@
-import { messages } from '@sopheon/shared-ui';
+import { ThemeProvider } from '@fluentui/react-theme-provider';
+import { darkTheme, lightTheme, messages } from '@sopheon/shared-ui';
 import { mount } from 'enzyme';
 import toJson from 'enzyme-to-json';
 import { axe, toHaveNoViolations } from 'jest-axe';
@@ -42,15 +43,37 @@ describe('Testing the App component', () => {
     const results = await axe(wrapper.getDOMNode());
     expect(results).toHaveNoViolations();
   });
-  it('App snapshot render test', () => {
+  it('App snapshot light theme render test', () => {
     const appProps: AppProps = {
       changeTheme: jest.fn(),
     };
 
     const tree = mount(
-      <IntlProvider locale="en" messages={messages.en}>
-        <App {...appProps} />
-      </IntlProvider>
+      <ThemeProvider applyTo="body" theme={lightTheme}>
+        <IntlProvider locale="en" messages={messages.en}>
+          <App {...appProps} />
+        </IntlProvider>
+      </ThemeProvider>
+    );
+
+    expect(
+      toJson(tree, {
+        noKey: false,
+        mode: 'deep',
+      })
+    ).toMatchSnapshot();
+  });
+  it('App snapshot dark theme render test', () => {
+    const appProps: AppProps = {
+      changeTheme: jest.fn(),
+    };
+
+    const tree = mount(
+      <ThemeProvider applyTo="body" theme={darkTheme}>
+        <IntlProvider locale="en" messages={messages.en}>
+          <App {...appProps} />
+        </IntlProvider>
+      </ThemeProvider>
     );
 
     expect(

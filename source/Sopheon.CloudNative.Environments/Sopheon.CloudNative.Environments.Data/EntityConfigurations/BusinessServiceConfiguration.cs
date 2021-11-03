@@ -31,6 +31,8 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
                Name = bs.ToString()
             })
          );
+         // TODO CLOUD-2037
+         // builder.HasData(EnvironmentSeedData.BusinessServices);
       }
    }
 }
