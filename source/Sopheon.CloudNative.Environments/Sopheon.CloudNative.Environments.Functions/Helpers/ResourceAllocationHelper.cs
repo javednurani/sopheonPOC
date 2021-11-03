@@ -24,7 +24,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          IEnvironmentCommands environmentCommands)
       {
          _logger = logger;
-         _httpClient = httpClientFactory.CreateClient("TODO"); // TODO: name?
+         _httpClient = httpClientFactory.CreateClient(StringConstants.HTTP_CLIENT_NAME_AZURE_REST_API);
          _azure = azure;
          _environmentCommands = environmentCommands;
       }
