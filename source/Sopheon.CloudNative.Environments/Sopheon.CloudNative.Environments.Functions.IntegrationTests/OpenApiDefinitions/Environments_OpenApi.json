@@ -73,6 +73,19 @@
         "summary": "Get all Environments",
         "description": "Get all Environments that are not deleted",
         "operationId": "GetEnvironments",
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "query",
+            "description": "The key of the owning user to search for.",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "nullable": true
+            },
+            "x-ms-summary": "The key of of the owning user to search for."
+          }
+        ],
         "responses": {
           "200": {
             "description": "200 OK response, with Dto in response body",
@@ -438,17 +451,6 @@
               }
             },
             "x-ms-summary": "201 Created response"
-          },
-          "404": {
-            "description": "404 Not Found response, with error message in response body",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/errorDto"
-                }
-              }
-            },
-            "x-ms-summary": "404 Not Found response"
           },
           "400": {
             "description": "400 Bad Request response, with error message in response body",

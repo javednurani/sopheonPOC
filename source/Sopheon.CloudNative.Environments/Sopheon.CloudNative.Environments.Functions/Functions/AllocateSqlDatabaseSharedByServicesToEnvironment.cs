@@ -39,11 +39,6 @@ namespace Sopheon.CloudNative.Environments.Functions.Functions
          bodyType: typeof(ResourceAllocationResponseDto),
          Summary = StringConstants.RESPONSE_SUMMARY_201,
          Description = StringConstants.RESPONSE_DESCRIPTION_201)]
-      [OpenApiResponseWithBody(statusCode: HttpStatusCode.NotFound,
-         contentType: StringConstants.CONTENT_TYPE_APP_JSON,
-         bodyType: typeof(ErrorDto),
-         Summary = StringConstants.RESPONSE_SUMMARY_404,
-         Description = StringConstants.RESPONSE_DESCRIPTION_404)]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest,
          contentType: StringConstants.CONTENT_TYPE_APP_JSON,
          bodyType: typeof(ErrorDto),
