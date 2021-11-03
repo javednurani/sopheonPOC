@@ -7,10 +7,10 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.DataDepend
 {
    public class AllocateSqlDatabaseSharedByServicesToEnvironment_Tests : DataDependentFunctionIntegrationTest
    {
-      [DataDependentFunctionFact (Skip = "TODO Cloud-1960 in progress")]
+      [DataDependentFunctionFact (Skip = "TODO Cloud-1744, test is not re-runnable without 'delete allocated resources' functionality")]
       public async Task AllocateSqlDatabaseSharedByServicesToEnvironment_HappyPath()
       {
-         ResourceAllocationResponseDto result = await _sut.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(TestDataConstants.EnvironmentKey1);
+         ResourceAllocationResponseDto result = await _sut.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(TestDataConstants.EnvironmentKey3);
          Assert.NotNull(result);
       }
    }
