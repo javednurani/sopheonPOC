@@ -13,6 +13,7 @@ trigger:
 
 steps:
 - powershell:
+  targetType: 'filePath'
   filePath: DevOps/MachineCert.ps1
   displayName: 'Machine Cert'
 
