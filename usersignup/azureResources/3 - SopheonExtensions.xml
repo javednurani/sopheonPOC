@@ -60,9 +60,6 @@
           <Enumeration Text="I accept" Value="v1.0checkbox" SelectByDefault="true" />
         </Restriction>
       </ClaimType>
-      <ClaimType Id="extension_ProfileEditDate">
-        <DataType>dateTime</DataType>
-      </ClaimType>
       <ClaimType Id="isForgotPassword">
         <DisplayName>isForgotPassword</DisplayName>
         <DataType>boolean</DataType>
@@ -105,11 +102,6 @@
       <ClaimsTransformation Id="GetSystemDateTimeConsent" TransformationMethod="GetCurrentDateTime">
         <OutputClaims>
           <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedDate" TransformationClaimType="currentDateTime" />
-        </OutputClaims>
-      </ClaimsTransformation>
-      <ClaimsTransformation Id="GetSystemDateTimeProfileEdit" TransformationMethod="GetCurrentDateTime">
-        <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="extension_ProfileEditDate" TransformationClaimType="currentDateTime" />
         </OutputClaims>
       </ClaimsTransformation>
       <ClaimsTransformation Id="GenerateCreateEnvironmentRequestBody" TransformationMethod="GenerateJson">
@@ -688,7 +680,6 @@
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedDate" />
             <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedVersion" />
-            <OutputClaim ClaimTypeReferenceId="extension_ProfileEditDate" />
           </OutputClaims>
         </TechnicalProfile>
         <!-- Read data after user authenticates with a local account. -->
@@ -700,7 +691,6 @@
             <OutputClaim ClaimTypeReferenceId="extension_newsletter" />
             <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedDate" />
             <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedVersion" />
-            <OutputClaim ClaimTypeReferenceId="extension_ProfileEditDate" />
             <OutputClaim ClaimTypeReferenceId="extension_Company" />
             <OutputClaim ClaimTypeReferenceId="signInName" />
           </OutputClaims>
@@ -725,15 +715,11 @@
           <IncludeTechnicalProfile ReferenceId="AAD-Common" />
         </TechnicalProfile>
         <TechnicalProfile Id="AAD-UserWriteProfileUsingObjectId">
-          <InputClaimsTransformations>
-            <InputClaimsTransformation ReferenceId="GetSystemDateTimeProfileEdit" />
-          </InputClaimsTransformations>
           <PersistedClaims>
             <!-- Optional profile claims -->
             <PersistedClaim ClaimTypeReferenceId="jobTitle" />
             <PersistedClaim ClaimTypeReferenceId="country" />
             <PersistedClaim ClaimTypeReferenceId="extension_Company" />
-            <PersistedClaim ClaimTypeReferenceId="extension_ProfileEditDate" />
           </PersistedClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
