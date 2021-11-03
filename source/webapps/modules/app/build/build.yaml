@@ -12,7 +12,7 @@ trigger:
     - source/webapps/modules/app
 
 steps:
-- powershell:
+- task: PowerShell@2
   targetType: 'filePath'
   filePath: DevOps/MachineCert.ps1
   displayName: 'Machine Cert'
