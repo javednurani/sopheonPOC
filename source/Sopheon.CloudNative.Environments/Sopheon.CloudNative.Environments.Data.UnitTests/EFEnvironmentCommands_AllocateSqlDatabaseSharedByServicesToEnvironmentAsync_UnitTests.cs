@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Sopheon.CloudNative.Environments.Domain.Exceptions;
 using Sopheon.CloudNative.Environments.Testing.Common;
@@ -37,7 +33,7 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
 
          // Act + Assert
          // No Exception implies success
-         await sut.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environment.EnvironmentKey);
+         await sut.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environment.EnvironmentKey, Some.Random.String());
       }
 
       [Fact]
@@ -54,7 +50,7 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
          EFEnvironmentCommands sut = new EFEnvironmentCommands(context);
 
          // Act + Assert
-         await Assert.ThrowsAsync<EntityNotFoundException>(() => sut.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(Some.Random.Guid()));
+         await Assert.ThrowsAsync<EntityNotFoundException>(() => sut.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(Some.Random.Guid(), Some.Random.String()));
       }
    }
 }

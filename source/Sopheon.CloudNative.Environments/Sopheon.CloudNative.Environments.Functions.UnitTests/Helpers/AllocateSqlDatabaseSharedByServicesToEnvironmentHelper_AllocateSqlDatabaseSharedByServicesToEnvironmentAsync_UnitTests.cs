@@ -27,7 +27,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
       {
          // Arrange
          _mockEnvironmentCommands
-            .Setup(m => m.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(It.IsAny<Guid>()))
+            .Setup(m => m.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(It.IsAny<Guid>(), It.IsAny<string>()))
             .Returns(() =>
             {
                return Task.CompletedTask;
@@ -37,7 +37,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          await _sut.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(Some.Random.Guid());
 
          // Assert
-         _mockEnvironmentCommands.Verify(ec => ec.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(It.IsAny<Guid>()), Times.Once);
+         _mockEnvironmentCommands.Verify(ec => ec.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(It.IsAny<Guid>(), It.IsAny<string>()), Times.Once);
       }
    }
 }

@@ -19,7 +19,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
       public async Task AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(Guid environmentKey)
       {
          _logger.LogInformation($"Executing {nameof(AllocateSqlDatabaseSharedByServicesToEnvironmentAsync)}");
-         await _environmentCommands.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environmentKey);
+         await _environmentCommands.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environmentKey, string.Empty);
       }
    }
 }
