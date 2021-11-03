@@ -20,7 +20,7 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
             .HasMaxLength(ModelConstraints.NAME_LENGTH)
             .IsRequired();
 
-         // Seed domain data to DomainResourceTypes table generated from ResourceTypes enum
+         // Seed domain data to ENV.DomainResourceTypes table generated from ResourceTypes enum
          ResourceTypes[] resourceTypes = (ResourceTypes[])Enum.GetValues(typeof(ResourceTypes));            
          builder.HasData(
             resourceTypes.Select(r => new DomainResourceType { 
