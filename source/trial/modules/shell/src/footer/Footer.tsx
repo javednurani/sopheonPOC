@@ -1,14 +1,10 @@
 import { Icon, IIconStyles, Stack, Sticky, StickyPositionType } from '@fluentui/react';
-import { useTheme } from '@fluentui/react-theme-provider';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 const Footer: React.FunctionComponent = () => {
-  const theme = useTheme();
-
   const footerStyle: React.CSSProperties = {
     borderTop: '1px solid',
-    borderTopColor: theme.palette.neutralSecondary,
     padding: '10px',
     textAlign: 'start',
   };

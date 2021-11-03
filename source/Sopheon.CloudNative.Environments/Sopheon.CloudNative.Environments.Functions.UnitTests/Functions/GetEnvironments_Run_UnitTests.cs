@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -24,7 +24,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       public async Task Run_HappyPath_EnvironmentsReturned()
       {
          // Arrange
-         _mockEnvironmentRepository.Setup(m => m.GetEnvironments()).Returns(() =>
+         _mockEnvironmentRepository.Setup(m => m.GetEnvironmentsMatchingExactFilters(It.IsAny<Guid?>())).Returns(() =>
          {
             IEnumerable<Environment> environments = new List<Environment>
             {
@@ -48,7 +48,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
             return Task.FromResult(environments);
          });
          // Act
-         HttpResponseData result = await Sut.Run(_request.Object, _context.Object);
+         HttpResponseData result = await Sut.Run(_request.Object, null, _context.Object);
          result.Body.Position = 0;
 
          // Assert
@@ -56,7 +56,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          Assert.Equal(HttpStatusCode.OK, result.StatusCode);
 
          // EF
-         _mockEnvironmentRepository.Verify(m => m.GetEnvironments(), Times.Once());
+         _mockEnvironmentRepository.Verify(m => m.GetEnvironmentsMatchingExactFilters(It.IsAny<Guid?>()), Times.Once());
 
          // HTTP response
          string responseBody = await GetResponseBody(result);
@@ -76,7 +76,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          });
 
          // Act
-         HttpResponseData result = await Sut.Run(_request.Object, _context.Object);
+         HttpResponseData result = await Sut.Run(_request.Object, null, _context.Object);
          result.Body.Position = 0;
 
          // Assert
@@ -84,7 +84,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          Assert.Equal(HttpStatusCode.OK, result.StatusCode);
 
          // EF
-         _mockEnvironmentRepository.Verify(m => m.GetEnvironments(), Times.Once());
+         _mockEnvironmentRepository.Verify(m => m.GetEnvironmentsMatchingExactFilters(It.IsAny<Guid?>()), Times.Once());
 
          // HTTP response
          string responseBody = await GetResponseBody(result);

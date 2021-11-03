@@ -1,0 +1,13 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
+  },
+  "AzureAd": {
+    "Instance": "https://sopheondevb2c.b2clogin.com/SopheonDevB2C.onmicrosoft.com/B2C_1_SignUpSignIn/v2.0",
+    "TenantId": "f15f9214-f6d2-48de-b964-6f91af938521",
+    "ClientId": "e00b091d-4b23-4e58-af27-116147a1c23c",
+    "ClientSecret": "_4A7Q~x2h1tmyy6OGD.lawXiqf7cCvM-5WRyk"
+  }
+}

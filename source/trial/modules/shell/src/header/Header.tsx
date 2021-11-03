@@ -23,7 +23,6 @@ const Header: FunctionComponent<HeaderProps> = ({ changeTheme }: HeaderProps) =>
   const headerStyle: React.CSSProperties = {
     marginTop: '8px',
     borderBottom: '1px solid',
-    borderBottomColor: theme.palette.neutralSecondary,
   };
 
   const logoStyle: React.CSSProperties = {
