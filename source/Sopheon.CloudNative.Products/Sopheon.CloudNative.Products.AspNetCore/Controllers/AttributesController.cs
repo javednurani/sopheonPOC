@@ -23,8 +23,6 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
       [HttpGet]
       public async Task<IEnumerable<Domain.Attribute>> Get()
       {
-         ClaimsPrincipal user = HttpContext.User;
-
          return await _dbContext.Attributes
                .AsNoTracking()
                .ToArrayAsync();

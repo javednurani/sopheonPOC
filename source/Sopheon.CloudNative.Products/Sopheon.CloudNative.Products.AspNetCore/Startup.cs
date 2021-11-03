@@ -36,7 +36,8 @@ namespace Sopheon.CloudNative.Products.AspNetCore
       {
          { "openid", "openid"},
          { "offline_access", "Refresh Token"},
-         { "profile", "profile"}
+         { "profile", "profile"},
+         { "https://StratusB2CDev.onmicrosoft.com/d7c97f69-2f27-43a0-b998-c659ab05d8ba/PMCore.ReadWrite", "Allows the app to read and write against the user's product data"}
       };
 
       public Startup(IConfiguration configuration,
@@ -44,12 +45,6 @@ namespace Sopheon.CloudNative.Products.AspNetCore
       {
          Configuration = configuration;
          _env = env;
-
-         string clientIdScope = Configuration.GetValue<string>("AzureAdB2C:ClientId");
-         if (!string.IsNullOrEmpty(clientIdScope)) 
-         {
-            _scopes.Add(clientIdScope, "Access the api as the signed-in user");
-         }
       }
 
       public IConfiguration Configuration { get; }
@@ -61,6 +56,10 @@ namespace Sopheon.CloudNative.Products.AspNetCore
          // Configuration to sign-in users with Azure AD B2C
          services
             .AddMicrosoftIdentityWebApiAuthentication(Configuration, Constants.AzureAdB2C);
+         services.Configure<MicrosoftIdentityOptions>(options =>
+         {
+            options.MetadataAddress = $"{Configuration.GetValue<string>("AzureAdB2C:Instance")}/{Configuration.GetValue<string>("AzureAdB2C:Domain")}/v2.0/.well-known/openid-configuration?p={Configuration.GetValue<string>("AzureAdB2C:SignUpSignInPolicyId")}";
+         });
 
          services
             .AddMemoryCache()
@@ -183,7 +182,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore
             {
                c.SwaggerEndpoint("/swagger/v1/swagger.json", "NextGen ProductManagement Api v1");
 
-               c.OAuthClientId(Configuration.GetValue<string>("AzureAdB2C:ClientId"));
+               c.OAuthClientId(Configuration.GetValue<string>("Swagger:ClientId"));
                c.OAuthAppName("SwaggerUI");
                c.OAuthScopeSeparator(" ");
                c.OAuthUsePkce();
