@@ -9,7 +9,7 @@ trigger:
     - master
   paths:
     include:
-    - source/webapps/modules/app
+    - /source/webapps/modules/app
 
 steps:
 - powershell: |
