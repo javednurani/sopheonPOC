@@ -29,7 +29,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          _environmentCommands = environmentCommands;
       }
 
-      // TODO: params make sens to be coming from function right?
+      // TODO: params make sense to be coming from function right?
       public async Task AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(Guid environmentKey, string subscriptionId, string resourceGroupName, string sqlServerName)
       {
          _logger.LogInformation($"Executing {nameof(AllocateSqlDatabaseSharedByServicesToEnvironmentAsync)}");
@@ -71,14 +71,22 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          string parentResourcePath = "servers";
          string resourceType = "databases";
          string url = $"https://management.azure.com/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{parentResourcePath}/{resourceType}/{sqlDatabase.Name}?api-version=2021-04-01";
-
-         // TODO: use IHttpClientFactory?
+         string body =
+@"{ 
+  'operation': 'merge', 
+  'properties': { 
+    'tags': { 
+      '" + StringConstants.CUSTOMER_PROVISIONED_DATABASE_TAG_NAME + "': '" + StringConstants.CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_ASSIGNED + @"'
+    } 
+  } 
+}";
          HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Patch, url)
          {
-            Content = new StringContent("TODO")
+            Content = new StringContent(body)
          };
+
          HttpResponseMessage response = await _httpClient.SendAsync(httpRequestMessage, CancellationToken.None);
-         if(!response.IsSuccessStatusCode)
+         if (!response.IsSuccessStatusCode)
          {
             // TODO: throw CloudServiceException?
             throw new Exception();

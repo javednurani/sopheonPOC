@@ -28,7 +28,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          _mockAzure = new Mock<IAzure>();
          _mockHttpClientFactory = new Mock<IHttpClientFactory>();
          _mockHttpClient = new Mock<HttpClient>();
-         _mockHttpClientFactory.Setup(m => m.CreateClient("TODO")).Returns(_mockHttpClient.Object);
+         _mockHttpClientFactory
+            .Setup(m => m.CreateClient(StringConstants.HTTP_CLIENT_NAME_AZURE_REST_API))
+            .Returns(_mockHttpClient.Object);
 
          _sut = new ResourceAllocationHelper(
             new Mock<ILogger<ResourceAllocationHelper>>().Object,
