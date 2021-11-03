@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Sopheon.CloudNative.Products.AspNetCore.Policies.Requirements;
 
 namespace Sopheon.CloudNative.Products.AspNetCore.Policies.Handlers
@@ -8,13 +10,19 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Policies.Handlers
    public class EnvironmentOwnerHandler : AuthorizationHandler<HasRelevantRelationshipToEnvironment>
    {
       private readonly IEnvironmentIdentificationService _environmentIdentificationService;
+      private readonly EnvironmentOwnerLookupService _environmentOwnerLookupService;
+      private readonly IConfiguration _configRoot;
 
-      public EnvironmentOwnerHandler(IEnvironmentIdentificationService environmentIdentificationService)
+      public EnvironmentOwnerHandler(IEnvironmentIdentificationService environmentIdentificationService,
+         EnvironmentOwnerLookupService environmentOwnerLookupService,
+         IConfiguration configRoot)
       {
          _environmentIdentificationService = environmentIdentificationService;
+         _environmentOwnerLookupService = environmentOwnerLookupService;
+         _configRoot = configRoot;
       }
 
-      protected override Task HandleRequirementAsync(AuthorizationHandlerContext context,
+      protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context,
          HasRelevantRelationshipToEnvironment requirement)
       {
          // When using endpoint routing, authorization is typically handled by the Authorization Middleware
@@ -23,20 +31,18 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Policies.Handlers
          if (context.Resource is HttpContext httpContext)
          {
             string environmentId = _environmentIdentificationService.GetEnvironmentIdentifier(httpContext);
-            var user = context.User;
+            ClaimsPrincipal user = context.User;
+            string ownerIdClaimType = _configRoot.GetValue<string>("AzureAdB2C:OwnerIdClaim") ?? string.Empty;
 
             // Short Term: Call to Azure Function to lookup Environment Owner
             // Long Term: Claims for explicit environment access? Will need to evaluate claim revocation scenarios
-            context.Succeed(requirement);  // TODO: Check Environment Access against User
+            string environmentOwner = await _environmentOwnerLookupService.GetEnvironmentOwnerAsync(environmentId) ?? string.Empty;
+
+            if (user.HasClaim(c => ownerIdClaimType.Equals(c.Type, System.StringComparison.OrdinalIgnoreCase) && environmentOwner.Equals(c.Value, System.StringComparison.OrdinalIgnoreCase)))
+            {
+               context.Succeed(requirement);
+            }
          }
-
-         //if (context.User.HasClaim(c => c.Type == "BadgeId" &&
-         //                               c.Issuer == "http://microsoftsecurity"))
-         //{
-         //   context.Succeed(requirement);
-         //}
-
-         return Task.CompletedTask;
       }
    }
 }

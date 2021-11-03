@@ -60,7 +60,6 @@ namespace Sopheon.CloudNative.Products.AspNetCore
       private async Task<string> CallCatalogService(string requestUrl)
       {
          var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
-         //request.Headers.Add("Accept", "application/vnd.github.v3+json");
          request.Headers.Add("User-Agent", "Sopheon.CloudNative.Products.AspNetCore");
 
          var client = _clientFactory.CreateClient();
@@ -82,33 +81,6 @@ namespace Sopheon.CloudNative.Products.AspNetCore
          }
 
          return connectionString;
-      }
-   }
-
-   public class DevelopmentTimeEnvironmentSqlConnectionStringProvider : IEnvironmentSqlConnectionStringProvider
-   {
-      private readonly HttpContext _httpContext;
-      private readonly IEnvironmentIdentificationService _tenantEnvironmentIdentificationService;
-      private readonly IConfiguration _configuration;
-
-      public DevelopmentTimeEnvironmentSqlConnectionStringProvider(IHttpContextAccessor accessor,
-         IEnvironmentIdentificationService tenantEnvironmentIdentificationService,
-         IConfiguration configuration)
-      {
-         _httpContext = accessor.HttpContext;
-         _tenantEnvironmentIdentificationService = tenantEnvironmentIdentificationService;
-         _configuration = configuration;
-      }
-
-      public Task<string> GetConnectionStringAsync()
-      {
-         Dictionary<string, string> environmentDatabaseCatalog = _configuration.GetSection("LocalDevelopment:TenantEnvironmentDatabases").Get<Dictionary<string, string>>();
-
-         environmentDatabaseCatalog = new Dictionary<string, string>(environmentDatabaseCatalog, StringComparer.OrdinalIgnoreCase);
-
-         string result = environmentDatabaseCatalog.TryGetValue(_tenantEnvironmentIdentificationService.GetEnvironmentIdentifier(_httpContext), out string connectionString) ? connectionString : null;
-
-         return Task.FromResult(result);
       }
    }
 }

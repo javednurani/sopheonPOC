@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sopheon.CloudNative.Products.Functions", "Sopheon.CloudNative.Products.Functions\Sopheon.CloudNative.Products.Functions.csproj", "{AEAB8F61-14FE-4EFA-81E3-16855C38C46C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sopheon.CloudNative.Products.DataAccess", "Sopheon.CloudNative.Products.DataAccess\Sopheon.CloudNative.Products.DataAccess.csproj", "{D31F4C4F-F630-48AC-90BE-C6C57ECAF47E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EnvironmentScoped", "EnvironmentScoped", "{8D6E7542-1C43-4048-9482-6867D631721D}"
@@ -32,10 +30,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{AEAB8F61-14FE-4EFA-81E3-16855C38C46C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AEAB8F61-14FE-4EFA-81E3-16855C38C46C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AEAB8F61-14FE-4EFA-81E3-16855C38C46C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AEAB8F61-14FE-4EFA-81E3-16855C38C46C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D31F4C4F-F630-48AC-90BE-C6C57ECAF47E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D31F4C4F-F630-48AC-90BE-C6C57ECAF47E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D31F4C4F-F630-48AC-90BE-C6C57ECAF47E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -65,7 +59,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{AEAB8F61-14FE-4EFA-81E3-16855C38C46C} = {8D6E7542-1C43-4048-9482-6867D631721D}
 		{D31F4C4F-F630-48AC-90BE-C6C57ECAF47E} = {8D6E7542-1C43-4048-9482-6867D631721D}
 		{764D4BBD-1406-465F-9992-85D2D8057899} = {8D6E7542-1C43-4048-9482-6867D631721D}
 		{CFD3700A-9B5F-4FF5-8F56-F1290229C68F} = {A0014169-3D30-46F2-A6EF-947EEC83F6C0}
