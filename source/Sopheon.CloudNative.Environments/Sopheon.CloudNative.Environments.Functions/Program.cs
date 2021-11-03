@@ -1,6 +1,7 @@
 ﻿#define Managed
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
@@ -57,7 +58,7 @@ namespace Sopheon.CloudNative.Environments.Functions
                services.AddLogging();
 
                // Add HttpClient
-               services.AddHttpClient();
+               services.AddHttpClient(StringConstants.HTTP_CLIENT_NAME_AZURE_REST_API, (servProd, client) => ConfigureAzureRestApiClient(client));
 
                // Add Custom Services
                string connString = string.Empty;
@@ -113,6 +114,13 @@ namespace Sopheon.CloudNative.Environments.Functions
          return Microsoft.Azure.Management.Fluent.Azure
             .Authenticate(credentials)
             .WithDefaultSubscription();
+      }
+
+      private static HttpClient ConfigureAzureRestApiClient(HttpClient client)
+      {
+         // TODO: configure for Azure auth
+         client.DefaultRequestHeaders.Add("TODO", "TODO");
+         return client;
       }
    }
 }
