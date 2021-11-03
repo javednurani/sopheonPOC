@@ -31,8 +31,12 @@ namespace Sopheon.CloudNative.Environments.Data
                Uri = resourceUri
             };
 
-            Environment environment = await _context.Environments.SingleEnvironmentAsync(environmentKey);
-            BusinessServiceDependency[] businessServiceDependencies = await _context.BusinessServiceDependencies.ToArrayAsync();
+            Environment environment = await _context.Environments
+               .SingleEnvironmentAsync(environmentKey);
+
+            BusinessServiceDependency[] azureSqlDbBusinessServiceDependencies = await _context.BusinessServiceDependencies
+               .Where(bsd => bsd.DomainResourceTypeId == (int)ResourceTypes.AzureSqlDb)
+               .ToArrayAsync();
 
             DedicatedEnvironmentResource dedicatedEnvironmentResource = new DedicatedEnvironmentResource
             {
@@ -40,7 +44,7 @@ namespace Sopheon.CloudNative.Environments.Data
                Resource = azureSqlDatabaseResource
             };
 
-            IEnumerable<EnvironmentResourceBinding> environmentResourceBindings = businessServiceDependencies.Select(bsd => new EnvironmentResourceBinding
+            IEnumerable<EnvironmentResourceBinding> environmentResourceBindings = azureSqlDbBusinessServiceDependencies.Select(bsd => new EnvironmentResourceBinding
             {
                BusinessServiceDependency = bsd,
                Environment = environment,
@@ -54,7 +58,7 @@ namespace Sopheon.CloudNative.Environments.Data
          }
          catch (DbUpdateException ex)
          {
-            throw new CommandFailedException($"{nameof(AllocateSqlDatabaseSharedByServicesToEnvironmentAsync)} EF Command failed", ex);
+            throw new CommandFailedException($"{nameof(AllocateSqlDatabaseSharedByServicesToEnvironmentAsync)} Command failed", ex);
          }
       }
    }
