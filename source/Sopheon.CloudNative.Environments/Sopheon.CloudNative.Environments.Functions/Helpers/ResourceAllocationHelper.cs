@@ -7,6 +7,7 @@ using Microsoft.Azure.Management.Fluent;
 using Microsoft.Azure.Management.Sql.Fluent;
 using Microsoft.Extensions.Logging;
 using Sopheon.CloudNative.Environments.Domain.Commands;
+using Sopheon.CloudNative.Environments.Domain.Exceptions;
 
 namespace Sopheon.CloudNative.Environments.Functions.Helpers
 {
@@ -53,15 +54,18 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          {
             ISqlDatabase databaseWithDetails = await _azure.SqlServers.Databases.GetBySqlServerAsync(sqlServer, database.Name);
 
-            if (databaseWithDetails?.Tags?.TryGetValue(StringConstants.CUSTOMER_PROVISIONED_DATABASE_TAG_NAME, out string tagValue) ?? false
+            if (databaseWithDetails?.Tags == null)
+            {
+               _logger.LogError($"Database details for '{database.Name}' were not found on Azure SQL Server: {sqlServer.Name}");
+            }
+            else if (databaseWithDetails.Tags.TryGetValue(StringConstants.CUSTOMER_PROVISIONED_DATABASE_TAG_NAME, out string tagValue)
                && tagValue == StringConstants.CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_INITIAL)
             {
                return databaseWithDetails;
             }
          }
 
-         // TODO: what does this case mean?  all DBs are assigned on server, error?
-         throw new Exception("TODO");
+         throw new CloudServiceException("No available database in buffer!");
       }
 
       private async Task TagSqlDatabaseAsAssignedToCustomer(ISqlDatabase sqlDatabase, string subscriptionId, string resourceGroupName)
@@ -69,12 +73,12 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          string url = $"https://management.azure.com/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.Sql/servers/databases/{sqlDatabase.Name}?api-version=2021-04-01";
          string body =
 @"{ 
-  'operation': 'merge', 
-  'properties': { 
-    'tags': { 
+  'operation': 'merge',
+  'properties': {
+    'tags': {
       '" + StringConstants.CUSTOMER_PROVISIONED_DATABASE_TAG_NAME + "': '" + StringConstants.CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_ASSIGNED + @"'
-    } 
-  } 
+    }
+  }
 }";
          HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Patch, url)
          {
@@ -84,8 +88,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          HttpResponseMessage response = await _httpClient.SendAsync(httpRequestMessage, CancellationToken.None);
          if (!response.IsSuccessStatusCode)
          {
-            // TODO: throw CloudServiceException?
-            throw new Exception("TODO");
+            throw new CloudServiceException("Error calling Azure REST API to update SQL Database tag.");
          }
 
          return;
