@@ -14,13 +14,13 @@ try {
 
 
     Write-Output "Deleting existing web app files to reduce blob size";
-    $DeleteStorage = az storage blob delete-batch --account-name $StorageAccountName --source '$web' --pattern 'app\*' --auth-mode login;
+    $DeleteStorage = az storage blob delete-batch --account-name $StorageAccountName --source '$web' --pattern 'ProductStory\*' --auth-mode login;
     $DeleteStorage;
 
     Write-Host "Uploading Marketing Page to blob storage";
-    $ShellAppUploadResults = az storage blob upload-batch --destination '$web' --destination-path 'app' --account-name $StorageAccountName --source "$($WebApp)";
+    $ShellAppUploadResults = az storage blob upload-batch --destination '$web' --destination-path 'ProductStory' --account-name $StorageAccountName --source "$($WebApp)";
     $ShellAppUploadResults;
-    Write-Host "Complete! Transfered files to Storage Account Blob: "'$web/app';
+    Write-Host "Complete! Transfered files to Storage Account Blob: "'$web/ProductStory';
 }
 catch {
     Write-Host "ERROR: ";
