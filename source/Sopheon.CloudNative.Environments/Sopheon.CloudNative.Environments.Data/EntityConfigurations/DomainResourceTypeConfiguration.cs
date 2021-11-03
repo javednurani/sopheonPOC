@@ -2,7 +2,6 @@
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Sopheon.CloudNative.Environments.Data.SeedData;
 using Sopheon.CloudNative.Environments.Domain;
 using Sopheon.CloudNative.Environments.Domain.Enums;
 using Sopheon.CloudNative.Environments.Domain.Infrastructure;

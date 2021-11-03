@@ -75,15 +75,6 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("BusinessServiceDependencies");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            BusinessServiceId = 1,
-                            DependencyName = "SqlDatabase",
-                            DomainResourceTypeId = 1
-                        });
                 });
 
             modelBuilder.Entity("Sopheon.CloudNative.Environments.Domain.Models.DedicatedEnvironmentResource", b =>

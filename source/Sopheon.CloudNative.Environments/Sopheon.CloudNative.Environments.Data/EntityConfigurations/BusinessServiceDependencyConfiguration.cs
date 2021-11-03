@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Sopheon.CloudNative.Environments.Data.SeedData;
 using Sopheon.CloudNative.Environments.Domain;
 using Sopheon.CloudNative.Environments.Domain.Models;
 
@@ -30,7 +29,8 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
          builder.HasIndex(bsd => new { bsd.BusinessServiceId, bsd.DependencyName })
             .IsUnique();
 
-         builder.HasData(EnvironmentSeedData.BusinessServiceDependencies);
+         // TODO CLOUD-2037
+         // builder.HasData(EnvironmentSeedData.BusinessServiceDependencies);
       }
    }
 }
