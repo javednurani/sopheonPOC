@@ -39,7 +39,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          // TODO: what info is "uri"?
          await _environmentCommands.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environmentKey, sqlDatabase.Name);
 
-         await TagSqlDatabaseAsAssignedToCustomer(sqlDatabase, subscriptionId, resourceGroupName);
+         await TagSqlDatabaseAsAssignedToCustomerAsync(sqlDatabase, subscriptionId, resourceGroupName);
       }
 
       private async Task<ISqlDatabase> GetUnassignedSqlDatabaseAsync(string subscriptionId, string resourceGroupName, string sqlServerName)
@@ -68,7 +68,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          throw new CloudServiceException("No available database in buffer!");
       }
 
-      private async Task TagSqlDatabaseAsAssignedToCustomer(ISqlDatabase sqlDatabase, string subscriptionId, string resourceGroupName)
+      private async Task TagSqlDatabaseAsAssignedToCustomerAsync(ISqlDatabase sqlDatabase, string subscriptionId, string resourceGroupName)
       {
          string url = $"https://management.azure.com/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.Sql/servers/databases/{sqlDatabase.Name}?api-version=2021-04-01";
          string body =
