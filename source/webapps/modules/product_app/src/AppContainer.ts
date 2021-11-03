@@ -2,36 +2,23 @@ import { InjectReducerMap, InjectSagaMap, ShellApiProps } from '@sopheon/shell-a
 import { FunctionComponent } from 'react';
 
 import App from './App';
-import {
-  decrementCounter,
-  DecrementCounterAction,
-  incrementCounter,
-  IncrementCounterAction,
-  incrementCounterAsync,
-  IncrementCounterAsyncAction,
-} from './counterReducer';
+import { nextStep, NextStepAction } from './onboardingInfoReducer';
 import { NAMESPACE, rootReducer, RootState } from './rootReducer';
 import rootSaga from './rootSaga';
 
 export type AppStateProps = {
-  counterValue: number;
+  currentStep: number
 };
 
-export type AppDispatchProps = {
-  incrementCounter: () => IncrementCounterAction;
-  decrementCounter: () => DecrementCounterAction;
-  incrementCounterAsync: () => IncrementCounterAsyncAction;
-};
+export type AppDispatchProps = { nextStep: () => NextStepAction };
 
 const AppContainer: FunctionComponent<ShellApiProps> = ({ shellApi }: ShellApiProps) => {
   const mapAppStateProps = (state: RootState): AppStateProps => ({
-    counterValue: state[NAMESPACE] ? state[NAMESPACE].counter.value : 0,
+    currentStep: state[NAMESPACE] ? state[NAMESPACE].onboardingInfo.currentStep : 1,
   });
 
   const mapAppDispatchProps = (state: RootState): AppDispatchProps => ({
-    incrementCounter: () => incrementCounter(),
-    decrementCounter: () => decrementCounter(),
-    incrementCounterAsync: () => incrementCounterAsync(),
+    nextStep: () => nextStep(),
   });
 
   const appReducerMap: InjectReducerMap = {

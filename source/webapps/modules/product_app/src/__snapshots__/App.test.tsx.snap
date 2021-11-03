@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing the App component App snapshot render test 1`] = `
+<div>
+  <label
+    className="ms-Label root-76"
+  >
+    welcome to app
+    <div
+      className="ms-Stack step1 css-77"
+    >
+      step1
+      Array [
+        <button
+          aria-label="next"
+          className="ms-Button ms-Button--primary root-78"
+          data-is-focusable={true}
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          onKeyPress={[Function]}
+          onKeyUp={[Function]}
+          onMouseDown={[Function]}
+          onMouseUp={[Function]}
+          type="button"
+        >
+          <span
+            className="ms-Button-flexContainer flexContainer-79"
+            data-automationid="splitbuttonprimary"
+          >
+            <span
+              className="ms-Button-textContainer textContainer-80"
+            >
+              <span
+                className="ms-Button-label label-82"
+                id="id__6"
+                key="id__6"
+              >
+                next
+              </span>
+            </span>
+          </span>
+        </button>,
+        "",
+      ]
+    </div>
+  </label>
+</div>
+`;
