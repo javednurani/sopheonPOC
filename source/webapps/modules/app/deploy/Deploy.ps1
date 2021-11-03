@@ -10,8 +10,8 @@ try {
     Write-Host "Zipping Artfacts for App...";
     & $ZipUtil "x" "$($PSScriptRoot)/App_*.zip" "-o$($WebApp)";
 
+    #!!!TODO: Will be iterated on later when tokens become needed in the product story app
     #& "$($env:System_DefaultWorkingDirectory)\_TokenConfigurationManagement\TokenConfigManagement\TokenReplacer.exe" replace -c "$($env:System_DefaultWorkingDirectory)\_StratusShellApp\ShellApp\Browser_Shell_Configuration.json" -f "$ShellApp\*"  -e $Environment
-
 
     Write-Output "Deleting existing web app files to reduce blob size";
     $DeleteStorage = az storage blob delete-batch --account-name $StorageAccountName --source '$web' --pattern 'ProductStory\*' --auth-mode login;

@@ -40,10 +40,12 @@ Write-Host "Deploying Master Template...";
 $MasterTemplateDeploy = az deployment group create --resource-group $ResourceGroupValue --template-file $MasterTemplate --parameters $MasterParametersTemplate --name "$($DeploymentName)-MasterDeploy-AppProducts" --query "properties.provisioningState";
 Write-Host "Master Template Deployment: $($MasterTemplateDeploy)";
 
-Write-Host "Enabling Static Website properties...";
-# updates a storage account to be a static website setup with auth-mode as login
-$StaticWebsiteEnabled = az storage blob service-properties update --account-name $StorageAccountNameValue --static-website --404-document index.html --index-document index.html --auth-mode login --query "staticWebsite.enabled";
-Write-Host "Static Website enabled: $($StaticWebsiteEnabled) on Storage Account: $($StorageAccountNameValue)";
+#!!!TODO: The storage account should already be in place from the Shell instance. We need to re-evaluate this usage later on when we refactor bicep pattern
+#
+# Write-Host "Enabling Static Website properties...";
+# # updates a storage account to be a static website setup with auth-mode as login
+# $StaticWebsiteEnabled = az storage blob service-properties update --account-name $StorageAccountNameValue --static-website --404-document index.html --index-document index.html --auth-mode login --query "staticWebsite.enabled";
+# Write-Host "Static Website enabled: $($StaticWebsiteEnabled) on Storage Account: $($StorageAccountNameValue)";
 
 Write-Host "Setting Static Website url for origin endpoint to CDN";
 # Gets the now setup url for the storage account Static Website
