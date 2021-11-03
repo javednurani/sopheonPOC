@@ -1,13 +1,13 @@
 import { combineReducers } from 'redux';
 
-import { counterReducer, CounterStateShape } from './counterReducer';
+import { onboardingInfoReducer, OnboardingStateShape } from './onboardingInfoReducer';
 
 export const rootReducer = combineReducers({
-  counter: counterReducer,
+  onboardingInfo: onboardingInfoReducer
 });
 
 type AppState = {
-  counter: CounterStateShape;
+  onboardingInfo: OnboardingStateShape
 };
 
 // The below NAMESPACE string, and RootState key, interact to provide Redux store nested namespacing.

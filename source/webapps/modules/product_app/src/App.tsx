@@ -4,21 +4,16 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { AppDispatchProps, AppStateProps } from './AppContainer';
-import Counter from './Counter';
+import OnboardingInfo from './onboardingInfo';
 
 export type Props = AppProps<AppStateProps, AppDispatchProps>;
 
-const App: React.FunctionComponent<Props> = ({ counterValue, decrementCounter, incrementCounter, incrementCounterAsync }: Props) => (
+const App: React.FunctionComponent<Props> = ({ currentStep, nextStep }: Props) => (
   <div>
     <Label>
-      <FormattedMessage id="app.welcome" />
+      <FormattedMessage id={'app.welcome'} />
+      <OnboardingInfo currentStep={currentStep} nextStep={nextStep} />
     </Label>
-    <Counter
-      counterValue={counterValue}
-      decrementCounter={decrementCounter}
-      incrementCounter={incrementCounter}
-      incrementCounterAsync={incrementCounterAsync}
-    />
   </div>
 );
 
