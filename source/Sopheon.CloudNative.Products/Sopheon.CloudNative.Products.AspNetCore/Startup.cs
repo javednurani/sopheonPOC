@@ -132,6 +132,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore
 
          // Dependency Injection Registration
          services.AddScoped<IEnvironmentIdentificationService, EnvironmentIdentificationService>();
+         services.AddScoped<EnvironmentOwnerLookupService>();
 
          // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/environments?view=aspnetcore-5.0#determining-the-environment-at-runtime
          if (!_env.IsDevelopment() || !Configuration.GetValue<bool>("LocalDevelopment:UseEnvironmentDatabasesFromAppSettings"))
