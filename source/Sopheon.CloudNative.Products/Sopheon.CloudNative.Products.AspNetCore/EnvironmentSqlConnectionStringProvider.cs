@@ -60,7 +60,6 @@ namespace Sopheon.CloudNative.Products.AspNetCore
       private async Task<string> CallCatalogService(string requestUrl)
       {
          var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
-         //request.Headers.Add("Accept", "application/vnd.github.v3+json");
          request.Headers.Add("User-Agent", "Sopheon.CloudNative.Products.AspNetCore");
 
          var client = _clientFactory.CreateClient();
