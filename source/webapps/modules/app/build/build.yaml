@@ -19,11 +19,9 @@ steps:
 
 - powershell: |
     Write-Host "License check in folder: $(System.DefaultWorkingDirectory)/source/webapps/packages/shell-api"
-    node C:\Windows\ServiceProfiles\NetworkService\AppData\Roaming\npm\node_modules\license-checker\bin\license-checker --start "$(System.DefaultWorkingDirectory)/source/webapps/packages/shell-api" --out $(Build.ArtifactStagingDirectory)\shell_api_licenses.csv --csv --failOn 'GPL'
-    
+    node C:\Windows\ServiceProfiles\NetworkService\AppData\Roaming\npm\node_modules\license-checker\bin\license-checker --start "$(System.DefaultWorkingDirectory)/source/webapps/packages/shell-api" --out $(Build.ArtifactStagingDirectory)\shell_api_licenses.csv --csv --failOn 'GPL'    
     Write-Host "License check in folder: $(System.DefaultWorkingDirectory)/source/webapps/packages/shared-ui"
-    node C:\Windows\ServiceProfiles\NetworkService\AppData\Roaming\npm\node_modules\license-checker\bin\license-checker --start "$(System.DefaultWorkingDirectory)/source/webapps/packages/shared-ui" --out $(Build.ArtifactStagingDirectory)\shared_ui_licenses.csv --csv --failOn 'GPL'
-    
+    node C:\Windows\ServiceProfiles\NetworkService\AppData\Roaming\npm\node_modules\license-checker\bin\license-checker --start "$(System.DefaultWorkingDirectory)/source/webapps/packages/shared-ui" --out $(Build.ArtifactStagingDirectory)\shared_ui_licenses.csv --csv --failOn 'GPL'    
     Write-Host "License check in folder: $(System.DefaultWorkingDirectory)/source/webapps/modules/app"
     node C:\Windows\ServiceProfiles\NetworkService\AppData\Roaming\npm\node_modules\license-checker\bin\license-checker --start "$(System.DefaultWorkingDirectory)/source/webapps/modules/app" --out $(Build.ArtifactStagingDirectory)\shell_app_licenses.csv --csv --failOn 'GPL'  
   displayName: 'License Checker - Packages and App'
