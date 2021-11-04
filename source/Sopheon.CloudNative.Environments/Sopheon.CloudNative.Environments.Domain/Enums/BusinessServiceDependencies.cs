@@ -5,11 +5,10 @@ namespace Sopheon.CloudNative.Environments.Domain.Enums
    /// <summary>
    /// Do not change these values; they are used to generate seed data
    /// </summary>
-   public enum ResourceTypes
+   public enum BusinessServiceDependencies
    {
-      [Dedicated(true)]
-      AzureSqlDb = 1,
-      [Dedicated(false)]
-      AzureBlobStorage = 2,
+      [BusinessService(BusinessServices.ProductManagement)]
+      [ResourceType(ResourceTypes.AzureSqlDb)]
+      ProductManagementSqlDb = 1,
    }
 }

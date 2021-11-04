@@ -12,9 +12,9 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.DataDepend
       [DataDependentFunctionFact]
       public async Task GetResourceUrisByBusinessServiceDependency_HappyPath()
       {
-         ICollection<ResourceUriDto> results = await _sut.GetResourceUrisByBusinessServiceDependencyAsync(BusinessServices.ProductManagement.ToString(), TestDataConstants.DEPENDENCY_NAME_1);
+         ICollection<ResourceUriDto> results = await _sut.GetResourceUrisByBusinessServiceDependencyAsync(BusinessServices.ProductManagement.ToString(), BusinessServiceDependencies.ProductManagementSqlDb.ToString());
          Assert.NotNull(results);
-         Assert.Equal(2, results.Count); // TODO Cloud-2037, this assert may be compromised by 'Resource Allocation' integration tests
+         Assert.Equal(2, results.Count);
          Assert.Contains(results, r => r.Uri == TestDataConstants.RESOURCE_URI_1);
       }
    }
