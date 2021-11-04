@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -37,7 +36,8 @@ namespace Sopheon.CloudNative.Products.AspNetCore
       {
          { "openid", "openid"},
          { "offline_access", "Refresh Token"},
-         { "profile", "profile"}
+         { "profile", "profile"},
+         { "https://StratusB2CDev.onmicrosoft.com/d7c97f69-2f27-43a0-b998-c659ab05d8ba/PMCore.ReadWrite", "Allows the app to read and write against the user's product data"}
       };
 
       public Startup(IConfiguration configuration,
@@ -45,12 +45,6 @@ namespace Sopheon.CloudNative.Products.AspNetCore
       {
          Configuration = configuration;
          _env = env;
-
-         string clientIdScope = Configuration.GetValue<string>("AzureAdB2C:ClientId");
-         if (!string.IsNullOrEmpty(clientIdScope)) 
-         {
-            _scopes.Add(clientIdScope, "Access the api as the signed-in user");
-         }
       }
 
       public IConfiguration Configuration { get; }
@@ -59,18 +53,13 @@ namespace Sopheon.CloudNative.Products.AspNetCore
       // This method gets called by the runtime. Use this method to add services to the container.
       public void ConfigureServices(IServiceCollection services)
       {
-         //services.Configure<CookiePolicyOptions>(options =>
-         //{
-         //   // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-         //   options.CheckConsentNeeded = context => true;
-         //   options.MinimumSameSitePolicy = SameSiteMode.Unspecified;
-         //   // Handling SameSite cookie according to https://docs.microsoft.com/en-us/aspnet/core/security/samesite?view=aspnetcore-3.1
-         //   options.HandleSameSiteCookieCompatibility();
-         //});
-
          // Configuration to sign-in users with Azure AD B2C
          services
             .AddMicrosoftIdentityWebApiAuthentication(Configuration, Constants.AzureAdB2C);
+         services.Configure<MicrosoftIdentityOptions>(options =>
+         {
+            options.MetadataAddress = $"{Configuration.GetValue<string>("AzureAdB2C:Instance")}/{Configuration.GetValue<string>("AzureAdB2C:Domain")}/v2.0/.well-known/openid-configuration?p={Configuration.GetValue<string>("AzureAdB2C:SignUpSignInPolicyId")}";
+         });
 
          services
             .AddMemoryCache()
@@ -80,10 +69,6 @@ namespace Sopheon.CloudNative.Products.AspNetCore
             .AddHealthChecks()//
             .AddCheck<EnvironmentCatalogHealthCheck>(nameof(EnvironmentCatalogHealthCheck), tags: new[] { "tenant-directory" })
             .AddCheck<EnvironmentDatabaseHealthCheck>(nameof(EnvironmentDatabaseHealthCheck), tags: new[] { "environment-specific" });
-         //.AddCheck("Example", () =>
-         //   HealthCheckResult.Healthy("Example is OK!"), tags: new[] { "example" })
-         //.AddCheck("Examples", () =>
-         //   HealthCheckResult.Healthy("Example is OKs!"), tags: new[] { "examples" });
 
          services.AddAuthorization(options =>
          {
@@ -104,9 +89,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore
             { 
                Title = "Sopheon.CloudNative.Products.AspNetCore", 
                Version = "v1",
-               Description = "",
-               TermsOfService = new Uri("https://www.sopheon.com/"),
-               //License
+               Description = ""
             });
 
             Uri authorizationUrl = new Uri($"{Configuration.GetValue<string>("AzureAdB2C:Instance")}/{Configuration.GetValue<string>("AzureAdB2C:Domain")}/{Configuration.GetValue<string>("AzureAdB2C:SignUpSignInPolicyId")}/oauth2/v2.0/authorize"); // ex: https://<b2c_tenant_name>.b2clogin.com/<b2c_tenant_name>.onmicrosoft.com/oauth2/v2.0/authorize?p=b2c_1_susi_v2
@@ -116,8 +99,6 @@ namespace Sopheon.CloudNative.Products.AspNetCore
             {
                Name = "Authorization",
                Type = SecuritySchemeType.OAuth2,
-               //Type = SecuritySchemeType.OpenIdConnect,
-               //OpenIdConnectUrl = new Uri($"{Configuration.GetValue<string>("AzureAdB2C:Instance")}/{Configuration.GetValue<string>("AzureAdB2C:Domain")}/v2.0/.well-known/openid-configuration?p={Configuration.GetValue<string>("AzureAdB2C:SignUpSignInPolicyId")}"),
                Scheme = "bearer",
                BearerFormat = "JWT",
                In = ParameterLocation.Header,
@@ -150,6 +131,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore
 
          // Dependency Injection Registration
          services.AddScoped<IEnvironmentIdentificationService, EnvironmentIdentificationService>();
+         services.AddScoped<EnvironmentOwnerLookupService>();
 
          // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/environments?view=aspnetcore-5.0#determining-the-environment-at-runtime
          if (!_env.IsDevelopment() || !Configuration.GetValue<bool>("LocalDevelopment:UseEnvironmentDatabasesFromAppSettings"))
@@ -200,8 +182,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore
             {
                c.SwaggerEndpoint("/swagger/v1/swagger.json", "NextGen ProductManagement Api v1");
 
-               c.OAuthClientId(Configuration.GetValue<string>("AzureAdB2C:ClientId"));
-               //c.OAuthClientSecret(Configuration.GetValue<string>("AzureAdB2C:ClientSecret"));
+               c.OAuthClientId(Configuration.GetValue<string>("Swagger:ClientId"));
                c.OAuthAppName("SwaggerUI");
                c.OAuthScopeSeparator(" ");
                c.OAuthUsePkce();
