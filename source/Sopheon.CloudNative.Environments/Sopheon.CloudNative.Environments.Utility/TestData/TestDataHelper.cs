@@ -10,7 +10,6 @@ namespace Sopheon.CloudNative.Environments.Utility.TestData
 {
    public static class TestDataHelper
    {
-      // TODO CLOUD-2037, as Test Data is finalized, split SeedTestDataAsync into smaller Helpers per Entity
       public static async Task SeedTestDataAsync(string databaseConnection)
       {
          DbContextOptions<EnvironmentContext> _dbContextOptions =
@@ -31,6 +30,9 @@ namespace Sopheon.CloudNative.Environments.Utility.TestData
 
             // ENV.BusinessServices
             BusinessService productManagementService = await context.BusinessServices.FirstAsync(bs => bs.Id == (int)BusinessServices.ProductManagement);
+
+            // ENV.BusinessServiceDependencies
+            BusinessServiceDependency productManagementAzureSqlDbDependency = await context.BusinessServiceDependencies.FirstAsync(bsd => bsd.Id == (int)BusinessServiceDependencies.ProductManagementSqlDb);
 
             // Populate Test data with TestDataConstants
 
@@ -103,14 +105,6 @@ namespace Sopheon.CloudNative.Environments.Utility.TestData
 
             // Relational Entities
 
-            // ENV.BusinesServiceDependencies
-            BusinessServiceDependency businessServiceDependency1 = new BusinessServiceDependency
-            {
-               DependencyName = TestDataConstants.DEPENDENCY_NAME_1,
-               BusinessService = productManagementService,
-               DomainResourceType = azureSqlResourceType
-            };
-
             // ENV.EnvironmentResourceBindings
             EnvironmentResourceBinding[] environmentResourceBindings = new EnvironmentResourceBinding[]
             {
@@ -118,13 +112,13 @@ namespace Sopheon.CloudNative.Environments.Utility.TestData
                {
                   Environment = environment1,
                   Resource = resource1,
-                  BusinessServiceDependency = businessServiceDependency1
+                  BusinessServiceDependency = productManagementAzureSqlDbDependency
                },
                new EnvironmentResourceBinding
                {
                   Environment = environment2,
                   Resource = resource2,
-                  BusinessServiceDependency = businessServiceDependency1
+                  BusinessServiceDependency = productManagementAzureSqlDbDependency
                }
             };
 

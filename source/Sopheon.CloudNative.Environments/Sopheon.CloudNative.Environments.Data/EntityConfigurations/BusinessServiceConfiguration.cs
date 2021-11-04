@@ -22,7 +22,7 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
             .HasMaxLength(ModelConstraints.NAME_LENGTH)
             .IsRequired();
 
-         // Seed domain data to BusinessServices table generated from BusinessServices enum
+         // Seed domain data to ENV.BusinessServices table generated from BusinessServices enum
          BusinessServices[] businessServices = (BusinessServices[])Enum.GetValues(typeof(BusinessServices));
          builder.HasData(
             businessServices.Select(bs => new BusinessService
@@ -31,8 +31,6 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
                Name = bs.ToString()
             })
          );
-         // TODO CLOUD-2037
-         // builder.HasData(EnvironmentSeedData.BusinessServices);
       }
    }
 }
