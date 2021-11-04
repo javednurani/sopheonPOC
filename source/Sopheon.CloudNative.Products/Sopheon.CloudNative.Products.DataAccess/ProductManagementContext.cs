@@ -42,11 +42,6 @@ namespace Sopheon.CloudNative.Products.Domain
 
       protected override void OnConfiguring(DbContextOptionsBuilder modelBuilder)
       {
-         if (!modelBuilder.IsConfigured)
-         {
-            //optionsBuilder.UseInMemoryDatabase("...");
-         }
-
          modelBuilder.UseSqlServer(options =>
          {
             options.MigrationsHistoryTable(
