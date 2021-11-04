@@ -81,7 +81,7 @@ namespace Sopheon.CloudNative.Environments.Utility.TestData
                Name = "Hammer Production",
                Description = "Hammer Corp production environment",
                EnvironmentKey = TestDataConstants.EnvironmentKey1,
-               Owner = Guid.NewGuid(),
+               Owner = TestDataConstants.OwnerKey1,
                IsDeleted = false
             };
 

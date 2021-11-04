@@ -15,6 +15,8 @@ namespace Sopheon.CloudNative.Environments.Utility.TestData
       private static readonly Guid _environmentKey2 = Guid.Parse("00000000-0000-0000-0000-000000000002");
       private static readonly Guid _environmentKey3 = Guid.Parse("00000000-0000-0000-0000-000000000003");
 
+      private static readonly Guid _ownerKey1 = Guid.Parse("00000000-0000-0000-0000-000000000008");
+
       public static Guid EnvironmentKey1
       {
          get
@@ -36,6 +38,14 @@ namespace Sopheon.CloudNative.Environments.Utility.TestData
          get
          {
             return _environmentKey3;
+         }
+      }
+
+      public static Guid OwnerKey1
+      {
+         get
+         {
+            return _ownerKey1;
          }
       }
    }

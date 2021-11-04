@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Sopheon.CloudNative.Environments.Functions.IntegrationTests.Infrastructure;
 using Sopheon.CloudNative.Environments.Testing.Common;
@@ -11,12 +12,13 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.StandAlone
       [FunctionFact]
       public async Task HappyPath_AllFunctions()
       {
+         Guid ownerKey = Some.Random.Guid();
          // create an environment
          EnvironmentDto createDto = new EnvironmentDto 
          { 
             Name = Some.Random.String(), 
             Description = Some.Random.String(), 
-            Owner = Some.Random.Guid() 
+            Owner = ownerKey
          };
          EnvironmentDto createdEnv = await _sut.CreateEnvironmentAsync(createDto);
 
@@ -28,7 +30,7 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.StandAlone
          await _sut.DeleteEnvironmentAsync(createdEnv.EnvironmentKey);
 
          // get evironments - verify deleted
-         ICollection<EnvironmentDto> environments = await _sut.GetEnvironmentsAsync();
+         ICollection<EnvironmentDto> environments = await _sut.GetEnvironmentsAsync(ownerKey);
          Assert.DoesNotContain(environments, e => e.EnvironmentKey == createdEnv.EnvironmentKey);
       }
    }
