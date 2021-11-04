@@ -7,6 +7,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Sopheon.CloudNative.Environments.Domain.Exceptions;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Functions.Models;
 
@@ -44,6 +45,11 @@ namespace Sopheon.CloudNative.Environments.Functions.Functions
          bodyType: typeof(ErrorDto),
          Summary = StringConstants.RESPONSE_SUMMARY_400,
          Description = StringConstants.RESPONSE_DESCRIPTION_400)]
+      [OpenApiResponseWithBody(statusCode: HttpStatusCode.NotFound,
+         contentType: StringConstants.CONTENT_TYPE_APP_JSON,
+         bodyType: typeof(ErrorDto),
+         Summary = StringConstants.RESPONSE_SUMMARY_404,
+         Description = StringConstants.RESPONSE_DESCRIPTION_404)]
       [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError,
          contentType: StringConstants.CONTENT_TYPE_APP_JSON,
          bodyType: typeof(ErrorDto),
@@ -71,6 +77,11 @@ namespace Sopheon.CloudNative.Environments.Functions.Functions
 
             await _resourceAllocationHelper.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environmentKey, subscriptionId, resourceGroupName, sqlServerName);
             return await _responseBuilder.BuildWithJsonBodyAsync(req, HttpStatusCode.Created, new ResourceAllocationResponseDto());
+         }
+         catch (EntityNotFoundException ex)
+         {
+            logger.LogInformation(ex.Message);
+            return await _responseBuilder.BuildWithErrorBodyAsync(req, HttpStatusCode.NotFound, ex.Message);
          }
          catch (Exception ex)
          {

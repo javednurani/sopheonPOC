@@ -463,6 +463,17 @@
             },
             "x-ms-summary": "400 Bad Request response"
           },
+          "404": {
+            "description": "404 Not Found response, with error message in response body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorDto"
+                }
+              }
+            },
+            "x-ms-summary": "404 Not Found response"
+          },
           "500": {
             "description": "500 Internal Server Error response, with error message in response body",
             "content": {

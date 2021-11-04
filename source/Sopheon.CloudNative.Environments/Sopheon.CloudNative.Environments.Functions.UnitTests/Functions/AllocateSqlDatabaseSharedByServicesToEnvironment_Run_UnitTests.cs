@@ -9,6 +9,7 @@ using Sopheon.CloudNative.Environments.Testing.Common;
 using Xunit;
 using System.Text.Json;
 using Sopheon.CloudNative.Environments.Functions.Models;
+using Sopheon.CloudNative.Environments.Domain.Exceptions;
 
 namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 {
@@ -68,6 +69,28 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          string responseBody = await GetResponseBody(result);
          ErrorDto errorResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
          Assert.Equal(StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID, errorResponse.Message);
+      }
+
+      [Fact]
+      public async Task Run_DependencyThrowsEntityNotFoundException_ReturnsExpectedErrorDto()
+      {
+         // Arrange
+         string exceptionMessage = Some.Random.String();
+         EntityNotFoundException ex = new EntityNotFoundException(exceptionMessage);
+         _mockAllocatorHelper
+            .Setup(mh => mh.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+            .ThrowsAsync(ex);
+
+         // Act
+         HttpResponseData result = await _sut.Run(_request.Object, _context.Object, Some.Random.Guid());
+
+         // Assert
+         Assert.NotNull(result);
+         Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
+
+         string responseBody = await GetResponseBody(result);
+         ErrorDto errorResponse = JsonSerializer.Deserialize<ErrorDto>(responseBody);
+         Assert.Equal(exceptionMessage, errorResponse.Message);
       }
 
       [Fact]
