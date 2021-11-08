@@ -1,4 +1,4 @@
-import { Dropdown, IDropdownOption, IDropdownStyles, PrimaryButton, Stack, TextField } from '@fluentui/react';
+import { Dropdown, IDropdownOption, IDropdownStyles, Label, PrimaryButton, ProgressIndicator, Stack, TextField } from '@fluentui/react';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -8,7 +8,12 @@ export type OnboardingInfoProps = AppStateProps & AppDispatchProps;
 
 const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentStep, nextStep }: OnboardingInfoProps) => {
   const { formatMessage } = useIntl();
-
+  const headerStyle: React.CSSProperties = {
+    // TODO: Use header styles from cloud-1583 at merge
+  };
+  const progressBarStyles: React.CSSProperties = {
+    padding: '0vh 25vw 0vh 25vw',
+  };
   const dropdownStyles: Partial<IDropdownStyles> = {
     dropdown: { width: 250 },
   };
@@ -47,17 +52,12 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
   ];
 
   switch (currentStep) {
-    case 1:
-      return (
-        <Stack className="step1" horizontalAlign="center">
-          <FormattedMessage id={'step1'} />
-          <PrimaryButton text={formatMessage({ id: 'next' })} aria-label={formatMessage({ id: 'next' })} onClick={() => nextStep()} />
-        </Stack>
-      );
     case 2:
       return (
         <Stack className="step2" horizontalAlign="center">
-          <FormattedMessage id={'step2'} />
+          <Stack.Item>
+            <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupproduct' })}</Label>
+          </Stack.Item>
           <Stack.Item>
             <TextField
               label={formatMessage({ id: 'onboarding.yourproductname' })}
@@ -76,14 +76,21 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
               required
             />
           </Stack.Item>
-          <PrimaryButton text={formatMessage({ id: 'next' })} aria-label={formatMessage({ id: 'next' })} onClick={() => nextStep()} />
+          <Stack.Item align={'auto'} style={progressBarStyles}>
+            <ProgressIndicator
+              label={formatMessage({ id: 'onboarding.step2of3' })}
+              description={formatMessage({ id: 'onboarding.nextGoals' })}
+              ariaValueText={formatMessage({ id: 'onboarding.step2of3' })}
+              percentComplete={0.67}
+              barHeight={12}
+            />
+          </Stack.Item>
         </Stack>
       );
     case 3:
       return (
         <Stack className="step3" horizontalAlign="center">
           <FormattedMessage id={'step3'} />
-          <PrimaryButton text={formatMessage({ id: 'next' })} aria-label={formatMessage({ id: 'next' })} onClick={() => nextStep()} />
         </Stack>
       );
     case 4:
