@@ -32,7 +32,7 @@ export type OnboardingStateShape = {
 };
 
 export const initialState: OnboardingStateShape = {
-  currentStep: 1,
+  currentStep: 2,
 };
 
 // HANDLERS
