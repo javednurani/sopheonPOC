@@ -5,7 +5,7 @@ Copy-Item -Path "$($env:System_DefaultWorkingDirectory)\source\webapps\modules\a
 # Set location to packages shell-api
 Set-Location -Path "$($env:System_DefaultWorkingDirectory)\source\webapps\packages\shell-api";
 Write-Host "Location set for shared packages 'Shell-Api'";
-npm install
+npm ci
 
 Write-Host "Building package.json at Shell-Api location"
 npm run build
@@ -13,7 +13,7 @@ npm run build
 # Set location to packages shared-ui
 Set-Location -Path "$($env:System_DefaultWorkingDirectory)\source\webapps\packages\shared-ui";
 Write-Host "Location set for shared packages 'shared-ui'";
-npm install
+npm ci
 
 Write-Host "Building package.json at shared-ui location"
 npm run build
@@ -21,7 +21,7 @@ npm run build
 # Set location to trial app
 Set-Location -Path "$($env:System_DefaultWorkingDirectory)\source\webapps\modules\app";
 Write-Host "Location set for shared packages 'app'";
-npm install
+npm ci
 
 npm install jest-junit
 

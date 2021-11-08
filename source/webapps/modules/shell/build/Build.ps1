@@ -5,7 +5,7 @@ Copy-Item -Path "$($env:System_DefaultWorkingDirectory)\source\webapps\modules\s
 # Set location to packages shell-api
 Set-Location -Path "$($env:System_DefaultWorkingDirectory)\source\webapps\packages\shell-api";
 Write-Host "Location set for shared packages 'Shell-Api'";
-npm install;
+npm ci;
 Check-LastExitCode;
 
 Write-Host "Building package.json at Shell-Api location";
@@ -15,7 +15,7 @@ Check-LastExitCode;
 # Set location to packages shared-ui
 Set-Location -Path "$($env:System_DefaultWorkingDirectory)\source\webapps\packages\shared-ui";
 Write-Host "Location set for shared packages 'shared-ui'";
-npm install;
+npm ci;
 Check-LastExitCode;
 
 Write-Host "Building package.json at shared-ui location"
@@ -25,7 +25,7 @@ Check-LastExitCode;
 # Set location to trial app
 Set-Location -Path "$($env:System_DefaultWorkingDirectory)\source\webapps\modules\shell";
 Write-Host "Location set for shared packages 'shell'";
-npm install;
+npm ci;
 Check-LastExitCode;
 
 # install jest-junit to get reporting from the tests
