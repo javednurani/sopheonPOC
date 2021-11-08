@@ -29,9 +29,9 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
           </Stack.Item>
           <Stack.Item align={'auto'} style={progressBarStyles}>
             <ProgressIndicator
-              label={'Step 2 of 3: Setup your Product'}
-              description={'Next: Setup your Goals'}
-              ariaValueText={'Step 2 of 3: Setup your Product'}
+              label={formatMessage({ id: 'onboarding.step2of3' })}
+              description={formatMessage({ id: 'onboarding.nextGoals' })}
+              ariaValueText={formatMessage({ id: 'onboarding.step2of3' })}
               percentComplete={0.68}
               barHeight={12}
             />
