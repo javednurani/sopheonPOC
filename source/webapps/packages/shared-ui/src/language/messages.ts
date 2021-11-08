@@ -41,8 +41,9 @@ export const messages: Record<string, Record<string, string>> = {
     'error.componentmissing': 'Component could not be loaded.',
     'error.errorcomponentmissing': 'Error component could not be loaded.',
     'fallback.loading': 'Loading...',
+    'onboarding.setupproduct': 'Set up your product',
     'onboarding.yourproductname': `Your Product's Name`,
     'onboarding.step2of3': 'Step 2 of 3: Setup your Product',
-    'onboarding.nextGoals': 'Next: Setup your Goals'
+    'onboarding.nextGoals': 'Next: Setup your Goals',
   },
 };

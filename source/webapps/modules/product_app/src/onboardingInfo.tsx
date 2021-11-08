@@ -1,4 +1,4 @@
-import { ProgressIndicator, Stack, TextField } from '@fluentui/react';
+import { Label, ProgressIndicator, Stack, TextField } from '@fluentui/react';
 import React, { CSSProperties } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -8,6 +8,9 @@ export type OnboardingInfoProps = AppStateProps & AppDispatchProps;
 
 const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentStep, nextStep }: OnboardingInfoProps) => {
   const { formatMessage } = useIntl();
+  const headerStyle: React.CSSProperties = {
+    // TODO: Use header styles from cloud-1583 at merge
+  };
   const progressBarStyles: CSSProperties = {
     padding: '0vh 25vw 0vh 25vw',
   };
@@ -15,9 +18,9 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
   switch (currentStep) {
     case 2:
       return (
-        <Stack className="step2">
-          <Stack.Item align={'center'}>
-            <FormattedMessage id={'step2'} />
+        <Stack className="step2" horizontalAlign="center">
+          <Stack.Item>
+            <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupproduct' })}</Label>
           </Stack.Item>
           <Stack.Item>
             <TextField
