@@ -1,10 +1,16 @@
-import { PrimaryButton, Stack } from '@fluentui/react';
+import { Label, PrimaryButton, Stack } from '@fluentui/react';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { AppDispatchProps, AppStateProps } from './AppContainer';
 
 export type OnboardingInfoProps = AppStateProps & AppDispatchProps;
+
+const headerStyle: React.CSSProperties = {
+  marginTop: '20px',
+  marginBottom: '20px',
+  fontSize: '40px',
+};
 
 const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentStep, nextStep }: OnboardingInfoProps) => {
   const { formatMessage } = useIntl();
@@ -27,7 +33,7 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
     case 3:
       return (
         <Stack className="step3" horizontalAlign="center">
-          <FormattedMessage id={'step3'} />
+          <Label style={headerStyle}>{formatMessage({ id: 'setupYourGoals' })}</Label>
           <PrimaryButton text={formatMessage({ id: 'next' })} aria-label={formatMessage({ id: 'next' })} onClick={() => nextStep()} />
         </Stack>
       );
