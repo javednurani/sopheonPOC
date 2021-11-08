@@ -33,12 +33,16 @@ export const messages: Record<string, Record<string, string>> = {
     'step2': 'Step 2',
     'step3': 'Step 3',
     'next': 'next',
+    'continue': 'Continue',
+    'getStarted': 'Get Started!',
     'lucy': 'Lucy',
     'defaultTitle': 'Template Title',
     'error.erroroccurred': 'An Error Occurred',
     'error.componentmissing': 'Component could not be loaded.',
     'error.errorcomponentmissing': 'Error component could not be loaded.',
     'fallback.loading': 'Loading...',
-    'onboarding.yourproductname': "Your Product's Name",
+    'onboarding.yourproductname': `Your Product's Name`,
+    'onboarding.step2of3': 'Step 2 of 3: Setup your Product',
+    'onboarding.nextGoals': 'Next: Setup your Goals'
   },
 };
