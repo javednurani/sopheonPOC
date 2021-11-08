@@ -11,8 +11,8 @@ const azureRawSettings: Record<string, string> = {
   AD_B2C_SignUp_Policy: 'B2C_1A_SIGNUP',
   AD_B2C_PasswordChange_Policy: 'B2C_1A_PROFILEEDIT_PASSWORDCHANGE',
   AD_B2C_ProfileEdit_Policy: 'B2C_1A_PROFILEEDIT',
-  SPA_Root_URL: 'https://^BrowserWebAppUrl^.azureedge.net/',
-  SPA_Root_URL_Dev: 'https://localhost:3000/',
+  SPA_Root_URL: 'https://^BrowserWebAppUrl^.azureedge.net/product',
+  SPA_Root_URL_Dev: 'https://localhost:3000/product',
 };
 
 // these collapsed settings incorporate the current environment to assign the relevant raw setting
