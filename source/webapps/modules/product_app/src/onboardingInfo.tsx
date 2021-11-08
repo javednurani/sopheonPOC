@@ -33,17 +33,22 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
     case 3:
       return (
         <Stack className="step3" horizontalAlign="center">
-          <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupYourGoals' })}</Label>
-          <FormattedMessage id={'step3'} />
-          <TextField label={formatMessage({ id: 'onboarding.productKpi' })} maxLength={60} />
+          <Stack.Item>
+            <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupYourGoals' })}</Label>
+          </Stack.Item>
           <Stack.Item>
             <TextField label={formatMessage({ id: 'onboarding.productgoal' })} maxLength={300} multiline rows={4} />
           </Stack.Item>
-          <PrimaryButton
-            text={formatMessage({ id: 'onboarding.getstarted' })}
-            aria-label={formatMessage({ id: 'onboarding.getstarted' })}
-            onClick={() => nextStep()}
-          />
+          <Stack.Item>
+            <TextField label={formatMessage({ id: 'onboarding.productKpi' })} maxLength={60} />
+          </Stack.Item>
+          <Stack.Item>
+            <PrimaryButton
+              text={formatMessage({ id: 'onboarding.getstarted' })}
+              aria-label={formatMessage({ id: 'onboarding.getstarted' })}
+              onClick={() => nextStep()}
+            />
+          </Stack.Item>
         </Stack>
       );
     case 4:
