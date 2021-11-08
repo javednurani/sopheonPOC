@@ -1,34 +1,38 @@
-import { PrimaryButton, Stack } from '@fluentui/react';
-import React from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { ProgressIndicator, Stack } from '@fluentui/react';
+import React, { CSSProperties } from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import { AppDispatchProps, AppStateProps } from './AppContainer';
 
 export type OnboardingInfoProps = AppStateProps & AppDispatchProps;
 
 const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentStep, nextStep }: OnboardingInfoProps) => {
-  const { formatMessage } = useIntl();
+  const progressBarStyles: CSSProperties = {
+    padding: '0vh 25vw 0vh 25vw',
+  };
 
   switch (currentStep) {
-    case 1:
-      return (
-        <Stack className="step1" horizontalAlign="center">
-          <FormattedMessage id={'step1'} />
-          <PrimaryButton text={formatMessage({ id: 'next' })} aria-label={formatMessage({ id: 'next' })} onClick={() => nextStep()} />
-        </Stack>
-      );
     case 2:
       return (
-        <Stack className="step2" horizontalAlign="center">
-          <FormattedMessage id={'step2'} />
-          <PrimaryButton text={formatMessage({ id: 'next' })} aria-label={formatMessage({ id: 'next' })} onClick={() => nextStep()} />
+        <Stack className="step2">
+          <Stack.Item align={'center'}>
+            <FormattedMessage id={'step2'} />
+          </Stack.Item>
+          <Stack.Item align={'auto'} style={progressBarStyles}>
+            <ProgressIndicator
+              label={'Step 2 of 3: Setup your Product'}
+              description={'Next: Setup your Goals'}
+              ariaValueText={'Step 2 of 3: Setup your Product'}
+              percentComplete={0.68}
+              barHeight={12}
+            />
+          </Stack.Item>
         </Stack>
       );
     case 3:
       return (
         <Stack className="step3" horizontalAlign="center">
           <FormattedMessage id={'step3'} />
-          <PrimaryButton text={formatMessage({ id: 'next' })} aria-label={formatMessage({ id: 'next' })} onClick={() => nextStep()} />
         </Stack>
       );
     case 4:
