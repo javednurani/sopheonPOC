@@ -9,7 +9,7 @@ trigger:
     - master
   paths:
     include:
-    - source/webapps/modules/app
+    - source/webapps/modules/product_app
 
 steps:
 - powershell: |
@@ -46,21 +46,21 @@ steps:
   displayName: 'License Checker - Packages and App'
 
 - task: AzureCLI@2
-  displayName: 'Azure CLI source/webapps/modules/app/build/Build.ps1'
+  displayName: 'Build Product App'
   inputs:
     azureSubscription: 'Sopheon Dev'
     scriptType: ps
-    scriptPath: source/webapps/modules/app/build/Build.ps1
+    scriptPath: source/webapps/modules/product_app/build/Build.ps1
 
 - task: PublishTestResults@2
-  displayName: 'Publish Test Results source/webapps/modules/app/junit.xml'
+  displayName: 'Publish Test Results'
   inputs:
-    testResultsFiles: source/webapps/modules/app/junit.xml
+    testResultsFiles: source/webapps/modules/product_app/junit.xml
     failTaskOnFailedTests: true
   condition: succeededOrFailed()
 
 - task: PublishCodeCoverageResults@1
-  displayName: 'Publish code coverage from **/coverage/cobertura-coverage.xml'
+  displayName: 'Publish code coverage'
   inputs:
     codeCoverageTool: Cobertura
     summaryFileLocation: '**/coverage/cobertura-coverage.xml'
