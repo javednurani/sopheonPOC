@@ -18,10 +18,10 @@ export type AppModule = {
 // INFO: this simulates a login/claims webservice that could return available apps for user
 export const appModules: AppModule[] = [
   {
-    displayNameResourceKey: 'nav.app',
-    scope: 'appModule',
-    url: isProd ? '/app/remoteEntry.js' : 'https://localhost:3001/remoteEntry.js',
-    routeName: '/app',
+    displayNameResourceKey: 'nav.product_app',
+    scope: 'productAppModule',
+    url: isProd ? '/product/remoteEntry.js' : 'https://localhost:3001/remoteEntry.js',
+    routeName: '/product',
     iconName: 'CircleAddition',
     rank: 1,
     applicationDefinitionId: 1,

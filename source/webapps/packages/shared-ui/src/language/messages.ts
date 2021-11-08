@@ -17,7 +17,7 @@ export const messages: Record<string, Record<string, string>> = {
     'app.add5_aria': 'Increment value by 5',
     'acct.account': 'Account',
     'nav.accoladeAlt': 'Accolade logo',
-    'nav.app': 'Home',
+    'nav.product_app': 'Home',
     'aria.increment': 'Increment',
     'aria.decrement': 'Decremement',
     'aria.submit': 'Submit',
