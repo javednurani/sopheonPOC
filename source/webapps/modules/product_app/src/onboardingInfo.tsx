@@ -1,4 +1,4 @@
-import { PrimaryButton, Stack, TextField } from '@fluentui/react';
+import { Label, PrimaryButton, Stack, TextField } from '@fluentui/react';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -8,6 +8,9 @@ export type OnboardingInfoProps = AppStateProps & AppDispatchProps;
 
 const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentStep, nextStep }: OnboardingInfoProps) => {
   const { formatMessage } = useIntl();
+  const headerStyle: React.CSSProperties = {
+    // TODO: Use header styles from cloud-1583 at merge
+  };
 
   switch (currentStep) {
     case 1:
@@ -20,7 +23,7 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
     case 2:
       return (
         <Stack className="step2" horizontalAlign="center">
-          <FormattedMessage id={'step2'} />
+          <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupproduct' })}</Label>
           <Stack.Item>
             <TextField
               label={formatMessage({ id: 'onboarding.yourproductname' })}
