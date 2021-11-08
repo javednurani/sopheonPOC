@@ -1,6 +1,6 @@
 $ZipUtil = "C:\Program Files\7-Zip\7z.exe";
-$ShellApp = "$($env:System_DefaultWorkingDirectory)/Shell";
-$MarketingPage = "$($env:System_DefaultWorkingDirectory)/MarketingPage";
+$ShellApp = "$($env:System_DefaultWorkingDirectory)\Shell";
+$MarketingPage = "$($env:System_DefaultWorkingDirectory)\MarketingPage";
 $Environment = $env:Environment;
 $StorageAccountName = "stratuswebsite$($Environment.ToLower())";
 
@@ -15,12 +15,12 @@ try {
     & "$($env:System_DefaultWorkingDirectory)\_TokenConfigurationManagement\TokenConfigManagement\TokenReplacer.exe" replace -c "$($env:System_DefaultWorkingDirectory)\_StratusShellApp\Shell\Browser_Shell_Configuration.json" -f "$MarketingPage\*"  -e $Environment
 
     Write-Host "Uploading Marketing Page to blob storage";
-    $MarketingUploadResults = az storage blob upload --container-name '$web' --account-name $StorageAccountName --file "$($MarketingPage)\index.html" --name 'Marketing/index.html' --auth-mode login;
+    $MarketingUploadResults = az storage blob upload --container-name '$web' --account-name $StorageAccountName --file "$($MarketingPage)\index.html" --name 'Marketing\index.html' --auth-mode login;
     $MarketingUploadResults;
     Write-Host "Complete! Transfered files to Storage Account Blob: "'$web';
 
     Write-Output "Deleting existing web app files to reduce blob size";
-    $DeleteStorage = az storage blob delete-batch --account-name $StorageAccountName --source '$web' --pattern "[!ProductStory!TermsOfService!Marketing]*" --auth-mode login;
+    $DeleteStorage = az storage blob delete-batch --account-name $StorageAccountName --source '$web' --pattern "[!product!TermsOfService!Marketing]*" --auth-mode login;
     $DeleteStorage;
 
     Write-Host "Uploading Shell to blob storage";
