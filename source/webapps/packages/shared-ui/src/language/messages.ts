@@ -39,5 +39,6 @@ export const messages: Record<string, Record<string, string>> = {
     'error.componentmissing': 'Component could not be loaded.',
     'error.errorcomponentmissing': 'Error component could not be loaded.',
     'fallback.loading': 'Loading...',
+    'onboarding.productKpi': "What key performance indicators (KPI) measure or track your product's success?",
   },
 };
