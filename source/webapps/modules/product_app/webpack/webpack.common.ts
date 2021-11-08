@@ -22,7 +22,7 @@ export default (): webpack.Configuration => ({
   plugins: [
     new CleanWebpackPlugin(),
     new ModuleFederationPlugin({
-      name: 'appModule',
+      name: 'productAppModule',
       filename: 'remoteEntry.js',
       remotes: {},
       exposes: {
