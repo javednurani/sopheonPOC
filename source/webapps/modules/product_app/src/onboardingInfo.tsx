@@ -32,7 +32,7 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
               label={formatMessage({ id: 'onboarding.step2of3' })}
               description={formatMessage({ id: 'onboarding.nextGoals' })}
               ariaValueText={formatMessage({ id: 'onboarding.step2of3' })}
-              percentComplete={0.68}
+              percentComplete={0.67}
               barHeight={12}
             />
           </Stack.Item>

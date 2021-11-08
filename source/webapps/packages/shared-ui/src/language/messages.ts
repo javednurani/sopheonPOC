@@ -33,6 +33,8 @@ export const messages: Record<string, Record<string, string>> = {
     'step2': 'Step 2',
     'step3': 'Step 3',
     'next': 'next',
+    'continue': 'Continue',
+    'getStarted': 'Get Started!',
     'lucy': 'Lucy',
     'defaultTitle': 'Template Title',
     'error.erroroccurred': 'An Error Occurred',

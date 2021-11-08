@@ -16,7 +16,11 @@ const App: React.FunctionComponent<Props> = ({ currentStep, nextStep }: Props) =
       <Label>
         <FormattedMessage id={'app.welcome'} />
         <OnboardingInfo currentStep={currentStep} nextStep={nextStep} />
-        <PrimaryButton text={formatMessage({ id: 'next' })} aria-label={formatMessage({ id: 'next' })} onClick={() => nextStep()} />
+        <PrimaryButton
+          text={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
+          aria-label={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
+          onClick={() => nextStep()}
+        />
       </Label>
     </div>
   );
