@@ -1,4 +1,4 @@
-import { PrimaryButton, Stack } from '@fluentui/react';
+import { PrimaryButton, Stack, TextField } from '@fluentui/react';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -28,7 +28,14 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
       return (
         <Stack className="step3" horizontalAlign="center">
           <FormattedMessage id={'step3'} />
-          <PrimaryButton text={formatMessage({ id: 'next' })} aria-label={formatMessage({ id: 'next' })} onClick={() => nextStep()} />
+          <Stack.Item>
+            <TextField label={formatMessage({ id: 'onboarding.productgoal' })} maxLength={300} multiline rows={4} />
+          </Stack.Item>
+          <PrimaryButton
+            text={formatMessage({ id: 'onboarding.getstarted' })}
+            aria-label={formatMessage({ id: 'next' })}
+            onClick={() => nextStep()}
+          />
         </Stack>
       );
     case 4:
