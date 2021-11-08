@@ -9,7 +9,7 @@ exports[`Testing the App component App snapshot render test 1`] = `
     <div
       className="ms-Stack step1 css-77"
     >
-      step1
+      Step 1
       Array [
         <button
           aria-label="next"
