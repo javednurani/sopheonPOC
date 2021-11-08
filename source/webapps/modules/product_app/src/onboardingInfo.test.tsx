@@ -16,14 +16,11 @@ describe('Testing the onboardingInfo component', () => {
 
     const wrapper = mount(
       <IntlProvider locale="en" messages={messages.en}>
-        <OnboardingInfo
-          currentStep={appProps.currentStep}
-          nextStep={appProps.nextStep}
-        />
+        <OnboardingInfo currentStep={appProps.currentStep} nextStep={appProps.nextStep} />
       </IntlProvider>
     );
-
-    expect(wrapper.find(FormattedMessage).text()).toBe(`step${appProps.currentStep}`);
+    // TODO remove hardcoded string?
+    expect(wrapper.find(FormattedMessage).text()).toBe(`Step ${appProps.currentStep}`);
     expect(wrapper.find(PrimaryButton)).toHaveLength(1);
   });
   it('userEvent test for the onboardingInfo component', () => {
@@ -34,10 +31,7 @@ describe('Testing the onboardingInfo component', () => {
 
     const wrapper = mount(
       <IntlProvider locale="en" messages={messages.en}>
-        <OnboardingInfo
-          currentStep={appProps.currentStep}
-          nextStep={appProps.nextStep}
-        />
+        <OnboardingInfo currentStep={appProps.currentStep} nextStep={appProps.nextStep} />
       </IntlProvider>
     );
 
