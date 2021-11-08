@@ -33,7 +33,7 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
     case 3:
       return (
         <Stack className="step3" horizontalAlign="center">
-          <Label style={headerStyle}>{formatMessage({ id: 'setupYourGoals' })}</Label>
+          <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupYourGoals' })}</Label>
           <FormattedMessage id={'step3'} />
           <TextField label={formatMessage({ id: 'onboarding.productKpi' })} maxLength={60} />
           <Stack.Item>
