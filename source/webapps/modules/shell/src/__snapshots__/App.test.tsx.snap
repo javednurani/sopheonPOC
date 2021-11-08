@@ -77,7 +77,7 @@ exports[`Testing the App component App snapshot dark theme render test 1`] = `
                       }
                     }
                   >
-                    App
+                    Home
                   </a>
                 </nav>
               </div>
@@ -370,7 +370,7 @@ exports[`Testing the App component App snapshot light theme render test 1`] = `
                       }
                     }
                   >
-                    App
+                    Home
                   </a>
                 </nav>
               </div>
