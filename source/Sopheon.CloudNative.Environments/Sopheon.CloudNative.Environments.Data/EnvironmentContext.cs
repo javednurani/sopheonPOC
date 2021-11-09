@@ -70,5 +70,11 @@ namespace Sopheon.CloudNative.Environments.Data
          get;
          set;
       }
+
+      public virtual DbSet<DedicatedEnvironmentResource> DedicatedEnvironmentResources
+      {
+         get;
+         set;
+      }
    }
 }

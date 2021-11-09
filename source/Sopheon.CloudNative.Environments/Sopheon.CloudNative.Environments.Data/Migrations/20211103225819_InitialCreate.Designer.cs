@@ -10,8 +10,8 @@ using Sopheon.CloudNative.Environments.Data;
 namespace Sopheon.CloudNative.Environments.Data.Migrations
 {
     [DbContext(typeof(EnvironmentContext))]
-    [Migration("20210929192658_DomainResourceType_Add_AzureSqlDb")]
-    partial class DomainResourceType_Add_AzureSqlDb
+    [Migration("20211103225819_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,6 +41,13 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("BusinessServices");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "ProductManagement"
+                        });
                 });
 
             modelBuilder.Entity("Sopheon.CloudNative.Environments.Domain.Models.BusinessServiceDependency", b =>
@@ -70,6 +77,39 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("BusinessServiceDependencies");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BusinessServiceId = 1,
+                            DependencyName = "ProductManagementSqlDb",
+                            DomainResourceTypeId = 1
+                        });
+                });
+
+            modelBuilder.Entity("Sopheon.CloudNative.Environments.Domain.Models.DedicatedEnvironmentResource", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("DedicatedEnvironmentResourceId")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("EnvironmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ResourceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnvironmentId");
+
+                    b.HasIndex("ResourceId")
+                        .IsUnique();
+
+                    b.ToTable("DedicatedEnvironmentResources");
                 });
 
             modelBuilder.Entity("Sopheon.CloudNative.Environments.Domain.Models.DomainResourceType", b =>
@@ -79,6 +119,9 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
                         .HasColumnType("int")
                         .HasColumnName("DomainResourceTypeId")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("IsDedicated")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -93,7 +136,14 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
                         new
                         {
                             Id = 1,
+                            IsDedicated = true,
                             Name = "AzureSqlDb"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            IsDedicated = false,
+                            Name = "AzureBlobStorage"
                         });
                 });
 
@@ -205,6 +255,25 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
                     b.Navigation("DomainResourceType");
                 });
 
+            modelBuilder.Entity("Sopheon.CloudNative.Environments.Domain.Models.DedicatedEnvironmentResource", b =>
+                {
+                    b.HasOne("Sopheon.CloudNative.Environments.Domain.Models.Environment", "Environment")
+                        .WithMany("DedicatedEnvironmentResources")
+                        .HasForeignKey("EnvironmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Sopheon.CloudNative.Environments.Domain.Models.Resource", "Resource")
+                        .WithOne("DedicatedEnvironmentResource")
+                        .HasForeignKey("Sopheon.CloudNative.Environments.Domain.Models.DedicatedEnvironmentResource", "ResourceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Environment");
+
+                    b.Navigation("Resource");
+                });
+
             modelBuilder.Entity("Sopheon.CloudNative.Environments.Domain.Models.EnvironmentResourceBinding", b =>
                 {
                     b.HasOne("Sopheon.CloudNative.Environments.Domain.Models.BusinessServiceDependency", "BusinessServiceDependency")
@@ -262,11 +331,15 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
 
             modelBuilder.Entity("Sopheon.CloudNative.Environments.Domain.Models.Environment", b =>
                 {
+                    b.Navigation("DedicatedEnvironmentResources");
+
                     b.Navigation("EnvironmentResourceBindings");
                 });
 
             modelBuilder.Entity("Sopheon.CloudNative.Environments.Domain.Models.Resource", b =>
                 {
+                    b.Navigation("DedicatedEnvironmentResource");
+
                     b.Navigation("EnvironmentResourceBindings");
                 });
 #pragma warning restore 612, 618

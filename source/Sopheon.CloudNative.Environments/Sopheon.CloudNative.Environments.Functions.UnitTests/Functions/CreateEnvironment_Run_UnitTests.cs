@@ -13,7 +13,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
 {
    public class CreateEnvironment_Run_UnitTests : FunctionUnitTestBase
    {
-      CreateEnvironment Sut;
+      private readonly CreateEnvironment Sut;
 
       public CreateEnvironment_Run_UnitTests()
       {
