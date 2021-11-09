@@ -21,7 +21,7 @@ namespace Sopheon.CloudNative.Environments.Functions
    {
       private readonly IEnvironmentQueries _environmentQueries;
       private readonly IRequiredNameValidator _validator;
-      private IMapper _mapper;
+      private readonly IMapper _mapper;
       private readonly HttpResponseDataBuilder _responseBuilder;
 
       public GetResourceUrisByBusinessServiceDependency(IEnvironmentQueries environmentQueries, IRequiredNameValidator validator, IMapper mapper, HttpResponseDataBuilder responseBuilder)
@@ -76,29 +76,19 @@ namespace Sopheon.CloudNative.Environments.Functions
 
             if (!validationResultBusinessServiceName.IsValid || !validationResultDependencyname.IsValid)
             {
-               ErrorDto error = new ErrorDto
-               {
-                  StatusCode = (int)HttpStatusCode.BadRequest,
-                  Message = StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID,
-               };
                logger.LogInformation(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID);
-               return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.BadRequest, error);
+               return await _responseBuilder.BuildWithErrorBodyAsync(req, HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID);
             }
 
             IEnumerable<string> resourceUris = await _environmentQueries.GetResourceUrisByBusinessServiceDependency(businessServiceName, dependencyName);
             IEnumerable<ResourceUriDto> result = resourceUris.Select(r => new ResourceUriDto { Uri = r });
 
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.OK, result);
+            return await _responseBuilder.BuildWithJsonBodyAsync(req, HttpStatusCode.OK, result);
          }
          catch (Exception ex)
          {
-            ErrorDto error = new ErrorDto
-            {
-               StatusCode = (int)HttpStatusCode.InternalServerError,
-               Message = StringConstants.RESPONSE_GENERIC_ERROR,
-            };
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.InternalServerError, error);
+            return await _responseBuilder.BuildWithErrorBodyAsync(req, HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR);
          }
       }
    }

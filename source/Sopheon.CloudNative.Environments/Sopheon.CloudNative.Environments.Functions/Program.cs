@@ -1,6 +1,7 @@
 ﻿#define Managed
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
@@ -15,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Sopheon.CloudNative.Environments.Data;
+using Sopheon.CloudNative.Environments.Domain.Commands;
 using Sopheon.CloudNative.Environments.Domain.Queries;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
@@ -56,7 +58,7 @@ namespace Sopheon.CloudNative.Environments.Functions
                services.AddLogging();
 
                // Add HttpClient
-               services.AddHttpClient();
+               services.AddHttpClient(StringConstants.HTTP_CLIENT_NAME_AZURE_REST_API, (servProd, client) => ConfigureAzureRestApiClient(client));
 
                // Add Custom Services
                string connString = string.Empty;
@@ -75,9 +77,11 @@ namespace Sopheon.CloudNative.Environments.Functions
 
                services.AddScoped<IEnvironmentRepository, EFEnvironmentRepository>();
                services.AddScoped<IEnvironmentQueries, EFEnvironmentQueries>();
+               services.AddScoped<IEnvironmentCommands, EFEnvironmentCommands>();
                services.AddScoped<IValidator<EnvironmentDto>, EnvironmentDtoValidator>();
                services.AddScoped<IRequiredNameValidator, RequiredNameValidator>();
                services.AddScoped<IDatabaseBufferMonitorHelper, DatabaseBufferMonitorHelper>();
+               services.AddScoped<IResourceAllocationHelper, ResourceAllocationHelper>();
                services.AddScoped<HttpResponseDataBuilder>();
                
                _lazyAzureClient = new Lazy<IAzure>(GetAzureInstance(hostContext));
@@ -110,6 +114,13 @@ namespace Sopheon.CloudNative.Environments.Functions
          return Microsoft.Azure.Management.Fluent.Azure
             .Authenticate(credentials)
             .WithDefaultSubscription();
+      }
+
+      private static HttpClient ConfigureAzureRestApiClient(HttpClient client)
+      {
+         // TODO: configure for Azure auth
+         client.DefaultRequestHeaders.Add("TODO", "TODO");
+         return client;
       }
    }
 }
