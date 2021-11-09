@@ -75,15 +75,17 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
             .Setup(dbo => dbo.GetBySqlServerAsync(It.IsAny<ISqlServer>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .Returns(Task.FromResult(mockDatabase.Object));
 
+         string sqlServerName = Some.Random.String();
+
          _mockHttpClient.Setup(m => m.SendAsync(It.IsAny<HttpRequestMessage>(), It.IsAny<CancellationToken>())).ReturnsAsync(new HttpResponseMessage());
 
          // Act
          Guid environmentKey = Some.Random.Guid();
-         await _sut.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environmentKey, null, null, null);
+         await _sut.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environmentKey, null, null, sqlServerName);
 
          // Assert
          _mockEnvironmentCommands.Verify(
-            ec => ec.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environmentKey, databaseName),
+            ec => ec.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environmentKey, $"Server=https://{sqlServerName}.database.windows.net;Database={databaseName};"),
             Times.Once);
       }
    }
