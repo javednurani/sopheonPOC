@@ -1,6 +1,7 @@
 import {
   Dropdown,
   FontSizes,
+  Icon,
   IDropdownOption,
   IDropdownStyles,
   IStackStyles,
@@ -48,38 +49,48 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
     },
   };
   const industryOptions: IDropdownOption[] = [
-    { key: 1, text: formatMessage({ id: 'industryoption.advertising' }) },
-    { key: 2, text: formatMessage({ id: 'industryoption.agricuture' }) },
-    { key: 3, text: formatMessage({ id: 'industryoption.construction' }) },
-    { key: 4, text: formatMessage({ id: 'industryoption.eduhigher' }) },
-    { key: 5, text: formatMessage({ id: 'industryoption.eduk12' }) },
-    { key: 6, text: formatMessage({ id: 'industryoption.energy' }) },
-    { key: 7, text: formatMessage({ id: 'industryoption.financialservices' }) },
-    { key: 8, text: formatMessage({ id: 'industryoption.govfederal' }) },
-    { key: 9, text: formatMessage({ id: 'industryoption.govlocal' }) },
-    { key: 10, text: formatMessage({ id: 'industryoption.govmilitary' }) },
-    { key: 11, text: formatMessage({ id: 'industryoption.govstate' }) },
-    { key: 12, text: formatMessage({ id: 'industryoption.healthcare' }) },
-    { key: 13, text: formatMessage({ id: 'industryoption.insurance' }) },
-    { key: 14, text: formatMessage({ id: 'industryoption.manuaero' }) },
-    { key: 15, text: formatMessage({ id: 'industryoption.manuauto' }) },
-    { key: 16, text: formatMessage({ id: 'industryoption.manuconsumergoods' }) },
-    { key: 17, text: formatMessage({ id: 'industryoption.manuindustrial' }) },
-    { key: 18, text: formatMessage({ id: 'industryoption.entertainment' }) },
-    { key: 19, text: formatMessage({ id: 'industryoption.membershiporg' }) },
-    { key: 20, text: formatMessage({ id: 'industryoption.nonprofit' }) },
-    { key: 21, text: formatMessage({ id: 'industryoption.pharma' }) },
-    { key: 22, text: formatMessage({ id: 'industryoption.protechservices' }) },
-    { key: 23, text: formatMessage({ id: 'industryoption.realestate' }) },
-    { key: 24, text: formatMessage({ id: 'industryoption.retail' }) },
-    { key: 25, text: formatMessage({ id: 'industryoption.techhardware' }) },
-    { key: 26, text: formatMessage({ id: 'industryoption.techsoftware' }) },
-    { key: 27, text: formatMessage({ id: 'industryoption.telecom' }) },
-    { key: 28, text: formatMessage({ id: 'industryoption.transportation' }) },
-    { key: 29, text: formatMessage({ id: 'industryoption.travel' }) },
-    { key: 30, text: formatMessage({ id: 'industryoption.utilities' }) },
+    { key: 1, text: formatMessage({ id: 'industryoption.advertising' }), data: { icon: 'MediaIndustryIcon' } },
+    { key: 2, text: formatMessage({ id: 'industryoption.agricuture' }), data: { icon: 'AgIndustryIcon' } },
+    { key: 3, text: formatMessage({ id: 'industryoption.construction' }), data: { icon: 'ConstREIndustryIcon' } },
+    { key: 4, text: formatMessage({ id: 'industryoption.eduhigher' }), data: { icon: 'EduIndustryIcon' } },
+    { key: 5, text: formatMessage({ id: 'industryoption.eduk12' }), data: { icon: 'EduIndustryIcon' } },
+    { key: 6, text: formatMessage({ id: 'industryoption.energy' }), data: { icon: 'EnergyIndustryIcon' } },
+    { key: 7, text: formatMessage({ id: 'industryoption.financialservices' }), data: { icon: 'FinIndustryIcon' } },
+    { key: 8, text: formatMessage({ id: 'industryoption.govfederal' }), data: { icon: 'GovtIndustryIcon' } },
+    { key: 9, text: formatMessage({ id: 'industryoption.govlocal' }), data: { icon: 'GovtIndustryIcon' } },
+    { key: 10, text: formatMessage({ id: 'industryoption.govmilitary' }), data: { icon: 'GovtIndustryIcon' } },
+    { key: 11, text: formatMessage({ id: 'industryoption.govstate' }), data: { icon: 'GovtIndustryIcon' } },
+    { key: 12, text: formatMessage({ id: 'industryoption.healthcare' }), data: { icon: 'HealthIndustryIcon' } },
+    { key: 13, text: formatMessage({ id: 'industryoption.insurance' }), data: { icon: 'FinIndustryIcon' } },
+    { key: 14, text: formatMessage({ id: 'industryoption.manuaero' }), data: { icon: 'AeroIndustryIcon' } },
+    { key: 15, text: formatMessage({ id: 'industryoption.manuauto' }), data: { icon: 'AutoIndustryIcon' } },
+    { key: 16, text: formatMessage({ id: 'industryoption.manuconsumergoods' }), data: { icon: 'ConsumerIndustryIcon' } },
+    { key: 17, text: formatMessage({ id: 'industryoption.manuindustrial' }), data: { icon: 'IndusIndustryIcon' } },
+    { key: 18, text: formatMessage({ id: 'industryoption.entertainment' }), data: { icon: 'MediaIndustryIcon' } },
+    { key: 19, text: formatMessage({ id: 'industryoption.membershiporg' }), data: { icon: 'MemberIndustryIcon' } },
+    { key: 20, text: formatMessage({ id: 'industryoption.nonprofit' }), data: { icon: 'MemberIndustryIcon' } },
+    { key: 21, text: formatMessage({ id: 'industryoption.pharma' }), data: { icon: 'HealthIndustryIcon' } },
+    { key: 22, text: formatMessage({ id: 'industryoption.protechservices' }), data: { icon: 'ServicesIndustryIcon' } },
+    { key: 23, text: formatMessage({ id: 'industryoption.realestate' }), data: { icon: 'ConstREIndustryIcon' } },
+    { key: 24, text: formatMessage({ id: 'industryoption.retail' }), data: { icon: 'ConsumerIndustryIcon' } },
+    { key: 25, text: formatMessage({ id: 'industryoption.techhardware' }), data: { icon: 'TechIndustryIcon' } },
+    { key: 26, text: formatMessage({ id: 'industryoption.techsoftware' }), data: { icon: 'TechIndustryIcon' } },
+    { key: 27, text: formatMessage({ id: 'industryoption.telecom' }), data: { icon: 'TeleIndustryIcon' } },
+    { key: 28, text: formatMessage({ id: 'industryoption.transportation' }), data: { icon: 'TransIndustryIcon' } },
+    { key: 29, text: formatMessage({ id: 'industryoption.travel' }), data: { icon: 'HospIndustryIcon' } },
+    { key: 30, text: formatMessage({ id: 'industryoption.utilities' }), data: { icon: 'TechIndustryIcon' } },
   ];
-
+  const onRenderOption = (option: IDropdownOption): JSX.Element => {
+    const svgIconStyle: React.CSSProperties = {
+      marginRight: 8,
+    };
+    return (
+      <div>
+        {option.data && option.data.icon && <Icon style={svgIconStyle} iconName={option.data.icon} aria-hidden="true" title={option.data.icon} />}
+        <span>{option.text}</span>
+      </div>
+    );
+  };
   switch (currentStep) {
     case 2:
       return (
@@ -103,6 +114,7 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
                 placeholder={formatMessage({ id: 'industryoption.default' })}
                 options={industryOptions}
                 styles={dropdownStyles}
+                onRenderOption={onRenderOption}
                 multiSelect
                 required
               />
