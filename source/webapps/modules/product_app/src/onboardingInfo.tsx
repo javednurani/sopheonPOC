@@ -1,4 +1,4 @@
-import { Label, PrimaryButton, ProgressIndicator, Stack, TextField } from '@fluentui/react';
+import { FontSizes, IStackTokens, ITextFieldStyles, Label, PrimaryButton, ProgressIndicator, Stack, TextField } from '@fluentui/react';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -7,12 +7,25 @@ import { AppDispatchProps, AppStateProps } from './AppContainer';
 export type OnboardingInfoProps = AppStateProps & AppDispatchProps;
 
 const headerStyle: React.CSSProperties = {
-  marginTop: '20px',
-  marginBottom: '20px',
-  fontSize: '40px',
+  fontSize: FontSizes.size42,
+  marginBottom: '2vh',
 };
 
 const fieldWidth = 300;
+
+const stackTokens: IStackTokens = { childrenGap: 15 };
+
+const buttonStyles: React.CSSProperties = {
+  marginTop: '6vh',
+};
+
+const textFieldStyles: Partial<ITextFieldStyles> = {
+  root: {
+    width: fieldWidth,
+    textAlign: 'left',
+  },
+};
+
 const progressBarStyles: React.CSSProperties = {
   marginTop: '10vh',
   width: fieldWidth,
@@ -38,21 +51,29 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
       );
     case 3:
       return (
-        <Stack className="step3" horizontalAlign="center">
+        <Stack className="step3" horizontalAlign="center" tokens={stackTokens}>
           <Stack.Item>
             <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupYourGoals' })}</Label>
           </Stack.Item>
           <Stack.Item>
-            <TextField label={formatMessage({ id: 'onboarding.productgoal' })} maxLength={300} multiline rows={4} />
+            <TextField
+              label={formatMessage({ id: 'onboarding.productgoal' })}
+              maxLength={300}
+              multiline
+              rows={4}
+              styles={textFieldStyles}
+              resizable={false}
+            />
           </Stack.Item>
           <Stack.Item>
-            <TextField label={formatMessage({ id: 'onboarding.productKpi' })} maxLength={60} />
+            <TextField label={formatMessage({ id: 'onboarding.productKpi' })} maxLength={60} styles={textFieldStyles} />
           </Stack.Item>
           <Stack.Item>
             <PrimaryButton
               text={formatMessage({ id: 'onboarding.getstarted' })}
               aria-label={formatMessage({ id: 'onboarding.getstarted' })}
               onClick={() => nextStep()}
+              style={buttonStyles}
             />
           </Stack.Item>
           <Stack.Item align={'auto'} style={progressBarStyles}>
