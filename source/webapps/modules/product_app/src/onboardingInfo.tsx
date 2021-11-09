@@ -6,6 +6,12 @@ import { AppDispatchProps, AppStateProps } from './AppContainer';
 
 export type OnboardingInfoProps = AppStateProps & AppDispatchProps;
 
+const headerStyle: React.CSSProperties = {
+  marginTop: '20px',
+  marginBottom: '20px',
+  fontSize: '40px',
+};
+
 const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentStep, nextStep }: OnboardingInfoProps) => {
   const { formatMessage } = useIntl();
   const headerStyle: React.CSSProperties = {
@@ -90,7 +96,22 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
     case 3:
       return (
         <Stack className="step3" horizontalAlign="center">
-          <FormattedMessage id={'step3'} />
+          <Stack.Item>
+            <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupYourGoals' })}</Label>
+          </Stack.Item>
+          <Stack.Item>
+            <TextField label={formatMessage({ id: 'onboarding.productgoal' })} maxLength={300} multiline rows={4} />
+          </Stack.Item>
+          <Stack.Item>
+            <TextField label={formatMessage({ id: 'onboarding.productKpi' })} maxLength={60} />
+          </Stack.Item>
+          <Stack.Item>
+            <PrimaryButton
+              text={formatMessage({ id: 'onboarding.getstarted' })}
+              aria-label={formatMessage({ id: 'onboarding.getstarted' })}
+              onClick={() => nextStep()}
+            />
+          </Stack.Item>
         </Stack>
       );
     case 4:
