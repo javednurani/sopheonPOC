@@ -1,7 +1,7 @@
 import { Label, PrimaryButton } from '@fluentui/react';
 import { AppProps } from '@sopheon/shell-api';
 import React from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 
 import { AppDispatchProps, AppStateProps } from './AppContainer';
 import OnboardingInfo from './onboardingInfo';
@@ -14,7 +14,6 @@ const App: React.FunctionComponent<Props> = ({ currentStep, nextStep }: Props) =
   return (
     <div>
       <Label>
-        <FormattedMessage id={'app.welcome'} />
         <OnboardingInfo currentStep={currentStep} nextStep={nextStep} />
         <PrimaryButton
           text={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
