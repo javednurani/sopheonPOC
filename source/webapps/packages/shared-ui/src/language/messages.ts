@@ -72,7 +72,7 @@ export const messages: Record<string, Record<string, string>> = {
     'industryoption.realestate': 'Real Estate, Rental & Leasing',
     'industryoption.retail': 'Retail',
     'industryoption.techhardware': 'Technology Hardware',
-    'industryoptiontechsoftware.': 'Technology Software & Services',
+    'industryoption.techsoftware': 'Technology Software & Services',
     'industryoption.telecom': 'Telecommunications',
     'industryoption.transportation': 'Transportation & Warehousing',
     'industryoption.travel': 'Travel, Leisure & Hospitality',
