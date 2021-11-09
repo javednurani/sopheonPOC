@@ -1,4 +1,17 @@
-import { Dropdown, IDropdownOption, IDropdownStyles, Label, PrimaryButton, ProgressIndicator, Stack, TextField } from '@fluentui/react';
+import {
+  Dropdown,
+  FontSizes,
+  IDropdownOption,
+  IDropdownStyles,
+  IStackStyles,
+  IStackTokens,
+  ITextFieldStyles,
+  Label,
+  PrimaryButton,
+  ProgressIndicator,
+  Stack,
+  TextField,
+} from '@fluentui/react';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -9,15 +22,31 @@ export type OnboardingInfoProps = AppStateProps & AppDispatchProps;
 const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentStep, nextStep }: OnboardingInfoProps) => {
   const { formatMessage } = useIntl();
   const headerStyle: React.CSSProperties = {
-    // TODO: Use header styles from cloud-1583 at merge
+    fontSize: FontSizes.size42,
+    marginBottom: '2vh',
+  };
+  const fieldWidth: number = 300;
+
+  const stackTokens: IStackTokens = { childrenGap: 15 };
+  const buttonStyles: React.CSSProperties = {
+    marginTop: '6vh',
   };
   const progressBarStyles: React.CSSProperties = {
-    padding: '0vh 25vw 0vh 25vw',
+    marginTop: '10vh',
+    width: fieldWidth,
+  };
+  const textFieldStyles: Partial<ITextFieldStyles> = {
+    root: {
+      width: fieldWidth,
+      textAlign: 'left',
+    },
   };
   const dropdownStyles: Partial<IDropdownStyles> = {
-    dropdown: { width: 250 },
+    root: {
+      width: fieldWidth,
+      textAlign: 'left',
+    },
   };
-
   const industryOptions: IDropdownOption[] = [
     { key: 1, text: formatMessage({ id: 'industryoption.advertising' }) },
     { key: 2, text: formatMessage({ id: 'industryoption.agricuture' }) },
@@ -54,43 +83,56 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
   switch (currentStep) {
     case 2:
       return (
-        <Stack className="step2" horizontalAlign="center">
-          <Stack.Item>
-            <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupproduct' })}</Label>
-          </Stack.Item>
-          <Stack.Item>
-            <TextField
-              label={formatMessage({ id: 'onboarding.yourproductname' })}
-              aria-label={formatMessage({ id: 'onboarding.yourproductname' })}
-              required
-              maxLength={300}
-            />
-          </Stack.Item>
-          <Stack.Item>
-            <Dropdown
-              label={formatMessage({ id: 'onboarding.industryselection' })}
-              placeholder={formatMessage({ id: 'industryoption.default' })}
-              options={industryOptions}
-              styles={dropdownStyles}
-              multiSelect
-              required
-            />
-          </Stack.Item>
-          <Stack.Item align={'auto'} style={progressBarStyles}>
-            <ProgressIndicator
-              label={formatMessage({ id: 'onboarding.step2of3' })}
-              description={formatMessage({ id: 'onboarding.nextGoals' })}
-              ariaValueText={formatMessage({ id: 'onboarding.step2of3' })}
-              percentComplete={0.67}
-              barHeight={12}
-            />
-          </Stack.Item>
-        </Stack>
+        <>
+          <Stack className="step2" horizontalAlign="center" tokens={stackTokens}>
+            <Stack.Item>
+              <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupproduct' })}</Label>
+            </Stack.Item>
+            <Stack.Item>
+              <TextField
+                label={formatMessage({ id: 'onboarding.yourproductname' })}
+                aria-label={formatMessage({ id: 'onboarding.yourproductname' })}
+                styles={textFieldStyles}
+                required
+                maxLength={300}
+              />
+            </Stack.Item>
+            <Stack.Item>
+              <Dropdown
+                label={formatMessage({ id: 'onboarding.industryselection' })}
+                placeholder={formatMessage({ id: 'industryoption.default' })}
+                options={industryOptions}
+                styles={dropdownStyles}
+                multiSelect
+                required
+              />
+            </Stack.Item>
+            <Stack.Item>
+              <PrimaryButton
+                text={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
+                aria-label={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
+                onClick={() => nextStep()}
+                style={buttonStyles}
+              />
+            </Stack.Item>
+            <Stack.Item style={progressBarStyles}>
+              <ProgressIndicator
+                label={formatMessage({ id: 'onboarding.step2of3' })}
+                description={formatMessage({ id: 'onboarding.nextGoals' })}
+                ariaValueText={formatMessage({ id: 'onboarding.step2of3' })}
+                percentComplete={0.67}
+                barHeight={8}
+              />
+            </Stack.Item>
+          </Stack>
+        </>
       );
     case 3:
       return (
         <Stack className="step3" horizontalAlign="center">
-          <FormattedMessage id={'step3'} />
+          <Stack.Item>
+            <FormattedMessage id={'step3'} />
+          </Stack.Item>
         </Stack>
       );
     case 4:
