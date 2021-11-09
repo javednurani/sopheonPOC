@@ -85,16 +85,16 @@ namespace Sopheon.CloudNative.Products.AspNetCore
          services.AddSwaggerGen(c =>
          {
             // If new Swagger Docs are added, update the build action
-            c.SwaggerDoc("v1", new OpenApiInfo 
-            { 
-               Title = "Sopheon.CloudNative.Products.AspNetCore", 
+            c.SwaggerDoc("v1", new OpenApiInfo
+            {
+               Title = "Sopheon.CloudNative.Products.AspNetCore",
                Version = "v1",
                Description = ""
             });
 
             Uri authorizationUrl = new Uri($"{Configuration.GetValue<string>("AzureAdB2C:Instance")}/{Configuration.GetValue<string>("AzureAdB2C:Domain")}/{Configuration.GetValue<string>("AzureAdB2C:SignUpSignInPolicyId")}/oauth2/v2.0/authorize"); // ex: https://<b2c_tenant_name>.b2clogin.com/<b2c_tenant_name>.onmicrosoft.com/oauth2/v2.0/authorize?p=b2c_1_susi_v2
             Uri tokenUrl = new Uri($"{Configuration.GetValue<string>("AzureAdB2C:Instance")}/{Configuration.GetValue<string>("AzureAdB2C:Domain")}/{Configuration.GetValue<string>("AzureAdB2C:SignUpSignInPolicyId")}/oauth2/v2.0/token"); // ex: https://<b2c_tenant_name>.b2clogin.com/<b2c_tenant_name>.onmicrosoft.com/oauth2/v2.0/token?p=b2c_1_susi_v2
-            
+
             c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
             {
                Name = "Authorization",
@@ -134,7 +134,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore
          services.AddScoped<EnvironmentOwnerLookupService>();
 
          // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/environments?view=aspnetcore-5.0#determining-the-environment-at-runtime
-         if (!_env.IsDevelopment() || !Configuration.GetValue<bool>("LocalDevelopment:UseEnvironmentDatabasesFromAppSettings"))
+         if (!_env.IsDevelopment() || !Configuration.GetValue<bool>("DevelopmentAndDemoSettings:UseEnvironmentDatabasesFromAppSettings"))
          {
             services.AddScoped<IEnvironmentSqlConnectionStringProvider, EnvironmentSqlConnectionStringProvider>();
          }
@@ -156,6 +156,10 @@ namespace Sopheon.CloudNative.Products.AspNetCore
 
          services.AddScoped<IAuthorizationHandler, EnvironmentOwnerHandler>();
          //services.AddScoped<IAuthorizationHandler, SopheonSupportEnvironmentAccessHandler>(); // TODO: Add handling for support access scenario, or potentially local dev scenarios
+         if (_env.IsDevelopment() && Configuration.GetValue<bool>("DevelopmentAndDemoSettings:EnableSuperUsers"))
+         {
+            services.AddScoped<IAuthorizationHandler, DemoSuperUserHandler>();
+         }
 
          // Entity Framework
          services.AddDbContext<ProductManagementContext>((serviceProvider, optionsBuilder) =>

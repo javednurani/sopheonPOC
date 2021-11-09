@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Sopheon.CloudNative.Products.Utilities;
 
 namespace Sopheon.CloudNative.Products.AspNetCore
@@ -18,16 +19,19 @@ namespace Sopheon.CloudNative.Products.AspNetCore
       private readonly IHttpClientFactory _clientFactory;
       private readonly IMemoryCache _memoryCache;
       private readonly IConfiguration _configRoot;
+      private readonly ILogger<EnvironmentOwnerLookupService> _logger;
 
       public EnvironmentOwnerLookupService(IHttpContextAccessor accessor,
          IHttpClientFactory clientFactory,
          IMemoryCache memoryCache,
-         IConfiguration configRoot)
+         IConfiguration configRoot,
+         ILogger<EnvironmentOwnerLookupService> logger)
       {
          _httpContext = accessor.HttpContext;
          _clientFactory = clientFactory;
          _memoryCache = memoryCache;
          _configRoot = configRoot;
+         _logger = logger;
       }
 
       public async Task<string> GetEnvironmentOwnerAsync(string environmentKey) 
@@ -37,7 +41,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore
          if (!_memoryCache.TryGetValue<string>(cacheKey, out string environmentOwner)) 
          {
             List<EnvironmentCatalogEntry> environments = await GetEnvironments();
-            environmentOwner = environments.FirstOrDefault(e => e.EnvironmentKey.Equals(environmentKey, StringComparison.OrdinalIgnoreCase))?.Owner;
+            environmentOwner = environments?.FirstOrDefault(e => e.EnvironmentKey.Equals(environmentKey, StringComparison.OrdinalIgnoreCase))?.Owner;
 
             if (!string.IsNullOrWhiteSpace(environmentOwner)) 
             {
@@ -63,20 +67,31 @@ namespace Sopheon.CloudNative.Products.AspNetCore
 
          var client = _clientFactory.CreateClient();
 
-         var response = await client.SendAsync(request);
-
          List<EnvironmentCatalogEntry> environments = null;
-         if (response.IsSuccessStatusCode)
+         try
          {
-            string responseString = null;
-            using (var responseStream = await response.Content.ReadAsStreamAsync())
+            var response = await client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
             {
-               using (StreamReader streamReader = new StreamReader(responseStream))
+               string responseString = null;
+               using (var responseStream = await response.Content.ReadAsStreamAsync())
                {
-                  responseString = streamReader.ReadToEnd();
+                  using (StreamReader streamReader = new StreamReader(responseStream))
+                  {
+                     responseString = streamReader.ReadToEnd();
+                  }
                }
+               environments = JsonSerializer.Deserialize<List<EnvironmentCatalogEntry>>(responseString); // TODO: Create Client Library for Function Endpoint
             }
-            environments = JsonSerializer.Deserialize<List<EnvironmentCatalogEntry>>(responseString); // TODO: Create Client Library for Function Endpoint
+            else 
+            {
+               _logger.LogError($"Error calling {requestUrl}");
+            }
+         }
+         catch (Exception ex)
+         {
+            _logger.LogError(ex, $"Error calling {requestUrl}");
          }
 
          return environments;
