@@ -19,31 +19,6 @@ import { AppDispatchProps, AppStateProps } from './AppContainer';
 
 export type OnboardingInfoProps = AppStateProps & AppDispatchProps;
 
-const headerStyle: React.CSSProperties = {
-  fontSize: FontSizes.size42,
-  marginBottom: '2vh',
-};
-
-const fieldWidth = 300;
-
-const stackTokens: IStackTokens = { childrenGap: 15 };
-
-const buttonStyles: React.CSSProperties = {
-  marginTop: '6vh',
-};
-
-const textFieldStyles: Partial<ITextFieldStyles> = {
-  root: {
-    width: fieldWidth,
-    textAlign: 'left',
-  },
-};
-
-const progressBarStyles: React.CSSProperties = {
-  marginTop: '10vh',
-  width: fieldWidth,
-};
-
 const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentStep, nextStep }: OnboardingInfoProps) => {
   const { formatMessage } = useIntl();
   const headerStyle: React.CSSProperties = {
