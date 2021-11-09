@@ -4,7 +4,6 @@ import {
   Icon,
   IDropdownOption,
   IDropdownStyles,
-  IStackStyles,
   IStackTokens,
   ITextFieldStyles,
   Label,
@@ -13,7 +12,7 @@ import {
   Stack,
   TextField,
 } from '@fluentui/react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { AppDispatchProps, AppStateProps } from './AppContainer';
@@ -80,6 +79,7 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
     { key: 29, text: formatMessage({ id: 'industryoption.travel' }), data: { icon: 'HospIndustryIcon' } },
     { key: 30, text: formatMessage({ id: 'industryoption.utilities' }), data: { icon: 'TechIndustryIcon' } },
   ];
+
   const onRenderOption = (option: IDropdownOption): JSX.Element => {
     const svgIconStyle: React.CSSProperties = {
       marginRight: 8,
@@ -91,53 +91,81 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
       </div>
     );
   };
+
+  const [productName, setProductName] = useState('');
+  const [industryKeys, setIndustryKeys] = useState<number[]>([]);
+  const [continueDisabled, setContinueDisabled] = useState(true);
+
+  const handleProductNameChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string | undefined): void => {
+    setProductName(newValue || '');
+  };
+
+  const handleIndustryDropdownChange = (
+    event: React.FormEvent<HTMLDivElement>,
+    option?: IDropdownOption | undefined,
+    index?: number | undefined
+  ): void => {
+    if (option) {
+      if (industryKeys.indexOf(option.key as number) < 0) {
+        setIndustryKeys([...industryKeys, option.key as number]);
+      } else {
+        setIndustryKeys(industryKeys.filter(k => k != (option.key as number)));
+      }
+    }
+  };
+
+  useEffect(() => {
+    setContinueDisabled(productName.length == 0 || industryKeys.length == 0);
+  }, [productName, industryKeys]);
+
   switch (currentStep) {
     case 2:
       return (
-        <>
-          <Stack className="step2" horizontalAlign="center" tokens={stackTokens}>
-            <Stack.Item>
-              <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupproduct' })}</Label>
-            </Stack.Item>
-            <Stack.Item>
-              <TextField
-                label={formatMessage({ id: 'onboarding.yourproductname' })}
-                aria-label={formatMessage({ id: 'onboarding.yourproductname' })}
-                styles={textFieldStyles}
-                required
-                maxLength={300}
-              />
-            </Stack.Item>
-            <Stack.Item>
-              <Dropdown
-                label={formatMessage({ id: 'onboarding.industryselection' })}
-                placeholder={formatMessage({ id: 'industryoption.default' })}
-                options={industryOptions}
-                styles={dropdownStyles}
-                onRenderOption={onRenderOption}
-                multiSelect
-                required
-              />
-            </Stack.Item>
-            <Stack.Item>
-              <PrimaryButton
-                text={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
-                aria-label={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
-                onClick={() => nextStep()}
-                style={buttonStyles}
-              />
-            </Stack.Item>
-            <Stack.Item style={progressBarStyles}>
-              <ProgressIndicator
-                label={formatMessage({ id: 'onboarding.step2of3' })}
-                description={formatMessage({ id: 'onboarding.nextGoals' })}
-                ariaValueText={formatMessage({ id: 'onboarding.step2of3' })}
-                percentComplete={0.67}
-                barHeight={8}
-              />
-            </Stack.Item>
-          </Stack>
-        </>
+        <Stack className="step2" horizontalAlign="center" tokens={stackTokens}>
+          <Stack.Item>
+            <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupproduct' })}</Label>
+          </Stack.Item>
+          <Stack.Item>
+            <TextField
+              label={formatMessage({ id: 'onboarding.yourproductname' })}
+              aria-label={formatMessage({ id: 'onboarding.yourproductname' })}
+              styles={textFieldStyles}
+              onChange={handleProductNameChange}
+              required
+              maxLength={300}
+            />
+          </Stack.Item>
+          <Stack.Item>
+            <Dropdown
+              label={formatMessage({ id: 'onboarding.industryselection' })}
+              placeholder={formatMessage({ id: 'industryoption.default' })}
+              options={industryOptions}
+              styles={dropdownStyles}
+              onRenderOption={onRenderOption}
+              onChange={handleIndustryDropdownChange}
+              multiSelect
+              required
+            />
+          </Stack.Item>
+          <Stack.Item>
+            <PrimaryButton
+              text={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
+              aria-label={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
+              onClick={() => nextStep()}
+              style={buttonStyles}
+              disabled={continueDisabled}
+            />
+          </Stack.Item>
+          <Stack.Item style={progressBarStyles}>
+            <ProgressIndicator
+              label={formatMessage({ id: 'onboarding.step2of3' })}
+              description={formatMessage({ id: 'onboarding.nextGoals' })}
+              ariaValueText={formatMessage({ id: 'onboarding.step2of3' })}
+              percentComplete={0.67}
+              barHeight={8}
+            />
+          </Stack.Item>
+        </Stack>
       );
     case 3:
       return (
