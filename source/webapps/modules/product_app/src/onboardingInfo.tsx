@@ -121,7 +121,7 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
                 description={formatMessage({ id: 'onboarding.nextGoals' })}
                 ariaValueText={formatMessage({ id: 'onboarding.step2of3' })}
                 percentComplete={0.67}
-                barHeight={12}
+                barHeight={8}
               />
             </Stack.Item>
           </Stack>
