@@ -11,8 +11,11 @@ const headerStyle: React.CSSProperties = {
   marginBottom: '20px',
   fontSize: '40px',
 };
+
+const fieldWidth = 300;
 const progressBarStyles: React.CSSProperties = {
-  padding: '0vh 25vw',
+  marginTop: '10vh',
+  width: fieldWidth,
 };
 
 const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentStep, nextStep }: OnboardingInfoProps) => {
