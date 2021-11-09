@@ -1,4 +1,4 @@
-import { Label, PrimaryButton, Stack, TextField } from '@fluentui/react';
+import { Label, PrimaryButton, ProgressIndicator, Stack, TextField } from '@fluentui/react';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -10,6 +10,12 @@ const headerStyle: React.CSSProperties = {
   marginTop: '20px',
   marginBottom: '20px',
   fontSize: '40px',
+};
+
+const fieldWidth = 300;
+const progressBarStyles: React.CSSProperties = {
+  marginTop: '10vh',
+  width: fieldWidth,
 };
 
 const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentStep, nextStep }: OnboardingInfoProps) => {
@@ -47,6 +53,15 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
               text={formatMessage({ id: 'onboarding.getstarted' })}
               aria-label={formatMessage({ id: 'onboarding.getstarted' })}
               onClick={() => nextStep()}
+            />
+          </Stack.Item>
+          <Stack.Item align={'auto'} style={progressBarStyles}>
+            <ProgressIndicator
+              label={formatMessage({ id: 'onboarding.step3of3' })}
+              description={formatMessage({ id: 'onboarding.done' })}
+              ariaValueText={formatMessage({ id: 'onboarding.step3of3' })}
+              percentComplete={1}
+              barHeight={8}
             />
           </Stack.Item>
         </Stack>

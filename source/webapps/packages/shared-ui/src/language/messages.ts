@@ -43,5 +43,7 @@ export const messages: Record<string, Record<string, string>> = {
     'onboarding.productKpi': "What key performance indicators (KPI) measure or track your product's success?",
     'onboarding.getstarted': 'Get Started!',
     'onboarding.productgoal': 'What is your current product goal?',
+    'onboarding.step3of3': 'Step 3 of 3: Setup your Goals',
+    'onboarding.done': 'Done: Get Started!',
   },
 };
