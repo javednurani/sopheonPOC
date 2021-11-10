@@ -1,6 +1,6 @@
-﻿using Sopheon.CloudNative.Environments.Functions.Models;
+﻿using Sopheon.CloudNative.Environments.Domain.Models;
+using Sopheon.CloudNative.Environments.Functions.Models;
 using Profile = AutoMapper.Profile;
-using Sopheon.CloudNative.Environments.Domain.Models;
 
 namespace Sopheon.CloudNative.Environments.Functions
 {
@@ -8,6 +8,16 @@ namespace Sopheon.CloudNative.Environments.Functions
    {
       public MappingProfile()
       {
+         CreateMap<DomainResourceType, ResourceTypeDto>()
+            .ReverseMap();
+
+         CreateMap<Resource, ResourceDto>()
+            .ForMember((resourceDto => resourceDto.ResourceTypeId),
+               memberOptions => memberOptions.MapFrom(resource => resource.DomainResourceTypeId))
+            .ReverseMap();
+
+         CreateMap<BusinessServiceDependency, BusinessServiceDependencyDto>().ReverseMap();
+
          CreateMap<Environment, EnvironmentDto>().ReverseMap();
       }
    }

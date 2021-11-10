@@ -21,9 +21,9 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
       };
 
       private readonly ILogger<DatabaseBufferMonitorHelper> _logger;
-      private readonly IAzure _azure;
+      private readonly Lazy<IAzure> _azure;
 
-      public DatabaseBufferMonitorHelper(ILogger<DatabaseBufferMonitorHelper> logger, IAzure azure)
+      public DatabaseBufferMonitorHelper(ILogger<DatabaseBufferMonitorHelper> logger, Lazy<IAzure> azure)
       {
          _logger = logger;
          _azure = azure;
@@ -52,13 +52,13 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
       {
          List<ISqlDatabase> notAssigned = new List<ISqlDatabase>();
 
-         IReadOnlyList<ISqlDatabase> allDatabasesOnServer = await _azure.SqlServers.Databases.ListBySqlServerAsync(sqlServer);
+         IReadOnlyList<ISqlDatabase> allDatabasesOnServer = await _azure.Value.SqlServers.Databases.ListBySqlServerAsync(sqlServer);
 
          // categorize CustomerProvisionedDatabase tagged databases by tag value
          foreach (var database in allDatabasesOnServer)
          {
-            ISqlDatabase databaseWithDetails = await _azure.SqlServers.Databases.GetBySqlServerAsync(sqlServer, database.Name);
-            
+            ISqlDatabase databaseWithDetails = await _azure.Value.SqlServers.Databases.GetBySqlServerAsync(sqlServer, database.Name);
+
             if (databaseWithDetails?.Tags == null)
             {
                _logger.LogError($"Database details for '{database.Name}' were not found on Azure SQL Server: {sqlServer.Name}");
@@ -76,7 +76,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
 
       private async Task<bool> HasSufficientDatabaseBuffer(string subscriptionId, string resourceGroupName, string sqlServerName)
       {
-         ISqlServer sqlServer = await _azure.SqlServers
+         ISqlServer sqlServer = await _azure.Value.SqlServers
                            .GetByIdAsync($"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Sql/servers/{sqlServerName}");
 
          if (sqlServer == null)
@@ -95,7 +95,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
 
       private async Task<bool> IsOngoingDeployment(string resourceGroupName)
       {
-         IPagedCollection<IDeployment> deploymentsForResourceGroup = await _azure.Deployments.ListByResourceGroupAsync(resourceGroupName);
+         IPagedCollection<IDeployment> deploymentsForResourceGroup = await _azure.Value.Deployments.ListByResourceGroupAsync(resourceGroupName);
 
          return deploymentsForResourceGroup.Any(d =>
             d.Name.Contains(nameof(DatabaseBufferMonitor)) &&
@@ -107,7 +107,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          string deploymentName = $"{nameof(DatabaseBufferMonitor)}_Deployment_{DateTime.UtcNow:yyyyMMddTHHmmss}";
          _logger.LogInformation($"Creating new deployment: {deploymentName}");
 
-         IDeployment deployment = await _azure.Deployments
+         IDeployment deployment = await _azure.Value.Deployments
             .Define(deploymentName)
             .WithExistingResourceGroup(resourceGroupName)
             .WithTemplate(deploymentTemplateJson)
