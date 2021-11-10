@@ -7,10 +7,10 @@ import { FormattedMessage, IntlProvider } from 'react-intl';
 import { Props } from './App';
 import OnboardingInfo from './onboardingInfo';
 
-describe('Testing the onboardingInfo component', () => {
+describe.skip('Testing the onboardingInfo component', () => {
   it('Render test for the onboardingInfo component', () => {
     const appProps: Props = {
-      currentStep: 1,
+      currentStep: 2,
       nextStep: jest.fn(),
     };
 
@@ -20,12 +20,12 @@ describe('Testing the onboardingInfo component', () => {
       </IntlProvider>
     );
     // TODO remove hardcoded string?
-    expect(wrapper.find(FormattedMessage).text()).toBe(`Step ${appProps.currentStep}`);
+    expect(wrapper.find(FormattedMessage).text()).toBe(`Step ${appProps.currentStep}`); //TODO look for label with messages value.
     expect(wrapper.find(PrimaryButton)).toHaveLength(1);
   });
   it('userEvent test for the onboardingInfo component', () => {
     const appProps: Props = {
-      currentStep: 1,
+      currentStep: 2,
       nextStep: jest.fn(),
     };
 
