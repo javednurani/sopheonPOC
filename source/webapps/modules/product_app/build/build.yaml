@@ -10,6 +10,7 @@ trigger:
   paths:
     include:
     - source/webapps/modules/product_app
+    - source/webapps/packages
 
 steps:
 - powershell: |

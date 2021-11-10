@@ -76,5 +76,19 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
 
          return NoContent();
       }
+
+      [HttpPost]
+      public async Task<IActionResult> PostAsync([FromBody] ProductPostDto productPostDto)
+      {
+         Product product = _mapper.Map<Product>(productPostDto);
+
+         _ = await _dbContext.Products.AddAsync(product);
+
+         _ = await _dbContext.SaveChangesAsync();
+
+         ProductDto resultProduct = _mapper.Map<ProductDto>(product);
+
+         return Created("TODO_URI", resultProduct);
+      }
    }
 }

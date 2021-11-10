@@ -50,7 +50,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore
       {
          string apiUrl = _configRoot.GetValue<string>("ServiceUrls:GetEnvironmentResourceBindingUri"); 
          string businessServiceName = "ProductManagement";
-         string dependencyName = "SqlDatabase";
+         string dependencyName = "ProductManagementSqlDb";
          string requestUrl = $"{apiUrl}({environmentKey}, {businessServiceName}, {dependencyName})";
 
          string connectionString = await CallCatalogService(requestUrl); // TODO: Retry and Backoff Logic

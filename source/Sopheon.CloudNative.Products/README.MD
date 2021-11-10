@@ -10,7 +10,7 @@ Initial Dev Environment Setup Steps:
 - Run the dotnet ef command to create/update some example target databases
 
 ```
-dotnet ef database update --connection ".;Database=TenantEnvironment1;Integrated Security=True"
+dotnet ef database update -- --connectionstring ".;Database=TenantEnvironment1;Integrated Security=True"
 ```
 
 Update the appsettings.Development.json file within Sopheon.CloudNative.Products.AspNetCore to point to the example databases you created
