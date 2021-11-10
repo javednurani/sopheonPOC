@@ -177,14 +177,17 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
             <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupYourGoals' })}</Label>
           </Stack.Item>
           <Stack.Item>
-            <TextField
-              label={formatMessage({ id: 'onboarding.productgoal' })}
-              maxLength={300}
-              multiline
-              rows={4}
-              styles={textFieldStyles}
-              resizable={false}
-            />
+            {/* Wrapped in a div to alter the DOM structure between steps, preventing text carry over bug */}
+            <div>
+              <TextField
+                label={formatMessage({ id: 'onboarding.productgoal' })}
+                maxLength={300}
+                multiline
+                rows={4}
+                styles={textFieldStyles}
+                resizable={false}
+              />
+            </div>
           </Stack.Item>
           <Stack.Item>
             <TextField label={formatMessage({ id: 'onboarding.productKpi' })} maxLength={60} styles={textFieldStyles} />
