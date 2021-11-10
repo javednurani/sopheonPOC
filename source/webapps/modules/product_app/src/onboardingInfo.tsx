@@ -80,16 +80,19 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
     { key: 30, text: formatMessage({ id: 'industryoption.utilities' }), data: { icon: 'TechIndustryIcon' } },
   ];
 
-  const onRenderOption = (option: IDropdownOption): JSX.Element => {
+  const onRenderOption = (option: IDropdownOption | undefined): JSX.Element => {
     const svgIconStyle: React.CSSProperties = {
       marginRight: 8,
     };
-    return (
-      <div>
-        {option.data && option.data.icon && <Icon style={svgIconStyle} iconName={option.data.icon} aria-hidden="true" title={option.data.icon} />}
-        <span>{option.text}</span>
-      </div>
-    );
+    if (option) {
+      return (
+        <div>
+          {option.data && option.data.icon && <Icon style={svgIconStyle} iconName={option.data.icon} aria-hidden="true" title={option.data.icon} />}
+          <span>{option.text}</span>
+        </div>
+      );
+    }
+    return <></>;
   };
 
   const [productName, setProductName] = useState('');
