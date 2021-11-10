@@ -16,6 +16,7 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { AppDispatchProps, AppStateProps } from './AppContainer';
+import SopheonLogo from './SopheonLogo';
 
 export type OnboardingInfoProps = AppStateProps & AppDispatchProps;
 
@@ -28,6 +29,9 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
   const fieldWidth = 300;
 
   const stackTokens: IStackTokens = { childrenGap: 15 };
+  const sopheonLogoStyle: React.CSSProperties = {
+    width: 200,
+  };
   const buttonStyles: React.CSSProperties = {
     marginTop: '6vh',
   };
@@ -126,6 +130,9 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
       return (
         <Stack className="step2" horizontalAlign="center" tokens={stackTokens}>
           <Stack.Item>
+            <SopheonLogo style={sopheonLogoStyle} />
+          </Stack.Item>
+          <Stack.Item>
             <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupproduct' })}</Label>
           </Stack.Item>
           <Stack.Item>
@@ -173,6 +180,9 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
     case 3:
       return (
         <Stack className="step3" horizontalAlign="center" tokens={stackTokens}>
+          <Stack.Item>
+            <SopheonLogo style={sopheonLogoStyle} />
+          </Stack.Item>
           <Stack.Item>
             <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupYourGoals' })}</Label>
           </Stack.Item>
