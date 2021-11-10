@@ -14,6 +14,7 @@ import {
   updateProductSuccess
 } from './onboardingInfoReducer';
 import { createProduct, updateProduct } from './onboardingService';
+
 export function* watchOnCreateProduct(): Generator {
   yield takeEvery(OnboardingSagaActionTypes.CREATE_PRODUCT, onCreateProduct);
 }
