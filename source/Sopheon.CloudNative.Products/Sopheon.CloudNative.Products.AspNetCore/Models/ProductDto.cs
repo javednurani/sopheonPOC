@@ -71,4 +71,11 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
 
       //public List<Release> Releases { get; set; }
    }
+
+   public class ProductPostDto
+   {
+      public string Name { get; set; }
+
+      public string Description { get; set; }
+   }
 }
