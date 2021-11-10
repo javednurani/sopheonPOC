@@ -125,7 +125,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({ current
   const handleOnboardingContinueClick = () => {
     const productData: Product = {
       Key: null,
-      Name: 'TODO FROM UI',
+      Name: productName,
       Description: 'TODO FROM UI',
     };
 
@@ -135,7 +135,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({ current
   const handleOnboardingGetStartedClick = () => {
     const productData: Product = {
       Key: 'TODO FROM STATE',
-      Name: 'TODO FROM UI',
+      Name: productName,
       Description: 'TODO FROM UI',
     };
 
