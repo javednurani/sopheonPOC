@@ -143,7 +143,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({ current
   };
 
   useEffect(() => {
-    setContinueDisabled(productName.length == 0 || industryKeys.length == 0);
+    setContinueDisabled(productName.length === 0 || industryKeys.length === 0);
   }, [productName, industryKeys]);
 
   switch (currentStep) {
