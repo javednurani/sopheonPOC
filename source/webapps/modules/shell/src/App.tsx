@@ -48,6 +48,9 @@ const App: FunctionComponent<AppProps> = ({ changeTheme }: AppProps) => {
     height: '100%',
   };
 
+  // TODO: check for user product existance CLOUD-2148
+  const userIsOnboarded = false;
+
   return (
     <div className="App" style={appStyle}>
       <BrowserRouter>
@@ -68,9 +71,11 @@ const App: FunctionComponent<AppProps> = ({ changeTheme }: AppProps) => {
                 },
               }}
             >
-              <Stack.Item shrink>
-                <Header changeTheme={changeTheme} />
-              </Stack.Item>
+              {(!location.pathname.includes('product') || userIsOnboarded) &&
+                <Stack.Item>
+                  <Header changeTheme={changeTheme} />
+                </Stack.Item>
+              }
               <Stack.Item shrink>
                 <IdleMonitor />
               </Stack.Item>
@@ -95,9 +100,11 @@ const App: FunctionComponent<AppProps> = ({ changeTheme }: AppProps) => {
                   </ScrollablePane>
                 </main>
               </Stack.Item>
-              <Stack.Item>
-                <Footer />
-              </Stack.Item>
+              {(!location.pathname.includes('product') || userIsOnboarded) &&
+                <Stack.Item>
+                  <Footer />
+                </Stack.Item>
+              }
             </Stack>
           </Route>
         </Switch>
