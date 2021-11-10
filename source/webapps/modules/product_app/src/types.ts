@@ -2,7 +2,7 @@
 // In Cloud-2147, we should generate TS Types from Sopheon.CloudNative.Products.AspNetCore OpenAPI schema
 
 export interface Product {
-  Key: string;
+  Key: string | null;
   Name: string;
   Description: string;
 }

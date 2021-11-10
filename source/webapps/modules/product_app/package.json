@@ -18,6 +18,7 @@
     "@sopheon/controls": "file:../../packages/controls",
     "@sopheon/shared-ui": "file:../../packages/shared-ui",
     "@sopheon/shell-api": "file:../../packages/shell-api",
+    "axios": "^0.24.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-intl": "^5.13.4",

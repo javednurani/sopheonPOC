@@ -41,8 +41,8 @@ export enum OnboardingSagaActionTypes {
   UPDATE_PRODUCT = 'ONBOARDING/UPDATE_PRODUCT'
 }
 
-export type CreateProductAction = Action<OnboardingSagaActionTypes.CREATE_PRODUCT>;
-export type UpdateProductAction = Action<OnboardingSagaActionTypes.UPDATE_PRODUCT>;
+export type CreateProductAction = PayloadAction<OnboardingSagaActionTypes.CREATE_PRODUCT, Product>;
+export type UpdateProductAction = PayloadAction<OnboardingSagaActionTypes.UPDATE_PRODUCT, Product>;
 
 //#endregion
 
@@ -67,8 +67,8 @@ export const updateProductFailure = (error: Error): UpdateProductFailureAction =
 
 // SAGA ACTIONS
 
-export const createProduct = (): CreateProductAction => createAction(OnboardingSagaActionTypes.CREATE_PRODUCT);
-export const updateProduct = (): UpdateProductAction => createAction(OnboardingSagaActionTypes.UPDATE_PRODUCT);
+export const createProduct = (product: Product): CreateProductAction => createPayloadAction(OnboardingSagaActionTypes.CREATE_PRODUCT, product);
+export const updateProduct = (product: Product): UpdateProductAction => createPayloadAction(OnboardingSagaActionTypes.UPDATE_PRODUCT, product);
 
 //#endregion
 

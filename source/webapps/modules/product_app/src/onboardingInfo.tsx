@@ -1,24 +1,27 @@
-import { Dropdown, IDropdownOption, IDropdownStyles, Label, PrimaryButton, ProgressIndicator, Stack, TextField } from '@fluentui/react';
+import { Dropdown, FontSizes, IDropdownOption, IDropdownStyles, Label, PrimaryButton, ProgressIndicator, Stack, TextField } from '@fluentui/react';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { AppDispatchProps, AppStateProps } from './AppContainer';
+import { CreateProductAction, UpdateProductAction } from './onboardingInfoReducer';
+import { Product } from './types';
 
-export type OnboardingInfoProps = AppStateProps & AppDispatchProps;
+export interface IOnboardingInfoProps {
+  currentStep: number;
+  createProduct: (product: Product) => CreateProductAction;
+  updateProduct: (product: Product) => UpdateProductAction;
+}
 
-const headerStyle: React.CSSProperties = {
-  marginTop: '20px',
-  marginBottom: '20px',
-  fontSize: '40px',
-};
-
-const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentStep, nextStep }: OnboardingInfoProps) => {
+const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({ currentStep, createProduct, updateProduct }: IOnboardingInfoProps) => {
   const { formatMessage } = useIntl();
   const headerStyle: React.CSSProperties = {
-    // TODO: Use header styles from cloud-1583 at merge
+    fontSize: FontSizes.size42,
+    marginBottom: '2vh',
+  };
+  const buttonStyles: React.CSSProperties = {
+    marginTop: '6vh',
   };
   const progressBarStyles: React.CSSProperties = {
-    padding: '0vh 25vw 0vh 25vw',
+    padding: '0vh 25vw',
   };
   const dropdownStyles: Partial<IDropdownStyles> = {
     dropdown: { width: 250 },
@@ -57,6 +60,26 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
     { key: 30, text: formatMessage({ id: 'industryoption.utilities' }) },
   ];
 
+  const handleOnboardingContinueClick = () => {
+    const productData: Product = {
+      Key: null,
+      Name: 'TODO FROM UI',
+      Description: 'TODO FROM UI',
+    };
+
+    createProduct(productData);
+  };
+
+  const handleOnboardingGetStartedClick = () => {
+    const productData: Product = {
+      Key: 'TODO FROM STATE',
+      Name: 'TODO FROM UI',
+      Description: 'TODO FROM UI',
+    };
+
+    updateProduct(productData);
+  };
+
   switch (currentStep) {
     case 2:
       return (
@@ -80,6 +103,14 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
               styles={dropdownStyles}
               multiSelect
               required
+            />
+          </Stack.Item>
+          <Stack.Item>
+            <PrimaryButton
+              text={formatMessage({ id: 'continue' })}
+              aria-label={formatMessage({ id: 'continue' })}
+              style={buttonStyles}
+              onClick={() => handleOnboardingContinueClick()}
             />
           </Stack.Item>
           <Stack.Item align={'auto'} style={progressBarStyles}>
@@ -109,7 +140,7 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
             <PrimaryButton
               text={formatMessage({ id: 'onboarding.getstarted' })}
               aria-label={formatMessage({ id: 'onboarding.getstarted' })}
-              onClick={() => nextStep()}
+              onClick={() => handleOnboardingGetStartedClick()}
             />
           </Stack.Item>
         </Stack>

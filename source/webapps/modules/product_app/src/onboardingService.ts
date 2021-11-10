@@ -19,7 +19,7 @@ export const createProduct: (product: Product) => Promise<Product> = async produ
 export const updateProduct: (product: Product) => Promise<Product> = async product => {
   const updateProductUrlWithEnvironment = `${API_URL_BASE}${API_URL_PATH_UPDATE_PRODUCT}`
     .replace(settings.TokenEnvironmentKey, ENVIRONMENT_KEY_STUB)
-    .replace(settings.TokenProductKey, product.Key);
+    .replace(settings.TokenProductKey, product.Key || ''); // TODO, nullable Key? null check ?
   return await axios.post(updateProductUrlWithEnvironment, product);
 };
 
