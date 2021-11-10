@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import {
   Dropdown,
   FontSizes,
@@ -13,6 +12,7 @@ import {
   Stack,
   TextField,
 } from '@fluentui/react';
+import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { AppDispatchProps, AppStateProps } from './AppContainer';
@@ -25,7 +25,7 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
     fontSize: FontSizes.size42,
     marginBottom: '2vh',
   };
-  const fieldWidth: number = 300;
+  const fieldWidth = 300;
 
   const stackTokens: IStackTokens = { childrenGap: 15 };
   const buttonStyles: React.CSSProperties = {
@@ -112,13 +112,13 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
       if (industryKeys.indexOf(option.key as number) < 0) {
         setIndustryKeys([...industryKeys, option.key as number]);
       } else {
-        setIndustryKeys(industryKeys.filter(k => k != (option.key as number)));
+        setIndustryKeys(industryKeys.filter(k => k !== (option.key as number)));
       }
     }
   };
 
   useEffect(() => {
-    setContinueDisabled(productName.length == 0 || industryKeys.length == 0);
+    setContinueDisabled(productName.length === 0 || industryKeys.length === 0);
   }, [productName, industryKeys]);
 
   switch (currentStep) {
