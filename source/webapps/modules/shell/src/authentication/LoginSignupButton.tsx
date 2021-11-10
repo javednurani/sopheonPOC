@@ -15,6 +15,9 @@ const LoginSignupButton: FunctionComponent = () => {
   useEffect(() => {
     const msalAccount: AccountInfo | undefined = getMsalAccount(instance);
     if (msalAccount !== undefined) {
+      if (msalAccount.idTokenClaims && msalAccount.idTokenClaims.environmentKey) {
+        // setEnvironmentKey(msalAccount.idTokenClaims.environmentKey);
+      }
       setAccount(msalAccount);
     }
   }, [instance, accounts]);

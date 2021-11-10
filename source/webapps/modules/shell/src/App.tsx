@@ -48,7 +48,7 @@ const App: FunctionComponent<AppProps> = ({ changeTheme }: AppProps) => {
     height: '100%',
   };
 
-  // TODO: check for user product existance CLOUD-2148
+  // TODO: check for user product existence CLOUD-2158
   const userIsOnboarded = false;
 
   return (

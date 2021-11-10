@@ -16,15 +16,21 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { CreateProductAction, UpdateProductAction } from './onboardingInfoReducer';
-import { Product } from './types';
+import { CreateUpdateProductDto, Product } from './types';
 
 export interface IOnboardingInfoProps {
   currentStep: number;
-  createProduct: (product: Product) => CreateProductAction;
-  updateProduct: (product: Product) => UpdateProductAction;
+  createProduct: (product: CreateUpdateProductDto) => CreateProductAction;
+  updateProduct: (product: CreateUpdateProductDto) => UpdateProductAction;
+  environmentKey: string;
 }
 
-const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({ currentStep, createProduct, updateProduct }: IOnboardingInfoProps) => {
+const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
+  currentStep,
+  createProduct,
+  updateProduct,
+  environmentKey,
+}: IOnboardingInfoProps) => {
   const { formatMessage } = useIntl();
   const headerStyle: React.CSSProperties = {
     fontSize: FontSizes.size42,
@@ -117,7 +123,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({ current
       if (industryKeys.indexOf(option.key as number) < 0) {
         setIndustryKeys([...industryKeys, option.key as number]);
       } else {
-        setIndustryKeys(industryKeys.filter(k => k != (option.key as number)));
+        setIndustryKeys(industryKeys.filter(k => k !== (option.key as number)));
       }
     }
   };
@@ -129,7 +135,12 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({ current
       Description: 'TODO FROM UI',
     };
 
-    createProduct(productData);
+    const createProductDto: CreateUpdateProductDto = {
+      Product: productData,
+      EnvironmentKey: environmentKey,
+    };
+
+    createProduct(createProductDto);
   };
 
   const handleOnboardingGetStartedClick = () => {
@@ -139,7 +150,11 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({ current
       Description: 'TODO FROM UI',
     };
 
-    updateProduct(productData);
+    const updateProductDto: CreateUpdateProductDto = {
+      Product: productData,
+      EnvironmentKey: environmentKey,
+    };
+    updateProduct(updateProductDto);
   };
 
   useEffect(() => {

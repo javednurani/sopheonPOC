@@ -53,10 +53,10 @@ registerIcons({
   },
 });
 
-const App: React.FunctionComponent<Props> = ({ currentStep, createProduct, updateProduct }: Props) => (
+const App: React.FunctionComponent<Props> = ({ currentStep, createProduct, updateProduct, environmentKey }: Props) => (
   <div>
     <Label>
-      <OnboardingInfo currentStep={currentStep} createProduct={createProduct} updateProduct={updateProduct} />
+      <OnboardingInfo currentStep={currentStep} createProduct={createProduct} updateProduct={updateProduct} environmentKey={environmentKey} />
     </Label>
   </div>
 );
