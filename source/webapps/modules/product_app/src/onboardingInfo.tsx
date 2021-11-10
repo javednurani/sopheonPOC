@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import {
   Dropdown,
   FontSizes,
@@ -12,7 +13,6 @@ import {
   Stack,
   TextField,
 } from '@fluentui/react';
-import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { AppDispatchProps, AppStateProps } from './AppContainer';
@@ -169,9 +169,39 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
       );
     case 3:
       return (
-        <Stack className="step3" horizontalAlign="center">
+        <Stack className="step3" horizontalAlign="center" tokens={stackTokens}>
           <Stack.Item>
-            <FormattedMessage id={'step3'} />
+            <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupYourGoals' })}</Label>
+          </Stack.Item>
+          <Stack.Item>
+            <TextField
+              label={formatMessage({ id: 'onboarding.productgoal' })}
+              maxLength={300}
+              multiline
+              rows={4}
+              styles={textFieldStyles}
+              resizable={false}
+            />
+          </Stack.Item>
+          <Stack.Item>
+            <TextField label={formatMessage({ id: 'onboarding.productKpi' })} maxLength={60} styles={textFieldStyles} />
+          </Stack.Item>
+          <Stack.Item>
+            <PrimaryButton
+              text={formatMessage({ id: 'onboarding.getstarted' })}
+              aria-label={formatMessage({ id: 'onboarding.getstarted' })}
+              onClick={() => nextStep()}
+              style={buttonStyles}
+            />
+          </Stack.Item>
+          <Stack.Item align={'auto'} style={progressBarStyles}>
+            <ProgressIndicator
+              label={formatMessage({ id: 'onboarding.step3of3' })}
+              description={formatMessage({ id: 'onboarding.done' })}
+              ariaValueText={formatMessage({ id: 'onboarding.step3of3' })}
+              percentComplete={1}
+              barHeight={8}
+            />
           </Stack.Item>
         </Stack>
       );
