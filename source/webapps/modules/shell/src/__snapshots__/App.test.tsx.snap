@@ -47,14 +47,12 @@ exports[`Testing the App component App snapshot dark theme render test 1`] = `
                   <ReactComponent
                     style={
                       Object {
-                        "fill": "#61a39f",
                         "height": "100%",
-                        "maxHeight": "100px",
-                        "maxWidth": "100px",
+                        "maxHeight": "200px",
+                        "maxWidth": "200px",
                         "minHeight": "25px",
                         "minWidth": "25px",
                         "overflow": "visible",
-                        "stroke": "#61a39f",
                         "width": "100%",
                       }
                     }
@@ -340,14 +338,12 @@ exports[`Testing the App component App snapshot light theme render test 1`] = `
                   <ReactComponent
                     style={
                       Object {
-                        "fill": "#33596f",
                         "height": "100%",
-                        "maxHeight": "100px",
-                        "maxWidth": "100px",
+                        "maxHeight": "200px",
+                        "maxWidth": "200px",
                         "minHeight": "25px",
                         "minWidth": "25px",
                         "overflow": "visible",
-                        "stroke": "#33596f",
                         "width": "100%",
                       }
                     }

@@ -4,7 +4,7 @@ import React, { FunctionComponent, useEffect, useState } from 'react';
 
 import { ReactComponent as SopheonLogoLight } from './images/sopheon_logo_blk_txt.svg';
 import { ReactComponent as SopheonLogoDark } from './images/sopheon_logo_wht_txt.svg';
-//TODO MOVE DUPLICATED COMPONENT HERE AND PRODUCT_APP TO SHARED-UI PACKAGE AND FIX SVG ISSUE (also remove duplicated images)
+//TODO MOVE DUPLICATED COMPONENT HERE AND SHELL TO SHARED-UI PACKAGE AND FIX SVG ISSUE (also remove duplicated images)
 interface SopheonLogoProps {
   style: React.CSSProperties;
 }
