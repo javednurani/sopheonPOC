@@ -674,7 +674,6 @@
           <PersistedClaims>
             <PersistedClaim ClaimTypeReferenceId="mobile" />
             <PersistedClaim ClaimTypeReferenceId="extension_newsletter" />
-            <PersistedClaim ClaimTypeReferenceId="extension_environmentKey" />
           </PersistedClaims>
         </TechnicalProfile>
         <TechnicalProfile Id="AAD-UserReadUsingEmailAddress">
@@ -723,6 +722,25 @@
             <PersistedClaim ClaimTypeReferenceId="country" />
             <PersistedClaim ClaimTypeReferenceId="extension_Company" />
           </PersistedClaims>
+        </TechnicalProfile>
+        <!-- Technical profiles for updating user record using objectId -->
+        <TechnicalProfile Id="AAD-UserWriteEnvironmentKeyUsingObjectId">
+          <Metadata>
+            <Item Key="Operation">Write</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+          </InputClaims>
+          <PersistedClaims>
+            <!-- Required claims -->
+            <PersistedClaim ClaimTypeReferenceId="objectId" />
+            <!-- Optional claims -->
+            <PersistedClaim ClaimTypeReferenceId="extension_environmentKey" />
+          </PersistedClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
@@ -812,8 +830,15 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <!-- This step reads any user attributes that we may not have received when in the token. -->
+        <!-- Save EnvironmentKey, returned from Sopheon.CloudNative.Environments API in previous step, to AADB2C extension property -->
         <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserWriteEnvironmentKeyUsingObjectId" TechnicalProfileReferenceId="AAD-UserWriteEnvironmentKeyUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- This step reads any user attributes that we may not have received when in the token. -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
           </ClaimsExchanges>
@@ -821,7 +846,7 @@
 
         <!-- execute consent step if the users consented version does not met the current version,
               otherwhise this step is skipped -->
-        <OrchestrationStep Order="3" Type="ClaimsExchange">
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
               <Value>extension_TermsOfUseConsentedVersion</Value>
@@ -834,7 +859,7 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <OrchestrationStep Order="4" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
 
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
@@ -905,6 +930,7 @@
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
+    
     <UserJourney Id="PasswordChange">
       <OrchestrationSteps>
         <OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.signuporsignin">
