@@ -69,7 +69,7 @@
         <DisplayName>String request body to send to Sopheon.CloudNative.Environment Create endpoint</DisplayName>
         <DataType>string</DataType>
       </ClaimType>
-      <ClaimType Id="environmentKey">
+      <ClaimType Id="extension_environmentKey">
         <DisplayName>EnvironmentKey of a Sopheon.CloudNative.Environment</DisplayName>
         <DataType>string</DataType>
       </ClaimType>
@@ -576,7 +576,7 @@
             <OutputClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" DefaultValue="true" />
             <OutputClaim ClaimTypeReferenceId="authenticationSource" />
             <OutputClaim ClaimTypeReferenceId="newUser" />
-            <OutputClaim ClaimTypeReferenceId="environmentKey" />
+            <OutputClaim ClaimTypeReferenceId="extension_environmentKey" />
             <OutputClaim ClaimTypeReferenceId="RESTFailSafe" />
           </OutputClaims>
           <ValidationTechnicalProfiles>
@@ -674,6 +674,7 @@
           <PersistedClaims>
             <PersistedClaim ClaimTypeReferenceId="mobile" />
             <PersistedClaim ClaimTypeReferenceId="extension_newsletter" />
+            <PersistedClaim ClaimTypeReferenceId="extension_environmentKey" />
           </PersistedClaims>
         </TechnicalProfile>
         <TechnicalProfile Id="AAD-UserReadUsingEmailAddress">
@@ -692,6 +693,7 @@
             <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedDate" />
             <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedVersion" />
             <OutputClaim ClaimTypeReferenceId="extension_Company" />
+            <OutputClaim ClaimTypeReferenceId="extension_environmentKey" />
             <OutputClaim ClaimTypeReferenceId="signInName" />
           </OutputClaims>
         </TechnicalProfile>
@@ -785,7 +787,7 @@
             <InputClaim ClaimTypeReferenceId="createEnvironmentRequestBody" />
           </InputClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="environmentKey" />
+            <OutputClaim ClaimTypeReferenceId="extension_environmentKey" PartnerClaimType="environmentKey" />
           </OutputClaims>
         </TechnicalProfile>
         <TechnicalProfile Id="REST-FailSafe-Dummy">
