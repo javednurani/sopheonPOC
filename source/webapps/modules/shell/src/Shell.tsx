@@ -12,11 +12,11 @@ const connector = shellApi.getConnector();
 
 export type ShellProps = ConnectedProps<typeof connector>;
 
-const Shell: FunctionComponent<ShellProps> = ({ changeTheme, language, theme }: ShellProps) => (
+const Shell: FunctionComponent<ShellProps> = ({ changeTheme, setEnvironmentKey, language, theme }: ShellProps) => (
   <MsalProvider instance={msalInstance()}>
     <ConnectedIntlProvider language={language}>
       <ConnectedThemeProvider theme={theme}>
-        <App changeTheme={changeTheme} />
+        <App changeTheme={changeTheme} setEnvironmentKey={setEnvironmentKey} />
       </ConnectedThemeProvider>
     </ConnectedIntlProvider>
   </MsalProvider>
