@@ -20,8 +20,8 @@ const LoginSignupButton: FunctionComponent<ILoginSignupButtonProps> = ({ setEnvi
   useEffect(() => {
     const msalAccount: AccountInfo | undefined = getMsalAccount(instance);
     if (msalAccount !== undefined) {
-      if (msalAccount.idTokenClaims && msalAccount.idTokenClaims.environmentKey) {
-        setEnvironmentKey(msalAccount.idTokenClaims.environmentKey);
+      if (msalAccount.idTokenClaims && msalAccount.idTokenClaims.extension_environmentKey) {
+        setEnvironmentKey(msalAccount.idTokenClaims.extension_environmentKey);
       }
       setAccount(msalAccount);
     }
