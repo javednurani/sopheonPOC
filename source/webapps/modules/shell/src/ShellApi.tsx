@@ -89,7 +89,7 @@ export class ShellApi implements IShellApi {
   ) {
     const mapState = () => ({
       ...(mapStateProps && mapStateProps(this.store.getState() as unknown as TState)),
-      environmentKey: this.store.getState().shell.auth.environmentKey, // TODO Cloud-2148 remove hardcoding
+      environmentKey: this.store.getState().shell.auth.environmentKey,
       // the below stateProps are not exposed to MFE's via IShellApi. only used by, and private to, the shell
       theme: this.store.getState().shell.theme,
       language: initialLanguageState,
