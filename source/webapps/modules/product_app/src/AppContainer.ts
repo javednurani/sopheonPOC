@@ -2,15 +2,19 @@ import { InjectReducerMap, InjectSagaMap, ShellApiProps } from '@sopheon/shell-a
 import { FunctionComponent } from 'react';
 
 import App from './App';
-import { nextStep, NextStepAction } from './onboardingInfoReducer';
+import { createProduct, CreateProductAction, updateProduct, UpdateProductAction } from './onboardingInfoReducer';
 import { NAMESPACE, rootReducer, RootState } from './rootReducer';
 import rootSaga from './rootSaga';
+import { Product } from './types';
 
 export type AppStateProps = {
   currentStep: number
 };
 
-export type AppDispatchProps = { nextStep: () => NextStepAction };
+export type AppDispatchProps = {
+  createProduct: (product: Product) => CreateProductAction;
+  updateProduct: (product: Product) => UpdateProductAction;
+};
 
 const AppContainer: FunctionComponent<ShellApiProps> = ({ shellApi }: ShellApiProps) => {
   const mapAppStateProps = (state: RootState): AppStateProps => ({
@@ -18,7 +22,8 @@ const AppContainer: FunctionComponent<ShellApiProps> = ({ shellApi }: ShellApiPr
   });
 
   const mapAppDispatchProps = (state: RootState): AppDispatchProps => ({
-    nextStep: () => nextStep(),
+    createProduct: (product: Product) => createProduct(product),
+    updateProduct: (product: Product) => updateProduct(product)
   });
 
   const appReducerMap: InjectReducerMap = {

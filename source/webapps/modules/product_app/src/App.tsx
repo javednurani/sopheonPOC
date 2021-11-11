@@ -24,6 +24,7 @@ import { ReactComponent as TransIndustry } from './images/industryico_Trans.svg'
 import OnboardingInfo from './onboardingInfo';
 
 export type Props = AppProps<AppStateProps, AppDispatchProps>;
+
 const svgIconStyle: React.CSSProperties = {
   width: '20px',
   height: '20px',
@@ -52,10 +53,10 @@ registerIcons({
   },
 });
 
-const App: React.FunctionComponent<Props> = ({ currentStep, nextStep }: Props) => (
+const App: React.FunctionComponent<Props> = ({ currentStep, createProduct, updateProduct }: Props) => (
   <div>
     <Label>
-      <OnboardingInfo currentStep={currentStep} nextStep={nextStep} />
+      <OnboardingInfo currentStep={currentStep} createProduct={createProduct} updateProduct={updateProduct} />
     </Label>
   </div>
 );

@@ -15,12 +15,13 @@ describe.skip('Testing the App component', () => {
   it('Render test for the App component', () => {
     const appProps: Props = {
       currentStep: 1,
-      nextStep: jest.fn(),
+      createProduct: jest.fn(),
+      updateProduct: jest.fn(),
     };
 
     const wrapper = mount(
       <IntlProvider locale="en" messages={messages.en}>
-        <App currentStep={appProps.currentStep} nextStep={appProps.nextStep} />
+        <App {...appProps} />
       </IntlProvider>
     );
 
@@ -31,12 +32,13 @@ describe.skip('Testing the App component', () => {
   it('Accessibility test for the App component', async () => {
     const appProps: Props = {
       currentStep: 1,
-      nextStep: jest.fn(),
+      createProduct: jest.fn(),
+      updateProduct: jest.fn(),
     };
 
     const wrapper = mount(
       <IntlProvider locale="en" messages={messages.en}>
-        <App currentStep={appProps.currentStep} nextStep={appProps.nextStep} />
+        <App {...appProps} />
       </IntlProvider>
     );
 
@@ -51,7 +53,8 @@ describe.skip('Testing the App component', () => {
   it('App snapshot render test', () => {
     const appProps: Props = {
       currentStep: 1,
-      nextStep: jest.fn(),
+      createProduct: jest.fn(),
+      updateProduct: jest.fn(),
     };
 
     const tree = mount(

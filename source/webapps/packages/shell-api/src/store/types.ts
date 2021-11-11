@@ -13,3 +13,11 @@ export type InjectSagaMap = {
   key: string;
   saga: Saga;
 };
+
+// eslint-disable-next-line no-shadow
+export enum FetchStatus {
+  NotActive = 1,
+  InProgress,
+  DoneFailure,
+  DoneSuccess,
+}

@@ -15,11 +15,16 @@ import {
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { AppDispatchProps, AppStateProps } from './AppContainer';
+import { CreateProductAction, UpdateProductAction } from './onboardingInfoReducer';
+import { Product } from './types';
 
-export type OnboardingInfoProps = AppStateProps & AppDispatchProps;
+export interface IOnboardingInfoProps {
+  currentStep: number;
+  createProduct: (product: Product) => CreateProductAction;
+  updateProduct: (product: Product) => UpdateProductAction;
+}
 
-const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentStep, nextStep }: OnboardingInfoProps) => {
+const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({ currentStep, createProduct, updateProduct }: IOnboardingInfoProps) => {
   const { formatMessage } = useIntl();
   const headerStyle: React.CSSProperties = {
     fontSize: FontSizes.size42,
@@ -117,8 +122,28 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
     }
   };
 
+  const handleOnboardingContinueClick = () => {
+    const productData: Product = {
+      Key: null,
+      Name: productName,
+      Description: 'TODO FROM UI',
+    };
+
+    createProduct(productData);
+  };
+
+  const handleOnboardingGetStartedClick = () => {
+    const productData: Product = {
+      Key: 'TODO FROM STATE',
+      Name: productName,
+      Description: 'TODO FROM UI',
+    };
+
+    updateProduct(productData);
+  };
+
   useEffect(() => {
-    setContinueDisabled(productName.length == 0 || industryKeys.length == 0);
+    setContinueDisabled(productName.length === 0 || industryKeys.length === 0);
   }, [productName, industryKeys]);
 
   switch (currentStep) {
@@ -154,7 +179,7 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
             <PrimaryButton
               text={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
               aria-label={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
-              onClick={() => nextStep()}
+              onClick={() => handleOnboardingContinueClick()}
               style={buttonStyles}
               disabled={continueDisabled}
             />
@@ -196,7 +221,7 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
             <PrimaryButton
               text={formatMessage({ id: 'onboarding.getstarted' })}
               aria-label={formatMessage({ id: 'onboarding.getstarted' })}
-              onClick={() => nextStep()}
+              onClick={() => handleOnboardingGetStartedClick()}
               style={buttonStyles}
             />
           </Stack.Item>
