@@ -1,5 +1,6 @@
 ﻿#define Managed
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Dynamic;
 using System.Net.Http;
@@ -122,22 +123,22 @@ namespace Sopheon.CloudNative.Environments.Functions
 
       private static HttpClient ConfigureAzureRestApiClient(HttpClient client, HostBuilderContext hostContext)
       {
-
          string tenantId = Environment.GetEnvironmentVariable("AzSpTenantId");
          string clientId = Environment.GetEnvironmentVariable("AzSpClientId");
-         string clientSecret = hostContext.Configuration["AzSpClientSecret"]; // TODO: going to need this in PROD context?  used in Dev already
+         string clientSecret = hostContext.Configuration["AzSpClientSecret"]; // TODO: going to need this in production context?  used in dev already
          string url = $"https://login.microsoftonline.com/{tenantId}/oauth2/token";
-         string body =
-@"{ 
-  'grant_type': 'client_credentials',
-  'client_id': '" + clientId + @"',
-  'client_secret': '" + clientSecret + @"',
-  'resource': 'https://management.azure.com/'
-}";
+
+         var values = new Dictionary<string, string>
+         {
+            { "grant_type", "client_credentials" },
+            { "client_id", clientId},
+            { "client_secret", clientSecret},
+            { "resource", "https://management.azure.com/"},
+         };
 
          HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, url)
          {
-            Content = new StringContent(body, Encoding.UTF8, "application/json") // Content-Type header
+            Content = new FormUrlEncodedContent(values)
          };
 
          HttpResponseMessage response = client.Send(httpRequestMessage, CancellationToken.None);
@@ -146,8 +147,8 @@ namespace Sopheon.CloudNative.Environments.Functions
             throw new CloudServiceException("Error authenticating with Azure for REST API client");
          }
 
-         dynamic content = response.Content.ReadAsAsync<ExpandoObject>().Result;
-         string accessToken = content.access_token;
+         dynamic responseContent = response.Content.ReadAsAsync<ExpandoObject>().Result;
+         string accessToken = responseContent.access_token;
 
          client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
 
