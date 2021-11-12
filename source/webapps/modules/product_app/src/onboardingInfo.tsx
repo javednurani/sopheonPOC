@@ -23,6 +23,7 @@ export interface IOnboardingInfoProps {
   createProduct: (product: CreateUpdateProductDto) => CreateProductAction;
   updateProduct: (product: CreateUpdateProductDto) => UpdateProductAction;
   environmentKey: string;
+  getAccessToken: () => Promise<string>;
 }
 
 const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
@@ -30,8 +31,20 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
   createProduct,
   updateProduct,
   environmentKey,
+  getAccessToken,
 }: IOnboardingInfoProps) => {
   const { formatMessage } = useIntl();
+  const [accessToken, setAccessToken] = useState('');
+
+  useEffect(() => {
+    getAccessTokenAsync();
+  }, []);
+
+  const getAccessTokenAsync = async () => {
+    const token = await getAccessToken();
+    setAccessToken(token);
+  };
+
   const headerStyle: React.CSSProperties = {
     fontSize: FontSizes.size42,
     marginBottom: '2vh',
@@ -128,7 +141,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
     }
   };
 
-  const handleOnboardingContinueClick = () => {
+  const handleOnboardingContinueClick = async () => {
     const productData: Product = {
       Key: null,
       Name: productName,
@@ -138,6 +151,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
     const createProductDto: CreateUpdateProductDto = {
       Product: productData,
       EnvironmentKey: environmentKey,
+      AccessToken: accessToken
     };
 
     createProduct(createProductDto);
@@ -153,6 +167,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
     const updateProductDto: CreateUpdateProductDto = {
       Product: productData,
       EnvironmentKey: environmentKey,
+      AccessToken: accessToken
     };
     updateProduct(updateProductDto);
   };
@@ -197,7 +212,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
               <PrimaryButton
                 text={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
                 aria-label={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
-                onClick={() => handleOnboardingContinueClick()}
+                onClick={async () => await handleOnboardingContinueClick()}
                 style={buttonStyles}
                 disabled={continueDisabled}
               />

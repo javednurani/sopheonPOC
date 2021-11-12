@@ -7,6 +7,7 @@ import { InjectReducerMap, InjectSagaMap } from './store/types';
 export type AppProps<TStateProps, TDispatchProps> = {
   // expose main-shell concerns, as state or dispatch (read or write), here
   environmentKey: string;
+  getAccessToken: () => Promise<string>;
 } & TStateProps &
   TDispatchProps; // include StateProps and DispatchProps handed to getConnector
 
