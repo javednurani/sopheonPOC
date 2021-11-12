@@ -12,7 +12,7 @@ const tokenProductKey = '{*productKey*}';
 // Public settings object
 export const settings: Record<string, string> = {
   ProductManagementApiUrlBase: productManagementApiUrlBase,
-  CreateProductUrlPath: `/Environments/${tokenEnvironmentKey}/Products/`,
+  CreateProductUrlPath: `/Environments/${tokenEnvironmentKey}/Products`,
   UpdateProductUrlPath: `/Environments/${tokenEnvironmentKey}/Products/${tokenProductKey}`,
   TokenEnvironmentKey: tokenEnvironmentKey,
   TokenProductKey: tokenProductKey,
