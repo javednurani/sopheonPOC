@@ -14,7 +14,7 @@ using Xunit;
 
 namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
 {
-   public class AllocateSqlDatabaseSharedByServicesToEnvironmentHelper_AllocateSqlDatabaseSharedByServicesToEnvironmentAsync_UnitTests
+   public class AllocateSqlDatabaseSharedByServicesToEnvironmentHelper_UnitTests
    {
       private readonly AllocateSqlDatabaseSharedByServicesToEnvironmentHelper _sut;
       private readonly Mock<IEnvironmentCommands> _mockEnvironmentCommands;
@@ -22,7 +22,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
       private readonly Mock<IHttpClientFactory> _mockHttpClientFactory;
       private readonly Mock<HttpClient> _mockHttpClient;
 
-      public AllocateSqlDatabaseSharedByServicesToEnvironmentHelper_AllocateSqlDatabaseSharedByServicesToEnvironmentAsync_UnitTests()
+      public AllocateSqlDatabaseSharedByServicesToEnvironmentHelper_UnitTests()
       {
          _mockEnvironmentCommands = new Mock<IEnvironmentCommands>();
          _mockAzure = new Mock<IAzure>();
