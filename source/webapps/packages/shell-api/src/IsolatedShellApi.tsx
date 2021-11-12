@@ -36,6 +36,7 @@ export class IsolatedShellApi implements IShellApi {
   constructor(store?: Store) {
     this.store = store || createIsolatedStore();
   }
+  environmentKey: string;
 
   get getStore(): Store {
     return this.store;
@@ -85,6 +86,7 @@ export class IsolatedShellApi implements IShellApi {
     const mapState = () => ({
       ...(mapStateProps && mapStateProps(this.store.getState() as TState)),
       // stub out Shell-provided state (found in AppProps) here
+      environmentKey: 'ISOLATED_SHELL_API_ENVIRONMENTKEY_STUB',
     });
 
     // INFO: some of these action creators are duplicated in main-shell reducers, could possibly consolidate

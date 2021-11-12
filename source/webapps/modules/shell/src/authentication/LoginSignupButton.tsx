@@ -5,8 +5,13 @@ import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
 import { changePasswordRequest, editProfileRequest, getMsalAccount } from './authHelpers';
+import { SetEnvironmentKeyAction } from './authReducer';
 
-const LoginSignupButton: FunctionComponent = () => {
+export interface ILoginSignupButtonProps {
+  setEnvironmentKey: (environmentKey: string) => SetEnvironmentKeyAction;
+}
+
+const LoginSignupButton: FunctionComponent<ILoginSignupButtonProps> = ({ setEnvironmentKey }: ILoginSignupButtonProps) => {
   const { formatMessage } = useIntl();
   const { instance, accounts } = useMsal();
 
@@ -15,6 +20,9 @@ const LoginSignupButton: FunctionComponent = () => {
   useEffect(() => {
     const msalAccount: AccountInfo | undefined = getMsalAccount(instance);
     if (msalAccount !== undefined) {
+      if (msalAccount.idTokenClaims && msalAccount.idTokenClaims.extension_environmentKey) {
+        setEnvironmentKey(msalAccount.idTokenClaims.extension_environmentKey);
+      }
       setAccount(msalAccount);
     }
   }, [instance, accounts]);

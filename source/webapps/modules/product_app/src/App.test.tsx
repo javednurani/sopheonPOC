@@ -17,6 +17,7 @@ describe.skip('Testing the App component', () => {
       currentStep: 1,
       createProduct: jest.fn(),
       updateProduct: jest.fn(),
+      environmentKey: '',
     };
 
     const wrapper = mount(
@@ -34,6 +35,7 @@ describe.skip('Testing the App component', () => {
       currentStep: 1,
       createProduct: jest.fn(),
       updateProduct: jest.fn(),
+      environmentKey: '',
     };
 
     const wrapper = mount(
@@ -55,6 +57,7 @@ describe.skip('Testing the App component', () => {
       currentStep: 1,
       createProduct: jest.fn(),
       updateProduct: jest.fn(),
+      environmentKey: '',
     };
 
     const tree = mount(

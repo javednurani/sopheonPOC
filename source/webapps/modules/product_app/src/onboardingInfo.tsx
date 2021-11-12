@@ -16,15 +16,21 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { CreateProductAction, UpdateProductAction } from './onboardingInfoReducer';
-import { Product } from './types';
+import { CreateUpdateProductDto, Product } from './types';
 
 export interface IOnboardingInfoProps {
   currentStep: number;
-  createProduct: (product: Product) => CreateProductAction;
-  updateProduct: (product: Product) => UpdateProductAction;
+  createProduct: (product: CreateUpdateProductDto) => CreateProductAction;
+  updateProduct: (product: CreateUpdateProductDto) => UpdateProductAction;
+  environmentKey: string;
 }
 
-const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({ currentStep, createProduct, updateProduct }: IOnboardingInfoProps) => {
+const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
+  currentStep,
+  createProduct,
+  updateProduct,
+  environmentKey,
+}: IOnboardingInfoProps) => {
   const { formatMessage } = useIntl();
   const headerStyle: React.CSSProperties = {
     fontSize: FontSizes.size42,
@@ -117,7 +123,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({ current
       if (industryKeys.indexOf(option.key as number) < 0) {
         setIndustryKeys([...industryKeys, option.key as number]);
       } else {
-        setIndustryKeys(industryKeys.filter(k => k != (option.key as number)));
+        setIndustryKeys(industryKeys.filter(k => k !== (option.key as number)));
       }
     }
   };
@@ -129,7 +135,12 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({ current
       Description: 'TODO FROM UI',
     };
 
-    createProduct(productData);
+    const createProductDto: CreateUpdateProductDto = {
+      Product: productData,
+      EnvironmentKey: environmentKey,
+    };
+
+    createProduct(createProductDto);
   };
 
   const handleOnboardingGetStartedClick = () => {
@@ -139,7 +150,11 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({ current
       Description: 'TODO FROM UI',
     };
 
-    updateProduct(productData);
+    const updateProductDto: CreateUpdateProductDto = {
+      Product: productData,
+      EnvironmentKey: environmentKey,
+    };
+    updateProduct(updateProductDto);
   };
 
   useEffect(() => {
@@ -149,54 +164,59 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({ current
   switch (currentStep) {
     case 2:
       return (
-        <Stack className="step2" horizontalAlign="center" tokens={stackTokens}>
-          <Stack.Item>
-            <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupproduct' })}</Label>
-          </Stack.Item>
-          <Stack.Item>
-            <TextField
-              label={formatMessage({ id: 'onboarding.yourproductname' })}
-              aria-label={formatMessage({ id: 'onboarding.yourproductname' })}
-              styles={textFieldStyles}
-              onChange={handleProductNameChange}
-              required
-              maxLength={300}
-            />
-          </Stack.Item>
-          <Stack.Item>
-            <Dropdown
-              label={formatMessage({ id: 'onboarding.industryselection' })}
-              placeholder={formatMessage({ id: 'industryoption.default' })}
-              options={industryOptions}
-              styles={dropdownStyles}
-              onRenderOption={onRenderOption}
-              onChange={handleIndustryDropdownChange}
-              multiSelect
-              required
-            />
-          </Stack.Item>
-          <Stack.Item>
-            <PrimaryButton
-              text={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
-              aria-label={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
-              onClick={() => handleOnboardingContinueClick()}
-              style={buttonStyles}
-              disabled={continueDisabled}
-            />
-          </Stack.Item>
-          <Stack.Item style={progressBarStyles}>
-            <ProgressIndicator
-              label={formatMessage({ id: 'onboarding.step2of3' })}
-              description={formatMessage({ id: 'onboarding.nextGoals' })}
-              ariaValueText={formatMessage({ id: 'onboarding.step2of3' })}
-              percentComplete={0.67}
-              barHeight={8}
-            />
-          </Stack.Item>
-        </Stack>
+        // INFO - presence of environmentKey represents a logged-in user
+        // TODO, replace environmentKey with better 'isAuthenticated' logic. expose MSAL through ShellAPI?
+        environmentKey &&
+          <Stack className="step2" horizontalAlign="center" tokens={stackTokens}>
+            <Stack.Item>
+              <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupproduct' })}</Label>
+            </Stack.Item>
+            <Stack.Item>
+              <TextField
+                label={formatMessage({ id: 'onboarding.yourproductname' })}
+                aria-label={formatMessage({ id: 'onboarding.yourproductname' })}
+                styles={textFieldStyles}
+                onChange={handleProductNameChange}
+                required
+                maxLength={300}
+              />
+            </Stack.Item>
+            <Stack.Item>
+              <Dropdown
+                label={formatMessage({ id: 'onboarding.industryselection' })}
+                placeholder={formatMessage({ id: 'industryoption.default' })}
+                options={industryOptions}
+                styles={dropdownStyles}
+                onRenderOption={onRenderOption}
+                onChange={handleIndustryDropdownChange}
+                multiSelect
+                required
+              />
+            </Stack.Item>
+            <Stack.Item>
+              <PrimaryButton
+                text={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
+                aria-label={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
+                onClick={() => handleOnboardingContinueClick()}
+                style={buttonStyles}
+                disabled={continueDisabled}
+              />
+            </Stack.Item>
+            <Stack.Item style={progressBarStyles}>
+              <ProgressIndicator
+                label={formatMessage({ id: 'onboarding.step2of3' })}
+                description={formatMessage({ id: 'onboarding.nextGoals' })}
+                ariaValueText={formatMessage({ id: 'onboarding.step2of3' })}
+                percentComplete={0.67}
+                barHeight={8}
+              />
+            </Stack.Item>
+          </Stack>
       );
     case 3:
-      return (
+      // INFO - presence of environmentKey represents a logged-in user
+      // TODO, replace environmentKey with better 'isAuthenticated' logic. expose MSAL through ShellAPI?
+      return (environmentKey &&
         <Stack className="step3" horizontalAlign="center" tokens={stackTokens}>
           <Stack.Item>
             <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupYourGoals' })}</Label>

@@ -1,7 +1,7 @@
 import { Action, createAction, createPayloadAction, FetchStatus, PayloadAction } from '@sopheon/shell-api';
 import { Reducer } from 'redux';
 
-import { Product } from './types';
+import { CreateUpdateProductDto, Product } from './types';
 
 //#region  Action Types
 
@@ -41,8 +41,8 @@ export enum OnboardingSagaActionTypes {
   UPDATE_PRODUCT = 'ONBOARDING/UPDATE_PRODUCT'
 }
 
-export type CreateProductAction = PayloadAction<OnboardingSagaActionTypes.CREATE_PRODUCT, Product>;
-export type UpdateProductAction = PayloadAction<OnboardingSagaActionTypes.UPDATE_PRODUCT, Product>;
+export type CreateProductAction = PayloadAction<OnboardingSagaActionTypes.CREATE_PRODUCT, CreateUpdateProductDto>;
+export type UpdateProductAction = PayloadAction<OnboardingSagaActionTypes.UPDATE_PRODUCT, CreateUpdateProductDto>;
 
 //#endregion
 
@@ -67,8 +67,8 @@ export const updateProductFailure = (error: Error): UpdateProductFailureAction =
 
 // SAGA ACTIONS
 
-export const createProduct = (product: Product): CreateProductAction => createPayloadAction(OnboardingSagaActionTypes.CREATE_PRODUCT, product);
-export const updateProduct = (product: Product): UpdateProductAction => createPayloadAction(OnboardingSagaActionTypes.UPDATE_PRODUCT, product);
+export const createProduct = (product: CreateUpdateProductDto): CreateProductAction => createPayloadAction(OnboardingSagaActionTypes.CREATE_PRODUCT, product);
+export const updateProduct = (product: CreateUpdateProductDto): UpdateProductAction => createPayloadAction(OnboardingSagaActionTypes.UPDATE_PRODUCT, product);
 
 //#endregion
 

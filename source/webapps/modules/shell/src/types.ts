@@ -6,10 +6,15 @@ export type State = {
 
 type ShellState = {
   theme: ThemeShape;
+  auth: AuthShape;
 };
 
 export interface ThemeShape {
   theme: ITheme;
+}
+
+export interface AuthShape {
+  environmentKey: string | null;
 }
 
 export interface LanguageShape {

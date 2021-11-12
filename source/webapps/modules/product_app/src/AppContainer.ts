@@ -5,15 +5,15 @@ import App from './App';
 import { createProduct, CreateProductAction, updateProduct, UpdateProductAction } from './onboardingInfoReducer';
 import { NAMESPACE, rootReducer, RootState } from './rootReducer';
 import rootSaga from './rootSaga';
-import { Product } from './types';
+import { CreateUpdateProductDto } from './types';
 
 export type AppStateProps = {
   currentStep: number
 };
 
 export type AppDispatchProps = {
-  createProduct: (product: Product) => CreateProductAction;
-  updateProduct: (product: Product) => UpdateProductAction;
+  createProduct: (product: CreateUpdateProductDto) => CreateProductAction;
+  updateProduct: (product: CreateUpdateProductDto) => UpdateProductAction;
 };
 
 const AppContainer: FunctionComponent<ShellApiProps> = ({ shellApi }: ShellApiProps) => {
@@ -22,8 +22,8 @@ const AppContainer: FunctionComponent<ShellApiProps> = ({ shellApi }: ShellApiPr
   });
 
   const mapAppDispatchProps = (state: RootState): AppDispatchProps => ({
-    createProduct: (product: Product) => createProduct(product),
-    updateProduct: (product: Product) => updateProduct(product)
+    createProduct: (product: CreateUpdateProductDto) => createProduct(product),
+    updateProduct: (product: CreateUpdateProductDto) => updateProduct(product)
   });
 
   const appReducerMap: InjectReducerMap = {
