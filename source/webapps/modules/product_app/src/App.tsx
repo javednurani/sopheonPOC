@@ -55,7 +55,8 @@ registerIcons({
 
 const App: React.FunctionComponent<Props> = ({ currentStep, createProduct, updateProduct, environmentKey, getAccessToken, accessToken }: Props) => {
   useEffect(() => {
-    // trigger Shell action to store access token, freshly acquired from MSAL, in Redux state
+    // getAccessToken triggers Shell action to store access token, freshly acquired from MSAL, in Redux state
+    // after getAccessToken is called (here, on ProductApp render), shellApi::accessToken should be up-to-date access token from MSAL.acquireTokenSilent()
     getAccessToken();
   }, []);
 

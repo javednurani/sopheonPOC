@@ -17,8 +17,6 @@ export const createProduct: (productDto: CreateUpdateProductDto) => Promise<Prod
     }
   };
 
-  console.log(productDto.AccessToken);
-
   return await axios.post(createProductUrlWithEnvironment, productDto.Product, config);
 };
 

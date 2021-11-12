@@ -9,9 +9,7 @@ export function* watchOnGetAccessToken() {
 }
 
 export function* onGetAccessToken() {
-  console.log('onGetAccessToken');
   const accessToken = yield call(getAccessToken);
-  console.log(accessToken);
   yield put(setAccessToken(accessToken));
 }
 

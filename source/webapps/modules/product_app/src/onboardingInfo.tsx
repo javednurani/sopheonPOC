@@ -202,7 +202,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
               <PrimaryButton
                 text={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
                 aria-label={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
-                onClick={async () => await handleOnboardingContinueClick()}
+                onClick={() => handleOnboardingContinueClick()}
                 style={buttonStyles}
                 disabled={continueDisabled}
               />
