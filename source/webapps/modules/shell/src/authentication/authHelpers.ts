@@ -20,13 +20,13 @@ export const msalInstance = (): PublicClientApplication => {
   return pca;
 };
 
-export const getAccessToken = async (): Promise<string> => {
+export const getAccessToken: () => Promise<string> = async () => {
   // outside of the component tree / React Context, create a new PublicClientApplication (with same config options) to access MSAL
   const pca = msalInstance();
   const account = getMsalAccount(pca);
 
   const acquireTokenResponse = await pca.acquireTokenSilent({
-    scopes: [],
+    scopes: PRODUCT_MANAGEMENT_SCOPES,
     account: account
   });
 

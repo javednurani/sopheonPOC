@@ -1,6 +1,6 @@
 import { Label, registerIcons } from '@fluentui/react';
 import { AppProps } from '@sopheon/shell-api';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { AppDispatchProps, AppStateProps } from './AppContainer';
 import { ReactComponent as AeroIndustry } from './images/industryico_Aero.svg';
@@ -53,12 +53,24 @@ registerIcons({
   },
 });
 
-const App: React.FunctionComponent<Props> = ({ currentStep, createProduct, updateProduct, environmentKey, getAccessToken }: Props) => (
-  <div>
-    <Label>
-      <OnboardingInfo currentStep={currentStep} createProduct={createProduct} updateProduct={updateProduct} environmentKey={environmentKey} getAccessToken={getAccessToken} />
-    </Label>
-  </div>
-);
+const App: React.FunctionComponent<Props> = ({ currentStep, createProduct, updateProduct, environmentKey, getAccessToken, accessToken }: Props) => {
+  useEffect(() => {
+    // trigger Shell action to store access token, freshly acquired from MSAL, in Redux state
+    getAccessToken();
+  }, []);
 
+  return (
+    <div>
+      <Label>
+        <OnboardingInfo
+          currentStep={currentStep}
+          createProduct={createProduct}
+          updateProduct={updateProduct}
+          environmentKey={environmentKey}
+          accessToken={accessToken}
+        />
+      </Label>
+    </div>
+  );
+};
 export default App;

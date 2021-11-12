@@ -21,3 +21,5 @@ export enum FetchStatus {
   DoneFailure,
   DoneSuccess,
 }
+
+export * from './auth/types';

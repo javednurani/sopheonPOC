@@ -2,12 +2,16 @@ import { ComponentType } from 'react';
 import { InferableComponentEnhancerWithProps } from 'react-redux';
 import { Store } from 'redux';
 
+import { GetAccessTokenAction } from './store/auth/types';
 import { InjectReducerMap, InjectSagaMap } from './store/types';
 
 export type AppProps<TStateProps, TDispatchProps> = {
-  // expose main-shell concerns, as state or dispatch (read or write), here
+  // expose main-shell concerns as state (read) here
   environmentKey: string;
-  getAccessToken: () => Promise<string>;
+  accessToken: string;
+} & {
+  // expose main-shell concerns as dispatch (action) here
+  getAccessToken: () => GetAccessTokenAction;
 } & TStateProps &
   TDispatchProps; // include StateProps and DispatchProps handed to getConnector
 

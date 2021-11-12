@@ -150,6 +150,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore
                options.AddDefaultPolicy(builder =>
                {
                   builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
+                  builder.AllowAnyMethod(); // TODO get options post patch put delete ?
                });
             });
          }
