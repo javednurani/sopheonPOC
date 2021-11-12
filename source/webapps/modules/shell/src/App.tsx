@@ -49,7 +49,7 @@ const App: FunctionComponent<AppProps> = ({ changeTheme }: AppProps) => {
   };
 
   // TODO: check for user product existance CLOUD-2148
-  const userIsOnboarded = false;
+  const userHasProduct = false;
 
   return (
     <div className="App" style={appStyle}>
@@ -71,7 +71,7 @@ const App: FunctionComponent<AppProps> = ({ changeTheme }: AppProps) => {
                 },
               }}
             >
-              {(!location.pathname.includes('product') || userIsOnboarded) &&
+              {(!location.pathname.includes('product') || userHasProduct) &&
                 <Stack.Item>
                   <Header changeTheme={changeTheme} />
                 </Stack.Item>
@@ -100,7 +100,7 @@ const App: FunctionComponent<AppProps> = ({ changeTheme }: AppProps) => {
                   </ScrollablePane>
                 </main>
               </Stack.Item>
-              {(!location.pathname.includes('product') || userIsOnboarded) &&
+              {(!location.pathname.includes('product') || userHasProduct) &&
                 <Stack.Item>
                   <Footer />
                 </Stack.Item>

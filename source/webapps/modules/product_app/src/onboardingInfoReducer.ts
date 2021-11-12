@@ -18,6 +18,10 @@ enum OnboardingActionTypes {
   UPDATE_PRODUCT_REQUEST = 'ONBOARDING/UPDATE_PRODUCT_REQUEST',
   UPDATE_PRODUCT_SUCCESS = 'ONBOARDING/UPDATE_PRODUCT_SUCCESS',
   UPDATE_PRODUCT_FAILURE = 'ONBOARDING/UPDATE_PRODUCT_FAILURE',
+
+  GET_PRODUCTS_REQUEST = 'ONBOARDING/GET_PRODUCTS_REQUEST',
+  GET_PRODUCTS_SUCCESS = 'ONBOARDING/GET_PRODUCTS_SUCCESS',
+  GET_PRODUCTS_FAILURE = 'ONBOARDING/GET_PRODUCTS_FAILURE',
 }
 
 export type NextStepAction = Action<OnboardingActionTypes.NEXT_STEP>;
@@ -30,19 +34,34 @@ export type UpdateProductRequestAction = Action<OnboardingActionTypes.UPDATE_PRO
 export type UpdateProductSuccessAction = PayloadAction<OnboardingActionTypes.UPDATE_PRODUCT_SUCCESS, Product>;
 export type UpdateProductFailureAction = PayloadAction<OnboardingActionTypes.UPDATE_PRODUCT_FAILURE, Error>;
 
-export type OnboardingReducerActions = NextStepAction | CreateProductRequestAction | CreateProductSuccessAction | CreateProductFailureAction |
-  UpdateProductRequestAction | UpdateProductSuccessAction | UpdateProductFailureAction;
+export type getProductsRequestAction = Action<OnboardingActionTypes.GET_PRODUCTS_REQUEST>;
+export type getProductsSuccessAction = PayloadAction<OnboardingActionTypes.GET_PRODUCTS_SUCCESS, Product[]>;
+export type getProductsFailureAction = PayloadAction<OnboardingActionTypes.GET_PRODUCTS_FAILURE, Error>;
+
+export type OnboardingReducerActions =
+  | NextStepAction
+  | CreateProductRequestAction
+  | CreateProductSuccessAction
+  | CreateProductFailureAction
+  | UpdateProductRequestAction
+  | UpdateProductSuccessAction
+  | UpdateProductFailureAction
+  | getProductsRequestAction
+  | getProductsSuccessAction
+  | getProductsFailureAction;
 
 // SAGA ACTION TYPES
 
 // eslint-disable-next-line no-shadow
 export enum OnboardingSagaActionTypes {
   CREATE_PRODUCT = 'ONBOARDING/CREATE_PRODUCT',
-  UPDATE_PRODUCT = 'ONBOARDING/UPDATE_PRODUCT'
+  UPDATE_PRODUCT = 'ONBOARDING/UPDATE_PRODUCT',
+  GET_PRODUCTS = 'ONBOARDING/GET_PRODUCTS'
 }
 
 export type CreateProductAction = PayloadAction<OnboardingSagaActionTypes.CREATE_PRODUCT, Product>;
 export type UpdateProductAction = PayloadAction<OnboardingSagaActionTypes.UPDATE_PRODUCT, Product>;
+export type getProductsAction = PayloadAction<OnboardingSagaActionTypes.GET_PRODUCTS, Product[]>
 
 //#endregion
 
@@ -64,11 +83,16 @@ export const updateProductSuccess = (product: Product): UpdateProductSuccessActi
 export const updateProductFailure = (error: Error): UpdateProductFailureAction =>
   createPayloadAction(OnboardingActionTypes.UPDATE_PRODUCT_FAILURE, error);
 
+export const getProductsRequest = (): getProductsRequestAction => createAction(OnboardingActionTypes.GET_PRODUCTS_REQUEST);
+export const getProductsSuccess = (products: Product[]): getProductsSuccessAction =>
+  createPayloadAction(OnboardingActionTypes.GET_PRODUCTS_SUCCESS, products);
+export const getProductsFailure = (error: Error): getProductsFailureAction => createPayloadAction(OnboardingActionTypes.GET_PRODUCTS_FAILURE, error);
 
 // SAGA ACTIONS
 
 export const createProduct = (product: Product): CreateProductAction => createPayloadAction(OnboardingSagaActionTypes.CREATE_PRODUCT, product);
 export const updateProduct = (product: Product): UpdateProductAction => createPayloadAction(OnboardingSagaActionTypes.UPDATE_PRODUCT, product);
+export const getProducts = (products: Product[]): getProductsAction => createPayloadAction(OnboardingSagaActionTypes.GET_PRODUCTS, products);
 
 //#endregion
 
@@ -79,8 +103,9 @@ export const updateProduct = (product: Product): UpdateProductAction => createPa
 export type OnboardingStateShape = {
   currentStep: number;
   product: Product | null;
-  createProductFetchStatus: FetchStatus,
-  updateProductFetchStatus: FetchStatus,
+  createProductFetchStatus: FetchStatus;
+  updateProductFetchStatus: FetchStatus;
+  getProductsFetchStatus: FetchStatus;
 };
 
 export const initialState: OnboardingStateShape = {
@@ -88,6 +113,7 @@ export const initialState: OnboardingStateShape = {
   product: null,
   createProductFetchStatus: FetchStatus.NotActive,
   updateProductFetchStatus: FetchStatus.NotActive,
+  getProductsFetchStatus: FetchStatus.NotActive,
 };
 
 // HANDLERS
@@ -99,39 +125,58 @@ const setValue = (state: OnboardingStateShape, valueToSet: number): OnboardingSt
 
 const createProductRequestHandler = (state: OnboardingStateShape) => ({
   ...state,
-  createProductFetchStatus: FetchStatus.InProgress
+  createProductFetchStatus: FetchStatus.InProgress,
 });
 
 const createProductSuccessHandler = (state: OnboardingStateShape, productToSet: Product) => ({
   ...state,
   product: productToSet,
-  createProductFetchStatus: FetchStatus.DoneSuccess
+  createProductFetchStatus: FetchStatus.DoneSuccess,
 });
 
 const createProductFailureHandler = (state: OnboardingStateShape, error: Error) => {
   console.log(error);
   return {
     ...state,
-    createProductFetchStatus: FetchStatus.DoneFailure
+    createProductFetchStatus: FetchStatus.DoneFailure,
   };
 };
 
 const updateProductRequestHandler = (state: OnboardingStateShape) => ({
   ...state,
-  updateProductFetchStatus: FetchStatus.InProgress
+  updateProductFetchStatus: FetchStatus.InProgress,
 });
 
 const updateProductSuccessHandler = (state: OnboardingStateShape, productToSet: Product) => ({
   ...state,
   product: productToSet,
-  createProductFetchStatus: FetchStatus.DoneSuccess
+  createProductFetchStatus: FetchStatus.DoneSuccess,
 });
 
 const updateProductFailureHandler = (state: OnboardingStateShape, error: Error) => {
   console.log(error);
   return {
     ...state,
-    updateProductFetchStatus: FetchStatus.DoneFailure
+    updateProductFetchStatus: FetchStatus.DoneFailure,
+  };
+};
+
+const getProductsRequestHandler = (state: OnboardingStateShape) => ({
+  ...state,
+  getProductsFetchStatus: FetchStatus.InProgress,
+});
+
+const getProductsSuccessHandler = (state: OnboardingStateShape, productsToSet: Product[]) => ({
+  ...state,
+  products: productsToSet,
+  getProductsFetchStatus: FetchStatus.DoneSuccess,
+});
+
+const getProductsFailureHandler = (state: OnboardingStateShape, error: Error) => {
+  console.log(error);
+  return {
+    ...state,
+    getProductsFetchStatus: FetchStatus.DoneFailure,
   };
 };
 
@@ -153,6 +198,12 @@ export const onboardingInfoReducer: Reducer<OnboardingStateShape, OnboardingRedu
       return updateProductSuccessHandler(state, action.payload);
     case OnboardingActionTypes.UPDATE_PRODUCT_FAILURE:
       return updateProductFailureHandler(state, action.payload);
+    case OnboardingActionTypes.GET_PRODUCTS_REQUEST:
+      return getProductsRequestHandler(state);
+    case OnboardingActionTypes.GET_PRODUCTS_SUCCESS:
+      return getProductsSuccessHandler(state, action.payload);
+    case OnboardingActionTypes.GET_PRODUCTS_FAILURE:
+      return getProductsFailureHandler(state, action.payload);
     default:
       return state;
   }

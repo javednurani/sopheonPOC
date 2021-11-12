@@ -15,16 +15,17 @@ import {
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { CreateProductAction, UpdateProductAction } from './onboardingInfoReducer';
+import { CreateProductAction, getProductsAction, UpdateProductAction } from './onboardingInfoReducer';
 import { Product } from './types';
 
 export interface IOnboardingInfoProps {
   currentStep: number;
   createProduct: (product: Product) => CreateProductAction;
   updateProduct: (product: Product) => UpdateProductAction;
+  getProducts: (product: Product) => getProductsAction;
 }
 
-const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({ currentStep, createProduct, updateProduct }: IOnboardingInfoProps) => {
+const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({ currentStep, createProduct, updateProduct, getProducts }: IOnboardingInfoProps) => {
   const { formatMessage } = useIntl();
   const headerStyle: React.CSSProperties = {
     fontSize: FontSizes.size42,
@@ -117,7 +118,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({ current
       if (industryKeys.indexOf(option.key as number) < 0) {
         setIndustryKeys([...industryKeys, option.key as number]);
       } else {
-        setIndustryKeys(industryKeys.filter(k => k != (option.key as number)));
+        setIndustryKeys(industryKeys.filter(k => k !== (option.key as number)));
       }
     }
   };

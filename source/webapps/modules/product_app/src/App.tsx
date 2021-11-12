@@ -1,4 +1,4 @@
-import { Label, registerIcons } from '@fluentui/react';
+import { registerIcons, Stack } from '@fluentui/react';
 import { AppProps } from '@sopheon/shell-api';
 import React from 'react';
 
@@ -53,11 +53,11 @@ registerIcons({
   },
 });
 
-const App: React.FunctionComponent<Props> = ({ currentStep, createProduct, updateProduct }: Props) => (
+const App: React.FunctionComponent<Props> = ({ currentStep, createProduct, updateProduct, getProducts }: Props) => (
   <div>
-    <Label>
-      <OnboardingInfo currentStep={currentStep} createProduct={createProduct} updateProduct={updateProduct} />
-    </Label>
+    <Stack>
+      <OnboardingInfo currentStep={currentStep} createProduct={createProduct} updateProduct={updateProduct} getProducts={getProducts}/>
+    </Stack>
   </div>
 );
 

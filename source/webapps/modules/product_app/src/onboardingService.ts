@@ -9,6 +9,7 @@ const ENVIRONMENT_KEY_STUB = '00000000-0000-0000-0000-000000000001';
 const API_URL_BASE: string = settings.ProductManagementApiUrlBase;
 const API_URL_PATH_CREATE_PRODUCT: string = settings.CreateProductUrlPath;
 const API_URL_PATH_UPDATE_PRODUCT: string = settings.UpdateProductUrlPath;
+const API_URL_PATH_GET_PRODUCT: string = settings.getProductsUrlPath;
 
 export const createProduct: (product: Product) => Promise<Product> = async product => {
   const createProductUrlWithEnvironment = `${API_URL_BASE}${API_URL_PATH_CREATE_PRODUCT}`
@@ -23,3 +24,8 @@ export const updateProduct: (product: Product) => Promise<Product> = async produ
   return await axios.patch(updateProductUrlWithEnvironment, product);
 };
 
+export const getProducts: () => Promise<Product[]> = async () => {
+  const getProductsUrlWithEnvironment = `${API_URL_BASE}${API_URL_PATH_GET_PRODUCT}`
+    .replace(settings.TokenEnvironmentKey, ENVIRONMENT_KEY_STUB);
+  return await axios.get(getProductsUrlWithEnvironment);
+};

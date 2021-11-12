@@ -6,14 +6,18 @@ import {
   createProductFailure,
   createProductRequest,
   createProductSuccess,
+  getProductsAction,
+  getProductsFailure,
+  getProductsRequest,
+  getProductsSuccess,
   nextStep,
   OnboardingSagaActionTypes,
   UpdateProductAction,
   updateProductFailure,
   updateProductRequest,
-  updateProductSuccess
+  updateProductSuccess,
 } from './onboardingInfoReducer';
-import { createProduct, updateProduct } from './onboardingService';
+import { createProduct, getProducts, updateProduct } from './onboardingService';
 
 export function* watchOnCreateProduct(): Generator {
   yield takeEvery(OnboardingSagaActionTypes.CREATE_PRODUCT, onCreateProduct);
@@ -21,6 +25,10 @@ export function* watchOnCreateProduct(): Generator {
 
 export function* watchOnUpdateProduct(): Generator {
   yield takeEvery(OnboardingSagaActionTypes.UPDATE_PRODUCT, onUpdateProduct);
+}
+
+export function* watchOnGetProduct(): Generator {
+  yield takeEvery(OnboardingSagaActionTypes.GET_PRODUCTS, onGetProducts);
 }
 
 export function* onCreateProduct(action: CreateProductAction): Generator {
@@ -44,6 +52,17 @@ export function* onUpdateProduct(action: UpdateProductAction): Generator {
     yield put(updateProductSuccess(data));
   } catch (error) {
     yield put(updateProductFailure(error));
+  }
+}
+
+export function* onGetProducts(action: getProductsAction): Generator {
+  try {
+    yield put(getProductsRequest());
+    //@ts-ignore TODO Cloud-1920, fix this ignore and a console error
+    const { data } = yield call(getProducts(action.payload));
+    yield put(getProductsSuccess(data));
+  } catch (error) {
+    yield put(getProductsFailure(error));
   }
 }
 
