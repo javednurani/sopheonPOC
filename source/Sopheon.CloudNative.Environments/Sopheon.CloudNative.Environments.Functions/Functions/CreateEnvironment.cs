@@ -97,9 +97,6 @@ namespace Sopheon.CloudNative.Environments.Functions
 
             #region Cloud-2022 Steel Thread Increment
             string url = $"{req.Url.AbsoluteUri.Replace(req.Url.AbsolutePath, string.Empty)}/AllocateSqlDatabaseSharedByServicesToEnvironment({environment.EnvironmentKey})";
-            logger.LogInformation($"CLOUD-2022 ALLOCATE URL: {url}");
-            logger.LogInformation($"CLOUD-2022 req.Url.AbsoluteUri: {req.Url.AbsoluteUri}");
-            logger.LogInformation($"CLOUD-2022 req.Url.AbsolutePath: {req.Url.AbsolutePath}");
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, url);
             _ = await _httpClient.SendAsync(httpRequestMessage, CancellationToken.None);
