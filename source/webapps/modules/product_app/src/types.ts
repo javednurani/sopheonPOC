@@ -10,4 +10,5 @@ export interface Product {
 export interface CreateUpdateProductDto {
   Product: Product;
   EnvironmentKey: string;
+  AccessToken: string;
 }

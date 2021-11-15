@@ -13,6 +13,9 @@ const azureRawSettings: Record<string, string> = {
   AD_B2C_ProfileEdit_Policy: 'B2C_1A_PROFILEEDIT',
   SPA_Root_URL: 'https://^BrowserWebAppUrl^.azureedge.net/product',
   SPA_Root_URL_Dev: 'https://localhost:3000/product',
+  Product_Management_API_Application_Client_Id: '^ProductManagementApiApplicationClientId^',
+  Product_Management_API_Application_Client_Id_Dev: 'd7c97f69-2f27-43a0-b998-c659ab05d8ba',
+  Product_Management_API_Scope_PMCore_ReadWrite: 'PMCore.ReadWrite'
 };
 
 // these collapsed settings incorporate the current environment to assign the relevant raw setting
@@ -24,6 +27,10 @@ export const azureSettings: Record<string, string> = {
   AD_B2C_PasswordChange_Policy: azureRawSettings.AD_B2C_PasswordChange_Policy,
   AD_B2C_ProfileEdit_Policy: azureRawSettings.AD_B2C_ProfileEdit_Policy,
   SPA_Root_URL: isDev ? azureRawSettings.SPA_Root_URL_Dev : azureRawSettings.SPA_Root_URL,
+  Product_Management_API_Application_Client_Id: isDev
+    ? azureRawSettings.Product_Management_API_Application_Client_Id_Dev
+    : azureRawSettings.Product_Management_API_Application_Client_Id,
+  Product_Management_API_Scope_PMCore_ReadWrite: azureRawSettings.Product_Management_API_Scope_PMCore_ReadWrite,
 };
 
 export function getAuthorityUrl(adB2cPolicyName: string): string {
@@ -32,4 +39,16 @@ export function getAuthorityUrl(adB2cPolicyName: string): string {
 
 export function getAuthorityDomain(): string {
   return `${azureSettings.AD_B2C_TenantName}.b2clogin.com`;
+}
+
+// returns https://StratusB2CDev.onmicrosoft.com/d7c97f69-2f27-43a0-b998-c659ab05d8ba
+// see ProductManagementApi "Application ID URI" on Azure, this helper may not be necessary
+export function getProductManagementApiApplicationIdUri() {
+  return `https://${azureSettings.AD_B2C_TenantName}.onmicrosoft.com/${azureSettings.Product_Management_API_Application_Client_Id}`;
+}
+
+// returns https://StratusB2CDev.onmicrosoft.com/d7c97f69-2f27-43a0-b998-c659ab05d8ba/PMCore.ReadWrite
+// needed in AADB2C Requests to request Private WebAPI Scope(s)
+export function getProductManagementApiScopeCoreReadWrite() {
+  return `${getProductManagementApiApplicationIdUri()}/${azureSettings.Product_Management_API_Scope_PMCore_ReadWrite}`;
 }

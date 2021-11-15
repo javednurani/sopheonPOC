@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -85,16 +86,16 @@ namespace Sopheon.CloudNative.Products.AspNetCore
          services.AddSwaggerGen(c =>
          {
             // If new Swagger Docs are added, update the build action
-            c.SwaggerDoc("v1", new OpenApiInfo 
-            { 
-               Title = "Sopheon.CloudNative.Products.AspNetCore", 
+            c.SwaggerDoc("v1", new OpenApiInfo
+            {
+               Title = "Sopheon.CloudNative.Products.AspNetCore",
                Version = "v1",
                Description = ""
             });
 
             Uri authorizationUrl = new Uri($"{Configuration.GetValue<string>("AzureAdB2C:Instance")}/{Configuration.GetValue<string>("AzureAdB2C:Domain")}/{Configuration.GetValue<string>("AzureAdB2C:SignUpSignInPolicyId")}/oauth2/v2.0/authorize"); // ex: https://<b2c_tenant_name>.b2clogin.com/<b2c_tenant_name>.onmicrosoft.com/oauth2/v2.0/authorize?p=b2c_1_susi_v2
             Uri tokenUrl = new Uri($"{Configuration.GetValue<string>("AzureAdB2C:Instance")}/{Configuration.GetValue<string>("AzureAdB2C:Domain")}/{Configuration.GetValue<string>("AzureAdB2C:SignUpSignInPolicyId")}/oauth2/v2.0/token"); // ex: https://<b2c_tenant_name>.b2clogin.com/<b2c_tenant_name>.onmicrosoft.com/oauth2/v2.0/token?p=b2c_1_susi_v2
-            
+
             c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
             {
                Name = "Authorization",
@@ -143,16 +144,17 @@ namespace Sopheon.CloudNative.Products.AspNetCore
             services.AddScoped<IEnvironmentSqlConnectionStringProvider, DevelopmentTimeEnvironmentSqlConnectionStringProvider>();
          }
 
-         if (_env.IsDevelopment())
-         {
-            services.AddCors(options =>
-            {
-               options.AddDefaultPolicy(builder =>
-               {
-                  builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
-               });
-            });
-         }
+         //if (_env.IsDevelopment())
+         //{
+         //   services.AddCors(options =>
+         //   {
+         //      options.AddDefaultPolicy(builder =>
+         //      {
+         //         builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
+         //         builder.AllowAnyMethod(); // TODO get options post patch put delete ?
+         //      });
+         //   });
+         //}
 
          services.AddScoped<IAuthorizationHandler, EnvironmentOwnerHandler>();
          //services.AddScoped<IAuthorizationHandler, SopheonSupportEnvironmentAccessHandler>(); // TODO: Add handling for support access scenario, or potentially local dev scenarios
@@ -187,8 +189,8 @@ namespace Sopheon.CloudNative.Products.AspNetCore
                c.OAuthScopeSeparator(" ");
                c.OAuthUsePkce();
             });
-
-            app.UseCors();
+            // TODO, iterate on CORS policy
+            app.UseCors(corsPolicyAllowAll);
          }
 
          app.UseHttpsRedirection();
@@ -232,5 +234,11 @@ namespace Sopheon.CloudNative.Products.AspNetCore
          };
          await context.Response.WriteAsJsonAsync(response);
       }
+
+      private Action<CorsPolicyBuilder> corsPolicyAllowAll =
+         options => options
+                     .AllowAnyOrigin()
+                     .AllowAnyMethod()
+                     .AllowAnyHeader();
    }
 }

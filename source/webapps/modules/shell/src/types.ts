@@ -15,6 +15,7 @@ export interface ThemeShape {
 
 export interface AuthShape {
   environmentKey: string | null;
+  accessToken: string | null;
 }
 
 export interface LanguageShape {
