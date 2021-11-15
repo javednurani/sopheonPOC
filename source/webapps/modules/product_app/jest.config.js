@@ -5,4 +5,11 @@ module.exports = {
   setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect', '<rootDir>/webpack/test-setup.ts'],
   snapshotSerializers: ['enzyme-to-json/serializer'],
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(tsx?|scss)$',
+  preset: 'ts-jest',
+  transform: {
+    '^.+\\.(ts|tsx)?$': 'ts-jest',
+    '^.+\\.(js|jsx)$': 'babel-jest',
+    '^.+\\.svg$': '<rootDir>/svgTransform.js',
+  },
+  transformIgnorePatterns: ['node_modules/(?!(@sopheon))/'],
 };
