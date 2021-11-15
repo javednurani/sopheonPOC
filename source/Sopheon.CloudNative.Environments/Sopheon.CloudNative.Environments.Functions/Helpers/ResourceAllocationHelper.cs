@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.Management.Fluent;
@@ -11,6 +12,7 @@ using Sopheon.CloudNative.Environments.Domain.Exceptions;
 
 namespace Sopheon.CloudNative.Environments.Functions.Helpers
 {
+   // TODO: rename this class to be specific to the function.  It will not be used by other functions.
    public class ResourceAllocationHelper : IResourceAllocationHelper
    {
       private readonly ILogger<ResourceAllocationHelper> _logger;
@@ -40,7 +42,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          string azureSqlDbResourceUri= $"Server=https://{sqlServerName}.database.windows.net;Database={sqlDatabase.Name};";
          await _environmentCommands.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environmentKey, azureSqlDbResourceUri);
 
-         await TagSqlDatabaseAsAssignedToCustomerAsync(sqlDatabase, subscriptionId, resourceGroupName);
+         await TagSqlDatabaseAsAssignedToCustomerAsync(sqlDatabase, subscriptionId, resourceGroupName, sqlServerName);
       }
 
       private async Task<ISqlDatabase> GetUnassignedSqlDatabaseAsync(string subscriptionId, string resourceGroupName, string sqlServerName)
@@ -69,21 +71,22 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          throw new CloudServiceException("No available database in buffer!");
       }
 
-      private async Task TagSqlDatabaseAsAssignedToCustomerAsync(ISqlDatabase sqlDatabase, string subscriptionId, string resourceGroupName)
+      private async Task TagSqlDatabaseAsAssignedToCustomerAsync(ISqlDatabase sqlDatabase, string subscriptionId, string resourceGroupName, string sqlServerName)
       {
-         string url = $"https://management.azure.com/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.Sql/servers/databases/{sqlDatabase.Name}?api-version=2021-04-01";
+         string url = $"https://management.azure.com/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.Sql/servers/{sqlServerName}/databases/{sqlDatabase.Name}/providers/Microsoft.Resources/tags/default?api-version=2021-04-01";
          string body =
-@"{ 
-  'operation': 'merge',
-  'properties': {
-    'tags': {
-      '" + StringConstants.CUSTOMER_PROVISIONED_DATABASE_TAG_NAME + "': '" + StringConstants.CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_ASSIGNED + @"'
-    }
-  }
-}";
+            "{" +
+              "'operation': 'merge'," +
+              "'properties': {" +
+                "'tags': {" +
+                  "'" + StringConstants.CUSTOMER_PROVISIONED_DATABASE_TAG_NAME + "': '" + StringConstants.CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_ASSIGNED + "'" +
+                "}" +
+              "}" +
+            "}";
+
          HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Patch, url)
          {
-            Content = new StringContent(body)
+            Content = new StringContent(body, Encoding.UTF8, "application/json")
          };
 
          HttpResponseMessage response = await _httpClient.SendAsync(httpRequestMessage, CancellationToken.None);

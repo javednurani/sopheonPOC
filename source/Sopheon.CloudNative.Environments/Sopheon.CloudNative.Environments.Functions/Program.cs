@@ -1,7 +1,11 @@
 ﻿#define Managed
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Dynamic;
 using System.Net.Http;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
@@ -17,6 +21,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Sopheon.CloudNative.Environments.Data;
 using Sopheon.CloudNative.Environments.Domain.Commands;
+using Sopheon.CloudNative.Environments.Domain.Exceptions;
 using Sopheon.CloudNative.Environments.Domain.Queries;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
@@ -58,7 +63,7 @@ namespace Sopheon.CloudNative.Environments.Functions
                services.AddLogging();
 
                // Add HttpClient
-               services.AddHttpClient(StringConstants.HTTP_CLIENT_NAME_AZURE_REST_API, (servProd, client) => ConfigureAzureRestApiClient(client));
+               services.AddHttpClient(StringConstants.HTTP_CLIENT_NAME_AZURE_REST_API, (servProd, client) => ConfigureAzureRestApiClient(client, hostContext));
 
                // Add Custom Services
                string connString = string.Empty;
@@ -116,10 +121,37 @@ namespace Sopheon.CloudNative.Environments.Functions
             .WithDefaultSubscription();
       }
 
-      private static HttpClient ConfigureAzureRestApiClient(HttpClient client)
+      private static HttpClient ConfigureAzureRestApiClient(HttpClient client, HostBuilderContext hostContext)
       {
-         // TODO: configure for Azure auth
-         client.DefaultRequestHeaders.Add("TODO", "TODO");
+         string tenantId = Environment.GetEnvironmentVariable("AzSpTenantId");
+         string clientId = Environment.GetEnvironmentVariable("AzSpClientId");
+         string clientSecret = hostContext.Configuration["AzSpClientSecret"]; // TODO: going to need this in production context?  used in dev already
+         string url = $"https://login.microsoftonline.com/{tenantId}/oauth2/token";
+
+         var values = new Dictionary<string, string>
+         {
+            { "grant_type", "client_credentials" },
+            { "client_id", clientId},
+            { "client_secret", clientSecret},
+            { "resource", "https://management.azure.com/"},
+         };
+
+         HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, url)
+         {
+            Content = new FormUrlEncodedContent(values)
+         };
+
+         HttpResponseMessage response = client.Send(httpRequestMessage, CancellationToken.None);
+         if (!response.IsSuccessStatusCode)
+         {
+            throw new CloudServiceException("Error authenticating with Azure for REST API client");
+         }
+
+         dynamic responseContent = response.Content.ReadAsAsync<ExpandoObject>().Result;
+         string accessToken = responseContent.access_token;
+
+         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
+
          return client;
       }
    }
