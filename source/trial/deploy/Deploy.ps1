@@ -1,5 +1,5 @@
 $ZipUtil = "C:\Program Files\7-Zip\7z.exe";
-$ShellApp = "$($env:System_DefaultWorkingDirectory)/ShellApp";
+$ShellApp = "$($env:System_DefaultWorkingDirectory)/Shell";
 $MarketingPage = "$($env:System_DefaultWorkingDirectory)/MarketingPage";
 
 $Environment = $env:Environment;
@@ -12,8 +12,8 @@ try {
     & $ZipUtil "x" "$($PSScriptRoot)/ShellTrial_*.zip" "-o$($ShellApp)";
     & $ZipUtil "x" "$($PSScriptRoot)/MarketingPage_*.zip" "-o$($MarketingPage)";
 
-    & "$($env:System_DefaultWorkingDirectory)\_TokenConfigurationManagement\TokenConfigManagement\TokenReplacer.exe" replace -c "$($env:System_DefaultWorkingDirectory)\_StratusShellApp\ShellApp\Browser_Shell_Configuration.json" -f "$ShellApp\*"  -e $Environment
-    & "$($env:System_DefaultWorkingDirectory)\_TokenConfigurationManagement\TokenConfigManagement\TokenReplacer.exe" replace -c "$($env:System_DefaultWorkingDirectory)\_StratusShellApp\ShellApp\Browser_Shell_Configuration.json" -f "$MarketingPage\*"  -e $Environment
+    & "$($env:System_DefaultWorkingDirectory)\_TokenConfigurationManagement\TokenConfigManagement\TokenReplacer.exe" replace -c "$($env:System_DefaultWorkingDirectory)\_StratusShellApp\Shell\Browser_Shell_Configuration.json" -f "$ShellApp\*"  -e $Environment
+    & "$($env:System_DefaultWorkingDirectory)\_TokenConfigurationManagement\TokenConfigManagement\TokenReplacer.exe" replace -c "$($env:System_DefaultWorkingDirectory)\_StratusShellApp\Shell\Browser_Shell_Configuration.json" -f "$MarketingPage\*"  -e $Environment
 
 
     Write-Host "Uploading Marketing Page to blob storage";

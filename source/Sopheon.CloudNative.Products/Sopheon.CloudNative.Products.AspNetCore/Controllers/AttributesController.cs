@@ -23,34 +23,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
       [HttpGet]
       public async Task<IEnumerable<Domain.Attribute>> Get()
       {
-         ClaimsPrincipal user = HttpContext.User;
-
          return await _dbContext.Attributes
-               .AsNoTracking()
-               .ToArrayAsync();
-      }
-
-      [HttpPost]
-      [Route("SeedRandom")]
-      public async Task<IEnumerable<Product>> PostSeedRandom()
-      {
-         ClaimsPrincipal user = HttpContext.User;
-
-         List<AttributeValueType> attributeTypes = await _dbContext.AttributeValueType.ToListAsync();
-         AttributeValueType randomAttributeType = attributeTypes[new Random().Next(0, attributeTypes.Count)];
-
-         var newAttribute = new Domain.Attribute()
-         {
-            Name = $"{randomAttributeType.Name}_{Guid.NewGuid()}",
-            AttributeValueTypeId = randomAttributeType.AttributeValueTypeId
-         };
-         _dbContext.Attributes.Add(newAttribute);
-
-         await _dbContext.SaveChangesAsync();
-
-         await _dbContext.SaveChangesAsync();
-
-         return await _dbContext.Products
                .AsNoTracking()
                .ToArrayAsync();
       }
