@@ -42,9 +42,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attribute.cs" />
-    <Compile Include="AttributeValue.cs" />
+    <Compile Include="IAttributeValue.cs" />
     <Compile Include="AttributeValueType.cs" />
+    <Compile Include="DecimalAttributeValue.cs" />
+    <Compile Include="IAttributeContainer.cs" />
+    <Compile Include="Int32AttributeValue.cs" />
     <Compile Include="KeyPerformanceIndicator.cs" />
+    <Compile Include="MoneyAttributeValue.cs" />
+    <Compile Include="MoneyValue.cs" />
     <Compile Include="Product.cs" />
     <Compile Include="HealthConfiguration.cs" />
     <Compile Include="ProductItemType.cs" />
@@ -52,6 +57,8 @@
     <Compile Include="Rank.cs" />
     <Compile Include="SharedProductSummary.cs" />
     <Compile Include="Status.cs" />
+    <Compile Include="StringAttributeValue.cs" />
+    <Compile Include="UtcDateTimeAttributeValue.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
