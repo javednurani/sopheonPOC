@@ -111,7 +111,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          {
             // authenticate with Service Principal credentials
             string clientId = Environment.GetEnvironmentVariable("AzSpClientId");
-            string clientSecret = hostContext.Configuration["AzSpClientSecret"];
+            string clientSecret = hostContext.Configuration["AzSpClientEnigma"];
             credentials = SdkContext.AzureCredentialsFactory
                .FromServicePrincipal(clientId, clientSecret, tenantId, environment: AzureEnvironment.AzureGlobalCloud);
          }
@@ -125,7 +125,7 @@ namespace Sopheon.CloudNative.Environments.Functions
       {
          string tenantId = Environment.GetEnvironmentVariable("AzSpTenantId");
          string clientId = Environment.GetEnvironmentVariable("AzSpClientId");
-         string clientSecret = hostContext.Configuration["AzSpClientSecret"]; // TODO: going to need this in production context?  used in dev already
+         string clientSecret = hostContext.Configuration["AzSpClientEnigma"];
          string url = $"https://login.microsoftonline.com/{tenantId}/oauth2/token";
 
          var values = new Dictionary<string, string>
