@@ -62,8 +62,9 @@ namespace Sopheon.CloudNative.Environments.Functions
                // Add Logging
                services.AddLogging();
 
-               // Add HttpClient
+               // Add HttpClients
                services.AddHttpClient(StringConstants.HTTP_CLIENT_NAME_AZURE_REST_API, (servProd, client) => ConfigureAzureRestApiClient(client, hostContext));
+               services.AddHttpClient(StringConstants.HTTP_CLIENT_NAME_ENVIRONMENT_FUNCTIONS, (servProd, client) => ConfigureEnvironmentFunctionsClient(client, hostContext));
 
                // Add Custom Services
                string connString = string.Empty;
@@ -151,6 +152,13 @@ namespace Sopheon.CloudNative.Environments.Functions
          string accessToken = responseContent.access_token;
 
          client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
+
+         return client;
+      }
+
+      private static HttpClient ConfigureEnvironmentFunctionsClient(HttpClient client, HostBuilderContext hostContext)
+      {
+         // TODO in Cloud-1822, handle Sopheon.CloudNative.Environments.Functions authorization
 
          return client;
       }
