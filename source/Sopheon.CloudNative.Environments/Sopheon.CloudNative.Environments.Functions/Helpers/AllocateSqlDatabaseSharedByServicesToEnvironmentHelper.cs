@@ -12,16 +12,15 @@ using Sopheon.CloudNative.Environments.Domain.Exceptions;
 
 namespace Sopheon.CloudNative.Environments.Functions.Helpers
 {
-   // TODO: rename this class to be specific to the function.  It will not be used by other functions.
-   public class ResourceAllocationHelper : IResourceAllocationHelper
+   public class AllocateSqlDatabaseSharedByServicesToEnvironmentHelper : IAllocateSqlDatabaseSharedByServicesToEnvironmentHelper
    {
-      private readonly ILogger<ResourceAllocationHelper> _logger;
+      private readonly ILogger<AllocateSqlDatabaseSharedByServicesToEnvironmentHelper> _logger;
       private readonly HttpClient _httpClient;
       private readonly IAzure _azure;
       private readonly IEnvironmentCommands _environmentCommands;
 
-      public ResourceAllocationHelper(
-         ILogger<ResourceAllocationHelper> logger,
+      public AllocateSqlDatabaseSharedByServicesToEnvironmentHelper(
+         ILogger<AllocateSqlDatabaseSharedByServicesToEnvironmentHelper> logger,
          IHttpClientFactory httpClientFactory,
          IAzure azure,
          IEnvironmentCommands environmentCommands)

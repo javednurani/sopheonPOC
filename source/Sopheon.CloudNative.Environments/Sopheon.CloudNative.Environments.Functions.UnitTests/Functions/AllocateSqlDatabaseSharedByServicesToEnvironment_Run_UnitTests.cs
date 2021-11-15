@@ -16,11 +16,11 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
    public class AllocateSqlDatabaseSharedByServicesToEnvironment_Run_UnitTests : FunctionUnitTestBase
    {
       private readonly AllocateSqlDatabaseSharedByServicesToEnvironment _sut;
-      private readonly Mock<IResourceAllocationHelper> _mockAllocatorHelper;
+      private readonly Mock<IAllocateSqlDatabaseSharedByServicesToEnvironmentHelper> _mockAllocatorHelper;
 
       public AllocateSqlDatabaseSharedByServicesToEnvironment_Run_UnitTests()
       {
-         _mockAllocatorHelper = new Mock<IResourceAllocationHelper>();
+         _mockAllocatorHelper = new Mock<IAllocateSqlDatabaseSharedByServicesToEnvironmentHelper>();
          _sut = new AllocateSqlDatabaseSharedByServicesToEnvironment(_mockAllocatorHelper.Object, _responseBuilder);
       }
 

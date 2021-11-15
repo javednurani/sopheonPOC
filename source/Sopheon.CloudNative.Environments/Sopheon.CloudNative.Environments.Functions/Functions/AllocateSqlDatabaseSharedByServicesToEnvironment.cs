@@ -15,10 +15,10 @@ namespace Sopheon.CloudNative.Environments.Functions.Functions
 {
    public class AllocateSqlDatabaseSharedByServicesToEnvironment
    {
-      private readonly IResourceAllocationHelper _resourceAllocationHelper;
+      private readonly IAllocateSqlDatabaseSharedByServicesToEnvironmentHelper _resourceAllocationHelper;
       private readonly HttpResponseDataBuilder _responseBuilder;
 
-      public AllocateSqlDatabaseSharedByServicesToEnvironment(IResourceAllocationHelper resourceAllocationHelper, HttpResponseDataBuilder responseBuilder)
+      public AllocateSqlDatabaseSharedByServicesToEnvironment(IAllocateSqlDatabaseSharedByServicesToEnvironmentHelper resourceAllocationHelper, HttpResponseDataBuilder responseBuilder)
       {
          _resourceAllocationHelper = resourceAllocationHelper;
          _responseBuilder = responseBuilder;
