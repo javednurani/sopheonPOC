@@ -15,13 +15,13 @@ import {
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { CreateProductAction, getProductsAction, UpdateProductAction } from './onboardingInfoReducer';
+import { CreateProductAction, GetProductsAction, UpdateProductAction } from './onboardingInfoReducer';
 import { CreateUpdateProductDto, Product } from './types';
 export interface IOnboardingInfoProps {
   currentStep: number;
   createProduct: (product: CreateUpdateProductDto) => CreateProductAction;
   updateProduct: (product: CreateUpdateProductDto) => UpdateProductAction;
-  getProducts: (product: Product[]) => getProductsAction;
+  getProducts: (product: Product[]) => GetProductsAction;
   environmentKey: string;
   accessToken: string;
 }
@@ -222,7 +222,8 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
     case 3:
       // INFO - presence of environmentKey represents a logged-in user
       // TODO, replace environmentKey with better 'isAuthenticated' logic. expose MSAL through ShellAPI?
-      return (environmentKey &&
+      return (
+        environmentKey &&
           <Stack className="step3" horizontalAlign="center" tokens={stackTokens}>
             <Stack.Item>
               <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupYourGoals' })}</Label>

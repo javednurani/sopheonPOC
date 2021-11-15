@@ -2,7 +2,7 @@ import { InjectReducerMap, InjectSagaMap, ShellApiProps } from '@sopheon/shell-a
 import { FunctionComponent } from 'react';
 
 import App from './App';
-import { createProduct, CreateProductAction, getProducts, getProductsAction, updateProduct, UpdateProductAction } from './onboardingInfoReducer';
+import { createProduct, CreateProductAction, getProducts, GetProductsAction, updateProduct, UpdateProductAction } from './onboardingInfoReducer';
 import { NAMESPACE, rootReducer, RootState } from './rootReducer';
 import rootSaga from './rootSaga';
 import { CreateUpdateProductDto, Product } from './types';
@@ -12,7 +12,7 @@ export type AppStateProps = {
 };
 
 export type AppDispatchProps = {
-  getProducts: (product: Product[]) => getProductsAction;
+  getProducts: (product: Product[]) => GetProductsAction;
   createProduct: (product: CreateUpdateProductDto) => CreateProductAction;
   updateProduct: (product: CreateUpdateProductDto) => UpdateProductAction;
 };

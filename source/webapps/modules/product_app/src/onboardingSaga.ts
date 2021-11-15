@@ -6,7 +6,7 @@ import {
   createProductFailure,
   createProductRequest,
   createProductSuccess,
-  getProductsAction,
+  GetProductsAction,
   getProductsFailure,
   getProductsRequest,
   getProductsSuccess,
@@ -55,7 +55,7 @@ export function* onUpdateProduct(action: UpdateProductAction): Generator {
   }
 }
 
-export function* onGetProducts(action: getProductsAction): Generator {
+export function* onGetProducts(action: GetProductsAction): Generator {
   try {
     yield put(getProductsRequest());
     //@ts-ignore TODO Cloud-1920, fix this ignore and a console error

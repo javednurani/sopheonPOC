@@ -34,9 +34,9 @@ export type UpdateProductRequestAction = Action<OnboardingActionTypes.UPDATE_PRO
 export type UpdateProductSuccessAction = PayloadAction<OnboardingActionTypes.UPDATE_PRODUCT_SUCCESS, Product>;
 export type UpdateProductFailureAction = PayloadAction<OnboardingActionTypes.UPDATE_PRODUCT_FAILURE, Error>;
 
-export type getProductsRequestAction = Action<OnboardingActionTypes.GET_PRODUCTS_REQUEST>;
-export type getProductsSuccessAction = PayloadAction<OnboardingActionTypes.GET_PRODUCTS_SUCCESS, Product[]>;
-export type getProductsFailureAction = PayloadAction<OnboardingActionTypes.GET_PRODUCTS_FAILURE, Error>;
+export type GetProductsRequestAction = Action<OnboardingActionTypes.GET_PRODUCTS_REQUEST>;
+export type GetProductsSuccessAction = PayloadAction<OnboardingActionTypes.GET_PRODUCTS_SUCCESS, Product[]>;
+export type GetProductsFailureAction = PayloadAction<OnboardingActionTypes.GET_PRODUCTS_FAILURE, Error>;
 
 export type OnboardingReducerActions =
   | NextStepAction
@@ -46,9 +46,9 @@ export type OnboardingReducerActions =
   | UpdateProductRequestAction
   | UpdateProductSuccessAction
   | UpdateProductFailureAction
-  | getProductsRequestAction
-  | getProductsSuccessAction
-  | getProductsFailureAction;
+  | GetProductsRequestAction
+  | GetProductsSuccessAction
+  | GetProductsFailureAction;
 
 // SAGA ACTION TYPES
 
@@ -59,7 +59,7 @@ export enum OnboardingSagaActionTypes {
   GET_PRODUCTS = 'ONBOARDING/GET_PRODUCTS'
 }
 
-export type getProductsAction = PayloadAction<OnboardingSagaActionTypes.GET_PRODUCTS, Product[]>
+export type GetProductsAction = PayloadAction<OnboardingSagaActionTypes.GET_PRODUCTS, Product[]>;
 export type CreateProductAction = PayloadAction<OnboardingSagaActionTypes.CREATE_PRODUCT, CreateUpdateProductDto>;
 export type UpdateProductAction = PayloadAction<OnboardingSagaActionTypes.UPDATE_PRODUCT, CreateUpdateProductDto>;
 
@@ -83,14 +83,14 @@ export const updateProductSuccess = (product: Product): UpdateProductSuccessActi
 export const updateProductFailure = (error: Error): UpdateProductFailureAction =>
   createPayloadAction(OnboardingActionTypes.UPDATE_PRODUCT_FAILURE, error);
 
-export const getProductsRequest = (): getProductsRequestAction => createAction(OnboardingActionTypes.GET_PRODUCTS_REQUEST);
-export const getProductsSuccess = (products: Product[]): getProductsSuccessAction =>
+export const getProductsRequest = (): GetProductsRequestAction => createAction(OnboardingActionTypes.GET_PRODUCTS_REQUEST);
+export const getProductsSuccess = (products: Product[]): GetProductsSuccessAction =>
   createPayloadAction(OnboardingActionTypes.GET_PRODUCTS_SUCCESS, products);
-export const getProductsFailure = (error: Error): getProductsFailureAction => createPayloadAction(OnboardingActionTypes.GET_PRODUCTS_FAILURE, error);
+export const getProductsFailure = (error: Error): GetProductsFailureAction => createPayloadAction(OnboardingActionTypes.GET_PRODUCTS_FAILURE, error);
 
 // SAGA ACTIONS
 
-export const getProducts = (products: Product[]): getProductsAction => createPayloadAction(OnboardingSagaActionTypes.GET_PRODUCTS, products);
+export const getProducts = (products: Product[]): GetProductsAction => createPayloadAction(OnboardingSagaActionTypes.GET_PRODUCTS, products);
 export const createProduct = (product: CreateUpdateProductDto): CreateProductAction => createPayloadAction(OnboardingSagaActionTypes.CREATE_PRODUCT, product);
 export const updateProduct = (product: CreateUpdateProductDto): UpdateProductAction => createPayloadAction(OnboardingSagaActionTypes.UPDATE_PRODUCT, product);
 
