@@ -16,17 +16,34 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { CreateProductAction, getProductsAction, UpdateProductAction } from './onboardingInfoReducer';
-import { Product } from './types';
-
+import { CreateUpdateProductDto, Product } from './types';
 export interface IOnboardingInfoProps {
   currentStep: number;
-  createProduct: (product: Product) => CreateProductAction;
-  updateProduct: (product: Product) => UpdateProductAction;
-  getProducts: (product: Product) => getProductsAction;
+  createProduct: (product: CreateUpdateProductDto) => CreateProductAction;
+  updateProduct: (product: CreateUpdateProductDto) => UpdateProductAction;
+  getProducts: (product: Product[]) => getProductsAction;
+  environmentKey: string;
+  accessToken: string;
 }
 
-const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({ currentStep, createProduct, updateProduct, getProducts }: IOnboardingInfoProps) => {
+const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
+  currentStep,
+  createProduct,
+  updateProduct,
+  getProducts,
+  environmentKey,
+  accessToken,
+}: IOnboardingInfoProps) => {
   const { formatMessage } = useIntl();
+
+  const [productName, setProductName] = useState('');
+  const [industryKeys, setIndustryKeys] = useState<number[]>([]);
+  const [continueDisabled, setContinueDisabled] = useState(true);
+
+  useEffect(() => {
+    setContinueDisabled(productName.length === 0 || industryKeys.length === 0);
+  }, [productName, industryKeys]);
+
   const headerStyle: React.CSSProperties = {
     fontSize: FontSizes.size42,
     marginBottom: '2vh',
@@ -101,10 +118,6 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({ current
     return <></>;
   };
 
-  const [productName, setProductName] = useState('');
-  const [industryKeys, setIndustryKeys] = useState<number[]>([]);
-  const [continueDisabled, setContinueDisabled] = useState(true);
-
   const handleProductNameChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string | undefined): void => {
     setProductName(newValue || '');
   };
@@ -130,7 +143,13 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({ current
       Description: 'TODO FROM UI',
     };
 
-    createProduct(productData);
+    const createProductDto: CreateUpdateProductDto = {
+      Product: productData,
+      EnvironmentKey: environmentKey,
+      AccessToken: accessToken,
+    };
+
+    createProduct(createProductDto);
   };
 
   const handleOnboardingGetStartedClick = () => {
@@ -140,102 +159,108 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({ current
       Description: 'TODO FROM UI',
     };
 
-    updateProduct(productData);
+    const updateProductDto: CreateUpdateProductDto = {
+      Product: productData,
+      EnvironmentKey: environmentKey,
+      AccessToken: accessToken,
+    };
+    updateProduct(updateProductDto);
   };
-
-  useEffect(() => {
-    setContinueDisabled(productName.length === 0 || industryKeys.length === 0);
-  }, [productName, industryKeys]);
 
   switch (currentStep) {
     case 2:
       return (
-        <Stack className="step2" horizontalAlign="center" tokens={stackTokens}>
-          <Stack.Item>
-            <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupproduct' })}</Label>
-          </Stack.Item>
-          <Stack.Item>
-            <TextField
-              label={formatMessage({ id: 'onboarding.yourproductname' })}
-              aria-label={formatMessage({ id: 'onboarding.yourproductname' })}
-              styles={textFieldStyles}
-              onChange={handleProductNameChange}
-              required
-              maxLength={300}
-            />
-          </Stack.Item>
-          <Stack.Item>
-            <Dropdown
-              label={formatMessage({ id: 'onboarding.industryselection' })}
-              placeholder={formatMessage({ id: 'industryoption.default' })}
-              options={industryOptions}
-              styles={dropdownStyles}
-              onRenderOption={onRenderOption}
-              onChange={handleIndustryDropdownChange}
-              multiSelect
-              required
-            />
-          </Stack.Item>
-          <Stack.Item>
-            <PrimaryButton
-              text={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
-              aria-label={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
-              onClick={() => handleOnboardingContinueClick()}
-              style={buttonStyles}
-              disabled={continueDisabled}
-            />
-          </Stack.Item>
-          <Stack.Item style={progressBarStyles}>
-            <ProgressIndicator
-              label={formatMessage({ id: 'onboarding.step2of3' })}
-              description={formatMessage({ id: 'onboarding.nextGoals' })}
-              ariaValueText={formatMessage({ id: 'onboarding.step2of3' })}
-              percentComplete={0.67}
-              barHeight={8}
-            />
-          </Stack.Item>
-        </Stack>
+        // INFO - presence of environmentKey represents a logged-in user
+        // TODO, replace environmentKey with better 'isAuthenticated' logic. expose MSAL through ShellAPI?
+        environmentKey &&
+          <Stack className="step2" horizontalAlign="center" tokens={stackTokens}>
+            <Stack.Item>
+              <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupproduct' })}</Label>
+            </Stack.Item>
+            <Stack.Item>
+              <TextField
+                label={formatMessage({ id: 'onboarding.yourproductname' })}
+                aria-label={formatMessage({ id: 'onboarding.yourproductname' })}
+                styles={textFieldStyles}
+                onChange={handleProductNameChange}
+                required
+                maxLength={300}
+              />
+            </Stack.Item>
+            <Stack.Item>
+              <Dropdown
+                label={formatMessage({ id: 'onboarding.industryselection' })}
+                placeholder={formatMessage({ id: 'industryoption.default' })}
+                options={industryOptions}
+                styles={dropdownStyles}
+                onRenderOption={onRenderOption}
+                onChange={handleIndustryDropdownChange}
+                multiSelect
+                required
+              />
+            </Stack.Item>
+            <Stack.Item>
+              <PrimaryButton
+                text={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
+                aria-label={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
+                onClick={handleOnboardingContinueClick}
+                style={buttonStyles}
+                disabled={continueDisabled}
+              />
+            </Stack.Item>
+            <Stack.Item style={progressBarStyles}>
+              <ProgressIndicator
+                label={formatMessage({ id: 'onboarding.step2of3' })}
+                description={formatMessage({ id: 'onboarding.nextGoals' })}
+                ariaValueText={formatMessage({ id: 'onboarding.step2of3' })}
+                percentComplete={0.67}
+                barHeight={8}
+              />
+            </Stack.Item>
+          </Stack>
       );
     case 3:
-      return (
-        <Stack className="step3" horizontalAlign="center" tokens={stackTokens}>
-          <Stack.Item>
-            <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupYourGoals' })}</Label>
-          </Stack.Item>
-          <Stack.Item>
-            {/* Wrapped in a div to alter the DOM structure between steps, preventing text carry over bug */}
-            <div>
-              <TextField
-                label={formatMessage({ id: 'onboarding.productgoal' })}
-                maxLength={300}
-                multiline
-                rows={4}
-                styles={textFieldStyles}
-                resizable={false}
+      // INFO - presence of environmentKey represents a logged-in user
+      // TODO, replace environmentKey with better 'isAuthenticated' logic. expose MSAL through ShellAPI?
+      return (environmentKey &&
+          <Stack className="step3" horizontalAlign="center" tokens={stackTokens}>
+            <Stack.Item>
+              <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupYourGoals' })}</Label>
+            </Stack.Item>
+            <Stack.Item>
+              {/* Wrapped in a div to alter the DOM structure between steps, preventing text carry over bug */}
+              <div>
+                <TextField
+                  label={formatMessage({ id: 'onboarding.productgoal' })}
+                  maxLength={300}
+                  multiline
+                  rows={4}
+                  styles={textFieldStyles}
+                  resizable={false}
+                />
+              </div>
+            </Stack.Item>
+            <Stack.Item>
+              <TextField label={formatMessage({ id: 'onboarding.productKpi' })} maxLength={60} styles={textFieldStyles} />
+            </Stack.Item>
+            <Stack.Item>
+              <PrimaryButton
+                text={formatMessage({ id: 'onboarding.getstarted' })}
+                aria-label={formatMessage({ id: 'onboarding.getstarted' })}
+                onClick={handleOnboardingGetStartedClick}
+                style={buttonStyles}
               />
-            </div>
-          </Stack.Item>
-          <Stack.Item>
-            <TextField label={formatMessage({ id: 'onboarding.productKpi' })} maxLength={60} styles={textFieldStyles} />
-          </Stack.Item>
-          <Stack.Item>
-            <PrimaryButton
-              text={formatMessage({ id: 'onboarding.getstarted' })}
-              aria-label={formatMessage({ id: 'onboarding.getstarted' })}
-              onClick={() => handleOnboardingGetStartedClick()}
-              style={buttonStyles}
-            />
-          </Stack.Item>
-          <Stack.Item align={'auto'} style={progressBarStyles}>
-            <ProgressIndicator
-              label={formatMessage({ id: 'onboarding.step3of3' })}
-              description={formatMessage({ id: 'onboarding.done' })}
-              ariaValueText={formatMessage({ id: 'onboarding.step3of3' })}
-              percentComplete={1}
-              barHeight={8}
-            />
-          </Stack.Item>
-        </Stack>
+            </Stack.Item>
+            <Stack.Item align={'auto'} style={progressBarStyles}>
+              <ProgressIndicator
+                label={formatMessage({ id: 'onboarding.step3of3' })}
+                description={formatMessage({ id: 'onboarding.done' })}
+                ariaValueText={formatMessage({ id: 'onboarding.step3of3' })}
+                percentComplete={1}
+                barHeight={8}
+              />
+            </Stack.Item>
+          </Stack>
       );
     case 4:
       return (

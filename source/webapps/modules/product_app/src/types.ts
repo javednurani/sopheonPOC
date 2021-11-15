@@ -6,3 +6,9 @@ export interface Product {
   Name: string;
   Description: string;
 }
+
+export interface CreateUpdateProductDto {
+  Product: Product;
+  EnvironmentKey: string;
+  AccessToken: string;
+}

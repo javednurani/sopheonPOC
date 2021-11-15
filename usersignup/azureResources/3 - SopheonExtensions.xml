@@ -69,9 +69,13 @@
         <DisplayName>String request body to send to Sopheon.CloudNative.Environment Create endpoint</DisplayName>
         <DataType>string</DataType>
       </ClaimType>
-      <ClaimType Id="environmentKey">
+      <ClaimType Id="extension_environmentKey">
         <DisplayName>EnvironmentKey of a Sopheon.CloudNative.Environment</DisplayName>
         <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="isLocalSignup">
+        <DisplayName>Indicator of LocalAccount Signup, used to save EnvironmentKey. Adding Social IDPs may affect this.</DisplayName>
+        <DataType>boolean</DataType>
       </ClaimType>
       <ClaimType Id="RESTFailSafe">
         <DisplayName>RESTFailSafe</DisplayName>
@@ -576,7 +580,8 @@
             <OutputClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" DefaultValue="true" />
             <OutputClaim ClaimTypeReferenceId="authenticationSource" />
             <OutputClaim ClaimTypeReferenceId="newUser" />
-            <OutputClaim ClaimTypeReferenceId="environmentKey" />
+            <OutputClaim ClaimTypeReferenceId="extension_environmentKey" />
+            <OutputClaim ClaimTypeReferenceId="isLocalSignup" DefaultValue="true" AlwaysUseDefaultValue="true" />
             <OutputClaim ClaimTypeReferenceId="RESTFailSafe" />
           </OutputClaims>
           <ValidationTechnicalProfiles>
@@ -692,6 +697,7 @@
             <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedDate" />
             <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsentedVersion" />
             <OutputClaim ClaimTypeReferenceId="extension_Company" />
+            <OutputClaim ClaimTypeReferenceId="extension_environmentKey" />
             <OutputClaim ClaimTypeReferenceId="signInName" />
           </OutputClaims>
         </TechnicalProfile>
@@ -721,6 +727,25 @@
             <PersistedClaim ClaimTypeReferenceId="country" />
             <PersistedClaim ClaimTypeReferenceId="extension_Company" />
           </PersistedClaims>
+        </TechnicalProfile>
+        <!-- Technical profiles for updating user record using objectId -->
+        <TechnicalProfile Id="AAD-UserWriteEnvironmentKeyUsingObjectId">
+          <Metadata>
+            <Item Key="Operation">Write</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+          </InputClaims>
+          <PersistedClaims>
+            <!-- Required claims -->
+            <PersistedClaim ClaimTypeReferenceId="objectId" />
+            <!-- Optional claims -->
+            <PersistedClaim ClaimTypeReferenceId="extension_environmentKey" />
+          </PersistedClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
@@ -785,7 +810,7 @@
             <InputClaim ClaimTypeReferenceId="createEnvironmentRequestBody" />
           </InputClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="environmentKey" />
+            <OutputClaim ClaimTypeReferenceId="extension_environmentKey" PartnerClaimType="environmentKey" />
           </OutputClaims>
         </TechnicalProfile>
         <TechnicalProfile Id="REST-FailSafe-Dummy">
@@ -810,8 +835,15 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <!-- This step reads any user attributes that we may not have received when in the token. -->
+        <!-- Save EnvironmentKey, returned from Sopheon.CloudNative.Environments API in previous step, to AADB2C extension property -->
         <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserWriteEnvironmentKeyUsingObjectId" TechnicalProfileReferenceId="AAD-UserWriteEnvironmentKeyUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- This step reads any user attributes that we may not have received when in the token. -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
           </ClaimsExchanges>
@@ -819,7 +851,7 @@
 
         <!-- execute consent step if the users consented version does not met the current version,
               otherwhise this step is skipped -->
-        <OrchestrationStep Order="3" Type="ClaimsExchange">
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
               <Value>extension_TermsOfUseConsentedVersion</Value>
@@ -832,7 +864,7 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <OrchestrationStep Order="4" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
 
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
@@ -864,7 +896,27 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <OrchestrationStep Order="3" Type="InvokeSubJourney">
+        <!-- Save EnvironmentKey, returned from Sopheon.CloudNative.Environments API in previous step, to AADB2C extension property -->
+        <!-- INFO: isLocalSignup claim + precondition attempt to only save EnvironmentKey on new user signup, not returning signin.  -->
+        <!-- INFO: in the case of conflict between isLocalSignup and isForgotPassword, can remove isLocalSignup precondition and always save -->
+        <!-- TODO 2148, is isForgotPassword precond redundant? (maybe, but safe to preserve forgot pw behavior?) -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>isLocalSignup</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>isForgotPassword</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserWriteEnvironmentKeyUsingObjectId" TechnicalProfileReferenceId="AAD-UserWriteEnvironmentKeyUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="4" Type="InvokeSubJourney">
           <Preconditions>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
               <Value>isForgotPassword</Value>
@@ -877,7 +929,7 @@
         </OrchestrationStep>
 
         <!-- This step reads any user attributes that we may not have received when in the token. -->
-        <OrchestrationStep Order="4" Type="ClaimsExchange">
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
           </ClaimsExchanges>
@@ -885,7 +937,7 @@
 
         <!-- execute consent step if the users consented version does not meet the current version,
               otherwise this step is skipped -->
-        <OrchestrationStep Order="5" Type="ClaimsExchange">
+        <OrchestrationStep Order="6" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
               <Value>extension_TermsOfUseConsentedVersion</Value>
@@ -898,11 +950,12 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="7" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
 
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
+
     <UserJourney Id="PasswordChange">
       <OrchestrationSteps>
         <OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.signuporsignin">

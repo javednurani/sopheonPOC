@@ -16,6 +16,7 @@ describe('Testing the App component', () => {
   it('Render test for the App component', () => {
     const appProps: AppProps = {
       changeTheme: jest.fn(),
+      setEnvironmentKey: jest.fn(),
     };
 
     const wrapper = mount(
@@ -32,6 +33,7 @@ describe('Testing the App component', () => {
   it('Accessibility test for the App component', async () => {
     const appProps: AppProps = {
       changeTheme: jest.fn(),
+      setEnvironmentKey: jest.fn(),
     };
 
     const wrapper = mount(
@@ -46,6 +48,7 @@ describe('Testing the App component', () => {
   it('App snapshot light theme render test', () => {
     const appProps: AppProps = {
       changeTheme: jest.fn(),
+      setEnvironmentKey: jest.fn(),
     };
 
     const tree = mount(
@@ -66,6 +69,7 @@ describe('Testing the App component', () => {
   it('App snapshot dark theme render test', () => {
     const appProps: AppProps = {
       changeTheme: jest.fn(),
+      setEnvironmentKey: jest.fn(),
     };
 
     const tree = mount(

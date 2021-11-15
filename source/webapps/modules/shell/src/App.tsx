@@ -4,6 +4,7 @@ import React, { CSSProperties, FunctionComponent } from 'react';
 import { useIntl } from 'react-intl';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
+import { SetEnvironmentKeyAction } from './authentication/authReducer';
 import IdleMonitor from './authentication/IdleMonitor';
 import Login from './authentication/Login';
 import Signup from './authentication/Signup';
@@ -17,9 +18,10 @@ import { ChangeThemeAction } from './themes/themeReducer/themeReducer';
 
 export interface AppProps {
   changeTheme: (useDarkTheme: boolean) => ChangeThemeAction;
+  setEnvironmentKey: (environmentKey: string) => SetEnvironmentKeyAction;
 }
 
-const App: FunctionComponent<AppProps> = ({ changeTheme }: AppProps) => {
+const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey }: AppProps) => {
   const { formatMessage } = useIntl();
   const loadingMessage: string = formatMessage({ id: 'fallback.loading' });
   useTheme();
@@ -73,7 +75,7 @@ const App: FunctionComponent<AppProps> = ({ changeTheme }: AppProps) => {
             >
               {(!location.pathname.includes('product') || userHasProduct) &&
                 <Stack.Item>
-                  <Header changeTheme={changeTheme} />
+                  <Header changeTheme={changeTheme} setEnvironmentKey={setEnvironmentKey} />
                 </Stack.Item>
               }
               <Stack.Item shrink>
