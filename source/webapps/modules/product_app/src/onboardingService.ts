@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 import { settings } from './settings';
-import { CreateUpdateProductDto, Product } from './types';
+import { CreateUpdateProductDto, EnvironmentScopedApiRequestDto, Product } from './types';
 
 const API_URL_BASE: string = settings.ProductManagementApiUrlBase;
 const API_URL_PATH_CREATE_PRODUCT: string = settings.CreateProductUrlPath;
@@ -35,8 +35,15 @@ export const updateProduct: (productDto: CreateUpdateProductDto) => Promise<Prod
   return await axios.patch(updateProductUrlWithEnvironment, productDto.Product, config);
 };
 
-export const getProducts: () => Promise<Product[]> = async () => {
+export const getProducts: (requestDto: EnvironmentScopedApiRequestDto) => Promise<Product[]> = async requestDto => {
   const getProductsUrlWithEnvironment = `${API_URL_BASE}${API_URL_PATH_GET_PRODUCT}`
-    .replace(settings.TokenEnvironmentKey, ENVIRONMENT_KEY_STUB);
-  return await axios.get(getProductsUrlWithEnvironment);
+    .replace(settings.TokenEnvironmentKey, requestDto.EnvironmentKey);
+
+  const config: AxiosRequestConfig = {
+    headers: {
+      'Authorization': `Bearer ${requestDto.AccessToken}`
+    }
+  };
+
+  return await axios.get(getProductsUrlWithEnvironment, config);
 };

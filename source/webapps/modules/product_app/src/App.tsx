@@ -22,6 +22,7 @@ import { ReactComponent as TechIndustry } from './images/industryico_Tech.svg';
 import { ReactComponent as TeleIndustry } from './images/industryico_Tele.svg';
 import { ReactComponent as TransIndustry } from './images/industryico_Trans.svg';
 import OnboardingInfo from './onboardingInfo';
+import { EnvironmentScopedApiRequestDto } from './types';
 
 export type Props = AppProps<AppStateProps, AppDispatchProps>;
 
@@ -53,11 +54,27 @@ registerIcons({
   },
 });
 
-const App: React.FunctionComponent<Props> = ({ currentStep, createProduct, updateProduct, getProducts, environmentKey, getAccessToken, accessToken }: Props) => {
+const App: React.FunctionComponent<Props> = ({
+  currentStep,
+  createProduct,
+  updateProduct,
+  getProducts,
+  environmentKey,
+  getAccessToken,
+  accessToken,
+}: Props) => {
   useEffect(() => {
     // getAccessToken triggers Shell action to store access token, freshly acquired from MSAL, in Redux state
     // after getAccessToken is called (here, on ProductApp render), shellApi::accessToken should be up-to-date access token from MSAL.acquireTokenSilent()
     getAccessToken();
+
+    // get any Products for User on initial load of Product App (will determine Onboarding State, ____, etc)
+    const requestDto: EnvironmentScopedApiRequestDto = {
+      EnvironmentKey: environmentKey,
+      AccessToken: accessToken,
+    };
+
+    getProducts(requestDto);
   }, []);
 
   return (
@@ -67,7 +84,6 @@ const App: React.FunctionComponent<Props> = ({ currentStep, createProduct, updat
           currentStep={currentStep}
           createProduct={createProduct}
           updateProduct={updateProduct}
-          getProducts={getProducts}
           environmentKey={environmentKey}
           accessToken={accessToken}
         />

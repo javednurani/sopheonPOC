@@ -5,14 +5,14 @@ import App from './App';
 import { createProduct, CreateProductAction, getProducts, GetProductsAction, updateProduct, UpdateProductAction } from './onboardingInfoReducer';
 import { NAMESPACE, rootReducer, RootState } from './rootReducer';
 import rootSaga from './rootSaga';
-import { CreateUpdateProductDto, Product } from './types';
+import { CreateUpdateProductDto, EnvironmentScopedApiRequestDto } from './types';
 
 export type AppStateProps = {
   currentStep: number;
 };
 
 export type AppDispatchProps = {
-  getProducts: (product: Product[]) => GetProductsAction;
+  getProducts: (requestDto: EnvironmentScopedApiRequestDto) => GetProductsAction;
   createProduct: (product: CreateUpdateProductDto) => CreateProductAction;
   updateProduct: (product: CreateUpdateProductDto) => UpdateProductAction;
 };
@@ -23,7 +23,7 @@ const AppContainer: FunctionComponent<ShellApiProps> = ({ shellApi }: ShellApiPr
   });
 
   const mapAppDispatchProps = (state: RootState): AppDispatchProps => ({
-    getProducts: (product: Product[]) => getProducts(product),
+    getProducts: (requestDto: EnvironmentScopedApiRequestDto) => getProducts(requestDto),
     createProduct: (product: CreateUpdateProductDto) => createProduct(product),
     updateProduct: (product: CreateUpdateProductDto) => updateProduct(product)
   });

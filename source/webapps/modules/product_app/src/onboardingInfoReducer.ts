@@ -1,7 +1,7 @@
 import { Action, createAction, createPayloadAction, FetchStatus, PayloadAction } from '@sopheon/shell-api';
 import { Reducer } from 'redux';
 
-import { CreateUpdateProductDto, Product } from './types';
+import { CreateUpdateProductDto, EnvironmentScopedApiRequestDto, Product } from './types';
 
 //#region  Action Types
 
@@ -59,7 +59,7 @@ export enum OnboardingSagaActionTypes {
   GET_PRODUCTS = 'ONBOARDING/GET_PRODUCTS'
 }
 
-export type GetProductsAction = PayloadAction<OnboardingSagaActionTypes.GET_PRODUCTS, Product[]>;
+export type GetProductsAction = PayloadAction<OnboardingSagaActionTypes.GET_PRODUCTS, EnvironmentScopedApiRequestDto>;
 export type CreateProductAction = PayloadAction<OnboardingSagaActionTypes.CREATE_PRODUCT, CreateUpdateProductDto>;
 export type UpdateProductAction = PayloadAction<OnboardingSagaActionTypes.UPDATE_PRODUCT, CreateUpdateProductDto>;
 
@@ -90,7 +90,7 @@ export const getProductsFailure = (error: Error): GetProductsFailureAction => cr
 
 // SAGA ACTIONS
 
-export const getProducts = (products: Product[]): GetProductsAction => createPayloadAction(OnboardingSagaActionTypes.GET_PRODUCTS, products);
+export const getProducts = (requestDto: EnvironmentScopedApiRequestDto): GetProductsAction => createPayloadAction(OnboardingSagaActionTypes.GET_PRODUCTS, requestDto);
 export const createProduct = (product: CreateUpdateProductDto): CreateProductAction => createPayloadAction(OnboardingSagaActionTypes.CREATE_PRODUCT, product);
 export const updateProduct = (product: CreateUpdateProductDto): UpdateProductAction => createPayloadAction(OnboardingSagaActionTypes.UPDATE_PRODUCT, product);
 
@@ -102,7 +102,7 @@ export const updateProduct = (product: CreateUpdateProductDto): UpdateProductAct
 
 export type OnboardingStateShape = {
   currentStep: number;
-  product: Product | null;
+  products: Product[];
   createProductFetchStatus: FetchStatus;
   updateProductFetchStatus: FetchStatus;
   getProductsFetchStatus: FetchStatus;
@@ -110,7 +110,7 @@ export type OnboardingStateShape = {
 
 export const initialState: OnboardingStateShape = {
   currentStep: 2,
-  product: null,
+  products: [],
   createProductFetchStatus: FetchStatus.NotActive,
   updateProductFetchStatus: FetchStatus.NotActive,
   getProductsFetchStatus: FetchStatus.NotActive,
@@ -130,7 +130,7 @@ const createProductRequestHandler = (state: OnboardingStateShape) => ({
 
 const createProductSuccessHandler = (state: OnboardingStateShape, productToSet: Product) => ({
   ...state,
-  product: productToSet,
+  products: [...state.products, productToSet],
   createProductFetchStatus: FetchStatus.DoneSuccess,
 });
 

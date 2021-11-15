@@ -67,5 +67,5 @@ export function* onGetProducts(action: GetProductsAction): Generator {
 }
 
 export default function* onboardingSaga(): Generator {
-  yield all([fork(watchOnCreateProduct), fork(watchOnUpdateProduct)]);
+  yield all([fork(watchOnCreateProduct), fork(watchOnUpdateProduct), fork(watchOnGetProduct)]);
 }

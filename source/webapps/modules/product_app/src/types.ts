@@ -2,13 +2,16 @@
 // In Cloud-2147, we should generate TS Types from Sopheon.CloudNative.Products.AspNetCore OpenAPI schema
 
 export interface Product {
-  Key: string | null;
+  Id: string | null;
   Name: string;
   Description: string;
 }
 
-export interface CreateUpdateProductDto {
+export type CreateUpdateProductDto = {
   Product: Product;
+} & EnvironmentScopedApiRequestDto;
+
+export type EnvironmentScopedApiRequestDto = {
   EnvironmentKey: string;
   AccessToken: string;
 }
