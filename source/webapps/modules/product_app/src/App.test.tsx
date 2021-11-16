@@ -48,23 +48,4 @@ describe('Testing the App component', () => {
     });
     expect(results).toHaveNoViolations();
   });
-  it('App snapshot render test', () => {
-    const appProps: Props = {
-      currentStep: 1,
-      nextStep: jest.fn(),
-    };
-
-    const tree = mount(
-      <IntlProvider locale="en" messages={messages.en}>
-        <App {...appProps} />
-      </IntlProvider>
-    );
-
-    expect(
-      toJson(tree, {
-        noKey: false,
-        mode: 'deep',
-      })
-    ).toMatchSnapshot();
-  });
 });
