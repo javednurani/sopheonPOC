@@ -136,7 +136,7 @@ resource EnvironmentsFunctionApp 'Microsoft.Web/sites@2021-01-15' = {
           value: tenant().tenantId
         }
         {
-          name: 'AzSpSubscriptionId'
+          name: 'AzSubscriptionId'
           value: subscription().subscriptionId
         }
         {
