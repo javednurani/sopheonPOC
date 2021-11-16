@@ -1,5 +1,6 @@
 import { messages } from '@sopheon/shared-ui';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
@@ -7,7 +8,7 @@ import { Props } from './App';
 import OnboardingInfo from './onboardingInfo';
 
 describe('Testing the onboardingInfo component', () => {
-  it.skip('step 2 renders correctly', async () => {
+  it('step 2 renders correctly', async () => {
     const appProps: Props = {
       currentStep: 2,
       nextStep: jest.fn(),
@@ -29,10 +30,13 @@ describe('Testing the onboardingInfo component', () => {
     expect(nameTextField).toBeInTheDocument();
     expect(industryDropdown).toBeInTheDocument();
 
-    fireEvent.change(nameTextField, { target: { value: 'test' } });
-    fireEvent.change(industryDropdown, { target: { option: { key: 2 } } });
+    userEvent.type(nameTextField, 'test');
+    userEvent.click(industryDropdown);
+    const allOpts: HTMLElement[] = screen.getAllByRole('option');
+    userEvent.click(allOpts[0]); // Select the first option in the dropdown
     await waitFor(() => expect(continueButton).not.toBeDisabled());
-    fireEvent.change(screen.getByLabelText(messages.en['onboarding.yourproductname']), { target: { newValue: '' } });
+    fireEvent.change(nameTextField, { target: { value: '' } });
+    expect(nameTextField).toHaveValue('');
     expect(continueButton).toBeDisabled();
   });
   it('step 3 components render correctly', async () => {
