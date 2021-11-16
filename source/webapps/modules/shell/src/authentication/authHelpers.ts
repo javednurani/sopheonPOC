@@ -21,6 +21,7 @@ export const msalInstance = (): PublicClientApplication => {
 };
 
 export const getAccessToken: () => Promise<string> = async () => {
+  const FAILURE_MESSAGE = 'shell::authHelpers::getAccessToken FAILURE';
   try {
     // outside of the component tree / React Context, create a new PublicClientApplication (with same config options) to access MSAL
     const pca = msalInstance();
@@ -31,9 +32,10 @@ export const getAccessToken: () => Promise<string> = async () => {
       account: account
     });
 
-    return acquireTokenResponse.accessToken;
+    return acquireTokenResponse.accessToken || FAILURE_MESSAGE;
   } catch (error) {
     console.log(error);
+    return FAILURE_MESSAGE;
   }
 };
 

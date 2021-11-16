@@ -1,11 +1,12 @@
 import { constants, messages } from '@sopheon/shared-ui';
-import { InjectReducerMap, InjectSagaMap, IShellApi } from '@sopheon/shell-api';
+import { EnvironmentScopedApiRequestDto, InjectReducerMap, InjectSagaMap, IShellApi } from '@sopheon/shell-api';
 import React, { ComponentType, useEffect } from 'react';
 import { connect, Provider } from 'react-redux';
 import { CombinedState, combineReducers, Reducer, ReducersMapObject, Store } from 'redux';
 import { Saga } from 'redux-saga';
 
 import { getAccessToken, setEnvironmentKey } from './authentication/authReducer';
+import { getProducts } from './product/productReducer';
 import { shell } from './rootReducer';
 import { sagaMiddleware, store as mainShellStore } from './store';
 import { changeTheme } from './themes/themeReducer/themeReducer';
@@ -91,7 +92,9 @@ export class ShellApi implements IShellApi {
       ...(mapStateProps && mapStateProps(this.store.getState() as unknown as TState)),
       environmentKey: this.store.getState().shell.auth.environmentKey,
       accessToken: this.store.getState().shell.auth.accessToken,
+      products: this.store.getState().shell.product.products,
       // the below stateProps are not exposed to MFE's via IShellApi. only used by, and private to, the shell
+      getProductsFetchStatus: this.store.getState().shell.product.getProductsFetchStatus, // TODO, should this be exposed via IShellApi later?
       theme: this.store.getState().shell.theme,
       language: initialLanguageState,
     });
@@ -99,6 +102,7 @@ export class ShellApi implements IShellApi {
     const mapDispatch = {
       ...(mapDispatchProps && mapDispatchProps(this.store.getState() as unknown as TState)),
       getAccessToken: () => getAccessToken(),
+      getProducts: (requestDto: EnvironmentScopedApiRequestDto) => getProducts(requestDto),
       // the below dispatchProps are not exposed to MFE's via IShellApi. only used by, and private to, the shell
       changeTheme: (useDarkTheme: boolean) => changeTheme(useDarkTheme),
       setEnvironmentKey: (environmentKey: string) => setEnvironmentKey(environmentKey),

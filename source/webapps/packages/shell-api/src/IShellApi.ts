@@ -3,15 +3,17 @@ import { InferableComponentEnhancerWithProps } from 'react-redux';
 import { Store } from 'redux';
 
 import { GetAccessTokenAction } from './store/auth/types';
-import { InjectReducerMap, InjectSagaMap } from './store/types';
+import { EnvironmentScopedApiRequestDto, GetProductsAction, InjectReducerMap, InjectSagaMap, Product } from './store/types';
 
 export type AppProps<TStateProps, TDispatchProps> = {
   // expose main-shell concerns as state (read) here
   environmentKey: string;
   accessToken: string;
+  products: Product[];
 } & {
   // expose main-shell concerns as dispatch (action) here
   getAccessToken: () => GetAccessTokenAction;
+  getProducts: (requestDto: EnvironmentScopedApiRequestDto) => GetProductsAction;
 } & TStateProps &
   TDispatchProps; // include StateProps and DispatchProps handed to getConnector
 

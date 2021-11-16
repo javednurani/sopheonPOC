@@ -1,23 +1,17 @@
+import { CreateProductAction, OnboardingSagaActionTypes, UpdateProductAction } from '@sopheon/shell-api';
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 
 // eslint-disable-next-line max-len
 import {
-  CreateProductAction,
   createProductFailure,
   createProductRequest,
   createProductSuccess,
-  GetProductsAction,
-  getProductsFailure,
-  getProductsRequest,
-  getProductsSuccess,
   nextStep,
-  OnboardingSagaActionTypes,
-  UpdateProductAction,
   updateProductFailure,
   updateProductRequest,
   updateProductSuccess,
 } from './onboardingInfoReducer';
-import { createProduct, getProducts, updateProduct } from './onboardingService';
+import { createProduct, updateProduct } from './onboardingService';
 
 export function* watchOnCreateProduct(): Generator {
   yield takeEvery(OnboardingSagaActionTypes.CREATE_PRODUCT, onCreateProduct);
@@ -25,10 +19,6 @@ export function* watchOnCreateProduct(): Generator {
 
 export function* watchOnUpdateProduct(): Generator {
   yield takeEvery(OnboardingSagaActionTypes.UPDATE_PRODUCT, onUpdateProduct);
-}
-
-export function* watchOnGetProduct(): Generator {
-  yield takeEvery(OnboardingSagaActionTypes.GET_PRODUCTS, onGetProducts);
 }
 
 export function* onCreateProduct(action: CreateProductAction): Generator {
@@ -53,16 +43,6 @@ export function* onUpdateProduct(action: UpdateProductAction): Generator {
   }
 }
 
-export function* onGetProducts(action: GetProductsAction): Generator {
-  try {
-    yield put(getProductsRequest());
-    const { data } = yield call(getProducts, action.payload);
-    yield put(getProductsSuccess(data));
-  } catch (error) {
-    yield put(getProductsFailure(error));
-  }
-}
-
 export default function* onboardingSaga(): Generator {
-  yield all([fork(watchOnCreateProduct), fork(watchOnUpdateProduct), fork(watchOnGetProduct)]);
+  yield all([fork(watchOnCreateProduct), fork(watchOnUpdateProduct)]);
 }

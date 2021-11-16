@@ -1,7 +1,16 @@
-import { Action, createAction, createPayloadAction, FetchStatus, PayloadAction } from '@sopheon/shell-api';
+import {
+  Action,
+  createAction,
+  createPayloadAction,
+  CreateProductAction,
+  CreateUpdateProductDto,
+  FetchStatus,
+  OnboardingSagaActionTypes,
+  PayloadAction,
+  Product,
+  UpdateProductAction,
+} from '@sopheon/shell-api';
 import { Reducer } from 'redux';
-
-import { CreateUpdateProductDto, EnvironmentScopedApiRequestDto, Product } from './types';
 
 //#region  Action Types
 
@@ -18,10 +27,6 @@ enum OnboardingActionTypes {
   UPDATE_PRODUCT_REQUEST = 'ONBOARDING/UPDATE_PRODUCT_REQUEST',
   UPDATE_PRODUCT_SUCCESS = 'ONBOARDING/UPDATE_PRODUCT_SUCCESS',
   UPDATE_PRODUCT_FAILURE = 'ONBOARDING/UPDATE_PRODUCT_FAILURE',
-
-  GET_PRODUCTS_REQUEST = 'ONBOARDING/GET_PRODUCTS_REQUEST',
-  GET_PRODUCTS_SUCCESS = 'ONBOARDING/GET_PRODUCTS_SUCCESS',
-  GET_PRODUCTS_FAILURE = 'ONBOARDING/GET_PRODUCTS_FAILURE',
 }
 
 export type NextStepAction = Action<OnboardingActionTypes.NEXT_STEP>;
@@ -34,10 +39,6 @@ export type UpdateProductRequestAction = Action<OnboardingActionTypes.UPDATE_PRO
 export type UpdateProductSuccessAction = PayloadAction<OnboardingActionTypes.UPDATE_PRODUCT_SUCCESS, Product>;
 export type UpdateProductFailureAction = PayloadAction<OnboardingActionTypes.UPDATE_PRODUCT_FAILURE, Error>;
 
-export type GetProductsRequestAction = Action<OnboardingActionTypes.GET_PRODUCTS_REQUEST>;
-export type GetProductsSuccessAction = PayloadAction<OnboardingActionTypes.GET_PRODUCTS_SUCCESS, Product[]>;
-export type GetProductsFailureAction = PayloadAction<OnboardingActionTypes.GET_PRODUCTS_FAILURE, Error>;
-
 export type OnboardingReducerActions =
   | NextStepAction
   | CreateProductRequestAction
@@ -45,23 +46,8 @@ export type OnboardingReducerActions =
   | CreateProductFailureAction
   | UpdateProductRequestAction
   | UpdateProductSuccessAction
-  | UpdateProductFailureAction
-  | GetProductsRequestAction
-  | GetProductsSuccessAction
-  | GetProductsFailureAction;
+  | UpdateProductFailureAction;
 
-// SAGA ACTION TYPES
-
-// eslint-disable-next-line no-shadow
-export enum OnboardingSagaActionTypes {
-  CREATE_PRODUCT = 'ONBOARDING/CREATE_PRODUCT',
-  UPDATE_PRODUCT = 'ONBOARDING/UPDATE_PRODUCT',
-  GET_PRODUCTS = 'ONBOARDING/GET_PRODUCTS'
-}
-
-export type GetProductsAction = PayloadAction<OnboardingSagaActionTypes.GET_PRODUCTS, EnvironmentScopedApiRequestDto>;
-export type CreateProductAction = PayloadAction<OnboardingSagaActionTypes.CREATE_PRODUCT, CreateUpdateProductDto>;
-export type UpdateProductAction = PayloadAction<OnboardingSagaActionTypes.UPDATE_PRODUCT, CreateUpdateProductDto>;
 
 //#endregion
 
@@ -83,14 +69,8 @@ export const updateProductSuccess = (product: Product): UpdateProductSuccessActi
 export const updateProductFailure = (error: Error): UpdateProductFailureAction =>
   createPayloadAction(OnboardingActionTypes.UPDATE_PRODUCT_FAILURE, error);
 
-export const getProductsRequest = (): GetProductsRequestAction => createAction(OnboardingActionTypes.GET_PRODUCTS_REQUEST);
-export const getProductsSuccess = (products: Product[]): GetProductsSuccessAction =>
-  createPayloadAction(OnboardingActionTypes.GET_PRODUCTS_SUCCESS, products);
-export const getProductsFailure = (error: Error): GetProductsFailureAction => createPayloadAction(OnboardingActionTypes.GET_PRODUCTS_FAILURE, error);
-
 // SAGA ACTIONS
 
-export const getProducts = (requestDto: EnvironmentScopedApiRequestDto): GetProductsAction => createPayloadAction(OnboardingSagaActionTypes.GET_PRODUCTS, requestDto);
 export const createProduct = (product: CreateUpdateProductDto): CreateProductAction => createPayloadAction(OnboardingSagaActionTypes.CREATE_PRODUCT, product);
 export const updateProduct = (product: CreateUpdateProductDto): UpdateProductAction => createPayloadAction(OnboardingSagaActionTypes.UPDATE_PRODUCT, product);
 
@@ -102,18 +82,14 @@ export const updateProduct = (product: CreateUpdateProductDto): UpdateProductAct
 
 export type OnboardingStateShape = {
   currentStep: number;
-  products: Product[];
   createProductFetchStatus: FetchStatus;
   updateProductFetchStatus: FetchStatus;
-  getProductsFetchStatus: FetchStatus;
 };
 
 export const initialState: OnboardingStateShape = {
   currentStep: 2,
-  products: [],
   createProductFetchStatus: FetchStatus.NotActive,
   updateProductFetchStatus: FetchStatus.NotActive,
-  getProductsFetchStatus: FetchStatus.NotActive,
 };
 
 // HANDLERS
@@ -130,8 +106,9 @@ const createProductRequestHandler = (state: OnboardingStateShape) => ({
 
 const createProductSuccessHandler = (state: OnboardingStateShape, productToSet: Product) => ({
   ...state,
-  products: [...state.products, productToSet],
-  createProductFetchStatus: FetchStatus.DoneSuccess,
+  // TODO move createProduct to SHELL
+  // products: [...state.products, productToSet],
+  // createProductFetchStatus: FetchStatus.DoneSuccess,
 });
 
 const createProductFailureHandler = (state: OnboardingStateShape, error: Error) => {
@@ -149,7 +126,7 @@ const updateProductRequestHandler = (state: OnboardingStateShape) => ({
 
 const updateProductSuccessHandler = (state: OnboardingStateShape, productToSet: Product) => ({
   ...state,
-  product: productToSet,
+  // product: productToSet, // TODO implement Update
   createProductFetchStatus: FetchStatus.DoneSuccess,
 });
 
@@ -158,25 +135,6 @@ const updateProductFailureHandler = (state: OnboardingStateShape, error: Error) 
   return {
     ...state,
     updateProductFetchStatus: FetchStatus.DoneFailure,
-  };
-};
-
-const getProductsRequestHandler = (state: OnboardingStateShape) => ({
-  ...state,
-  getProductsFetchStatus: FetchStatus.InProgress,
-});
-
-const getProductsSuccessHandler = (state: OnboardingStateShape, productsToSet: Product[]) => ({
-  ...state,
-  products: productsToSet,
-  getProductsFetchStatus: FetchStatus.DoneSuccess,
-});
-
-const getProductsFailureHandler = (state: OnboardingStateShape, error: Error) => {
-  console.log(error);
-  return {
-    ...state,
-    getProductsFetchStatus: FetchStatus.DoneFailure,
   };
 };
 
@@ -198,12 +156,6 @@ export const onboardingInfoReducer: Reducer<OnboardingStateShape, OnboardingRedu
       return updateProductSuccessHandler(state, action.payload);
     case OnboardingActionTypes.UPDATE_PRODUCT_FAILURE:
       return updateProductFailureHandler(state, action.payload);
-    case OnboardingActionTypes.GET_PRODUCTS_REQUEST:
-      return getProductsRequestHandler(state);
-    case OnboardingActionTypes.GET_PRODUCTS_SUCCESS:
-      return getProductsSuccessHandler(state, action.payload);
-    case OnboardingActionTypes.GET_PRODUCTS_FAILURE:
-      return getProductsFailureHandler(state, action.payload);
     default:
       return state;
   }
