@@ -38,7 +38,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          ISqlDatabase sqlDatabase = await GetUnassignedSqlDatabaseAsync(subscriptionId, resourceGroupName, sqlServerName);
 
          // INFO: For ENV.Resources of type AzureSqlDb, ENV.Resources.Uri contains the Server & Database components of a SQL connection string
-         string azureSqlDbResourceUri= $"Server=https://{sqlServerName}.database.windows.net;Database={sqlDatabase.Name};";
+         string azureSqlDbResourceUri = $"Server=https://{sqlServerName}.database.windows.net;Database={sqlDatabase.Name};";
          await _environmentCommands.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environmentKey, azureSqlDbResourceUri);
 
          await TagSqlDatabaseAsAssignedToCustomerAsync(sqlDatabase, subscriptionId, resourceGroupName, sqlServerName);
@@ -91,6 +91,11 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          HttpResponseMessage response = await _httpClient.SendAsync(httpRequestMessage, CancellationToken.None);
          if (!response.IsSuccessStatusCode)
          {
+            string logMessage = "Error calling Azure REST API to update SQL Database tag." + Environment.NewLine +
+               $"Status Code: {response.StatusCode}" + Environment.NewLine +
+               $"Reason: {response.ReasonPhrase}";
+            _logger.LogError(logMessage);
+
             throw new CloudServiceException("Error calling Azure REST API to update SQL Database tag.");
          }
 

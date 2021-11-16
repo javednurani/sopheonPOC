@@ -80,12 +80,12 @@ namespace Sopheon.CloudNative.Environments.Functions.Functions
          }
          catch (EntityNotFoundException ex)
          {
-            logger.LogInformation(ex.Message);
+            logger.LogError(ex.Message);
             return await _responseBuilder.BuildWithErrorBodyAsync(req, HttpStatusCode.NotFound, ex.Message);
          }
          catch (Exception ex)
          {
-            logger.LogInformation($"{ex.GetType()} : {ex.Message}");
+            logger.LogError($"{ex.GetType()} : {ex.Message}");
             return await _responseBuilder.BuildWithErrorBodyAsync(req, HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR);
          }
       }
