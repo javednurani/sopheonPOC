@@ -166,112 +166,120 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
     };
     updateProduct(updateProductDto);
   };
-  if (environmentKey) {
-    if (products.length > 0) {
-      return (
-        <Stack horizontalAlign="center">
-          <h1>Product App Home Page</h1>
-        </Stack>
-      );
-    } else if (currentStep === 2) {
-      // onboarding 'step 2' (first onboarding page in SPA: Product Name & Industries)
-      return (
-        <Stack className="step2" horizontalAlign="center" tokens={stackTokens}>
-          <Stack.Item>
-            <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupproduct' })}</Label>
-          </Stack.Item>
-          <Stack.Item>
-            <TextField
-              label={formatMessage({ id: 'onboarding.yourproductname' })}
-              aria-label={formatMessage({ id: 'onboarding.yourproductname' })}
-              styles={textFieldStyles}
-              onChange={handleProductNameChange}
-              required
-              maxLength={300}
-            />
-          </Stack.Item>
-          <Stack.Item>
-            <Dropdown
-              label={formatMessage({ id: 'onboarding.industryselection' })}
-              placeholder={formatMessage({ id: 'industryoption.default' })}
-              options={industryOptions}
-              styles={dropdownStyles}
-              onRenderOption={onRenderOption}
-              onChange={handleIndustryDropdownChange}
-              multiSelect
-              required
-            />
-          </Stack.Item>
-          <Stack.Item>
-            <PrimaryButton
-              text={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
-              aria-label={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
-              onClick={handleOnboardingContinueClick}
-              style={buttonStyles}
-              disabled={continueDisabled}
-            />
-          </Stack.Item>
-          <Stack.Item style={progressBarStyles}>
-            <ProgressIndicator
-              label={formatMessage({ id: 'onboarding.step2of3' })}
-              description={formatMessage({ id: 'onboarding.nextGoals' })}
-              ariaValueText={formatMessage({ id: 'onboarding.step2of3' })}
-              percentComplete={0.67}
-              barHeight={8}
-            />
-          </Stack.Item>
-        </Stack>
-      );
-    } else if (currentStep === 3) {
-      // onboarding 'step 3' (second onboarding page in SPA: Goal & KPIs)
-      return (
-        <Stack className="step3" horizontalAlign="center" tokens={stackTokens}>
-          <Stack.Item>
-            <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupYourGoals' })}</Label>
-          </Stack.Item>
-          <Stack.Item>
-            {/* Wrapped in a div to alter the DOM structure between steps, preventing text carry over bug */}
-            <div>
-              <TextField
-                label={formatMessage({ id: 'onboarding.productgoal' })}
-                maxLength={300}
-                multiline
-                rows={4}
-                styles={textFieldStyles}
-                resizable={false}
-              />
-            </div>
-          </Stack.Item>
-          <Stack.Item>
-            <TextField label={formatMessage({ id: 'onboarding.productKpi' })} maxLength={60} styles={textFieldStyles} />
-          </Stack.Item>
-          <Stack.Item>
-            <PrimaryButton
-              text={formatMessage({ id: 'onboarding.getstarted' })}
-              aria-label={formatMessage({ id: 'onboarding.getstarted' })}
-              onClick={handleOnboardingGetStartedClick}
-              style={buttonStyles}
-            />
-          </Stack.Item>
-          <Stack.Item align={'auto'} style={progressBarStyles}>
-            <ProgressIndicator
-              label={formatMessage({ id: 'onboarding.step3of3' })}
-              description={formatMessage({ id: 'onboarding.done' })}
-              ariaValueText={formatMessage({ id: 'onboarding.step3of3' })}
-              percentComplete={1}
-              barHeight={8}
-            />
-          </Stack.Item>
-        </Stack>
-      );
-    }
-  } else {
+
+  if (!environmentKey) {
     return (
       <Stack horizontalAlign="center">
         <h1>Log In to use the Product App.</h1>
       </Stack>
     );
   }
+
+  if (products.length > 0) {
+    return (
+      <Stack horizontalAlign="center">
+        <h1>Product App Home Page</h1>
+      </Stack>
+    );
+  }
+
+  if (currentStep === 2) {
+    // onboarding 'step 2' (first onboarding page in SPA: Product Name & Industries)
+    return (
+      <Stack className="step2" horizontalAlign="center" tokens={stackTokens}>
+        <Stack.Item>
+          <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupproduct' })}</Label>
+        </Stack.Item>
+        <Stack.Item>
+          <TextField
+            label={formatMessage({ id: 'onboarding.yourproductname' })}
+            aria-label={formatMessage({ id: 'onboarding.yourproductname' })}
+            styles={textFieldStyles}
+            onChange={handleProductNameChange}
+            required
+            maxLength={300}
+          />
+        </Stack.Item>
+        <Stack.Item>
+          <Dropdown
+            label={formatMessage({ id: 'onboarding.industryselection' })}
+            placeholder={formatMessage({ id: 'industryoption.default' })}
+            options={industryOptions}
+            styles={dropdownStyles}
+            onRenderOption={onRenderOption}
+            onChange={handleIndustryDropdownChange}
+            multiSelect
+            required
+          />
+        </Stack.Item>
+        <Stack.Item>
+          <PrimaryButton
+            text={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
+            aria-label={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
+            onClick={handleOnboardingContinueClick}
+            style={buttonStyles}
+            disabled={continueDisabled}
+          />
+        </Stack.Item>
+        <Stack.Item style={progressBarStyles}>
+          <ProgressIndicator
+            label={formatMessage({ id: 'onboarding.step2of3' })}
+            description={formatMessage({ id: 'onboarding.nextGoals' })}
+            ariaValueText={formatMessage({ id: 'onboarding.step2of3' })}
+            percentComplete={0.67}
+            barHeight={8}
+          />
+        </Stack.Item>
+      </Stack>
+    );
+  } else if (currentStep === 3) {
+    // onboarding 'step 3' (second onboarding page in SPA: Goal & KPIs)
+    return (
+      <Stack className="step3" horizontalAlign="center" tokens={stackTokens}>
+        <Stack.Item>
+          <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupYourGoals' })}</Label>
+        </Stack.Item>
+        <Stack.Item>
+          {/* Wrapped in a div to alter the DOM structure between steps, preventing text carry over bug */}
+          <div>
+            <TextField
+              label={formatMessage({ id: 'onboarding.productgoal' })}
+              maxLength={300}
+              multiline
+              rows={4}
+              styles={textFieldStyles}
+              resizable={false}
+            />
+          </div>
+        </Stack.Item>
+        <Stack.Item>
+          <TextField label={formatMessage({ id: 'onboarding.productKpi' })} maxLength={60} styles={textFieldStyles} />
+        </Stack.Item>
+        <Stack.Item>
+          <PrimaryButton
+            text={formatMessage({ id: 'onboarding.getstarted' })}
+            aria-label={formatMessage({ id: 'onboarding.getstarted' })}
+            onClick={handleOnboardingGetStartedClick}
+            style={buttonStyles}
+          />
+        </Stack.Item>
+        <Stack.Item align={'auto'} style={progressBarStyles}>
+          <ProgressIndicator
+            label={formatMessage({ id: 'onboarding.step3of3' })}
+            description={formatMessage({ id: 'onboarding.done' })}
+            ariaValueText={formatMessage({ id: 'onboarding.step3of3' })}
+            percentComplete={1}
+            barHeight={8}
+          />
+        </Stack.Item>
+      </Stack>
+    );
+  }
+  return (
+    <Stack horizontalAlign="center">
+      <h1>Fall-through / Default OnboardingInfo.tsx : Invalid State...are you lost?</h1>
+    </Stack>
+  );
 };
 
 export default OnboardingInfo;
