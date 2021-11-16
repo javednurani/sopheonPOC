@@ -14,15 +14,15 @@ using Xunit;
 
 namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
 {
-   public class AllocateSqlDatabaseSharedByServicesToEnvironmentHelper_AllocateSqlDatabaseSharedByServicesToEnvironmentAsync_UnitTests
+   public class AllocateSqlDatabaseSharedByServicesToEnvironmentHelper_UnitTests
    {
-      private readonly ResourceAllocationHelper _sut;
+      private readonly AllocateSqlDatabaseSharedByServicesToEnvironmentHelper _sut;
       private readonly Mock<IEnvironmentCommands> _mockEnvironmentCommands;
       private readonly Mock<IAzure> _mockAzure;
       private readonly Mock<IHttpClientFactory> _mockHttpClientFactory;
       private readonly Mock<HttpClient> _mockHttpClient;
 
-      public AllocateSqlDatabaseSharedByServicesToEnvironmentHelper_AllocateSqlDatabaseSharedByServicesToEnvironmentAsync_UnitTests()
+      public AllocateSqlDatabaseSharedByServicesToEnvironmentHelper_UnitTests()
       {
          _mockEnvironmentCommands = new Mock<IEnvironmentCommands>();
          _mockAzure = new Mock<IAzure>();
@@ -32,8 +32,8 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
             .Setup(m => m.CreateClient(StringConstants.HTTP_CLIENT_NAME_AZURE_REST_API))
             .Returns(_mockHttpClient.Object);
 
-         _sut = new ResourceAllocationHelper(
-            new Mock<ILogger<ResourceAllocationHelper>>().Object,
+         _sut = new AllocateSqlDatabaseSharedByServicesToEnvironmentHelper(
+            new Mock<ILogger<AllocateSqlDatabaseSharedByServicesToEnvironmentHelper>>().Object,
             _mockHttpClientFactory.Object,
             _mockAzure.Object,
             _mockEnvironmentCommands.Object);
