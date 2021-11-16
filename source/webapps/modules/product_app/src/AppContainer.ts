@@ -5,10 +5,11 @@ import App from './App';
 import { createProduct, CreateProductAction, getProducts, GetProductsAction, updateProduct, UpdateProductAction } from './onboardingInfoReducer';
 import { NAMESPACE, rootReducer, RootState } from './rootReducer';
 import rootSaga from './rootSaga';
-import { CreateUpdateProductDto, EnvironmentScopedApiRequestDto } from './types';
+import { CreateUpdateProductDto, EnvironmentScopedApiRequestDto, Product } from './types';
 
 export type AppStateProps = {
   currentStep: number;
+  products: Product[];
 };
 
 export type AppDispatchProps = {
@@ -20,6 +21,7 @@ export type AppDispatchProps = {
 const AppContainer: FunctionComponent<ShellApiProps> = ({ shellApi }: ShellApiProps) => {
   const mapAppStateProps = (state: RootState): AppStateProps => ({
     currentStep: state[NAMESPACE] ? state[NAMESPACE].onboardingInfo.currentStep : 1,
+    products: state[NAMESPACE] ? state[NAMESPACE].onboardingInfo.products : []
   });
 
   const mapAppDispatchProps = (state: RootState): AppDispatchProps => ({

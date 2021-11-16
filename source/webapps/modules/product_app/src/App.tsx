@@ -59,6 +59,7 @@ const App: React.FunctionComponent<Props> = ({
   createProduct,
   updateProduct,
   getProducts,
+  products,
   environmentKey,
   getAccessToken,
   accessToken,
@@ -86,6 +87,7 @@ const App: React.FunctionComponent<Props> = ({
           updateProduct={updateProduct}
           environmentKey={environmentKey}
           accessToken={accessToken}
+          products={products}
         />
       </Stack>
     </div>

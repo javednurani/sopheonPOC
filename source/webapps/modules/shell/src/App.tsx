@@ -50,7 +50,12 @@ const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey }: Ap
     height: '100%',
   };
 
-  // TODO: check for user product existance CLOUD-2148
+  // TODO: check for user product existence CLOUD-2148
+  // 'products' = shared concern between Shell & ProductApp
+  //
+  // create a Shell reducer to support this
+  // expose products through ShellApi
+  // products.any can represent userHasProduct concept
   const userHasProduct = false;
 
   return (
