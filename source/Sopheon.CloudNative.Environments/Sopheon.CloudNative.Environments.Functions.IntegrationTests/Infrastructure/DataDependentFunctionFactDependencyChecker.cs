@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using Sopheon.CloudNative.Environments.Utility;
+using Sopheon.CloudNative.Environments.Utility.TestData;
 
 namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.Infrastructure
 {
@@ -15,9 +15,9 @@ namespace Sopheon.CloudNative.Environments.Functions.IntegrationTests.Infrastruc
          Console.WriteLine($"{nameof(DataDependentFunctionFactDependencyChecker)} is checking dependencies...");
 
          Environments_OpenApiClient environments_OpenApiClient = new Environments_OpenApiClient(new HttpClient());
-         ICollection<EnvironmentDto> environments = environments_OpenApiClient.GetEnvironmentsAsync().Result;
+         ICollection<EnvironmentDto> environments = environments_OpenApiClient.GetEnvironmentsAsync(TestDataConstants.OwnerKey1).Result;
 
-         if (environments.Any(env => env.EnvironmentKey == TestData.EnvironmentKey1))
+         if (environments.Any(env => env.EnvironmentKey == TestDataConstants.EnvironmentKey1))
          {
             return DependencyCheckResult.Success();
          }
