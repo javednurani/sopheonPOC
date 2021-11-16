@@ -2,16 +2,27 @@
 {
    public class ErrorDto
    {
-      public int StatusCode
+      /// <summary>
+      /// DTO representing an error or exception response to a request for a JSON return type
+      /// </summary>
+      /// <param name="httpStatusCode">The HTTP status code detailing the type of error</param>
+      /// <param name="message">The message describing the error.</param>
+      public ErrorDto(int httpStatusCode, string message)
+      {
+         HttpStatusCode = httpStatusCode;
+         Message = message;
+      }
+
+      public int HttpStatusCode
       {
          get;
-         set;
+         init;
       }
 
       public string Message
       {
          get;
-         set;
+         init;
       }
    }
 }

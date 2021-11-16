@@ -32,7 +32,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          Summary = "Delete an Environment",
          Description = "Delete an Environment by EnvironmentKey",
          Visibility = OpenApiVisibilityType.Important)]
-      [OpenApiParameter(name: "key",
+      [OpenApiParameter(name: "environmentKey",
          Type = typeof(Guid),
          Required = true,
          Description = "The key of the Environment to delete.",
@@ -57,24 +57,17 @@ namespace Sopheon.CloudNative.Environments.Functions
          Description = StringConstants.RESPONSE_DESCRIPTION_500)]
 
       public async Task<HttpResponseData> Run(
-          [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "environments/{key}")] HttpRequestData req,
-          FunctionContext context, string key)
+          [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "environments/{environmentKey}")] HttpRequestData req,
+          FunctionContext context, Guid environmentKey)
       {
          ILogger logger = context.GetLogger(nameof(DeleteEnvironment));
 
          try
          {
-            Guid environmentKey;
-            bool validKey = Guid.TryParse(key, out environmentKey);
-            if (!validKey || environmentKey == Guid.Empty)
+            if (environmentKey == Guid.Empty)
             {
-               ErrorDto error = new ErrorDto
-               {
-                  StatusCode = (int)HttpStatusCode.BadRequest,
-                  Message = StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID,
-               };
                logger.LogInformation(StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID);
-               return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.BadRequest, error);
+               return await _responseBuilder.BuildWithErrorBodyAsync(req, HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_ENVIRONMENTKEY_INVALID);
             }
 
             await _environmentRepository.DeleteEnvironment(environmentKey);
@@ -83,23 +76,13 @@ namespace Sopheon.CloudNative.Environments.Functions
          }
          catch (EntityNotFoundException ex)
          {
-            ErrorDto error = new ErrorDto
-            {
-               StatusCode = (int)HttpStatusCode.NotFound,
-               Message = ex.Message,
-            };
             logger.LogInformation(ex.Message);
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.NotFound, error);
+            return await _responseBuilder.BuildWithErrorBodyAsync(req, HttpStatusCode.NotFound, ex.Message);
          }
          catch (Exception ex)
          {
-            ErrorDto error = new ErrorDto
-            {
-               StatusCode = (int)HttpStatusCode.InternalServerError,
-               Message = StringConstants.RESPONSE_GENERIC_ERROR,
-            };
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.InternalServerError, error);
+            return await _responseBuilder.BuildWithErrorBodyAsync(req, HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR);
          }
       }
    }
