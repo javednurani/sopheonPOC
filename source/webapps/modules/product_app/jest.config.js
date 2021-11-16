@@ -9,7 +9,11 @@ module.exports = {
   transform: {
     '^.+\\.(ts|tsx)?$': 'ts-jest',
     '^.+\\.(js|jsx)$': 'babel-jest',
-    '^.+\\.svg$': '<rootDir>/svgTransform.js',
+    // '^.+\\.svg$': '<rootDir>/svgTransform.js',
+  },
+  moduleNameMapper: {
+    '\\.svg$': '<rootDir>/src/__mocks__/svgMock.js',
+    // '\\.svg$': 'svgr/webpack'
   },
   transformIgnorePatterns: ['node_modules/(?!(@sopheon))/'],
 };
