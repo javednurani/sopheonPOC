@@ -136,6 +136,10 @@ resource EnvironmentsFunctionApp 'Microsoft.Web/sites@2021-01-15' = {
           value: tenant().tenantId
         }
         {
+          name: 'AzSpSubscriptionId'
+          value: subscription().subscriptionId
+        }
+        {
           name: 'AzResourceGroupName'
           value: resourceGroup().name
         }

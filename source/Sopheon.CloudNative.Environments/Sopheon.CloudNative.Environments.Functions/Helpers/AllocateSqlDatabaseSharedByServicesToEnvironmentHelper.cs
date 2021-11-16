@@ -58,7 +58,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
 
             if (databaseWithDetails?.Tags == null)
             {
-               _logger.LogError($"Database details for '{database.Name}' were not found on Azure SQL Server: {sqlServer.Name}");
+               _logger.LogInformation($"Database details for '{database.Name}' were not found on Azure SQL Server: {sqlServer.Name}");
             }
             else if (databaseWithDetails.Tags.TryGetValue(StringConstants.CUSTOMER_PROVISIONED_DATABASE_TAG_NAME, out string tagValue)
                && tagValue == StringConstants.CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_INITIAL)
