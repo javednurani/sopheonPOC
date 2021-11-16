@@ -110,7 +110,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          else
          {
             // authenticate with Service Principal credentials
-            string clientId = Environment.GetEnvironmentVariable("AzSpClientId");
+            string clientId = hostContext.Configuration["AzSpClientId"];
             string clientSecret = hostContext.Configuration["AzSpClientEnigma"];
             credentials = SdkContext.AzureCredentialsFactory
                .FromServicePrincipal(clientId, clientSecret, tenantId, environment: AzureEnvironment.AzureGlobalCloud);
@@ -124,7 +124,7 @@ namespace Sopheon.CloudNative.Environments.Functions
       private static HttpClient ConfigureAzureRestApiClient(HttpClient client, HostBuilderContext hostContext)
       {
          string tenantId = Environment.GetEnvironmentVariable("AzSpTenantId");
-         string clientId = Environment.GetEnvironmentVariable("AzSpClientId");
+         string clientId = hostContext.Configuration["AzSpClientId"];
          string clientSecret = hostContext.Configuration["AzSpClientEnigma"];
          string url = $"https://login.microsoftonline.com/{tenantId}/oauth2/token";
 
