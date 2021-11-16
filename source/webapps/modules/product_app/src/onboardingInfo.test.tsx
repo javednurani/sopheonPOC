@@ -1,41 +1,77 @@
-import { PrimaryButton } from '@fluentui/react';
 import { messages } from '@sopheon/shared-ui';
-import { mount } from 'enzyme';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
-import { FormattedMessage, IntlProvider } from 'react-intl';
+import { IntlProvider } from 'react-intl';
 
 import { Props } from './App';
 import OnboardingInfo from './onboardingInfo';
 
-describe.skip('Testing the onboardingInfo component', () => {
-  it('Render test for the onboardingInfo component', () => {
+describe('Testing the onboardingInfo component', () => {
+  it.skip('step 2 renders correctly', async () => {
     const appProps: Props = {
       currentStep: 2,
       nextStep: jest.fn(),
     };
 
-    const wrapper = mount(
+    render(
       <IntlProvider locale="en" messages={messages.en}>
         <OnboardingInfo currentStep={appProps.currentStep} nextStep={appProps.nextStep} />
       </IntlProvider>
     );
-    // TODO remove hardcoded string?
-    expect(wrapper.find(FormattedMessage).text()).toBe(`Step ${appProps.currentStep}`); //TODO look for label with messages value.
-    expect(wrapper.find(PrimaryButton)).toHaveLength(1);
+
+    const continueButton = screen.getByRole('button', {
+      name: /continue/i,
+    });
+    expect(continueButton).toBeDisabled();
+    const nameTextField = screen.getByLabelText(messages.en['onboarding.yourproductname']);
+    const industryDropdown = screen.getByLabelText(messages.en['onboarding.industryselection']);
+
+    expect(nameTextField).toBeInTheDocument();
+    expect(industryDropdown).toBeInTheDocument();
+
+    fireEvent.change(nameTextField, { target: { value: 'test' } });
+    fireEvent.change(industryDropdown, { target: { option: { key: 2 } } });
+    await waitFor(() => expect(continueButton).not.toBeDisabled());
+    fireEvent.change(screen.getByLabelText(messages.en['onboarding.yourproductname']), { target: { newValue: '' } });
+    expect(continueButton).toBeDisabled();
   });
-  it('userEvent test for the onboardingInfo component', () => {
+  it('step 3 components render correctly', async () => {
     const appProps: Props = {
-      currentStep: 2,
+      currentStep: 3,
       nextStep: jest.fn(),
     };
 
-    const wrapper = mount(
+    render(
       <IntlProvider locale="en" messages={messages.en}>
         <OnboardingInfo currentStep={appProps.currentStep} nextStep={appProps.nextStep} />
       </IntlProvider>
     );
+    const goalTextField: HTMLElement = screen.getByLabelText(messages.en['onboarding.productgoal']);
+    const kpiTextField = screen.getByLabelText(messages.en['onboarding.productKpi']);
 
-    wrapper.find(PrimaryButton).simulate('click');
+    expect(goalTextField).toBeInTheDocument();
+    expect(kpiTextField).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', {
+        name: /Get Started!/i,
+      })
+    ).not.toBeDisabled();
+  });
+  it('next step function fires on button click', () => {
+    const appProps: Props = {
+      currentStep: 3,
+      nextStep: jest.fn(),
+    };
+    render(
+      <IntlProvider locale="en" messages={messages.en}>
+        <OnboardingInfo currentStep={appProps.currentStep} nextStep={appProps.nextStep} />
+      </IntlProvider>
+    );
+    fireEvent.click(
+      screen.getByRole('button', {
+        name: /Get Started!/i,
+      })
+    );
     expect(appProps.nextStep).toHaveBeenCalled();
   });
 });

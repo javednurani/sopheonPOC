@@ -11,7 +11,7 @@ import OnboardingInfo from './onboardingInfo';
 
 expect.extend(toHaveNoViolations);
 
-describe.skip('Testing the App component', () => {
+describe('Testing the App component', () => {
   it('Render test for the App component', () => {
     const appProps: Props = {
       currentStep: 1,

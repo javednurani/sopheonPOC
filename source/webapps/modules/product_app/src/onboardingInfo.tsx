@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import {
   Dropdown,
   FontSizes,
@@ -13,6 +12,7 @@ import {
   Stack,
   TextField,
 } from '@fluentui/react';
+import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { AppDispatchProps, AppStateProps } from './AppContainer';
