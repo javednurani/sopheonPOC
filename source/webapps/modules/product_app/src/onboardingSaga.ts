@@ -35,8 +35,7 @@ export function* onCreateProduct(action: CreateProductAction): Generator {
   try {
     yield put(nextStep());
     yield put(createProductRequest());
-    //@ts-ignore TODO Cloud-1920, fix this ignore and a console error
-    const { data } = yield call(createProduct(action.payload));
+    const { data } = yield call(createProduct, action.payload);
     yield put(createProductSuccess(data));
   } catch (error) {
     yield put(createProductFailure(error));
@@ -47,8 +46,7 @@ export function* onUpdateProduct(action: UpdateProductAction): Generator {
   try {
     yield put(nextStep());
     yield put(updateProductRequest());
-    //@ts-ignore TODO Cloud-1920, fix this ignore and a console error
-    const { data } = yield call(updateProduct(action.payload));
+    const { data } = yield call(updateProduct, action.payload);
     yield put(updateProductSuccess(data));
   } catch (error) {
     yield put(updateProductFailure(error));
@@ -58,8 +56,7 @@ export function* onUpdateProduct(action: UpdateProductAction): Generator {
 export function* onGetProducts(action: GetProductsAction): Generator {
   try {
     yield put(getProductsRequest());
-    //@ts-ignore TODO Cloud-1920, fix this ignore and a console error
-    const { data } = yield call(getProducts(action.payload));
+    const { data } = yield call(getProducts, action.payload);
     yield put(getProductsSuccess(data));
   } catch (error) {
     yield put(getProductsFailure(error));
