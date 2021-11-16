@@ -39,7 +39,7 @@ export type UpdateProductRequestAction = Action<OnboardingActionTypes.UPDATE_PRO
 export type UpdateProductSuccessAction = PayloadAction<OnboardingActionTypes.UPDATE_PRODUCT_SUCCESS, Product>;
 export type UpdateProductFailureAction = PayloadAction<OnboardingActionTypes.UPDATE_PRODUCT_FAILURE, Error>;
 
-export type OnboardingReducerActions =
+export type OnboardingReducerAction =
   | NextStepAction
   | CreateProductRequestAction
   | CreateProductSuccessAction
@@ -140,7 +140,7 @@ const updateProductFailureHandler = (state: OnboardingStateShape, error: Error) 
 
 // ACTION SWITCH
 
-export const onboardingInfoReducer: Reducer<OnboardingStateShape, OnboardingReducerActions> = (state = initialState, action) => {
+export const onboardingInfoReducer: Reducer<OnboardingStateShape, OnboardingReducerAction> = (state = initialState, action) => {
   switch (action.type) {
     case OnboardingActionTypes.NEXT_STEP:
       return setValue(state, state.currentStep + 1);
