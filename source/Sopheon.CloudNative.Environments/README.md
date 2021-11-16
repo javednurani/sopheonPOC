@@ -71,6 +71,7 @@ See also: https://pluto/display/PDP/Azure+Functions+and+Entity+Framework+Local+D
         - UserSecretManager.LocalDatabaseConnectionString (this dot notation represents JSON structure in the file)
         - SQLCONNSTR_EnvironmentsSqlConnectionString
         - SqlServerAdminEnigma
+        - AzSpClientId
         - AzSpClientEnigma
       - (Ask Cloud Team 1 devs for values)
 
