@@ -1,7 +1,9 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
@@ -26,13 +28,15 @@ namespace Sopheon.CloudNative.Environments.Functions
       private readonly IMapper _mapper;
       private readonly IValidator<EnvironmentDto> _validator;
       private readonly HttpResponseDataBuilder _responseBuilder;
+      private readonly HttpClient _httpClient;
 
-      public CreateEnvironment(IEnvironmentRepository environmentRepository, IMapper mapper, IValidator<EnvironmentDto> validator, HttpResponseDataBuilder responseBuilder)
+      public CreateEnvironment(IEnvironmentRepository environmentRepository, IMapper mapper, IValidator<EnvironmentDto> validator, HttpResponseDataBuilder responseBuilder, IHttpClientFactory httpClientFactory)
       {
          _environmentRepository = environmentRepository;
          _mapper = mapper;
          _validator = validator;
          _responseBuilder = responseBuilder;
+         _httpClient = httpClientFactory.CreateClient(StringConstants.HTTP_CLIENT_NAME_ENVIRONMENT_FUNCTIONS);
       }
 
       [Function(nameof(CreateEnvironment))]
@@ -73,7 +77,7 @@ namespace Sopheon.CloudNative.Environments.Functions
             EnvironmentDto data = JsonSerializer.Deserialize<EnvironmentDto>(requestBody, SerializationSettings.JsonSerializerOptions);
 
             ValidationResult validationResult = await _validator.ValidateAsync(data);
-            if(!validationResult.IsValid)
+            if (!validationResult.IsValid)
             {
                string validationMessage = validationResult.ToString();
                logger.LogInformation(validationMessage);
@@ -90,6 +94,14 @@ namespace Sopheon.CloudNative.Environments.Functions
 
             // TODO: environments that already exist with name?
             environment = await _environmentRepository.AddEnvironment(environment);
+
+            #region Cloud-2022 Steel Thread Increment
+            string url = $"{req.Url.AbsoluteUri.Replace(req.Url.AbsolutePath, string.Empty)}/AllocateSqlDatabaseSharedByServicesToEnvironment({environment.EnvironmentKey})";
+
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, url);
+            _ = await _httpClient.SendAsync(httpRequestMessage, CancellationToken.None);
+            #endregion // Cloud-2022 Steel Thread Increment
+
             return await _responseBuilder.BuildWithJsonBodyAsync(req, HttpStatusCode.Created, _mapper.Map<EnvironmentDto>(environment));
          }
          catch (JsonException ex)
