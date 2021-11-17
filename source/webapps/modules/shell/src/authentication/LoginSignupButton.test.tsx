@@ -9,6 +9,7 @@ import { IntlProvider } from 'react-intl';
 import { azureSettings } from '../settings/azureSettings';
 import { RootState } from '../store';
 import { getInitState, languageRender, randomMsalAccount, render, testMsalInstance } from '../testUtils';
+import { ALL_SCOPES } from './authHelpers';
 import LoginSignupButton from './LoginSignupButton';
 
 expect.extend(toHaveNoViolations);
@@ -21,7 +22,7 @@ afterEach(() => {
 describe('Test Unauthenticated LoginSignupButton component', () => {
   test('button renders correctly and a11y compliant', async () => {
     // Arrange
-    const sut: ReactElement = <LoginSignupButton />;
+    const sut: ReactElement = <LoginSignupButton setEnvironmentKey={jest.fn()} />;
     const initialState: RootState = getInitState({});
 
     // Act
@@ -38,7 +39,7 @@ describe('Test Unauthenticated LoginSignupButton component', () => {
     // Arrange
     const pca = testMsalInstance();
     const loginRedirectSpy = jest.spyOn(pca, 'loginRedirect').mockImplementation(request => {
-      expect(request).toBe(undefined);
+      expect(request?.scopes).toBe(ALL_SCOPES);
 
       return Promise.resolve();
     });
@@ -47,7 +48,7 @@ describe('Test Unauthenticated LoginSignupButton component', () => {
     render(
       <MsalProvider instance={pca}>
         <IntlProvider locale="en" messages={messages.en}>
-          <LoginSignupButton />
+          <LoginSignupButton setEnvironmentKey={jest.fn()} />
         </IntlProvider>
       </MsalProvider>
     );
@@ -72,7 +73,7 @@ describe('Test Authenticated LoginSignupButton component', () => {
       <MsalProvider instance={pca}>
         <IntlProvider locale="en" messages={messages.en}>
           <p>This text will always display.</p>
-          <LoginSignupButton />
+          <LoginSignupButton setEnvironmentKey={jest.fn()} />
         </IntlProvider>
       </MsalProvider>
     );
@@ -104,7 +105,7 @@ describe('Test Authenticated LoginSignupButton component', () => {
       <MsalProvider instance={pca}>
         <IntlProvider locale="en" messages={messages.en}>
           <p>This text will always display.</p>
-          <LoginSignupButton />
+          <LoginSignupButton setEnvironmentKey={jest.fn()} />
         </IntlProvider>
       </MsalProvider>
     );
@@ -136,7 +137,7 @@ describe('Test Authenticated LoginSignupButton component', () => {
       <MsalProvider instance={pca}>
         <IntlProvider locale="en" messages={messages.en}>
           <p>This text will always display.</p>
-          <LoginSignupButton />
+          <LoginSignupButton setEnvironmentKey={jest.fn()} />
         </IntlProvider>
       </MsalProvider>
     );
@@ -167,7 +168,7 @@ describe('Test Authenticated LoginSignupButton component', () => {
       <MsalProvider instance={pca}>
         <IntlProvider locale="en" messages={messages.en}>
           <p>This text will always display.</p>
-          <LoginSignupButton />
+          <LoginSignupButton setEnvironmentKey={jest.fn()} />
         </IntlProvider>
       </MsalProvider>
     );

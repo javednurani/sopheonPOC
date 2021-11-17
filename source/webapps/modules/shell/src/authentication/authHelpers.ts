@@ -5,7 +5,7 @@ import { azureSettings, getAuthorityDomain, getAuthorityUrl, getProductManagemen
 const OIDC_SCOPES = ['openid', 'offline_access'];
 const PRODUCT_MANAGEMENT_SCOPES = [getProductManagementApiScopeCoreReadWrite()];
 
-const ALL_SCOPES = OIDC_SCOPES.concat(PRODUCT_MANAGEMENT_SCOPES);
+export const ALL_SCOPES = OIDC_SCOPES.concat(PRODUCT_MANAGEMENT_SCOPES);
 
 export const msalInstance = (): PublicClientApplication => {
   const msalConfig: Configuration = {
