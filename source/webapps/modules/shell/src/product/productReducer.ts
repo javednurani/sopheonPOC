@@ -2,12 +2,15 @@ import {
   Action,
   createAction,
   createPayloadAction,
+  CreateProductAction,
+  CreateUpdateProductDto,
   EnvironmentScopedApiRequestDto,
   FetchStatus,
   GetProductsAction,
-  OnboardingSagaActionTypes,
   PayloadAction,
   Product,
+  ProductSagaActionTypes,
+  UpdateProductAction,
 } from '@sopheon/shell-api';
 import { Reducer } from 'redux';
 
@@ -20,16 +23,38 @@ enum ProductActionTypes {
   GET_PRODUCTS_REQUEST = 'SHELL/GET_PRODUCTS_REQUEST',
   GET_PRODUCTS_SUCCESS = 'SHELL/GET_PRODUCTS_SUCCESS',
   GET_PRODUCTS_FAILURE = 'SHELL/GET_PRODUCTS_FAILURE',
+
+  CREATE_PRODUCT_REQUEST = 'SHELL/CREATE_PRODUCT_REQUEST',
+  CREATE_PRODUCT_SUCCESS = 'SHELL/CREATE_PRODUCT_SUCCESS',
+  CREATE_PRODUCT_FAILURE = 'SHELL/CREATE_PRODUCT_FAILURE',
+
+  UPDATE_PRODUCT_REQUEST = 'SHELL/UPDATE_PRODUCT_REQUEST',
+  UPDATE_PRODUCT_SUCCESS = 'SHELL/UPDATE_PRODUCT_SUCCESS',
+  UPDATE_PRODUCT_FAILURE = 'SHELL/UPDATE_PRODUCT_FAILURE',
 }
 
 export type GetProductsRequestAction = Action<ProductActionTypes.GET_PRODUCTS_REQUEST>;
 export type GetProductsSuccessAction = PayloadAction<ProductActionTypes.GET_PRODUCTS_SUCCESS, Product[]>;
 export type GetProductsFailureAction = PayloadAction<ProductActionTypes.GET_PRODUCTS_FAILURE, Error>;
 
+export type CreateProductRequestAction = Action<ProductActionTypes.CREATE_PRODUCT_REQUEST>;
+export type CreateProductSuccessAction = PayloadAction<ProductActionTypes.CREATE_PRODUCT_SUCCESS, Product>;
+export type CreateProductFailureAction = PayloadAction<ProductActionTypes.CREATE_PRODUCT_FAILURE, Error>;
+
+export type UpdateProductRequestAction = Action<ProductActionTypes.UPDATE_PRODUCT_REQUEST>;
+export type UpdateProductSuccessAction = PayloadAction<ProductActionTypes.UPDATE_PRODUCT_SUCCESS, Product>;
+export type UpdateProductFailureAction = PayloadAction<ProductActionTypes.UPDATE_PRODUCT_FAILURE, Error>;
+
 export type ProductReducerActions =
   GetProductsRequestAction
   | GetProductsSuccessAction
-  | GetProductsFailureAction;
+  | GetProductsFailureAction
+  | CreateProductRequestAction
+  | CreateProductSuccessAction
+  | CreateProductFailureAction
+  | UpdateProductRequestAction
+  | UpdateProductSuccessAction
+  | UpdateProductFailureAction;
 
 //#endregion
 
@@ -42,9 +67,24 @@ export const getProductsSuccess = (products: Product[]): GetProductsSuccessActio
   createPayloadAction(ProductActionTypes.GET_PRODUCTS_SUCCESS, products);
 export const getProductsFailure = (error: Error): GetProductsFailureAction => createPayloadAction(ProductActionTypes.GET_PRODUCTS_FAILURE, error);
 
+export const createProductRequest = (): CreateProductRequestAction => createAction(ProductActionTypes.CREATE_PRODUCT_REQUEST);
+export const createProductSuccess = (product: Product): CreateProductSuccessAction =>
+  createPayloadAction(ProductActionTypes.CREATE_PRODUCT_SUCCESS, product);
+export const createProductFailure = (error: Error): CreateProductFailureAction =>
+  createPayloadAction(ProductActionTypes.CREATE_PRODUCT_FAILURE, error);
+
+export const updateProductRequest = (): UpdateProductRequestAction => createAction(ProductActionTypes.UPDATE_PRODUCT_REQUEST);
+export const updateProductSuccess = (product: Product): UpdateProductSuccessAction =>
+  createPayloadAction(ProductActionTypes.UPDATE_PRODUCT_SUCCESS, product);
+export const updateProductFailure = (error: Error): UpdateProductFailureAction =>
+  createPayloadAction(ProductActionTypes.UPDATE_PRODUCT_FAILURE, error);
+
+
 // SAGA ACTIONS
 
-export const getProducts = (requestDto: EnvironmentScopedApiRequestDto): GetProductsAction => createPayloadAction(OnboardingSagaActionTypes.GET_PRODUCTS, requestDto);
+export const getProducts = (requestDto: EnvironmentScopedApiRequestDto): GetProductsAction => createPayloadAction(ProductSagaActionTypes.GET_PRODUCTS, requestDto);
+export const createProduct = (product: CreateUpdateProductDto): CreateProductAction => createPayloadAction(ProductSagaActionTypes.CREATE_PRODUCT, product);
+export const updateProduct = (product: CreateUpdateProductDto): UpdateProductAction => createPayloadAction(ProductSagaActionTypes.UPDATE_PRODUCT, product);
 
 //#endregion
 
@@ -55,11 +95,15 @@ export const getProducts = (requestDto: EnvironmentScopedApiRequestDto): GetProd
 export type ProductStateShape = {
   products: Product[];
   getProductsFetchStatus: FetchStatus;
+  createProductFetchStatus: FetchStatus;
+  updateProductFetchStatus: FetchStatus;
 };
 
 export const initialState: ProductStateShape = {
   products: [],
   getProductsFetchStatus: FetchStatus.NotActive,
+  createProductFetchStatus: FetchStatus.NotActive,
+  updateProductFetchStatus: FetchStatus.NotActive,
 };
 
 // HANDLERS
@@ -83,6 +127,51 @@ const getProductsFailureHandler = (state: ProductStateShape, error: Error) => {
   };
 };
 
+const createProductRequestHandler = (state: ProductStateShape) => ({
+  ...state,
+  createProductFetchStatus: FetchStatus.InProgress,
+});
+
+const createProductSuccessHandler = (state: ProductStateShape, createdProduct: Product) => ({
+  ...state,
+  products: [...state.products, createdProduct],
+  createProductFetchStatus: FetchStatus.DoneSuccess,
+});
+
+const createProductFailureHandler = (state: ProductStateShape, error: Error) => {
+  console.log(error);
+  return {
+    ...state,
+    createProductFetchStatus: FetchStatus.DoneFailure,
+  };
+};
+
+const updateProductRequestHandler = (state: ProductStateShape) => ({
+  ...state,
+  updateProductFetchStatus: FetchStatus.InProgress,
+});
+
+const updateProductSuccessHandler = (state: ProductStateShape, updatedProduct: Product) => {
+  const stateProducts = [...state.products];
+  const updatedProducts = stateProducts.map(existingProduct => ((existingProduct.Key !== updatedProduct.Key)
+    ? existingProduct
+    : updatedProduct));
+
+  return {
+    ...state,
+    products: updatedProducts,
+    createProductFetchStatus: FetchStatus.DoneSuccess,
+  };
+};
+
+const updateProductFailureHandler = (state: ProductStateShape, error: Error) => {
+  console.log(error);
+  return {
+    ...state,
+    updateProductFetchStatus: FetchStatus.DoneFailure,
+  };
+};
+
 // ACTION SWITCH
 
 export const productReducer: Reducer<ProductStateShape, ProductReducerActions> = (state = initialState, action) => {
@@ -93,6 +182,18 @@ export const productReducer: Reducer<ProductStateShape, ProductReducerActions> =
       return getProductsSuccessHandler(state, action.payload);
     case ProductActionTypes.GET_PRODUCTS_FAILURE:
       return getProductsFailureHandler(state, action.payload);
+    case ProductActionTypes.CREATE_PRODUCT_REQUEST:
+      return createProductRequestHandler(state);
+    case ProductActionTypes.CREATE_PRODUCT_SUCCESS:
+      return createProductSuccessHandler(state, action.payload);
+    case ProductActionTypes.CREATE_PRODUCT_FAILURE:
+      return createProductFailureHandler(state, action.payload);
+    case ProductActionTypes.UPDATE_PRODUCT_REQUEST:
+      return updateProductRequestHandler(state);
+    case ProductActionTypes.UPDATE_PRODUCT_SUCCESS:
+      return updateProductSuccessHandler(state, action.payload);
+    case ProductActionTypes.UPDATE_PRODUCT_FAILURE:
+      return updateProductFailureHandler(state, action.payload);
     default:
       return state;
   }

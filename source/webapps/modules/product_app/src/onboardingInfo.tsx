@@ -16,8 +16,11 @@ import { CreateProductAction, CreateUpdateProductDto, Product, UpdateProductActi
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
+import { NextStepAction } from './onboardingReducer';
+
 export interface IOnboardingInfoProps {
   currentStep: number;
+  nextStep: () => NextStepAction;
   createProduct: (product: CreateUpdateProductDto) => CreateProductAction;
   updateProduct: (product: CreateUpdateProductDto) => UpdateProductAction;
   environmentKey: string;
@@ -27,6 +30,7 @@ export interface IOnboardingInfoProps {
 
 const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
   currentStep,
+  nextStep,
   createProduct,
   updateProduct,
   environmentKey,
@@ -149,6 +153,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
     };
 
     createProduct(createProductDto);
+    nextStep();
   };
 
   const handleOnboardingGetStartedClick = () => {
@@ -164,6 +169,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
       AccessToken: accessToken,
     };
     updateProduct(updateProductDto);
+    nextStep();
   };
 
   if (!environmentKey) {
@@ -174,15 +180,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
     );
   }
 
-  if (products.length > 0) {
-    return (
-      <Stack horizontalAlign="center">
-        <h1>Product App Home Page</h1>
-      </Stack>
-    );
-  }
-
-  if (currentStep === 2) {
+  if (currentStep === 2 && products.length === 0) {
     // onboarding 'step 2' (first onboarding page in SPA: Product Name & Industries)
     return (
       <Stack className="step2" horizontalAlign="center" tokens={stackTokens}>
@@ -274,6 +272,15 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
       </Stack>
     );
   }
+
+  if (products.length > 0) {
+    return (
+      <Stack horizontalAlign="center">
+        <h1>Product App Home Page</h1>
+      </Stack>
+    );
+  }
+
   return (
     <Stack horizontalAlign="center">
       <h1>Fall-through / Default OnboardingInfo.tsx : Invalid State...are you lost?</h1>

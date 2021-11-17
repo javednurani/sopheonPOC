@@ -4,7 +4,7 @@ import { PayloadAction } from '../types';
 // In Cloud-2147, we should generate TS Types from Sopheon.CloudNative.Products.AspNetCore OpenAPI schema
 
 export interface Product {
-  Id: string | null;
+  Key: string | null;
   Name: string;
   Description: string;
 }
@@ -21,12 +21,12 @@ export type EnvironmentScopedApiRequestDto = {
 // SAGA ACTION TYPES
 
 // eslint-disable-next-line no-shadow
-export enum OnboardingSagaActionTypes { // TODO, rename - remove onboarding (full file)
-  CREATE_PRODUCT = 'ONBOARDING/CREATE_PRODUCT',
-  UPDATE_PRODUCT = 'ONBOARDING/UPDATE_PRODUCT',
-  GET_PRODUCTS = 'ONBOARDING/GET_PRODUCTS'
+export enum ProductSagaActionTypes {
+  CREATE_PRODUCT = 'SHELL/CREATE_PRODUCT',
+  UPDATE_PRODUCT = 'SHELL/UPDATE_PRODUCT',
+  GET_PRODUCTS = 'SHELL/GET_PRODUCTS'
 }
 
-export type GetProductsAction = PayloadAction<OnboardingSagaActionTypes.GET_PRODUCTS, EnvironmentScopedApiRequestDto>;
-export type CreateProductAction = PayloadAction<OnboardingSagaActionTypes.CREATE_PRODUCT, CreateUpdateProductDto>;
-export type UpdateProductAction = PayloadAction<OnboardingSagaActionTypes.UPDATE_PRODUCT, CreateUpdateProductDto>;
+export type GetProductsAction = PayloadAction<ProductSagaActionTypes.GET_PRODUCTS, EnvironmentScopedApiRequestDto>;
+export type CreateProductAction = PayloadAction<ProductSagaActionTypes.CREATE_PRODUCT, CreateUpdateProductDto>;
+export type UpdateProductAction = PayloadAction<ProductSagaActionTypes.UPDATE_PRODUCT, CreateUpdateProductDto>;
