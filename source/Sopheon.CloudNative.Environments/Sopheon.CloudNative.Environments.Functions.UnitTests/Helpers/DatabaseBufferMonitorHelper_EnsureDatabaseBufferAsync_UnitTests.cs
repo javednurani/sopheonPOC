@@ -11,6 +11,7 @@ using Microsoft.Azure.Management.ResourceManager.Fluent.Models;
 using Microsoft.Azure.Management.Sql.Fluent;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Sopheon.CloudNative.Environments.Domain.Exceptions;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Testing.Common;
 using Xunit;
@@ -116,8 +117,22 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          deploymentMock.Verify(wc => wc.BeginCreateAsync(default(CancellationToken)), Times.Never, "Should not have created deployment!");
       }
 
-      private void SetupMockDatabases(int numUnassignedDatabases, bool databasesDeleted = false)
+      [Fact]
+      public async Task EnsureDatabaseBufferAsync_AzureSqlServerNotFound_CloudServiceExceptionThrown()
       {
+         // Arrange
+         SetupMockDatabases(4, serverNotFound: true);
+         Mock<IWithCreate> deploymentMock = SetupMockDeployment();
+
+         // Act
+
+         // Assert
+         await Assert.ThrowsAsync<CloudServiceException>(() => _sut.EnsureDatabaseBufferAsync(Some.Random.String(), Some.Random.String(), Some.Random.String(), Some.Random.String()));
+      }
+
+      private void SetupMockDatabases(int numUnassignedDatabases, bool databasesDeleted = false, bool serverNotFound = false)
+      {
+         Mock<ISqlServer> mockSqlServer = new Mock<ISqlServer>();
          Mock<ISqlServers> mockSqlServers = new Mock<ISqlServers>();
          Mock<ISqlDatabaseOperations> mockDbOperations = new Mock<ISqlDatabaseOperations>();
          Mock<ISqlDatabase> mockDb = new Mock<ISqlDatabase>();
@@ -129,6 +144,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          var expectedValue = "NotAssigned";
          mockDbTags.Setup(t => t.TryGetValue(It.IsAny<string>(), out expectedValue)).Returns(true);
          mockDb.Setup(db => db.Tags).Returns(mockDbTags.Object);
+         mockDb.Setup(db => db.Name).Returns(Some.Random.String());
          if (!databasesDeleted)
          { 
             mockDbOperations
@@ -140,6 +156,14 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
             .Returns(Task.FromResult<IReadOnlyList<ISqlDatabase>>(unassignedDatabases.AsReadOnly()));
          mockSqlServers.Setup(s => s.Databases).Returns(mockDbOperations.Object);
          mockSqlServers.Setup(s => s.ElasticPools).Returns(new Mock<ISqlElasticPoolOperations>().Object);
+         if (serverNotFound)
+         {
+            mockSqlServers.Setup(s => s.GetByIdAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult<ISqlServer>(null));
+         }
+         else
+         {
+            mockSqlServers.Setup(s => s.GetByIdAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(mockSqlServer.Object);
+         }
       }
 
       private Mock<IWithCreate> SetupMockDeployment(bool existingDeploymentIsActive = false)

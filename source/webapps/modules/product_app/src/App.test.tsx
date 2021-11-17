@@ -11,7 +11,7 @@ import OnboardingInfo from './onboardingInfo';
 
 expect.extend(toHaveNoViolations);
 
-describe.skip('Testing the App component', () => {
+describe('Testing the App component', () => {
   it('Render test for the App component', () => {
     const appProps: Props = {
       currentStep: 1,
@@ -47,24 +47,5 @@ describe.skip('Testing the App component', () => {
       },
     });
     expect(results).toHaveNoViolations();
-  });
-  it('App snapshot render test', () => {
-    const appProps: Props = {
-      currentStep: 1,
-      nextStep: jest.fn(),
-    };
-
-    const tree = mount(
-      <IntlProvider locale="en" messages={messages.en}>
-        <App {...appProps} />
-      </IntlProvider>
-    );
-
-    expect(
-      toJson(tree, {
-        noKey: false,
-        mode: 'deep',
-      })
-    ).toMatchSnapshot();
   });
 });

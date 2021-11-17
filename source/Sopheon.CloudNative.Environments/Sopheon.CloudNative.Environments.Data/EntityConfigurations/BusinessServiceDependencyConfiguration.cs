@@ -1,7 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Sopheon.CloudNative.Environments.Data.SeedData;
 using Sopheon.CloudNative.Environments.Domain;
+using Sopheon.CloudNative.Environments.Domain.Enums;
+using Sopheon.CloudNative.Environments.Domain.Infrastructure;
 using Sopheon.CloudNative.Environments.Domain.Models;
 
 namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
@@ -30,7 +33,16 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
          builder.HasIndex(bsd => new { bsd.BusinessServiceId, bsd.DependencyName })
             .IsUnique();
 
-         builder.HasData(EnvironmentSeedData.BusinessServiceDependencies);
+         // Seed domain data to ENV.BusinessServiceDependencies table generated from BusinessServiceDependencies enum
+         BusinessServiceDependencies[] businessServiceDependencies = (BusinessServiceDependencies[])Enum.GetValues(typeof(BusinessServiceDependencies));
+         builder.HasData(
+            businessServiceDependencies.Select(bsd => new BusinessServiceDependency
+            {
+               Id = (int)bsd,
+               DependencyName = bsd.ToString(),
+               BusinessServiceId = (int)bsd.GetAttribute<BusinessServiceAttribute>().BusinessService,
+               DomainResourceTypeId = (int)bsd.GetAttribute<ResourceTypeAttribute>().ResourceType
+            }));
       }
    }
 }

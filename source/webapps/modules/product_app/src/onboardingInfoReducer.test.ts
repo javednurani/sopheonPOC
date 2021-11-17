@@ -1,8 +1,8 @@
 import { initialState, nextStep, onboardingInfoReducer, OnboardingStateShape } from './onboardingInfoReducer';
 
-describe.skip('onboardingInfoReducer', () => {
+describe('onboardingInfoReducer', () => {
   test('nextStep', () => {
     const nextState: OnboardingStateShape = onboardingInfoReducer(initialState, nextStep());
-    expect(nextState.currentStep).toEqual(2);
+    expect(nextState.currentStep).toEqual(3);
   });
 });

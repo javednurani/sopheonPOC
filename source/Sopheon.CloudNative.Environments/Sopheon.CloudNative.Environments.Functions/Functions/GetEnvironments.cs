@@ -18,7 +18,7 @@ namespace Sopheon.CloudNative.Environments.Functions
    public class GetEnvironments
    {
       private readonly IEnvironmentRepository _environmentRepository;
-      private IMapper _mapper;
+      private readonly IMapper _mapper;
       private readonly HttpResponseDataBuilder _responseBuilder;
 
       public GetEnvironments(IEnvironmentRepository environmentRepository, IMapper mapper, HttpResponseDataBuilder responseBuilder)
@@ -60,17 +60,12 @@ namespace Sopheon.CloudNative.Environments.Functions
          {
             IEnumerable<Environment> environments = await _environmentRepository.GetEnvironmentsMatchingExactFilters(owner);
 
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.OK, _mapper.Map<IEnumerable<EnvironmentDto>>(environments));
+            return await _responseBuilder.BuildWithJsonBodyAsync(req, HttpStatusCode.OK, _mapper.Map<IEnumerable<EnvironmentDto>>(environments));
          }
          catch (Exception ex)
          {
-            ErrorDto error = new ErrorDto
-            {
-               StatusCode = (int)HttpStatusCode.InternalServerError,
-               Message = StringConstants.RESPONSE_GENERIC_ERROR,
-            };
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.InternalServerError, error);
+            return await _responseBuilder.BuildWithErrorBodyAsync(req, HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR);
          }
       }
    }
