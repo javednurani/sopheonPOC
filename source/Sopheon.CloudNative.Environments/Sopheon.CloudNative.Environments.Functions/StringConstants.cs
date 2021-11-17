@@ -40,5 +40,6 @@
       public static readonly string ADMINISTRATOR_LOGIN_ENIGMA_TOKEN = "^SqlAdminEngima^";
 
       public static readonly string HTTP_CLIENT_NAME_AZURE_REST_API = "AzureRestApiHttpClient";
+      public static readonly string HTTP_CLIENT_NAME_ENVIRONMENT_FUNCTIONS = "EnvironmentFunctionsHttpClient"; // used to call Sopheon.CloudNative.Environments.Functions HttpTrigger endpoints
    }
 }
