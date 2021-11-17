@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Sopheon.CloudNative.Environments.Data.SeedData;
 using Sopheon.CloudNative.Environments.Domain;
+using Sopheon.CloudNative.Environments.Domain.Enums;
 using Sopheon.CloudNative.Environments.Domain.Models;
 
 namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
@@ -20,7 +22,15 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
             .HasMaxLength(ModelConstraints.NAME_LENGTH)
             .IsRequired();
 
-         builder.HasData(EnvironmentSeedData.BusinessServices);
+         // Seed domain data to ENV.BusinessServices table generated from BusinessServices enum
+         BusinessServices[] businessServices = (BusinessServices[])Enum.GetValues(typeof(BusinessServices));
+         builder.HasData(
+            businessServices.Select(bs => new BusinessService
+            {
+               Id = (int)bs,
+               Name = bs.ToString()
+            })
+         );
       }
    }
 }

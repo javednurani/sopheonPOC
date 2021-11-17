@@ -1,6 +1,11 @@
 ﻿#define Managed
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Dynamic;
+using System.Net.Http;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
@@ -15,6 +20,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Sopheon.CloudNative.Environments.Data;
+using Sopheon.CloudNative.Environments.Domain.Commands;
+using Sopheon.CloudNative.Environments.Domain.Exceptions;
 using Sopheon.CloudNative.Environments.Domain.Queries;
 using Sopheon.CloudNative.Environments.Domain.Repositories;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
@@ -55,8 +62,9 @@ namespace Sopheon.CloudNative.Environments.Functions
                // Add Logging
                services.AddLogging();
 
-               // Add HttpClient
-               services.AddHttpClient();
+               // Add HttpClients
+               services.AddHttpClient(StringConstants.HTTP_CLIENT_NAME_AZURE_REST_API, (servProd, client) => ConfigureAzureRestApiClient(client, hostContext));
+               services.AddHttpClient(StringConstants.HTTP_CLIENT_NAME_ENVIRONMENT_FUNCTIONS, (servProd, client) => ConfigureEnvironmentFunctionsClient(client, hostContext));
 
                // Add Custom Services
                string connString = string.Empty;
@@ -75,9 +83,11 @@ namespace Sopheon.CloudNative.Environments.Functions
 
                services.AddScoped<IEnvironmentRepository, EFEnvironmentRepository>();
                services.AddScoped<IEnvironmentQueries, EFEnvironmentQueries>();
+               services.AddScoped<IEnvironmentCommands, EFEnvironmentCommands>();
                services.AddScoped<IValidator<EnvironmentDto>, EnvironmentDtoValidator>();
                services.AddScoped<IRequiredNameValidator, RequiredNameValidator>();
                services.AddScoped<IDatabaseBufferMonitorHelper, DatabaseBufferMonitorHelper>();
+               services.AddScoped<IAllocateSqlDatabaseSharedByServicesToEnvironmentHelper, AllocateSqlDatabaseSharedByServicesToEnvironmentHelper>();
                services.AddScoped<HttpResponseDataBuilder>();
                
                _lazyAzureClient = new Lazy<IAzure>(GetAzureInstance(hostContext));
@@ -101,8 +111,8 @@ namespace Sopheon.CloudNative.Environments.Functions
          else
          {
             // authenticate with Service Principal credentials
-            string clientId = Environment.GetEnvironmentVariable("AzSpClientId");
-            string clientSecret = hostContext.Configuration["AzSpClientSecret"];
+            string clientId = hostContext.Configuration["AzSpClientId"];
+            string clientSecret = hostContext.Configuration["AzSpClientEnigma"];
             credentials = SdkContext.AzureCredentialsFactory
                .FromServicePrincipal(clientId, clientSecret, tenantId, environment: AzureEnvironment.AzureGlobalCloud);
          }
@@ -110,6 +120,47 @@ namespace Sopheon.CloudNative.Environments.Functions
          return Microsoft.Azure.Management.Fluent.Azure
             .Authenticate(credentials)
             .WithDefaultSubscription();
+      }
+
+      private static HttpClient ConfigureAzureRestApiClient(HttpClient client, HostBuilderContext hostContext)
+      {
+         string tenantId = Environment.GetEnvironmentVariable("AzSpTenantId");
+         string clientId = hostContext.Configuration["AzSpClientId"];
+         string clientSecret = hostContext.Configuration["AzSpClientEnigma"];
+         string url = $"https://login.microsoftonline.com/{tenantId}/oauth2/token";
+
+         var values = new Dictionary<string, string>
+         {
+            { "grant_type", "client_credentials" },
+            { "client_id", clientId},
+            { "client_secret", clientSecret},
+            { "resource", "https://management.azure.com/"},
+         };
+
+         HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, url)
+         {
+            Content = new FormUrlEncodedContent(values)
+         };
+
+         HttpResponseMessage response = client.Send(httpRequestMessage, CancellationToken.None);
+         if (!response.IsSuccessStatusCode)
+         {
+            throw new CloudServiceException("Error authenticating with Azure for REST API client");
+         }
+
+         dynamic responseContent = response.Content.ReadAsAsync<ExpandoObject>().Result;
+         string accessToken = responseContent.access_token;
+
+         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
+
+         return client;
+      }
+
+      private static HttpClient ConfigureEnvironmentFunctionsClient(HttpClient client, HostBuilderContext hostContext)
+      {
+         // TODO in Cloud-1822, handle Sopheon.CloudNative.Environments.Functions authorization
+
+         return client;
       }
    }
 }

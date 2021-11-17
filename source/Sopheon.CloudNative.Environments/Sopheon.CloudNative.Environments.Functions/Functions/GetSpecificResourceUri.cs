@@ -19,7 +19,7 @@ namespace Sopheon.CloudNative.Environments.Functions
    {
 
       private readonly IEnvironmentQueries _environmentQueries;
-      private IMapper _mapper;
+      private readonly IMapper _mapper;
       private readonly HttpResponseDataBuilder _responseBuilder;
 
       public GetSpecificResourceUri(IEnvironmentQueries environmentQueries, IMapper mapper, HttpResponseDataBuilder responseBuilder)
@@ -81,13 +81,8 @@ namespace Sopheon.CloudNative.Environments.Functions
             // TODO, other validation eg minLength?
             if (Guid.Empty.Equals(environmentKey) || string.IsNullOrEmpty(businessServiceName) || string.IsNullOrEmpty(dependencyName))
             {
-               ErrorDto error = new ErrorDto
-               {
-                  StatusCode = (int)HttpStatusCode.BadRequest,
-                  Message = StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID,
-               };
                logger.LogInformation(StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID);
-               return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.BadRequest, error);
+               return await _responseBuilder.BuildWithErrorBodyAsync(req, HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID);
             }
 
             string resourceUri = await _environmentQueries.GetSpecificResourceUri(environmentKey, businessServiceName, dependencyName);
@@ -97,27 +92,17 @@ namespace Sopheon.CloudNative.Environments.Functions
                Uri = resourceUri
             };
 
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.OK, dto);
+            return await _responseBuilder.BuildWithJsonBodyAsync(req, HttpStatusCode.OK, dto);
          }
          catch (EntityNotFoundException ex)
          {
-            ErrorDto error = new ErrorDto
-            {
-               StatusCode = (int)HttpStatusCode.NotFound,
-               Message = ex.Message,
-            };
             logger.LogInformation(ex.Message);
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.NotFound, error);
+            return await _responseBuilder.BuildWithErrorBodyAsync(req, HttpStatusCode.NotFound, ex.Message);
          }
          catch (Exception ex)
          {
-            ErrorDto error = new ErrorDto
-            {
-               StatusCode = (int)HttpStatusCode.InternalServerError,
-               Message = StringConstants.RESPONSE_GENERIC_ERROR,
-            };
             logger.LogInformation($"{ex.GetType()} : {ex.Message}");
-            return await _responseBuilder.BuildWithJsonBody(req, HttpStatusCode.InternalServerError, error);
+            return await _responseBuilder.BuildWithErrorBodyAsync(req, HttpStatusCode.InternalServerError, StringConstants.RESPONSE_GENERIC_ERROR);
          }
       }
    }
