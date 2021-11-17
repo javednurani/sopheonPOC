@@ -1,7 +1,7 @@
+import { CreateUpdateProductDto, Product } from '@sopheon/shell-api';
 import axios, { AxiosRequestConfig } from 'axios';
 
 import { settings } from './settings';
-import { CreateUpdateProductDto, Product } from './types';
 
 const API_URL_BASE: string = settings.ProductManagementApiUrlBase;
 const API_URL_PATH_CREATE_PRODUCT: string = settings.CreateProductUrlPath;
@@ -33,4 +33,3 @@ export const updateProduct: (productDto: CreateUpdateProductDto) => Promise<Prod
 
   return await axios.patch(updateProductUrlWithEnvironment, productDto.Product, config);
 };
-

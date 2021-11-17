@@ -21,16 +21,22 @@ export const msalInstance = (): PublicClientApplication => {
 };
 
 export const getAccessToken: () => Promise<string> = async () => {
-  // outside of the component tree / React Context, create a new PublicClientApplication (with same config options) to access MSAL
-  const pca = msalInstance();
-  const account = getMsalAccount(pca);
+  const FAILURE_MESSAGE = 'shell::authHelpers::getAccessToken FAILURE';
+  try {
+    // outside of the component tree / React Context, create a new PublicClientApplication (with same config options) to access MSAL
+    const pca = msalInstance();
+    const account = getMsalAccount(pca);
 
-  const acquireTokenResponse = await pca.acquireTokenSilent({
-    scopes: PRODUCT_MANAGEMENT_SCOPES,
-    account: account
-  });
+    const acquireTokenResponse = await pca.acquireTokenSilent({
+      scopes: PRODUCT_MANAGEMENT_SCOPES,
+      account: account
+    });
 
-  return acquireTokenResponse.accessToken;
+    return acquireTokenResponse.accessToken || FAILURE_MESSAGE;
+  } catch (error) {
+    console.log(error);
+    return FAILURE_MESSAGE;
+  }
 };
 
 export const loginButtonRequest: RedirectRequest = {

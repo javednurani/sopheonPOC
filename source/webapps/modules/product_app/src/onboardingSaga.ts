@@ -1,17 +1,15 @@
+import { CreateProductAction, OnboardingSagaActionTypes, UpdateProductAction } from '@sopheon/shell-api';
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 
 // eslint-disable-next-line max-len
 import {
-  CreateProductAction,
   createProductFailure,
   createProductRequest,
   createProductSuccess,
   nextStep,
-  OnboardingSagaActionTypes,
-  UpdateProductAction,
   updateProductFailure,
   updateProductRequest,
-  updateProductSuccess
+  updateProductSuccess,
 } from './onboardingInfoReducer';
 import { createProduct, updateProduct } from './onboardingService';
 
@@ -27,8 +25,7 @@ export function* onCreateProduct(action: CreateProductAction): Generator {
   try {
     yield put(nextStep());
     yield put(createProductRequest());
-    //@ts-ignore TODO Cloud-1920, fix this ignore and a console error
-    const { data } = yield call(createProduct(action.payload));
+    const { data } = yield call(createProduct, action.payload);
     yield put(createProductSuccess(data));
   } catch (error) {
     yield put(createProductFailure(error));
@@ -39,8 +36,7 @@ export function* onUpdateProduct(action: UpdateProductAction): Generator {
   try {
     yield put(nextStep());
     yield put(updateProductRequest());
-    //@ts-ignore TODO Cloud-1920, fix this ignore and a console error
-    const { data } = yield call(updateProduct(action.payload));
+    const { data } = yield call(updateProduct, action.payload);
     yield put(updateProductSuccess(data));
   } catch (error) {
     yield put(updateProductFailure(error));

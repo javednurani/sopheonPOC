@@ -1,4 +1,4 @@
-import { Label, registerIcons } from '@fluentui/react';
+import { registerIcons, Stack } from '@fluentui/react';
 import { AppProps } from '@sopheon/shell-api';
 import React, { useEffect } from 'react';
 
@@ -53,7 +53,15 @@ registerIcons({
   },
 });
 
-const App: React.FunctionComponent<Props> = ({ currentStep, createProduct, updateProduct, environmentKey, getAccessToken, accessToken }: Props) => {
+const App: React.FunctionComponent<Props> = ({
+  currentStep,
+  createProduct,
+  updateProduct,
+  products,
+  environmentKey,
+  getAccessToken,
+  accessToken,
+}: Props) => {
   useEffect(() => {
     // getAccessToken triggers Shell action to store access token, freshly acquired from MSAL, in Redux state
     // after getAccessToken is called (here, on ProductApp render), shellApi::accessToken should be up-to-date access token from MSAL.acquireTokenSilent()
@@ -62,15 +70,16 @@ const App: React.FunctionComponent<Props> = ({ currentStep, createProduct, updat
 
   return (
     <div>
-      <Label>
+      <Stack>
         <OnboardingInfo
           currentStep={currentStep}
           createProduct={createProduct}
           updateProduct={updateProduct}
           environmentKey={environmentKey}
           accessToken={accessToken}
+          products={products}
         />
-      </Label>
+      </Stack>
     </div>
   );
 };

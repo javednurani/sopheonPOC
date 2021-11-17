@@ -1,5 +1,7 @@
 import { ITheme } from '@fluentui/react';
 
+import { ProductStateShape } from './product/productReducer';
+
 export type State = {
   shell: ShellState;
 };
@@ -7,6 +9,7 @@ export type State = {
 type ShellState = {
   theme: ThemeShape;
   auth: AuthShape;
+  product: ProductStateShape;
 };
 
 export interface ThemeShape {
