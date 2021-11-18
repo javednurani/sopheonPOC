@@ -151,6 +151,7 @@ const updateProductRequestHandler = (state: ProductStateShape) => ({
   updateProductFetchStatus: FetchStatus.InProgress,
 });
 
+// TODO - 'update state' code here will need to be reworked per the Product API Post endpoint behavior
 const updateProductSuccessHandler = (state: ProductStateShape, updatedProduct: Product) => {
   const stateProducts = [...state.products];
   const updatedProducts = stateProducts.map(existingProduct => ((existingProduct.Key !== updatedProduct.Key)

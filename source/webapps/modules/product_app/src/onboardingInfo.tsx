@@ -177,7 +177,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
       Name: productName, // TODO: PATCH endpoint behavior for partial updates.  don't include fields in Request Body?
       Industries: [], // TODO: PATCH endpoint behavior for partial updates.  don't include fields in Request Body?
       Goals: [goal],
-      KPIs: kpi.split(','), // TODO, confirm comma-seperated UI, and PatchDto KPI format
+      KPIs: kpi.split(','), // TODO SANITIZE USER KPI INPUT, also: confirm comma-seperated UI, and PatchDto KPI format
     };
 
     const updateProductDto: CreateUpdateProductDto = {
