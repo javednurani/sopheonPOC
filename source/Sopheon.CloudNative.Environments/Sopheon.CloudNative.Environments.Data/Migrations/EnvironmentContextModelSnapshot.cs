@@ -39,13 +39,6 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("BusinessServices");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "ProductManagement"
-                        });
                 });
 
             modelBuilder.Entity("Sopheon.CloudNative.Environments.Domain.Models.BusinessServiceDependency", b =>

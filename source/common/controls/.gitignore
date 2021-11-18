@@ -1,6 +1,0 @@
-# package and module build output
-dist/
-# output from jest code coverage
-coverage/
-# VS Code workspace settings
-.vscode/launch.json

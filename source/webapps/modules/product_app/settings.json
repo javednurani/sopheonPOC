@@ -1,0 +1,20 @@
+{
+  "appTitle": "Product",
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true,
+    "source.fixAll.eslint": true,
+    "source.fixAll.stylelint": true
+  },
+  "editor.detectIndentation": false,
+  "editor.formatOnSave": true,
+  "editor.insertSpaces": true,
+  "editor.tabSize": 2,
+  "baseUrl": "/",
+  "debugMode": false,
+  "logLevel": "warn",
+  "maxSizeDataUrl": 8192,
+  "stats": true,
+  "testMode": false,
+  "port": 3001,
+  "folderPath": "/product/"
+}

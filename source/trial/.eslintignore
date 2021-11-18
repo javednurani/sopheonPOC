@@ -1,7 +1,0 @@
-.chrome/
-.eslintcache/
-.nyc_output/
-.tmp/
-coverage/
-dist/
-node_modules/
