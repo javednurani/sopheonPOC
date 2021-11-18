@@ -4,7 +4,7 @@ import { Action } from '../types';
 
 // eslint-disable-next-line no-shadow
 export enum AuthSagaActionTypes {
-  GET_ACCESS_TOKEN = 'SHELL/GET_ACCESS_TOKEN'
+  GET_ACCESS_TOKEN = 'SHELL/AUTH/GET_ACCESS_TOKEN'
 }
 
 export type GetAccessTokenAction = Action<AuthSagaActionTypes.GET_ACCESS_TOKEN>;

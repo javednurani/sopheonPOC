@@ -24,9 +24,9 @@ export type EnvironmentScopedApiRequestDto = {
 
 // eslint-disable-next-line no-shadow
 export enum ProductSagaActionTypes {
-  CREATE_PRODUCT = 'SHELL/CREATE_PRODUCT',
-  UPDATE_PRODUCT = 'SHELL/UPDATE_PRODUCT',
-  GET_PRODUCTS = 'SHELL/GET_PRODUCTS'
+  CREATE_PRODUCT = 'SHELL/PRODUCT/CREATE_PRODUCT',
+  UPDATE_PRODUCT = 'SHELL/PRODUCT/UPDATE_PRODUCT',
+  GET_PRODUCTS = 'SHELL/PRODUCT/GET_PRODUCTS'
 }
 
 export type GetProductsAction = PayloadAction<ProductSagaActionTypes.GET_PRODUCTS, EnvironmentScopedApiRequestDto>;

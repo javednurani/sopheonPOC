@@ -11,7 +11,7 @@ import { ThemeShape } from '../../types';
 
 // eslint-disable-next-line no-shadow
 export enum ThemeActionTypes {
-  CHANGE_THEME = 'SHELL/CHANGE_THEME',
+  CHANGE_THEME = 'SHELL/THEME/CHANGE_THEME',
 }
 
 export type ChangeThemeAction = PayloadAction<ThemeActionTypes.CHANGE_THEME, boolean>;
