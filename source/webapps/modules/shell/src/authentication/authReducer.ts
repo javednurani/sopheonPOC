@@ -9,8 +9,8 @@ import { AuthShape } from '../types';
 
 // eslint-disable-next-line no-shadow
 export enum AuthActionTypes {
-  SET_ENVIRONMENTKEY = 'SHELL/SET_ENVIRONMENTKEY',
-  SET_ACCESS_TOKEN = 'SHELL/SET_ACCESS_TOKEN',
+  SET_ENVIRONMENTKEY = 'SHELL/AUTH/SET_ENVIRONMENTKEY',
+  SET_ACCESS_TOKEN = 'SHELL/AUTH/SET_ACCESS_TOKEN',
 }
 
 export type SetEnvironmentKeyAction = PayloadAction<AuthActionTypes.SET_ENVIRONMENTKEY, string>;

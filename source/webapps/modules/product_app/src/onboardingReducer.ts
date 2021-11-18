@@ -10,7 +10,7 @@ import { Reducer } from 'redux';
 
 // eslint-disable-next-line no-shadow
 enum OnboardingActionTypes {
-  NEXT_STEP = 'PRODUCT/ONBOARDING/NEXT_STEP', // TODO propose mfe/reducer/action naming convention. ?? - apply to SHELL/ actions also?
+  NEXT_STEP = 'PRODUCT/ONBOARDING/NEXT_STEP',
 }
 
 export type NextStepAction = Action<OnboardingActionTypes.NEXT_STEP>;
