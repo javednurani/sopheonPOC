@@ -5,7 +5,15 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { Saga } from 'redux-saga';
 
 import { IShellApi } from './IShellApi';
-import { InjectReducerMap, InjectSagaMap } from './store/types';
+import { createAction, createPayloadAction } from './store/actions';
+import {
+  AuthSagaActionTypes,
+  CreateUpdateProductDto,
+  EnvironmentScopedApiRequestDto,
+  InjectReducerMap,
+  InjectSagaMap,
+  ProductSagaActionTypes,
+} from './store/types';
 
 // REDUCER INJECTION HELPERS / UTILITY VARIABLES
 
@@ -87,12 +95,18 @@ export class IsolatedShellApi implements IShellApi {
       ...(mapStateProps && mapStateProps(this.store.getState() as TState)),
       // stub out Shell-provided state (found in AppProps) here
       environmentKey: 'ISOLATED_SHELL_API_ENVIRONMENTKEY_STUB',
+      accessToken: 'ISOLATED_SHELL_API_ACCESSTOKEN_STUB',
+      products: [], // TODO - once past onboarding, stub a Product? for Product App experience, not onboarding
     });
 
     // INFO: some of these action creators are duplicated in main-shell reducers, could possibly consolidate
     const mapDispatch = {
       ...(mapDispatchProps && mapDispatchProps(this.store.getState() as TState)),
       // stub out Shell-provided dispatch (found in AppProps) here
+      getAccessToken: () => createAction(AuthSagaActionTypes.GET_ACCESS_TOKEN),
+      getProducts: (requestDto: EnvironmentScopedApiRequestDto) => createPayloadAction(ProductSagaActionTypes.GET_PRODUCTS, requestDto),
+      createProduct: (product: CreateUpdateProductDto) => createPayloadAction(ProductSagaActionTypes.CREATE_PRODUCT, product),
+      updateProduct: (product: CreateUpdateProductDto) => createPayloadAction(ProductSagaActionTypes.UPDATE_PRODUCT, product),
     };
 
     return connect(mapState, mapDispatch);
