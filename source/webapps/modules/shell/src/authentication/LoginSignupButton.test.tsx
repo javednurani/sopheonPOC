@@ -38,7 +38,8 @@ describe('Test Unauthenticated LoginSignupButton component', () => {
     // Arrange
     const pca = testMsalInstance();
     const loginRedirectSpy = jest.spyOn(pca, 'loginRedirect').mockImplementation(request => {
-      expect(request).toBe(undefined);
+      expect(request?.redirectUri).toBe(azureSettings.SPA_Root_URL);
+      expect(request?.redirectStartPage).toBe(azureSettings.SPA_Root_URL);
 
       return Promise.resolve();
     });

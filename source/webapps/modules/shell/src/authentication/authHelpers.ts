@@ -15,6 +15,12 @@ export const msalInstance = (): PublicClientApplication => {
   return pca;
 };
 
+export const loginButtonRequest: RedirectRequest = {
+  redirectUri: azureSettings.SPA_Root_URL,
+  redirectStartPage: azureSettings.SPA_Root_URL,
+  scopes: []
+};
+
 export const changePasswordRequest: RedirectRequest = {
   authority: getAuthorityUrl(azureSettings.AD_B2C_PasswordChange_Policy),
   redirectUri: azureSettings.SPA_Root_URL,
