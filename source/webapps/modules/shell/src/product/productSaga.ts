@@ -39,9 +39,11 @@ export function* onCreateProduct(action: CreateProductAction): Generator {
     const { data } = yield call(createProduct, action.payload);
 
     const createdProduct: Product = {
-      Key: data.id, // TODO, POST endpoint should return ProductDto with Key GUID, data.key
+      Key: data.id, // TODO, POST endpoint Resposne data ProductDto with Key GUID, data.key
       Name: data.name,
-      Description: '1920 STUB TODO REMOVE'
+      Industries: [], // TODO connect to Response data
+      KPIs: [],
+      Goals: []
     };
 
     yield put(createProductSuccess(createdProduct));
@@ -62,11 +64,13 @@ export function* onUpdateProduct(action: UpdateProductAction): Generator {
     const updatedProduct: Product = {
       Key: data.id, // TODO, PATCH endpoint should return ProductDto with Key GUID, data.key
       Name: data.name,
-      Description: '1920 PRODUCT WAS UPDATED!'
+      Industries: [],
+      KPIs: [], // TODO connect to Response data
+      Goals: [] // TODO connect to Response data
     };
 
 
-    yield put(updateProductSuccess(data));
+    yield put(updateProductSuccess(updatedProduct));
   } catch (error) {
     yield put(updateProductFailure(error));
   }

@@ -39,9 +39,14 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
 }: IOnboardingInfoProps) => {
   const { formatMessage } = useIntl();
 
+  // Onboarding Page 2
   const [productName, setProductName] = useState('');
   const [industryKeys, setIndustryKeys] = useState<number[]>([]);
   const [continueDisabled, setContinueDisabled] = useState(true);
+
+  // Onboarding Page 3
+  const [goal, setGoal] = useState('');
+  const [kpi, setKpi] = useState('');
 
   useEffect(() => {
     setContinueDisabled(productName.length === 0 || industryKeys.length === 0);
@@ -143,7 +148,9 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
     const productData: Product = {
       Key: null,
       Name: productName,
-      Description: 'TODO FROM UI',
+      Industries: industryKeys,
+      Goals: [],
+      KPIs: [],
     };
 
     const createProductDto: CreateUpdateProductDto = {
@@ -156,11 +163,21 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
     nextStep();
   };
 
+  const handleGoalChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string | undefined): void => {
+    setGoal(newValue || '');
+  };
+
+  const handleKpiChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string | undefined): void => {
+    setKpi(newValue || '');
+  };
+
   const handleOnboardingGetStartedClick = () => {
     const productData: Product = {
-      Key: 'TODO FROM STATE',
-      Name: productName,
-      Description: 'TODO FROM UI',
+      Key: products[0].Key, // TODO: confirm, trusting that state.products will have exactly 1 element at this point in onboarding?
+      Name: productName, // TODO: PATCH endpoint behavior for partial updates.  don't include fields in Request Body?
+      Industries: [], // TODO: PATCH endpoint behavior for partial updates.  don't include fields in Request Body?
+      Goals: [goal],
+      KPIs: kpi.split(','), // TODO, confirm comma-seperated UI, and PatchDto KPI format
     };
 
     const updateProductDto: CreateUpdateProductDto = {
@@ -246,11 +263,12 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
               rows={4}
               styles={textFieldStyles}
               resizable={false}
+              onChange={handleGoalChange}
             />
           </div>
         </Stack.Item>
         <Stack.Item>
-          <TextField label={formatMessage({ id: 'onboarding.productKpi' })} maxLength={60} styles={textFieldStyles} />
+          <TextField label={formatMessage({ id: 'onboarding.productKpi' })} maxLength={60} styles={textFieldStyles} onChange={handleKpiChange} />
         </Stack.Item>
         <Stack.Item>
           <PrimaryButton

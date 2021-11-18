@@ -6,7 +6,9 @@ import { PayloadAction } from '../types';
 export interface Product {
   Key: string | null;
   Name: string;
-  Description: string;
+  Industries: number[];
+  Goals: string[];
+  KPIs: string[];
 }
 
 export type CreateUpdateProductDto = {
