@@ -54,6 +54,12 @@ try {
     $MarketingUploadResults;
     Check-LastExitCode;
     Write-Host "Complete! Transfered files to Storage Account Blob: "'b2cassets';
+
+    Write-Host "Uploading images to blob storage";
+    $MarketingUploadResults = az storage blob upload-batch --destination 'b2cassets' --account-name $StorageAccountName --source "$($B2CAssets)\azureResources\images" --auth-mode login;
+    $MarketingUploadResults;
+    Check-LastExitCode;
+    Write-Host "Complete! Uploaded images to Storage Account Blob: "'b2cassets';
 }
 catch {
     Write-Host "ERROR: ";
