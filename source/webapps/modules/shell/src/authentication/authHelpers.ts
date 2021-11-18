@@ -40,7 +40,9 @@ export const getAccessToken: () => Promise<string> = async () => {
 };
 
 export const loginButtonRequest: RedirectRequest = {
-  scopes: ALL_SCOPES
+  scopes: ALL_SCOPES,
+  redirectUri: azureSettings.SPA_Root_URL,
+  redirectStartPage: azureSettings.SPA_Root_URL,
 };
 
 export const changePasswordRequest: RedirectRequest = {
