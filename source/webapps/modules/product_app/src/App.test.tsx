@@ -15,9 +15,13 @@ describe.skip('Testing the App component', () => {
   it('Render test for the App component', () => {
     const appProps: Props = {
       currentStep: 1,
+      nextStep: jest.fn(),
       createProduct: jest.fn(),
       updateProduct: jest.fn(),
+      products: [],
       environmentKey: '',
+      getAccessToken: jest.fn(),
+      accessToken: '',
     };
 
     const wrapper = mount(
@@ -33,9 +37,13 @@ describe.skip('Testing the App component', () => {
   it('Accessibility test for the App component', async () => {
     const appProps: Props = {
       currentStep: 1,
+      nextStep: jest.fn(),
       createProduct: jest.fn(),
       updateProduct: jest.fn(),
+      products: [],
       environmentKey: '',
+      getAccessToken: jest.fn(),
+      accessToken: '',
     };
 
     const wrapper = mount(

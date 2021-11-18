@@ -1,12 +1,12 @@
 import { constants, messages } from '@sopheon/shared-ui';
-import { EnvironmentScopedApiRequestDto, InjectReducerMap, InjectSagaMap, IShellApi } from '@sopheon/shell-api';
+import { CreateUpdateProductDto, EnvironmentScopedApiRequestDto, InjectReducerMap, InjectSagaMap, IShellApi } from '@sopheon/shell-api';
 import React, { ComponentType, useEffect } from 'react';
 import { connect, Provider } from 'react-redux';
 import { CombinedState, combineReducers, Reducer, ReducersMapObject, Store } from 'redux';
 import { Saga } from 'redux-saga';
 
 import { getAccessToken, setEnvironmentKey } from './authentication/authReducer';
-import { getProducts } from './product/productReducer';
+import { createProduct, getProducts, updateProduct } from './product/productReducer';
 import { shell } from './rootReducer';
 import { sagaMiddleware, store as mainShellStore } from './store';
 import { changeTheme } from './themes/themeReducer/themeReducer';
@@ -103,6 +103,8 @@ export class ShellApi implements IShellApi {
       ...(mapDispatchProps && mapDispatchProps(this.store.getState() as unknown as TState)),
       getAccessToken: () => getAccessToken(),
       getProducts: (requestDto: EnvironmentScopedApiRequestDto) => getProducts(requestDto),
+      createProduct: (product: CreateUpdateProductDto) => createProduct(product),
+      updateProduct: (product: CreateUpdateProductDto) => updateProduct(product),
       // the below dispatchProps are not exposed to MFE's via IShellApi. only used by, and private to, the shell
       changeTheme: (useDarkTheme: boolean) => changeTheme(useDarkTheme),
       setEnvironmentKey: (environmentKey: string) => setEnvironmentKey(environmentKey),

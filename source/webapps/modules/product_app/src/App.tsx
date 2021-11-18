@@ -55,6 +55,7 @@ registerIcons({
 
 const App: React.FunctionComponent<Props> = ({
   currentStep,
+  nextStep,
   createProduct,
   updateProduct,
   products,
@@ -73,6 +74,7 @@ const App: React.FunctionComponent<Props> = ({
       <Stack>
         <OnboardingInfo
           currentStep={currentStep}
+          nextStep={nextStep}
           createProduct={createProduct}
           updateProduct={updateProduct}
           environmentKey={environmentKey}
