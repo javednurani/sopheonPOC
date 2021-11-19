@@ -129,6 +129,7 @@
         </LocalizedResourcesReferences>
       </ContentDefinition>
       <ContentDefinition Id="api.localaccountsignup">
+        <LoadUri>https://^StorageAccountName^.blob.core.windows.net/b2cassets/SignUpCustom.html</LoadUri>
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.localaccountsignup.en" />
         </LocalizedResourcesReferences>
