@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 
-import { onboardingReducer, OnboardingStateShape } from './onboardingReducer';
+import { onboardingReducer, OnboardingStateShape } from './onboarding/onboardingReducer';
 
 export const rootReducer = combineReducers({
   onboarding: onboardingReducer

@@ -7,7 +7,7 @@ import React from 'react';
 import { IntlProvider } from 'react-intl';
 
 import App, { Props } from './App';
-import OnboardingInfo from './onboardingInfo';
+import OnboardingInfo from './onboarding/onboardingInfo';
 
 expect.extend(toHaveNoViolations);
 

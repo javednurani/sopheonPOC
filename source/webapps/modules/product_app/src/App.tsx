@@ -21,7 +21,7 @@ import { ReactComponent as ServicesIndustry } from './images/industryico_Service
 import { ReactComponent as TechIndustry } from './images/industryico_Tech.svg';
 import { ReactComponent as TeleIndustry } from './images/industryico_Tele.svg';
 import { ReactComponent as TransIndustry } from './images/industryico_Trans.svg';
-import OnboardingInfo from './onboardingInfo';
+import OnboardingInfo from './onboarding/onboardingInfo';
 
 export type Props = AppProps<AppStateProps, AppDispatchProps>;
 

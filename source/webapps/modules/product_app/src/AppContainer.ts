@@ -6,7 +6,7 @@ import {
 import { FunctionComponent } from 'react';
 
 import App from './App';
-import { nextStep, NextStepAction } from './onboardingReducer';
+import { nextStep, NextStepAction } from './onboarding/onboardingReducer';
 import { NAMESPACE, rootReducer, RootState } from './rootReducer';
 import rootSaga from './rootSaga';
 
