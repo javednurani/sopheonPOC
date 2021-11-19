@@ -4,6 +4,9 @@
     "parameters": {
         "storageAccounts_name": {
             "value":"^StorageAccountName^"            
+        },
+        "b2cLogin" : {
+            "value": "^B2CLogin^"
         }
     }
 }

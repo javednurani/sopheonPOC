@@ -14,5 +14,5 @@
     "noEmit": true,
     "jsx": "react"
   },
-  "include": ["build", "src"]
+  "include": ["build", "src", "custom.d.ts"]
 }
