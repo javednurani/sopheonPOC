@@ -22,7 +22,6 @@ import { ReactComponent as TechIndustry } from './images/industryico_Tech.svg';
 import { ReactComponent as TeleIndustry } from './images/industryico_Tele.svg';
 import { ReactComponent as TransIndustry } from './images/industryico_Trans.svg';
 import OnboardingInfo from './onboarding/onboardingInfo';
-import { getProducts } from './product/productReducer';
 import { EnvironmentScopedApiRequestDto } from './types';
 
 export type Props = AppProps<AppStateProps, AppDispatchProps>;
@@ -61,25 +60,15 @@ const App: React.FunctionComponent<Props> = ({
   createProduct,
   updateProduct,
   products,
+  getProducts,
   getProductsFetchStatus,
   environmentKey,
-  getAccessToken,
   accessToken,
   hideHeaderFooter,
   showHeaderFooter,
 }: Props) => {
   useEffect(() => {
-    // getAccessToken triggers Shell action to store access token, freshly acquired from MSAL, in Redux state
-    // after getAccessToken is called (here, on ProductApp render), shellApi::accessToken should be up-to-date access token from MSAL.acquireTokenSilent()
-    // TODO FRIDAY 11/19, IS THIS LINE THE CAUSING THE LOGIN FAILURE ISSUE?
-    getAccessToken();
-  }, []);
-
-  useEffect(() => {
-    // get any Products for logged in User
-    if (environmentKey && accessToken && getProductsFetchStatus === FetchStatus.NotActive) {
-      // TODO, use isAuthenticated ?
-
+    if (accessToken && getProductsFetchStatus === FetchStatus.NotActive) {
       const requestDto: EnvironmentScopedApiRequestDto = {
         EnvironmentKey: environmentKey || '',
         AccessToken: accessToken,
@@ -87,15 +76,15 @@ const App: React.FunctionComponent<Props> = ({
 
       getProducts(requestDto);
     }
-  }, [environmentKey, getProductsFetchStatus, accessToken]);
+  }, [accessToken, getProductsFetchStatus]);
 
   useEffect(() => {
-    if (products.length === 0) {
+    if ((products.length === 0 && environmentKey) || (currentStep === 3 && products.length === 1)) {
       hideHeaderFooter();
     } else {
       showHeaderFooter();
     }
-  }, [products]);
+  }, [products, environmentKey]);
 
   return (
     <div>

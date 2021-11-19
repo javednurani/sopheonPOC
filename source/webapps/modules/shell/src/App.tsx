@@ -1,5 +1,6 @@
 import { initializeIcons, registerIcons, ScrollablePane, ScrollbarVisibility, Stack } from '@fluentui/react';
 import { useTheme } from '@fluentui/react-theme-provider';
+import { GetAccessTokenAction } from '@sopheon/shell-api';
 import React, { CSSProperties, FunctionComponent } from 'react';
 import { useIntl } from 'react-intl';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
@@ -21,9 +22,10 @@ export interface AppProps {
   setEnvironmentKey: (environmentKey: string) => SetEnvironmentKeyAction;
   environmentKey: string | null;
   headerFooterAreShown: boolean;
+  getAccessToken: () => GetAccessTokenAction;
 }
 
-const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, headerFooterAreShown }: AppProps) => {
+const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, headerFooterAreShown, getAccessToken }: AppProps) => {
   const { formatMessage } = useIntl();
 
   const loadingMessage: string = formatMessage({ id: 'fallback.loading' });
@@ -53,6 +55,12 @@ const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, head
     height: '100%',
   };
 
+  const hideHeaderFooterStyle = {
+    root: {
+      height: '0'
+    }
+  };
+
   return (
     <div className="App" style={appStyle}>
       <BrowserRouter>
@@ -73,10 +81,9 @@ const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, head
                 },
               }}
             >
-              {headerFooterAreShown &&
-              <Stack.Item>
-                <Header changeTheme={changeTheme} setEnvironmentKey={setEnvironmentKey} />
-              </Stack.Item>}
+              <Stack.Item styles={headerFooterAreShown ? {} : hideHeaderFooterStyle}>
+                <Header changeTheme={changeTheme} setEnvironmentKey={setEnvironmentKey} getAccessToken={getAccessToken} />
+              </Stack.Item>
 
               <Stack.Item shrink>
                 <IdleMonitor />
@@ -87,6 +94,8 @@ const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, head
                   root: {
                     height: '100%',
                     overflow: 'auto',
+                    backgroundColor: 'white',
+                    zIndex: '9999'
                   },
                 }}
               >
@@ -102,10 +111,9 @@ const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, head
                   </ScrollablePane>
                 </main>
               </Stack.Item>
-              {headerFooterAreShown &&
-                <Stack.Item>
-                  <Footer />
-                </Stack.Item>}
+              <Stack.Item>
+                <Footer showFooter={headerFooterAreShown}/>
+              </Stack.Item>
             </Stack>
           </Route>
         </Switch>
