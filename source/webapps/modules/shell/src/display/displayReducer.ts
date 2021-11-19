@@ -22,19 +22,19 @@ export const hideHeaderFooter = (): HideHeaderFooterAction => createAction(Displ
 // INITIAL STATE & DEFAULTS
 
 export const initialState: DisplayShape = {
-  showHeaderFooter: true,
+  headerFooterAreShown: true,
 };
 
 // HANDLERS
 
 const showHeaderFooterHandler = (state: DisplayShape) => ({
   ...state,
-  showHeaderFooter: true,
+  headerFooterAreShown: true,
 });
 
 const hideHeaderFooterHandler = (state: DisplayShape) => ({
   ...state,
-  showHeaderFooter: false,
+  headerFooterAreShown: false,
 });
 
 // ACTION SWITCH

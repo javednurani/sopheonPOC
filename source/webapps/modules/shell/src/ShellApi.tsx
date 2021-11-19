@@ -94,7 +94,7 @@ export class ShellApi implements IShellApi {
       accessToken: this.store.getState().shell.auth.accessToken,
       // the below stateProps are not exposed to MFE's via IShellApi. only used by, and private to, the shell
       theme: this.store.getState().shell.theme,
-      showHeaderFooter: this.store.getState().shell.display.showHeaderFooter,
+      headerFooterAreShown: this.store.getState().shell.display.headerFooterAreShown,
       language: initialLanguageState,
     });
 

@@ -20,10 +20,10 @@ export interface AppProps {
   changeTheme: (useDarkTheme: boolean) => ChangeThemeAction;
   setEnvironmentKey: (environmentKey: string) => SetEnvironmentKeyAction;
   environmentKey: string | null;
-  showHeaderFooter: boolean;
+  headerFooterAreShown: boolean;
 }
 
-const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, showHeaderFooter }: AppProps) => {
+const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, headerFooterAreShown }: AppProps) => {
   const { formatMessage } = useIntl();
 
   const loadingMessage: string = formatMessage({ id: 'fallback.loading' });
@@ -73,11 +73,11 @@ const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, show
                 },
               }}
             >
-              {showHeaderFooter && (
-                <Stack.Item>
-                  <Header changeTheme={changeTheme} setEnvironmentKey={setEnvironmentKey} />
-                </Stack.Item>
-              )}
+              {headerFooterAreShown &&
+              <Stack.Item>
+                <Header changeTheme={changeTheme} setEnvironmentKey={setEnvironmentKey} />
+              </Stack.Item>}
+
               <Stack.Item shrink>
                 <IdleMonitor />
               </Stack.Item>
@@ -102,11 +102,10 @@ const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, show
                   </ScrollablePane>
                 </main>
               </Stack.Item>
-              {showHeaderFooter && (
+              {headerFooterAreShown &&
                 <Stack.Item>
                   <Footer />
-                </Stack.Item>
-              )}
+                </Stack.Item>}
             </Stack>
           </Route>
         </Switch>
