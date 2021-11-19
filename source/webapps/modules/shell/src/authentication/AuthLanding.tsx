@@ -3,14 +3,7 @@ import { ISpinnerStyles, IStackStyles, Spinner, SpinnerSize, Stack } from '@flue
 import React, { CSSProperties, FunctionComponent, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
-import AzureBlueBackground from '../images/azure-blue-background.png';
 import { getAuthLandingRedirectRequest } from './authHelpers';
-
-const sectionStyle: CSSProperties = {
-  width: '100vw',
-  height: '100vh',
-  backgroundImage: `url(${AzureBlueBackground})`,
-};
 
 export interface AuthLandingProps {
   adB2cPolicyName: string;
@@ -45,28 +38,24 @@ const AuthLanding: FunctionComponent<AuthLandingProps> = ({ adB2cPolicyName, spi
   };
   const spinnerStyles: ISpinnerStyles = {
     label: {
-      color: 'white',
       fontSize: '18px',
     },
     circle: {
-      borderColor: 'white',
       height: '40px',
       width: '40px',
     },
   };
 
   return (
-    <section style={sectionStyle}>
-      <Stack>
-        <Stack.Item grow>
-          <Stack horizontal verticalAlign="center" styles={stackStyles}>
-            <Stack.Item grow>
-              <Spinner styles={spinnerStyles} size={SpinnerSize.large} label={formatMessage({ id: spinnerMessageResourceKey })} />
-            </Stack.Item>
-          </Stack>
-        </Stack.Item>
-      </Stack>
-    </section>
+    <Stack>
+      <Stack.Item grow>
+        <Stack horizontal verticalAlign="center" styles={stackStyles}>
+          <Stack.Item grow>
+            <Spinner styles={spinnerStyles} size={SpinnerSize.large} label={formatMessage({ id: spinnerMessageResourceKey })} />
+          </Stack.Item>
+        </Stack>
+      </Stack.Item>
+    </Stack>
   );
 };
 
