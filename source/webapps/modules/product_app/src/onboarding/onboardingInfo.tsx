@@ -12,10 +12,11 @@ import {
   Stack,
   TextField,
 } from '@fluentui/react';
-import { CreateProductAction, CreateUpdateProductDto, Product, UpdateProductAction } from '@sopheon/shell-api';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
+import { CreateProductAction, UpdateProductAction } from '../product/productReducer';
+import { CreateUpdateProductDto, Product } from '../types';
 import { NextStepAction } from './onboardingReducer';
 
 export interface IOnboardingInfoProps {

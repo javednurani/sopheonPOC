@@ -1,4 +1,4 @@
-import { PRODUCT_MANAGEMENT_API_BASE_URL } from '../../../../devEnvSettings';
+import { PRODUCT_MANAGEMENT_API_BASE_URL } from '../../../devEnvSettings';
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -12,7 +12,7 @@ const tokenProductKey = '{*productKey*}';
 // TODO, unify this file and product_app/settings.ts
 
 // Public settings object
-export const productSettings: Record<string, string> = {
+export const settings: Record<string, string> = {
   ProductManagementApiUrlBase: productManagementApiUrlBase,
   CreateProductUrlPath: `/Environments/${tokenEnvironmentKey}/Products`,
   getProductsUrlPath: `/Environments/${tokenEnvironmentKey}/Products`,

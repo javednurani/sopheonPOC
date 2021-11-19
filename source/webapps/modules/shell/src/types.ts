@@ -1,7 +1,5 @@
 import { ITheme } from '@fluentui/react';
 
-import { ProductStateShape } from './product/productReducer';
-
 export type State = {
   shell: ShellState;
 };
@@ -9,7 +7,7 @@ export type State = {
 type ShellState = {
   theme: ThemeShape;
   auth: AuthShape;
-  product: ProductStateShape;
+  display: DisplayShape;
 };
 
 export interface ThemeShape {
@@ -25,6 +23,10 @@ export interface LanguageShape {
   locale: string;
   messages: Record<string, string>;
   direction: string;
+}
+
+export interface DisplayShape {
+  showHeaderFooter: boolean;
 }
 
 export interface NavBarItem {

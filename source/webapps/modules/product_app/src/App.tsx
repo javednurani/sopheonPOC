@@ -1,5 +1,5 @@
 import { registerIcons, Stack } from '@fluentui/react';
-import { AppProps } from '@sopheon/shell-api';
+import { AppProps, FetchStatus } from '@sopheon/shell-api';
 import React, { useEffect } from 'react';
 
 import { AppDispatchProps, AppStateProps } from './AppContainer';
@@ -22,6 +22,8 @@ import { ReactComponent as TechIndustry } from './images/industryico_Tech.svg';
 import { ReactComponent as TeleIndustry } from './images/industryico_Tele.svg';
 import { ReactComponent as TransIndustry } from './images/industryico_Trans.svg';
 import OnboardingInfo from './onboarding/onboardingInfo';
+import { getProducts } from './product/productReducer';
+import { EnvironmentScopedApiRequestDto } from './types';
 
 export type Props = AppProps<AppStateProps, AppDispatchProps>;
 
@@ -59,15 +61,41 @@ const App: React.FunctionComponent<Props> = ({
   createProduct,
   updateProduct,
   products,
+  getProductsFetchStatus,
   environmentKey,
   getAccessToken,
   accessToken,
+  hideHeaderFooter,
+  showHeaderFooter,
 }: Props) => {
   useEffect(() => {
     // getAccessToken triggers Shell action to store access token, freshly acquired from MSAL, in Redux state
     // after getAccessToken is called (here, on ProductApp render), shellApi::accessToken should be up-to-date access token from MSAL.acquireTokenSilent()
+    // TODO FRIDAY 11/19, IS THIS LINE THE CAUSING THE LOGIN FAILURE ISSUE?
     getAccessToken();
   }, []);
+
+  useEffect(() => {
+    // get any Products for logged in User
+    if (environmentKey && accessToken && getProductsFetchStatus === FetchStatus.NotActive) {
+      // TODO, use isAuthenticated ?
+
+      const requestDto: EnvironmentScopedApiRequestDto = {
+        EnvironmentKey: environmentKey || '',
+        AccessToken: accessToken,
+      };
+
+      getProducts(requestDto);
+    }
+  }, [environmentKey, getProductsFetchStatus, accessToken]);
+
+  useEffect(() => {
+    if (products.length === 0) {
+      hideHeaderFooter();
+    } else {
+      showHeaderFooter();
+    }
+  }, [products]);
 
   return (
     <div>

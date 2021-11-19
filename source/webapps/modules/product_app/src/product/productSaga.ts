@@ -1,14 +1,18 @@
-import { CreateProductAction, GetProductsAction, Product, ProductSagaActionTypes, UpdateProductAction } from '@sopheon/shell-api';
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 
+import { Product } from '../types';
 // eslint-disable-next-line max-len
 import {
+  CreateProductAction,
   createProductFailure,
   createProductRequest,
   createProductSuccess,
+  GetProductsAction,
   getProductsFailure,
   getProductsRequest,
   getProductsSuccess,
+  ProductSagaActionTypes,
+  UpdateProductAction,
   updateProductFailure,
   updateProductRequest,
   updateProductSuccess

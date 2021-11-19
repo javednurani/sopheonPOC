@@ -2,17 +2,16 @@ import {
   Action,
   createAction,
   createPayloadAction,
-  CreateProductAction,
-  CreateUpdateProductDto,
-  EnvironmentScopedApiRequestDto,
   FetchStatus,
-  GetProductsAction,
   PayloadAction,
-  Product,
-  ProductSagaActionTypes,
-  UpdateProductAction,
 } from '@sopheon/shell-api';
 import { Reducer } from 'redux';
+
+import {
+  CreateUpdateProductDto,
+  EnvironmentScopedApiRequestDto,
+  Product
+} from '../types';
 
 //#region  Action Types
 
@@ -20,17 +19,17 @@ import { Reducer } from 'redux';
 
 // eslint-disable-next-line no-shadow
 enum ProductActionTypes {
-  GET_PRODUCTS_REQUEST = 'SHELL/PRODUCT/GET_PRODUCTS_REQUEST',
-  GET_PRODUCTS_SUCCESS = 'SHELL/PRODUCT/GET_PRODUCTS_SUCCESS',
-  GET_PRODUCTS_FAILURE = 'SHELL/PRODUCT/GET_PRODUCTS_FAILURE',
+  GET_PRODUCTS_REQUEST = 'PRODUCT/PRODUCT/GET_PRODUCTS_REQUEST',
+  GET_PRODUCTS_SUCCESS = 'PRODUCT/PRODUCT/GET_PRODUCTS_SUCCESS',
+  GET_PRODUCTS_FAILURE = 'PRODUCT/PRODUCT/GET_PRODUCTS_FAILURE',
 
-  CREATE_PRODUCT_REQUEST = 'SHELL/PRODUCT/CREATE_PRODUCT_REQUEST',
-  CREATE_PRODUCT_SUCCESS = 'SHELL/PRODUCT/CREATE_PRODUCT_SUCCESS',
-  CREATE_PRODUCT_FAILURE = 'SHELL/PRODUCT/CREATE_PRODUCT_FAILURE',
+  CREATE_PRODUCT_REQUEST = 'PRODUCT/PRODUCT/CREATE_PRODUCT_REQUEST',
+  CREATE_PRODUCT_SUCCESS = 'PRODUCT/PRODUCT/CREATE_PRODUCT_SUCCESS',
+  CREATE_PRODUCT_FAILURE = 'PRODUCT/PRODUCT/CREATE_PRODUCT_FAILURE',
 
-  UPDATE_PRODUCT_REQUEST = 'SHELL/PRODUCT/UPDATE_PRODUCT_REQUEST',
-  UPDATE_PRODUCT_SUCCESS = 'SHELL/PRODUCT/UPDATE_PRODUCT_SUCCESS',
-  UPDATE_PRODUCT_FAILURE = 'SHELL/PRODUCT/UPDATE_PRODUCT_FAILURE',
+  UPDATE_PRODUCT_REQUEST = 'PRODUCT/PRODUCT/UPDATE_PRODUCT_REQUEST',
+  UPDATE_PRODUCT_SUCCESS = 'PRODUCT/PRODUCT/UPDATE_PRODUCT_SUCCESS',
+  UPDATE_PRODUCT_FAILURE = 'PRODUCT/PRODUCT/UPDATE_PRODUCT_FAILURE',
 }
 
 export type GetProductsRequestAction = Action<ProductActionTypes.GET_PRODUCTS_REQUEST>;
@@ -55,6 +54,21 @@ export type ProductReducerActions =
   | UpdateProductRequestAction
   | UpdateProductSuccessAction
   | UpdateProductFailureAction;
+
+
+// SAGA ACTION TYPES
+
+// eslint-disable-next-line no-shadow
+export enum ProductSagaActionTypes {
+  CREATE_PRODUCT = 'PRODUCT/PRODUCT/CREATE_PRODUCT',
+  UPDATE_PRODUCT = 'PRODUCT/PRODUCT/UPDATE_PRODUCT',
+  GET_PRODUCTS = 'PRODUCT/PRODUCT/GET_PRODUCTS'
+}
+
+export type GetProductsAction = PayloadAction<ProductSagaActionTypes.GET_PRODUCTS, EnvironmentScopedApiRequestDto>;
+export type CreateProductAction = PayloadAction<ProductSagaActionTypes.CREATE_PRODUCT, CreateUpdateProductDto>;
+export type UpdateProductAction = PayloadAction<ProductSagaActionTypes.UPDATE_PRODUCT, CreateUpdateProductDto>;
+
 
 //#endregion
 
