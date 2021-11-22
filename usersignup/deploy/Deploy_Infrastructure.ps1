@@ -9,19 +9,21 @@ $DeploymentName = "ADO-Deployment";
 
 $ResourceGroupValue = "Stratus-$($Environment)";
 $StorageAccountNameValue = "stratus$($Environment.ToLower())b2c";
+$B2CLoginName = "https://$((az keyvault secret show --vault-name Stratus-$Environment --name 'StratusB2CTenantLoginName' | ConvertFrom-Json).value).b2clogin.com";
+
 
 $MasterTemplate = "$($PSScriptRoot)\Master_Template.bicep";
 $MasterParametersTemplate = "$($PSScriptRoot)\Master_Template_Parameters.json";
 
 Write-Host "Replacing tokens on Master Template...";
 $masterTemplateContent = Get-Content $MasterTemplate -raw;
-$masterTemplateContent = $masterTemplateContent.Replace('^StorageAccountName^', $StorageAccountNameValue)
+$masterTemplateContent = $masterTemplateContent.Replace('^StorageAccountName^', $StorageAccountNameValue).Replace('^B2CLogin^', $B2CLoginName);
 Set-Content -Value $masterTemplateContent -Path $MasterTemplate;
 Write-Host "Complete!";
 
 Write-Host "Replacing tokens on Master Parameters Template...";
 $masterParametersContent = Get-Content $MasterParametersTemplate -raw;
-$masterParametersContent = $masterParametersContent.Replace('^StorageAccountName^', $StorageAccountNameValue)
+$masterParametersContent = $masterParametersContent.Replace('^StorageAccountName^', $StorageAccountNameValue).Replace('^B2CLogin^', $B2CLoginName);
 Set-Content -Value $masterParametersContent -Path $MasterParametersTemplate;
 Write-Host "Complete!";
 
