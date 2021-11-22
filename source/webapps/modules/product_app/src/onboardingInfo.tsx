@@ -16,6 +16,7 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { AppDispatchProps, AppStateProps } from './AppContainer';
+import SopheonLogo from './SopheonLogo';
 
 export type OnboardingInfoProps = AppStateProps & AppDispatchProps;
 
@@ -25,9 +26,12 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
     fontSize: FontSizes.size42,
     marginBottom: '2vh',
   };
-  const fieldWidth: number = 300;
+  const fieldWidth = 300;
 
   const stackTokens: IStackTokens = { childrenGap: 15 };
+  const sopheonLogoStyle: React.CSSProperties = {
+    width: 200,
+  };
   const buttonStyles: React.CSSProperties = {
     marginTop: '6vh',
   };
@@ -112,19 +116,22 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
       if (industryKeys.indexOf(option.key as number) < 0) {
         setIndustryKeys([...industryKeys, option.key as number]);
       } else {
-        setIndustryKeys(industryKeys.filter(k => k != (option.key as number)));
+        setIndustryKeys(industryKeys.filter(k => k !== (option.key as number)));
       }
     }
   };
 
   useEffect(() => {
-    setContinueDisabled(productName.length == 0 || industryKeys.length == 0);
+    setContinueDisabled(productName.length === 0 || industryKeys.length === 0);
   }, [productName, industryKeys]);
 
   switch (currentStep) {
     case 2:
       return (
         <Stack className="step2" horizontalAlign="center" tokens={stackTokens}>
+          <Stack.Item>
+            <SopheonLogo style={sopheonLogoStyle} />
+          </Stack.Item>
           <Stack.Item>
             <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupproduct' })}</Label>
           </Stack.Item>
@@ -173,6 +180,9 @@ const OnboardingInfo: React.FunctionComponent<OnboardingInfoProps> = ({ currentS
     case 3:
       return (
         <Stack className="step3" horizontalAlign="center" tokens={stackTokens}>
+          <Stack.Item>
+            <SopheonLogo style={sopheonLogoStyle} />
+          </Stack.Item>
           <Stack.Item>
             <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupYourGoals' })}</Label>
           </Stack.Item>

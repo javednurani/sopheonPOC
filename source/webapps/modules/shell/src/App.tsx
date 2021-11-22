@@ -10,7 +10,8 @@ import Signup from './authentication/Signup';
 import { DynamicModule } from './DynamicModule';
 import Footer from './footer/Footer';
 import Header from './header/Header';
-import { ReactComponent as LLogo } from './images/Lucy24_logo.svg';
+import { ReactComponent as SopheonLogoDark } from './images/sopheon_logo_blk_txt.svg';
+import { ReactComponent as SopheonLogoLight } from './images/sopheon_logo_wht_txt.svg';
 import { appModules } from './settings/appModuleSettings';
 import { shellApi } from './ShellApi';
 import { ChangeThemeAction } from './themes/themeReducer/themeReducer';
@@ -26,15 +27,10 @@ const App: FunctionComponent<AppProps> = ({ changeTheme }: AppProps) => {
 
   initializeIcons();
 
-  const lucyIconStyle: CSSProperties = {
-    width: '20px',
-    height: '20px',
-    overflow: 'visible',
-  };
-
   registerIcons({
     icons: {
-      Lucy: <LLogo style={lucyIconStyle} />,
+      SopheonLogoDark: <SopheonLogoDark />,
+      SopheonLogoLight: <SopheonLogoLight />,
     },
   });
 
@@ -71,11 +67,11 @@ const App: FunctionComponent<AppProps> = ({ changeTheme }: AppProps) => {
                 },
               }}
             >
-              {(!location.pathname.includes('product') || userIsOnboarded) &&
+              {(!location.pathname.includes('product') || userIsOnboarded) && (
                 <Stack.Item>
                   <Header changeTheme={changeTheme} />
                 </Stack.Item>
-              }
+              )}
               <Stack.Item shrink>
                 <IdleMonitor />
               </Stack.Item>
@@ -100,11 +96,11 @@ const App: FunctionComponent<AppProps> = ({ changeTheme }: AppProps) => {
                   </ScrollablePane>
                 </main>
               </Stack.Item>
-              {(!location.pathname.includes('product') || userIsOnboarded) &&
+              {(!location.pathname.includes('product') || userIsOnboarded) && (
                 <Stack.Item>
                   <Footer />
                 </Stack.Item>
-              }
+              )}
             </Stack>
           </Route>
         </Switch>

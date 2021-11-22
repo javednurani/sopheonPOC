@@ -1,13 +1,12 @@
 import { IStackTokens, Stack, Sticky, StickyPositionType } from '@fluentui/react';
-import { useTheme } from '@fluentui/react-theme-provider';
 import React, { FunctionComponent } from 'react';
 import { useIntl } from 'react-intl';
 import { useLocation } from 'react-router-dom';
 
 import LoginSignupButton from '../authentication/LoginSignupButton';
-import { ReactComponent as LucyLogo } from '../images/Lucy_logo.svg';
 import Navbar from '../navbar/Navbar';
 import { AppModule, appModules } from '../settings/appModuleSettings';
+import SopheonLogo from '../SopheonLogo';
 import ThemeSelector from '../themes/components/themeSelector/ThemeSelector';
 import { ChangeThemeAction } from '../themes/themeReducer/themeReducer';
 
@@ -18,7 +17,6 @@ interface HeaderProps {
 const Header: FunctionComponent<HeaderProps> = ({ changeTheme }: HeaderProps) => {
   const { formatMessage } = useIntl();
   const location = useLocation();
-  const theme = useTheme();
 
   const headerStyle: React.CSSProperties = {
     marginTop: '8px',
@@ -28,12 +26,10 @@ const Header: FunctionComponent<HeaderProps> = ({ changeTheme }: HeaderProps) =>
   const logoStyle: React.CSSProperties = {
     height: '100%',
     width: '100%',
-    maxWidth: '100px',
-    maxHeight: '100px',
+    maxWidth: '200px',
+    maxHeight: '200px',
     minWidth: '25px',
     minHeight: '25px',
-    fill: theme.palette.themePrimary,
-    stroke: theme.palette.themePrimary,
     overflow: 'visible',
   };
 
@@ -57,8 +53,8 @@ const Header: FunctionComponent<HeaderProps> = ({ changeTheme }: HeaderProps) =>
       <header style={headerStyle} role="banner">
         <Stack horizontal verticalAlign="center">
           <Stack.Item shrink>
-            <div style={logoContainerStyle} title={formatMessage({ id: 'lucy' })}>
-              <LucyLogo style={logoStyle} />
+            <div style={logoContainerStyle} title={formatMessage({ id: 'sopheon' })}>
+              <SopheonLogo style={logoStyle} />
             </div>
           </Stack.Item>
           <Stack.Item>
