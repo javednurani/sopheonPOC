@@ -45,46 +45,4 @@ describe('Testing the App component', () => {
     const results = await axe(wrapper.getDOMNode());
     expect(results).toHaveNoViolations();
   });
-  it('App snapshot light theme render test', () => {
-    const appProps: AppProps = {
-      changeTheme: jest.fn(),
-      setEnvironmentKey: jest.fn(),
-    };
-
-    const tree = mount(
-      <ThemeProvider applyTo="body" theme={lightTheme}>
-        <IntlProvider locale="en" messages={messages.en}>
-          <App {...appProps} />
-        </IntlProvider>
-      </ThemeProvider>
-    );
-
-    expect(
-      toJson(tree, {
-        noKey: false,
-        mode: 'deep',
-      })
-    ).toMatchSnapshot();
-  });
-  it('App snapshot dark theme render test', () => {
-    const appProps: AppProps = {
-      changeTheme: jest.fn(),
-      setEnvironmentKey: jest.fn(),
-    };
-
-    const tree = mount(
-      <ThemeProvider applyTo="body" theme={darkTheme}>
-        <IntlProvider locale="en" messages={messages.en}>
-          <App {...appProps} />
-        </IntlProvider>
-      </ThemeProvider>
-    );
-
-    expect(
-      toJson(tree, {
-        noKey: false,
-        mode: 'deep',
-      })
-    ).toMatchSnapshot();
-  });
 });

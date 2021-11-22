@@ -13,7 +13,7 @@ import {
   TextField,
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import { CreateProductAction, UpdateProductAction } from '../product/productReducer';
 import { CreateUpdateProductDto, Product } from '../types';
@@ -229,8 +229,8 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
         </Stack.Item>
         <Stack.Item>
           <PrimaryButton
-            text={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
-            aria-label={currentStep === 2 ? formatMessage({ id: 'continue' }) : formatMessage({ id: 'getStarted' })}
+            text={formatMessage({ id: 'continue' })}
+            aria-label={formatMessage({ id: 'continue' })}
             onClick={handleOnboardingContinueClick}
             style={buttonStyles}
             disabled={continueDisabled}
@@ -301,8 +301,8 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
   }
 
   return (
-    <Stack horizontalAlign="center">
-      <h1>Fall-through / Default OnboardingInfo.tsx : Invalid State...are you lost?</h1>
+    <Stack className="badStep" horizontalAlign="center">
+      <FormattedMessage id="error.erroroccurred" />
     </Stack>
   );
 };
