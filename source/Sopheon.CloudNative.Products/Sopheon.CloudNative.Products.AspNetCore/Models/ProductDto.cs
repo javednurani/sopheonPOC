@@ -41,7 +41,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
    {
       //public int Id { get; set; }
 
-      //public IntAttributeValueDto[] IntAttributeValues { get; set; }
+      //public Int32AttributeValueDto[] IntAttributeValues { get; set; }
 
       //public StringAttributeValueDto[] StringAttributeValues { get; set; }
 
@@ -75,7 +75,6 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
    public class ProductPostDto
    {
       public string Name { get; set; }
-
-      public string Description { get; set; }
+      public List<Int32AttributeValueDto> IntAttributeValues { get; set; }
    }
 }
