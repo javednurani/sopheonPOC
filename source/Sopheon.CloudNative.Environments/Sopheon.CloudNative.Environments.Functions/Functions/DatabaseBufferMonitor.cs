@@ -18,7 +18,7 @@ namespace Sopheon.CloudNative.Environments.Functions
          _configuration = configuration;
       }
 
-      [Function(nameof(DatabaseBufferMonitor))]
+      //[Function(nameof(DatabaseBufferMonitor))]
       public async Task Run(
          [TimerTrigger("%DatabaseBufferTimer%")] TimerInfo myTimer,
          [BlobInput(StringConstants.ELASTICPOOL_DATABASE_BUFFER_BLOB_PATH)] string jsonTemplateData, // TODO: Experiment with connection parameter and secrets to always reference azure blob storage

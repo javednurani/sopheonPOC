@@ -81,6 +81,7 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
             ILogger log)
         {
             string resourceGroupName = context.GetInput<string>();
+            // TODO: Should be able to use _configuration here as we AddEnvironmentVariables on Startup.cs Line:25
             string sqlServerName = Environment.GetEnvironmentVariable("AzSqlServerName");
             string adminLoginEnigma = _configuration["SqlServerAdminEnigma"]; // Pull admin enigma from app config (user secrets or key vault)
 
