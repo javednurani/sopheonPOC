@@ -22,7 +22,7 @@ import { ReactComponent as TechIndustry } from './images/industryico_Tech.svg';
 import { ReactComponent as TeleIndustry } from './images/industryico_Tele.svg';
 import { ReactComponent as TransIndustry } from './images/industryico_Trans.svg';
 import OnboardingInfo from './onboarding/onboardingInfo';
-import { EnvironmentScopedApiRequestDto } from './types';
+import { EnvironmentScopedApiRequestModel } from './types';
 
 export type Props = AppProps<AppStateProps, AppDispatchProps>;
 
@@ -69,7 +69,7 @@ const App: React.FunctionComponent<Props> = ({
 }: Props) => {
   useEffect(() => {
     if (accessToken && getProductsFetchStatus === FetchStatus.NotActive) {
-      const requestDto: EnvironmentScopedApiRequestDto = {
+      const requestDto: EnvironmentScopedApiRequestModel = {
         EnvironmentKey: environmentKey || '',
         AccessToken: accessToken,
       };

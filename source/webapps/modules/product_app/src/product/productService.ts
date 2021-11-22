@@ -1,14 +1,14 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 import { settings } from '../settings';
-import { CreateUpdateProductModel, EnvironmentScopedApiRequestDto, Product } from '../types';
+import { CreateUpdateProductModel, EnvironmentScopedApiRequestModel, Product } from '../types';
 
 const API_URL_BASE: string = settings.ProductManagementApiUrlBase;
 const API_URL_PATH_GET_PRODUCT: string = settings.getProductsUrlPath;
 const API_URL_PATH_CREATE_PRODUCT: string = settings.CreateProductUrlPath;
 const API_URL_PATH_UPDATE_PRODUCT: string = settings.UpdateProductUrlPath;
 
-export const getProducts: (requestDto: EnvironmentScopedApiRequestDto) => Promise<Product[]> = async requestDto => {
+export const getProducts: (requestDto: EnvironmentScopedApiRequestModel) => Promise<Product[]> = async requestDto => {
   const getProductsUrlWithEnvironment = `${API_URL_BASE}${API_URL_PATH_GET_PRODUCT}`
     .replace(settings.TokenEnvironmentKey, requestDto.EnvironmentKey);
 

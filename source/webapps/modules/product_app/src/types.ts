@@ -11,9 +11,9 @@ export interface Product {
 
 export type CreateUpdateProductModel = {
   Product: Product;
-} & EnvironmentScopedApiRequestDto;
+} & EnvironmentScopedApiRequestModel;
 
-export type EnvironmentScopedApiRequestDto = {
+export type EnvironmentScopedApiRequestModel = {
   EnvironmentKey: string;
   AccessToken: string;
 }
