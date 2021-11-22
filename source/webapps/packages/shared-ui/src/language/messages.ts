@@ -34,7 +34,7 @@ export const messages: Record<string, Record<string, string>> = {
     'next': 'next',
     'continue': 'Continue',
     'getStarted': 'Get Started!',
-    'lucy': 'Lucy',
+    'sopheon': 'Sopheon',
     'defaultTitle': 'Template Title',
     'error.erroroccurred': 'An Error Occurred',
     'error.componentmissing': 'Component could not be loaded.',
