@@ -8,8 +8,9 @@ import {
 import { Reducer } from 'redux';
 
 import {
-  CreateUpdateProductDto,
-  EnvironmentScopedApiRequestDto,
+  CreateProductModel,
+  CreateUpdateProductModel,
+  EnvironmentScopedApiRequestModel,
   Product
 } from '../types';
 
@@ -65,9 +66,9 @@ export enum ProductSagaActionTypes {
   GET_PRODUCTS = 'PRODUCT/PRODUCT/GET_PRODUCTS'
 }
 
-export type GetProductsAction = PayloadAction<ProductSagaActionTypes.GET_PRODUCTS, EnvironmentScopedApiRequestDto>;
-export type CreateProductAction = PayloadAction<ProductSagaActionTypes.CREATE_PRODUCT, CreateUpdateProductDto>;
-export type UpdateProductAction = PayloadAction<ProductSagaActionTypes.UPDATE_PRODUCT, CreateUpdateProductDto>;
+export type GetProductsAction = PayloadAction<ProductSagaActionTypes.GET_PRODUCTS, EnvironmentScopedApiRequestModel>;
+export type CreateProductAction = PayloadAction<ProductSagaActionTypes.CREATE_PRODUCT, CreateProductModel>;
+export type UpdateProductAction = PayloadAction<ProductSagaActionTypes.UPDATE_PRODUCT, CreateUpdateProductModel>;
 
 
 //#endregion
@@ -96,9 +97,9 @@ export const updateProductFailure = (error: Error): UpdateProductFailureAction =
 
 // SAGA ACTIONS
 
-export const getProducts = (requestDto: EnvironmentScopedApiRequestDto): GetProductsAction => createPayloadAction(ProductSagaActionTypes.GET_PRODUCTS, requestDto);
-export const createProduct = (product: CreateUpdateProductDto): CreateProductAction => createPayloadAction(ProductSagaActionTypes.CREATE_PRODUCT, product);
-export const updateProduct = (product: CreateUpdateProductDto): UpdateProductAction => createPayloadAction(ProductSagaActionTypes.UPDATE_PRODUCT, product);
+export const getProducts = (requestDto: EnvironmentScopedApiRequestModel): GetProductsAction => createPayloadAction(ProductSagaActionTypes.GET_PRODUCTS, requestDto);
+export const createProduct = (product: CreateProductModel): CreateProductAction => createPayloadAction(ProductSagaActionTypes.CREATE_PRODUCT, product);
+export const updateProduct = (product: CreateUpdateProductModel): UpdateProductAction => createPayloadAction(ProductSagaActionTypes.UPDATE_PRODUCT, product);
 
 //#endregion
 

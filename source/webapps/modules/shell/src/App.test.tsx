@@ -1,7 +1,5 @@
-import { ThemeProvider } from '@fluentui/react-theme-provider';
-import { darkTheme, lightTheme, messages } from '@sopheon/shared-ui';
+import { messages } from '@sopheon/shared-ui';
 import { mount } from 'enzyme';
-import toJson from 'enzyme-to-json';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
@@ -17,6 +15,9 @@ describe('Testing the App component', () => {
     const appProps: AppProps = {
       changeTheme: jest.fn(),
       setEnvironmentKey: jest.fn(),
+      environmentKey: 'asdf',
+      headerFooterAreShown: true,
+      getAccessToken: jest.fn(),
     };
 
     const wrapper = mount(
@@ -25,7 +26,6 @@ describe('Testing the App component', () => {
       </IntlProvider>
     );
     expect(wrapper.find(Header)).toHaveLength(1);
-    expect(wrapper.find(Header).props()).toStrictEqual(appProps);
     expect(wrapper.find('main')).toHaveLength(1);
     expect(wrapper.find('main').getDOMNode()).toHaveAttribute('role', 'main');
     expect(wrapper.find(Footer)).toHaveLength(1);
@@ -34,6 +34,9 @@ describe('Testing the App component', () => {
     const appProps: AppProps = {
       changeTheme: jest.fn(),
       setEnvironmentKey: jest.fn(),
+      environmentKey: '',
+      headerFooterAreShown: true,
+      getAccessToken: jest.fn(),
     };
 
     const wrapper = mount(

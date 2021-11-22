@@ -46,27 +46,8 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                         new
                         {
                             AttributeId = -1,
-                            AttributeValueTypeId = 4,
-                            Name = "Net Present Value",
-                            ShortName = "NPV"
-                        },
-                        new
-                        {
-                            AttributeId = -2,
-                            AttributeValueTypeId = 1,
-                            Name = "Industry"
-                        },
-                        new
-                        {
-                            AttributeId = -3,
                             AttributeValueTypeId = 2,
-                            Name = "Risk Score"
-                        },
-                        new
-                        {
-                            AttributeId = -4,
-                            AttributeValueTypeId = 5,
-                            Name = "Initial Release Date"
+                            Name = "Industry"
                         });
                 });
 

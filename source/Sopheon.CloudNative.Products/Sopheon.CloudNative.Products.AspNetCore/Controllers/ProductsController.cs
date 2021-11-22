@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -82,13 +83,15 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
       {
          Product product = _mapper.Map<Product>(productPostDto);
 
+         product.Key = Guid.NewGuid().ToString();
+
          _ = await _dbContext.Products.AddAsync(product);
 
          _ = await _dbContext.SaveChangesAsync();
 
          ProductDto resultProduct = _mapper.Map<ProductDto>(product);
 
-         return Created("TODO_URI", resultProduct);
+         return Created("TODO_URI_GET_PRODUCT_BY_ID_ENDPOINT", resultProduct);
       }
    }
 }

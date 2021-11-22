@@ -10,8 +10,8 @@ using Sopheon.CloudNative.Products.Domain;
 namespace Sopheon.CloudNative.Products.DataAccess.Migrations
 {
     [DbContext(typeof(ProductManagementContext))]
-    [Migration("20211022164417_ProductItemType")]
-    partial class ProductItemType
+    [Migration("20211122171722_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -48,27 +48,8 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                         new
                         {
                             AttributeId = -1,
-                            AttributeValueTypeId = 4,
-                            Name = "Net Present Value",
-                            ShortName = "NPV"
-                        },
-                        new
-                        {
-                            AttributeId = -2,
-                            AttributeValueTypeId = 1,
-                            Name = "Industry"
-                        },
-                        new
-                        {
-                            AttributeId = -3,
                             AttributeValueTypeId = 2,
-                            Name = "Risk Score"
-                        },
-                        new
-                        {
-                            AttributeId = -4,
-                            AttributeValueTypeId = 5,
-                            Name = "Initial Release Date"
+                            Name = "Industry"
                         });
                 });
 

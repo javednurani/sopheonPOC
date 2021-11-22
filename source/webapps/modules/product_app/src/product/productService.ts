@@ -1,14 +1,14 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 import { settings } from '../settings';
-import { CreateUpdateProductDto, EnvironmentScopedApiRequestDto, Product } from '../types';
+import { CreateProductModel, CreateUpdateProductModel, EnvironmentScopedApiRequestModel, Product } from '../types';
 
 const API_URL_BASE: string = settings.ProductManagementApiUrlBase;
 const API_URL_PATH_GET_PRODUCT: string = settings.getProductsUrlPath;
 const API_URL_PATH_CREATE_PRODUCT: string = settings.CreateProductUrlPath;
 const API_URL_PATH_UPDATE_PRODUCT: string = settings.UpdateProductUrlPath;
 
-export const getProducts: (requestDto: EnvironmentScopedApiRequestDto) => Promise<Product[]> = async requestDto => {
+export const getProducts: (requestDto: EnvironmentScopedApiRequestModel) => Promise<Product[]> = async requestDto => {
   const getProductsUrlWithEnvironment = `${API_URL_BASE}${API_URL_PATH_GET_PRODUCT}`
     .replace(settings.TokenEnvironmentKey, requestDto.EnvironmentKey);
 
@@ -21,20 +21,20 @@ export const getProducts: (requestDto: EnvironmentScopedApiRequestDto) => Promis
   return await axios.get(getProductsUrlWithEnvironment, config);
 };
 
-export const createProduct: (productDto: CreateUpdateProductDto) => Promise<Product> = async productDto => {
+export const createProduct: (productDto: CreateProductModel) => Promise<Product> = async createProductModel => {
   const createProductUrlWithEnvironment = `${API_URL_BASE}${API_URL_PATH_CREATE_PRODUCT}`
-    .replace(settings.TokenEnvironmentKey, productDto.EnvironmentKey);
+    .replace(settings.TokenEnvironmentKey, createProductModel.EnvironmentKey);
 
   const config: AxiosRequestConfig = {
     headers: {
-      'Authorization': `Bearer ${productDto.AccessToken}`
+      'Authorization': `Bearer ${createProductModel.AccessToken}`
     }
   };
 
-  return await axios.post(createProductUrlWithEnvironment, productDto.Product, config);
+  return await axios.post(createProductUrlWithEnvironment, createProductModel.Product, config);
 };
 
-export const updateProduct: (productDto: CreateUpdateProductDto) => Promise<Product> = async productDto => {
+export const updateProduct: (productDto: CreateUpdateProductModel) => Promise<Product> = async productDto => {
   const updateProductUrlWithEnvironment = `${API_URL_BASE}${API_URL_PATH_UPDATE_PRODUCT}`
     .replace(settings.TokenEnvironmentKey, productDto.EnvironmentKey)
     .replace(settings.TokenProductKey, productDto.Product.Key || ''); // TODO, nullable Key? null check ?

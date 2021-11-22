@@ -16,14 +16,14 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { CreateProductAction, UpdateProductAction } from '../product/productReducer';
-import { CreateUpdateProductDto, Product } from '../types';
+import { Attributes, CreateProductModel, CreateUpdateProductModel, Product, ProductPostDto } from '../types';
 import { NextStepAction } from './onboardingReducer';
 
 export interface IOnboardingInfoProps {
   currentStep: number;
   nextStep: () => NextStepAction;
-  createProduct: (product: CreateUpdateProductDto) => CreateProductAction;
-  updateProduct: (product: CreateUpdateProductDto) => UpdateProductAction;
+  createProduct: (product: CreateProductModel) => CreateProductAction;
+  updateProduct: (product: CreateUpdateProductModel) => UpdateProductAction;
   environmentKey: string;
   accessToken: string;
   products: Product[];
@@ -146,15 +146,15 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
   };
 
   const handleOnboardingContinueClick = () => {
-    const productData: Product = {
-      Key: null,
+    const productData: ProductPostDto = {
       Name: productName,
-      Industries: industryKeys,
-      Goals: [],
-      KPIs: [],
+      IntAttributeValues: industryKeys.map(ik => ({
+        AttributeId: Attributes.INDUSTRIES,
+        Value: ik,
+      })),
     };
 
-    const createProductDto: CreateUpdateProductDto = {
+    const createProductDto: CreateProductModel = {
       Product: productData,
       EnvironmentKey: environmentKey,
       AccessToken: accessToken,
@@ -174,6 +174,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
 
   const handleOnboardingGetStartedClick = () => {
     const productData: Product = {
+      Id: null,
       Key: products[0].Key, // TODO: confirm, trusting that state.products will have exactly 1 element at this point in onboarding?
       Name: productName, // TODO: PATCH endpoint behavior for partial updates.  don't include fields in Request Body?
       Industries: [], // TODO: PATCH endpoint behavior for partial updates.  don't include fields in Request Body?
@@ -181,7 +182,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
       KPIs: kpi.split(','), // TODO SANITIZE USER KPI INPUT, also: confirm comma-seperated UI, and PatchDto KPI format
     };
 
-    const updateProductDto: CreateUpdateProductDto = {
+    const updateProductDto: CreateUpdateProductModel = {
       Product: productData,
       EnvironmentKey: environmentKey,
       AccessToken: accessToken,
