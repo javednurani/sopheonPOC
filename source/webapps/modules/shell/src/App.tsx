@@ -1,12 +1,10 @@
-import { useIsAuthenticated } from '@azure/msal-react';
 import { initializeIcons, registerIcons, ScrollablePane, ScrollbarVisibility, Stack } from '@fluentui/react';
 import { useTheme } from '@fluentui/react-theme-provider';
-import { EnvironmentScopedApiRequestDto, FetchStatus, GetProductsAction, Product } from '@sopheon/shell-api';
-import React, { CSSProperties, FunctionComponent, useEffect } from 'react';
+import { GetAccessTokenAction } from '@sopheon/shell-api';
+import React, { CSSProperties, FunctionComponent } from 'react';
 import { useIntl } from 'react-intl';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import { getAccessToken } from './authentication/authHelpers';
 import { SetEnvironmentKeyAction } from './authentication/authReducer';
 import IdleMonitor from './authentication/IdleMonitor';
 import Login from './authentication/Login';
@@ -23,40 +21,12 @@ export interface AppProps {
   changeTheme: (useDarkTheme: boolean) => ChangeThemeAction;
   setEnvironmentKey: (environmentKey: string) => SetEnvironmentKeyAction;
   environmentKey: string | null;
-  products: Product[];
-  getProductsFetchStatus: FetchStatus;
-  getProducts: (requestDto: EnvironmentScopedApiRequestDto) => GetProductsAction;
+  headerFooterAreShown: boolean;
+  getAccessToken: () => GetAccessTokenAction;
 }
 
-const App: FunctionComponent<AppProps> = ({
-  changeTheme,
-  setEnvironmentKey,
-  environmentKey,
-  products,
-  getProductsFetchStatus,
-  getProducts,
-}: AppProps) => {
+const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, headerFooterAreShown, getAccessToken }: AppProps) => {
   const { formatMessage } = useIntl();
-  const isAuthenticated = useIsAuthenticated();
-
-  useEffect(() => {
-    // get any Products for logged in User
-    if (environmentKey && getProductsFetchStatus === FetchStatus.NotActive) {
-      // TODO, use isAuthenticated ?
-      getAccessToken().then(token => {
-        const requestDto: EnvironmentScopedApiRequestDto = {
-          EnvironmentKey: environmentKey || '',
-          AccessToken: token,
-        };
-
-        getProducts(requestDto);
-      });
-    }
-  }, [environmentKey, getProductsFetchStatus]);
-
-  const userHasProduct: boolean = products && products.length > 0;
-
-  const userIsOnboardingProductApp = location.pathname.includes('product') && isAuthenticated && !userHasProduct;
 
   const loadingMessage: string = formatMessage({ id: 'fallback.loading' });
   useTheme();
@@ -85,6 +55,12 @@ const App: FunctionComponent<AppProps> = ({
     height: '100%',
   };
 
+  const hideHeaderFooterStyle = {
+    root: {
+      height: '0'
+    }
+  };
+
   return (
     <div className="App" style={appStyle}>
       <BrowserRouter>
@@ -105,11 +81,10 @@ const App: FunctionComponent<AppProps> = ({
                 },
               }}
             >
-              {!userIsOnboardingProductApp && (
-                <Stack.Item>
-                  <Header changeTheme={changeTheme} setEnvironmentKey={setEnvironmentKey} />
-                </Stack.Item>
-              )}
+              <Stack.Item styles={headerFooterAreShown ? {} : hideHeaderFooterStyle}>
+                <Header changeTheme={changeTheme} setEnvironmentKey={setEnvironmentKey} getAccessToken={getAccessToken} />
+              </Stack.Item>
+
               <Stack.Item shrink>
                 <IdleMonitor />
               </Stack.Item>
@@ -119,6 +94,8 @@ const App: FunctionComponent<AppProps> = ({
                   root: {
                     height: '100%',
                     overflow: 'auto',
+                    backgroundColor: 'white',
+                    zIndex: '9999'
                   },
                 }}
               >
@@ -134,12 +111,9 @@ const App: FunctionComponent<AppProps> = ({
                   </ScrollablePane>
                 </main>
               </Stack.Item>
-              {/* Only hide Header/Footer for Product Onboarding (when on /product page, is authenticated, but does NOT have a product) */}
-              {!userIsOnboardingProductApp && (
-                <Stack.Item>
-                  <Footer />
-                </Stack.Item>
-              )}
+              <Stack.Item>
+                <Footer showFooter={headerFooterAreShown}/>
+              </Stack.Item>
             </Stack>
           </Route>
         </Switch>

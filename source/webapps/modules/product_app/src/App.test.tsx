@@ -7,7 +7,7 @@ import React from 'react';
 import { IntlProvider } from 'react-intl';
 
 import App, { Props } from './App';
-import OnboardingInfo from './onboardingInfo';
+import OnboardingInfo from './onboarding/onboardingInfo';
 
 expect.extend(toHaveNoViolations);
 
@@ -16,12 +16,15 @@ describe.skip('Testing the App component', () => {
     const appProps: Props = {
       currentStep: 1,
       nextStep: jest.fn(),
-      createProduct: jest.fn(),
-      updateProduct: jest.fn(),
-      products: [],
       environmentKey: '',
       getAccessToken: jest.fn(),
       accessToken: '',
+      showHeaderFooter: jest.fn(),
+      hideHeaderFooter: jest.fn(),
+      products: [],
+      getProducts: jest.fn(),
+      createProduct: jest.fn(),
+      updateProduct: jest.fn(),
     };
 
     const wrapper = mount(
@@ -38,12 +41,15 @@ describe.skip('Testing the App component', () => {
     const appProps: Props = {
       currentStep: 1,
       nextStep: jest.fn(),
-      createProduct: jest.fn(),
-      updateProduct: jest.fn(),
-      products: [],
       environmentKey: '',
       getAccessToken: jest.fn(),
       accessToken: '',
+      showHeaderFooter: jest.fn(),
+      hideHeaderFooter: jest.fn(),
+      products: [],
+      getProducts: jest.fn(),
+      createProduct: jest.fn(),
+      updateProduct: jest.fn(),
     };
 
     const wrapper = mount(
@@ -63,9 +69,16 @@ describe.skip('Testing the App component', () => {
   it('App snapshot render test', () => {
     const appProps: Props = {
       currentStep: 1,
+      nextStep: jest.fn(),
+      environmentKey: '',
+      getAccessToken: jest.fn(),
+      accessToken: '',
+      showHeaderFooter: jest.fn(),
+      hideHeaderFooter: jest.fn(),
+      products: [],
+      getProducts: jest.fn(),
       createProduct: jest.fn(),
       updateProduct: jest.fn(),
-      environmentKey: '',
     };
 
     const tree = mount(

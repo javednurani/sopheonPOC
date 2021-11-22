@@ -1,5 +1,6 @@
 import { IStackTokens, Stack, Sticky, StickyPositionType } from '@fluentui/react';
 import { useTheme } from '@fluentui/react-theme-provider';
+import { GetAccessTokenAction } from '@sopheon/shell-api';
 import React, { FunctionComponent } from 'react';
 import { useIntl } from 'react-intl';
 import { useLocation } from 'react-router-dom';
@@ -15,9 +16,10 @@ import { ChangeThemeAction } from '../themes/themeReducer/themeReducer';
 interface HeaderProps {
   changeTheme: (useDarkTheme: boolean) => ChangeThemeAction;
   setEnvironmentKey: (environmentKey: string) => SetEnvironmentKeyAction;
+  getAccessToken: () => GetAccessTokenAction;
 }
 
-const Header: FunctionComponent<HeaderProps> = ({ changeTheme, setEnvironmentKey }: HeaderProps) => {
+const Header: FunctionComponent<HeaderProps> = ({ changeTheme, setEnvironmentKey, getAccessToken }: HeaderProps) => {
   const { formatMessage } = useIntl();
   const location = useLocation();
   const theme = useTheme();
@@ -74,7 +76,7 @@ const Header: FunctionComponent<HeaderProps> = ({ changeTheme, setEnvironmentKey
           <Stack.Item>
             <Stack tokens={stackTokensWithGap}>
               <Stack.Item>
-                <LoginSignupButton setEnvironmentKey={setEnvironmentKey} />
+                <LoginSignupButton setEnvironmentKey={setEnvironmentKey} getAccessToken={getAccessToken}/>
               </Stack.Item>
               <Stack.Item>
                 <ThemeSelector changeTheme={changeTheme} />

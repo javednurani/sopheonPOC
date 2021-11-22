@@ -1,5 +1,5 @@
 import { registerIcons, Stack } from '@fluentui/react';
-import { AppProps } from '@sopheon/shell-api';
+import { AppProps, FetchStatus } from '@sopheon/shell-api';
 import React, { useEffect } from 'react';
 
 import { AppDispatchProps, AppStateProps } from './AppContainer';
@@ -21,7 +21,8 @@ import { ReactComponent as ServicesIndustry } from './images/industryico_Service
 import { ReactComponent as TechIndustry } from './images/industryico_Tech.svg';
 import { ReactComponent as TeleIndustry } from './images/industryico_Tele.svg';
 import { ReactComponent as TransIndustry } from './images/industryico_Trans.svg';
-import OnboardingInfo from './onboardingInfo';
+import OnboardingInfo from './onboarding/onboardingInfo';
+import { EnvironmentScopedApiRequestDto } from './types';
 
 export type Props = AppProps<AppStateProps, AppDispatchProps>;
 
@@ -59,15 +60,31 @@ const App: React.FunctionComponent<Props> = ({
   createProduct,
   updateProduct,
   products,
+  getProducts,
+  getProductsFetchStatus,
   environmentKey,
-  getAccessToken,
   accessToken,
+  hideHeaderFooter,
+  showHeaderFooter,
 }: Props) => {
   useEffect(() => {
-    // getAccessToken triggers Shell action to store access token, freshly acquired from MSAL, in Redux state
-    // after getAccessToken is called (here, on ProductApp render), shellApi::accessToken should be up-to-date access token from MSAL.acquireTokenSilent()
-    getAccessToken();
-  }, []);
+    if (accessToken && getProductsFetchStatus === FetchStatus.NotActive) {
+      const requestDto: EnvironmentScopedApiRequestDto = {
+        EnvironmentKey: environmentKey || '',
+        AccessToken: accessToken,
+      };
+
+      getProducts(requestDto);
+    }
+  }, [accessToken, getProductsFetchStatus]);
+
+  useEffect(() => {
+    if ((products.length === 0 && environmentKey) || (currentStep === 3 && products.length === 1)) {
+      hideHeaderFooter();
+    } else {
+      showHeaderFooter();
+    }
+  }, [products, environmentKey]);
 
   return (
     <div>

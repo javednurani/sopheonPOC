@@ -1,6 +1,7 @@
 import { AccountInfo } from '@azure/msal-browser';
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
 import { DefaultButton, IContextualMenuProps } from '@fluentui/react';
+import { GetAccessTokenAction } from '@sopheon/shell-api';
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
@@ -9,9 +10,10 @@ import { SetEnvironmentKeyAction } from './authReducer';
 
 export interface ILoginSignupButtonProps {
   setEnvironmentKey: (environmentKey: string) => SetEnvironmentKeyAction;
+  getAccessToken: () => GetAccessTokenAction;
 }
 
-const LoginSignupButton: FunctionComponent<ILoginSignupButtonProps> = ({ setEnvironmentKey }: ILoginSignupButtonProps) => {
+const LoginSignupButton: FunctionComponent<ILoginSignupButtonProps> = ({ setEnvironmentKey, getAccessToken }: ILoginSignupButtonProps) => {
   const { formatMessage } = useIntl();
   const { instance, accounts } = useMsal();
 
@@ -24,6 +26,7 @@ const LoginSignupButton: FunctionComponent<ILoginSignupButtonProps> = ({ setEnvi
         setEnvironmentKey(msalAccount.idTokenClaims.extension_environmentKey);
       }
       setAccount(msalAccount);
+      getAccessToken();
     }
   }, [instance, accounts]);
 

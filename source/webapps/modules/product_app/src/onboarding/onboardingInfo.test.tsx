@@ -4,7 +4,7 @@ import { mount } from 'enzyme';
 import React from 'react';
 import { FormattedMessage, IntlProvider } from 'react-intl';
 
-import { Props } from './App';
+import { Props } from '../App';
 import OnboardingInfo from './onboardingInfo';
 
 describe.skip('Testing the onboardingInfo component', () => {
