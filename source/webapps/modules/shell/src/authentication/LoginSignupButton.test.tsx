@@ -22,7 +22,7 @@ afterEach(() => {
 describe('Test Unauthenticated LoginSignupButton component', () => {
   test('button renders correctly and a11y compliant', async () => {
     // Arrange
-    const sut: ReactElement = <LoginSignupButton setEnvironmentKey={jest.fn()} />;
+    const sut: ReactElement = <LoginSignupButton setEnvironmentKey={jest.fn()} getAccessToken={jest.fn()} />;
     const initialState: RootState = getInitState({});
 
     // Act
@@ -50,7 +50,7 @@ describe('Test Unauthenticated LoginSignupButton component', () => {
     render(
       <MsalProvider instance={pca}>
         <IntlProvider locale="en" messages={messages.en}>
-          <LoginSignupButton setEnvironmentKey={jest.fn()} />
+          <LoginSignupButton setEnvironmentKey={jest.fn()} getAccessToken={jest.fn()} />
         </IntlProvider>
       </MsalProvider>
     );
@@ -75,7 +75,7 @@ describe('Test Authenticated LoginSignupButton component', () => {
       <MsalProvider instance={pca}>
         <IntlProvider locale="en" messages={messages.en}>
           <p>This text will always display.</p>
-          <LoginSignupButton setEnvironmentKey={jest.fn()} />
+          <LoginSignupButton setEnvironmentKey={jest.fn()} getAccessToken={jest.fn()} />
         </IntlProvider>
       </MsalProvider>
     );
@@ -107,7 +107,7 @@ describe('Test Authenticated LoginSignupButton component', () => {
       <MsalProvider instance={pca}>
         <IntlProvider locale="en" messages={messages.en}>
           <p>This text will always display.</p>
-          <LoginSignupButton setEnvironmentKey={jest.fn()} />
+          <LoginSignupButton setEnvironmentKey={jest.fn()} getAccessToken={jest.fn()} />
         </IntlProvider>
       </MsalProvider>
     );
@@ -139,7 +139,7 @@ describe('Test Authenticated LoginSignupButton component', () => {
       <MsalProvider instance={pca}>
         <IntlProvider locale="en" messages={messages.en}>
           <p>This text will always display.</p>
-          <LoginSignupButton setEnvironmentKey={jest.fn()} />
+          <LoginSignupButton setEnvironmentKey={jest.fn()} getAccessToken={jest.fn()} />
         </IntlProvider>
       </MsalProvider>
     );
@@ -170,7 +170,7 @@ describe('Test Authenticated LoginSignupButton component', () => {
       <MsalProvider instance={pca}>
         <IntlProvider locale="en" messages={messages.en}>
           <p>This text will always display.</p>
-          <LoginSignupButton setEnvironmentKey={jest.fn()} />
+          <LoginSignupButton setEnvironmentKey={jest.fn()} getAccessToken={jest.fn()} />
         </IntlProvider>
       </MsalProvider>
     );

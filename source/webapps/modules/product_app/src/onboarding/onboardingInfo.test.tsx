@@ -4,19 +4,24 @@ import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { Props } from '../App';
-import OnboardingInfo from './onboardingInfo';
+import { Product } from '../types';
+import OnboardingInfo, { IOnboardingInfoProps } from './onboardingInfo';
 
 describe('Testing the onboardingInfo component', () => {
   it('step 2 renders correctly', async () => {
-    const appProps: Props = {
+    const componentProps: IOnboardingInfoProps = {
       currentStep: 2,
       nextStep: jest.fn(),
+      createProduct: jest.fn(),
+      updateProduct: jest.fn(),
+      environmentKey: 'asdf',
+      accessToken: '',
+      products: [],
     };
 
     render(
       <IntlProvider locale="en" messages={messages.en}>
-        <OnboardingInfo currentStep={appProps.currentStep} nextStep={appProps.nextStep} />
+        <OnboardingInfo {...componentProps} />
       </IntlProvider>
     );
 
@@ -40,14 +45,28 @@ describe('Testing the onboardingInfo component', () => {
     expect(continueButton).toBeDisabled();
   });
   it('step 3 components render correctly', async () => {
-    const appProps: Props = {
+    const product: Product = {
+      Id: 1,
+      Key: 'key',
+      Name: 'name',
+      Industries: [1, 2, 3],
+      Goals: [],
+      KPIs: [],
+    };
+
+    const componentProps: IOnboardingInfoProps = {
       currentStep: 3,
       nextStep: jest.fn(),
+      createProduct: jest.fn(),
+      updateProduct: jest.fn(),
+      environmentKey: 'asdf',
+      accessToken: '',
+      products: [product],
     };
 
     render(
       <IntlProvider locale="en" messages={messages.en}>
-        <OnboardingInfo currentStep={appProps.currentStep} nextStep={appProps.nextStep} />
+        <OnboardingInfo {...componentProps} />
       </IntlProvider>
     );
     const goalTextField: HTMLElement = screen.getByLabelText(messages.en['onboarding.productgoal']);
@@ -62,13 +81,27 @@ describe('Testing the onboardingInfo component', () => {
     ).not.toBeDisabled();
   });
   it('next step function fires on button click', () => {
-    const appProps: Props = {
+    const product: Product = {
+      Id: 1,
+      Key: 'key',
+      Name: 'name',
+      Industries: [1, 2, 3],
+      Goals: [],
+      KPIs: [],
+    };
+
+    const componentProps: IOnboardingInfoProps = {
       currentStep: 3,
       nextStep: jest.fn(),
+      createProduct: jest.fn(),
+      updateProduct: jest.fn(),
+      environmentKey: 'asdf',
+      accessToken: '',
+      products: [product],
     };
     render(
       <IntlProvider locale="en" messages={messages.en}>
-        <OnboardingInfo currentStep={appProps.currentStep} nextStep={appProps.nextStep} />
+        <OnboardingInfo {...componentProps} />
       </IntlProvider>
     );
     fireEvent.click(
@@ -76,6 +109,6 @@ describe('Testing the onboardingInfo component', () => {
         name: /Get Started!/i,
       })
     );
-    expect(appProps.nextStep).toHaveBeenCalled();
+    expect(componentProps.nextStep).toHaveBeenCalled();
   });
 });

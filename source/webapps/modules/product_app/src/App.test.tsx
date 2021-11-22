@@ -1,7 +1,6 @@
-import { Label } from '@fluentui/react';
 import { messages } from '@sopheon/shared-ui';
+import { FetchStatus } from '@sopheon/shell-api';
 import { mount } from 'enzyme';
-import toJson from 'enzyme-to-json';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
@@ -16,12 +15,13 @@ describe('Testing the App component', () => {
     const appProps: Props = {
       currentStep: 1,
       nextStep: jest.fn(),
-      environmentKey: '',
+      environmentKey: 'asdf',
       getAccessToken: jest.fn(),
       accessToken: '',
       showHeaderFooter: jest.fn(),
       hideHeaderFooter: jest.fn(),
       products: [],
+      getProductsFetchStatus: FetchStatus.NotActive,
       getProducts: jest.fn(),
       createProduct: jest.fn(),
       updateProduct: jest.fn(),
@@ -33,20 +33,19 @@ describe('Testing the App component', () => {
       </IntlProvider>
     );
 
-    expect(wrapper.find(Label)).toHaveLength(1);
     expect(wrapper.find(OnboardingInfo)).toHaveLength(1);
-    expect(wrapper.find(OnboardingInfo).props()).toStrictEqual(appProps);
   });
   it('Accessibility test for the App component', async () => {
     const appProps: Props = {
       currentStep: 1,
       nextStep: jest.fn(),
-      environmentKey: '',
+      environmentKey: 'asdf',
       getAccessToken: jest.fn(),
       accessToken: '',
       showHeaderFooter: jest.fn(),
       hideHeaderFooter: jest.fn(),
       products: [],
+      getProductsFetchStatus: FetchStatus.NotActive,
       getProducts: jest.fn(),
       createProduct: jest.fn(),
       updateProduct: jest.fn(),

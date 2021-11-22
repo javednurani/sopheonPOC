@@ -16,7 +16,7 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { CreateProductAction, UpdateProductAction } from '../product/productReducer';
-import { CreateProductModel, CreateUpdateProductModel, Product, ProductPostDto } from '../types';
+import { Attributes, CreateProductModel, CreateUpdateProductModel, Product, ProductPostDto } from '../types';
 import { NextStepAction } from './onboardingReducer';
 
 export interface IOnboardingInfoProps {
@@ -149,7 +149,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
     const productData: ProductPostDto = {
       Name: productName,
       IntAttributeValues: industryKeys.map(ik => ({
-        AttributeId: -1,
+        AttributeId: Attributes.INDUSTRIES,
         Value: ik,
       })),
     };
@@ -174,6 +174,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
 
   const handleOnboardingGetStartedClick = () => {
     const productData: Product = {
+      Id: null,
       Key: products[0].Key, // TODO: confirm, trusting that state.products will have exactly 1 element at this point in onboarding?
       Name: productName, // TODO: PATCH endpoint behavior for partial updates.  don't include fields in Request Body?
       Industries: [], // TODO: PATCH endpoint behavior for partial updates.  don't include fields in Request Body?

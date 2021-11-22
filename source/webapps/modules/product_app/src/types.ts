@@ -10,6 +10,11 @@ export interface Product {
   KPIs: string[];
 }
 
+// eslint-disable-next-line no-shadow
+export enum Attributes {
+  INDUSTRIES = -1,
+}
+
 export type CreateUpdateProductModel = {
   Product: Product;
 } & EnvironmentScopedApiRequestModel;

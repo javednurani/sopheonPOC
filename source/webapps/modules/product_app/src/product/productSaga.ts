@@ -1,6 +1,6 @@
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 
-import { Product } from '../types';
+import { Attributes, Product } from '../types';
 // eslint-disable-next-line max-len
 import {
   CreateProductAction,
@@ -43,10 +43,10 @@ export function* onCreateProduct(action: CreateProductAction): Generator {
     const { data } = yield call(createProduct, action.payload);
 
     const createdProduct: Product = {
-      Id: data.Id,
-      Key: data.Key,
-      Name: data.Name,
-      Industries: data.IntAttributeValues.filter(iav => iav.AttributeId === -1).map(iav => iav.Value),
+      Id: data.id,
+      Key: data.key,
+      Name: data.name,
+      Industries: data.intAttributeValues.filter(iav => iav.attributeId === Attributes.INDUSTRIES).map(iav => iav.value),
       Goals: [],
       KPIs: [],
     };
