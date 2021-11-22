@@ -16,13 +16,13 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { CreateProductAction, UpdateProductAction } from '../product/productReducer';
-import { CreateUpdateProductModel, Product } from '../types';
+import { CreateProductModel, CreateUpdateProductModel, Product, ProductPostDto } from '../types';
 import { NextStepAction } from './onboardingReducer';
 
 export interface IOnboardingInfoProps {
   currentStep: number;
   nextStep: () => NextStepAction;
-  createProduct: (product: CreateUpdateProductModel) => CreateProductAction;
+  createProduct: (product: CreateProductModel) => CreateProductAction;
   updateProduct: (product: CreateUpdateProductModel) => UpdateProductAction;
   environmentKey: string;
   accessToken: string;
@@ -146,15 +146,15 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
   };
 
   const handleOnboardingContinueClick = () => {
-    const productData: Product = {
-      Key: null,
+    const productData: ProductPostDto = {
       Name: productName,
-      Industries: industryKeys,
-      Goals: [],
-      KPIs: [],
+      IntAttributeValues: industryKeys.map(ik => ({
+        AttributeId: -1,
+        Value: ik,
+      })),
     };
 
-    const createProductDto: CreateUpdateProductModel = {
+    const createProductDto: CreateProductModel = {
       Product: productData,
       EnvironmentKey: environmentKey,
       AccessToken: accessToken,

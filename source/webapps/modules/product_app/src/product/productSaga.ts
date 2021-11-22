@@ -43,11 +43,12 @@ export function* onCreateProduct(action: CreateProductAction): Generator {
     const { data } = yield call(createProduct, action.payload);
 
     const createdProduct: Product = {
-      Key: data.id, // TODO, POST endpoint Resposne data ProductDto with Key GUID, data.key
-      Name: data.name,
-      Industries: [], // TODO connect to Response data
+      Id: data.Id,
+      Key: data.Key,
+      Name: data.Name,
+      Industries: data.IntAttributeValues.filter(iav => iav.AttributeId === -1).map(iav => iav.Value),
+      Goals: [],
       KPIs: [],
-      Goals: []
     };
 
     yield put(createProductSuccess(createdProduct));
