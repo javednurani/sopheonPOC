@@ -11,7 +11,7 @@ import { nextStep, NextStepAction } from './onboarding/onboardingReducer';
 import { createProduct, CreateProductAction, getProducts, GetProductsAction, updateProduct, UpdateProductAction } from './product/productReducer';
 import { NAMESPACE, rootReducer, RootState } from './rootReducer';
 import rootSaga from './rootSaga';
-import { CreateUpdateProductDto, EnvironmentScopedApiRequestDto, Product } from './types';
+import { CreateUpdateProductModel, EnvironmentScopedApiRequestDto, Product } from './types';
 
 export type AppStateProps = {
   currentStep: number;
@@ -22,8 +22,8 @@ export type AppStateProps = {
 export type AppDispatchProps = {
   nextStep: () => NextStepAction;
   getProducts: (requestDto: EnvironmentScopedApiRequestDto) => GetProductsAction;
-  createProduct: (product: CreateUpdateProductDto) => CreateProductAction;
-  updateProduct: (product: CreateUpdateProductDto) => UpdateProductAction;
+  createProduct: (product: CreateUpdateProductModel) => CreateProductAction;
+  updateProduct: (product: CreateUpdateProductModel) => UpdateProductAction;
 };
 
 const AppContainer: FunctionComponent<ShellApiProps> = ({ shellApi }: ShellApiProps) => {
@@ -36,8 +36,8 @@ const AppContainer: FunctionComponent<ShellApiProps> = ({ shellApi }: ShellApiPr
   const mapAppDispatchProps = (state: RootState): AppDispatchProps => ({
     nextStep: () => nextStep(),
     getProducts: (requestDto: EnvironmentScopedApiRequestDto) => getProducts(requestDto),
-    createProduct: (product: CreateUpdateProductDto) => createProduct(product),
-    updateProduct: (product: CreateUpdateProductDto) => updateProduct(product),
+    createProduct: (product: CreateUpdateProductModel) => createProduct(product),
+    updateProduct: (product: CreateUpdateProductModel) => updateProduct(product),
   });
 
   const appReducerMap: InjectReducerMap = {

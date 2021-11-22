@@ -16,14 +16,14 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { CreateProductAction, UpdateProductAction } from '../product/productReducer';
-import { CreateUpdateProductDto, Product } from '../types';
+import { CreateUpdateProductModel, Product } from '../types';
 import { NextStepAction } from './onboardingReducer';
 
 export interface IOnboardingInfoProps {
   currentStep: number;
   nextStep: () => NextStepAction;
-  createProduct: (product: CreateUpdateProductDto) => CreateProductAction;
-  updateProduct: (product: CreateUpdateProductDto) => UpdateProductAction;
+  createProduct: (product: CreateUpdateProductModel) => CreateProductAction;
+  updateProduct: (product: CreateUpdateProductModel) => UpdateProductAction;
   environmentKey: string;
   accessToken: string;
   products: Product[];
@@ -154,7 +154,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
       KPIs: [],
     };
 
-    const createProductDto: CreateUpdateProductDto = {
+    const createProductDto: CreateUpdateProductModel = {
       Product: productData,
       EnvironmentKey: environmentKey,
       AccessToken: accessToken,
@@ -181,7 +181,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
       KPIs: kpi.split(','), // TODO SANITIZE USER KPI INPUT, also: confirm comma-seperated UI, and PatchDto KPI format
     };
 
-    const updateProductDto: CreateUpdateProductDto = {
+    const updateProductDto: CreateUpdateProductModel = {
       Product: productData,
       EnvironmentKey: environmentKey,
       AccessToken: accessToken,

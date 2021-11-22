@@ -9,7 +9,7 @@ export interface Product {
   KPIs: string[];
 }
 
-export type CreateUpdateProductDto = {
+export type CreateUpdateProductModel = {
   Product: Product;
 } & EnvironmentScopedApiRequestDto;
 
