@@ -81,7 +81,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore
 
       services.AddAutoMapper(typeof(Startup));
 
-      services.AddControllers();
+      services.AddControllers().AddNewtonsoftJson();
 
       services.AddSwaggerGen(c =>
       {

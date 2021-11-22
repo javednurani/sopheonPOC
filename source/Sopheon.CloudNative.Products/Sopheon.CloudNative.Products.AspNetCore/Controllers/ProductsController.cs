@@ -14,84 +14,97 @@ using Sopheon.CloudNative.Products.Domain;
 
 namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
 {
-   public class ProductsController : EnvironmentScopedControllerBase
-   {
-      private readonly ILogger<ProductsController> _logger;
-      private readonly ProductManagementContext _dbContext;
-      private readonly IMapper _mapper;
+    public class ProductsController : EnvironmentScopedControllerBase
+    {
+        private readonly ILogger<ProductsController> _logger;
+        private readonly ProductManagementContext _dbContext;
+        private readonly IMapper _mapper;
 
-      public ProductsController(ILogger<ProductsController> logger,
-         ProductManagementContext dbContext,
-         IMapper mapper)
-      {
-         _logger = logger;
-         _dbContext = dbContext;
-         _mapper = mapper;
-      }
+        public ProductsController(ILogger<ProductsController> logger,
+           ProductManagementContext dbContext,
+           IMapper mapper)
+        {
+            _logger = logger;
+            _dbContext = dbContext;
+            _mapper = mapper;
+        }
 
-      [ProducesResponseType(StatusCodes.Status200OK)]
-      [HttpGet]
-      public async Task<IEnumerable<ProductDto>> Get()
-      {
-         var query = _dbContext.Products
-               .AsNoTracking()
-               .ProjectTo<ProductDto>(_mapper.ConfigurationProvider);
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpGet]
+        public async Task<IEnumerable<ProductDto>> Get()
+        {
+            var query = _dbContext.Products
+                  .AsNoTracking()
+                  .ProjectTo<ProductDto>(_mapper.ConfigurationProvider);
 
-         return await query.ToArrayAsync();
-      }
+            return await query.ToArrayAsync();
+        }
 
-      [HttpGet("{key}/Items")]
-      public async Task<IActionResult> GetItems(string key)
-      {
-         var query = _dbContext.Products
-             .AsNoTracking()
-             .Where(p => p.Key == key)
-             .Select(p => p.Items)
-             .ProjectTo<ProductItemDto>(_mapper.ConfigurationProvider);
+        [HttpGet("{key}")]
+        public async Task<IActionResult> GetByKey(string key)
+        {
+            var product = await _dbContext.Products
+                .Include(p => p.Goals)
+                .Include(p => p.KeyPerformanceIndicators)
+                .AsNoTracking()
+                .SingleOrDefaultAsync(p => p.Key == key);
 
-         var results = await query.ToArrayAsync();
-         return Ok(results);
-      }
+            if (product == null) { return NotFound(); }
 
-      [HttpPatch("{key}")]
-      public async Task<IActionResult> Patch(string key, [FromBody] JsonPatchDocument<ProductPatchDto> patchDocument)
-      {
-         if (patchDocument.Operations.Count == 0)
-         {
+            return Ok(_mapper.Map<ProductDto>(product));
+        }
+
+        [HttpGet("{key}/Items")]
+        public async Task<IActionResult> GetItems(string key)
+        {
+            var query = _dbContext.Products
+                .AsNoTracking()
+                .Where(p => p.Key == key)
+                .Select(p => p.Items)
+                .ProjectTo<ProductItemDto>(_mapper.ConfigurationProvider);
+
+            var results = await query.ToArrayAsync();
+            return Ok(results);
+        }
+
+        [HttpPatch("{key}")]
+        public async Task<IActionResult> Patch(string key, [FromBody] JsonPatchDocument<ProductPatchDto> patchDocument)
+        {
+            if (patchDocument.Operations.Count == 0)
+            {
+                return NoContent();
+            }
+
+            var test = await _dbContext.Products.ToListAsync();
+            Product productFromDatabase = await _dbContext.Products.SingleOrDefaultAsync(p => p.Key == key);
+            if (productFromDatabase == null)
+            {
+                return NotFound();
+            }
+
+            ProductPatchDto productDto = _mapper.Map<ProductPatchDto>(productFromDatabase);
+
+            patchDocument.ApplyTo(productDto); //Apply the patch to that DTO. 
+            _mapper.Map(productDto, productFromDatabase); //Use automapper to map the DTO back ontop of the database object. 
+
+            await _dbContext.SaveChangesAsync();
+
             return NoContent();
-         }
+        }
 
-         var test = await _dbContext.Products.ToListAsync();
-         Product productFromDatabase = await _dbContext.Products.SingleOrDefaultAsync(p => p.Key == key);
-         if (productFromDatabase == null)
-         {
-            return NotFound();
-         }
+        [HttpPost]
+        public async Task<IActionResult> PostAsync([FromBody] ProductPostDto productPostDto)
+        {
+            Product product = _mapper.Map<Product>(productPostDto);
+            product.Key = Guid.NewGuid().ToString();
 
-         ProductPatchDto productDto = _mapper.Map<ProductPatchDto>(productFromDatabase);
+            await _dbContext.Products.AddAsync(product);
 
-         patchDocument.ApplyTo(productDto); //Apply the patch to that DTO. 
-         _mapper.Map(productDto, productFromDatabase); //Use automapper to map the DTO back ontop of the database object. 
+            await _dbContext.SaveChangesAsync();
 
-         await _dbContext.SaveChangesAsync();
+            ProductDto resultProduct = _mapper.Map<ProductDto>(product);
 
-         return NoContent();
-      }
-
-      [HttpPost]
-      public async Task<IActionResult> PostAsync([FromBody] ProductPostDto productPostDto)
-      {
-         Product product = _mapper.Map<Product>(productPostDto);
-
-         product.Key = Guid.NewGuid().ToString();
-
-         _ = await _dbContext.Products.AddAsync(product);
-
-         _ = await _dbContext.SaveChangesAsync();
-
-         ProductDto resultProduct = _mapper.Map<ProductDto>(product);
-
-         return Created("TODO_URI_GET_PRODUCT_BY_ID_ENDPOINT", resultProduct);
-      }
-   }
+            return CreatedAtAction(nameof(GetByKey), new { EnvironmentId = Request.RouteValues["EnvironmentId"], key = resultProduct.Key }, resultProduct);
+        }
+    }
 }

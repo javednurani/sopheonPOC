@@ -34,6 +34,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.EntityConfiguration
 
          builder
              .OwnsMany(product => product.UtcDateTimeAttributeValues);
+
       }
    }
 }

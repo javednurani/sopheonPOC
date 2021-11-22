@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sopheon.CloudNative.Products.Domain;
 
 namespace Sopheon.CloudNative.Products.DataAccess.Migrations
 {
     [DbContext(typeof(ProductManagementContext))]
-    partial class ProductManagementContextModelSnapshot : ModelSnapshot
+    [Migration("20211122212439_kpi")]
+    partial class kpi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,8 +48,27 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                         new
                         {
                             AttributeId = -1,
-                            AttributeValueTypeId = 2,
+                            AttributeValueTypeId = 4,
+                            Name = "Net Present Value",
+                            ShortName = "NPV"
+                        },
+                        new
+                        {
+                            AttributeId = -2,
+                            AttributeValueTypeId = 1,
                             Name = "Industry"
+                        },
+                        new
+                        {
+                            AttributeId = -3,
+                            AttributeValueTypeId = 2,
+                            Name = "Risk Score"
+                        },
+                        new
+                        {
+                            AttributeId = -4,
+                            AttributeValueTypeId = 5,
+                            Name = "Initial Release Date"
                         });
                 });
 
