@@ -16,7 +16,7 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { CreateProductAction, UpdateProductAction } from '../product/productReducer';
-import { AttributeDto, Attributes, CreateProductModel, PatchOperation, Product, ProductPostDto, UpdateProductModel } from '../types';
+import { Attributes, CreateProductModel, KeyPerformanceIndicatorDto, PatchOperation, Product, ProductPostDto, UpdateProductModel } from '../types';
 import { NextStepAction } from './onboardingReducer';
 
 export interface IOnboardingInfoProps {
@@ -174,13 +174,12 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
 
   const handleOnboardingGetStartedClick = () => {
     console.log('handleOnboardingGetStartedClick');
-    const kpiAttributes: AttributeDto[] = kpi
-      .trim()
-      .split(',')
-      .map(k => ({
+    const kpiAttributes: KeyPerformanceIndicatorDto[] = kpi.split(',').map(k => ({
+      attribute: {
         attributeValueTypeId: 3,
         name: k.trim(),
-      }));
+      },
+    }));
 
     const productPatchData: PatchOperation[] = [
       {
@@ -289,7 +288,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
           </div>
         </Stack.Item>
         <Stack.Item>
-          <TextField label={formatMessage({ id: 'onboarding.productKpi' })} maxLength={60} styles={textFieldStyles} onChange={handleKpiChange} />
+          <TextField label={formatMessage({ id: 'onboarding.productKpi' })} styles={textFieldStyles} onChange={handleKpiChange} />
         </Stack.Item>
         <Stack.Item>
           <PrimaryButton
