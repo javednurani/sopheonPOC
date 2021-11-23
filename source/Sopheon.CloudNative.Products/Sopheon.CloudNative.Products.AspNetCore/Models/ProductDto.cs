@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using Sopheon.CloudNative.Products.Domain;
 
 namespace Sopheon.CloudNative.Products.AspNetCore.Models
 {
@@ -55,6 +57,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
 
       //public MoneyAttributeValueDto[] MoneyAttributeValues { get; set; }
 
+      [MaxLength(ModelConstraints.NAME_LENGTH_300)]
       public string Name { get; set; }
 
       public string Description { get; set; }
@@ -74,6 +77,8 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
 
    public class ProductPostDto
    {
+      [Required()]
+      [MaxLength(ModelConstraints.NAME_LENGTH_300)]
       public string Name { get; set; }
       public List<Int32AttributeValueDto> IntAttributeValues { get; set; }
    }

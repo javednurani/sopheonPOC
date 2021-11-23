@@ -61,15 +61,6 @@ namespace Sopheon.CloudNative.Products.Domain
         public string Description { get; set; }
     }
 
-    public class Goal
-    {
-        public int Id { get; set; }
-
-        public string Name { get; set; }
-
-        public string Description { get; set; }
-    }
-
     public class ProductItem : IRankedEntity, IAttributeContainer
     {
         public int Id { get; set; }
