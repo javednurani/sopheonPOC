@@ -2,18 +2,6 @@
 // In Cloud-2147, we should generate TS Types from Sopheon.CloudNative.Products.AspNetCore OpenAPI schema
 
 
-// TODO Cloud-1920
-// camelCase
-// Industry, Goal, KPI models
-export interface Product {
-  Id: number | null;
-  Key: string | null;
-  Name: string;
-  Industries: number[];
-  Goals: string[];
-  KPIs: string[];
-}
-
 // eslint-disable-next-line no-shadow
 export enum Attributes {
   INDUSTRIES = -1,
@@ -39,6 +27,31 @@ export type ProductScopedApiRequestModel = {
 
 // DTO definitions from Sopheon.CloudNative.Products
 // TODO Cloud-2147, generate from OpenAPI spec
+
+// TODO Cloud-1920
+// camelCase
+// Industry, Goal, KPI models
+export interface Product {
+  Id: number | null;
+  Key: string | null;
+  Name: string;
+  Industries: number[];
+  Goals: Goal[];
+  KPIs: KeyPerformanceIndicator[];
+}
+
+export interface Goal {
+  id: number;
+  name: string;
+  description: string;
+}
+
+export interface KeyPerformanceIndicator {
+  keyPerformanceIndicatorId: number;
+  attributeId: number;
+  attribute: AttributeDto,
+}
+
 export interface Int32AttributeValueDto {
   AttributeId: number;
   Value: number | null;
@@ -64,6 +77,7 @@ export interface KeyPerformanceIndicatorDto {
 }
 
 export interface AttributeDto {
+  attributeId: number;
   attributeValueTypeId: number;
   name: string;
 }

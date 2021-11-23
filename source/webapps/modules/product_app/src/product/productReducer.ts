@@ -176,7 +176,7 @@ const updateProductSuccessHandler = (state: ProductStateShape, updatedProduct: P
   return {
     ...state,
     products: updatedProducts,
-    createProductFetchStatus: FetchStatus.DoneSuccess,
+    updateProductFetchStatus: FetchStatus.DoneSuccess,
   };
 };
 

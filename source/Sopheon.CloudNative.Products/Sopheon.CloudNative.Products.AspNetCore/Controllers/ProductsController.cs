@@ -80,8 +80,8 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
             return NoContent();
          }
 
-         var test = await _dbContext.Products.ToListAsync();
          Product productFromDatabase = await _dbContext.Products.SingleOrDefaultAsync(p => p.Key == key);
+
          if (productFromDatabase == null)
          {
             return NotFound();
@@ -94,7 +94,15 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
 
          await _dbContext.SaveChangesAsync();
 
-         return Ok(productDto);
+         // fetch updated product to ensure related entity Id's are populated (eg Attributes, KPIs, Goals)
+         var updatedProduct = await _dbContext.Products
+             .Include(p => p.Goals)
+             .Include(p => p.KeyPerformanceIndicators)
+             .ThenInclude(kpi => kpi.Attribute)
+             .AsNoTracking()
+             .SingleOrDefaultAsync(p => p.Key == key);
+
+         return Ok(_mapper.Map<ProductDto>(updatedProduct));
       }
 
       // TODO - ProductPostDto - maxlength, required fields, etc - 400 response if invalid

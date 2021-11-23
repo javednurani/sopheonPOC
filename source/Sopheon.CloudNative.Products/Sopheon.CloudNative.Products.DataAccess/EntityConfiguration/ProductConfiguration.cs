@@ -10,8 +10,12 @@ namespace Sopheon.CloudNative.Products.DataAccess.EntityConfiguration
       {
          ConfigureOwnedAttributeProperties<Product>(builder);
 
+         builder.HasIndex(p => p.Key)
+            .IsUnique();
+
          builder.Property(p => p.Name)
             .HasMaxLength(ModelConstraints.NAME_LENGTH_300)
+            
             .IsRequired();
       }
 

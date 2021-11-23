@@ -68,6 +68,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.SeedData
                {
                   AttributeId = -1,
                   Name = "Industry",
+                  ShortName = "IND",
                   AttributeValueTypeId = (int)AttributeValueTypes.Int32
                }
             };

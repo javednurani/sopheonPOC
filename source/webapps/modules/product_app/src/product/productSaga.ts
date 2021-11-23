@@ -70,9 +70,9 @@ export function* onUpdateProduct(action: UpdateProductAction): Generator {
       Id: data.id,
       Key: data.key,
       Name: data.name,
-      Industries: [],
-      KPIs: [], // TODO connect to Response data
-      Goals: [] // TODO connect to Response data
+      Industries: data.intAttributeValues.filter(iav => iav.attributeId === Attributes.INDUSTRIES).map(iav => iav.value),
+      KPIs: data.keyPerformanceIndicators,
+      Goals: data.goals
     };
 
 

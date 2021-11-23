@@ -173,7 +173,6 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
   };
 
   const handleOnboardingGetStartedClick = () => {
-    console.log('handleOnboardingGetStartedClick');
     const kpiAttributes: KeyPerformanceIndicatorDto[] = kpi.split(',').map(k => ({
       attribute: {
         attributeValueTypeId: 3,
@@ -204,7 +203,6 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
       EnvironmentKey: environmentKey,
       AccessToken: accessToken,
     };
-    console.log('productPatchData', productPatchData);
     updateProduct(updateProductDto);
     nextStep();
   };
@@ -288,7 +286,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
           </div>
         </Stack.Item>
         <Stack.Item>
-          <TextField label={formatMessage({ id: 'onboarding.productKpi' })} styles={textFieldStyles} onChange={handleKpiChange} />
+          <TextField label={formatMessage({ id: 'onboarding.productKpi' })} styles={textFieldStyles} onChange={handleKpiChange} maxLength={60} />
         </Stack.Item>
         <Stack.Item>
           <PrimaryButton

@@ -43,7 +43,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
 
    public class ProductPatchDto
    {
-      //public int Id { get; set; }
+      public int Id { get; set; }
 
       public List<Int32AttributeValueDto> IntAttributeValues { get; set; }
 
@@ -66,7 +66,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
 
       //public Status Status { get; set; }
 
-      //public string Key { get; set; }
+      public string Key { get; set; }
 
       public List<ProductGoalDto> Goals { get; set; }
 
