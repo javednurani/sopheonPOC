@@ -9,11 +9,13 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Sopheon.CloudNative.Products.AspNetCore.Filters;
 using Sopheon.CloudNative.Products.AspNetCore.Models;
 using Sopheon.CloudNative.Products.Domain;
 
 namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
 {
+   [TypeFilter(typeof(GeneralExceptionFilter))]
    public class ProductsController : EnvironmentScopedControllerBase
    {
       private readonly ILogger<ProductsController> _logger;
