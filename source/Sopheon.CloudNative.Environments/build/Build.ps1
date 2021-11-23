@@ -14,7 +14,7 @@ $OutputCoveragePath = "$($env:System_DefaultWorkingDirectory)\source\Sopheon.Clo
 
 Write-Host "...Running dotnet ef migrations...";
 
-dotnet ef migrations script -p "Sopheon.CloudNative.Environments.Data\Sopheon.CloudNative.Environments.Data.csproj" -o "$($env:Build_ArtifactStagingDirectory)\scripts.sql" -i;
+dotnet ef migrations script -p "Sopheon.CloudNative.Environments.Data\Sopheon.CloudNative.Environments.Data.csproj" -o "$($env:Build_ArtifactStagingDirectory)\scripts.sql" -i -- --connectionstring "foobar"
 Check-LastExitCode;
 
 #Setup for Integration tests here --
