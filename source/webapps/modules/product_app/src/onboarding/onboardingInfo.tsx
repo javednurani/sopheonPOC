@@ -16,14 +16,14 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { CreateProductAction, UpdateProductAction } from '../product/productReducer';
-import { Attributes, CreateProductModel, CreateUpdateProductModel, Product, ProductPostDto } from '../types';
+import { AttributeDto, Attributes, CreateProductModel, PatchOperation, Product, ProductPostDto, UpdateProductModel } from '../types';
 import { NextStepAction } from './onboardingReducer';
 
 export interface IOnboardingInfoProps {
   currentStep: number;
   nextStep: () => NextStepAction;
   createProduct: (product: CreateProductModel) => CreateProductAction;
-  updateProduct: (product: CreateUpdateProductModel) => UpdateProductAction;
+  updateProduct: (product: UpdateProductModel) => UpdateProductAction;
   environmentKey: string;
   accessToken: string;
   products: Product[];
@@ -173,20 +173,39 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
   };
 
   const handleOnboardingGetStartedClick = () => {
-    const productData: Product = {
-      Id: null,
-      Key: products[0].Key, // TODO: confirm, trusting that state.products will have exactly 1 element at this point in onboarding?
-      Name: productName, // TODO: PATCH endpoint behavior for partial updates.  don't include fields in Request Body?
-      Industries: [], // TODO: PATCH endpoint behavior for partial updates.  don't include fields in Request Body?
-      Goals: [goal],
-      KPIs: kpi.split(','), // TODO SANITIZE USER KPI INPUT, also: confirm comma-seperated UI, and PatchDto KPI format
-    };
+    console.log('handleOnboardingGetStartedClick');
+    const kpiAttributes: AttributeDto[] = kpi
+      .trim()
+      .split(',')
+      .map(k => ({
+        attributeValueTypeId: 3,
+        name: k.trim(),
+      }));
 
-    const updateProductDto: CreateUpdateProductModel = {
-      Product: productData,
+    const productPatchData: PatchOperation[] = [
+      {
+        op: 'replace',
+        path: '/Goals',
+        value: [
+          {
+            name: goal,
+          },
+        ],
+      },
+      {
+        op: 'replace',
+        path: '/KeyPerformanceIndicators',
+        value: kpiAttributes,
+      },
+    ];
+
+    const updateProductDto: UpdateProductModel = {
+      ProductPatchData: productPatchData,
+      ProductKey: products[0].Key || 'BAD_PRODUCT_KEY',
       EnvironmentKey: environmentKey,
       AccessToken: accessToken,
     };
+    console.log('productPatchData', productPatchData);
     updateProduct(updateProductDto);
     nextStep();
   };

@@ -9,9 +9,9 @@ import { Reducer } from 'redux';
 
 import {
   CreateProductModel,
-  CreateUpdateProductModel,
   EnvironmentScopedApiRequestModel,
-  Product
+  Product,
+  UpdateProductModel
 } from '../types';
 
 //#region  Action Types
@@ -68,7 +68,7 @@ export enum ProductSagaActionTypes {
 
 export type GetProductsAction = PayloadAction<ProductSagaActionTypes.GET_PRODUCTS, EnvironmentScopedApiRequestModel>;
 export type CreateProductAction = PayloadAction<ProductSagaActionTypes.CREATE_PRODUCT, CreateProductModel>;
-export type UpdateProductAction = PayloadAction<ProductSagaActionTypes.UPDATE_PRODUCT, CreateUpdateProductModel>;
+export type UpdateProductAction = PayloadAction<ProductSagaActionTypes.UPDATE_PRODUCT, UpdateProductModel>;
 
 
 //#endregion
@@ -99,7 +99,7 @@ export const updateProductFailure = (error: Error): UpdateProductFailureAction =
 
 export const getProducts = (requestDto: EnvironmentScopedApiRequestModel): GetProductsAction => createPayloadAction(ProductSagaActionTypes.GET_PRODUCTS, requestDto);
 export const createProduct = (product: CreateProductModel): CreateProductAction => createPayloadAction(ProductSagaActionTypes.CREATE_PRODUCT, product);
-export const updateProduct = (product: CreateUpdateProductModel): UpdateProductAction => createPayloadAction(ProductSagaActionTypes.UPDATE_PRODUCT, product);
+export const updateProduct = (product: UpdateProductModel): UpdateProductAction => createPayloadAction(ProductSagaActionTypes.UPDATE_PRODUCT, product);
 
 //#endregion
 

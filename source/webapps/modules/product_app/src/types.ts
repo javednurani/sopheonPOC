@@ -15,9 +15,10 @@ export enum Attributes {
   INDUSTRIES = -1,
 }
 
-export type CreateUpdateProductModel = {
-  Product: Product;
-} & EnvironmentScopedApiRequestModel;
+export type UpdateProductModel = {
+  ProductPatchData: PatchOperation[];
+} & EnvironmentScopedApiRequestModel
+  & ProductScopedApiRequestModel;
 
 export type CreateProductModel = {
   Product: ProductPostDto;
@@ -27,6 +28,10 @@ export type EnvironmentScopedApiRequestModel = {
   EnvironmentKey: string;
   AccessToken: string;
 }
+
+export type ProductScopedApiRequestModel = {
+  ProductKey: string;
+};
 
 // DTO definitions from Sopheon.CloudNative.Products
 // TODO Cloud-2147, generate from OpenAPI spec
@@ -40,3 +45,21 @@ export interface ProductPostDto {
   IntAttributeValues: Int32AttributeValueDto[];
 }
 
+export interface PatchOperation {
+  op: string;
+  path: string;
+  value: unknown[];
+}
+
+export interface ProductGoalDto {
+  name: string;
+}
+
+export interface KeyPerformanceIndicatorDto {
+  attribute: AttributeDto;
+}
+
+export interface AttributeDto {
+  attributeValueTypeId: number;
+  name: string;
+}

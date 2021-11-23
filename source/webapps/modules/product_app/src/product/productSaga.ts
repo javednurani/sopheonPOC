@@ -67,7 +67,8 @@ export function* onUpdateProduct(action: UpdateProductAction): Generator {
     const { data } = yield call(updateProduct, action.payload);
 
     const updatedProduct: Product = {
-      Key: data.id, // TODO, PATCH endpoint should return ProductDto with Key GUID, data.key
+      Id: data.id,
+      Key: data.key,
       Name: data.name,
       Industries: [],
       KPIs: [], // TODO connect to Response data
