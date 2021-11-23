@@ -14,7 +14,7 @@ $OutputCoveragePath = "$ProductsSourcePath\TestResults\";
 
 Write-Host "...Running dotnet ef migrations...";
 
-dotnet ef migrations script -p $ProductsDataAccessProject -o "$env:Build_ArtifactStagingDirectory\products_migration.sql" -i -- --connectionstring "Server=.;Database=TenantBlankEnv;Integrated Security=true;"
+dotnet ef migrations script -p $ProductsDataAccessProject -o "$env:Build_ArtifactStagingDirectory\products_migration.sql" -i -- --connectionstring "foobar"
 Check-LastExitCode;
 
 #Setup for Unit Tests here -
