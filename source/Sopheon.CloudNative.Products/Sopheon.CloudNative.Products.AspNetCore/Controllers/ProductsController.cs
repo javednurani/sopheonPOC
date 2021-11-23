@@ -69,9 +69,6 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
          return Ok(results);
       }
 
-      // TODO - ProductPatchDto - maxlength, required fields, etc - 400 response if invalid
-      // TODO - filter exception handling - 500
-      // https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/filters?view=aspnetcore-6.0#exception-filters
       [HttpPatch("{key}")]
       public async Task<IActionResult> Patch(string key, [FromBody] JsonPatchDocument<ProductPatchDto> patchDocument)
       {
@@ -105,9 +102,6 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
          return Ok(_mapper.Map<ProductDto>(updatedProduct));
       }
 
-      // TODO - ProductPostDto - maxlength, required fields, etc - 400 response if invalid
-      // TODO - filter exception handling - 500
-      // https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/filters?view=aspnetcore-6.0#exception-filters
       [HttpPost]
       public async Task<IActionResult> PostAsync([FromBody] ProductPostDto productPostDto)
       {
