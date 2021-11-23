@@ -19,7 +19,9 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Filters
          context.Result = new ContentResult
          {
             StatusCode = (int)HttpStatusCode.InternalServerError,
-            Content = "Something went wrong.  Please try again later." // TODO, remove hardcoded string
+            Content = _hostEnvironment.IsDevelopment()
+               ? context.Exception.ToString()
+               : "Something went wrong.  Please try again later." // TODO, remove hardcoded string
          };
       }
    }
