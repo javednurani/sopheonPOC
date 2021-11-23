@@ -29,7 +29,7 @@ Foreach($file in $TestProjects) {
 #All migrations and tests are done...let's publish it!
 
 Write-Host "...Running dotnet publish on Functions.csproj";
-dotnet publish $ProductManagementProject -c Release -o ".\PublishOutput\" -v diag;
+dotnet build $ProductManagementProject -c Release -o ".\PublishOutput\";
 Check-LastExitCode;
 
 dotnet tool restore
