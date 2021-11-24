@@ -53,7 +53,25 @@ try {
     $MarketingUploadResults = az storage blob upload --container-name 'b2cassets' --account-name $StorageAccountName --file "$($B2CAssets)\azureResources\Login\LoginCustom.html" --name LoginCustom.html --auth-mode login;
     $MarketingUploadResults;
     Check-LastExitCode;
-    Write-Host "Complete! Transfered files to Storage Account Blob: "'b2cassets';
+    Write-Host "Complete! Transfered LoginCustom files to Storage Account Blob: "'b2cassets';
+
+    Write-Host "Uploading SignUpCustom to blob storage";
+    $MarketingUploadResults = az storage blob upload --container-name 'b2cassets' --account-name $StorageAccountName --file "$($B2CAssets)\azureResources\SignUp\SignUpCustom.html" --name SignUpCustom.html --auth-mode login;
+    $MarketingUploadResults;
+    Check-LastExitCode;
+    Write-Host "Complete! Transfered SignUpCustom files to Storage Account Blob: "'b2cassets';
+
+    Write-Host "Uploading PasswordChange to blob storage";
+    $MarketingUploadResults = az storage blob upload --container-name 'b2cassets' --account-name $StorageAccountName --file "$($B2CAssets)\azureResources\PasswordChange\PasswordChange.html" --name PasswordChange.html --auth-mode login;
+    $MarketingUploadResults;
+    Check-LastExitCode;
+    Write-Host "Complete! Transfered PasswordChange files to Storage Account Blob: "'b2cassets';
+
+    Write-Host "Uploading images to blob storage";
+    $MarketingUploadResults = az storage blob upload-batch --destination 'b2cassets' --account-name $StorageAccountName --source "$($B2CAssets)\azureResources\images" --auth-mode login;
+    $MarketingUploadResults;
+    Check-LastExitCode;
+    Write-Host "Complete! Uploaded images to Storage Account Blob: "'b2cassets';
 }
 catch {
     Write-Host "ERROR: ";
