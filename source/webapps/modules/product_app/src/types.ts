@@ -77,7 +77,7 @@ export interface KeyPerformanceIndicatorDto {
 }
 
 export interface AttributeDto {
-  attributeId: number;
+  attributeId?: number;
   attributeValueTypeId: number;
   name: string;
 }
