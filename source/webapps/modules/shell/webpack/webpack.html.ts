@@ -35,7 +35,7 @@ export default (): webpack.Configuration => ({
     new HtmlWebpackPlugin({
       template: path.join(PUB_DIR, 'index.html'),
       minify: htmlMinifyOptions(),
-      favicon: path.join(PUB_DIR, 'Lucy16_logo.png'),
+      favicon: path.join(PUB_DIR, 'favicon.ico'),
     }),
   ],
 });

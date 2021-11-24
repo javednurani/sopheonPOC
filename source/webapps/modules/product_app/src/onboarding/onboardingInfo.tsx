@@ -16,6 +16,7 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { CreateProductAction, UpdateProductAction } from '../product/productReducer';
+import SopheonLogo from '../SopheonLogo';
 import { Attributes, CreateProductModel, KeyPerformanceIndicatorDto, PatchOperation, Product, ProductPostDto, UpdateProductModel } from '../types';
 import { NextStepAction } from './onboardingReducer';
 
@@ -60,6 +61,10 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
   const fieldWidth = 300;
 
   const stackTokens: IStackTokens = { childrenGap: 15 };
+  const sopheonLogoStyle: React.CSSProperties = {
+    marginTop: '10vh',
+    width: 200,
+  };
   const buttonStyles: React.CSSProperties = {
     marginTop: '6vh',
   };
@@ -220,6 +225,9 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
     return (
       <Stack className="step2" horizontalAlign="center" tokens={stackTokens}>
         <Stack.Item>
+          <SopheonLogo style={sopheonLogoStyle} />
+        </Stack.Item>
+        <Stack.Item>
           <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupproduct' })}</Label>
         </Stack.Item>
         <Stack.Item>
@@ -268,6 +276,9 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
     // onboarding 'step 3' (second onboarding page in SPA: Goal & KPIs)
     return (
       <Stack className="step3" horizontalAlign="center" tokens={stackTokens}>
+        <Stack.Item>
+          <SopheonLogo style={sopheonLogoStyle} />
+        </Stack.Item>
         <Stack.Item>
           <Label style={headerStyle}>{formatMessage({ id: 'onboarding.setupYourGoals' })}</Label>
         </Stack.Item>
