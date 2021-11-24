@@ -169,10 +169,10 @@ resource ProductManagementWebApp 'Microsoft.Web/sites@2021-02-01' = {
           name: 'WEBSITE_HEALTHCHECK_MAXPINGFAILURES'
           value: '10'
         }
-        {
-          name: 'ASPNETCORE_ENVIRONMENT'
-          value: 'development'
-        }
+        // {
+        //   name: 'ASPNETCORE_ENVIRONMENT'
+        //   value: 'development'
+        // }
       ]
     }
   }
