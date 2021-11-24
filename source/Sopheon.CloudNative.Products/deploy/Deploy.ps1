@@ -1,3 +1,5 @@
+$ZipUtil = "C:\Program Files\7-Zip\7z.exe";
+
 #Adding blank comments to avoid bad artifact generation
 
 $ProductManagementPath = "$($env:System_DefaultWorkingDirectory)\ProductManagementApi";
