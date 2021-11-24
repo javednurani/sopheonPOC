@@ -21,4 +21,4 @@ $WebApiAppServiceName = "stratus-productmanagement-$env:Environment";
 
 
 #upload webapp app
-az webapp deployment source config-zip --name $WebApiAppServiceName --resource-group $ResourceGroup --src "ProductManagement.zip";
+az webapp deployment source config-zip --name $WebApiAppServiceName --resource-group $ResourceGroup --src "ProductManagementApi.zip";
