@@ -4,8 +4,8 @@
     "private": true,
 
     "scripts": {
-        "start:db": "docker-compose -f docker-compose.dev-db.yml up -d --build",
-        "stop:db": "docker-compose -f docker-compose.dev-db.yml down",       
-        "prune": "powershell.exe -nologo ./docker-prune.ps1"
+        "start:db": "docker-compose -f ./docker/docker-compose.dev-db.yml up -d --build",
+        "stop:db": "docker-compose -f ./docker/docker-compose.dev-db.yml down",       
+        "prune": "powershell.exe -nologo ./docker/docker-prune.ps1"
     }
 }
