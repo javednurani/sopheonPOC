@@ -24,6 +24,7 @@ Write-Host "...Number of UnitTest projects found: $($TestProjects.Length)...";
 Foreach($file in $TestProjects) {
     Write-Host "...Running unit tests on $($file.Name)...";
     dotnet test $file.FullName -p:CollectCoverage=true -p:CoverletOutput=$OutputCoveragePath -p:CoverletOutputFormat="json%2cCobertura" -p:MergeWith="$OutputCoveragePath\coverage.json" --logger:"xunit;LogFilePath=$($OutputCoveragePath)\$($file.Name.Replace('.csproj', '')).xml" -p:Exclude="[*]Sopheon.CloudNative.Products.DataAccess.Migrations.*"
+    Check-LastExitCode;
 }
 
 #All migrations and tests are done...let's publish it!
