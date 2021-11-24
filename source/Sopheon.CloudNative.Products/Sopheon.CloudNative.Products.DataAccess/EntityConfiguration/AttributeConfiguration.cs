@@ -9,6 +9,10 @@ namespace Sopheon.CloudNative.Products.DataAccess.EntityConfiguration
    {
       public void Configure(EntityTypeBuilder<Attribute> builder)
       {
+         builder.Property(a => a.Name)
+            .HasMaxLength(ModelConstraints.NAME_LENGTH_60)
+            .IsRequired();
+
          builder.HasData(ProductSeedData.DefaultAttributes);
       }
    }

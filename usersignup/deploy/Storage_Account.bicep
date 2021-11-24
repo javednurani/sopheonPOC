@@ -48,7 +48,7 @@ resource StaticWebpage_Storage_BlobService 'Microsoft.Storage/storageAccounts/bl
       corsRules: [
         {
             allowedOrigins: [
-              b2cLogin
+              toLower(b2cLogin)
             ]
             allowedMethods: [
               'GET'

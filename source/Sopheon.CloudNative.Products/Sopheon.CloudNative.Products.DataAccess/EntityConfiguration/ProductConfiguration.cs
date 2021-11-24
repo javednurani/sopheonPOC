@@ -9,10 +9,19 @@ namespace Sopheon.CloudNative.Products.DataAccess.EntityConfiguration
       public void Configure(EntityTypeBuilder<Product> builder)
       {
          ConfigureOwnedAttributeProperties<Product>(builder);
+
+         builder.HasIndex(p => p.Key)
+            .IsUnique();
+
+         builder.Property(p => p.Name)
+            .HasMaxLength(ModelConstraints.NAME_LENGTH_300)
+            
+            .IsRequired();
       }
 
       private static void ConfigureOwnedAttributeProperties<TAttributeContainer>(EntityTypeBuilder<TAttributeContainer> builder) where TAttributeContainer : class, IAttributeContainer
       {
+
          builder
             .OwnsMany(product => product.IntAttributeValues);
 
@@ -34,6 +43,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.EntityConfiguration
 
          builder
              .OwnsMany(product => product.UtcDateTimeAttributeValues);
+
       }
    }
 }

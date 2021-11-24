@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 import { settings } from '../settings';
-import { CreateProductModel, CreateUpdateProductModel, EnvironmentScopedApiRequestModel, Product } from '../types';
+import { CreateProductModel, EnvironmentScopedApiRequestModel, Product, UpdateProductModel } from '../types';
 
 const API_URL_BASE: string = settings.ProductManagementApiUrlBase;
 const API_URL_PATH_GET_PRODUCT: string = settings.getProductsUrlPath;
@@ -34,16 +34,16 @@ export const createProduct: (productDto: CreateProductModel) => Promise<Product>
   return await axios.post(createProductUrlWithEnvironment, createProductModel.Product, config);
 };
 
-export const updateProduct: (productDto: CreateUpdateProductModel) => Promise<Product> = async productDto => {
+export const updateProduct: (productDto: UpdateProductModel) => Promise<Product> = async updateProductModel => {
   const updateProductUrlWithEnvironment = `${API_URL_BASE}${API_URL_PATH_UPDATE_PRODUCT}`
-    .replace(settings.TokenEnvironmentKey, productDto.EnvironmentKey)
-    .replace(settings.TokenProductKey, productDto.Product.Key || ''); // TODO, nullable Key? null check ?
+    .replace(settings.TokenEnvironmentKey, updateProductModel.EnvironmentKey)
+    .replace(settings.TokenProductKey, updateProductModel.ProductKey || ''); // TODO, nullable Key? null check ?
 
   const config: AxiosRequestConfig = {
     headers: {
-      'Authorization': `Bearer ${productDto.AccessToken}`
+      'Authorization': `Bearer ${updateProductModel.AccessToken}`
     }
   };
 
-  return await axios.patch(updateProductUrlWithEnvironment, productDto.Product, config);
+  return await axios.patch(updateProductUrlWithEnvironment, updateProductModel.ProductPatchData, config);
 };

@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
+#nullable disable
+
 namespace Sopheon.CloudNative.Products.DataAccess.Migrations
 {
     public partial class InitialCreate : Migration
@@ -17,7 +19,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 {
                     AttributeValueTypeId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,7 +33,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -45,9 +47,9 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Key = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Key = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -61,7 +63,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 {
                     RankId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -75,7 +77,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -90,7 +92,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                     AttributeId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AttributeValueTypeId = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
                     ShortName = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -112,7 +114,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 {
                     FileAttachmentId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -123,8 +125,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                         column: x => x.ProductId,
                         principalSchema: "SPM",
                         principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -134,7 +135,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ProductId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -146,8 +147,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                         column: x => x.ProductId,
                         principalSchema: "SPM",
                         principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -157,8 +157,8 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -169,8 +169,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                         column: x => x.ProductId,
                         principalSchema: "SPM",
                         principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -180,7 +179,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 {
                     UrlLinkId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -191,8 +190,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                         column: x => x.ProductId,
                         principalSchema: "SPM",
                         principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -202,9 +200,9 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProductItemTypeId = table.Column<int>(type: "int", nullable: false),
-                    RankId = table.Column<int>(type: "int", nullable: true),
+                    RankId = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -222,15 +220,42 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                         column: x => x.ProductId,
                         principalSchema: "SPM",
                         principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ProductItem_Rank_RankId",
                         column: x => x.RankId,
                         principalSchema: "SPM",
                         principalTable: "Rank",
                         principalColumn: "RankId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "KeyPerformanceIndicator",
+                schema: "SPM",
+                columns: table => new
+                {
+                    KeyPerformanceIndicatorId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AttributeId = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_KeyPerformanceIndicator", x => x.KeyPerformanceIndicatorId);
+                    table.ForeignKey(
+                        name: "FK_KeyPerformanceIndicator_Attributes_AttributeId",
+                        column: x => x.AttributeId,
+                        principalSchema: "SPM",
+                        principalTable: "Attributes",
+                        principalColumn: "AttributeId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_KeyPerformanceIndicator_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalSchema: "SPM",
+                        principalTable: "Products",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -302,7 +327,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AttributeId = table.Column<int>(type: "int", nullable: false),
-                    CurrencyCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CurrencyCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Value = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
                 },
                 constraints: table =>
@@ -333,7 +358,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AttributeId = table.Column<int>(type: "int", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -453,7 +478,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AttributeId = table.Column<int>(type: "int", nullable: false),
-                    CurrencyCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CurrencyCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Value = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
                 },
                 constraints: table =>
@@ -484,7 +509,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AttributeId = table.Column<int>(type: "int", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -574,7 +599,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 schema: "SPM",
                 table: "Attributes",
                 columns: new[] { "AttributeId", "AttributeValueTypeId", "Name", "ShortName" },
-                values: new object[] { -1, 2, "Industry", null });
+                values: new object[] { -1, 2, "Industry", "IND" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Attributes_AttributeValueTypeId",
@@ -592,6 +617,18 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 name: "IX_Goal_ProductId",
                 schema: "SPM",
                 table: "Goal",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_KeyPerformanceIndicator_AttributeId",
+                schema: "SPM",
+                table: "KeyPerformanceIndicator",
+                column: "AttributeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_KeyPerformanceIndicator_ProductId",
+                schema: "SPM",
+                table: "KeyPerformanceIndicator",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
@@ -641,6 +678,13 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 schema: "SPM",
                 table: "ProductItem_UtcDateTimeAttributeValues",
                 column: "AttributeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_Key",
+                schema: "SPM",
+                table: "Products",
+                column: "Key",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_DecimalAttributeValues_AttributeId",
@@ -693,6 +737,10 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "Goal",
+                schema: "SPM");
+
+            migrationBuilder.DropTable(
+                name: "KeyPerformanceIndicator",
                 schema: "SPM");
 
             migrationBuilder.DropTable(

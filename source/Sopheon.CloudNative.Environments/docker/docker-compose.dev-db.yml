@@ -16,4 +16,4 @@ services:
       - ACCEPT_EULA=Y
       - SA_PASSWORD
     volumes:
-      - ./dockervolumes/mssql-dev:/var/opt/mssql/data
+      - ../dockervolumes/mssql-dev:/var/opt/mssql/data
