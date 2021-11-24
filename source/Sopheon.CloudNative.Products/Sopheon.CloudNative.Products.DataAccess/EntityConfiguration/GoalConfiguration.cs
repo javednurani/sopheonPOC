@@ -5,15 +5,13 @@ using Sopheon.CloudNative.Products.Domain;
 
 namespace Sopheon.CloudNative.Products.DataAccess.EntityConfiguration
 {
-   public class AttributeConfiguration : IEntityTypeConfiguration<Attribute>
+   public class GoalConfiguration : IEntityTypeConfiguration<Goal>
    {
-      public void Configure(EntityTypeBuilder<Attribute> builder)
+      public void Configure(EntityTypeBuilder<Goal> builder)
       {
          builder.Property(a => a.Name)
-            .HasMaxLength(ModelConstraints.NAME_LENGTH_60)
+            .HasMaxLength(ModelConstraints.NAME_LENGTH_300)
             .IsRequired();
-
-         builder.HasData(ProductSeedData.DefaultAttributes);
       }
    }
 }

@@ -67,11 +67,12 @@ export function* onUpdateProduct(action: UpdateProductAction): Generator {
     const { data } = yield call(updateProduct, action.payload);
 
     const updatedProduct: Product = {
-      Key: data.id, // TODO, PATCH endpoint should return ProductDto with Key GUID, data.key
+      Id: data.id,
+      Key: data.key,
       Name: data.name,
-      Industries: [],
-      KPIs: [], // TODO connect to Response data
-      Goals: [] // TODO connect to Response data
+      Industries: data.intAttributeValues.filter(iav => iav.attributeId === Attributes.INDUSTRIES).map(iav => iav.value),
+      KPIs: data.keyPerformanceIndicators,
+      Goals: data.goals
     };
 
 

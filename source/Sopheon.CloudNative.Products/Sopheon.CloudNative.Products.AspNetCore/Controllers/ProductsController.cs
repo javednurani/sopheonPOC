@@ -9,11 +9,13 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Sopheon.CloudNative.Products.AspNetCore.Filters;
 using Sopheon.CloudNative.Products.AspNetCore.Models;
 using Sopheon.CloudNative.Products.Domain;
 
 namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
 {
+   [TypeFilter(typeof(GeneralExceptionFilter))]
    public class ProductsController : EnvironmentScopedControllerBase
    {
       private readonly ILogger<ProductsController> _logger;
@@ -40,6 +42,20 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
          return await query.ToArrayAsync();
       }
 
+      [HttpGet("{key}")]
+      public async Task<IActionResult> GetByKey(string key)
+      {
+         var product = await _dbContext.Products
+             .Include(p => p.Goals)
+             .Include(p => p.KeyPerformanceIndicators)
+             .AsNoTracking()
+             .SingleOrDefaultAsync(p => p.Key == key);
+
+         if (product == null) { return NotFound(); }
+
+         return Ok(_mapper.Map<ProductDto>(product));
+      }
+
       [HttpGet("{key}/Items")]
       public async Task<IActionResult> GetItems(string key)
       {
@@ -61,8 +77,8 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
             return NoContent();
          }
 
-         var test = await _dbContext.Products.ToListAsync();
          Product productFromDatabase = await _dbContext.Products.SingleOrDefaultAsync(p => p.Key == key);
+
          if (productFromDatabase == null)
          {
             return NotFound();
@@ -75,23 +91,30 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
 
          await _dbContext.SaveChangesAsync();
 
-         return NoContent();
+         // fetch updated product to ensure related entity Id's are populated (eg Attributes, KPIs, Goals)
+         var updatedProduct = await _dbContext.Products
+             .Include(p => p.Goals)
+             .Include(p => p.KeyPerformanceIndicators)
+             .ThenInclude(kpi => kpi.Attribute)
+             .AsNoTracking()
+             .SingleOrDefaultAsync(p => p.Key == key);
+
+         return Ok(_mapper.Map<ProductDto>(updatedProduct));
       }
 
       [HttpPost]
       public async Task<IActionResult> PostAsync([FromBody] ProductPostDto productPostDto)
       {
          Product product = _mapper.Map<Product>(productPostDto);
-
          product.Key = Guid.NewGuid().ToString();
 
-         _ = await _dbContext.Products.AddAsync(product);
+         await _dbContext.Products.AddAsync(product);
 
-         _ = await _dbContext.SaveChangesAsync();
+         await _dbContext.SaveChangesAsync();
 
          ProductDto resultProduct = _mapper.Map<ProductDto>(product);
 
-         return Created("TODO_URI_GET_PRODUCT_BY_ID_ENDPOINT", resultProduct);
+         return CreatedAtAction(nameof(GetByKey), new { EnvironmentId = Request.RouteValues["EnvironmentId"], key = resultProduct.Key }, resultProduct);
       }
    }
 }

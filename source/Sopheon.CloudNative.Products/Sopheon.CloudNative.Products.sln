@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sopheon.CloudNative.Product
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EnvironmentScoped", "EnvironmentScoped", "{8D6E7542-1C43-4048-9482-6867D631721D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sopheon.CloudNative.Products.Domain", "Sopheon.CloudNative.Products.Domain\Sopheon.CloudNative.Products.Domain.csproj", "{764D4BBD-1406-465F-9992-85D2D8057899}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{A0014169-3D30-46F2-A6EF-947EEC83F6C0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sopheon.CloudNative.Products.Utilities", "Sopheon.CloudNative.Products.Utilities\Sopheon.CloudNative.Products.Utilities.csproj", "{CFD3700A-9B5F-4FF5-8F56-F1290229C68F}"
@@ -24,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Development Resources", "De
 		README.MD = README.MD
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sopheon.CloudNative.Products.Domain", "Sopheon.CloudNative.Products.Domain\Sopheon.CloudNative.Products.Domain.csproj", "{389710CA-6F89-433C-A1CC-FFF6C77E4345}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,10 +34,6 @@ Global
 		{D31F4C4F-F630-48AC-90BE-C6C57ECAF47E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D31F4C4F-F630-48AC-90BE-C6C57ECAF47E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D31F4C4F-F630-48AC-90BE-C6C57ECAF47E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{764D4BBD-1406-465F-9992-85D2D8057899}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{764D4BBD-1406-465F-9992-85D2D8057899}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{764D4BBD-1406-465F-9992-85D2D8057899}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{764D4BBD-1406-465F-9992-85D2D8057899}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CFD3700A-9B5F-4FF5-8F56-F1290229C68F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CFD3700A-9B5F-4FF5-8F56-F1290229C68F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFD3700A-9B5F-4FF5-8F56-F1290229C68F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -54,17 +50,21 @@ Global
 		{533BD0F6-95FD-48F9-B37A-C6DC1E7FC6BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{533BD0F6-95FD-48F9-B37A-C6DC1E7FC6BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{533BD0F6-95FD-48F9-B37A-C6DC1E7FC6BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{389710CA-6F89-433C-A1CC-FFF6C77E4345}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{389710CA-6F89-433C-A1CC-FFF6C77E4345}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{389710CA-6F89-433C-A1CC-FFF6C77E4345}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{389710CA-6F89-433C-A1CC-FFF6C77E4345}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D31F4C4F-F630-48AC-90BE-C6C57ECAF47E} = {8D6E7542-1C43-4048-9482-6867D631721D}
-		{764D4BBD-1406-465F-9992-85D2D8057899} = {8D6E7542-1C43-4048-9482-6867D631721D}
 		{CFD3700A-9B5F-4FF5-8F56-F1290229C68F} = {A0014169-3D30-46F2-A6EF-947EEC83F6C0}
 		{9DCEFC60-ECED-4005-B03A-A2DF40EC1562} = {A0014169-3D30-46F2-A6EF-947EEC83F6C0}
 		{E93F0B8F-1293-408D-AD5A-01ACC9867480} = {8D6E7542-1C43-4048-9482-6867D631721D}
 		{533BD0F6-95FD-48F9-B37A-C6DC1E7FC6BC} = {8D6E7542-1C43-4048-9482-6867D631721D}
+		{389710CA-6F89-433C-A1CC-FFF6C77E4345} = {8D6E7542-1C43-4048-9482-6867D631721D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {55E5FCFC-E761-4361-8010-64D6C6540FEA}

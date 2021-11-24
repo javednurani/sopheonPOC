@@ -139,7 +139,7 @@ resource ProductManagementWebApp 'Microsoft.Web/sites@2021-02-01' = {
       http20Enabled: false
       functionAppScaleLimit: 0
       minimumElasticInstanceCount: 1
-      netFrameworkVersion: 'v5.0'      
+      netFrameworkVersion: 'v6.0'      
       appSettings: [
         {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
@@ -183,7 +183,7 @@ resource sites_StratusProductManagement_Dev_name_web 'Microsoft.Web/sites/config
   name: 'web'
   properties: {
     numberOfWorkers: 1    
-    netFrameworkVersion: 'v5.0'
+    netFrameworkVersion: 'v6.0'
     requestTracingEnabled: true
     requestTracingExpirationTime: '12/31/9999 11:59:00 PM'
     remoteDebuggingEnabled: false
