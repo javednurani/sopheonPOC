@@ -9,9 +9,9 @@ $ResourceGroup = "Stratus-$($env:Environment)";
 # }
 
 
-$WebApiAppServiceName = "stratus-productmanagement-$env:Environment"
+$WebApiAppServiceName = "stratus-productmanagement-$env:Environment";
 
-& $ZipUtil "x" "$($PSScriptRoot)\ProductManagement.zip" "-o$($ProductManagementPath)";
+& $ZipUtil "x" "$($PSScriptRoot)/ProductManagement.zip" "-o$($ProductManagementPath)";
 
 & "$($env:System_DefaultWorkingDirectory)\_TokenConfigurationManagement\TokenConfigManagement\TokenReplacer.exe" replace -c _ProductMangement\ProductManagement\Product_Management_Configuration.json -f "$ProductManagementPath\*"  -e $env:Environment
 
