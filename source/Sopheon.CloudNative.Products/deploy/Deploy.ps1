@@ -17,7 +17,7 @@ $WebApiAppServiceName = "stratus-productmanagement-$env:Environment";
 
 & "$($env:System_DefaultWorkingDirectory)\_TokenConfigurationManagement\TokenConfigManagement\TokenReplacer.exe" replace -c _ProductManagement\ProductManagement\Product_Management_Configuration.json -f "$ProductManagementPath\*"  -e $env:Environment
 
-& $ZipUtil "a" "-tzip" "$env:Build_ArtifactStagingDirectory" "$($ProductManagementPath)/*"
+& $ZipUtil "a" "-tzip" "$($env:Build_ArtifactStagingDirectory)\ProductManagementApi" "$($ProductManagementPath)\*" "-xr!build" "-xr!deploy";
 
 
 #upload webapp app
