@@ -131,3 +131,7 @@ See also: https://pluto/display/PDP/Azure+Functions+and+Entity+Framework+Local+D
 
 # Design Decisions
 TODO: flesh this out.  This section should explain any design decisions or implementation details that might throw a newly onboarded dev for a loop.
+
+# Solution Items
+
+- .editorconfig file holds Sopheon VS Settings for Solution.  No dev action should be necessary.
