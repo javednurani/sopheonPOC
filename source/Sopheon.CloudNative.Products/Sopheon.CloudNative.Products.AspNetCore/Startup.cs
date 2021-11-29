@@ -62,6 +62,8 @@ namespace Sopheon.CloudNative.Products.AspNetCore
             options.MetadataAddress = $"{Configuration.GetValue<string>("AzureAdB2C:Instance")}/{Configuration.GetValue<string>("AzureAdB2C:Domain")}/v2.0/.well-known/openid-configuration?p={Configuration.GetValue<string>("AzureAdB2C:SignUpSignInPolicyId")}";
          });
 
+         services.AddCors();
+
          services
             .AddMemoryCache()
             .AddHttpClient();
@@ -146,18 +148,6 @@ namespace Sopheon.CloudNative.Products.AspNetCore
             services.AddScoped<IAuthorizationHandler, DevelopmentTimeEnvironmentOwnerHandler>();
          }
 
-         //if (_env.IsDevelopment())
-         //{
-         //   services.AddCors(options =>
-         //   {
-         //      options.AddDefaultPolicy(builder =>
-         //      {
-         //         builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
-         //         builder.AllowAnyMethod(); // TODO get options post patch put delete ?
-         //      });
-         //   });
-         //}
-
          //services.AddScoped<IAuthorizationHandler, SopheonSupportEnvironmentAccessHandler>(); // TODO: Add handling for support access scenario, or potentially local dev scenarios
 
          // Entity Framework
@@ -241,7 +231,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore
          await context.Response.WriteAsJsonAsync(response);
       }
 
-      private Action<CorsPolicyBuilder> corsPolicyAllowAll =
+      private readonly Action<CorsPolicyBuilder> corsPolicyAllowAll =
          options => options
                      .AllowAnyOrigin()
                      .AllowAnyMethod()
