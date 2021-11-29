@@ -176,7 +176,7 @@ resource ProductManagementWebApp 'Microsoft.Web/sites@2021-02-01' = {
       ]
       cors: {
         allowedOrigins:[
-          'https://stratusapp-${env}.azureedge.net'
+          'https://stratusapp-${toLower(env)}.azureedge.net'
         ]
       }
     }
