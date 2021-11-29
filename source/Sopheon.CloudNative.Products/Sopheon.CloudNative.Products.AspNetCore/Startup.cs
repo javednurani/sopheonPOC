@@ -75,8 +75,8 @@ namespace Sopheon.CloudNative.Products.AspNetCore
          {
             options.AddPolicy(nameof(HasEnvironmentAccessPolicy), policy => policy.Requirements.Add(new HasRelevantRelationshipToEnvironment()));
 
-         // By default, all incoming requests will be authorized according to the default policy
-         options.FallbackPolicy = options.DefaultPolicy;
+            // By default, all incoming requests will be authorized according to the default policy
+            options.FallbackPolicy = options.DefaultPolicy;
          });
 
          services.AddAutoMapper(typeof(Startup));
@@ -85,8 +85,8 @@ namespace Sopheon.CloudNative.Products.AspNetCore
 
          services.AddSwaggerGen(c =>
          {
-         // If new Swagger Docs are added, update the build action
-         c.SwaggerDoc("v1", new OpenApiInfo
+            // If new Swagger Docs are added, update the build action
+            c.SwaggerDoc("v1", new OpenApiInfo
             {
                Title = "Sopheon.CloudNative.Products.AspNetCore",
                Version = "v1",
@@ -94,9 +94,9 @@ namespace Sopheon.CloudNative.Products.AspNetCore
             });
 
             Uri authorizationUrl = new Uri($"{Configuration.GetValue<string>("AzureAdB2C:Instance")}/{Configuration.GetValue<string>("AzureAdB2C:Domain")}/{Configuration.GetValue<string>("AzureAdB2C:SignUpSignInPolicyId")}/oauth2/v2.0/authorize"); // ex: https://<b2c_tenant_name>.b2clogin.com/<b2c_tenant_name>.onmicrosoft.com/oauth2/v2.0/authorize?p=b2c_1_susi_v2
-         Uri tokenUrl = new Uri($"{Configuration.GetValue<string>("AzureAdB2C:Instance")}/{Configuration.GetValue<string>("AzureAdB2C:Domain")}/{Configuration.GetValue<string>("AzureAdB2C:SignUpSignInPolicyId")}/oauth2/v2.0/token"); // ex: https://<b2c_tenant_name>.b2clogin.com/<b2c_tenant_name>.onmicrosoft.com/oauth2/v2.0/token?p=b2c_1_susi_v2
+            Uri tokenUrl = new Uri($"{Configuration.GetValue<string>("AzureAdB2C:Instance")}/{Configuration.GetValue<string>("AzureAdB2C:Domain")}/{Configuration.GetValue<string>("AzureAdB2C:SignUpSignInPolicyId")}/oauth2/v2.0/token"); // ex: https://<b2c_tenant_name>.b2clogin.com/<b2c_tenant_name>.onmicrosoft.com/oauth2/v2.0/token?p=b2c_1_susi_v2
 
-         c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+            c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
             {
                Name = "Authorization",
                Type = SecuritySchemeType.OAuth2,
@@ -146,27 +146,15 @@ namespace Sopheon.CloudNative.Products.AspNetCore
             services.AddScoped<IAuthorizationHandler, DevelopmentTimeEnvironmentOwnerHandler>();
          }
 
-         //if (_env.IsDevelopment())
-         //{
-         //   services.AddCors(options =>
-         //   {
-         //      options.AddDefaultPolicy(builder =>
-         //      {
-         //         builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
-         //         builder.AllowAnyMethod(); // TODO get options post patch put delete ?
-         //      });
-         //   });
-         //}
-
          //services.AddScoped<IAuthorizationHandler, SopheonSupportEnvironmentAccessHandler>(); // TODO: Add handling for support access scenario, or potentially local dev scenarios
 
          // Entity Framework
          services.AddDbContext<ProductManagementContext>((serviceProvider, optionsBuilder) =>
       {
-      // WARNING: As of EF 5, AddDbContext does not support an aysnc delegate
-      var connectionStringProvider = serviceProvider.GetService<IEnvironmentSqlConnectionStringProvider>();
-      string connectionString = connectionStringProvider.GetConnectionStringAsync().Result; // TODO: Need to find async registration method
-      optionsBuilder.UseSqlServer(connectionString);
+         // WARNING: As of EF 5, AddDbContext does not support an aysnc delegate
+         var connectionStringProvider = serviceProvider.GetService<IEnvironmentSqlConnectionStringProvider>();
+         string connectionString = connectionStringProvider.GetConnectionStringAsync().Result; // TODO: Need to find async registration method
+         optionsBuilder.UseSqlServer(connectionString);
       });
       }
 
@@ -190,13 +178,14 @@ namespace Sopheon.CloudNative.Products.AspNetCore
                c.OAuthScopeSeparator(" ");
                c.OAuthUsePkce();
             });
-            // TODO, iterate on CORS policy
-            app.UseCors(corsPolicyAllowAll);
          }
 
          app.UseHttpsRedirection();
 
          app.UseRouting();
+
+         // TODO, iterate on CORS policy for non-Development use
+         app.UseCors(corsPolicyAllowAll);
 
          app.UseAuthentication();
          app.UseAuthorization();
@@ -236,7 +225,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore
          await context.Response.WriteAsJsonAsync(response);
       }
 
-      private Action<CorsPolicyBuilder> corsPolicyAllowAll =
+      private readonly Action<CorsPolicyBuilder> corsPolicyAllowAll =
          options => options
                      .AllowAnyOrigin()
                      .AllowAnyMethod()
