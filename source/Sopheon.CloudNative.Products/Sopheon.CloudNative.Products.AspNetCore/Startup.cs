@@ -190,7 +190,12 @@ namespace Sopheon.CloudNative.Products.AspNetCore
                c.OAuthScopeSeparator(" ");
                c.OAuthUsePkce();
             });
-            // TODO, iterate on CORS policy
+
+            app.UseCors(corsPolicyAllowAll);
+         }
+         else
+         {
+            // TODO, iterate on CORS policy for non-Development use
             app.UseCors(corsPolicyAllowAll);
          }
 
