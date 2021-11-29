@@ -62,8 +62,6 @@ namespace Sopheon.CloudNative.Products.AspNetCore
             options.MetadataAddress = $"{Configuration.GetValue<string>("AzureAdB2C:Instance")}/{Configuration.GetValue<string>("AzureAdB2C:Domain")}/v2.0/.well-known/openid-configuration?p={Configuration.GetValue<string>("AzureAdB2C:SignUpSignInPolicyId")}";
          });
 
-         services.AddCors();
-
          services
             .AddMemoryCache()
             .AddHttpClient();
@@ -77,8 +75,8 @@ namespace Sopheon.CloudNative.Products.AspNetCore
          {
             options.AddPolicy(nameof(HasEnvironmentAccessPolicy), policy => policy.Requirements.Add(new HasRelevantRelationshipToEnvironment()));
 
-         // By default, all incoming requests will be authorized according to the default policy
-         options.FallbackPolicy = options.DefaultPolicy;
+            // By default, all incoming requests will be authorized according to the default policy
+            options.FallbackPolicy = options.DefaultPolicy;
          });
 
          services.AddAutoMapper(typeof(Startup));
@@ -87,8 +85,8 @@ namespace Sopheon.CloudNative.Products.AspNetCore
 
          services.AddSwaggerGen(c =>
          {
-         // If new Swagger Docs are added, update the build action
-         c.SwaggerDoc("v1", new OpenApiInfo
+            // If new Swagger Docs are added, update the build action
+            c.SwaggerDoc("v1", new OpenApiInfo
             {
                Title = "Sopheon.CloudNative.Products.AspNetCore",
                Version = "v1",
@@ -96,9 +94,9 @@ namespace Sopheon.CloudNative.Products.AspNetCore
             });
 
             Uri authorizationUrl = new Uri($"{Configuration.GetValue<string>("AzureAdB2C:Instance")}/{Configuration.GetValue<string>("AzureAdB2C:Domain")}/{Configuration.GetValue<string>("AzureAdB2C:SignUpSignInPolicyId")}/oauth2/v2.0/authorize"); // ex: https://<b2c_tenant_name>.b2clogin.com/<b2c_tenant_name>.onmicrosoft.com/oauth2/v2.0/authorize?p=b2c_1_susi_v2
-         Uri tokenUrl = new Uri($"{Configuration.GetValue<string>("AzureAdB2C:Instance")}/{Configuration.GetValue<string>("AzureAdB2C:Domain")}/{Configuration.GetValue<string>("AzureAdB2C:SignUpSignInPolicyId")}/oauth2/v2.0/token"); // ex: https://<b2c_tenant_name>.b2clogin.com/<b2c_tenant_name>.onmicrosoft.com/oauth2/v2.0/token?p=b2c_1_susi_v2
+            Uri tokenUrl = new Uri($"{Configuration.GetValue<string>("AzureAdB2C:Instance")}/{Configuration.GetValue<string>("AzureAdB2C:Domain")}/{Configuration.GetValue<string>("AzureAdB2C:SignUpSignInPolicyId")}/oauth2/v2.0/token"); // ex: https://<b2c_tenant_name>.b2clogin.com/<b2c_tenant_name>.onmicrosoft.com/oauth2/v2.0/token?p=b2c_1_susi_v2
 
-         c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+            c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
             {
                Name = "Authorization",
                Type = SecuritySchemeType.OAuth2,
@@ -153,10 +151,10 @@ namespace Sopheon.CloudNative.Products.AspNetCore
          // Entity Framework
          services.AddDbContext<ProductManagementContext>((serviceProvider, optionsBuilder) =>
       {
-      // WARNING: As of EF 5, AddDbContext does not support an aysnc delegate
-      var connectionStringProvider = serviceProvider.GetService<IEnvironmentSqlConnectionStringProvider>();
-      string connectionString = connectionStringProvider.GetConnectionStringAsync().Result; // TODO: Need to find async registration method
-      optionsBuilder.UseSqlServer(connectionString);
+         // WARNING: As of EF 5, AddDbContext does not support an aysnc delegate
+         var connectionStringProvider = serviceProvider.GetService<IEnvironmentSqlConnectionStringProvider>();
+         string connectionString = connectionStringProvider.GetConnectionStringAsync().Result; // TODO: Need to find async registration method
+         optionsBuilder.UseSqlServer(connectionString);
       });
       }
 
@@ -180,18 +178,14 @@ namespace Sopheon.CloudNative.Products.AspNetCore
                c.OAuthScopeSeparator(" ");
                c.OAuthUsePkce();
             });
-
-            app.UseCors(corsPolicyAllowAll);
-         }
-         else
-         {
-            // TODO, iterate on CORS policy for non-Development use
-            app.UseCors(corsPolicyAllowAll);
          }
 
          app.UseHttpsRedirection();
 
          app.UseRouting();
+
+         // TODO, iterate on CORS policy for non-Development use
+         app.UseCors(corsPolicyAllowAll);
 
          app.UseAuthentication();
          app.UseAuthorization();
