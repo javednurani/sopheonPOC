@@ -131,7 +131,7 @@ resource ProductManagementWebApp 'Microsoft.Web/sites@2021-02-01' = {
         sslState: 'Disabled'
         hostType: 'Repository'
       }
-    ]
+    ]    
     siteConfig: {
       numberOfWorkers: 1
       acrUseManagedIdentityCreds: false
@@ -174,6 +174,11 @@ resource ProductManagementWebApp 'Microsoft.Web/sites@2021-02-01' = {
         //   value: 'development'
         // }
       ]
+      cors: {
+        allowedOrigins:[
+          'https://stratusapp-${env}.azureedge.net'
+        ]
+      }
     }
   }
 }
