@@ -129,6 +129,7 @@
         </LocalizedResourcesReferences>
       </ContentDefinition>
       <ContentDefinition Id="api.localaccountsignup">
+        <LoadUri>https://^StorageAccountName^.blob.core.windows.net/b2cassets/SignUpCustom.html</LoadUri>
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.localaccountsignup.en" />
         </LocalizedResourcesReferences>
@@ -159,7 +160,7 @@
         </LocalizedResourcesReferences>
       </ContentDefinition>
       <ContentDefinition Id="api.selfasserted.passwordchange">
-        <LoadUri>~/tenant/templates/AzureBlue/selfAsserted.cshtml</LoadUri>
+        <LoadUri>https://^StorageAccountName^.blob.core.windows.net/b2cassets/PasswordChange.html</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
         <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.1.0</DataUri>
         <LocalizedResourcesReferences MergeBehavior="Prepend">
@@ -841,7 +842,7 @@
             <ClaimsExchange Id="AADUserWriteEnvironmentKeyUsingObjectId" TechnicalProfileReferenceId="AAD-UserWriteEnvironmentKeyUsingObjectId" />
           </ClaimsExchanges>
         </OrchestrationStep>
-
+        
         <!-- This step reads any user attributes that we may not have received when in the token. -->
         <OrchestrationStep Order="3" Type="ClaimsExchange">
           <ClaimsExchanges>
