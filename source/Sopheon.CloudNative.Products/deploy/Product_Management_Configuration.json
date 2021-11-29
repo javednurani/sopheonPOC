@@ -1,0 +1,34 @@
+{
+  "Tokens": [
+    {
+      "TokenDisplayName": "B2C Product Management Api Client Id",
+      "Pattern": "^B2CProductManagementApiClientId^",
+      "IsKeyVaultSecret": true,
+      "KeyVaultSecretName": "StratusB2CProductManagementApiClientId"
+    },
+    {
+      "TokenDisplayName": "B2C Product Management Api Swagger Client Id",
+      "Pattern": "^B2CProductManagementApiSwaggerClientId^",
+      "IsKeyVaultSecret": true,
+      "KeyVaultSecretName": "StratusB2CProductManagementApiSwaggerClientId"
+    },
+    {
+      "TokenDisplayName": "B2C Tenant Id",
+      "Pattern": "^B2CTenantId^",
+      "IsKeyVaultSecret": true,
+      "KeyVaultSecretName": "StratusB2CTenantId"
+    },
+    {
+      "TokenDisplayName": "B2C Tenant Login Name",
+      "Pattern": "^B2CTenantLoginName^",
+      "IsKeyVaultSecret": true,
+      "KeyVaultSecretName": "StratusB2CTenantLoginName"
+    },
+    {
+      "TokenDisplayName": "B2C Tenant Name",
+      "Pattern": "nonexistent.onmicrosoft.com",
+      "IsKeyVaultSecret": true,
+      "KeyVaultSecretName": "StratusB2CTenantName"
+    }
+  ]
+}

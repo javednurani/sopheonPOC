@@ -15,7 +15,7 @@ const azureRawSettings: Record<string, string> = {
   SPA_Root_URL_Dev: 'https://localhost:3000/product',
   // TODO Cloud-2259, query Graph API for App Reg "PMAPI"
   // https://docs.microsoft.com/en-us/graph/api/application-list?view=graph-rest-1.0&tabs=http#http-request
-  Product_Management_API_Application_Client_Id: 'd7c97f69-2f27-43a0-b998-c659ab05d8ba', // '^ProductManagementApiApplicationClientId^'
+  Product_Management_API_Application_Client_Id: '^B2CProductManagementApiClientId^',
   Product_Management_API_Application_Client_Id_Dev: 'd7c97f69-2f27-43a0-b998-c659ab05d8ba',
   Product_Management_API_Scope_PMCore_ReadWrite: 'PMCore.ReadWrite'
 };
