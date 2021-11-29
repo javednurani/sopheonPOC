@@ -24,9 +24,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Development Resources", "De
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sopheon.CloudNative.Products.Domain", "Sopheon.CloudNative.Products.Domain\Sopheon.CloudNative.Products.Domain.csproj", "{389710CA-6F89-433C-A1CC-FFF6C77E4345}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8FA44ED0-2007-48A9-8195-06456FCDA65F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A2D77E10-39BA-4AE2-B860-EDA70CF8AFA6}"
 	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
+		..\.editorconfig = ..\.editorconfig
 	EndProjectSection
 EndProject
 Global
