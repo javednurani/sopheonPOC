@@ -35,6 +35,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
       [HttpGet]
       public async Task<IEnumerable<ProductDto>> Get()
       {
+         _logger.LogInformation("ProductsController::Get");
          var query = _dbContext.Products
                .AsNoTracking()
                .ProjectTo<ProductDto>(_mapper.ConfigurationProvider);
