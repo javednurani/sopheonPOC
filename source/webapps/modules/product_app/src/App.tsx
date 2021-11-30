@@ -3,6 +3,7 @@ import { AppProps, FetchStatus } from '@sopheon/shell-api';
 import React, { useEffect } from 'react';
 
 import { AppDispatchProps, AppStateProps } from './AppContainer';
+import Dashboard from './Dashboard';
 import { ReactComponent as AeroIndustry } from './images/industryico_Aero.svg';
 import { ReactComponent as AgIndustry } from './images/industryico_Ag.svg';
 import { ReactComponent as AutoIndustry } from './images/industryico_Auto.svg';
@@ -31,6 +32,8 @@ const svgIconStyle: React.CSSProperties = {
   height: '20px',
   overflow: 'visible',
 };
+
+// TODO: is this specific to Onboarding?
 registerIcons({
   icons: {
     AgIndustryIcon: <AgIndustry style={svgIconStyle} />,
@@ -78,6 +81,7 @@ const App: React.FunctionComponent<Props> = ({
     }
   }, [accessToken, getProductsFetchStatus]);
 
+  // TODO: maybe this should be the respnsibility of the onbaording component to control?
   useEffect(() => {
     if ((products.length === 0 && environmentKey) || (currentStep === 3 && products.length === 1)) {
       hideHeaderFooter();
@@ -86,19 +90,30 @@ const App: React.FunctionComponent<Props> = ({
     }
   }, [products, environmentKey]);
 
+  // TODO: condition copied from above, can be simplified?
+  const userNeedsOnboarding = (products.length === 0 && environmentKey) || (currentStep === 3 && products.length === 1);
+
+  if (userNeedsOnboarding) {
+    return (
+      <div>
+        <Stack>
+          <OnboardingInfo
+            currentStep={currentStep}
+            nextStep={nextStep}
+            createProduct={createProduct}
+            updateProduct={updateProduct}
+            environmentKey={environmentKey}
+            accessToken={accessToken}
+            products={products}
+          />
+        </Stack>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <Stack>
-        <OnboardingInfo
-          currentStep={currentStep}
-          nextStep={nextStep}
-          createProduct={createProduct}
-          updateProduct={updateProduct}
-          environmentKey={environmentKey}
-          accessToken={accessToken}
-          products={products}
-        />
-      </Stack>
+      <Dashboard />
     </div>
   );
 };

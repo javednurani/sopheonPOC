@@ -320,6 +320,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
     );
   }
 
+  // TODO: is this reachable?
   if (products.length > 0) {
     return (
       <Stack horizontalAlign="center">
