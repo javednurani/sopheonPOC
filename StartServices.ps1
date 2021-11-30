@@ -13,7 +13,7 @@ npm run buildmods
 Write-Output "............."
 npm install
 Write-Output "........"
-powershell -NoExit npm run start
+Start-Process powershell "-NoExit npm run start";
 Write-Output "...."
 Write-Output "Done!"
 Write-Output "Services and react node server should be running in new windows..."
