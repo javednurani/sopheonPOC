@@ -16,7 +16,7 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
 
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            FunctionsHostBuilderContext context = builder.GetContext();
+            FunctionsHostBuilderContext context = builder.GetContext();            
 
             ConfigureServices(context, builder.Services);
         }
