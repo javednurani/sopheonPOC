@@ -179,8 +179,8 @@ namespace Sopheon.CloudNative.Products.AspNetCore
                c.OAuthUsePkce();
             });
             // TODO, iterate on CORS policy
-            // CORS policy currently handled on App Service config
-            // app.UseCors(corsPolicyAllowAll);
+            // deploy CORS policy currently handled on App Service config
+            app.UseCors(corsPolicyAllowAll);
          }
 
          app.UseHttpsRedirection();

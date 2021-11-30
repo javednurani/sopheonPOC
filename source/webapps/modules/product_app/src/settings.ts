@@ -3,7 +3,7 @@ import { PRODUCT_MANAGEMENT_API_BASE_URL } from '../../../devEnvSettings';
 const isDev = process.env.NODE_ENV === 'development';
 
 // INFO: ^token^ is meant to be replaced in Deploy CI
-const productManagementApiUrlBase = isDev ? PRODUCT_MANAGEMENT_API_BASE_URL : '^ProductMangementApiBaseUrl^';
+const productManagementApiUrlBase = isDev ? PRODUCT_MANAGEMENT_API_BASE_URL : '^ProductManagementApiBaseUrl^';
 
 // INFO: {*token*} is meant to be replaced in React SPA
 const tokenEnvironmentKey = '{*environmentKey*}';
