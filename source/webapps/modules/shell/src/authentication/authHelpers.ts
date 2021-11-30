@@ -1,6 +1,11 @@
 import { AccountInfo, Configuration, IPublicClientApplication, PublicClientApplication, RedirectRequest } from '@azure/msal-browser';
 
-import { azureSettings, getAuthorityDomain, getAuthorityUrl } from '../settings/azureSettings';
+import { azureSettings, getAuthorityDomain, getAuthorityUrl, getProductManagementApiScopeCoreReadWrite } from '../settings/azureSettings';
+
+const OIDC_SCOPES = ['openid', 'offline_access'];
+const PRODUCT_MANAGEMENT_SCOPES = [getProductManagementApiScopeCoreReadWrite()];
+
+export const ALL_SCOPES = OIDC_SCOPES.concat(PRODUCT_MANAGEMENT_SCOPES);
 
 export const msalInstance = (): PublicClientApplication => {
   const msalConfig: Configuration = {
@@ -15,10 +20,31 @@ export const msalInstance = (): PublicClientApplication => {
   return pca;
 };
 
+export const getAccessToken: () => Promise<string> = async () => {
+  const FAILURE_MESSAGE = 'shell::authHelpers::getAccessToken FAILURE';
+  try {
+    // outside of the component tree / React Context, create a new PublicClientApplication (with same config options) to access MSAL
+    const pca = msalInstance();
+    const account = getMsalAccount(pca);
+    if (account) {
+      const acquireTokenResponse = await pca.acquireTokenSilent({
+        scopes: PRODUCT_MANAGEMENT_SCOPES,
+        account: account
+      });
+
+      return acquireTokenResponse.accessToken || FAILURE_MESSAGE;
+    }
+    return FAILURE_MESSAGE;
+  } catch (error) {
+    console.log(error);
+    return FAILURE_MESSAGE;
+  }
+};
+
 export const loginButtonRequest: RedirectRequest = {
+  scopes: ALL_SCOPES,
   redirectUri: azureSettings.SPA_Root_URL,
   redirectStartPage: azureSettings.SPA_Root_URL,
-  scopes: []
 };
 
 export const changePasswordRequest: RedirectRequest = {
@@ -35,7 +61,7 @@ export const editProfileRequest: RedirectRequest = {
 
 export const getAuthLandingRedirectRequest = (adB2cPolicyName: string): RedirectRequest => ({
   authority: getAuthorityUrl(adB2cPolicyName),
-  scopes: ['openid', 'offline_access'],
+  scopes: ALL_SCOPES,
   redirectUri: azureSettings.SPA_Root_URL,
   redirectStartPage: azureSettings.SPA_Root_URL,
   // extraQueryParameters object can be used to pass in values that are resolved as custom policy claims

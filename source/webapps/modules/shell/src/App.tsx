@@ -1,9 +1,11 @@
 import { initializeIcons, registerIcons, ScrollablePane, ScrollbarVisibility, Stack } from '@fluentui/react';
 import { useTheme } from '@fluentui/react-theme-provider';
+import { GetAccessTokenAction } from '@sopheon/shell-api';
 import React, { CSSProperties, FunctionComponent } from 'react';
 import { useIntl } from 'react-intl';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
+import { SetEnvironmentKeyAction } from './authentication/authReducer';
 import IdleMonitor from './authentication/IdleMonitor';
 import Login from './authentication/Login';
 import Signup from './authentication/Signup';
@@ -18,10 +20,15 @@ import { ChangeThemeAction } from './themes/themeReducer/themeReducer';
 
 export interface AppProps {
   changeTheme: (useDarkTheme: boolean) => ChangeThemeAction;
+  setEnvironmentKey: (environmentKey: string) => SetEnvironmentKeyAction;
+  environmentKey: string | null;
+  headerFooterAreShown: boolean;
+  getAccessToken: () => GetAccessTokenAction;
 }
 
-const App: FunctionComponent<AppProps> = ({ changeTheme }: AppProps) => {
+const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, headerFooterAreShown, getAccessToken }: AppProps) => {
   const { formatMessage } = useIntl();
+
   const loadingMessage: string = formatMessage({ id: 'fallback.loading' });
   useTheme();
 
@@ -44,8 +51,11 @@ const App: FunctionComponent<AppProps> = ({ changeTheme }: AppProps) => {
     height: '100%',
   };
 
-  // TODO: check for user product existance CLOUD-2148
-  const userIsOnboarded = false;
+  const hideHeaderFooterStyle = {
+    root: {
+      height: '0'
+    }
+  };
 
   return (
     <div className="App" style={appStyle}>
@@ -67,11 +77,10 @@ const App: FunctionComponent<AppProps> = ({ changeTheme }: AppProps) => {
                 },
               }}
             >
-              {(!location.pathname.includes('product') || userIsOnboarded) && (
-                <Stack.Item>
-                  <Header changeTheme={changeTheme} />
-                </Stack.Item>
-              )}
+              <Stack.Item styles={headerFooterAreShown ? {} : hideHeaderFooterStyle}>
+                <Header changeTheme={changeTheme} setEnvironmentKey={setEnvironmentKey} getAccessToken={getAccessToken} />
+              </Stack.Item>
+
               <Stack.Item shrink>
                 <IdleMonitor />
               </Stack.Item>
@@ -81,6 +90,8 @@ const App: FunctionComponent<AppProps> = ({ changeTheme }: AppProps) => {
                   root: {
                     height: '100%',
                     overflow: 'auto',
+                    backgroundColor: 'white',
+                    zIndex: '9999'
                   },
                 }}
               >
@@ -96,11 +107,9 @@ const App: FunctionComponent<AppProps> = ({ changeTheme }: AppProps) => {
                   </ScrollablePane>
                 </main>
               </Stack.Item>
-              {(!location.pathname.includes('product') || userIsOnboarded) && (
-                <Stack.Item>
-                  <Footer />
-                </Stack.Item>
-              )}
+              <Stack.Item>
+                <Footer showFooter={headerFooterAreShown}/>
+              </Stack.Item>
             </Stack>
           </Route>
         </Switch>

@@ -14,7 +14,7 @@ $OutputCoveragePath = "$ProductsSourcePath\TestResults\";
 
 Write-Host "...Running dotnet ef migrations...";
 
-dotnet ef migrations script -p $ProductsDataAccessProject -o "$env:Build_ArtifactStagingDirectory\products_migration.sql" -i -- --connectionstring "Server=.;Database=TenantBlankEnv;Integrated Security=true;"
+dotnet ef migrations script -p $ProductsDataAccessProject -o "$env:Build_ArtifactStagingDirectory\products_migration.sql" -i -- --connectionstring "foobar"
 Check-LastExitCode;
 
 #Setup for Unit Tests here -
@@ -24,12 +24,13 @@ Write-Host "...Number of UnitTest projects found: $($TestProjects.Length)...";
 Foreach($file in $TestProjects) {
     Write-Host "...Running unit tests on $($file.Name)...";
     dotnet test $file.FullName -p:CollectCoverage=true -p:CoverletOutput=$OutputCoveragePath -p:CoverletOutputFormat="json%2cCobertura" -p:MergeWith="$OutputCoveragePath\coverage.json" --logger:"xunit;LogFilePath=$($OutputCoveragePath)\$($file.Name.Replace('.csproj', '')).xml" -p:Exclude="[*]Sopheon.CloudNative.Products.DataAccess.Migrations.*"
+    Check-LastExitCode;
 }
 
 #All migrations and tests are done...let's publish it!
 
 Write-Host "...Running dotnet publish on Functions.csproj";
-dotnet publish $ProductManagementProject -c Release -o ".\PublishOutput\";
+dotnet build $ProductManagementProject -c Release -o ".\PublishOutput\";
 Check-LastExitCode;
 
 dotnet tool restore

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using Sopheon.CloudNative.Products.Domain;
 
 namespace Sopheon.CloudNative.Products.AspNetCore.Models
 {
@@ -16,6 +18,8 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
 
       public List<MoneyAttributeValueDto> MoneyAttributeValues { get; set; }
 
+      public List<KeyPerformanceIndicatorDto> KeyPerformanceIndicators { get; set; }
+
       public string Name { get; set; }
 
       public string Description { get; set; }
@@ -26,7 +30,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
 
       public string Key { get; set; }
 
-      //public List<Goal> Goals { get; set; }
+      public List<ProductGoalDto> Goals { get; set; }
 
       //public List<ProductItem> Items { get; set; }
 
@@ -39,11 +43,13 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
 
    public class ProductPatchDto
    {
-      //public int Id { get; set; }
+      public int Id { get; set; }
 
-      //public IntAttributeValueDto[] IntAttributeValues { get; set; }
+      public List<Int32AttributeValueDto> IntAttributeValues { get; set; }
 
       //public StringAttributeValueDto[] StringAttributeValues { get; set; }
+
+      public List<KeyPerformanceIndicatorDto> KeyPerformanceIndicators { get; set; }
 
       //public DecimalAttributeValueDto[] DecimalAttributeValues { get; set; }
 
@@ -51,6 +57,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
 
       //public MoneyAttributeValueDto[] MoneyAttributeValues { get; set; }
 
+      [MaxLength(ModelConstraints.NAME_LENGTH_300)]
       public string Name { get; set; }
 
       public string Description { get; set; }
@@ -59,16 +66,20 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
 
       //public Status Status { get; set; }
 
-      //public string Key { get; set; }
+      public string Key { get; set; }
 
-      //public List<Goal> Goals { get; set; }
+      public List<ProductGoalDto> Goals { get; set; }
 
       //public List<ProductItem> Items { get; set; }
 
       //public List<FileAttachment> FileAttachments { get; set; }
+   }
 
-      //public List<UrlLink> UrlLinks { get; set; }
-
-      //public List<Release> Releases { get; set; }
+   public class ProductPostDto
+   {
+      [Required()]
+      [MaxLength(ModelConstraints.NAME_LENGTH_300)]
+      public string Name { get; set; }
+      public List<Int32AttributeValueDto> IntAttributeValues { get; set; }
    }
 }

@@ -1,6 +1,6 @@
-import { Label, registerIcons } from '@fluentui/react';
-import { AppProps } from '@sopheon/shell-api';
-import React from 'react';
+import { registerIcons, Stack } from '@fluentui/react';
+import { AppProps, FetchStatus } from '@sopheon/shell-api';
+import React, { useEffect } from 'react';
 
 import { AppDispatchProps, AppStateProps } from './AppContainer';
 import { ReactComponent as AeroIndustry } from './images/industryico_Aero.svg';
@@ -21,9 +21,11 @@ import { ReactComponent as ServicesIndustry } from './images/industryico_Service
 import { ReactComponent as TechIndustry } from './images/industryico_Tech.svg';
 import { ReactComponent as TeleIndustry } from './images/industryico_Tele.svg';
 import { ReactComponent as TransIndustry } from './images/industryico_Trans.svg';
-import OnboardingInfo from './onboardingInfo';
+import OnboardingInfo from './onboarding/onboardingInfo';
+import { EnvironmentScopedApiRequestModel } from './types';
 
 export type Props = AppProps<AppStateProps, AppDispatchProps>;
+
 const svgIconStyle: React.CSSProperties = {
   width: '20px',
   height: '20px',
@@ -52,12 +54,52 @@ registerIcons({
   },
 });
 
-const App: React.FunctionComponent<Props> = ({ currentStep, nextStep }: Props) => (
-  <div>
-    <Label>
-      <OnboardingInfo currentStep={currentStep} nextStep={nextStep} />
-    </Label>
-  </div>
-);
+const App: React.FunctionComponent<Props> = ({
+  currentStep,
+  nextStep,
+  createProduct,
+  updateProduct,
+  products,
+  getProducts,
+  getProductsFetchStatus,
+  environmentKey,
+  accessToken,
+  hideHeaderFooter,
+  showHeaderFooter,
+}: Props) => {
+  useEffect(() => {
+    if (accessToken && getProductsFetchStatus === FetchStatus.NotActive) {
+      const requestDto: EnvironmentScopedApiRequestModel = {
+        EnvironmentKey: environmentKey || '',
+        AccessToken: accessToken,
+      };
 
+      getProducts(requestDto);
+    }
+  }, [accessToken, getProductsFetchStatus]);
+
+  useEffect(() => {
+    if ((products.length === 0 && environmentKey) || (currentStep === 3 && products.length === 1)) {
+      hideHeaderFooter();
+    } else {
+      showHeaderFooter();
+    }
+  }, [products, environmentKey]);
+
+  return (
+    <div>
+      <Stack>
+        <OnboardingInfo
+          currentStep={currentStep}
+          nextStep={nextStep}
+          createProduct={createProduct}
+          updateProduct={updateProduct}
+          environmentKey={environmentKey}
+          accessToken={accessToken}
+          products={products}
+        />
+      </Stack>
+    </div>
+  );
+};
 export default App;

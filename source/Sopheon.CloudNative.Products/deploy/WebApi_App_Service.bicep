@@ -131,7 +131,7 @@ resource ProductManagementWebApp 'Microsoft.Web/sites@2021-02-01' = {
         sslState: 'Disabled'
         hostType: 'Repository'
       }
-    ]
+    ]    
     siteConfig: {
       numberOfWorkers: 1
       acrUseManagedIdentityCreds: false
@@ -139,7 +139,7 @@ resource ProductManagementWebApp 'Microsoft.Web/sites@2021-02-01' = {
       http20Enabled: false
       functionAppScaleLimit: 0
       minimumElasticInstanceCount: 1
-      netFrameworkVersion: 'v5.0'      
+      netFrameworkVersion: 'v6.0'      
       appSettings: [
         {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
@@ -162,6 +162,10 @@ resource ProductManagementWebApp 'Microsoft.Web/sites@2021-02-01' = {
           value: 'http://${toLower(resourceGroup().name)}.azurewebsites.net/GetEnvironmentResourceBindingUri'
         }
         {
+          name: 'ServiceUrls:GetEnvironments'
+          value: 'http://${toLower(resourceGroup().name)}.azurewebsites.net/Environments'
+        }
+        {
           name: 'WEBSITE_HTTPLOGGING_RETENTION_DAYS'
           value: '90'
         }
@@ -169,11 +173,16 @@ resource ProductManagementWebApp 'Microsoft.Web/sites@2021-02-01' = {
           name: 'WEBSITE_HEALTHCHECK_MAXPINGFAILURES'
           value: '10'
         }
-        {
-          name: 'ASPNETCORE_ENVIRONMENT'
-          value: 'development'
-        }
+        // {
+        //   name: 'ASPNETCORE_ENVIRONMENT'
+        //   value: 'development'
+        // }
       ]
+      cors: {
+        allowedOrigins:[
+          'https://stratusapp-${toLower(env)}.azureedge.net'
+        ]
+      }
     }
   }
 }
@@ -183,7 +192,7 @@ resource sites_StratusProductManagement_Dev_name_web 'Microsoft.Web/sites/config
   name: 'web'
   properties: {
     numberOfWorkers: 1    
-    netFrameworkVersion: 'v5.0'
+    netFrameworkVersion: 'v6.0'
     requestTracingEnabled: true
     requestTracingExpirationTime: '12/31/9999 11:59:00 PM'
     remoteDebuggingEnabled: false

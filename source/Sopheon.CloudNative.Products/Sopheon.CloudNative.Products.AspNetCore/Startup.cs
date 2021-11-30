@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -80,21 +81,21 @@ namespace Sopheon.CloudNative.Products.AspNetCore
 
          services.AddAutoMapper(typeof(Startup));
 
-         services.AddControllers();
+         services.AddControllers().AddNewtonsoftJson();
 
          services.AddSwaggerGen(c =>
          {
             // If new Swagger Docs are added, update the build action
-            c.SwaggerDoc("v1", new OpenApiInfo 
-            { 
-               Title = "Sopheon.CloudNative.Products.AspNetCore", 
+            c.SwaggerDoc("v1", new OpenApiInfo
+            {
+               Title = "Sopheon.CloudNative.Products.AspNetCore",
                Version = "v1",
                Description = ""
             });
 
             Uri authorizationUrl = new Uri($"{Configuration.GetValue<string>("AzureAdB2C:Instance")}/{Configuration.GetValue<string>("AzureAdB2C:Domain")}/{Configuration.GetValue<string>("AzureAdB2C:SignUpSignInPolicyId")}/oauth2/v2.0/authorize"); // ex: https://<b2c_tenant_name>.b2clogin.com/<b2c_tenant_name>.onmicrosoft.com/oauth2/v2.0/authorize?p=b2c_1_susi_v2
             Uri tokenUrl = new Uri($"{Configuration.GetValue<string>("AzureAdB2C:Instance")}/{Configuration.GetValue<string>("AzureAdB2C:Domain")}/{Configuration.GetValue<string>("AzureAdB2C:SignUpSignInPolicyId")}/oauth2/v2.0/token"); // ex: https://<b2c_tenant_name>.b2clogin.com/<b2c_tenant_name>.onmicrosoft.com/oauth2/v2.0/token?p=b2c_1_susi_v2
-            
+
             c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
             {
                Name = "Authorization",
@@ -137,34 +138,24 @@ namespace Sopheon.CloudNative.Products.AspNetCore
          if (!_env.IsDevelopment() || !Configuration.GetValue<bool>("LocalDevelopment:UseEnvironmentDatabasesFromAppSettings"))
          {
             services.AddScoped<IEnvironmentSqlConnectionStringProvider, EnvironmentSqlConnectionStringProvider>();
+            services.AddScoped<IAuthorizationHandler, EnvironmentOwnerHandler>();
          }
          else
          {
             services.AddScoped<IEnvironmentSqlConnectionStringProvider, DevelopmentTimeEnvironmentSqlConnectionStringProvider>();
+            services.AddScoped<IAuthorizationHandler, DevelopmentTimeEnvironmentOwnerHandler>();
          }
 
-         if (_env.IsDevelopment())
-         {
-            services.AddCors(options =>
-            {
-               options.AddDefaultPolicy(builder =>
-               {
-                  builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
-               });
-            });
-         }
-
-         services.AddScoped<IAuthorizationHandler, EnvironmentOwnerHandler>();
          //services.AddScoped<IAuthorizationHandler, SopheonSupportEnvironmentAccessHandler>(); // TODO: Add handling for support access scenario, or potentially local dev scenarios
 
          // Entity Framework
          services.AddDbContext<ProductManagementContext>((serviceProvider, optionsBuilder) =>
-         {
-            // WARNING: As of EF 5, AddDbContext does not support an aysnc delegate
-            var connectionStringProvider = serviceProvider.GetService<IEnvironmentSqlConnectionStringProvider>();
-            string connectionString = connectionStringProvider.GetConnectionStringAsync().Result; // TODO: Need to find async registration method
-            optionsBuilder.UseSqlServer(connectionString);
-         });
+      {
+         // WARNING: As of EF 5, AddDbContext does not support an aysnc delegate
+         var connectionStringProvider = serviceProvider.GetService<IEnvironmentSqlConnectionStringProvider>();
+         string connectionString = connectionStringProvider.GetConnectionStringAsync().Result; // TODO: Need to find async registration method
+         optionsBuilder.UseSqlServer(connectionString);
+      });
       }
 
       /// <summary>
@@ -187,8 +178,9 @@ namespace Sopheon.CloudNative.Products.AspNetCore
                c.OAuthScopeSeparator(" ");
                c.OAuthUsePkce();
             });
-
-            app.UseCors();
+            // TODO, iterate on CORS policy
+            // deploy CORS policy currently handled on App Service config
+            app.UseCors(corsPolicyAllowAll);
          }
 
          app.UseHttpsRedirection();
@@ -232,5 +224,11 @@ namespace Sopheon.CloudNative.Products.AspNetCore
          };
          await context.Response.WriteAsJsonAsync(response);
       }
+
+      private readonly Action<CorsPolicyBuilder> corsPolicyAllowAll =
+         options => options
+                     .AllowAnyOrigin()
+                     .AllowAnyMethod()
+                     .AllowAnyHeader();
    }
 }

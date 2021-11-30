@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -8,11 +9,13 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Sopheon.CloudNative.Products.AspNetCore.Filters;
 using Sopheon.CloudNative.Products.AspNetCore.Models;
 using Sopheon.CloudNative.Products.Domain;
 
 namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
 {
+   [TypeFilter(typeof(GeneralExceptionFilter))]
    public class ProductsController : EnvironmentScopedControllerBase
    {
       private readonly ILogger<ProductsController> _logger;
@@ -32,11 +35,26 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
       [HttpGet]
       public async Task<IEnumerable<ProductDto>> Get()
       {
+         _logger.LogInformation("ProductsController::Get");
          var query = _dbContext.Products
                .AsNoTracking()
                .ProjectTo<ProductDto>(_mapper.ConfigurationProvider);
 
          return await query.ToArrayAsync();
+      }
+
+      [HttpGet("{key}")]
+      public async Task<IActionResult> GetByKey(string key)
+      {
+         var product = await _dbContext.Products
+             .Include(p => p.Goals)
+             .Include(p => p.KeyPerformanceIndicators)
+             .AsNoTracking()
+             .SingleOrDefaultAsync(p => p.Key == key);
+
+         if (product == null) { return NotFound(); }
+
+         return Ok(_mapper.Map<ProductDto>(product));
       }
 
       [HttpGet("{key}/Items")]
@@ -60,8 +78,8 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
             return NoContent();
          }
 
-         var test = await _dbContext.Products.ToListAsync();
          Product productFromDatabase = await _dbContext.Products.SingleOrDefaultAsync(p => p.Key == key);
+
          if (productFromDatabase == null)
          {
             return NotFound();
@@ -74,7 +92,30 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
 
          await _dbContext.SaveChangesAsync();
 
-         return NoContent();
+         // fetch updated product to ensure related entity Id's are populated (eg Attributes, KPIs, Goals)
+         var updatedProduct = await _dbContext.Products
+             .Include(p => p.Goals)
+             .Include(p => p.KeyPerformanceIndicators)
+             .ThenInclude(kpi => kpi.Attribute)
+             .AsNoTracking()
+             .SingleOrDefaultAsync(p => p.Key == key);
+
+         return Ok(_mapper.Map<ProductDto>(updatedProduct));
+      }
+
+      [HttpPost]
+      public async Task<IActionResult> PostAsync([FromBody] ProductPostDto productPostDto)
+      {
+         Product product = _mapper.Map<Product>(productPostDto);
+         product.Key = Guid.NewGuid().ToString();
+
+         await _dbContext.Products.AddAsync(product);
+
+         await _dbContext.SaveChangesAsync();
+
+         ProductDto resultProduct = _mapper.Map<ProductDto>(product);
+
+         return CreatedAtAction(nameof(GetByKey), new { EnvironmentId = Request.RouteValues["EnvironmentId"], key = resultProduct.Key }, resultProduct);
       }
    }
 }

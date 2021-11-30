@@ -67,27 +67,9 @@ namespace Sopheon.CloudNative.Products.DataAccess.SeedData
                new Domain.Attribute()
                {
                   AttributeId = -1,
-                  Name = "Net Present Value",
-                  ShortName = "NPV",
-                  AttributeValueTypeId = (int)AttributeValueTypes.Money
-               },
-               new Domain.Attribute()
-               {
-                  AttributeId = -2,
                   Name = "Industry",
-                  AttributeValueTypeId = (int)AttributeValueTypes.String
-               },
-               new Domain.Attribute()
-               {
-                  AttributeId = -3,
-                  Name = "Risk Score",
+                  ShortName = "IND",
                   AttributeValueTypeId = (int)AttributeValueTypes.Int32
-               },
-               new Domain.Attribute()
-               {
-                  AttributeId = -4,
-                  Name = "Initial Release Date",
-                  AttributeValueTypeId = (int)AttributeValueTypes.UtcDateTime
                }
             };
       }

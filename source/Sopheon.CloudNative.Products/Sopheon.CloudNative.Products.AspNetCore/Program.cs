@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Sopheon.CloudNative.Products.AspNetCore
 {
@@ -11,10 +12,11 @@ namespace Sopheon.CloudNative.Products.AspNetCore
       }
 
       public static IHostBuilder CreateHostBuilder(string[] args) =>
-          Host.CreateDefaultBuilder(args)
-              .ConfigureWebHostDefaults(webBuilder =>
-              {
-                 webBuilder.UseStartup<Startup>();
-              });
+         Host.CreateDefaultBuilder(args)
+            .ConfigureLogging(builder => builder.AddAzureWebAppDiagnostics())
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+               webBuilder.UseStartup<Startup>();
+            });
    }
 }
