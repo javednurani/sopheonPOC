@@ -8,20 +8,20 @@ Param(
 $DeploymentName = "ADO-Deployment";
 
 $ResourceGroupValue = "Stratus-$($Environment)";
-$StorageAccountNameValue = "stratuswebapp$($Environment.ToLower())";
+$StorageAccountNameValue = "stratuswebsite$($Environment.ToLower())";
 
 $MasterTemplate = "$($PSScriptRoot)\Master_Template.bicep";
 $MasterParametersTemplate = "$($PSScriptRoot)\Master_Template_Parameters.json";
 
 Write-Host "Replacing tokens on Master Template...";
 $masterTemplateContent = Get-Content $MasterTemplate -raw;
-$masterTemplateContent = $masterTemplateContent.Replace('^StorageAccountName^', $StorageAccountNameValue)
+$masterTemplateContent = $masterTemplateContent.Replace('^StorageAccountName^', $StorageAccountNameValue);
 Set-Content -Value $masterTemplateContent -Path $MasterTemplate;
 Write-Host "Complete!";
 
 Write-Host "Replacing tokens on Master Parameters Template...";
 $masterParametersContent = Get-Content $MasterParametersTemplate -raw;
-$masterParametersContent = $masterParametersContent.Replace('^StorageAccountName^', $StorageAccountNameValue)
+$masterParametersContent = $masterParametersContent.Replace('^StorageAccountName^', $StorageAccountNameValue);
 Set-Content -Value $masterParametersContent -Path $MasterParametersTemplate;
 Write-Host "Complete!";
 

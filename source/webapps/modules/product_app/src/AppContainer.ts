@@ -1,24 +1,43 @@
-import { InjectReducerMap, InjectSagaMap, ShellApiProps } from '@sopheon/shell-api';
+import {
+  FetchStatus,
+  InjectReducerMap,
+  InjectSagaMap,
+  ShellApiProps,
+} from '@sopheon/shell-api';
 import { FunctionComponent } from 'react';
 
 import App from './App';
-import { nextStep, NextStepAction } from './onboardingInfoReducer';
+import { nextStep, NextStepAction } from './onboarding/onboardingReducer';
+import { createProduct, CreateProductAction, getProducts, GetProductsAction, updateProduct, UpdateProductAction } from './product/productReducer';
 import { NAMESPACE, rootReducer, RootState } from './rootReducer';
 import rootSaga from './rootSaga';
+import { CreateProductModel, EnvironmentScopedApiRequestModel, Product, UpdateProductModel } from './types';
 
 export type AppStateProps = {
-  currentStep: number
+  currentStep: number;
+  products: Product[];
+  getProductsFetchStatus: FetchStatus;
 };
 
-export type AppDispatchProps = { nextStep: () => NextStepAction };
+export type AppDispatchProps = {
+  nextStep: () => NextStepAction;
+  getProducts: (requestDto: EnvironmentScopedApiRequestModel) => GetProductsAction;
+  createProduct: (product: CreateProductModel) => CreateProductAction;
+  updateProduct: (product: UpdateProductModel) => UpdateProductAction;
+};
 
 const AppContainer: FunctionComponent<ShellApiProps> = ({ shellApi }: ShellApiProps) => {
   const mapAppStateProps = (state: RootState): AppStateProps => ({
-    currentStep: state[NAMESPACE] ? state[NAMESPACE].onboardingInfo.currentStep : 1,
+    currentStep: state[NAMESPACE] ? state[NAMESPACE].onboarding.currentStep : 1,
+    products: state[NAMESPACE] ? state[NAMESPACE].product.products : [],
+    getProductsFetchStatus: state[NAMESPACE] ? state[NAMESPACE].product.getProductsFetchStatus : FetchStatus.NotActive,
   });
 
   const mapAppDispatchProps = (state: RootState): AppDispatchProps => ({
     nextStep: () => nextStep(),
+    getProducts: (requestDto: EnvironmentScopedApiRequestModel) => getProducts(requestDto),
+    createProduct: (product: CreateProductModel) => createProduct(product),
+    updateProduct: (product: UpdateProductModel) => updateProduct(product),
   });
 
   const appReducerMap: InjectReducerMap = {

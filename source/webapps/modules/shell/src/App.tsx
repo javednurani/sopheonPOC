@@ -1,40 +1,43 @@
 import { initializeIcons, registerIcons, ScrollablePane, ScrollbarVisibility, Stack } from '@fluentui/react';
 import { useTheme } from '@fluentui/react-theme-provider';
+import { GetAccessTokenAction } from '@sopheon/shell-api';
 import React, { CSSProperties, FunctionComponent } from 'react';
 import { useIntl } from 'react-intl';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
+import { SetEnvironmentKeyAction } from './authentication/authReducer';
 import IdleMonitor from './authentication/IdleMonitor';
 import Login from './authentication/Login';
 import Signup from './authentication/Signup';
 import { DynamicModule } from './DynamicModule';
 import Footer from './footer/Footer';
 import Header from './header/Header';
-import { ReactComponent as LLogo } from './images/Lucy24_logo.svg';
+import { ReactComponent as SopheonLogoDark } from './images/sopheon_logo_blk_txt.svg';
+import { ReactComponent as SopheonLogoLight } from './images/sopheon_logo_wht_txt.svg';
 import { appModules } from './settings/appModuleSettings';
 import { shellApi } from './ShellApi';
 import { ChangeThemeAction } from './themes/themeReducer/themeReducer';
 
 export interface AppProps {
   changeTheme: (useDarkTheme: boolean) => ChangeThemeAction;
+  setEnvironmentKey: (environmentKey: string) => SetEnvironmentKeyAction;
+  environmentKey: string | null;
+  headerFooterAreShown: boolean;
+  getAccessToken: () => GetAccessTokenAction;
 }
 
-const App: FunctionComponent<AppProps> = ({ changeTheme }: AppProps) => {
+const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, headerFooterAreShown, getAccessToken }: AppProps) => {
   const { formatMessage } = useIntl();
+
   const loadingMessage: string = formatMessage({ id: 'fallback.loading' });
   useTheme();
 
   initializeIcons();
 
-  const lucyIconStyle: CSSProperties = {
-    width: '20px',
-    height: '20px',
-    overflow: 'visible',
-  };
-
   registerIcons({
     icons: {
-      Lucy: <LLogo style={lucyIconStyle} />,
+      SopheonLogoDark: <SopheonLogoDark />,
+      SopheonLogoLight: <SopheonLogoLight />,
     },
   });
 
@@ -46,6 +49,12 @@ const App: FunctionComponent<AppProps> = ({ changeTheme }: AppProps) => {
   const pageContainerStyle: CSSProperties = {
     position: 'relative',
     height: '100%',
+  };
+
+  const hideHeaderFooterStyle = {
+    root: {
+      height: '0'
+    }
   };
 
   return (
@@ -68,9 +77,10 @@ const App: FunctionComponent<AppProps> = ({ changeTheme }: AppProps) => {
                 },
               }}
             >
-              <Stack.Item shrink>
-                <Header changeTheme={changeTheme} />
+              <Stack.Item styles={headerFooterAreShown ? {} : hideHeaderFooterStyle}>
+                <Header changeTheme={changeTheme} setEnvironmentKey={setEnvironmentKey} getAccessToken={getAccessToken} />
               </Stack.Item>
+
               <Stack.Item shrink>
                 <IdleMonitor />
               </Stack.Item>
@@ -80,6 +90,8 @@ const App: FunctionComponent<AppProps> = ({ changeTheme }: AppProps) => {
                   root: {
                     height: '100%',
                     overflow: 'auto',
+                    backgroundColor: 'white',
+                    zIndex: '9999'
                   },
                 }}
               >
@@ -96,7 +108,7 @@ const App: FunctionComponent<AppProps> = ({ changeTheme }: AppProps) => {
                 </main>
               </Stack.Item>
               <Stack.Item>
-                <Footer />
+                <Footer showFooter={headerFooterAreShown}/>
               </Stack.Item>
             </Stack>
           </Route>

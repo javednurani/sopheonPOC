@@ -1,6 +1,9 @@
 @description('The name of the Storage Account')
 param storageAccounts_name string = '^StorageAccountName^'
 
+@description('B2C Login Url')
+param b2cLogin string = '^B2CLogin^'
+
 param location string
 
 resource StaticWebpage_StorageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
@@ -45,18 +48,18 @@ resource StaticWebpage_Storage_BlobService 'Microsoft.Storage/storageAccounts/bl
       corsRules: [
         {
             allowedOrigins: [
-                'https://stratusb2cdev.b2clogin.com'
+              toLower(b2cLogin)
             ]
             allowedMethods: [
-                'GET'
-                'OPTIONS'
+              'GET'
+              'OPTIONS'
             ]
             maxAgeInSeconds: 200
             exposedHeaders: [
-                '*'
+              '*'
             ]
             allowedHeaders: [
-                '*'
+              '*'
             ]
         }
       ]

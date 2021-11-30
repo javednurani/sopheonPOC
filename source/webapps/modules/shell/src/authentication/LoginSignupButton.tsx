@@ -1,12 +1,19 @@
 import { AccountInfo } from '@azure/msal-browser';
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
 import { DefaultButton, IContextualMenuProps } from '@fluentui/react';
+import { GetAccessTokenAction } from '@sopheon/shell-api';
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
-import { changePasswordRequest, editProfileRequest, getMsalAccount } from './authHelpers';
+import { changePasswordRequest, editProfileRequest, getMsalAccount, loginButtonRequest } from './authHelpers';
+import { SetEnvironmentKeyAction } from './authReducer';
 
-const LoginSignupButton: FunctionComponent = () => {
+export interface ILoginSignupButtonProps {
+  setEnvironmentKey: (environmentKey: string) => SetEnvironmentKeyAction;
+  getAccessToken: () => GetAccessTokenAction;
+}
+
+const LoginSignupButton: FunctionComponent<ILoginSignupButtonProps> = ({ setEnvironmentKey, getAccessToken }: ILoginSignupButtonProps) => {
   const { formatMessage } = useIntl();
   const { instance, accounts } = useMsal();
 
@@ -15,7 +22,11 @@ const LoginSignupButton: FunctionComponent = () => {
   useEffect(() => {
     const msalAccount: AccountInfo | undefined = getMsalAccount(instance);
     if (msalAccount !== undefined) {
+      if (msalAccount.idTokenClaims && msalAccount.idTokenClaims.extension_environmentKey) {
+        setEnvironmentKey(msalAccount.idTokenClaims.extension_environmentKey);
+      }
       setAccount(msalAccount);
+      getAccessToken();
     }
   }, [instance, accounts]);
 
@@ -60,7 +71,7 @@ const LoginSignupButton: FunctionComponent = () => {
         <DefaultButton text={account ? account.name : formatMessage({ id: 'auth.myprofile' })} split menuProps={menuProps} />
       </AuthenticatedTemplate>
       <UnauthenticatedTemplate>
-        <DefaultButton text={formatMessage({ id: 'auth.loginbutton' })} onClick={() => instance.loginRedirect()} />
+        <DefaultButton text={formatMessage({ id: 'auth.loginbutton' })} onClick={() => instance.loginRedirect(loginButtonRequest)} />
       </UnauthenticatedTemplate>
     </React.Fragment>
   );

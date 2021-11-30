@@ -71,7 +71,8 @@ See also: https://pluto/display/PDP/Azure+Functions+and+Entity+Framework+Local+D
         - UserSecretManager.LocalDatabaseConnectionString (this dot notation represents JSON structure in the file)
         - SQLCONNSTR_EnvironmentsSqlConnectionString
         - SqlServerAdminEnigma
-        - AzSpClientSecret
+        - AzSpClientId
+        - AzSpClientEnigma
       - (Ask Cloud Team 1 devs for values)
 
 ## Local Azure storage emulation
@@ -111,6 +112,10 @@ See also: https://pluto/display/PDP/Azure+Functions+and+Entity+Framework+Local+D
  - You should be safe to run all tests in Test Explorer and get meaningful results
  - Integration tests should check if their dependencies are available in order to be tested, and skip if not
  - Any test failures should represent real failures
+ - OPEN TECH DESIGN ISSUE: Function Integration tests can potentially have 'real' side effects in Azure
+    - For example, Azure SQL Databases may be Tagged as "Assigned" to customer by AllocateSqlDatabaseSharedByServicesToEnvironment
+    - These tests should be skipped until a long-term strategy exists for mocking/stubbing out Azure dependencies and calls
+    - These tests can be run, but BE AWARE OF THE SIDE AFFECTS, and ONLY POINT TO THE STRATUS-DEV ENVIRONMENT
 
 # How To's
 
@@ -126,3 +131,7 @@ See also: https://pluto/display/PDP/Azure+Functions+and+Entity+Framework+Local+D
 
 # Design Decisions
 TODO: flesh this out.  This section should explain any design decisions or implementation details that might throw a newly onboarded dev for a loop.
+
+# Solution Items
+
+- .editorconfig file holds Sopheon VS Settings for Solution.  No dev action should be necessary.

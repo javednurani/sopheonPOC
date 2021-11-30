@@ -18,7 +18,7 @@
     <!-- https://github.com/Azure-Samples/Azure-AD-B2C-page-templates/blob/master/ocean_blue/css/assets.css -->
     <style>
       body {
-        background-image: url(https://^StorageAccountName^.blob.core.windows.net/b2cassets/azure-blue-background.png);
+        background-image: none;
       }
       @font-face {
         font-family: "SegoeUI";
@@ -27,7 +27,7 @@
       }
       @font-face {
         font-family: "SegoeUI";
-        src: url(https://^StorageAccountName^.blob.core.windows.net/b2cassets/segoeui_bold.WOFF);
+        src: url(https://login.microsoftonline.com/templates/src/fonts/segoeui_bold.WOFF);
         font-weight: bold;
       }
       #AmazonExchange {
@@ -619,6 +619,7 @@
       }
       .unified_container .row .panel-default .panel-body .companyLogo {
         display: block;
+        width: 200px;
       }
       .unified_container .row .panel-default .panel-body img {
         max-width: 100%;
@@ -897,6 +898,7 @@
         }
         .unified_container .row .panel-default .panel-body .companyLogo {
           display: block;
+          width: 200px;
         }
         .unified_container .row .panel-default .panel-body h3 {
           display: block;
@@ -1049,9 +1051,9 @@
           <div class="panel panel-default">
             <div class="panel-body">
               <img
-                alt="Company Logo"
+                alt="Sopheon Logo"
                 class="companyLogo"
-                src="https://^StorageAccountName^.blob.core.windows.net/b2cassets/logo.svg"
+                src="https://^StorageAccountName^.blob.core.windows.net/b2cassets/sopheon_logo_blk_txt.svg"
               />
               <div id="api"></div>
               <a

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -80,7 +81,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore
 
          services.AddAutoMapper(typeof(Startup));
 
-         services.AddControllers();
+         services.AddControllers().AddNewtonsoftJson();
 
          services.AddSwaggerGen(c =>
          {
@@ -137,24 +138,14 @@ namespace Sopheon.CloudNative.Products.AspNetCore
          if (!_env.IsDevelopment() || !Configuration.GetValue<bool>("DevelopmentAndDemoSettings:UseEnvironmentDatabasesFromAppSettings"))
          {
             services.AddScoped<IEnvironmentSqlConnectionStringProvider, EnvironmentSqlConnectionStringProvider>();
+            services.AddScoped<IAuthorizationHandler, EnvironmentOwnerHandler>();
          }
          else
          {
             services.AddScoped<IEnvironmentSqlConnectionStringProvider, DevelopmentTimeEnvironmentSqlConnectionStringProvider>();
+            services.AddScoped<IAuthorizationHandler, DevelopmentTimeEnvironmentOwnerHandler>();
          }
 
-         if (_env.IsDevelopment())
-         {
-            services.AddCors(options =>
-            {
-               options.AddDefaultPolicy(builder =>
-               {
-                  builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
-               });
-            });
-         }
-
-         services.AddScoped<IAuthorizationHandler, EnvironmentOwnerHandler>();
          //services.AddScoped<IAuthorizationHandler, SopheonSupportEnvironmentAccessHandler>(); // TODO: Add handling for support access scenario, or potentially local dev scenarios
          if (_env.IsDevelopment() && Configuration.GetValue<bool>("DevelopmentAndDemoSettings:EnableSuperUsers"))
          {
@@ -163,12 +154,12 @@ namespace Sopheon.CloudNative.Products.AspNetCore
 
          // Entity Framework
          services.AddDbContext<ProductManagementContext>((serviceProvider, optionsBuilder) =>
-         {
-            // WARNING: As of EF 5, AddDbContext does not support an aysnc delegate
-            var connectionStringProvider = serviceProvider.GetService<IEnvironmentSqlConnectionStringProvider>();
-            string connectionString = connectionStringProvider.GetConnectionStringAsync().Result; // TODO: Need to find async registration method
-            optionsBuilder.UseSqlServer(connectionString);
-         });
+      {
+         // WARNING: As of EF 5, AddDbContext does not support an aysnc delegate
+         var connectionStringProvider = serviceProvider.GetService<IEnvironmentSqlConnectionStringProvider>();
+         string connectionString = connectionStringProvider.GetConnectionStringAsync().Result; // TODO: Need to find async registration method
+         optionsBuilder.UseSqlServer(connectionString);
+      });
       }
 
       /// <summary>
@@ -191,8 +182,9 @@ namespace Sopheon.CloudNative.Products.AspNetCore
                c.OAuthScopeSeparator(" ");
                c.OAuthUsePkce();
             });
-
-            app.UseCors();
+            // TODO, iterate on CORS policy
+            // CORS policy currently handled on App Service config
+            // app.UseCors(corsPolicyAllowAll);
          }
 
          app.UseHttpsRedirection();
@@ -236,5 +228,11 @@ namespace Sopheon.CloudNative.Products.AspNetCore
          };
          await context.Response.WriteAsJsonAsync(response);
       }
+
+      private readonly Action<CorsPolicyBuilder> corsPolicyAllowAll =
+         options => options
+                     .AllowAnyOrigin()
+                     .AllowAnyMethod()
+                     .AllowAnyHeader();
    }
 }

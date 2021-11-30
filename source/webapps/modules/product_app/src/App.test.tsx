@@ -1,13 +1,12 @@
-import { Label } from '@fluentui/react';
 import { messages } from '@sopheon/shared-ui';
+import { FetchStatus } from '@sopheon/shell-api';
 import { mount } from 'enzyme';
-import toJson from 'enzyme-to-json';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
 import App, { Props } from './App';
-import OnboardingInfo from './onboardingInfo';
+import OnboardingInfo from './onboarding/onboardingInfo';
 
 expect.extend(toHaveNoViolations);
 
@@ -16,34 +15,45 @@ describe('Testing the App component', () => {
     const appProps: Props = {
       currentStep: 1,
       nextStep: jest.fn(),
+      environmentKey: 'asdf',
+      getAccessToken: jest.fn(),
+      accessToken: '',
+      showHeaderFooter: jest.fn(),
+      hideHeaderFooter: jest.fn(),
+      products: [],
+      getProductsFetchStatus: FetchStatus.NotActive,
+      getProducts: jest.fn(),
+      createProduct: jest.fn(),
+      updateProduct: jest.fn(),
     };
 
     const wrapper = mount(
       <IntlProvider locale="en" messages={messages.en}>
-        <App
-          currentStep={appProps.currentStep}
-          nextStep={appProps.nextStep}
-        />
+        <App {...appProps} />
       </IntlProvider>
     );
 
-    expect(wrapper.find(Label)).toHaveLength(1);
-    expect(wrapper.find(Label).text()).toContain(messages.en['app.welcome']);
     expect(wrapper.find(OnboardingInfo)).toHaveLength(1);
-    expect(wrapper.find(OnboardingInfo).props()).toStrictEqual(appProps);
   });
   it('Accessibility test for the App component', async () => {
     const appProps: Props = {
       currentStep: 1,
       nextStep: jest.fn(),
+      environmentKey: 'asdf',
+      getAccessToken: jest.fn(),
+      accessToken: '',
+      showHeaderFooter: jest.fn(),
+      hideHeaderFooter: jest.fn(),
+      products: [],
+      getProductsFetchStatus: FetchStatus.NotActive,
+      getProducts: jest.fn(),
+      createProduct: jest.fn(),
+      updateProduct: jest.fn(),
     };
 
     const wrapper = mount(
       <IntlProvider locale="en" messages={messages.en}>
-        <App
-          currentStep={appProps.currentStep}
-          nextStep={appProps.nextStep}
-        />
+        <App {...appProps} />
       </IntlProvider>
     );
 
@@ -54,24 +64,5 @@ describe('Testing the App component', () => {
       },
     });
     expect(results).toHaveNoViolations();
-  });
-  it('App snapshot render test', () => {
-    const appProps: Props = {
-      currentStep: 1,
-      nextStep: jest.fn(),
-    };
-
-    const tree = mount(
-      <IntlProvider locale="en" messages={messages.en}>
-        <App {...appProps} />
-      </IntlProvider>
-    );
-
-    expect(
-      toJson(tree, {
-        noKey: false,
-        mode: 'deep',
-      })
-    ).toMatchSnapshot();
   });
 });

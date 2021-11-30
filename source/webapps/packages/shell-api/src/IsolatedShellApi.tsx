@@ -5,7 +5,9 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { Saga } from 'redux-saga';
 
 import { IShellApi } from './IShellApi';
-import { InjectReducerMap, InjectSagaMap } from './store/types';
+import { createAction } from './store/actions';
+import { DisplayActionTypes } from './store/display/types';
+import { AuthSagaActionTypes, InjectReducerMap, InjectSagaMap } from './store/types';
 
 // REDUCER INJECTION HELPERS / UTILITY VARIABLES
 
@@ -36,6 +38,7 @@ export class IsolatedShellApi implements IShellApi {
   constructor(store?: Store) {
     this.store = store || createIsolatedStore();
   }
+  environmentKey: string;
 
   get getStore(): Store {
     return this.store;
@@ -85,12 +88,17 @@ export class IsolatedShellApi implements IShellApi {
     const mapState = () => ({
       ...(mapStateProps && mapStateProps(this.store.getState() as TState)),
       // stub out Shell-provided state (found in AppProps) here
+      environmentKey: 'ISOLATED_SHELL_API_ENVIRONMENTKEY_STUB',
+      accessToken: 'ISOLATED_SHELL_API_ACCESSTOKEN_STUB',
     });
 
     // INFO: some of these action creators are duplicated in main-shell reducers, could possibly consolidate
     const mapDispatch = {
       ...(mapDispatchProps && mapDispatchProps(this.store.getState() as TState)),
       // stub out Shell-provided dispatch (found in AppProps) here
+      getAccessToken: () => createAction(AuthSagaActionTypes.GET_ACCESS_TOKEN),
+      showHeaderFooter: () => createAction(DisplayActionTypes.SHOW_HEADER_FOOTER),
+      hideHeaderFooter: () => createAction(DisplayActionTypes.HIDE_HEADER_FOOTER),
     };
 
     return connect(mapState, mapDispatch);

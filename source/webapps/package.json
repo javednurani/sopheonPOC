@@ -8,6 +8,9 @@
   "scripts": {
     "start": "lerna run --parallel start",
     "build": "lerna run build",
+    "buildpkgs": "lerna exec --parallel --no-bail --scope @sopheon/\\* \"npm i && npm run build\"",
+    "buildmods": "lerna exec --parallel --no-bail --scope *-module \"npm i && npm run build\"",
+    "test": "lerna exec --parallel --no-bail npm run test",
     "serve": "lerna run --parallel serve",
     "clean": "lerna run --parallel clean",
     "format": "eslint . --fix || prettier . --write"

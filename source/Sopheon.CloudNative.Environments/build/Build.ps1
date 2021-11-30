@@ -14,7 +14,7 @@ $OutputCoveragePath = "$($env:System_DefaultWorkingDirectory)\source\Sopheon.Clo
 
 Write-Host "...Running dotnet ef migrations...";
 
-dotnet ef migrations script -p "Sopheon.CloudNative.Environments.Data\Sopheon.CloudNative.Environments.Data.csproj" -o "$($env:Build_ArtifactStagingDirectory)\scripts.sql" -i;
+dotnet ef migrations script -p "Sopheon.CloudNative.Environments.Data\Sopheon.CloudNative.Environments.Data.csproj" -o "$($env:Build_ArtifactStagingDirectory)\scripts.sql" -i -- --connectionstring "foobar"
 Check-LastExitCode;
 
 #Setup for Integration tests here --
@@ -71,6 +71,7 @@ Write-Host "...Number of UnitTest projects found: $($TestProjects.Length)...";
 Foreach($file in $TestProjects) {
     Write-Host "...Running unit tests on $($file.Name)...";
     dotnet test $file.FullName -p:CollectCoverage=true -p:CoverletOutput=$OutputCoveragePath -p:CoverletOutputFormat="json%2cCobertura" -p:MergeWith="$($OutputCoveragePath)\coverage.json" --logger:"xunit;LogFilePath=$($OutputCoveragePath)\$($file.Name.Replace('.csproj', '')).xml" -p:Exclude="[*]Sopheon.CloudNative.Environments.Data.Migrations.*"
+    Check-LastExitCode;
 }
 
 # #Tear down the integration tests setup -

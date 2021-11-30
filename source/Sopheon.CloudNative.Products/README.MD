@@ -27,3 +27,7 @@ Ex:
 ```
 /Environments/<environment key guid>/Attributes
 ```
+
+# Solution Items
+
+- .editorconfig file holds Sopheon VS Settings for Solution.  No dev action should be necessary.

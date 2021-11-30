@@ -29,6 +29,12 @@
       "Pattern": "^IdleLogOutWarningSeconds^",
       "EnvironmentVariableName": "IdleLogOutWarningSeconds",
       "IsKeyVaultSecret": false
+    },
+    {
+      "TokenDisplayName": "B2C Product Management Api Client Id",
+      "Pattern": "^B2CProductManagementApiClientId^",
+      "IsKeyVaultSecret": true,
+      "KeyVaultSecretName": "StratusB2CProductManagementApiClientId"
     }
   ]
 }
