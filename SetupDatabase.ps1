@@ -15,6 +15,6 @@ Start-Sleep -Seconds 5;
 
 Push-Location ..\..\setupScripts
 
-.\SetupEnvDB.ps1 -Password $Password
+& '.\SetupEnvDB.ps1' -Password $Password
 
-.\SetupProductDB.ps1 -Password $Password
+& '.\SetupProductDB.ps1' -Password $Password
