@@ -1,0 +1,12 @@
+{
+    "IsEncrypted": false,
+    "Values": {
+        "AzureWebJobsStorage": "InsertAzureStorageString",
+        "DatabaseBufferTimer": "0 * * * * *", // every minute
+        "AzureWebJobs.DatabaseBufferMonitor.Disabled": true
+    },
+    "Host": {
+        "CORS": "*",
+        "CORSCredentials": false
+    }
+}
