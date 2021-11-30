@@ -1,15 +1,5 @@
-[Cmdletbinding()]
-Param(
-    [Parameter(Mandatory = $true)]
-    [ValidateNotNullOrEmpty()]
-    [System.Security.SecureString]
-    $Password = $(Throw "Need a password")
-)
+Push-Location -Path "$($PSScriptRoot)\..\Sopheon.CloudNative.Environments\Sopheon.CloudNative.Environments.Data";
 
-$ConvertedValue = ConvertFrom-SecureString -SecureString $Password -AsPlainText
+docker-compose -f docker-compose.dev-db.yml up -d --build;
 
-Push-Location -Path "$($PSScriptRoot)\..\Sopheon.CloudNative.Environments\Sopheon.CloudNative.Environments.Data"
-
-Start-Process docker-compose -ArgumentList "-f docker-compose.dev-db.yml up -d --build"
-
-Pop-Location
+Pop-Location;
