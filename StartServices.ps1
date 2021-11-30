@@ -1,8 +1,8 @@
 Push-Location "$($PSScriptRoot)\source\setupScripts"
 
-& '.\StartEnvService.ps1';
+powershell -NoExit '.\StartEnvService.ps1';
 
-& '.\StartProductService.ps1';
+pwoershell -NoExit '.\StartProductService.ps1';
 
 Push-Location "..\webapps"
 
