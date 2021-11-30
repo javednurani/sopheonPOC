@@ -1,15 +1,4 @@
-﻿using System;
-using System.IO;
-using Microsoft.Azure.Functions.Extensions.DependencyInjection;
-using Microsoft.Azure.Management.Fluent;
-using Microsoft.Azure.Management.ResourceManager.Fluent;
-using Microsoft.Azure.Management.ResourceManager.Fluent.Authentication;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Sopheon.CloudNative.Environments.Data;
-
-[assembly: FunctionsStartup(typeof(Sopheon.CloudNative.Environments.DurableFunctions.Startup))]
+﻿[assembly: FunctionsStartup(typeof(Sopheon.CloudNative.Environments.DurableFunctions.Startup))]
 
 namespace Sopheon.CloudNative.Environments.DurableFunctions
 {
@@ -27,7 +16,7 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
 
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            FunctionsHostBuilderContext context = builder.GetContext();
+            FunctionsHostBuilderContext context = builder.GetContext();            
 
             ConfigureServices(context, builder.Services);
         }

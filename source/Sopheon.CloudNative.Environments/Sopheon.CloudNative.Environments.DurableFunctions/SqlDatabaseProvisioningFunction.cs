@@ -1,21 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Azure.Management.Fluent;
-using Microsoft.Azure.Management.ResourceManager.Fluent;
-using Microsoft.Azure.Management.ResourceManager.Fluent.Models;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.DurableTask;
-using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Sopheon.CloudNative.Environments.Data;
-
 namespace Sopheon.CloudNative.Environments.DurableFunctions
 {
     public class SqlDatabaseProvisioningFunction
@@ -41,16 +23,18 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
 
         [FunctionName(nameof(MaintainSqlDatabasePoolForOnboarding))]
         public async Task<List<string>> MaintainSqlDatabasePoolForOnboarding(
-            [OrchestrationTrigger] IDurableOrchestrationContext context)
+            [OrchestrationTrigger] IDurableOrchestrationContext context, ILogger log)
         {
             var outputs = new List<string>();
 
             int currentUnallocatedSqlDatabaseCount = await context.CallActivityAsync<int>(nameof(MaintainSqlDatabasePoolForOnboarding_GetUnallocatedDatabases), null);
-            string targetResourceGroupName = _configuration["TargetResourceGroupName"]; // "clcbuffertest";
-            int minimumBufferCapacity = _configuration.GetValue<int>("MinimumBufferCapacity"); // 50; // TODO: Parameter
+            string targetResourceGroupName = _configuration["TargetResourceGroupName"];
+            int minimumBufferCapacity = _configuration.GetValue<int>("MinimumBufferCapacity");
 
             if (currentUnallocatedSqlDatabaseCount < minimumBufferCapacity)
             {
+                log.LogInformation($"Unalloacted Database count was lower than 50. Actual count:{currentUnallocatedSqlDatabaseCount}");
+
                 string deploymentName = await context.CallActivityAsync<string>(nameof(MaintainSqlDatabasePoolForOnboarding_DeployElasticPoolAndDatabases), targetResourceGroupName);
 
                 List<string> deployedDatabases = await context.CallSubOrchestratorAsync<List<string>> (nameof(MonitorDeployment), deploymentName);
@@ -59,8 +43,12 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
                 {
                     await context.CallActivityAsync(nameof(MaintainSqlDatabasePoolForOnboarding_RegisterNewlyCreatedDatabases), deployedDatabases);
                 }
+
+                return outputs;
             }
 
+            log.LogInformation($"Unalloacted Database count was higher than 50. Actual count:{currentUnallocatedSqlDatabaseCount}");
+            
             return outputs;
         }
 
@@ -77,11 +65,12 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
 
         [FunctionName(nameof(MaintainSqlDatabasePoolForOnboarding_DeployElasticPoolAndDatabases))]
         public async Task<string> MaintainSqlDatabasePoolForOnboarding_DeployElasticPoolAndDatabases([ActivityTrigger] IDurableActivityContext context,
-            [Blob("armtemplates/ElasticPoolWithBuffer/ElasticPool_Database_Buffer.json", Connection = "ARM_Template_BlobStorage_ConnectionString")] string jsonTemplateData,
+            [Blob("armtemplates/ElasticPoolWithBuffer/ElasticPool_Database_Buffer.json", Connection = "AzureWebJobsStorage")] string jsonTemplateData,
             ILogger log)
         {
-            string resourceGroupName = context.GetInput<string>();
-            string sqlServerName = Environment.GetEnvironmentVariable("AzSqlServerName");
+            
+            string resourceGroupName = context.GetInput<string>();            
+            string sqlServerName = _configuration["AzSqlServerName"];
             string adminLoginEnigma = _configuration["SqlServerAdminEnigma"]; // Pull admin enigma from app config (user secrets or key vault)
 
             jsonTemplateData = jsonTemplateData
@@ -91,15 +80,15 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
             string deploymentName = $"{nameof(SqlDatabaseProvisioningFunction)}_Deployment_{DateTime.UtcNow:yyyyMMddTHHmmss}";
             log.LogInformation($"Creating new deployment: {deploymentName}");
 
-            IDeployment deployment = await _azureApi.Value.Deployments
-               .Define(deploymentName)
-               .WithExistingResourceGroup(resourceGroupName)
-               .WithTemplate(jsonTemplateData)
-               .WithParameters("{ }")
-               .WithMode(DeploymentMode.Incremental)
-               .BeginCreateAsync();
+			IDeployment deployment = await _azureApi.Value.Deployments
+			   .Define(deploymentName)
+			   .WithExistingResourceGroup(resourceGroupName)
+			   .WithTemplate(jsonTemplateData)
+			   .WithParameters("{ }")
+			   .WithMode(DeploymentMode.Incremental)
+			   .BeginCreateAsync();
 
-            return deploymentName;
+			return deploymentName;
         }
 
         /// <summary>
