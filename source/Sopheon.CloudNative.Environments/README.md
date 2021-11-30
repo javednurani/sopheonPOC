@@ -8,6 +8,8 @@ Major components include:
 
 # Running Locally
 
+See: https://pluto/display/PDP/Running+Environment+Subsystem+and+Product+Management+API+locally
+
 See also: https://pluto/display/PDP/Azure+Functions+and+Entity+Framework+Local+Dev
 
 ## Running a SQL Server Docker container locally
@@ -135,3 +137,9 @@ TODO: flesh this out.  This section should explain any design decisions or imple
 # Solution Items
 
 - .editorconfig file holds Sopheon VS Settings for Solution.  No dev action should be necessary.
+
+# CI Notes
+- Due to the use of a IDesignTimeDbContextFactory, a --connectionstring argument is required for 'dotnet ef' commands against a EnvironmentContext
+- For commands NOT affecting a specific (eg, scripting migrations), connection string value does not need to be value, but cannot be an empty string.
+- See stratus\source\Sopheon.CloudNative.Products\build\Build.ps1
+- See stratus\source\Sopheon.CloudNative.Environments\build\Build.ps1
