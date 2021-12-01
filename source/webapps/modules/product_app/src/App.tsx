@@ -63,10 +63,6 @@ const App: React.FunctionComponent<Props> = ({
     );
   }
 
-  return (
-    <div>
-      <Dashboard />
-    </div>
-  );
+  return <Dashboard />;
 };
 export default App;
