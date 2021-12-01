@@ -2,14 +2,19 @@ import { IStackItemStyles, IStackStyles, IStackTokens, Stack } from '@fluentui/r
 import { useTheme } from '@fluentui/react-theme-provider';
 import React from 'react';
 
-export interface IDashboardProps {}
+import { Product } from './types';
+import Working1581 from './Working1581';
+
+export interface IDashboardProps {
+  products: Product[];
+}
 
 const stackTokens: IStackTokens = {
   childrenGap: 5,
   padding: 5,
 };
 
-const Dashboard: React.FunctionComponent<IDashboardProps> = ({}: IDashboardProps) => {
+const Dashboard: React.FunctionComponent<IDashboardProps> = ({ products }: IDashboardProps) => {
   const theme = useTheme();
 
   const stackItemStyles: IStackItemStyles = {
@@ -35,7 +40,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({}: IDashboardProps
       <Stack.Item grow={4}>
         <Stack styles={stackStyles} tokens={stackTokens}>
           <Stack.Item grow={2} styles={stackItemStyles}>
-            Product Section
+            <Working1581 productName={products[0].name} />
           </Stack.Item>
           <Stack.Item grow={9} styles={stackItemStyles}>
             To Do List

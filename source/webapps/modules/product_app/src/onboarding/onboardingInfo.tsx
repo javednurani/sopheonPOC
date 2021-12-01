@@ -133,6 +133,10 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
       textAlign: 'left',
     },
   };
+
+  // TODO Cloud-2035, extract key/resourceId/iconName to an Industries data file
+  // build this industryOptions [] with a .map()
+  // access Industries data file as needed for Product Image display
   const industryOptions: IDropdownOption[] = [
     { key: 1, text: formatMessage({ id: 'industryoption.advertising' }), data: { icon: 'MediaIndustryIcon' } },
     { key: 2, text: formatMessage({ id: 'industryoption.agricuture' }), data: { icon: 'AgIndustryIcon' } },
@@ -253,7 +257,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
 
     const updateProductDto: UpdateProductModel = {
       ProductPatchData: productPatchData,
-      ProductKey: products[0].Key || 'BAD_PRODUCT_KEY',
+      ProductKey: products[0].key || 'BAD_PRODUCT_KEY',
       EnvironmentKey: environmentKey,
       AccessToken: accessToken,
     };
