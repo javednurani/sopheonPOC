@@ -9,6 +9,7 @@ import {
   Label,
   PrimaryButton,
   ProgressIndicator,
+  registerIcons,
   Stack,
   TextField,
 } from '@fluentui/react';
@@ -18,6 +19,24 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { CreateProductAction, UpdateProductAction } from '../product/productReducer';
 import SopheonLogo from '../SopheonLogo';
 import { Attributes, CreateProductModel, KeyPerformanceIndicatorDto, PatchOperation, Product, ProductPostDto, UpdateProductModel } from '../types';
+import { ReactComponent as AeroIndustry } from './../images/industryico_Aero.svg';
+import { ReactComponent as AgIndustry } from './../images/industryico_Ag.svg';
+import { ReactComponent as AutoIndustry } from './../images/industryico_Auto.svg';
+import { ReactComponent as ConstREIndustry } from './../images/industryico_ConstRE.svg';
+import { ReactComponent as ConsumerIndustry } from './../images/industryico_Consumer.svg';
+import { ReactComponent as EdIndustry } from './../images/industryico_Ed.svg';
+import { ReactComponent as EnergyIndustry } from './../images/industryico_Energy.svg';
+import { ReactComponent as FinIndustry } from './../images/industryico_Fin.svg';
+import { ReactComponent as GovtIndustry } from './../images/industryico_Govt.svg';
+import { ReactComponent as HealthIndustry } from './../images/industryico_Health.svg';
+import { ReactComponent as HospIndustry } from './../images/industryico_Hosp.svg';
+import { ReactComponent as IndusIndustry } from './../images/industryico_Indus.svg';
+import { ReactComponent as MediaIndustry } from './../images/industryico_Media.svg';
+import { ReactComponent as MemberIndustry } from './../images/industryico_Member.svg';
+import { ReactComponent as ServicesIndustry } from './../images/industryico_Services.svg';
+import { ReactComponent as TechIndustry } from './../images/industryico_Tech.svg';
+import { ReactComponent as TeleIndustry } from './../images/industryico_Tele.svg';
+import { ReactComponent as TransIndustry } from './../images/industryico_Trans.svg';
 import { NextStepAction } from './onboardingReducer';
 
 export interface IOnboardingInfoProps {
@@ -29,6 +48,36 @@ export interface IOnboardingInfoProps {
   accessToken: string;
   products: Product[];
 }
+
+const svgIndustryIconStyle: React.CSSProperties = {
+  width: '20px',
+  height: '20px',
+  overflow: 'visible',
+};
+
+// TODO: is this specific to Onboarding?
+registerIcons({
+  icons: {
+    AgIndustryIcon: <AgIndustry style={svgIndustryIconStyle} />,
+    AeroIndustryIcon: <AeroIndustry style={svgIndustryIconStyle} />,
+    AutoIndustryIcon: <AutoIndustry style={svgIndustryIconStyle} />,
+    ConstREIndustryIcon: <ConstREIndustry style={svgIndustryIconStyle} />,
+    ConsumerIndustryIcon: <ConsumerIndustry style={svgIndustryIconStyle} />,
+    EduIndustryIcon: <EdIndustry style={svgIndustryIconStyle} />,
+    EnergyIndustryIcon: <EnergyIndustry style={svgIndustryIconStyle} />,
+    FinIndustryIcon: <FinIndustry style={svgIndustryIconStyle} />,
+    GovtIndustryIcon: <GovtIndustry style={svgIndustryIconStyle} />,
+    HealthIndustryIcon: <HealthIndustry style={svgIndustryIconStyle} />,
+    HospIndustryIcon: <HospIndustry style={svgIndustryIconStyle} />,
+    IndusIndustryIcon: <IndusIndustry style={svgIndustryIconStyle} />,
+    MediaIndustryIcon: <MediaIndustry style={svgIndustryIconStyle} />,
+    MemberIndustryIcon: <MemberIndustry style={svgIndustryIconStyle} />,
+    ServicesIndustryIcon: <ServicesIndustry style={svgIndustryIconStyle} />,
+    TechIndustryIcon: <TechIndustry style={svgIndustryIconStyle} />,
+    TeleIndustryIcon: <TeleIndustry style={svgIndustryIconStyle} />,
+    TransIndustryIcon: <TransIndustry style={svgIndustryIconStyle} />,
+  },
+});
 
 const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
   currentStep,
@@ -316,14 +365,6 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
             barHeight={8}
           />
         </Stack.Item>
-      </Stack>
-    );
-  }
-
-  if (products.length > 0) {
-    return (
-      <Stack horizontalAlign="center">
-        <h1>Product App Home Page</h1>
       </Stack>
     );
   }
