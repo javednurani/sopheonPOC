@@ -15,10 +15,12 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({}: IDashboardProps
   const stackItemStyles: IStackItemStyles = {
     root: {
       background: theme.semanticColors.bodyBackground, // TODO: why needed?
+      //backgroundImage: `linear-gradient(to bottom right, ${theme.semanticColors.bodyBackground}, ${theme.semanticColors.bodyBackgroundHovered})`,
       display: 'flex',
       justifyContent: 'center',
       border: '1px solid',
       borderColor: theme.semanticColors.bodyText,
+      borderRadius: '3px',
     },
   };
 
