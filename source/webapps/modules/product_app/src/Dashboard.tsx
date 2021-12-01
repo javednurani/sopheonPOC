@@ -31,7 +31,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({}: IDashboardProps
   };
 
   return (
-    <Stack horizontal styles={stackStyles} tokens={stackTokens}>
+    <Stack horizontal styles={stackStyles}>
       <Stack.Item grow={4}>
         <Stack styles={stackStyles} tokens={stackTokens}>
           <Stack.Item grow={2} styles={stackItemStyles}>
