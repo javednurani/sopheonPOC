@@ -6,7 +6,7 @@ export interface IDashboardProps {}
 
 const stackTokens: IStackTokens = {
   childrenGap: 5,
-  padding: 10,
+  padding: 5,
 };
 
 const Dashboard: React.FunctionComponent<IDashboardProps> = ({}: IDashboardProps) => {
@@ -14,7 +14,6 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({}: IDashboardProps
 
   const stackItemStyles: IStackItemStyles = {
     root: {
-      alignItems: 'center',
       background: theme.semanticColors.bodyBackground, // TODO: why needed?
       display: 'flex',
       justifyContent: 'center',
@@ -27,16 +26,37 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({}: IDashboardProps
     root: {
       background: theme.semanticColors.bodyBackground, // TODO: why needed?
       height: '100%',
+      width: '100%',
     },
   };
 
   return (
     <Stack horizontal styles={stackStyles} tokens={stackTokens}>
-      <Stack.Item grow={4} styles={stackItemStyles}>
-        Main Left
+      <Stack.Item grow={4}>
+        <Stack styles={stackStyles} tokens={stackTokens}>
+          <Stack.Item grow={2} styles={stackItemStyles}>
+            Product Section
+          </Stack.Item>
+          <Stack.Item grow={9} styles={stackItemStyles}>
+            To Do List
+          </Stack.Item>
+          <Stack.Item grow={3} styles={stackItemStyles}>
+            Resources & Links
+          </Stack.Item>
+        </Stack>
       </Stack.Item>
-      <Stack.Item grow={7} styles={stackItemStyles}>
-        Main Right
+      <Stack.Item grow={7}>
+        <Stack styles={stackStyles} tokens={stackTokens}>
+          <Stack.Item grow={2} styles={stackItemStyles}>
+            KPI's
+          </Stack.Item>
+          <Stack.Item grow={9} styles={stackItemStyles}>
+            Timeline
+          </Stack.Item>
+          <Stack.Item grow={3} styles={stackItemStyles}>
+            Product Health & extra KPIs
+          </Stack.Item>
+        </Stack>
       </Stack.Item>
     </Stack>
   );
