@@ -86,7 +86,7 @@ Foreach($file in $TestProjects) {
 
 #All migrations and tests are done...let's publish it!
 Write-Host "...Running dotnet publish on Functions.csproj";
-dotnet publish "Sopheon.CloudNative.Environments.DurableFunctions\Sopheon.CloudNative.Environments.Functions.csproj" -c Release -o ".\PublishOutput\";
+dotnet publish "Sopheon.CloudNative.Environments.Functions\Sopheon.CloudNative.Environments.Functions.csproj" -c Release -o ".\PublishOutput\";
 Check-LastExitCode;
 
 # Zip/Archive Scripts 
