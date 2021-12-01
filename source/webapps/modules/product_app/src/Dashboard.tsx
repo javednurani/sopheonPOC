@@ -2,11 +2,17 @@ import { IStackItemStyles, IStackStyles, IStackTokens, Stack } from '@fluentui/r
 import { useTheme } from '@fluentui/react-theme-provider';
 import React from 'react';
 
+import KPIs from './KPIs';
+import ProductHealth from './ProductHealth';
+import ProductSection from './ProductSection';
+import ResourcesAndLinks from './ResourcesAndLinks';
+import Timeline from './Timeline';
+
 export interface IDashboardProps {}
 
 const stackTokens: IStackTokens = {
-  childrenGap: 5,
-  padding: 5,
+  childrenGap: 10,
+  padding: 10,
 };
 
 const Dashboard: React.FunctionComponent<IDashboardProps> = ({}: IDashboardProps) => {
@@ -19,7 +25,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({}: IDashboardProps
       display: 'flex',
       justifyContent: 'center',
       border: '1px solid',
-      borderColor: theme.semanticColors.bodyText,
+      borderColor: theme.palette.neutralTertiary,
       borderRadius: '3px',
     },
   };
@@ -37,26 +43,26 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({}: IDashboardProps
       <Stack.Item grow={4}>
         <Stack styles={stackStyles} tokens={stackTokens}>
           <Stack.Item grow={2} styles={stackItemStyles}>
-            Product Section
+            <ProductSection />
           </Stack.Item>
           <Stack.Item grow={9} styles={stackItemStyles}>
             To Do List
           </Stack.Item>
           <Stack.Item grow={3} styles={stackItemStyles}>
-            Resources & Links
+            <ResourcesAndLinks />
           </Stack.Item>
         </Stack>
       </Stack.Item>
       <Stack.Item grow={7}>
         <Stack styles={stackStyles} tokens={stackTokens}>
           <Stack.Item grow={2} styles={stackItemStyles}>
-            KPI's
+            <KPIs />
           </Stack.Item>
           <Stack.Item grow={9} styles={stackItemStyles}>
-            Timeline
+            <Timeline />
           </Stack.Item>
           <Stack.Item grow={3} styles={stackItemStyles}>
-            Product Health & extra KPIs
+            <ProductHealth />
           </Stack.Item>
         </Stack>
       </Stack.Item>
