@@ -23,6 +23,8 @@ export const messages: Record<string, Record<string, string>> = {
     'aria.name': 'Name',
     'yes': 'Yes',
     'no': 'No',
+    'edit': 'Edit',
+    'share': 'Share',
     'user.signin': 'Sign In',
     'user.signout': 'Sign Out',
     'ok': 'Ok',
