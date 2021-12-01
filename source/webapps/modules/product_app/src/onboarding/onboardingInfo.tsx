@@ -55,7 +55,7 @@ const svgIndustryIconStyle: React.CSSProperties = {
   overflow: 'visible',
 };
 
-// TODO: is this specific to Onboarding?
+// TODO: is this specific to Onboarding? (As of Cloud-2035 - will need access to registered Icons with a different style 48px width/height)
 registerIcons({
   icons: {
     AgIndustryIcon: <AgIndustry style={svgIndustryIconStyle} />,

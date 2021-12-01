@@ -2,13 +2,12 @@ import { IStackItemStyles, IStackStyles, IStackTokens, Stack } from '@fluentui/r
 import { useTheme } from '@fluentui/react-theme-provider';
 import React from 'react';
 
-import { Product } from './types';
-import Working1581 from './Working1581';
 import KPIs from './KPIs';
 import ProductHealth from './ProductHealth';
 import ProductSection from './ProductSection';
 import ResourcesAndLinks from './ResourcesAndLinks';
 import Timeline from './Timeline';
+import { Product } from './types';
 
 export interface IDashboardProps {
   products: Product[];
@@ -47,8 +46,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({ products }: IDash
       <Stack.Item grow={4}>
         <Stack styles={stackStyles} tokens={stackTokens}>
           <Stack.Item grow={2} styles={stackItemStyles}>
-            {/* <Working1581 productName={products[0].name} /> */}
-            <ProductSection />
+            <ProductSection productName={products[0].name} />
           </Stack.Item>
           <Stack.Item grow={9} styles={stackItemStyles}>
             To Do List
