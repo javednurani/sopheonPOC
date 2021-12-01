@@ -4,14 +4,19 @@ import React from 'react';
 
 import { Product } from './types';
 import Working1581 from './Working1581';
+import KPIs from './KPIs';
+import ProductHealth from './ProductHealth';
+import ProductSection from './ProductSection';
+import ResourcesAndLinks from './ResourcesAndLinks';
+import Timeline from './Timeline';
 
 export interface IDashboardProps {
   products: Product[];
 }
 
 const stackTokens: IStackTokens = {
-  childrenGap: 5,
-  padding: 5,
+  childrenGap: 10,
+  padding: 10,
 };
 
 const Dashboard: React.FunctionComponent<IDashboardProps> = ({ products }: IDashboardProps) => {
@@ -20,10 +25,12 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({ products }: IDash
   const stackItemStyles: IStackItemStyles = {
     root: {
       background: theme.semanticColors.bodyBackground, // TODO: why needed?
+      //backgroundImage: `linear-gradient(to bottom right, ${theme.semanticColors.bodyBackground}, ${theme.semanticColors.bodyBackgroundHovered})`,
       display: 'flex',
       justifyContent: 'center',
       border: '1px solid',
-      borderColor: theme.semanticColors.bodyText,
+      borderColor: theme.palette.neutralTertiary,
+      borderRadius: '3px',
     },
   };
 
@@ -40,26 +47,27 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({ products }: IDash
       <Stack.Item grow={4}>
         <Stack styles={stackStyles} tokens={stackTokens}>
           <Stack.Item grow={2} styles={stackItemStyles}>
-            <Working1581 productName={products[0].name} />
+            {/* <Working1581 productName={products[0].name} /> */}
+            <ProductSection />
           </Stack.Item>
           <Stack.Item grow={9} styles={stackItemStyles}>
             To Do List
           </Stack.Item>
           <Stack.Item grow={3} styles={stackItemStyles}>
-            Resources & Links
+            <ResourcesAndLinks />
           </Stack.Item>
         </Stack>
       </Stack.Item>
       <Stack.Item grow={7}>
         <Stack styles={stackStyles} tokens={stackTokens}>
           <Stack.Item grow={2} styles={stackItemStyles}>
-            KPI's
+            <KPIs />
           </Stack.Item>
           <Stack.Item grow={9} styles={stackItemStyles}>
-            Timeline
+            <Timeline />
           </Stack.Item>
           <Stack.Item grow={3} styles={stackItemStyles}>
-            Product Health & extra KPIs
+            <ProductHealth />
           </Stack.Item>
         </Stack>
       </Stack.Item>
