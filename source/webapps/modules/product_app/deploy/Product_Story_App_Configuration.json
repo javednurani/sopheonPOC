@@ -2,7 +2,7 @@
   "Tokens": [
     {
       "TokenDisplayName": "Product Management Api Base Url",
-      "Pattern": "^ProductMangementApiBaseUrl^",
+      "Pattern": "^ProductManagementApiBaseUrl^",
       "IsKeyVaultSecret": true,
       "KeyVaultSecretName": "StratusProductManagementApiBaseUrl"
     }
