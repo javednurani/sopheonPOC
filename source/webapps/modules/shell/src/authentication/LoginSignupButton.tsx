@@ -1,6 +1,6 @@
 import { AccountInfo } from '@azure/msal-browser';
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
-import { DefaultButton, IContextualMenuProps } from '@fluentui/react';
+import { DefaultButton, IButtonStyles, IconButton, IContextualMenuProps, IIconProps, IIconStyles, ITooltipHostStyles, TooltipHost } from '@fluentui/react';
 import { GetAccessTokenAction } from '@sopheon/shell-api';
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -65,10 +65,39 @@ const LoginSignupButton: FunctionComponent<ILoginSignupButtonProps> = ({ setEnvi
     ],
   };
 
+  const contactIconStyles: Partial<IIconStyles> = {
+    root: {
+      fontSize: '18px'
+    }
+  };
+
+  const loginButtonStyles: Partial<IButtonStyles> = {
+    root: {
+      height: '36px',
+      borderRadius: '2px',
+    }
+  };
+
+  const contactIcon: IIconProps = { iconName: 'Contact', styles: contactIconStyles};
+
+  const hostStyles: Partial<ITooltipHostStyles> = { root: { display: 'inline-block' } };
+
   return (
     <React.Fragment>
       <AuthenticatedTemplate>
-        <DefaultButton text={account ? account.name : formatMessage({ id: 'auth.myprofile' })} split menuProps={menuProps} />
+        <TooltipHost
+          content={account ? account.name : formatMessage({ id: 'auth.myprofile' })}
+          id='profileImageTooltip'
+          styles={hostStyles}
+        >
+          <IconButton
+            menuProps={menuProps}
+            iconProps={contactIcon}
+            title="profileImage"
+            ariaLabel="profileImage"
+            styles={loginButtonStyles}
+          />
+        </TooltipHost>
       </AuthenticatedTemplate>
       <UnauthenticatedTemplate>
         <DefaultButton text={formatMessage({ id: 'auth.loginbutton' })} onClick={() => instance.loginRedirect(loginButtonRequest)} />
