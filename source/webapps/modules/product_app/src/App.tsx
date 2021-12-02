@@ -47,7 +47,9 @@ const App: React.FunctionComponent<Props> = ({
 
   if (!environmentKey) {
     return (
-      <p>Please log in to use the Product App</p>
+      <Stack horizontalAlign="center">
+        <h2>Please Log In to use the Product App.</h2>
+      </Stack>
     );
   }
 
