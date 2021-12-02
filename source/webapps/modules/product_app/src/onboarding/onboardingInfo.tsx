@@ -261,14 +261,6 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
     nextStep();
   };
 
-  if (!environmentKey) {
-    return (
-      <Stack horizontalAlign="center">
-        <h1>Log In to use the Product App.</h1>
-      </Stack>
-    );
-  }
-
   if (currentStep === 2 && products.length === 0) {
     // onboarding 'step 2' (first onboarding page in SPA: Product Name & Industries)
     return (

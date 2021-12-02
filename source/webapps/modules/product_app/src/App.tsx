@@ -45,6 +45,14 @@ const App: React.FunctionComponent<Props> = ({
   // TODO: condition copied from above, can be simplified?
   const userNeedsOnboarding = (products.length === 0 && environmentKey) || (currentStep === 3 && products.length === 1);
 
+  if (!environmentKey) {
+    return (
+      <Stack horizontalAlign="center">
+        <h2>Please Log In to use the Product App.</h2>
+      </Stack>
+    );
+  }
+
   if (userNeedsOnboarding) {
     return (
       <div>
