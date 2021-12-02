@@ -66,9 +66,9 @@ const Header: FunctionComponent<HeaderProps> = ({ changeTheme, setEnvironmentKey
             <Navbar />
           </Stack.Item>
           <Stack.Item grow align="center">
-            <h1 id="page-title" className="page-title">
+            <div id="page-title" className="page-title">
               {/* {pageTitle} */}
-            </h1>
+            </div>
           </Stack.Item>
           <Stack.Item>
             <Stack tokens={stackTokensWithGap}>
