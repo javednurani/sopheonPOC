@@ -71,6 +71,6 @@ const App: React.FunctionComponent<Props> = ({
     );
   }
 
-  return <Dashboard />;
+  return <Dashboard products={products} />;
 };
 export default App;

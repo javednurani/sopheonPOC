@@ -32,12 +32,12 @@ export type ProductScopedApiRequestModel = {
 // camelCase
 // Industry, Goal, KPI models
 export interface Product {
-  Id: number | null;
-  Key: string | null;
-  Name: string;
-  Industries: number[];
-  Goals: Goal[];
-  KPIs: KeyPerformanceIndicator[];
+  id: number | null;
+  key: string | null;
+  name: string;
+  industries: number[];
+  goals: Goal[];
+  kpis: KeyPerformanceIndicator[];
 }
 
 export interface Goal {
