@@ -12,7 +12,7 @@ param webServerFarm_Name string = '^WebServerFarmName^'
 
 param sqlServer_Name string = '^SqlServerName^'
 
-var functionRuntime = 'dotnet'
+var functionRuntime = 'dotnet-isolated'
 
 var keyVaultName = resourceGroup().name
 
