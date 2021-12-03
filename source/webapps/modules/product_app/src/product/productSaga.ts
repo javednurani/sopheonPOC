@@ -43,12 +43,12 @@ export function* onCreateProduct(action: CreateProductAction): Generator {
     const { data } = yield call(createProduct, action.payload);
 
     const createdProduct: Product = {
-      Id: data.id,
-      Key: data.key,
-      Name: data.name,
-      Industries: data.intAttributeValues.filter(iav => iav.attributeId === Attributes.INDUSTRIES).map(iav => iav.value),
-      Goals: [],
-      KPIs: [],
+      id: data.id,
+      key: data.key,
+      name: data.name,
+      industries: data.intAttributeValues.filter(iav => iav.attributeId === Attributes.INDUSTRIES).map(iav => iav.value),
+      goals: [],
+      kpis: [],
     };
 
     yield put(createProductSuccess(createdProduct));
@@ -67,12 +67,12 @@ export function* onUpdateProduct(action: UpdateProductAction): Generator {
     const { data } = yield call(updateProduct, action.payload);
 
     const updatedProduct: Product = {
-      Id: data.id,
-      Key: data.key,
-      Name: data.name,
-      Industries: data.intAttributeValues.filter(iav => iav.attributeId === Attributes.INDUSTRIES).map(iav => iav.value),
-      KPIs: data.keyPerformanceIndicators,
-      Goals: data.goals
+      id: data.id,
+      key: data.key,
+      name: data.name,
+      industries: data.intAttributeValues.filter(iav => iav.attributeId === Attributes.INDUSTRIES).map(iav => iav.value),
+      kpis: data.keyPerformanceIndicators,
+      goals: data.goals
     };
 
 

@@ -46,12 +46,12 @@ describe('Testing the onboardingInfo component', () => {
   });
   it('step 3 components render correctly', async () => {
     const product: Product = {
-      Id: 1,
-      Key: 'key',
-      Name: 'name',
-      Industries: [1, 2, 3],
-      Goals: [],
-      KPIs: [],
+      id: 1,
+      key: 'key',
+      name: 'name',
+      industries: [1, 2, 3],
+      goals: [],
+      kpis: [],
     };
 
     const componentProps: IOnboardingInfoProps = {
@@ -82,12 +82,12 @@ describe('Testing the onboardingInfo component', () => {
   });
   it('next step function fires on button click', () => {
     const product: Product = {
-      Id: 1,
-      Key: 'key',
-      Name: 'name',
-      Industries: [1, 2, 3],
-      Goals: [],
-      KPIs: [],
+      id: 1,
+      key: 'key',
+      name: 'name',
+      industries: [1, 2, 3],
+      goals: [],
+      kpis: [],
     };
 
     const componentProps: IOnboardingInfoProps = {
