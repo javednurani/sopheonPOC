@@ -33,8 +33,6 @@ namespace Sopheon.CloudNative.Environments.Functions
    [ExcludeFromCodeCoverage]
    class Program
    {
-      private static Lazy<IAzure> _lazyAzureClient;
-
       static Task Main(string[] args)
       {
          IHost host = new HostBuilder()
@@ -85,13 +83,12 @@ namespace Sopheon.CloudNative.Environments.Functions
                services.AddScoped<IEnvironmentQueries, EFEnvironmentQueries>();
                services.AddScoped<IEnvironmentCommands, EFEnvironmentCommands>();
                services.AddScoped<IValidator<EnvironmentDto>, EnvironmentDtoValidator>();
+               services.AddScoped<IValidator<ResourceRegistrationDto>, ResourceRegistrationDtoValidator>();              
                services.AddScoped<IRequiredNameValidator, RequiredNameValidator>();
-               services.AddScoped<IDatabaseBufferMonitorHelper, DatabaseBufferMonitorHelper>();
                services.AddScoped<IAllocateSqlDatabaseSharedByServicesToEnvironmentHelper, AllocateSqlDatabaseSharedByServicesToEnvironmentHelper>();
                services.AddScoped<HttpResponseDataBuilder>();
                
-               _lazyAzureClient = new Lazy<IAzure>(GetAzureInstance(hostContext));
-               services.AddScoped<IAzure>(sp => _lazyAzureClient.Value);   // single instance shared across functions
+               services.AddSingleton<IAzure>(sp => GetAzureInstance(hostContext));   // single instance shared across functions
             })
             .Build();
 

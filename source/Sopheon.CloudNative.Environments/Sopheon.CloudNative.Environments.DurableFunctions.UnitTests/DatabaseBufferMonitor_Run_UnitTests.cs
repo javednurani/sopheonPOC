@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Moq;
-using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Testing.Common;
 using Xunit;
 
-namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
+namespace Sopheon.CloudNative.Environments.DurableFunctions.UnitTests
 {
    public class DatabaseBufferMonitor_Run_UnitTests : FunctionUnitTestBase
    {

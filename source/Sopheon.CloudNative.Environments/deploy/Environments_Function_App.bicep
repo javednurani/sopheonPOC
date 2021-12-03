@@ -12,7 +12,7 @@ param webServerFarm_Name string = '^WebServerFarmName^'
 
 param sqlServer_Name string = '^SqlServerName^'
 
-var functionRuntime = 'dotnet-isolated'
+var functionRuntime = 'dotnet'
 
 var keyVaultName = resourceGroup().name
 
@@ -117,7 +117,7 @@ resource EnvironmentsFunctionApp 'Microsoft.Web/sites@2021-01-15' = {
         }
         {
           name: 'FUNCTIONS_EXTENSION_VERSION'
-          value: '~3'
+          value: '~4'
         }
         {
           name: 'DatabaseBufferCapacity'

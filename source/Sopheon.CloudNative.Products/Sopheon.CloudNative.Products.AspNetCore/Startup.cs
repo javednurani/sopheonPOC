@@ -135,7 +135,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore
          services.AddScoped<EnvironmentOwnerLookupService>();
 
          // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/environments?view=aspnetcore-5.0#determining-the-environment-at-runtime
-         if (!_env.IsDevelopment() || !Configuration.GetValue<bool>("LocalDevelopment:UseEnvironmentDatabasesFromAppSettings"))
+         if (!_env.IsDevelopment() || !Configuration.GetValue<bool>("DevelopmentAndDemoSettings:UseEnvironmentDatabasesFromAppSettings"))
          {
             services.AddScoped<IEnvironmentSqlConnectionStringProvider, EnvironmentSqlConnectionStringProvider>();
             services.AddScoped<IAuthorizationHandler, EnvironmentOwnerHandler>();
@@ -147,6 +147,10 @@ namespace Sopheon.CloudNative.Products.AspNetCore
          }
 
          //services.AddScoped<IAuthorizationHandler, SopheonSupportEnvironmentAccessHandler>(); // TODO: Add handling for support access scenario, or potentially local dev scenarios
+         if (_env.IsDevelopment() && Configuration.GetValue<bool>("DevelopmentAndDemoSettings:EnableSuperUsers"))
+         {
+            services.AddScoped<IAuthorizationHandler, DemoSuperUserHandler>();
+         }
 
          // Entity Framework
          services.AddDbContext<ProductManagementContext>((serviceProvider, optionsBuilder) =>

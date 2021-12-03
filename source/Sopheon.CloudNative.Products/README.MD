@@ -14,12 +14,17 @@ Initial Dev Environment Setup Steps:
 - Run the dotnet ef command to create/update some example target databases
 
 ```
-dotnet ef database update -- --connectionstring ".;Database=TenantEnvironment1;Integrated Security=True"
+dotnet ef database update -- --connection ".;Database=TenantEnvironment1;Integrated Security=True"
+```
+
+- Alternatively, generaete a migration script to apply to the database manually
+```
+dotnet ef migrations script --idempotent
 ```
 
 Update the appsettings.Development.json file within Sopheon.CloudNative.Products.AspNetCore to point to the example databases you created
-- Update the LocalDevelopment.TenantEnvironmentDatabases section to define the environment databases to connect against
-- Set LocalDevelopment.UseEnvironmentDatabasesFromAppSettings to true to work off this list in the config file, rather than connecting against a environment management webservice
+- Update the DevelopmentAndDemoSettings.TenantEnvironmentDatabases section to define the environment databases to connect against
+- Set DevelopmentAndDemoSettings.UseEnvironmentDatabasesFromAppSettings to true to work off this list in the config file, rather than connecting against a environment management webservice
 
 The key of the TenantEnvironmentDatabase values will be used as the environment key for the product management api
 Ex: 

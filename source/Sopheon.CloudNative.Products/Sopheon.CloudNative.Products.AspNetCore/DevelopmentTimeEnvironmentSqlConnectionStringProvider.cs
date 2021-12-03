@@ -23,7 +23,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore
 
       public Task<string> GetConnectionStringAsync()
       {
-         Dictionary<string, string> environmentDatabaseCatalog = _configuration.GetSection("LocalDevelopment:TenantEnvironmentDatabases").Get<Dictionary<string, string>>();
+         Dictionary<string, string> environmentDatabaseCatalog = _configuration.GetSection("DevelopmentAndDemoSettings:TenantEnvironmentDatabases").Get<Dictionary<string, string>>();
 
          environmentDatabaseCatalog = new Dictionary<string, string>(environmentDatabaseCatalog, StringComparer.OrdinalIgnoreCase);
 
