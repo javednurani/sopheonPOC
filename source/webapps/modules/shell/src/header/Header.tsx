@@ -1,14 +1,11 @@
 import { IStackTokens, Stack, Sticky, StickyPositionType } from '@fluentui/react';
-import { useTheme } from '@fluentui/react-theme-provider';
 import { GetAccessTokenAction } from '@sopheon/shell-api';
 import React, { FunctionComponent } from 'react';
 import { useIntl } from 'react-intl';
-import { useLocation } from 'react-router-dom';
 
 import { SetEnvironmentKeyAction } from '../authentication/authReducer';
 import LoginSignupButton from '../authentication/LoginSignupButton';
 import Navbar from '../navbar/Navbar';
-import { AppModule, appModules } from '../settings/appModuleSettings';
 import SopheonLogo from '../SopheonLogo';
 import ThemeSelector from '../themes/components/themeSelector/ThemeSelector';
 import { ChangeThemeAction } from '../themes/themeReducer/themeReducer';
@@ -21,7 +18,6 @@ interface HeaderProps {
 
 const Header: FunctionComponent<HeaderProps> = ({ changeTheme, setEnvironmentKey, getAccessToken }: HeaderProps) => {
   const { formatMessage } = useIntl();
-  const location = useLocation();
 
   const headerStyle: React.CSSProperties = {
     marginTop: '8px',
@@ -46,12 +42,16 @@ const Header: FunctionComponent<HeaderProps> = ({ changeTheme, setEnvironmentKey
     childrenGap: 2,
   };
 
+  /*
+  const location = useLocation();
+
   const getTitle = (path: string): string => {
     const currentApp: AppModule | undefined = appModules.find(appModule => appModule.routeName === path);
     return currentApp ? formatMessage({ id: currentApp.displayNameResourceKey }) : formatMessage({ id: 'defaultTitle' });
   };
 
   const pageTitle: string = getTitle(location.pathname);
+  */
 
   return (
     <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced>
@@ -66,9 +66,9 @@ const Header: FunctionComponent<HeaderProps> = ({ changeTheme, setEnvironmentKey
             <Navbar />
           </Stack.Item>
           <Stack.Item grow align="center">
-            <h1 id="page-title" className="page-title">
-              {pageTitle}
-            </h1>
+            <div id="page-title" className="page-title">
+              {/* {pageTitle} */}
+            </div>
           </Stack.Item>
           <Stack.Item>
             <Stack tokens={stackTokensWithGap}>
