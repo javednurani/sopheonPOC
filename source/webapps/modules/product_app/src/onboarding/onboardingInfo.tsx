@@ -135,6 +135,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
   };
 
   // TODO Cloud-2035, extract key/resourceId/iconName to an Industries data file
+  // TODO Cloud-2035, anticipate service call
   // build this industryOptions [] with a .map()
   // access Industries data file as needed for Product Image display
   const industryOptions: IDropdownOption[] = [
