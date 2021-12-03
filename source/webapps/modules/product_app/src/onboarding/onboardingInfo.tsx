@@ -50,33 +50,33 @@ export interface IOnboardingInfoProps {
   products: Product[];
 }
 
-const svgIndustryIconStyle: React.CSSProperties = {
+const svgIndustryIconStyleSmall: React.CSSProperties = {
   width: '20px',
   height: '20px',
   overflow: 'visible',
 };
 
-// TODO: is this specific to Onboarding? (As of Cloud-2035 - will need access to registered Icons with a different style 48px width/height)
+// Industry Icons are currently used to stub out Product Section Product Icon. Appending 'Small' supports 2x registerIcons with 2x styles
 registerIcons({
   icons: {
-    AgIndustryIcon: <AgIndustry style={svgIndustryIconStyle} />,
-    AeroIndustryIcon: <AeroIndustry style={svgIndustryIconStyle} />,
-    AutoIndustryIcon: <AutoIndustry style={svgIndustryIconStyle} />,
-    ConstREIndustryIcon: <ConstREIndustry style={svgIndustryIconStyle} />,
-    ConsumerIndustryIcon: <ConsumerIndustry style={svgIndustryIconStyle} />,
-    EduIndustryIcon: <EdIndustry style={svgIndustryIconStyle} />,
-    EnergyIndustryIcon: <EnergyIndustry style={svgIndustryIconStyle} />,
-    FinIndustryIcon: <FinIndustry style={svgIndustryIconStyle} />,
-    GovtIndustryIcon: <GovtIndustry style={svgIndustryIconStyle} />,
-    HealthIndustryIcon: <HealthIndustry style={svgIndustryIconStyle} />,
-    HospIndustryIcon: <HospIndustry style={svgIndustryIconStyle} />,
-    IndusIndustryIcon: <IndusIndustry style={svgIndustryIconStyle} />,
-    MediaIndustryIcon: <MediaIndustry style={svgIndustryIconStyle} />,
-    MemberIndustryIcon: <MemberIndustry style={svgIndustryIconStyle} />,
-    ServicesIndustryIcon: <ServicesIndustry style={svgIndustryIconStyle} />,
-    TechIndustryIcon: <TechIndustry style={svgIndustryIconStyle} />,
-    TeleIndustryIcon: <TeleIndustry style={svgIndustryIconStyle} />,
-    TransIndustryIcon: <TransIndustry style={svgIndustryIconStyle} />,
+    AgIndustryIconSmall: <AgIndustry style={svgIndustryIconStyleSmall} />,
+    AeroIndustryIconSmall: <AeroIndustry style={svgIndustryIconStyleSmall} />,
+    AutoIndustryIconSmall: <AutoIndustry style={svgIndustryIconStyleSmall} />,
+    ConstREIndustryIconSmall: <ConstREIndustry style={svgIndustryIconStyleSmall} />,
+    ConsumerIndustryIconSmall: <ConsumerIndustry style={svgIndustryIconStyleSmall} />,
+    EduIndustryIconSmall: <EdIndustry style={svgIndustryIconStyleSmall} />,
+    EnergyIndustryIconSmall: <EnergyIndustry style={svgIndustryIconStyleSmall} />,
+    FinIndustryIconSmall: <FinIndustry style={svgIndustryIconStyleSmall} />,
+    GovtIndustryIconSmall: <GovtIndustry style={svgIndustryIconStyleSmall} />,
+    HealthIndustryIconSmall: <HealthIndustry style={svgIndustryIconStyleSmall} />,
+    HospIndustryIconSmall: <HospIndustry style={svgIndustryIconStyleSmall} />,
+    IndusIndustryIconSmall: <IndusIndustry style={svgIndustryIconStyleSmall} />,
+    MediaIndustryIconSmall: <MediaIndustry style={svgIndustryIconStyleSmall} />,
+    MemberIndustryIconSmall: <MemberIndustry style={svgIndustryIconStyleSmall} />,
+    ServicesIndustryIconSmall: <ServicesIndustry style={svgIndustryIconStyleSmall} />,
+    TechIndustryIconSmall: <TechIndustry style={svgIndustryIconStyleSmall} />,
+    TeleIndustryIconSmall: <TeleIndustry style={svgIndustryIconStyleSmall} />,
+    TransIndustryIconSmall: <TransIndustry style={svgIndustryIconStyleSmall} />,
   },
 });
 
@@ -139,7 +139,8 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
     key: ind.key,
     text: formatMessage({ id: ind.resourceKey }),
     data: {
-      icon: ind.iconName, // TODO append 'Small' if 2x registerIcons is needed
+      // Industry Icons are currently used to stub out Product Section Product Icon. Appending 'Small' supports 2x registerIcons with 2x styles
+      icon: `${ind.iconName}Small`,
     },
   }));
 
