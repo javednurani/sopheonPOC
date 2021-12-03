@@ -72,8 +72,8 @@ const Header: FunctionComponent<HeaderProps> = ({ changeTheme, setEnvironmentKey
           </Stack.Item>
           <Stack.Item>
             <Stack tokens={stackTokensWithGap}>
-              <Stack.Item>
-                <LoginSignupButton setEnvironmentKey={setEnvironmentKey} getAccessToken={getAccessToken} />
+              <Stack.Item align={'end'}>
+                <LoginSignupButton setEnvironmentKey={setEnvironmentKey} getAccessToken={getAccessToken}/>
               </Stack.Item>
               <Stack.Item>
                 <ThemeSelector changeTheme={changeTheme} />
