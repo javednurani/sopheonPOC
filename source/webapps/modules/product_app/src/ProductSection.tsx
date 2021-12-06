@@ -39,6 +39,7 @@ const ProductSection: React.FunctionComponent<IProductSectionProps> = ({ product
     overflow: 'visible',
     fill: theme.id?.includes(darkTheme.id ?? 'darkTheme') ? '#f0f0f0' : '#898989',
     stroke: theme.id?.includes(darkTheme.id ?? 'darkTheme') ? '#898989' : '#ffffff',
+    backgroundColor: theme.id?.includes(darkTheme.id ?? 'darkTheme') ? '#f0f0f0' : '#898989',
   };
 
   // Industry Icons are currently used to stub out Product Section Product Icon. Appending 'Large' supports 2x registerIcons with 2x styles
@@ -122,7 +123,8 @@ const ProductSection: React.FunctionComponent<IProductSectionProps> = ({ product
     width: 16,
   });
 
-  const industryIconName = industries.find(ind => ind.key === product.industries[0])?.iconName;
+  const sortedProductIndustries = product.industries.sort();
+  const industryIconName = industries.find(ind => ind.key === sortedProductIndustries[0])?.iconName;
 
   return (
     <Stack horizontal styles={stackStyles} tokens={mainStackTokens}>
