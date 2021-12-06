@@ -60,7 +60,7 @@ describe('Test Unauthenticated LoginSignupButton component', () => {
     expect(loginRedirectSpy).toHaveBeenCalledTimes(1);
   });
 });
-describe('Test Authenticated LoginSignupButton component', () => {
+describe.skip('Test Authenticated LoginSignupButton component', () => {
   test('button renders correctly and a11y compliant', async () => {
     // Arrange
     const pca = testMsalInstance();
