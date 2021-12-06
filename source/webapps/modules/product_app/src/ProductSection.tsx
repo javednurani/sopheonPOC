@@ -1,7 +1,7 @@
 import { FontIcon, IStackItemStyles, IStackStyles, IStackTokens, mergeStyles, registerIcons, Stack, Text } from '@fluentui/react';
 import { useTheme } from '@fluentui/react-theme-provider';
 import { darkTheme } from '@sopheon/shared-ui';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
 import { industries } from './data/industries';
@@ -29,42 +29,83 @@ export interface IProductSectionProps {
   product: Product;
 }
 
+const svgIndustryIconStyleLargeShared: React.CSSProperties = {
+  width: '48px',
+  height: '48px',
+  borderRadius: '50%',
+  overflow: 'visible',
+};
+
+const svgIndustryIconStyleLargeLight: React.CSSProperties = {
+  ...svgIndustryIconStyleLargeShared,
+  fill: '#fff',
+  stroke: '#fff',
+  backgroundColor: '#898989',
+};
+
+const svgIndustryIconStyleLargeDark: React.CSSProperties = {
+  ...svgIndustryIconStyleLargeShared,
+  fill: '#898989',
+  stroke: '#898989',
+  backgroundColor: '#f0f0f0',
+};
+
+// Industry Icons are currently used to stub out Product Section Product Icon. Appending 'Large' supports 2x registerIcons with 2x styles
+registerIcons({
+  icons: {
+    // light theme style
+    AgIndustryIconLargeLight: <AgIndustry style={svgIndustryIconStyleLargeLight} />,
+    AeroIndustryIconLargeLight: <AeroIndustry style={svgIndustryIconStyleLargeLight} />,
+    AutoIndustryIconLargeLight: <AutoIndustry style={svgIndustryIconStyleLargeLight} />,
+    ConstREIndustryIconLargeLight: <ConstREIndustry style={svgIndustryIconStyleLargeLight} />,
+    ConsumerIndustryIconLargeLight: <ConsumerIndustry style={svgIndustryIconStyleLargeLight} />,
+    EduIndustryIconLargeLight: <EdIndustry style={svgIndustryIconStyleLargeLight} />,
+    EnergyIndustryIconLargeLight: <EnergyIndustry style={svgIndustryIconStyleLargeLight} />,
+    FinIndustryIconLargeLight: <FinIndustry style={svgIndustryIconStyleLargeLight} />,
+    GovtIndustryIconLargeLight: <GovtIndustry style={svgIndustryIconStyleLargeLight} />,
+    HealthIndustryIconLargeLight: <HealthIndustry style={svgIndustryIconStyleLargeLight} />,
+    HospIndustryIconLargeLight: <HospIndustry style={svgIndustryIconStyleLargeLight} />,
+    IndusIndustryIconLargeLight: <IndusIndustry style={svgIndustryIconStyleLargeLight} />,
+    MediaIndustryIconLargeLight: <MediaIndustry style={svgIndustryIconStyleLargeLight} />,
+    MemberIndustryIconLargeLight: <MemberIndustry style={svgIndustryIconStyleLargeLight} />,
+    ServicesIndustryIconLargeLight: <ServicesIndustry style={svgIndustryIconStyleLargeLight} />,
+    TechIndustryIconLargeLight: <TechIndustry style={svgIndustryIconStyleLargeLight} />,
+    TeleIndustryIconLargeLight: <TeleIndustry style={svgIndustryIconStyleLargeLight} />,
+    TransIndustryIconLargeLight: <TransIndustry style={svgIndustryIconStyleLargeLight} />,
+    // dark theme style
+    AgIndustryIconLargeDark: <AgIndustry style={svgIndustryIconStyleLargeDark} />,
+    AeroIndustryIconLargeDark: <AeroIndustry style={svgIndustryIconStyleLargeDark} />,
+    AutoIndustryIconLargeDark: <AutoIndustry style={svgIndustryIconStyleLargeDark} />,
+    ConstREIndustryIconLargeDark: <ConstREIndustry style={svgIndustryIconStyleLargeDark} />,
+    ConsumerIndustryIconLargeDark: <ConsumerIndustry style={svgIndustryIconStyleLargeDark} />,
+    EduIndustryIconLargeDark: <EdIndustry style={svgIndustryIconStyleLargeDark} />,
+    EnergyIndustryIconLargeDark: <EnergyIndustry style={svgIndustryIconStyleLargeDark} />,
+    FinIndustryIconLargeDark: <FinIndustry style={svgIndustryIconStyleLargeDark} />,
+    GovtIndustryIconLargeDark: <GovtIndustry style={svgIndustryIconStyleLargeDark} />,
+    HealthIndustryIconLargeDark: <HealthIndustry style={svgIndustryIconStyleLargeDark} />,
+    HospIndustryIconLargeDark: <HospIndustry style={svgIndustryIconStyleLargeDark} />,
+    IndusIndustryIconLargeDark: <IndusIndustry style={svgIndustryIconStyleLargeDark} />,
+    MediaIndustryIconLargeDark: <MediaIndustry style={svgIndustryIconStyleLargeDark} />,
+    MemberIndustryIconLargeDark: <MemberIndustry style={svgIndustryIconStyleLargeDark} />,
+    ServicesIndustryIconLargeDark: <ServicesIndustry style={svgIndustryIconStyleLargeDark} />,
+    TechIndustryIconLargeDark: <TechIndustry style={svgIndustryIconStyleLargeDark} />,
+    TeleIndustryIconLargeDark: <TeleIndustry style={svgIndustryIconStyleLargeDark} />,
+    TransIndustryIconLargeDark: <TransIndustry style={svgIndustryIconStyleLargeDark} />,
+  },
+});
+
 const ProductSection: React.FunctionComponent<IProductSectionProps> = ({ product }: IProductSectionProps) => {
   const theme = useTheme();
   const { formatMessage } = useIntl();
+  const [darkThemeState, setdarkThemeState] = useState(false);
 
-  const svgIndustryIconStyleLarge: React.CSSProperties = {
-    width: '48px',
-    height: '48px',
-    overflow: 'visible',
-    fill: theme.id?.includes(darkTheme.id ?? 'darkTheme') ? '#f0f0f0' : '#898989',
-    stroke: theme.id?.includes(darkTheme.id ?? 'darkTheme') ? '#898989' : '#ffffff',
-    backgroundColor: theme.id?.includes(darkTheme.id ?? 'darkTheme') ? '#f0f0f0' : '#898989',
-  };
-
-  // Industry Icons are currently used to stub out Product Section Product Icon. Appending 'Large' supports 2x registerIcons with 2x styles
-  registerIcons({
-    icons: {
-      AgIndustryIconLarge: <AgIndustry style={svgIndustryIconStyleLarge} />,
-      AeroIndustryIconLarge: <AeroIndustry style={svgIndustryIconStyleLarge} />,
-      AutoIndustryIconLarge: <AutoIndustry style={svgIndustryIconStyleLarge} />,
-      ConstREIndustryIconLarge: <ConstREIndustry style={svgIndustryIconStyleLarge} />,
-      ConsumerIndustryIconLarge: <ConsumerIndustry style={svgIndustryIconStyleLarge} />,
-      EduIndustryIconLarge: <EdIndustry style={svgIndustryIconStyleLarge} />,
-      EnergyIndustryIconLarge: <EnergyIndustry style={svgIndustryIconStyleLarge} />,
-      FinIndustryIconLarge: <FinIndustry style={svgIndustryIconStyleLarge} />,
-      GovtIndustryIconLarge: <GovtIndustry style={svgIndustryIconStyleLarge} />,
-      HealthIndustryIconLarge: <HealthIndustry style={svgIndustryIconStyleLarge} />,
-      HospIndustryIconLarge: <HospIndustry style={svgIndustryIconStyleLarge} />,
-      IndusIndustryIconLarge: <IndusIndustry style={svgIndustryIconStyleLarge} />,
-      MediaIndustryIconLarge: <MediaIndustry style={svgIndustryIconStyleLarge} />,
-      MemberIndustryIconLarge: <MemberIndustry style={svgIndustryIconStyleLarge} />,
-      ServicesIndustryIconLarge: <ServicesIndustry style={svgIndustryIconStyleLarge} />,
-      TechIndustryIconLarge: <TechIndustry style={svgIndustryIconStyleLarge} />,
-      TeleIndustryIconLarge: <TeleIndustry style={svgIndustryIconStyleLarge} />,
-      TransIndustryIconLarge: <TransIndustry style={svgIndustryIconStyleLarge} />,
-    },
-  });
+  useEffect(() => {
+    if (theme.id?.includes(darkTheme.id ?? 'darkTheme')) {
+      setdarkThemeState(true);
+    } else {
+      setdarkThemeState(false);
+    }
+  }, [theme]);
 
   const stackStyles: IStackStyles = {
     root: {
@@ -129,7 +170,7 @@ const ProductSection: React.FunctionComponent<IProductSectionProps> = ({ product
   return (
     <Stack horizontal styles={stackStyles} tokens={mainStackTokens}>
       <Stack.Item styles={productIconStackItemStyles}>
-        <FontIcon iconName={`${industryIconName}Large`} className={productIconClass} />
+        <FontIcon iconName={`${industryIconName}Large${darkThemeState ? 'Light' : 'Dark'}`} className={productIconClass} />
       </Stack.Item>
       <Stack.Item>
         <Stack styles={stackStyles} tokens={nestedStackTokens}>
