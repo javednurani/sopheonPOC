@@ -1,5 +1,6 @@
 import { FontIcon, IStackItemStyles, IStackStyles, IStackTokens, mergeStyles, registerIcons, Stack, Text } from '@fluentui/react';
 import { useTheme } from '@fluentui/react-theme-provider';
+import { darkTheme } from '@sopheon/shared-ui';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -28,39 +29,41 @@ export interface IProductSectionProps {
   product: Product;
 }
 
-const svgIndustryIconStyleLarge: React.CSSProperties = {
-  width: '48px',
-  height: '48px',
-  overflow: 'visible',
-};
-
-// Industry Icons are currently used to stub out Product Section Product Icon. Appending 'Large' supports 2x registerIcons with 2x styles
-registerIcons({
-  icons: {
-    AgIndustryIconLarge: <AgIndustry style={svgIndustryIconStyleLarge} />,
-    AeroIndustryIconLarge: <AeroIndustry style={svgIndustryIconStyleLarge} />,
-    AutoIndustryIconLarge: <AutoIndustry style={svgIndustryIconStyleLarge} />,
-    ConstREIndustryIconLarge: <ConstREIndustry style={svgIndustryIconStyleLarge} />,
-    ConsumerIndustryIconLarge: <ConsumerIndustry style={svgIndustryIconStyleLarge} />,
-    EduIndustryIconLarge: <EdIndustry style={svgIndustryIconStyleLarge} />,
-    EnergyIndustryIconLarge: <EnergyIndustry style={svgIndustryIconStyleLarge} />,
-    FinIndustryIconLarge: <FinIndustry style={svgIndustryIconStyleLarge} />,
-    GovtIndustryIconLarge: <GovtIndustry style={svgIndustryIconStyleLarge} />,
-    HealthIndustryIconLarge: <HealthIndustry style={svgIndustryIconStyleLarge} />,
-    HospIndustryIconLarge: <HospIndustry style={svgIndustryIconStyleLarge} />,
-    IndusIndustryIconLarge: <IndusIndustry style={svgIndustryIconStyleLarge} />,
-    MediaIndustryIconLarge: <MediaIndustry style={svgIndustryIconStyleLarge} />,
-    MemberIndustryIconLarge: <MemberIndustry style={svgIndustryIconStyleLarge} />,
-    ServicesIndustryIconLarge: <ServicesIndustry style={svgIndustryIconStyleLarge} />,
-    TechIndustryIconLarge: <TechIndustry style={svgIndustryIconStyleLarge} />,
-    TeleIndustryIconLarge: <TeleIndustry style={svgIndustryIconStyleLarge} />,
-    TransIndustryIconLarge: <TransIndustry style={svgIndustryIconStyleLarge} />,
-  },
-});
-
 const ProductSection: React.FunctionComponent<IProductSectionProps> = ({ product }: IProductSectionProps) => {
   const theme = useTheme();
   const { formatMessage } = useIntl();
+
+  const svgIndustryIconStyleLarge: React.CSSProperties = {
+    width: '48px',
+    height: '48px',
+    overflow: 'visible',
+    fill: theme.id?.includes(darkTheme.id ?? 'darkTheme') ? '#f0f0f0' : '#898989',
+    stroke: theme.id?.includes(darkTheme.id ?? 'darkTheme') ? '#898989' : '#ffffff',
+  };
+
+  // Industry Icons are currently used to stub out Product Section Product Icon. Appending 'Large' supports 2x registerIcons with 2x styles
+  registerIcons({
+    icons: {
+      AgIndustryIconLarge: <AgIndustry style={svgIndustryIconStyleLarge} />,
+      AeroIndustryIconLarge: <AeroIndustry style={svgIndustryIconStyleLarge} />,
+      AutoIndustryIconLarge: <AutoIndustry style={svgIndustryIconStyleLarge} />,
+      ConstREIndustryIconLarge: <ConstREIndustry style={svgIndustryIconStyleLarge} />,
+      ConsumerIndustryIconLarge: <ConsumerIndustry style={svgIndustryIconStyleLarge} />,
+      EduIndustryIconLarge: <EdIndustry style={svgIndustryIconStyleLarge} />,
+      EnergyIndustryIconLarge: <EnergyIndustry style={svgIndustryIconStyleLarge} />,
+      FinIndustryIconLarge: <FinIndustry style={svgIndustryIconStyleLarge} />,
+      GovtIndustryIconLarge: <GovtIndustry style={svgIndustryIconStyleLarge} />,
+      HealthIndustryIconLarge: <HealthIndustry style={svgIndustryIconStyleLarge} />,
+      HospIndustryIconLarge: <HospIndustry style={svgIndustryIconStyleLarge} />,
+      IndusIndustryIconLarge: <IndusIndustry style={svgIndustryIconStyleLarge} />,
+      MediaIndustryIconLarge: <MediaIndustry style={svgIndustryIconStyleLarge} />,
+      MemberIndustryIconLarge: <MemberIndustry style={svgIndustryIconStyleLarge} />,
+      ServicesIndustryIconLarge: <ServicesIndustry style={svgIndustryIconStyleLarge} />,
+      TechIndustryIconLarge: <TechIndustry style={svgIndustryIconStyleLarge} />,
+      TeleIndustryIconLarge: <TeleIndustry style={svgIndustryIconStyleLarge} />,
+      TransIndustryIconLarge: <TransIndustry style={svgIndustryIconStyleLarge} />,
+    },
+  });
 
   const stackStyles: IStackStyles = {
     root: {
