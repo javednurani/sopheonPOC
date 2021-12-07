@@ -57,7 +57,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({ products }: IDash
     root: {
       background: theme.semanticColors.bodyBackground, // TODO: why needed?
       height: '100%',
-      width: '100%',
+      width: '620px',
     },
   };
 

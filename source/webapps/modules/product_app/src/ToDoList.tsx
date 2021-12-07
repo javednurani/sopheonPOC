@@ -5,10 +5,17 @@ export interface IToDoListProps {}
 
 const mainDivStyle: React.CSSProperties = {
   width: '100%',
+  marginLeft: '48px',
+  marginRight: '48px',
+  marginTop: '35px',
 };
 
 const headingLeftStyle: React.CSSProperties = {
   textAlign: 'left',
+};
+
+const contentDivStyle: React.CSSProperties = {
+  marginTop: '24px',
 };
 
 const ToDoList: React.FunctionComponent<IToDoListProps> = ({}: IToDoListProps) => (
@@ -20,7 +27,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({}: IToDoListProps) =
       <Stack.Item>XYZ</Stack.Item>
     </Stack>
     <hr />
-    <div>You don't have any tasks yet. Click + above to add one.</div>
+    <div style={contentDivStyle}>You don't have any tasks yet. Click + above to add one.</div>
   </div>
 );
 
