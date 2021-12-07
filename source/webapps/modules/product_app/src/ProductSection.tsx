@@ -170,7 +170,7 @@ const ProductSection: React.FunctionComponent<IProductSectionProps> = ({ product
   return (
     <Stack horizontal styles={stackStyles} tokens={mainStackTokens}>
       <Stack.Item styles={productIconStackItemStyles}>
-        <FontIcon iconName={`${industryIconName}Large${darkThemeState ? 'Light' : 'Dark'}`} className={productIconClass} />
+        <FontIcon iconName={`${industryIconName}Large${darkThemeState ? 'Dark' : 'Light'}`} className={productIconClass} />
       </Stack.Item>
       <Stack.Item>
         <Stack styles={stackStyles} tokens={nestedStackTokens}>
