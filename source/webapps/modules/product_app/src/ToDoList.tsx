@@ -1,4 +1,4 @@
-import { Stack, StackItem } from 'office-ui-fabric-react';
+import { FontIcon, Stack, StackItem } from 'office-ui-fabric-react';
 import React from 'react';
 
 export interface IToDoListProps {}
@@ -22,12 +22,17 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({}: IToDoListProps) =
   <div style={mainDivStyle}>
     <Stack horizontal>
       <Stack.Item grow style={headingLeftStyle}>
-        To Do +
+        To Do <FontIcon iconName="CirclePlus" />
       </Stack.Item>
-      <Stack.Item>XYZ</Stack.Item>
+      <Stack.Item>
+        <FontIcon iconName="Filter" />
+        <FontIcon iconName="Sort" />
+      </Stack.Item>
     </Stack>
     <hr />
-    <div style={contentDivStyle}>You don't have any tasks yet. Click + above to add one.</div>
+    <div style={contentDivStyle}>
+      You don't have any tasks yet. Click <FontIcon iconName="CirclePlus" /> above to add one.
+    </div>
   </div>
 );
 
