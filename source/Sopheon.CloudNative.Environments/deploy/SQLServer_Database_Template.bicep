@@ -1,17 +1,17 @@
 @description('The name of the SQL logical server.')
-param serverName string = 'SqlServerName'
+param serverName string = ''
 
 @description('The name of the SQL Database.')
-param sqlDBName string = 'SqlServerDatabaseName'
+param sqlDBName string = ''
 
 @description('The name of the SQL Elastic Pool')
-param poolName string = 'SqlElasticPoolName'
+param poolName string = ''
 
 @description('The administrator username of the SQL logical server.')
-param administratorLogin string = 'sopheon'
+param administratorLogin string = ''
 
 @description('The administrator password of the SQL logical server.')
-param administratorLoginEngima string = 'SqlAdminEngima'
+param administratorLoginEngima string = ''
 
 @description('Deploy an elastic pool to be used with the database')
 param useElasticPool bool = false
@@ -59,7 +59,7 @@ resource SqlServer_WithElasticPool_SqlDBName 'Microsoft.Sql/servers/databases@20
   }
 }
 
-resource SqlServer_SqlDBName 'Microsoft.Sql/servers/databases@2020-08-01-preview' = if (!useElasticPool) {
+resource SqlServer_SqlDBName 'Microsoft.Sql/servers/databases@2020-08-01-preview' = if (!useElasticPool && !empty(sqlDBName)) {
   name: '${SqlServer.name}/${sqlDBName}'
   location: location
   sku: {
