@@ -1,17 +1,20 @@
 @description('The name of the SQL logical server.')
-param serverName string = '^SqlServerName^'
+param serverName string = 'SqlServerName'
 
 @description('The name of the SQL Database.')
-param sqlDBName string = '^SqlServerDatabaseName^'
+param sqlDBName string = 'SqlServerDatabaseName'
 
 @description('The name of the SQL Elastic Pool')
-param poolName string = '^SqlElasticPoolName^'
+param poolName string = 'SqlElasticPoolName'
 
 @description('The administrator username of the SQL logical server.')
 param administratorLogin string = 'sopheon'
 
 @description('The administrator password of the SQL logical server.')
-param administratorLoginEngima string = '^SqlAdminEngima^'
+param administratorLoginEngima string = 'SqlAdminEngima'
+
+@description('Deploy an elastic pool to be used with the database')
+param useElasticPool bool = false
 
 param location string
 
@@ -25,7 +28,7 @@ resource SqlServer 'Microsoft.Sql/servers@2020-02-02-preview' = {
   }
 }
 
-resource SqlServer_Pool 'Microsoft.Sql/servers/elasticPools@2020-08-01-preview' = {
+resource SqlServer_Pool 'Microsoft.Sql/servers/elasticPools@2020-08-01-preview'  = if (useElasticPool) {
   name: '${SqlServer.name}/${poolName}'
   location: location
   sku: {
@@ -43,7 +46,7 @@ resource SqlServer_Pool 'Microsoft.Sql/servers/elasticPools@2020-08-01-preview' 
   }
 }
 
-resource SqlServer_SqlDBName 'Microsoft.Sql/servers/databases@2020-08-01-preview' = {
+resource SqlServer_WithElasticPool_SqlDBName 'Microsoft.Sql/servers/databases@2020-08-01-preview' = if (useElasticPool) {
   name: '${SqlServer.name}/${sqlDBName}'
   location: location
   sku: {
@@ -53,6 +56,16 @@ resource SqlServer_SqlDBName 'Microsoft.Sql/servers/databases@2020-08-01-preview
   }
   properties: {
     elasticPoolId: SqlServer_Pool.id
+  }
+}
+
+resource SqlServer_SqlDBName 'Microsoft.Sql/servers/databases@2020-08-01-preview' = if (!useElasticPool) {
+  name: '${SqlServer.name}/${sqlDBName}'
+  location: location
+  sku: {
+    name: 'Basic'
+    tier: 'Basic'
+    capacity: 0
   }
 }
 
