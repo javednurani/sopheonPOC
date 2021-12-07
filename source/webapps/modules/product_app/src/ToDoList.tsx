@@ -1,4 +1,4 @@
-import { FontIcon, Stack, StackItem } from 'office-ui-fabric-react';
+import { FontIcon, mergeStyles, Stack, StackItem } from 'office-ui-fabric-react';
 import React from 'react';
 
 export interface IToDoListProps {}
@@ -18,15 +18,19 @@ const contentDivStyle: React.CSSProperties = {
   marginTop: '24px',
 };
 
+const iconClass = mergeStyles({
+  marginLeft: '7px',
+});
+
 const ToDoList: React.FunctionComponent<IToDoListProps> = ({}: IToDoListProps) => (
   <div style={mainDivStyle}>
     <Stack horizontal>
       <Stack.Item grow style={headingLeftStyle}>
-        To Do <FontIcon iconName="CirclePlus" />
+        To Do <FontIcon iconName="CirclePlus" className={iconClass} />
       </Stack.Item>
       <Stack.Item>
-        <FontIcon iconName="Filter" />
-        <FontIcon iconName="Sort" />
+        <FontIcon iconName="Filter" className={iconClass} />
+        <FontIcon iconName="Sort" className={iconClass} />
       </Stack.Item>
     </Stack>
     <hr />
