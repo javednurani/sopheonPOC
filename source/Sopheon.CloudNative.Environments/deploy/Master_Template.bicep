@@ -1,23 +1,28 @@
 @description('The name of the Environment Function App')
 param environmentFunctionApp_Name string = '^EnvironmentFunctionAppName^'
 
+@description('The name of the Environment Management Function App Storage Account')
 param environmentFunctionAppStorage_name string = '^EnvironmentFunctionStorageAccountName^'
 
+@description('The name of the AppInsights instance')
 param appInsightsName string = '^AppInsightsName^'
 
-@description('The name of the SQL Server')
-param sqlServer_name string = '^SqlServerName^'
+@description('The name of the Environment Management SQL Server')
+param envManagement_sqlServer_name string = '^EnvManagementSqlServerName^'
 
-@description('Sql server pool name')
-param sqlServerPool_name string = '^SqlElasticPoolName^'
+@description('The name of the Elastic Job Agent SQL Server')
+param elasticJobAgent_sqlServer_name string = '^ElasticJobAgentSqlServerName^'
 
-@description('Sql server database name')
-param sqlServerDatabase_name string = '^SqlServerDatabaseName^'
+@description('Environment Management Sql server database name')
+param envManagement_sqlServerDatabase_name string = '^EnvironmentManagementSqlServerDatabaseName^'
+
+@description('Elastic Job Agent Sql server database name')
+param elasticJobAgent_sqlServerDatabase_name string = '^ElasticJobAgentSqlServerDatabaseName^'
 
 @description('Name of the WebServer Farm being used')
 param webServerFarm_Name string = '^WebServerFarmName^'
 
-@description('Sql Server Password')
+@description('Sql server password')
 param sqlServer_Enigma string = '^SqlAdminEngima^'
 
 @description('Sql server admin')
@@ -26,15 +31,28 @@ param administratorLogin string = 'sopheon'
 @description('The location of where to deploy the resource')
 param location string = resourceGroup().location
 
-// SQL Server module
-module SqlServer 'SQLServer_Database_Template.bicep' = {
-  name: 'Sql-Server-Deployment'
+// Environment Management SQL Server module
+module EnvironmentManagementSqlServer 'SQLServer_Database_Template.bicep' = {
+  name: 'EnvironmentMangement-Sql-Server-Deployment'
   params: {
     location: location
     administratorLoginEngima: sqlServer_Enigma
-    serverName: sqlServer_name
-    poolName:sqlServerPool_name
-    sqlDBName:sqlServerDatabase_name
+    serverName: envManagement_sqlServer_name
+    useElasticPool: false
+    sqlDBName: envManagement_sqlServerDatabase_name
+    administratorLogin: administratorLogin
+  }
+}
+
+// Elastic Job Agent SQL Server module
+module ElasticJobAgentSqlServer 'SQLServer_Database_Template.bicep' = {
+  name: 'ElasticJobAgent-Sql-Server-Deployment'
+  params: {
+    location: location
+    administratorLoginEngima: sqlServer_Enigma
+    useElasticPool: false
+    serverName: elasticJobAgent_sqlServer_name
+    sqlDBName: elasticJobAgent_sqlServerDatabase_name
     administratorLogin: administratorLogin
   }
 }
@@ -47,7 +65,7 @@ module EnvironmentFunction 'Environments_Function_App.bicep' = {
     appInsightsName: appInsightsName
     functionAppName: environmentFunctionApp_Name
     webServerFarm_Name: webServerFarm_Name
-    sqlServer_Name: toLower(sqlServer_name)
+    sqlServer_Name: toLower(EnvironmentManagementSqlServer.name)
   }
 }
 
