@@ -7,6 +7,7 @@ import ProductHealth from './ProductHealth';
 import ProductSection from './ProductSection';
 import ResourcesAndLinks from './ResourcesAndLinks';
 import Timeline from './Timeline';
+import ToDoList from './ToDoList';
 import { Product } from './types';
 
 export interface IDashboardProps {
@@ -67,7 +68,9 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({ products }: IDash
           <Stack.Item styles={topRowStackItemStyles}>
             <ProductSection productName={products[0].name} />
           </Stack.Item>
-          <Stack.Item styles={middleRowStackItemStyles}>To Do List</Stack.Item>
+          <Stack.Item styles={middleRowStackItemStyles}>
+            <ToDoList />
+          </Stack.Item>
           <Stack.Item styles={bottomRowStackItemStyles}>
             <ResourcesAndLinks />
           </Stack.Item>
