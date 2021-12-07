@@ -16,6 +16,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
+import { industries } from '../data/industries';
 import { CreateProductAction, UpdateProductAction } from '../product/productReducer';
 import SopheonLogo from '../SopheonLogo';
 import { Attributes, CreateProductModel, KeyPerformanceIndicatorDto, PatchOperation, Product, ProductPostDto, UpdateProductModel } from '../types';
@@ -49,33 +50,33 @@ export interface IOnboardingInfoProps {
   products: Product[];
 }
 
-const svgIndustryIconStyle: React.CSSProperties = {
+const svgIndustryIconStyleSmall: React.CSSProperties = {
   width: '20px',
   height: '20px',
   overflow: 'visible',
 };
 
-// TODO: is this specific to Onboarding? (As of Cloud-2035 - will need access to registered Icons with a different style 48px width/height)
+// Industry Icons are currently used to stub out Product Section Product Icon. Appending 'Small' supports 2x registerIcons with 2x styles
 registerIcons({
   icons: {
-    AgIndustryIcon: <AgIndustry style={svgIndustryIconStyle} />,
-    AeroIndustryIcon: <AeroIndustry style={svgIndustryIconStyle} />,
-    AutoIndustryIcon: <AutoIndustry style={svgIndustryIconStyle} />,
-    ConstREIndustryIcon: <ConstREIndustry style={svgIndustryIconStyle} />,
-    ConsumerIndustryIcon: <ConsumerIndustry style={svgIndustryIconStyle} />,
-    EduIndustryIcon: <EdIndustry style={svgIndustryIconStyle} />,
-    EnergyIndustryIcon: <EnergyIndustry style={svgIndustryIconStyle} />,
-    FinIndustryIcon: <FinIndustry style={svgIndustryIconStyle} />,
-    GovtIndustryIcon: <GovtIndustry style={svgIndustryIconStyle} />,
-    HealthIndustryIcon: <HealthIndustry style={svgIndustryIconStyle} />,
-    HospIndustryIcon: <HospIndustry style={svgIndustryIconStyle} />,
-    IndusIndustryIcon: <IndusIndustry style={svgIndustryIconStyle} />,
-    MediaIndustryIcon: <MediaIndustry style={svgIndustryIconStyle} />,
-    MemberIndustryIcon: <MemberIndustry style={svgIndustryIconStyle} />,
-    ServicesIndustryIcon: <ServicesIndustry style={svgIndustryIconStyle} />,
-    TechIndustryIcon: <TechIndustry style={svgIndustryIconStyle} />,
-    TeleIndustryIcon: <TeleIndustry style={svgIndustryIconStyle} />,
-    TransIndustryIcon: <TransIndustry style={svgIndustryIconStyle} />,
+    AgIndustryIconSmall: <AgIndustry style={svgIndustryIconStyleSmall} />,
+    AeroIndustryIconSmall: <AeroIndustry style={svgIndustryIconStyleSmall} />,
+    AutoIndustryIconSmall: <AutoIndustry style={svgIndustryIconStyleSmall} />,
+    ConstREIndustryIconSmall: <ConstREIndustry style={svgIndustryIconStyleSmall} />,
+    ConsumerIndustryIconSmall: <ConsumerIndustry style={svgIndustryIconStyleSmall} />,
+    EduIndustryIconSmall: <EdIndustry style={svgIndustryIconStyleSmall} />,
+    EnergyIndustryIconSmall: <EnergyIndustry style={svgIndustryIconStyleSmall} />,
+    FinIndustryIconSmall: <FinIndustry style={svgIndustryIconStyleSmall} />,
+    GovtIndustryIconSmall: <GovtIndustry style={svgIndustryIconStyleSmall} />,
+    HealthIndustryIconSmall: <HealthIndustry style={svgIndustryIconStyleSmall} />,
+    HospIndustryIconSmall: <HospIndustry style={svgIndustryIconStyleSmall} />,
+    IndusIndustryIconSmall: <IndusIndustry style={svgIndustryIconStyleSmall} />,
+    MediaIndustryIconSmall: <MediaIndustry style={svgIndustryIconStyleSmall} />,
+    MemberIndustryIconSmall: <MemberIndustry style={svgIndustryIconStyleSmall} />,
+    ServicesIndustryIconSmall: <ServicesIndustry style={svgIndustryIconStyleSmall} />,
+    TechIndustryIconSmall: <TechIndustry style={svgIndustryIconStyleSmall} />,
+    TeleIndustryIconSmall: <TeleIndustry style={svgIndustryIconStyleSmall} />,
+    TransIndustryIconSmall: <TransIndustry style={svgIndustryIconStyleSmall} />,
   },
 });
 
@@ -134,41 +135,14 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
     },
   };
 
-  // TODO Cloud-2035, extract key/resourceId/iconName to an Industries data file
-  // build this industryOptions [] with a .map()
-  // access Industries data file as needed for Product Image display
-  const industryOptions: IDropdownOption[] = [
-    { key: 1, text: formatMessage({ id: 'industryoption.advertising' }), data: { icon: 'MediaIndustryIcon' } },
-    { key: 2, text: formatMessage({ id: 'industryoption.agricuture' }), data: { icon: 'AgIndustryIcon' } },
-    { key: 3, text: formatMessage({ id: 'industryoption.construction' }), data: { icon: 'ConstREIndustryIcon' } },
-    { key: 4, text: formatMessage({ id: 'industryoption.eduhigher' }), data: { icon: 'EduIndustryIcon' } },
-    { key: 5, text: formatMessage({ id: 'industryoption.eduk12' }), data: { icon: 'EduIndustryIcon' } },
-    { key: 6, text: formatMessage({ id: 'industryoption.energy' }), data: { icon: 'EnergyIndustryIcon' } },
-    { key: 7, text: formatMessage({ id: 'industryoption.financialservices' }), data: { icon: 'FinIndustryIcon' } },
-    { key: 8, text: formatMessage({ id: 'industryoption.govfederal' }), data: { icon: 'GovtIndustryIcon' } },
-    { key: 9, text: formatMessage({ id: 'industryoption.govlocal' }), data: { icon: 'GovtIndustryIcon' } },
-    { key: 10, text: formatMessage({ id: 'industryoption.govmilitary' }), data: { icon: 'GovtIndustryIcon' } },
-    { key: 11, text: formatMessage({ id: 'industryoption.govstate' }), data: { icon: 'GovtIndustryIcon' } },
-    { key: 12, text: formatMessage({ id: 'industryoption.healthcare' }), data: { icon: 'HealthIndustryIcon' } },
-    { key: 13, text: formatMessage({ id: 'industryoption.insurance' }), data: { icon: 'FinIndustryIcon' } },
-    { key: 14, text: formatMessage({ id: 'industryoption.manuaero' }), data: { icon: 'AeroIndustryIcon' } },
-    { key: 15, text: formatMessage({ id: 'industryoption.manuauto' }), data: { icon: 'AutoIndustryIcon' } },
-    { key: 16, text: formatMessage({ id: 'industryoption.manuconsumergoods' }), data: { icon: 'ConsumerIndustryIcon' } },
-    { key: 17, text: formatMessage({ id: 'industryoption.manuindustrial' }), data: { icon: 'IndusIndustryIcon' } },
-    { key: 18, text: formatMessage({ id: 'industryoption.entertainment' }), data: { icon: 'MediaIndustryIcon' } },
-    { key: 19, text: formatMessage({ id: 'industryoption.membershiporg' }), data: { icon: 'MemberIndustryIcon' } },
-    { key: 20, text: formatMessage({ id: 'industryoption.nonprofit' }), data: { icon: 'MemberIndustryIcon' } },
-    { key: 21, text: formatMessage({ id: 'industryoption.pharma' }), data: { icon: 'HealthIndustryIcon' } },
-    { key: 22, text: formatMessage({ id: 'industryoption.protechservices' }), data: { icon: 'ServicesIndustryIcon' } },
-    { key: 23, text: formatMessage({ id: 'industryoption.realestate' }), data: { icon: 'ConstREIndustryIcon' } },
-    { key: 24, text: formatMessage({ id: 'industryoption.retail' }), data: { icon: 'ConsumerIndustryIcon' } },
-    { key: 25, text: formatMessage({ id: 'industryoption.techhardware' }), data: { icon: 'TechIndustryIcon' } },
-    { key: 26, text: formatMessage({ id: 'industryoption.techsoftware' }), data: { icon: 'TechIndustryIcon' } },
-    { key: 27, text: formatMessage({ id: 'industryoption.telecom' }), data: { icon: 'TeleIndustryIcon' } },
-    { key: 28, text: formatMessage({ id: 'industryoption.transportation' }), data: { icon: 'TransIndustryIcon' } },
-    { key: 29, text: formatMessage({ id: 'industryoption.travel' }), data: { icon: 'HospIndustryIcon' } },
-    { key: 30, text: formatMessage({ id: 'industryoption.utilities' }), data: { icon: 'TechIndustryIcon' } },
-  ];
+  const industryOptions: IDropdownOption[] = industries.map(ind => ({
+    key: ind.key,
+    text: formatMessage({ id: ind.resourceKey }),
+    data: {
+      // Industry Icons are currently used to stub out Product Section Product Icon. Appending 'Small' supports 2x registerIcons with 2x styles
+      icon: `${ind.iconName}Small`,
+    },
+  }));
 
   const onRenderOption = (option: IDropdownOption | undefined): JSX.Element => {
     const svgIconStyle: React.CSSProperties = {
