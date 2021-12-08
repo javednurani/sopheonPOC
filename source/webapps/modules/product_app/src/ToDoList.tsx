@@ -1,6 +1,7 @@
-import { ITextProps, Text } from '@fluentui/react/lib/Text';
-import { FontIcon, FontSizes, mergeStyles, Stack, StackItem } from 'office-ui-fabric-react';
+import { Text } from '@fluentui/react/lib/Text';
+import { FontIcon, mergeStyles, Stack } from 'office-ui-fabric-react';
 import React from 'react';
+import { useIntl } from 'react-intl';
 
 export interface IToDoListProps {}
 
@@ -17,8 +18,8 @@ const headingLeftStyle: React.CSSProperties = {
 
 const contentDivStyle: React.CSSProperties = {
   margin: '24px',
-  marginLeft: '72px',
-  marginRight: '72px',
+  marginLeft: '100px',
+  marginRight: '100px',
 };
 
 const iconClass = mergeStyles({
@@ -30,29 +31,35 @@ const filterSortIconClass = mergeStyles({
   verticalAlign: 'bottom',
 });
 
-const ToDoList: React.FunctionComponent<IToDoListProps> = ({}: IToDoListProps) => (
-  <div style={mainDivStyle}>
-    <Stack horizontal>
-      <Stack.Item grow style={headingLeftStyle}>
-        <Text variant="xxLarge">To Do</Text>
+const ToDoList: React.FunctionComponent<IToDoListProps> = ({}: IToDoListProps) => {
+  const { formatMessage } = useIntl();
+
+  return (
+    <div style={mainDivStyle}>
+      <Stack horizontal>
+        <Stack.Item grow style={headingLeftStyle}>
+          <Text variant="xxLarge">{formatMessage({ id: 'toDo.title' })}</Text>
+          <Text variant="xLarge">
+            <FontIcon iconName="CirclePlus" className={iconClass} />
+          </Text>
+        </Stack.Item>
+        <Stack.Item>
+          <Text variant="xLarge">
+            <FontIcon iconName="Filter" className={filterSortIconClass} />
+            <FontIcon iconName="Sort" className={filterSortIconClass} />
+          </Text>
+        </Stack.Item>
+      </Stack>
+      <hr />
+      <div style={contentDivStyle}>
         <Text variant="xLarge">
-          <FontIcon iconName="CirclePlus" className={iconClass} />
+          {formatMessage({ id: 'toDo.empty1' })}
+          <FontIcon iconName="CirclePlus" />
+          {formatMessage({ id: 'toDo.empty2' })}
         </Text>
-      </Stack.Item>
-      <Stack.Item>
-        <Text variant="xLarge">
-          <FontIcon iconName="Filter" className={filterSortIconClass} />
-          <FontIcon iconName="Sort" className={filterSortIconClass} />
-        </Text>
-      </Stack.Item>
-    </Stack>
-    <hr />
-    <div style={contentDivStyle}>
-      <Text variant="xLarge">
-        You don't have any tasks yet. Click <FontIcon iconName="CirclePlus" /> above to add one.
-      </Text>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default ToDoList;

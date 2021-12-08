@@ -1,6 +1,7 @@
 import { Stack } from '@fluentui/react';
 import { AppProps, FetchStatus } from '@sopheon/shell-api';
 import React, { useEffect } from 'react';
+import { useIntl } from 'react-intl';
 
 import { AppDispatchProps, AppStateProps } from './AppContainer';
 import Dashboard from './Dashboard';
@@ -42,13 +43,15 @@ const App: React.FunctionComponent<Props> = ({
     }
   }, [products, environmentKey]);
 
+  const { formatMessage } = useIntl();
+
   // TODO: condition copied from above, can be simplified?
   const userNeedsOnboarding = (products.length === 0 && environmentKey) || (currentStep === 3 && products.length === 1);
 
   if (!environmentKey) {
     return (
       <Stack horizontalAlign="center">
-        <h2>Please Log In to use the Product App.</h2>
+        <h2>{formatMessage({ id: 'onboarding.pleaseLogin' })}</h2>
       </Stack>
     );
   }
