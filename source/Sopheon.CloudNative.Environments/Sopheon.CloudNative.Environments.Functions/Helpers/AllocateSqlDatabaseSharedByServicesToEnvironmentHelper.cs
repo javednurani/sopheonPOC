@@ -38,7 +38,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          ISqlDatabase sqlDatabase = await GetUnassignedSqlDatabaseAsync(subscriptionId, resourceGroupName, sqlServerName);
 
          // INFO: For ENV.Resources of type AzureSqlDb, ENV.Resources.Uri contains the Server & Database components of a SQL connection string
-         string azureSqlDbResourceUri = $"Server=https://{sqlServerName}.database.windows.net;Database={sqlDatabase.Name};";
+         string azureSqlDbResourceUri = $"Server=tcp:{sqlServerName}.database.windows.net,1433;Database={sqlDatabase.Name};Encrypt=true;Connection Timeout=30;";
          await _environmentCommands.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environmentKey, azureSqlDbResourceUri);
 
          await TagSqlDatabaseAsAssignedToCustomerAsync(sqlDatabase, subscriptionId, resourceGroupName, sqlServerName);

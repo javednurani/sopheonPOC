@@ -6,6 +6,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Sopheon.CloudNative.Environments.Domain.Exceptions;
@@ -21,12 +22,14 @@ namespace Sopheon.CloudNative.Environments.Functions
       private readonly IEnvironmentQueries _environmentQueries;
       private readonly IMapper _mapper;
       private readonly HttpResponseDataBuilder _responseBuilder;
+      private readonly HostBuilderContext _hostContext;
 
-      public GetSpecificResourceUri(IEnvironmentQueries environmentQueries, IMapper mapper, HttpResponseDataBuilder responseBuilder)
+      public GetSpecificResourceUri(IEnvironmentQueries environmentQueries, IMapper mapper, HttpResponseDataBuilder responseBuilder, HostBuilderContext hostContext)
       {
          _environmentQueries = environmentQueries;
          _mapper = mapper;
          _responseBuilder = responseBuilder;
+         _hostContext = hostContext;
       }
 
       [Function(nameof(GetSpecificResourceUri))]
@@ -85,7 +88,12 @@ namespace Sopheon.CloudNative.Environments.Functions
                return await _responseBuilder.BuildWithErrorBodyAsync(req, HttpStatusCode.BadRequest, StringConstants.RESPONSE_REQUEST_PATH_PARAMETER_INVALID);
             }
 
-            string resourceUri = await _environmentQueries.GetSpecificResourceUri(environmentKey, businessServiceName, dependencyName);
+            string resourceUri = await _environmentQueries.GetSpecificResourceUri(environmentKey, businessServiceName, dependencyName);       
+            
+            if(businessServiceName.Equals("ProductManagement"))
+            {
+               resourceUri += $"User ID=sopheon;Password=${_hostContext.Configuration["SqlServerAdminEnigma"]};";
+            }
 
             ResourceUriDto dto = new ResourceUriDto
             {
