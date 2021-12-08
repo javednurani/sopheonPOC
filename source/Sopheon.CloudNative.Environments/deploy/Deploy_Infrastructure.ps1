@@ -1,48 +1,40 @@
-
 [Cmdletbinding()]
 Param(
     [Parameter(Mandatory = $false)][string]$Environment = $env:Environment
 )
 # Deploy Azure Resources for release definitions to talk to
 $azureKeyVault = "Cloud-DevOps";
-if ($env:AzureEnvironment -eq "Prod"){
+if ($env:AzureEnvironment -eq "Prod") {
     $azureKeyVault = "Prod-Cloud-DevOps"
 }
 
 $SqlAdminEnigma = (az keyvault secret show --vault-name $azureKeyVault --name "SqlServerAdminEnigma" --query value).Replace('"', '');
 
-
 $DeploymentName = "ADO-Deployment";
 
 $ResourceGroupValue = "Stratus-$($Environment)";
-$WebServerFarmName = "ASP-$($ResourceGroupValue)";
-$SqlServerNameValue = $ResourceGroupValue;
-$SqlServerPoolName = "$($ResourceGroupValue)-Pool";
-$FunctionAppName = $ResourceGroupValue.ToLower();
-$SqlServerDatabaseNameValue = "EnvironmentManagement";
-$FunctionAppStorageAccountName = "stratus$($Environment.ToLower())envfuncapp"
+
+#Token values
+$EnvironmentFunctionAppName = $ResourceGroupValue.ToLower();
+$EnvironmentFunctionAppStorageAccountName = "stratus$($Environment.ToLower())envfuncapp"
 $AppInsightsName = $ResourceGroupValue;
+$EnvironmentSQLServerName = $ResourceGroupValue;
+$ElasticJobAgentSQLServerName = "$($ResourceGroupValue)-JobAgent";
+$TenantSQLServerName = "$($ResourceGroupValue)-TenantEnvironments";
+$EnvironmentManagementSQLServerDatabaseName = "EnvironmentManagement";
+$ElasticJobAgentSQLServerDatabaseName = "JobAgent";
+$WebServerFarmName = "ASP-$($ResourceGroupValue)";
 
 $MasterTemplate = "$($PSScriptRoot)\Master_Template.bicep";
-$MasterParametersTemplate = "$($PSScriptRoot)\Master_Template_Parameters.json";
-
 
 Write-Host "Replacing tokens on Master Template...";
 $masterTemplateContent = Get-Content $MasterTemplate -raw;
-$masterTemplateContent = $masterTemplateContent.Replace('^SqlServerName^', $SqlServerNameValue).Replace('^SqlServerDatabaseName^', $SqlServerDatabaseNameValue);
-$masterTemplateContent = $masterTemplateContent.Replace('^SqlElasticPoolName^', $SqlServerPoolName).Replace('^EnvironmentFunctionAppName^', $FunctionAppName);
-$masterTemplateContent = $masterTemplateContent.Replace('^AppInsightsName^', $AppInsightsName).Replace('^EnvironmentFunctionStorageAccountName^', $FunctionAppStorageAccountName);
+$masterTemplateContent = $masterTemplateContent.Replace('^EnvironmentManagementSQLServerName^', $EnvironmentSQLServerName).Replace('^EnvironmentManagementSQLServerDatabaseName^', $EnvironmentManagementSQLServerDatabaseName);
+$masterTemplateContent = $masterTemplateContent.Replace('^ElasticJobAgentSQLServerName^', $ElasticJobAgentSQLServerName).Replace('^ElasticJobAgentSQLServerDatabaseName^', $ElasticJobAgentSQLServerDatabaseName);
+$masterTemplateContent = $masterTemplateContent.Replace('^EnvironmentFunctionAppName^', $EnvironmentFunctionAppName).Replace('^TenantSQLServerName^', $TenantSQLServerName);
+$masterTemplateContent = $masterTemplateContent.Replace('^AppInsightsName^', $AppInsightsName).Replace('^EnvironmentFunctionStorageAccountName^', $EnvironmentFunctionAppStorageAccountName);
 $masterTemplateContent = $masterTemplateContent.Replace('^SqlAdminEngima^', $SqlAdminEnigma).Replace('^WebServerFarmName^', $WebServerFarmName);
 Set-Content -Value $masterTemplateContent -Path $MasterTemplate;
-Write-Host "Complete!";
-
-Write-Host "Replacing tokens on Master Parameters Template...";
-$masterParametersContent = Get-Content $MasterParametersTemplate -raw;
-$masterParametersContent = $masterParametersContent.Replace('^SqlServerName^', $SqlServerNameValue).Replace('^SqlServerDatabaseName^', $SqlServerDatabaseNameValue);
-$masterParametersContent = $masterParametersContent.Replace("^SqlElasticPoolName^", $SqlServerPoolName).Replace('^EnvironmentFunctionAppName^', $FunctionAppName);
-$masterParametersContent = $masterParametersContent.Replace('^AppInsightsName^', $AppInsightsName).Replace('^EnvironmentFunctionStorageAccountName^', $FunctionAppStorageAccountName);
-$masterParametersContent = $masterParametersContent.Replace('^SqlAdminEngima^', $SqlAdminEnigma).Replace('^WebServerFarmName^', $WebServerFarmName);
-Set-Content -Value $masterParametersContent -Path $MasterParametersTemplate;
 Write-Host "Complete!";
 
 & "$($env:System_DefaultWorkingDirectory)\_TokenConfigurationManagement\TokenConfigManagement\TokenReplacer.exe" replace -c _StratusEnvironmentManagement\EnvironmentManagement\Environments_Configuration.json -f "$PSScriptRoot\*"  -e $Environment
@@ -58,7 +50,7 @@ if('false' -eq $GroupExists)
 }
 
 Write-Host "Deploying Master Template...";
-$MasterTemplateDeploy = az deployment group create --resource-group $ResourceGroupValue --template-file $MasterTemplate --parameters $MasterParametersTemplate --name "$($DeploymentName)-MasterDeploy-EnvironmentManagement" --query "properties.provisioningState";
+$MasterTemplateDeploy = az deployment group create --resource-group $ResourceGroupValue --template-file $MasterTemplate --name "$($DeploymentName)-MasterDeploy-EnvironmentManagement" --query "properties.provisioningState";
 Write-Host "Master Template Deployment: $($MasterTemplateDeploy)";
 
 $environmentManagementConnectionString = (az sql db show-connection-string --client ado.net --server "$($ResourceGroupValue.ToLower())" --name $SqlServerDatabaseNameValue).Replace('"', '');
