@@ -47,9 +47,15 @@ module EnvironmentManagementSqlServer 'SQLServer_Database_Template.bicep' = {
 }
 
 // Create blank tenant database, when re-ran the system will see it already exists
-resource TenantTemplateDatabase 'Microsoft.Sql/servers/databases@2021-05-01-preview' = {
-  name: '${environmentManagement_sqlServer_name}/TenantTemplateDatabase'
-  location: location
+module EnvironmentManagementSqlServerTenantTemplateDatabase 'SQLServer_Database_Template.bicep' = {
+  name: 'EnvironmentMangemenTenantTemplateDatabase-Sql-Server-Deployment'
+  params: {
+    location: location
+    administratorLoginEngima: sqlServer_Enigma
+    serverName: environmentManagement_sqlServer_name
+    sqlDBName: 'TenantEnvironmentTemplate'
+    administratorLogin: administratorLogin
+  }
 }
 
 // Elastic Job Agent SQL Server module

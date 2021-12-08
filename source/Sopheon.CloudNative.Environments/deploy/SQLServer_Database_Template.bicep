@@ -41,3 +41,5 @@ resource SqlServer_AllowAllWindowsAzureIps 'Microsoft.Sql/servers/firewallrules@
     startIpAddress: '0.0.0.0'
   }
 }
+
+output sqlServerName string = SqlServer.name
