@@ -62,7 +62,7 @@ resource SqlServer_SqlDBName 'Microsoft.Sql/servers/databases@2020-08-01-preview
   properties: {
     elasticPoolId: SqlServer_Pool.id
     createMode: 'Copy'
-    sourceDatabaseId: 
+    sourceDatabaseId: TenantTemplateDatabase.id
   }
 }]
 
