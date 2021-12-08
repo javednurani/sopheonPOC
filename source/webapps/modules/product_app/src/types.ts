@@ -28,9 +28,6 @@ export type ProductScopedApiRequestModel = {
 // DTO definitions from Sopheon.CloudNative.Products
 // TODO Cloud-2147, generate from OpenAPI spec
 
-// TODO Cloud-1920
-// camelCase
-// Industry, Goal, KPI models
 export interface Product {
   id: number | null;
   key: string | null;

@@ -66,7 +66,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({ products }: IDash
       <Stack.Item grow={4}>
         <Stack styles={stackStyles} tokens={stackTokens}>
           <Stack.Item styles={topRowStackItemStyles}>
-            <ProductSection productName={products[0].name} />
+            <ProductSection product={products[0]} />
           </Stack.Item>
           <Stack.Item styles={middleRowStackItemStyles}>
             <ToDoList />
