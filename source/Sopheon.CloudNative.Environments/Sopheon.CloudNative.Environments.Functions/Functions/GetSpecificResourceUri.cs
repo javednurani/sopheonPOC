@@ -6,6 +6,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
@@ -22,14 +23,14 @@ namespace Sopheon.CloudNative.Environments.Functions
       private readonly IEnvironmentQueries _environmentQueries;
       private readonly IMapper _mapper;
       private readonly HttpResponseDataBuilder _responseBuilder;
-      private readonly HostBuilderContext _hostContext;
+      private readonly IConfiguration _config;
 
-      public GetSpecificResourceUri(IEnvironmentQueries environmentQueries, IMapper mapper, HttpResponseDataBuilder responseBuilder, HostBuilderContext hostContext)
+      public GetSpecificResourceUri(IEnvironmentQueries environmentQueries, IMapper mapper, HttpResponseDataBuilder responseBuilder, IConfiguration config)
       {
          _environmentQueries = environmentQueries;
          _mapper = mapper;
          _responseBuilder = responseBuilder;
-         _hostContext = hostContext;
+         _config = config;
       }
 
       [Function(nameof(GetSpecificResourceUri))]
@@ -93,7 +94,7 @@ namespace Sopheon.CloudNative.Environments.Functions
             // TODO: Better way to track what is being request and how that uri could be appended or transformed for end user
             if(businessServiceName.Equals("ProductManagement"))
             {
-               resourceUri += $"User ID=sopheon;Password=${_hostContext.Configuration["SqlServerAdminEnigma"]};";
+               resourceUri += $"User ID=sopheon;Password=${_config["SqlServerAdminEnigma"]};";
             }
 
             ResourceUriDto dto = new ResourceUriDto

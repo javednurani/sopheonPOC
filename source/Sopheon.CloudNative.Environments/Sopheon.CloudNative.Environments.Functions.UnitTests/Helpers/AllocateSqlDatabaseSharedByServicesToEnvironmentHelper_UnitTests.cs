@@ -85,7 +85,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
 
          // Assert
          _mockEnvironmentCommands.Verify(
-            ec => ec.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environmentKey, $"Server=https://{sqlServerName}.database.windows.net;Database={databaseName};"),
+            ec => ec.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environmentKey, $"Server=tcp:{sqlServerName}.database.windows.net,1433;Database={databaseName};Encrypt=true;Connection Timeout=30;"),
             Times.Once);
       }
    }
