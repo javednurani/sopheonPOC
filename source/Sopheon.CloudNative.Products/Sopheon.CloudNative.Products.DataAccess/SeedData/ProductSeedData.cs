@@ -6,8 +6,8 @@ namespace Sopheon.CloudNative.Products.DataAccess.SeedData
 {
    public static class ProductSeedData
    {
-      private static readonly AttributeValueType[] _systemAttributeValueTypes;
-      public static AttributeValueType[] SystemAttributeValueTypes => _systemAttributeValueTypes.ToArray();
+      private static readonly AttributeDataType[] _systemAttributeDataTypes;
+      public static AttributeDataType[] SystemAttributeDataTypes => _systemAttributeDataTypes.ToArray();
 
       private static readonly ProductItemType[] _systemManagedProductItemTypes;
       public static ProductItemType[] SystemManagedProductItemTypes => _systemManagedProductItemTypes.ToArray();
@@ -20,19 +20,19 @@ namespace Sopheon.CloudNative.Products.DataAccess.SeedData
 
       static ProductSeedData()
       {
-         _systemAttributeValueTypes = GetDefaultAttributeValueTypes();
+         _systemAttributeDataTypes = GetDefaultAttributeDataTypes();
          _systemManagedProductItemTypes = GetSystemManagedProductItemTypes();
          _systemManagedStatuses = GetSystemManagedStatuses();
          _defaultAttributes = GetDefaultAttributes();
       }
 
-      private static AttributeValueType[] GetDefaultAttributeValueTypes()
+      private static AttributeDataType[] GetDefaultAttributeDataTypes()
       {
-         return Enum.GetValues(typeof(AttributeValueTypes))
-                     .Cast<AttributeValueTypes>()
-                     .Select(e => new AttributeValueType()
+         return Enum.GetValues(typeof(AttributeDataTypes))
+                     .Cast<AttributeDataTypes>()
+                     .Select(e => new AttributeDataType()
                      {
-                        AttributeValueTypeId = (int)e,
+                        AttributeDataTypeId = (int)e,
                         Name = e.ToString()
                      }).ToArray();
       }
@@ -69,21 +69,21 @@ namespace Sopheon.CloudNative.Products.DataAccess.SeedData
                   AttributeId = -1,
                   Name = "Industry",
                   ShortName = "IND",
-                  AttributeValueTypeId = (int)AttributeValueTypes.Int32
+                  AttributeDataTypeId = (int)AttributeDataTypes.Int32
                },
                new Domain.Attribute()
                {
                   AttributeId = -2,
                   Name = "Notes",
                   ShortName = "NOTES",
-                  AttributeValueTypeId = (int)AttributeValueTypes.String
+                  AttributeDataTypeId = (int)AttributeDataTypes.String
                },
                new Domain.Attribute()
                {
                   AttributeId = -3,
                   Name = "Due Date",
                   ShortName = "DUE",
-                  AttributeValueTypeId = (int)AttributeValueTypes.UtcDateTime
+                  AttributeDataTypeId = (int)AttributeDataTypes.UtcDateTime
                }
             };
       }

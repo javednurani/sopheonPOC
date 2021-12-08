@@ -2,9 +2,9 @@
 namespace Sopheon.CloudNative.Products.AspNetCore.Models
 {
 
-   public class AttributeValueTypeDto
+   public class AttributeDataTypeDto
    {
-      public int AttributeValueTypeId { get; set; }
+      public int AttributeDataTypeId { get; set; }
 
       public string Name { get; set; }
    }

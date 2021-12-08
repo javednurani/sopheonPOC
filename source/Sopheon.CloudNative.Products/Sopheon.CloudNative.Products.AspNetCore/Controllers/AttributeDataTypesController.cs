@@ -8,23 +8,23 @@ using Sopheon.CloudNative.Products.Domain;
 
 namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
 {
-   public class AttributeValueTypesController : EnvironmentScopedControllerBase
+   public class AttributeDataTypesController : EnvironmentScopedControllerBase
    {
-      private readonly ILogger<AttributeValueTypesController> _logger;
+      private readonly ILogger<AttributeDataTypesController> _logger;
       private readonly ProductManagementContext _dbContext;
 
-      public AttributeValueTypesController(ILogger<AttributeValueTypesController> logger, ProductManagementContext dbContext)
+      public AttributeDataTypesController(ILogger<AttributeDataTypesController> logger, ProductManagementContext dbContext)
       {
          _logger = logger;
          _dbContext = dbContext;
       }
 
       [HttpGet]
-      public async Task<IEnumerable<AttributeValueType>> Get()
+      public async Task<IEnumerable<AttributeDataType>> Get()
       {
          ClaimsPrincipal user = HttpContext.User;
 
-         return await _dbContext.AttributeValueType
+         return await _dbContext.AttributeDataType
                //.Where(filterExpression)
                .AsNoTracking()
                .ToArrayAsync();

@@ -10,12 +10,12 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
       /// <summary>
       /// Foreign Key to Attribute Type
       /// </summary>
-      public int AttributeValueTypeId { get; set; }
+      public int AttributeDataTypeId { get; set; }
 
       /// <summary>
       /// Navigation Property
       /// </summary>
-      public AttributeValueTypeDto AttributeValueType { get; set; }
+      public AttributeDataTypeDto AttributeDataType { get; set; }
 
       [Required()]
       [MaxLength(ModelConstraints.NAME_LENGTH_60)]

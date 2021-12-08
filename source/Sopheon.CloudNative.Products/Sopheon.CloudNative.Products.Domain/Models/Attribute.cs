@@ -9,12 +9,12 @@ namespace Sopheon.CloudNative.Products.Domain
       /// <summary>
       /// Foreign Key to Attribute Type
       /// </summary>
-      public int AttributeValueTypeId { get; set; }
+      public int AttributeDataTypeId { get; set; }
 
       /// <summary>
       /// Navigation Property
       /// </summary>
-      public AttributeValueType AttributeValueType { get; set; }
+      public AttributeDataType AttributeDataType { get; set; }
 
       public string Name { get; set; }
 

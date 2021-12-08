@@ -5,7 +5,7 @@ namespace Sopheon.CloudNative.Products.Domain
    /// <summary>
    /// NOTE: Changing this enum will require EF Migrations to be generated.
    /// </summary>
-   public enum AttributeValueTypes
+   public enum AttributeDataTypes
    {
       String = 1,
       Int32 = 2,
@@ -15,12 +15,12 @@ namespace Sopheon.CloudNative.Products.Domain
       MarkdownString = 6
    }
 
-   public class AttributeValueType
+   public class AttributeDataType
    {
       /// <summary>
-      /// System Defined Values found in enum <see cref="AttributeValueTypes" />
+      /// System Defined Values found in enum <see cref="AttributeDataTypes" />
       /// </summary>
-      public int AttributeValueTypeId { get; set; }
+      public int AttributeDataTypeId { get; set; }
 
       public string Name { get; set; }
    }

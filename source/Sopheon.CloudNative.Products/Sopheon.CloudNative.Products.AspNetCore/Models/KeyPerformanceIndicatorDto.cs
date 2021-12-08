@@ -1,7 +1,7 @@
 ﻿namespace Sopheon.CloudNative.Products.AspNetCore.Models
 {
    /// <summary>
-   /// Can only be created from attributes with numeric AttributeValueTypes
+   /// Can only be created from attributes with numeric AttributeDataTypes
    /// </summary>
    public class KeyPerformanceIndicatorDto
    {

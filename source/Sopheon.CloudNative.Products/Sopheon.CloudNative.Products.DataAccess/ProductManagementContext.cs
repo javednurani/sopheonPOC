@@ -28,7 +28,7 @@ namespace Sopheon.CloudNative.Products.Domain
 
       public DbSet<Status> Status { get; set; }
 
-      public DbSet<AttributeValueType> AttributeValueType { get; set; }
+      public DbSet<AttributeDataType> AttributeDataType { get; set; }
 
       public DbSet<Attribute> Attributes { get; set; }
 

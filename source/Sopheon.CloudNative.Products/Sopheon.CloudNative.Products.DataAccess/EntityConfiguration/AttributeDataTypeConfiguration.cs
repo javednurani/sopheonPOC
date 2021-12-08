@@ -5,11 +5,11 @@ using Sopheon.CloudNative.Products.Domain;
 
 namespace Sopheon.CloudNative.Products.DataAccess.EntityConfiguration
 {
-   public class AttributeValueTypeConfiguration : IEntityTypeConfiguration<AttributeValueType>
+   public class AttributeDataTypeConfiguration : IEntityTypeConfiguration<AttributeDataType>
    {
-      public void Configure(EntityTypeBuilder<AttributeValueType> builder)
+      public void Configure(EntityTypeBuilder<AttributeDataType> builder)
       {
-         builder.HasData(ProductSeedData.SystemAttributeValueTypes);
+         builder.HasData(ProductSeedData.SystemAttributeDataTypes);
       }
    }
 }

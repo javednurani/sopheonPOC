@@ -3,7 +3,7 @@
 namespace Sopheon.CloudNative.Products.Domain
 {
    /// <summary>
-   /// Can only be created from attributes with numeric AttributeValueTypes
+   /// Can only be created from attributes with numeric AttributeDataTypes
    /// </summary>
    public class KeyPerformanceIndicator
    {
