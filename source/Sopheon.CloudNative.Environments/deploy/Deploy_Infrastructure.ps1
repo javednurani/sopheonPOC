@@ -37,8 +37,7 @@ $masterTemplateContent = $masterTemplateContent.Replace('^SqlAdminEngima^', $Sql
 Set-Content -Value $masterTemplateContent -Path $MasterTemplate;
 Write-Host "Complete!";
 
-& "$($env:System_DefaultWorkingDirectory)\_TokenConfigurationManagement\TokenConfigManagement\TokenReplacer.exe" repla
-ce -c _StratusEnvironmentManagement\EnvironmentManagement\Environments_Configuration.json -f "$PSScriptRoot\*"  -e $Environment
+& "$($env:System_DefaultWorkingDirectory)\_TokenConfigurationManagement\TokenConfigManagement\TokenReplacer.exe" replace -c _StratusEnvironmentManagement\EnvironmentManagement\Environments_Configuration.json -f "$PSScriptRoot\*"  -e $Environment
 
 Write-Host "Deploying Storage Account Template to Resource Group: $($ResourceGroupValue)";
 # Creates a deployment for the given resource group and template.json
