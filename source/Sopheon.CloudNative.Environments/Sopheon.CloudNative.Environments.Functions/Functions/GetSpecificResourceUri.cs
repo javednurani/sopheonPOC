@@ -90,6 +90,7 @@ namespace Sopheon.CloudNative.Environments.Functions
 
             string resourceUri = await _environmentQueries.GetSpecificResourceUri(environmentKey, businessServiceName, dependencyName);       
             
+            // TODO: Better way to track what is being request and how that uri could be appended or transformed for end user
             if(businessServiceName.Equals("ProductManagement"))
             {
                resourceUri += $"User ID=sopheon;Password=${_hostContext.Configuration["SqlServerAdminEnigma"]};";
