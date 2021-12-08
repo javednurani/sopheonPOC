@@ -70,6 +70,20 @@ namespace Sopheon.CloudNative.Products.DataAccess.SeedData
                   Name = "Industry",
                   ShortName = "IND",
                   AttributeValueTypeId = (int)AttributeValueTypes.Int32
+               },
+               new Domain.Attribute()
+               {
+                  AttributeId = -2,
+                  Name = "Notes",
+                  ShortName = "NOTES",
+                  AttributeValueTypeId = (int)AttributeValueTypes.String
+               },
+               new Domain.Attribute()
+               {
+                  AttributeId = -3,
+                  Name = "Due Date",
+                  ShortName = "DUE",
+                  AttributeValueTypeId = (int)AttributeValueTypes.UtcDateTime
                }
             };
       }
