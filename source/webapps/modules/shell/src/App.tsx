@@ -53,8 +53,8 @@ const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, head
 
   const hideHeaderFooterStyle = {
     root: {
-      height: '0'
-    }
+      height: '0',
+    },
   };
 
   return (
@@ -90,8 +90,7 @@ const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, head
                   root: {
                     height: '100%',
                     overflow: 'auto',
-                    backgroundColor: 'white',
-                    zIndex: '9999'
+                    zIndex: '9999',
                   },
                 }}
               >
@@ -108,7 +107,7 @@ const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, head
                 </main>
               </Stack.Item>
               <Stack.Item>
-                <Footer showFooter={headerFooterAreShown}/>
+                <Footer showFooter={headerFooterAreShown} />
               </Stack.Item>
             </Stack>
           </Route>
