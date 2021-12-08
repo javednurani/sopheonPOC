@@ -1,6 +1,10 @@
 ﻿#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-using System.Collections.Generic;
+using Sopheon.CloudNative.Products.Domain.Attributes.Decimal;
+using Sopheon.CloudNative.Products.Domain.Attributes.Int32;
+using Sopheon.CloudNative.Products.Domain.Attributes.Money;
+using Sopheon.CloudNative.Products.Domain.Attributes.String;
+using Sopheon.CloudNative.Products.Domain.Attributes.UtcDateTime;
 
 namespace Sopheon.CloudNative.Products.Domain
 {
