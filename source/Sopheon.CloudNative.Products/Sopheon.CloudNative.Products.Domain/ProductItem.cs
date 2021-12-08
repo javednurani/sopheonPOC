@@ -1,6 +1,7 @@
 ﻿
 
 using Sopheon.CloudNative.Products.Domain.Attributes.Decimal;
+using Sopheon.CloudNative.Products.Domain.Attributes.Enum;
 using Sopheon.CloudNative.Products.Domain.Attributes.Int32;
 using Sopheon.CloudNative.Products.Domain.Attributes.Money;
 using Sopheon.CloudNative.Products.Domain.Attributes.String;
@@ -32,5 +33,7 @@ namespace Sopheon.CloudNative.Products.Domain
       public List<UtcDateTimeAttributeValue> UtcDateTimeAttributeValues { get; set; }
 
       public List<MoneyAttributeValue> MoneyAttributeValues { get; set; }
+
+      public List<EnumCollectionAttributeValue> EnumCollectionAttributeValues { get; set; }
    }
 }
