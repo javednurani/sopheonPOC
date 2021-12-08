@@ -4,6 +4,9 @@
    {
       int AttributeId { get; set; }
 
+      ///// <summary>
+      ///// Navigation Property
+      ///// </summary>
       Attribute Attribute { get; set; }
 
       TValueType Value { get; set; }

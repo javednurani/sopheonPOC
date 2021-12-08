@@ -9,11 +9,11 @@ using Sopheon.CloudNative.Products.Domain.Attributes.UtcDateTime;
 namespace Sopheon.CloudNative.Products.Domain
 {
 
-    public class Product : IAttributeContainer
+    public class Product : IAllAttributesContainer
     {
         public int Id { get; set; }
 
-        public List<Int32AttributeValue> IntAttributeValues { get; set; }
+        public List<Int32AttributeValue> Int32AttributeValues { get; set; }
 
         public List<StringAttributeValue> StringAttributeValues { get; set; }
 

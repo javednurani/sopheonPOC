@@ -11,10 +11,10 @@ namespace Sopheon.CloudNative.Products.DataAccess.EntityConfiguration
          ConfigureOwnedAttributeProperties<ProductItem>(builder);
       }
 
-      private static void ConfigureOwnedAttributeProperties<TAttributeContainer>(EntityTypeBuilder<TAttributeContainer> builder) where TAttributeContainer : class, IAttributeContainer
+      private static void ConfigureOwnedAttributeProperties<TAttributeContainer>(EntityTypeBuilder<TAttributeContainer> builder) where TAttributeContainer : class, IAllAttributesContainer
       {
          builder
-            .OwnsMany(product => product.IntAttributeValues);
+            .OwnsMany(product => product.Int32AttributeValues);
 
          builder
              .OwnsMany(product => product.DecimalAttributeValues);
