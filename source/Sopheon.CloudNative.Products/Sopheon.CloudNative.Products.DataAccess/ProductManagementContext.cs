@@ -37,7 +37,7 @@ namespace Sopheon.CloudNative.Products.Domain
       public DbSet<AttributeDataType> AttributeDataType { get; set; }
 
       // TODO - is table for base entity needed? or derived entity config creates?
-      public DbSet<Attribute> Attributes { get; set; }
+      //public DbSet<Attribute> Attributes { get; set; }
       public DbSet<Int32Attribute> Int32Attributes { get; set; }
       public DbSet<StringAttribute> StringAttributes { get; set; }
       public DbSet<DecimalAttribute> DecimalAttributes { get; set; }

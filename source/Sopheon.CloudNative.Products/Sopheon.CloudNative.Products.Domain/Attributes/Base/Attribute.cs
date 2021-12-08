@@ -2,7 +2,7 @@
 
 namespace Sopheon.CloudNative.Products.Domain
 {
-   public class Attribute
+   public abstract class Attribute
    {
       public int AttributeId { get; set; }
 
