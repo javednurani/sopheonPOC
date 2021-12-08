@@ -145,8 +145,12 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
                  ProvisioningState.Succeeded.Value.Equals(operation.ProvisioningState, StringComparison.OrdinalIgnoreCase))
              .ToList();
 
-         List<string> partialConnectionStrings = succesfulSqlDeployments
-             .Select(operation => String.Format("Server={0};Database={1};", operation.TargetResource.ResourceName.Split("/")))
+
+         List<string> partialConnectionStrings = succesfulSqlDeployments             
+             .Select(operation => {
+                var list = operation.TargetResource.ResourceName.Split('/');
+                return $"Server=tcp:{list[0].ToLower()}.database.windows.net,1433;Database={list[1].ToLower()};Encrypt=true;Connection Timeout=30;";
+                })
              .ToList();
 
          return (result.ProvisioningState.Value, partialConnectionStrings);
