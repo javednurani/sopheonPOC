@@ -24,5 +24,10 @@ namespace Sopheon.CloudNative.Products.Domain
       {
          return AttributeId < 0;
       }
+
+      public virtual Attribute ShallowCopy()
+      {
+         return (Attribute)this.MemberwiseClone();
+      }
    }
 }
