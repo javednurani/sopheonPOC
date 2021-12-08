@@ -53,7 +53,7 @@ Write-Host "Deploying Master Template...";
 $MasterTemplateDeploy = az deployment group create --resource-group $ResourceGroupValue --template-file $MasterTemplate --name "$($DeploymentName)-MasterDeploy-EnvironmentManagement" --query "properties.provisioningState";
 Write-Host "Master Template Deployment: $($MasterTemplateDeploy)";
 
-$environmentManagementConnectionString = (az sql db show-connection-string --client ado.net --server "$($ResourceGroupValue.ToLower())" --name $SqlServerDatabaseNameValue).Replace('"', '');
+$environmentManagementConnectionString = (az sql db show-connection-string --client ado.net --server "$($ResourceGroupValue.ToLower())" --name $EnvironmentManagementSQLServerDatabaseName).Replace('"', '');
 
 $environmentManagementConnectionString = $environmentManagementConnectionString.Replace('<username>', 'sopheon').Replace('<password>', $SqlAdminEnigma);
 
