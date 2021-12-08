@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+﻿
 
 using Sopheon.CloudNative.Products.Domain.Attributes.Decimal;
 using Sopheon.CloudNative.Products.Domain.Attributes.Int32;
@@ -25,7 +25,8 @@ namespace Sopheon.CloudNative.Products.Domain
 
         public string Name { get; set; }
 
-        public string? Description { get; set; }
+      // TODO - confirm nullable DB column, remove entity config if no longer needed
+      public string Description { get; set; }
 
         //public int? StatusId { get; set; }
 
