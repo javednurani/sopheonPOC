@@ -10,6 +10,10 @@ param administratorLogin string = 'sopheon'
 @description('The administrator password of the SQL logical server.')
 param administratorLoginEngima string = '^SqlAdminEngima^'
 
+param environmentSQLServerName string = '^EnvironmentManagementSQLServerName^'
+
+param environmentDatabaseSQLServerName string = '^EnvironmentManagementSQLServerDatabaseName^'
+
 param location string = resourceGroup().location
 
 var bufferCapacity = 100
@@ -22,6 +26,14 @@ resource SqlServer 'Microsoft.Sql/servers@2020-02-02-preview' = {
     administratorLoginPassword: administratorLoginEngima
     version: '12.0'
   }
+}
+
+resource EnvironmentSQLServer 'Microsoft.Sql/servers@2021-05-01-preview' existing = {
+  name: environmentSQLServerName
+}
+
+resource TenantTemplateDatabase 'Microsoft.Sql/servers/databases@2021-05-01-preview' existing = {
+  name: '${EnvironmentSQLServer.name}/${environmentDatabaseSQLServerName}'
 }
 
 resource SqlServer_Pool 'Microsoft.Sql/servers/elasticPools@2020-08-01-preview' = {
@@ -47,13 +59,10 @@ resource SqlServer_SqlDBName 'Microsoft.Sql/servers/databases@2020-08-01-preview
   tags: {
     CustomerProvisionedDatabase: 'NotAssigned'
   }
-  sku: {
-    name: 'ElasticPool'
-    tier: 'Standard'
-    capacity: 0
-  }
   properties: {
     elasticPoolId: SqlServer_Pool.id
+    createMode: 'Copy'
+    sourceDatabaseId: 
   }
 }]
 

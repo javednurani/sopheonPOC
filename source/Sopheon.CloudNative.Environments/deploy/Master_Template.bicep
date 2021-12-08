@@ -41,7 +41,6 @@ module EnvironmentManagementSqlServer 'SQLServer_Database_Template.bicep' = {
     location: location
     administratorLoginEngima: sqlServer_Enigma
     serverName: environmentManagement_sqlServer_name
-    useElasticPool: false
     sqlDBName: envManagement_sqlServerDatabase_name
     administratorLogin: administratorLogin
   }
@@ -59,7 +58,6 @@ module ElasticJobAgentSqlServer 'SQLServer_Database_Template.bicep' = {
   params: {
     location: location
     administratorLoginEngima: sqlServer_Enigma
-    useElasticPool: false
     serverName: elasticJobAgent_sqlServer_name
     sqlDBName: elasticJobAgent_sqlServerDatabase_name
     administratorLogin: administratorLogin
@@ -73,7 +71,6 @@ module TenantSqlServer 'SQLServer_Database_Template.bicep' = {
     location: location
     administratorLoginEngima: sqlServer_Enigma
     serverName: tenant_sqlServer_name
-    useElasticPool: false
     administratorLogin: administratorLogin
   }
 }
