@@ -1,6 +1,7 @@
 import {
   DatePicker,
   DayOfWeek,
+  DefaultButton,
   Dropdown,
   FontWeights,
   IButtonStyles,
@@ -10,6 +11,7 @@ import {
   IDropdownStyles,
   IIconProps,
   mergeStyleSets,
+  PrimaryButton,
   Stack,
   TextField,
 } from '@fluentui/react';
@@ -17,11 +19,11 @@ import { useTheme } from '@fluentui/react-theme-provider';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
-export interface IAddToDoListItemProps {
+export interface IAddTaskProps {
   hideModal: () => void;
 }
 
-const AddToDoListItem: React.FunctionComponent<IAddToDoListItemProps> = ({ hideModal }: IAddToDoListItemProps) => {
+const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal }: IAddTaskProps) => {
   const theme = useTheme();
   const { formatMessage } = useIntl();
 
@@ -51,6 +53,8 @@ const AddToDoListItem: React.FunctionComponent<IAddToDoListItemProps> = ({ hideM
     },
   });
 
+  // X BUTTON
+
   const iconButtonStyles: Partial<IButtonStyles> = {
     root: {
       color: theme.palette.neutralPrimary,
@@ -66,6 +70,7 @@ const AddToDoListItem: React.FunctionComponent<IAddToDoListItemProps> = ({ hideM
   const cancelIcon: IIconProps = { iconName: 'Cancel' };
 
   // DATEPICKER
+
   const firstDayOfWeek = DayOfWeek.Sunday;
 
   const datePickerStrings: IDatePickerStrings = {
@@ -138,25 +143,53 @@ const AddToDoListItem: React.FunctionComponent<IAddToDoListItemProps> = ({ hideM
 
   // STATUS DROPDOWN
 
-  const dropdownStyles: Partial<IDropdownStyles> = { dropdown: { width: 300 } };
+  const statusDropdownStyles: Partial<IDropdownStyles> = { dropdown: { width: 300 } };
 
-  const dropdownControlledExampleOptions = [
-    { key: 'apple', text: 'Apple' },
-    { key: 'banana', text: 'Banana' },
-    { key: 'grape', text: 'Grape' },
-    { key: 'broccoli', text: 'Broccoli' },
+  const statusDropdownOptions = [
+    // TODO, keys = int values per domain enum?
+    { key: 'notStarted', text: 'Not Started' },
+    { key: 'inProgress', text: 'In Progress' },
+    { key: 'assigned', text: 'Assigned' },
+    { key: 'complete', text: 'Complete' },
   ];
 
-  const [selectedItem, setSelectedItem] = React.useState<IDropdownOption>();
+  const [selectedItemStatusDropdown, setSelectedItemStatusDropdown] = React.useState<IDropdownOption>();
 
-  const onChange = (event: React.FormEvent<HTMLDivElement>, item: IDropdownOption | undefined): void => {
-    setSelectedItem(item);
+  const onStatusDropdownChange = (event: React.FormEvent<HTMLDivElement>, item: IDropdownOption | undefined): void => {
+    setSelectedItemStatusDropdown(item);
   };
+
+  // SAVE BUTTON
+  // TODO, start in disabled=true state, wire up setSaveButtonDisabled to TextField.Name onchange
+  const [saveButtonDisabled, setSaveButtonDisabled] = React.useState<boolean>(false);
+
+  const onSaveButtonClick = () => {
+    const asdf = 1;
+    // make API call
+    // reset form?
+    hideModal();
+  };
+
+  // CANCEL BUTTON
+  const onCancelButtonClick = () => {
+    const asdf = 1;
+    // reset form?
+    hideModal();
+  };
+
+  // display component for dialog testing
+  // return (
+  //   <Stack>
+  //     <Stack.Item>
+  //       <p>Hello from a display only component :)</p>
+  //     </Stack.Item>
+  //   </Stack>
+  // );
 
   return (
     <>
       <div className={contentStyles.header}>
-        <span id="AddToDoListItemModal">New Task</span>
+        <span id="AddTaskModal">New Task</span>
         <IconButton styles={iconButtonStyles} iconProps={cancelIcon} ariaLabel="Close popup modal" onClick={hideModal} />
       </div>
       <div className={contentStyles.body}>
@@ -181,13 +214,17 @@ const AddToDoListItem: React.FunctionComponent<IAddToDoListItemProps> = ({ hideM
           <Stack.Item>
             <Dropdown
               label="Status"
-              selectedKey={selectedItem ? selectedItem.key : undefined}
+              selectedKey={selectedItemStatusDropdown ? selectedItemStatusDropdown.key : 'notStarted'} // TODO int keys
               // eslint-disable-next-line react/jsx-no-bind
-              onChange={onChange}
+              onChange={onStatusDropdownChange}
               placeholder="Select a status"
-              options={dropdownControlledExampleOptions}
-              styles={dropdownStyles}
+              options={statusDropdownOptions}
+              styles={statusDropdownStyles}
             />
+          </Stack.Item>
+          <Stack.Item>
+            <PrimaryButton text="Save" onClick={onSaveButtonClick} disabled={saveButtonDisabled} />
+            <DefaultButton text="Cancel" onClick={onCancelButtonClick} />
           </Stack.Item>
         </Stack>
       </div>
@@ -195,4 +232,4 @@ const AddToDoListItem: React.FunctionComponent<IAddToDoListItemProps> = ({ hideM
   );
 };
 
-export default AddToDoListItem;
+export default AddTask;

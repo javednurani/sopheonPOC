@@ -2,12 +2,12 @@ import { DefaultButton, mergeStyleSets, Modal } from '@fluentui/react';
 import { useBoolean } from '@fluentui/react-hooks';
 import React from 'react';
 
-import AddToDoListItem from './AddToDoListItem';
+import AddTask from './AddTask';
 
 export interface IToDoListProps {}
 
 const ToDoList: React.FunctionComponent<IToDoListProps> = ({}: IToDoListProps) => {
-  const [isModalOpen, { setTrue: showModal, setFalse: hideModal }] = useBoolean(false);
+  const [isTaskModalOpen, { setTrue: showTaskModal, setFalse: hideTaskModal }] = useBoolean(false);
 
   const contentStyles = mergeStyleSets({
     container: {
@@ -22,15 +22,15 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({}: IToDoListProps) =
   return (
     <>
       <div>To Do List</div>
-      <DefaultButton onClick={showModal} text="Open Modal" />
+      <DefaultButton onClick={showTaskModal} text="Open Modal" />
       <Modal
-        titleAriaId="AddToDoListItemModal"
-        isOpen={isModalOpen}
-        onDismiss={hideModal}
+        titleAriaId="TaskModal"
+        isOpen={isTaskModalOpen}
+        onDismiss={hideTaskModal}
         isBlocking={true}
         containerClassName={contentStyles.container}
       >
-        <AddToDoListItem hideModal={hideModal} />
+        <AddTask hideModal={hideTaskModal} />
       </Modal>
     </>
   );
