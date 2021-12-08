@@ -1,4 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Sopheon.CloudNative.Products.Domain.Attributes.Decimal;
+using Sopheon.CloudNative.Products.Domain.Attributes.Enum;
+using Sopheon.CloudNative.Products.Domain.Attributes.Int32;
+using Sopheon.CloudNative.Products.Domain.Attributes.Money;
+using Sopheon.CloudNative.Products.Domain.Attributes.String;
+using Sopheon.CloudNative.Products.Domain.Attributes.UtcDateTime;
 
 namespace Sopheon.CloudNative.Products.Domain
 {
@@ -30,7 +36,14 @@ namespace Sopheon.CloudNative.Products.Domain
 
       public DbSet<AttributeDataType> AttributeDataType { get; set; }
 
+      // TODO - is table for base entity needed? or derived entity config creates?
       public DbSet<Attribute> Attributes { get; set; }
+      public DbSet<Int32Attribute> Int32Attributes { get; set; }
+      public DbSet<StringAttribute> StringAttributes { get; set; }
+      public DbSet<DecimalAttribute> DecimalAttributes { get; set; }
+      public DbSet<UtcDateTimeAttribute> UtcDateTimeAttributes { get; set; }
+      public DbSet<MoneyAttribute> MoneyAttributes { get; set; }
+      public DbSet<EnumCollectionAttribute> EnumCollectionAttributes { get; set; }
 
       #endregion
 
