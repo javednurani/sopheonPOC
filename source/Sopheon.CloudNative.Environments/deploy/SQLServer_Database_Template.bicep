@@ -12,6 +12,8 @@ param administratorLoginEngima string = ''
 
 param location string
 
+var createSingleDatabase = (sqlDBName != 'DeleteMeIfDeployed')
+
 resource SqlServer 'Microsoft.Sql/servers@2020-02-02-preview' = {
   name: serverName
   location: location
@@ -22,7 +24,7 @@ resource SqlServer 'Microsoft.Sql/servers@2020-02-02-preview' = {
   }
 }
 
-resource SqlServer_SqlDBName 'Microsoft.Sql/servers/databases@2020-08-01-preview' = if (!empty(sqlDBName)) {
+resource SqlServer_SqlDBName 'Microsoft.Sql/servers/databases@2020-08-01-preview' = if (createSingleDatabase) {
   name: '${SqlServer.name}/${sqlDBName}'
   location: location
   sku: {
