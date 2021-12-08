@@ -8,19 +8,19 @@ param environmentFunctionAppStorage_name string = '^EnvironmentFunctionStorageAc
 param appInsightsName string = '^AppInsightsName^'
 
 @description('The name of the Environment Management SQL server')
-param envManagement_sqlServer_name string = '^EnvManagementSqlServerName^'
+param environmentManagement_sqlServer_name string = '^EnvironmentManagementSQLServerName^'
 
 @description('The name of the Elastic Job Agent SQL server')
-param elasticJobAgent_sqlServer_name string = '^ElasticJobAgentSqlServerName^'
+param elasticJobAgent_sqlServer_name string = '^ElasticJobAgentSQLServerName^'
 
 @description('The name fo the Tenant SQL server')
-param tenant_sqlServer_name string = '^TenantSqlServerName^'
+param tenant_sqlServer_name string = '^TenantSQLServerName^'
 
 @description('Environment Management SQL server database name')
-param envManagement_sqlServerDatabase_name string = '^EnvironmentManagementSqlServerDatabaseName^'
+param envManagement_sqlServerDatabase_name string = '^EnvironmentManagementSQLServerDatabaseName^'
 
 @description('Elastic Job Agent SQL server database name')
-param elasticJobAgent_sqlServerDatabase_name string = '^ElasticJobAgentSqlServerDatabaseName^'
+param elasticJobAgent_sqlServerDatabase_name string = '^ElasticJobAgentSQLServerDatabaseName^'
 
 @description('Name of the WebServer Farm being used')
 param webServerFarm_Name string = '^WebServerFarmName^'
@@ -40,7 +40,7 @@ module EnvironmentManagementSqlServer 'SQLServer_Database_Template.bicep' = {
   params: {
     location: location
     administratorLoginEngima: sqlServer_Enigma
-    serverName: envManagement_sqlServer_name
+    serverName: environmentManagement_sqlServer_name
     useElasticPool: false
     sqlDBName: envManagement_sqlServerDatabase_name
     administratorLogin: administratorLogin
@@ -49,7 +49,7 @@ module EnvironmentManagementSqlServer 'SQLServer_Database_Template.bicep' = {
 
 // Create blank tenant database, when re-ran the system will see it already exists
 resource TenantTemplateDatabase 'Microsoft.Sql/servers/databases@2021-05-01-preview' = {
-  name: '${envManagement_sqlServer_name}/TenantTemplateDatabase'
+  name: '${environmentManagement_sqlServer_name}/TenantTemplateDatabase'
   location: location
 }
 
