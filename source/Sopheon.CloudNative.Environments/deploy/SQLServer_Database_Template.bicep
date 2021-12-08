@@ -2,7 +2,7 @@
 param serverName string = ''
 
 @description('The name of the SQL Database.')
-param sqlDBName string = ''
+param sqlDBName string = 'DeleteMeIfDeployed'
 
 @description('The administrator username of the SQL logical server.')
 param administratorLogin string = ''
