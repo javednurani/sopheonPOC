@@ -70,12 +70,16 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
       {
 
          string resourceGroupName = context.GetInput<string>();
-         string sqlServerName = _configuration["AzSqlServerName"];
+         string tenantSqlServerName = _configuration["AzTenantEnvironmentServer"];
          string adminLoginEnigma = _configuration["SqlServerAdminEnigma"]; // Pull admin enigma from app config (user secrets or key vault)
+         string envSqlServerName = _configuration["AzSqlServerName"];
+         string envSqlDatabaseName = "EnvironmentManagement";
 
          jsonTemplateData = jsonTemplateData
-            .Replace("^SqlServerName^", sqlServerName)
-            .Replace("^SqlAdminEngima^", adminLoginEnigma);
+            .Replace("^SqlServerName^", tenantSqlServerName)
+            .Replace("^SqlAdminEngima^", adminLoginEnigma)
+            .Replace("^EnvironmentManagementSQLServerName^", envSqlServerName)
+            .Replace("^EnvironmentManagementSQLServerDatabaseName^", envSqlDatabaseName);
 
          string deploymentName = $"{nameof(SqlDatabaseProvisioningFunction)}_Deployment_{DateTime.UtcNow:yyyyMMddTHHmmss}";
          log.LogInformation($"Creating new deployment: {deploymentName}");

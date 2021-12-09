@@ -87,6 +87,7 @@ module EnvironmentFunction 'Environments_Function_App.bicep' = {
     location: location
     storageAccountName: environmentFunctionAppStorage_name
     appInsightsName: appInsightsName
+    tenantEnvironmentServer: toLower(TenantSqlServer.name)
     functionAppName: environmentFunctionApp_Name
     webServerFarm_Name: webServerFarm_Name
     sqlServer_Name: toLower(EnvironmentManagementSqlServer.name)
