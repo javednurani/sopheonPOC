@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Sopheon.CloudNative.Products.DataAccess.Migrations
 {
-    public partial class TestProgress : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -734,7 +734,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 columns: new[] { "AttributeId", "AttributeDataTypeId", "Name", "ShortName" },
                 values: new object[,]
                 {
-                    { -4, 7, "Status", null },
+                    { -4, 7, "Status", "STATUS" },
                     { -1, 2, "Industry", "IND" },
                     { -2, 1, "Notes", "NOTES" },
                     { -3, 5, "Due Date", "DUE" }

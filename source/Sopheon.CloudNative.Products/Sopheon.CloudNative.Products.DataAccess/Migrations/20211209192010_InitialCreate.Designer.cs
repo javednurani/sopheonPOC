@@ -12,8 +12,8 @@ using Sopheon.CloudNative.Products.Domain;
 namespace Sopheon.CloudNative.Products.DataAccess.Migrations
 {
     [DbContext(typeof(ProductManagementContext))]
-    [Migration("20211208221735_TestProgress")]
-    partial class TestProgress
+    [Migration("20211209192010_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -401,7 +401,8 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                         {
                             AttributeId = -4,
                             AttributeDataTypeId = 0,
-                            Name = "Status"
+                            Name = "Status",
+                            ShortName = "STATUS"
                         });
                 });
 

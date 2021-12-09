@@ -399,7 +399,8 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                         {
                             AttributeId = -4,
                             AttributeDataTypeId = 0,
-                            Name = "Status"
+                            Name = "Status",
+                            ShortName = "STATUS"
                         });
                 });
 
