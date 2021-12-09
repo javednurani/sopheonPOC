@@ -16,10 +16,6 @@ const mainDivStyle: React.CSSProperties = {
   marginTop: '35px',
 };
 
-const headingLeftStyle: React.CSSProperties = {
-  textAlign: 'left',
-};
-
 const contentDivStyle: React.CSSProperties = {
   margin: '24px',
   marginLeft: '100px',
@@ -47,6 +43,7 @@ const addIconStyle: React.CSSProperties = {
   cursor: 'pointer',
 };
 
+// TODO: remove this for 1693 version
 interface ToDoItem {
   name?: string;
   notes?: string;
@@ -54,6 +51,7 @@ interface ToDoItem {
   status?: Status;
 }
 
+// TODO: remove this for 1693 version
 // eslint-disable-next-line no-shadow
 enum Status {
   NotStarted = -1,
@@ -69,6 +67,12 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({}: IToDoListProps) =
   const dummyData: ToDoItem[] = [
     {
       name: 'ZachName',
+      dueDate: new Date('01/01/2022'),
+      status: Status.InProgress,
+    },
+    {
+      name: 'ZachName2',
+      status: Status.Complete,
     },
   ];
 
@@ -82,14 +86,35 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({}: IToDoListProps) =
     </div>
   );
 
-  const populatedListContent = <div>ZachTest!!!</div>;
+  // TODO: convert date UTC->local
+  const populatedListContent: JSX.Element = (
+    <div>
+      {dummyData.map((item, index) => {
+        const dueDateDisplay: string = item.dueDate ? item.dueDate.toLocaleDateString() : 'xxxx';
+        const statusIcon = item.status === Status.Complete ? <FontIcon iconName="CircleRing" /> : <FontIcon iconName="CircleRing" />;
+
+        return (
+          <div key={index}>
+            <Stack horizontal>
+              <Stack.Item>{statusIcon}</Stack.Item>
+              <Stack.Item align="stretch">
+                <div>{item.name}</div>
+                <div>Due {dueDateDisplay}</div>
+              </Stack.Item>
+            </Stack>
+            <hr />
+          </div>
+        );
+      })}
+    </div>
+  );
 
   const toDoListContent: JSX.Element = dummyData.length === 0 ? emptyListContent : populatedListContent;
 
   return (
     <div style={mainDivStyle}>
       <Stack horizontal>
-        <Stack.Item grow style={headingLeftStyle}>
+        <Stack.Item grow>
           <Text variant="xxLarge">{formatMessage({ id: 'toDo.title' })}</Text>
           <Text variant="xLarge">
             <FontIcon style={addIconStyle} onClick={showTaskModal} iconName="CirclePlus" className={iconClass} />
