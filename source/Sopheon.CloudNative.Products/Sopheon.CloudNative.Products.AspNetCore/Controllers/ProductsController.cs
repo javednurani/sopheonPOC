@@ -95,11 +95,17 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
          // TODO 1693 - update .Includes per new attribute collections
          // fetch updated product to ensure related entity Id's are populated (eg Attributes, KPIs, Goals)
          var updatedProduct = await _dbContext.Products
-             .Include(p => p.Goals)
-             .Include(p => p.KeyPerformanceIndicators)
-             .ThenInclude(kpi => kpi.Attribute)
-             .AsNoTracking()
-             .SingleOrDefaultAsync(p => p.Key == key);
+            .Include(p => p.Items)
+            .ThenInclude(i => i.StringAttributeValues)
+            .Include(p => p.Items)
+            .ThenInclude(i => i.UtcDateTimeAttributeValues)
+            .Include(p => p.Items)
+            .ThenInclude(i => i.EnumCollectionAttributeValues)
+            .Include(p => p.Goals)
+            .Include(p => p.KeyPerformanceIndicators)
+            .ThenInclude(kpi => kpi.Attribute)
+            .AsNoTracking()
+            .SingleOrDefaultAsync(p => p.Key == key);
 
          return Ok(_mapper.Map<ProductDto>(updatedProduct));
       }

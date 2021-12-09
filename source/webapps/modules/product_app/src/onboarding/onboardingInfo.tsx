@@ -214,7 +214,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
 
     const productPatchData: PatchOperation[] = [
       {
-        op: 'replace',
+        op: 'add',
         path: '/Goals',
         value: [
           {
@@ -223,7 +223,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
         ],
       },
       {
-        op: 'replace',
+        op: 'add',
         path: '/KeyPerformanceIndicators',
         value: kpiAttributes,
       },
