@@ -1,6 +1,6 @@
-import { DefaultButton, mergeStyleSets, Modal } from '@fluentui/react';
-import { useBoolean } from '@fluentui/react-hooks';
+import { mergeStyleSets, Modal } from '@fluentui/react';
 import { Text } from '@fluentui/react/lib/Text';
+import { useBoolean } from '@fluentui/react-hooks';
 import { FontIcon, mergeStyles, Stack } from 'office-ui-fabric-react';
 import React from 'react';
 import { useIntl } from 'react-intl';
@@ -9,33 +9,6 @@ import AddTask from './AddTask';
 
 export interface IToDoListProps {}
 
-// const ToDoList: React.FunctionComponent<IToDoListProps> = ({}: IToDoListProps) => {
-//   const [isTaskModalOpen, { setTrue: showTaskModal, setFalse: hideTaskModal }] = useBoolean(false);
-
-//   const contentStyles = mergeStyleSets({
-//     container: {
-//       // display: 'flex',
-//       // flexFlow: 'column nowrap',
-//       // alignItems: 'stretch',
-//       height: '560px',
-//       width: '956px',
-//     },
-//   });
-
-//   return (
-//     <>
-//       <div>To Do List</div>
-//       <DefaultButton onClick={showTaskModal} text="Open Modal" />
-//       <Modal
-//         titleAriaId="TaskModal"
-//         isOpen={isTaskModalOpen}
-//         onDismiss={hideTaskModal}
-//         isBlocking={true}
-//         containerClassName={contentStyles.container}
-//       >
-//         <AddTask hideModal={hideTaskModal} />
-//       </Modal>
-//     </>
 const mainDivStyle: React.CSSProperties = {
   width: '100%',
   marginLeft: '48px',
@@ -62,8 +35,21 @@ const filterSortIconClass = mergeStyles({
   verticalAlign: 'bottom',
 });
 
+// AddTask modal style
+const addTaskModalStyles = mergeStyleSets({
+  container: {
+    height: '560px',
+    width: '956px',
+  },
+});
+
+const addIconStyle: React.CSSProperties = {
+  cursor: 'pointer',
+};
+
 const ToDoList: React.FunctionComponent<IToDoListProps> = ({}: IToDoListProps) => {
   const { formatMessage } = useIntl();
+  const [isTaskModalOpen, { setTrue: showTaskModal, setFalse: hideTaskModal }] = useBoolean(false);
 
   return (
     <div style={mainDivStyle}>
@@ -71,7 +57,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({}: IToDoListProps) =
         <Stack.Item grow style={headingLeftStyle}>
           <Text variant="xxLarge">{formatMessage({ id: 'toDo.title' })}</Text>
           <Text variant="xLarge">
-            <FontIcon iconName="CirclePlus" className={iconClass} />
+            <FontIcon style={addIconStyle} onClick={showTaskModal} iconName="CirclePlus" className={iconClass} />
           </Text>
         </Stack.Item>
         <Stack.Item>
@@ -89,6 +75,15 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({}: IToDoListProps) =
           {formatMessage({ id: 'toDo.empty2' })}
         </Text>
       </div>
+      <Modal
+        titleAriaId="TaskModal"
+        isOpen={isTaskModalOpen}
+        onDismiss={hideTaskModal}
+        isBlocking={true}
+        containerClassName={addTaskModalStyles.container}
+      >
+        <AddTask hideModal={hideTaskModal} />
+      </Modal>
     </div>
   );
 };
