@@ -92,6 +92,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
 
          await _dbContext.SaveChangesAsync();
 
+         // TODO 1693 - update .Includes per new attribute collections
          // fetch updated product to ensure related entity Id's are populated (eg Attributes, KPIs, Goals)
          var updatedProduct = await _dbContext.Products
              .Include(p => p.Goals)
