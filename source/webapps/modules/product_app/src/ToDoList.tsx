@@ -6,8 +6,15 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 
 import AddTask from './AddTask';
+import { UpdateProductAction } from './product/productReducer';
+import { Product, UpdateProductModel } from './types';
 
-export interface IToDoListProps {}
+export interface IToDoListProps {
+  updateProduct: (product: UpdateProductModel) => UpdateProductAction;
+  environmentKey: string;
+  accessToken: string;
+  products: Product[];
+}
 
 const mainDivStyle: React.CSSProperties = {
   width: '100%',
@@ -47,7 +54,7 @@ const addIconStyle: React.CSSProperties = {
   cursor: 'pointer',
 };
 
-const ToDoList: React.FunctionComponent<IToDoListProps> = ({}: IToDoListProps) => {
+const ToDoList: React.FunctionComponent<IToDoListProps> = ({ updateProduct, environmentKey, accessToken, products }: IToDoListProps) => {
   const { formatMessage } = useIntl();
   const [isTaskModalOpen, { setTrue: showTaskModal, setFalse: hideTaskModal }] = useBoolean(false);
 
@@ -82,7 +89,13 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({}: IToDoListProps) =
         isBlocking={true}
         containerClassName={addTaskModalStyles.container}
       >
-        <AddTask hideModal={hideTaskModal} />
+        <AddTask
+          hideModal={hideTaskModal}
+          updateProduct={updateProduct}
+          environmentKey={environmentKey}
+          accessToken={accessToken}
+          products={products}
+        />
       </Modal>
     </div>
   );

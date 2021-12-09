@@ -19,11 +19,18 @@ import { useTheme } from '@fluentui/react-theme-provider';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
+import { UpdateProductAction } from './product/productReducer';
+import { PatchOperation, Product, UpdateProductModel } from './types';
+
 export interface IAddTaskProps {
   hideModal: () => void;
+  updateProduct: (product: UpdateProductModel) => UpdateProductAction;
+  environmentKey: string;
+  accessToken: string;
+  products: Product[];
 }
 
-const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal }: IAddTaskProps) => {
+const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProduct, environmentKey, accessToken, products }: IAddTaskProps) => {
   const theme = useTheme();
   const { formatMessage } = useIntl();
 
@@ -164,15 +171,56 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal }: IAddTask
   const [saveButtonDisabled, setSaveButtonDisabled] = React.useState<boolean>(false);
 
   const onSaveButtonClick = () => {
-    const asdf = 1;
     // make API call
+    const productPatchData: PatchOperation[] = [
+      {
+        op: 'add',
+        path: '/Items',
+        value: [
+          {
+            name: 'MATTBRIANTODOLISTITEM!', // TODO form
+            productItemTypeId: -1, // TODO enum
+            stringAttributeValues: [
+              {
+                attributeId: -2, // TODO enum
+                value: 'MATTBRIANTODOLISTITEMNOTES!', //TODO form
+              },
+            ],
+            utcDateTimeAttributeValues: [
+              {
+                attributeId: -3, // TODO enum
+                value: '1979-08-11', // TODO form
+              },
+            ],
+            enumCollectionAttributeValues: [
+              {
+                attributeId: -4,
+                value: [
+                  {
+                    enumAttributeOptionId: -3,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ];
+
+    const updateProductDto: UpdateProductModel = {
+      ProductPatchData: productPatchData,
+      ProductKey: products[0].key || 'BAD_PRODUCT_KEY',
+      EnvironmentKey: environmentKey,
+      AccessToken: accessToken,
+    };
+    updateProduct(updateProductDto);
+
     // reset form?
     hideModal();
   };
 
   // CANCEL BUTTON
   const onCancelButtonClick = () => {
-    const asdf = 1;
     // reset form?
     hideModal();
   };
