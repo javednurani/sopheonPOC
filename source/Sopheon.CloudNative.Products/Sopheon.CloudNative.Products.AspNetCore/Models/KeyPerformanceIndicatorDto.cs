@@ -12,7 +12,7 @@
       /// <summary>
       /// Navigation Property
       /// </summary>
-      public AttributeDto Attribute { get; set; }
+      public DecimalAttributeDto Attribute { get; set; }
 
       // TODO: Other details that deal with the specific KPI concern, rather than just the attribute 'value holder' 
       // Min/Max?
