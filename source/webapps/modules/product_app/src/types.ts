@@ -5,6 +5,14 @@
 // eslint-disable-next-line no-shadow
 export enum Attributes {
   INDUSTRIES = -1,
+  NOTES = -2,
+  DUEDATE = -3,
+  STATUS = -4,
+}
+
+// eslint-disable-next-line no-shadow
+export enum ProductItemTypes {
+  TASK = -1,
 }
 
 export type UpdateProductModel = {
