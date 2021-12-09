@@ -47,9 +47,44 @@ const addIconStyle: React.CSSProperties = {
   cursor: 'pointer',
 };
 
+interface ToDoItem {
+  name?: string;
+  notes?: string;
+  dueDate?: Date;
+  status?: Status;
+}
+
+// eslint-disable-next-line no-shadow
+enum Status {
+  NotStarted = -1,
+  InProgress = -2,
+  Assigned = -3,
+  Complete = -4,
+}
+
 const ToDoList: React.FunctionComponent<IToDoListProps> = ({}: IToDoListProps) => {
   const { formatMessage } = useIntl();
   const [isTaskModalOpen, { setTrue: showTaskModal, setFalse: hideTaskModal }] = useBoolean(false);
+
+  const dummyData: ToDoItem[] = [
+    {
+      name: 'ZachName',
+    },
+  ];
+
+  const emptyListContent: JSX.Element = (
+    <div style={contentDivStyle}>
+      <Text variant="xLarge">
+        {formatMessage({ id: 'toDo.empty1' })}
+        <FontIcon iconName="CirclePlus" />
+        {formatMessage({ id: 'toDo.empty2' })}
+      </Text>
+    </div>
+  );
+
+  const populatedListContent = <div>ZachTest!!!</div>;
+
+  const toDoListContent: JSX.Element = dummyData.length === 0 ? emptyListContent : populatedListContent;
 
   return (
     <div style={mainDivStyle}>
@@ -68,13 +103,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({}: IToDoListProps) =
         </Stack.Item>
       </Stack>
       <hr />
-      <div style={contentDivStyle}>
-        <Text variant="xLarge">
-          {formatMessage({ id: 'toDo.empty1' })}
-          <FontIcon iconName="CirclePlus" />
-          {formatMessage({ id: 'toDo.empty2' })}
-        </Text>
-      </div>
+      {toDoListContent}
       <Modal
         titleAriaId="TaskModal"
         isOpen={isTaskModalOpen}
