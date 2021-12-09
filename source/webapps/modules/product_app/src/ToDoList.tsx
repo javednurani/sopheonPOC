@@ -7,7 +7,7 @@ import { useIntl } from 'react-intl';
 
 import AddTask from './AddTask';
 import { UpdateProductAction } from './product/productReducer';
-import { Product, UpdateProductModel } from './types';
+import { Product, Status, ToDoItem, UpdateProductModel } from './types';
 
 export interface IToDoListProps {
   updateProduct: (product: UpdateProductModel) => UpdateProductAction;
@@ -54,6 +54,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({ updateProduct, envi
   const { formatMessage } = useIntl();
   const [isTaskModalOpen, { setTrue: showTaskModal, setFalse: hideTaskModal }] = useBoolean(false);
 
+  // TODO: optional due date and notes?
   const dummyData: ToDoItem[] = [
     {
       name: 'ZachName',

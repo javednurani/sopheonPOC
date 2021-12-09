@@ -1,7 +1,6 @@
 // TODO - (for domain/DTO types like Product), this file should serve as a temporary stub for Types for DTOs in the Sopheon.CloudNative.Products WebAPI project
 // In Cloud-2147, we should generate TS Types from Sopheon.CloudNative.Products.AspNetCore OpenAPI schema
 
-
 // eslint-disable-next-line no-shadow
 export enum Attributes {
   INDUSTRIES = -1,
@@ -9,8 +8,8 @@ export enum Attributes {
 
 export type UpdateProductModel = {
   ProductPatchData: PatchOperation[];
-} & EnvironmentScopedApiRequestModel
-  & ProductScopedApiRequestModel;
+} & EnvironmentScopedApiRequestModel &
+  ProductScopedApiRequestModel;
 
 export type CreateProductModel = {
   Product: ProductPostDto;
@@ -19,7 +18,7 @@ export type CreateProductModel = {
 export type EnvironmentScopedApiRequestModel = {
   EnvironmentKey: string;
   AccessToken: string;
-}
+};
 
 export type ProductScopedApiRequestModel = {
   ProductKey: string;
@@ -40,8 +39,8 @@ export interface Product {
 
 export interface ToDoItem {
   name: string;
-  notes: string;
-  dueDate: Date;
+  notes?: string;
+  dueDate?: Date;
   status: Status;
 }
 
@@ -50,7 +49,7 @@ export enum Status {
   NotStarted = -1,
   InProgress = -2,
   Assigned = -3,
-  Complete = -4
+  Complete = -4,
 }
 
 export interface Goal {
@@ -62,7 +61,7 @@ export interface Goal {
 export interface KeyPerformanceIndicator {
   keyPerformanceIndicatorId: number;
   attributeId: number;
-  attribute: AttributeDto,
+  attribute: AttributeDto;
 }
 
 export interface Int32AttributeValueDto {
