@@ -180,7 +180,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
   const handleOnboardingContinueClick = () => {
     const productData: ProductPostDto = {
       Name: productName,
-      IntAttributeValues: industryKeys.map(ik => ({
+      Int32AttributeValues: industryKeys.map(ik => ({
         AttributeId: Attributes.INDUSTRIES,
         Value: ik,
       })),

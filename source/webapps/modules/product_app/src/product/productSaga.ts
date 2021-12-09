@@ -32,7 +32,7 @@ export function* onGetProducts(action: GetProductsAction): Generator {
       id: d.id,
       key: d.key,
       name: d.name,
-      industries: d.intAttributeValues.filter(iav => iav.attributeId === Attributes.INDUSTRIES).map(iav => iav.value),
+      industries: d.int32AttributeValues.filter(iav => iav.attributeId === Attributes.INDUSTRIES).map(iav => iav.value),
       kpis: d.keyPerformanceIndicators,
       goals: d.goals
     }));
@@ -55,7 +55,7 @@ export function* onCreateProduct(action: CreateProductAction): Generator {
       id: data.id,
       key: data.key,
       name: data.name,
-      industries: data.intAttributeValues.filter(iav => iav.attributeId === Attributes.INDUSTRIES).map(iav => iav.value),
+      industries: data.int32AttributeValues.filter(iav => iav.attributeId === Attributes.INDUSTRIES).map(iav => iav.value),
       goals: [],
       kpis: [],
     };
@@ -79,7 +79,7 @@ export function* onUpdateProduct(action: UpdateProductAction): Generator {
       id: data.id,
       key: data.key,
       name: data.name,
-      industries: data.intAttributeValues.filter(iav => iav.attributeId === Attributes.INDUSTRIES).map(iav => iav.value),
+      industries: data.int32AttributeValues.filter(iav => iav.attributeId === Attributes.INDUSTRIES).map(iav => iav.value),
       kpis: data.keyPerformanceIndicators,
       goals: data.goals
     };

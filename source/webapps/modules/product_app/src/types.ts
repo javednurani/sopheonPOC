@@ -56,7 +56,7 @@ export interface Int32AttributeValueDto {
 
 export interface ProductPostDto {
   Name: string;
-  IntAttributeValues: Int32AttributeValueDto[];
+  Int32AttributeValues: Int32AttributeValueDto[];
 }
 
 export interface PatchOperation {
