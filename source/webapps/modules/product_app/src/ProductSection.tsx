@@ -109,7 +109,6 @@ const ProductSection: React.FunctionComponent<IProductSectionProps> = ({ product
 
   const stackStyles: IStackStyles = {
     root: {
-      background: theme.semanticColors.bodyBackground, // TODO: why needed?
       height: '100%',
       width: '100%',
     },
@@ -126,7 +125,6 @@ const ProductSection: React.FunctionComponent<IProductSectionProps> = ({ product
 
   const productIconStackItemStyles: IStackItemStyles = {
     root: {
-      background: theme.semanticColors.bodyBackground, // TODO: why needed?
       display: 'flex',
       justifyContent: 'center',
     },
@@ -134,7 +132,6 @@ const ProductSection: React.FunctionComponent<IProductSectionProps> = ({ product
 
   const productNameStackItemStyles: IStackItemStyles = {
     root: {
-      background: theme.semanticColors.bodyBackground, // TODO: why needed?
       display: 'flex',
       justifyContent: 'left',
     },

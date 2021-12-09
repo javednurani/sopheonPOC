@@ -79,6 +79,7 @@ export const messages: Record<string, Record<string, string>> = {
     'onboarding.step2of3': 'Step 2 of 3: Set up your Product',
     'onboarding.nextGoals': 'Next: Set up your Goals',
     'onboarding.setupYourGoals': 'Set up your Goals',
+    'onboarding.pleaseLogin': 'Please Log In to use the Product App.',
     'onboarding.productKpi': "What key performance indicators (KPI) measure or track your product's success?",
     'onboarding.getstarted': 'Get Started!',
     'onboarding.productgoal': 'What is your current product goal?',
@@ -130,5 +131,8 @@ export const messages: Record<string, Record<string, string>> = {
     'calendar.closedatepicker': 'Close date picker',
     'calendar.selecttochangeyear': '{0}, select to change the year',
     'calendar.selecttochangemonth': '{0}, select to change the month',
+    'toDo.title': 'To Do',
+    'toDo.empty1': "You don't have any tasks yet. Click ",
+    'toDo.empty2': ' above to add one.',
   },
 };

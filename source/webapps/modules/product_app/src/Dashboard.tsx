@@ -23,7 +23,6 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({ products }: IDash
   const theme = useTheme();
 
   const sharedStackItemStyles: Partial<IStyle> = {
-    background: theme.semanticColors.bodyBackground, // TODO: why needed?
     //backgroundImage: `linear-gradient(to bottom right, ${theme.semanticColors.bodyBackground}, ${theme.semanticColors.bodyBackgroundHovered})`,
     display: 'flex',
     justifyContent: 'center',
@@ -55,9 +54,8 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({ products }: IDash
 
   const stackStyles: IStackStyles = {
     root: {
-      background: theme.semanticColors.bodyBackground, // TODO: why needed?
       height: '100%',
-      width: '100%',
+      width: '620px',
     },
   };
 
