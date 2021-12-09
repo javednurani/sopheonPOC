@@ -28,4 +28,8 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
          return AttributeId < 0;
       }
    }
+
+   public class DecimalAttributeDto : AttributeDto
+   {
+   }
 }

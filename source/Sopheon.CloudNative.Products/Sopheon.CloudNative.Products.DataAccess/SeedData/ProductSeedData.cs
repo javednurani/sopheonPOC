@@ -86,6 +86,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.SeedData
             new EnumCollectionAttribute
             {
                AttributeId = -4,
+               AttributeDataTypeId = (int)AttributeDataTypes.EnumCollection,
                Name = "Status",
                ShortName = "STATUS",
                EnumAttributeOptions = new List<EnumAttributeOption>
@@ -127,18 +128,21 @@ namespace Sopheon.CloudNative.Products.DataAccess.SeedData
             new Int32Attribute
             {
                AttributeId = -1,
+               AttributeDataTypeId = (int)AttributeDataTypes.Int32,
                Name = "Industry",
                ShortName = "IND"
             },
             new StringAttribute
             {
                AttributeId = -2,
+               AttributeDataTypeId = (int)AttributeDataTypes.String,
                Name = "Notes",
                ShortName = "NOTES"
             },
             new UtcDateTimeAttribute
             {
                AttributeId = -3,
+               AttributeDataTypeId = (int)AttributeDataTypes.UtcDateTime,
                Name = "Due Date",
                ShortName = "DUE"
             }

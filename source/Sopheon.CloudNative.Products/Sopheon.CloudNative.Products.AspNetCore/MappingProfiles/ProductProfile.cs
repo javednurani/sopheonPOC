@@ -16,6 +16,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.MappingProfiles
       public ProductProfile()
       {
          CreateMap<Attribute, AttributeDto>().ReverseMap();
+         CreateMap<DecimalAttribute, DecimalAttributeDto>().ReverseMap();
          CreateMap<AttributeDataType, AttributeDataTypeDto>().ReverseMap();
 
          CreateMap<Product, ProductDto>().ReverseMap();
