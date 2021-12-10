@@ -47,6 +47,9 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
 
   const [saveButtonDisabled, setSaveButtonDisabled] = React.useState(false);
 
+  // TODO 1693 - possible taskName.errorMessage display pattern, remove if unneeded
+  const [taskNameDirty, setTaskNameDirty] = React.useState(false);
+
   useEffect(() => {
     setSaveButtonDisabled(taskName.length === 0);
   }, [taskName]);
@@ -226,6 +229,10 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
   };
 
   const handleTaskNameChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string | undefined): void => {
+    // TODO 1693 - possible taskName.errorMessage display pattern, remove if unneeded
+    if (!taskNameDirty) {
+      setTaskNameDirty(true);
+    }
     setTaskName(newValue || '');
   };
 
@@ -247,7 +254,7 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
   return (
     <>
       <div className={contentStyles.header}>
-        <span id="AddTaskModal">{formatMessage({ id: 'todo.newtask' })}</span>
+        <span id="AddTaskModal">{formatMessage({ id: 'toDo.newtask' })}</span>
         <IconButton styles={iconButtonStyles} iconProps={cancelIcon} ariaLabel={formatMessage({ id: 'closemodal' })} onClick={hideModal} />
       </div>
       <div className={contentStyles.body}>
@@ -258,7 +265,8 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
               onChange={handleTaskNameChange}
               required
               label={formatMessage({ id: 'name' })}
-              errorMessage={formatMessage({ id: 'fieldisrequired' })}
+              // TODO 1693 - possible taskName.errorMessage display pattern, remove if unneeded
+              onGetErrorMessage={value => (taskNameDirty && !value ? formatMessage({ id: 'fieldisrequired' }) : undefined)}
             />
           </Stack.Item>
           <Stack.Item>
