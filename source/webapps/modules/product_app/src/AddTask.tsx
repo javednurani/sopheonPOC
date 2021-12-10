@@ -16,11 +16,11 @@ import {
   TextField,
 } from '@fluentui/react';
 import { useTheme } from '@fluentui/react-theme-provider';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
 import { UpdateProductAction } from './product/productReducer';
-import { PatchOperation, Product, UpdateProductModel } from './types';
+import { Attributes, PatchOperation, Product, ProductItemTypes, Status, UpdateProductModel } from './types';
 
 export interface IAddTaskProps {
   hideModal: () => void;
@@ -30,9 +30,29 @@ export interface IAddTaskProps {
   products: Product[];
 }
 
+export interface DateStateObject {
+  date: Date | undefined;
+}
+
 const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProduct, environmentKey, accessToken, products }: IAddTaskProps) => {
   const theme = useTheme();
   const { formatMessage } = useIntl();
+
+  const [taskName, setTaskName] = useState('');
+  const [taskNotes, setTaskNotes] = useState('');
+
+  const [taskDueDate, setTaskDueDate] = useState<DateStateObject>({ date: undefined });
+
+  const [selectedItemStatusDropdown, setSelectedItemStatusDropdown] = React.useState<IDropdownOption>();
+
+  const [saveButtonDisabled, setSaveButtonDisabled] = React.useState(false);
+
+  // TODO 1693 - possible taskName.errorMessage display pattern, remove if unneeded
+  const [taskNameDirty, setTaskNameDirty] = React.useState(false);
+
+  useEffect(() => {
+    setSaveButtonDisabled(taskName.length === 0);
+  }, [taskName]);
 
   const contentStyles = mergeStyleSets({
     header: [
@@ -59,8 +79,6 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
       },
     },
   });
-
-  // X BUTTON
 
   const iconButtonStyles: Partial<IButtonStyles> = {
     root: {
@@ -153,51 +171,39 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
   const statusDropdownStyles: Partial<IDropdownStyles> = { dropdown: { width: 300 } };
 
   const statusDropdownOptions = [
-    // TODO, keys = int values per domain enum?
-    { key: 'notStarted', text: 'Not Started' },
-    { key: 'inProgress', text: 'In Progress' },
-    { key: 'assigned', text: 'Assigned' },
-    { key: 'complete', text: 'Complete' },
+    { key: Status.NotStarted, text: formatMessage({ id: 'status.notstarted' }) },
+    { key: Status.InProgress, text: formatMessage({ id: 'status.inprogress' }) },
+    { key: Status.Assigned, text: formatMessage({ id: 'status.assigned' }) },
+    { key: Status.Complete, text: formatMessage({ id: 'status.complete' }) },
   ];
 
-  const [selectedItemStatusDropdown, setSelectedItemStatusDropdown] = React.useState<IDropdownOption>();
-
-  const onStatusDropdownChange = (event: React.FormEvent<HTMLDivElement>, item: IDropdownOption | undefined): void => {
-    setSelectedItemStatusDropdown(item);
-  };
-
-  // SAVE BUTTON
-  // TODO, start in disabled=true state, wire up setSaveButtonDisabled to TextField.Name onchange
-  const [saveButtonDisabled, setSaveButtonDisabled] = React.useState<boolean>(false);
-
-  const onSaveButtonClick = () => {
-    // make API call
+  const handleSaveButtonClick = () => {
     const productPatchData: PatchOperation[] = [
       {
         op: 'add',
         path: '/Items',
         value: [
           {
-            name: 'MATTBRIANTODOLISTITEM!', // TODO form
-            productItemTypeId: -1, // TODO enum
+            name: taskName,
+            productItemTypeId: ProductItemTypes.TASK,
             stringAttributeValues: [
               {
-                attributeId: -2, // TODO enum
-                value: 'MATTBRIANTODOLISTITEMNOTES!', //TODO form
+                attributeId: Attributes.NOTES,
+                value: taskNotes,
               },
             ],
             utcDateTimeAttributeValues: [
               {
-                attributeId: -3, // TODO enum
-                value: '1979-08-11', // TODO form
+                attributeId: Attributes.DUEDATE,
+                value: taskDueDate.date?.toDateString(),
               },
             ],
             enumCollectionAttributeValues: [
               {
-                attributeId: -4,
+                attributeId: Attributes.STATUS,
                 value: [
                   {
-                    enumAttributeOptionId: -3,
+                    enumAttributeOptionId: selectedItemStatusDropdown?.key || Status.NotStarted,
                   },
                 ],
               },
@@ -214,65 +220,92 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
       AccessToken: accessToken,
     };
     updateProduct(updateProductDto);
-
-    // reset form?
     hideModal();
   };
 
   // CANCEL BUTTON
-  const onCancelButtonClick = () => {
-    // reset form?
+  const handleCancelButtonClick = () => {
     hideModal();
   };
 
-  // display component for dialog testing
-  // return (
-  //   <Stack>
-  //     <Stack.Item>
-  //       <p>Hello from a display only component :)</p>
-  //     </Stack.Item>
-  //   </Stack>
-  // );
+  const handleTaskNameChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string | undefined): void => {
+    // TODO 1693 - possible taskName.errorMessage display pattern, remove if unneeded
+    if (!taskNameDirty) {
+      setTaskNameDirty(true);
+    }
+    setTaskName(newValue || '');
+  };
+
+  const handleTaskNotesChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string | undefined): void => {
+    setTaskNotes(newValue || '');
+  };
+
+  const handleTaskDueDateChange = (date: Date | null | undefined) => {
+    if (date) {
+      // eslint-disable-next-line object-shorthand
+      setTaskDueDate({ date: date });
+    }
+  };
+
+  const handleStatusDropdownChange = (event: React.FormEvent<HTMLDivElement>, item: IDropdownOption | undefined): void => {
+    setSelectedItemStatusDropdown(item);
+  };
 
   return (
     <>
       <div className={contentStyles.header}>
-        <span id="AddTaskModal">New Task</span>
-        <IconButton styles={iconButtonStyles} iconProps={cancelIcon} ariaLabel="Close popup modal" onClick={hideModal} />
+        <span id="AddTaskModal">{formatMessage({ id: 'toDo.newtask' })}</span>
+        <IconButton styles={iconButtonStyles} iconProps={cancelIcon} ariaLabel={formatMessage({ id: 'closemodal' })} onClick={hideModal} />
       </div>
       <div className={contentStyles.body}>
         <Stack>
           <Stack.Item>
-            <TextField required label="Name" />
+            <TextField
+              placeholder={formatMessage({ id: 'toDo.tasknameplaceholder' })}
+              onChange={handleTaskNameChange}
+              required
+              label={formatMessage({ id: 'name' })}
+              // TODO 1693 - possible taskName.errorMessage display pattern, remove if unneeded
+              onGetErrorMessage={value => (taskNameDirty && !value ? formatMessage({ id: 'fieldisrequired' }) : undefined)}
+            />
           </Stack.Item>
           <Stack.Item>
-            <TextField multiline resizable={false} label="Notes" />
+            <TextField
+              placeholder={formatMessage({ id: 'toDo.tasknotesplaceholder' })}
+              onChange={handleTaskNotesChange}
+              multiline
+              resizable={false}
+              label={formatMessage({ id: 'toDo.notes' })}
+            />
           </Stack.Item>
           <Stack.Item>
             <DatePicker
+              value={taskDueDate.date}
               className={datePickerClass.control}
               firstDayOfWeek={firstDayOfWeek}
-              placeholder="Select a date..."
-              ariaLabel="Select a date"
+              placeholder={formatMessage({ id: 'calendar.selectadate' })}
+              ariaLabel={formatMessage({ id: 'calendar.selectadate' })}
               // DatePicker uses English strings by default. For localized apps, you must override this prop.
               strings={datePickerStrings}
-              label="Due Date"
+              label={formatMessage({ id: 'toDo.duedate' })}
+              onSelectDate={handleTaskDueDateChange}
+              formatDate={(date: Date | undefined): string => `${date?.getMonth()}/${date?.getDate()}/${date?.getFullYear()}`}
             />
           </Stack.Item>
           <Stack.Item>
             <Dropdown
-              label="Status"
-              selectedKey={selectedItemStatusDropdown ? selectedItemStatusDropdown.key : 'notStarted'} // TODO int keys
+              label={formatMessage({ id: 'status' })}
+              selectedKey={selectedItemStatusDropdown ? selectedItemStatusDropdown.key : Status.NotStarted}
               // eslint-disable-next-line react/jsx-no-bind
-              onChange={onStatusDropdownChange}
-              placeholder="Select a status"
+              onChange={handleStatusDropdownChange}
+              placeholder={formatMessage({ id: 'toDo.selectastatus' })}
               options={statusDropdownOptions}
               styles={statusDropdownStyles}
             />
           </Stack.Item>
           <Stack.Item>
-            <PrimaryButton text="Save" onClick={onSaveButtonClick} disabled={saveButtonDisabled} />
-            <DefaultButton text="Cancel" onClick={onCancelButtonClick} />
+            <PrimaryButton text={formatMessage({ id: 'save' })} onClick={handleSaveButtonClick} disabled={saveButtonDisabled} />
+            <DefaultButton text={formatMessage({ id: 'cancel' })} onClick={handleCancelButtonClick} />
           </Stack.Item>
         </Stack>
       </div>
