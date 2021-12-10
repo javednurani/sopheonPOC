@@ -69,7 +69,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({ updateProduct, envi
     <div>
       {todos.map((item, index) => {
         const dueDateDisplay: string = item.dueDate ? item.dueDate.toLocaleDateString() : 'xxxx';
-        const statusIcon = item.status === Status.Complete ? <FontIcon iconName="CircleRing" /> : <FontIcon iconName="CircleRing" />;
+        const statusIcon = item.status === Status.Complete ? <FontIcon iconName="CheckMark" /> : <FontIcon iconName="CircleRing" />;
 
         return (
           <div key={index}>
