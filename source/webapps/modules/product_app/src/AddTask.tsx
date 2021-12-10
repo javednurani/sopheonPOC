@@ -16,6 +16,7 @@ import {
   mergeStyleSets,
   PrimaryButton,
   Stack,
+  Text,
   TextField,
 } from '@fluentui/react';
 import { useTheme } from '@fluentui/react-theme-provider';
@@ -292,7 +293,9 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
   return (
     <>
       <div className={contentStyles.header}>
-        <span id="AddTaskModal">{formatMessage({ id: 'toDo.newtask' })}</span>
+        <span id="AddTaskModal">
+          <Text variant="xxLarge">{formatMessage({ id: 'toDo.newtask' })}</Text>
+        </span>
         <IconButton styles={iconButtonStyles} iconProps={cancelIcon} ariaLabel={formatMessage({ id: 'closemodal' })} onClick={hideModal} />
       </div>
       <div className={contentStyles.body}>
@@ -305,6 +308,7 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
                   placeholder={formatMessage({ id: 'toDo.tasknameplaceholder' })}
                   onChange={handleTaskNameChange}
                   required
+                  maxLength={150}
                   label={formatMessage({ id: 'name' })}
                   // TODO 1693 - possible taskName.errorMessage display pattern, remove if unneeded
                   onGetErrorMessage={value => (taskNameDirty && !value ? formatMessage({ id: 'fieldisrequired' }) : undefined)}
@@ -333,6 +337,7 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
                   placeholder={formatMessage({ id: 'toDo.tasknotesplaceholder' })}
                   onChange={handleTaskNotesChange}
                   multiline
+                  maxLength={5000}
                   rows={15}
                   resizable={false}
                   label={formatMessage({ id: 'toDo.notes' })}
