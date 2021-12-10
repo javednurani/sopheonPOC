@@ -1,6 +1,7 @@
-import { Stack } from '@fluentui/react';
+import { Spinner, Stack } from '@fluentui/react';
 import { AppProps, FetchStatus } from '@sopheon/shell-api';
 import React, { useEffect } from 'react';
+import { useIntl } from 'react-intl';
 
 import { AppDispatchProps, AppStateProps } from './AppContainer';
 import Dashboard from './Dashboard';
@@ -22,6 +23,8 @@ const App: React.FunctionComponent<Props> = ({
   hideHeaderFooter,
   showHeaderFooter,
 }: Props) => {
+  const { formatMessage } = useIntl();
+
   useEffect(() => {
     if (accessToken && getProductsFetchStatus === FetchStatus.NotActive) {
       const requestDto: EnvironmentScopedApiRequestModel = {
@@ -31,27 +34,28 @@ const App: React.FunctionComponent<Props> = ({
 
       getProducts(requestDto);
     }
-  }, [accessToken, getProductsFetchStatus]);
+  }, [accessToken, environmentKey, getProducts, getProductsFetchStatus]);
 
-  // TODO: maybe this should be the respnsibility of the onbaording component to control?
+  // TODO: move this into onboarding component, but right now this is helping work around our injected saga delay issue
   useEffect(() => {
     if ((products.length === 0 && environmentKey) || (currentStep === 3 && products.length === 1)) {
       hideHeaderFooter();
     } else {
       showHeaderFooter();
     }
-  }, [products, environmentKey]);
+  }, [currentStep, products, environmentKey, hideHeaderFooter, showHeaderFooter]);
 
-  // TODO: condition copied from above, can be simplified?
-  const userNeedsOnboarding = (products.length === 0 && environmentKey) || (currentStep === 3 && products.length === 1);
-
-  if (!environmentKey) {
-    return (
-      <Stack horizontalAlign="center">
-        <h2>Please Log In to use the Product App.</h2>
-      </Stack>
-    );
+  if (!environmentKey || getProductsFetchStatus === FetchStatus.NotActive || getProductsFetchStatus === FetchStatus.InProgress) {
+    return <Spinner label={formatMessage({ id: 'fallback.loading' })} />;
   }
+
+  if (getProductsFetchStatus === FetchStatus.DoneFailure) {
+    showHeaderFooter();
+    throw new Error(formatMessage({ id: 'error.erroroccurred' }));
+  }
+
+  // TODO: once we fix the header toggle timing issue, this would probably get changed to getProductsFetchStatus === FetchStatus.DoneSuccess && products.length === 0
+  const userNeedsOnboarding = (products.length === 0 && environmentKey) || (currentStep === 3 && products.length === 1);
 
   if (userNeedsOnboarding) {
     return (

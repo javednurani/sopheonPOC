@@ -1,3 +1,4 @@
+import { AuthenticatedTemplate } from '@azure/msal-react';
 import { initializeIcons, registerIcons, ScrollablePane, ScrollbarVisibility, Stack } from '@fluentui/react';
 import { useTheme } from '@fluentui/react-theme-provider';
 import { GetAccessTokenAction } from '@sopheon/shell-api';
@@ -53,8 +54,8 @@ const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, head
 
   const hideHeaderFooterStyle = {
     root: {
-      height: '0'
-    }
+      height: '0',
+    },
   };
 
   return (
@@ -91,24 +92,26 @@ const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, head
                     height: '100%',
                     overflow: 'auto',
                     backgroundColor: 'white',
-                    zIndex: '9999'
+                    zIndex: '9999',
                   },
                 }}
               >
                 <main style={pageContainerStyle} role="main">
                   <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-                    <Switch>
-                      {appModules.map(appModule => (
-                        <Route exact key={appModule.scope} path={appModule.routeName}>
-                          <DynamicModule module={appModule} loadingMessage={loadingMessage} shellApi={shellApi} />
-                        </Route>
-                      ))}
-                    </Switch>
+                    <AuthenticatedTemplate>
+                      <Switch>
+                        {appModules.map(appModule => (
+                          <Route exact key={appModule.scope} path={appModule.routeName}>
+                            <DynamicModule module={appModule} loadingMessage={loadingMessage} shellApi={shellApi} />
+                          </Route>
+                        ))}
+                      </Switch>
+                    </AuthenticatedTemplate>
                   </ScrollablePane>
                 </main>
               </Stack.Item>
               <Stack.Item>
-                <Footer showFooter={headerFooterAreShown}/>
+                <Footer showFooter={headerFooterAreShown} />
               </Stack.Item>
             </Stack>
           </Route>
