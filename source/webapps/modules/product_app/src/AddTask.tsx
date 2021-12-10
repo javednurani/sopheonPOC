@@ -168,10 +168,10 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
   const statusDropdownStyles: Partial<IDropdownStyles> = { dropdown: { width: 300 } };
 
   const statusDropdownOptions = [
-    { key: Status.NotStarted, text: 'Not Started' },
-    { key: Status.InProgress, text: 'In Progress' },
-    { key: Status.Assigned, text: 'Assigned' },
-    { key: Status.Complete, text: 'Complete' },
+    { key: Status.NotStarted, text: formatMessage({ id: 'status.notstarted' }) },
+    { key: Status.InProgress, text: formatMessage({ id: 'status.inprogress' }) },
+    { key: Status.Assigned, text: formatMessage({ id: 'status.assigned' }) },
+    { key: Status.Complete, text: formatMessage({ id: 'status.complete' }) },
   ];
 
   const handleSaveButtonClick = () => {
@@ -247,44 +247,57 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
   return (
     <>
       <div className={contentStyles.header}>
-        <span id="AddTaskModal">New Task</span>
-        <IconButton styles={iconButtonStyles} iconProps={cancelIcon} ariaLabel="Close popup modal" onClick={hideModal} />
+        <span id="AddTaskModal">{formatMessage({ id: 'todo.newtask' })}</span>
+        <IconButton styles={iconButtonStyles} iconProps={cancelIcon} ariaLabel={formatMessage({ id: 'closemodal' })} onClick={hideModal} />
       </div>
       <div className={contentStyles.body}>
         <Stack>
           <Stack.Item>
-            <TextField onChange={handleTaskNameChange} required label="Name" />
+            <TextField
+              placeholder={formatMessage({ id: 'toDo.tasknameplaceholder' })}
+              onChange={handleTaskNameChange}
+              required
+              label={formatMessage({ id: 'name' })}
+              errorMessage={formatMessage({ id: 'fieldisrequired' })}
+            />
           </Stack.Item>
           <Stack.Item>
-            <TextField onChange={handleTaskNotesChange} multiline resizable={false} label="Notes" />
+            <TextField
+              placeholder={formatMessage({ id: 'toDo.tasknotesplaceholder' })}
+              onChange={handleTaskNotesChange}
+              multiline
+              resizable={false}
+              label={formatMessage({ id: 'toDo.notes' })}
+            />
           </Stack.Item>
           <Stack.Item>
             <DatePicker
               value={taskDueDate.date}
               className={datePickerClass.control}
               firstDayOfWeek={firstDayOfWeek}
-              placeholder="Select a date..."
-              ariaLabel="Select a date"
+              placeholder={formatMessage({ id: 'calendar.selectadate' })}
+              ariaLabel={formatMessage({ id: 'calendar.selectadate' })}
               // DatePicker uses English strings by default. For localized apps, you must override this prop.
               strings={datePickerStrings}
-              label="Due Date"
+              label={formatMessage({ id: 'toDo.duedate' })}
               onSelectDate={handleTaskDueDateChange}
+              formatDate={(date: Date | undefined): string => `${date?.getMonth()}/${date?.getDate()}/${date?.getFullYear()}`}
             />
           </Stack.Item>
           <Stack.Item>
             <Dropdown
-              label="Status"
+              label={formatMessage({ id: 'status' })}
               selectedKey={selectedItemStatusDropdown ? selectedItemStatusDropdown.key : Status.NotStarted}
               // eslint-disable-next-line react/jsx-no-bind
               onChange={handleStatusDropdownChange}
-              placeholder="Select a status"
+              placeholder={formatMessage({ id: 'toDo.selectastatus' })}
               options={statusDropdownOptions}
               styles={statusDropdownStyles}
             />
           </Stack.Item>
           <Stack.Item>
-            <PrimaryButton text="Save" onClick={handleSaveButtonClick} disabled={saveButtonDisabled} />
-            <DefaultButton text="Cancel" onClick={handleCancelButtonClick} />
+            <PrimaryButton text={formatMessage({ id: 'save' })} onClick={handleSaveButtonClick} disabled={saveButtonDisabled} />
+            <DefaultButton text={formatMessage({ id: 'cancel' })} onClick={handleCancelButtonClick} />
           </Stack.Item>
         </Stack>
       </div>
