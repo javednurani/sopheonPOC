@@ -21,7 +21,7 @@ describe('Testing the App component', () => {
       showHeaderFooter: jest.fn(),
       hideHeaderFooter: jest.fn(),
       products: [],
-      getProductsFetchStatus: FetchStatus.NotActive,
+      getProductsFetchStatus: FetchStatus.DoneSuccess,
       getProducts: jest.fn(),
       createProduct: jest.fn(),
       updateProduct: jest.fn(),
