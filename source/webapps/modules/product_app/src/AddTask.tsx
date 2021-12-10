@@ -235,17 +235,14 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
   // );
 
   const handleTaskNameChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string | undefined): void => {
-    console.log('handleTaskNameChange', newValue);
     setTaskName(newValue || '');
   };
 
   const handleTaskNotesChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string | undefined): void => {
-    console.log('handleTaskNotesChange', newValue);
     setTaskNotes(newValue || '');
   };
 
   const handleTaskDueDateChange = (date: Date | null | undefined) => {
-    console.log('handleTaskDueDateChange', date);
     if (date) {
       // eslint-disable-next-line object-shorthand
       setTaskDueDate({ date: date });
@@ -253,7 +250,6 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
   };
 
   const handleStatusDropdownChange = (event: React.FormEvent<HTMLDivElement>, item: IDropdownOption | undefined): void => {
-    console.log('handleStatusDropdownChange', item);
     setSelectedItemStatusDropdown(item);
   };
 
