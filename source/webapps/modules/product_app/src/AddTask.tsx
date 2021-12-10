@@ -30,13 +30,18 @@ export interface IAddTaskProps {
   products: Product[];
 }
 
+export interface DateStateObject {
+  date: Date | undefined;
+}
+
 const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProduct, environmentKey, accessToken, products }: IAddTaskProps) => {
   const theme = useTheme();
   const { formatMessage } = useIntl();
 
   const [taskName, setTaskName] = useState('');
   const [taskNotes, setTaskNotes] = useState('');
-  const [taskDueDate, setTaskDueDate] = useState({ date: new Date() });
+
+  const [taskDueDate, setTaskDueDate] = useState<DateStateObject>({ date: undefined });
 
   const [selectedItemStatusDropdown, setSelectedItemStatusDropdown] = React.useState<IDropdownOption>();
 
@@ -163,7 +168,6 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
   const statusDropdownStyles: Partial<IDropdownStyles> = { dropdown: { width: 300 } };
 
   const statusDropdownOptions = [
-    // TODO, keys = int values per domain enum?
     { key: Status.NotStarted, text: 'Not Started' },
     { key: Status.InProgress, text: 'In Progress' },
     { key: Status.Assigned, text: 'Assigned' },
@@ -171,7 +175,6 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
   ];
 
   const handleSaveButtonClick = () => {
-    // make API call
     const productPatchData: PatchOperation[] = [
       {
         op: 'add',
@@ -189,7 +192,7 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
             utcDateTimeAttributeValues: [
               {
                 attributeId: Attributes.DUEDATE,
-                value: taskDueDate.date.toDateString(),
+                value: taskDueDate.date?.toDateString(),
               },
             ],
             enumCollectionAttributeValues: [
@@ -214,14 +217,11 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
       AccessToken: accessToken,
     };
     updateProduct(updateProductDto);
-
-    // reset form?
     hideModal();
   };
 
   // CANCEL BUTTON
   const handleCancelButtonClick = () => {
-    // reset form?
     hideModal();
   };
 
@@ -260,6 +260,7 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
           </Stack.Item>
           <Stack.Item>
             <DatePicker
+              value={taskDueDate.date}
               className={datePickerClass.control}
               firstDayOfWeek={firstDayOfWeek}
               placeholder="Select a date..."
