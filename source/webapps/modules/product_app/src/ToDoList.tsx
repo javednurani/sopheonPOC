@@ -89,6 +89,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({ updateProduct, envi
         isBlocking={true}
         containerClassName={addTaskModalStyles.container}
       >
+        {/* <div>Display only Modal :) does it work nice with the IdleMonitor?</div> */}
         <AddTask
           hideModal={hideTaskModal}
           updateProduct={updateProduct}

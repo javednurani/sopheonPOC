@@ -225,15 +225,6 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
     hideModal();
   };
 
-  // display component for dialog testing
-  // return (
-  //   <Stack>
-  //     <Stack.Item>
-  //       <p>Hello from a display only component :)</p>
-  //     </Stack.Item>
-  //   </Stack>
-  // );
-
   const handleTaskNameChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string | undefined): void => {
     setTaskName(newValue || '');
   };
