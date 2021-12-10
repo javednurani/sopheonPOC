@@ -1,13 +1,12 @@
-import { mergeStyleSets, Modal } from '@fluentui/react';
+import { FontIcon, mergeStyles, mergeStyleSets, Modal, Stack } from '@fluentui/react';
 import { Text } from '@fluentui/react/lib/Text';
 import { useBoolean } from '@fluentui/react-hooks';
-import { FontIcon, mergeStyles, Stack } from 'office-ui-fabric-react';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
 import AddTask from './AddTask';
 import { UpdateProductAction } from './product/productReducer';
-import { Product, Status, ToDoItem, UpdateProductModel } from './types';
+import { Product, Status, UpdateProductModel } from './types';
 
 export interface IToDoListProps {
   updateProduct: (product: UpdateProductModel) => UpdateProductAction;
@@ -53,19 +52,7 @@ const addIconStyle: React.CSSProperties = {
 const ToDoList: React.FunctionComponent<IToDoListProps> = ({ updateProduct, environmentKey, accessToken, products }: IToDoListProps) => {
   const { formatMessage } = useIntl();
   const [isTaskModalOpen, { setTrue: showTaskModal, setFalse: hideTaskModal }] = useBoolean(false);
-
-  // TODO: optional due date and notes?
-  const dummyData: ToDoItem[] = [
-    {
-      name: 'ZachName',
-      dueDate: new Date('01/01/2022'),
-      status: Status.InProgress,
-    },
-    {
-      name: 'ZachName2',
-      status: Status.Complete,
-    },
-  ];
+  const { todos } = products[0];
 
   const emptyListContent: JSX.Element = (
     <div style={contentDivStyle}>
@@ -80,7 +67,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({ updateProduct, envi
   // TODO: convert date UTC->local
   const populatedListContent: JSX.Element = (
     <div>
-      {dummyData.map((item, index) => {
+      {todos.map((item, index) => {
         const dueDateDisplay: string = item.dueDate ? item.dueDate.toLocaleDateString() : 'xxxx';
         const statusIcon = item.status === Status.Complete ? <FontIcon iconName="CircleRing" /> : <FontIcon iconName="CircleRing" />;
 
@@ -100,7 +87,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({ updateProduct, envi
     </div>
   );
 
-  const toDoListContent: JSX.Element = dummyData.length === 0 ? emptyListContent : populatedListContent;
+  const toDoListContent: JSX.Element = todos.length === 0 ? emptyListContent : populatedListContent;
 
   return (
     <div style={mainDivStyle}>
