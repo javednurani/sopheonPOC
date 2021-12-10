@@ -49,9 +49,15 @@ const addIconStyle: React.CSSProperties = {
   cursor: 'pointer',
 };
 
-const textFieldStyles: Partial<ITextFieldStyles> = {
+const emptyDueDateStyles: Partial<ITextFieldStyles> = {
   root: {
     color: 'red',
+  },
+};
+
+const completedNameStyles: Partial<ITextFieldStyles> = {
+  root: {
+    textDecoration: 'line-through',
   },
 };
 
@@ -74,16 +80,22 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({ updateProduct, envi
   const populatedListContent: JSX.Element = (
     <div>
       {todos.map((item, index) => {
-        const statusIcon = item.status === Status.Complete ? <FontIcon iconName="CheckMark" /> : <FontIcon iconName="CircleRing" />;
-        const dueDate: JSX.Element = item.dueDate ? <Text>{item.dueDate.toLocaleDateString()}</Text> : <Text styles={textFieldStyles}>xxxx</Text>;
+        const emptyNamePlaceholder = 'xxxx';
+        const statusIcon: JSX.Element = item.status === Status.Complete ? <FontIcon iconName="CheckMark" /> : <FontIcon iconName="CircleRing" />;
+        const name: JSX.Element = item.status === Status.Complete ? <Text styles={completedNameStyles}>{item.name}</Text> : <Text>{item.name}</Text>;
+        const dueDate: JSX.Element = item.dueDate ? (
+          <Text>{item.dueDate.toLocaleDateString()}</Text>
+        ) : (
+          <Text styles={emptyDueDateStyles}>{emptyNamePlaceholder}</Text>
+        );
 
         return (
           <div key={index}>
             <Stack horizontal>
               <Stack.Item>{statusIcon}</Stack.Item>
               <Stack.Item align="stretch">
-                <div>{item.name}</div>
-                {dueDate}
+                <div>{name}</div>
+                <div>{dueDate}</div>
               </Stack.Item>
             </Stack>
             <hr />
