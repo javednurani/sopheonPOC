@@ -10,7 +10,6 @@ const Footer: React.FunctionComponent<IFooterProps> = ({ showFooter }: IFooterPr
   const footerStyle: React.CSSProperties = {
     borderTop: '1px solid',
     padding: '10px',
-    textAlign: 'start',
   };
 
   const iconStyles: Partial<IIconStyles> = {

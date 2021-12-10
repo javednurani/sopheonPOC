@@ -1,13 +1,12 @@
-import { mergeStyleSets, Modal } from '@fluentui/react';
+import { FontIcon, ITextFieldStyles, mergeStyles, mergeStyleSets, Modal, Stack } from '@fluentui/react';
 import { Text } from '@fluentui/react/lib/Text';
 import { useBoolean } from '@fluentui/react-hooks';
-import { FontIcon, mergeStyles, Stack } from 'office-ui-fabric-react';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
 import AddTask from './AddTask';
 import { UpdateProductAction } from './product/productReducer';
-import { Product, UpdateProductModel } from './types';
+import { Product, Status, UpdateProductModel } from './types';
 
 export interface IToDoListProps {
   updateProduct: (product: UpdateProductModel) => UpdateProductAction;
@@ -21,10 +20,6 @@ const mainDivStyle: React.CSSProperties = {
   marginLeft: '48px',
   marginRight: '48px',
   marginTop: '35px',
-};
-
-const headingLeftStyle: React.CSSProperties = {
-  textAlign: 'left',
 };
 
 const contentDivStyle: React.CSSProperties = {
@@ -54,14 +49,80 @@ const addIconStyle: React.CSSProperties = {
   cursor: 'pointer',
 };
 
+const completeIconStyle: React.CSSProperties = {
+  cursor: 'pointer',
+};
+
+const emptyDueDateStyles: Partial<ITextFieldStyles> = {
+  root: {
+    color: 'red',
+  },
+};
+
+const completedNameStyles: Partial<ITextFieldStyles> = {
+  root: {
+    textDecoration: 'line-through',
+  },
+};
+
 const ToDoList: React.FunctionComponent<IToDoListProps> = ({ updateProduct, environmentKey, accessToken, products }: IToDoListProps) => {
   const { formatMessage } = useIntl();
   const [isTaskModalOpen, { setTrue: showTaskModal, setFalse: hideTaskModal }] = useBoolean(false);
+  const { todos } = products[0];
+
+  const emptyListContent: JSX.Element = (
+    <div style={contentDivStyle}>
+      <Text variant="xLarge">
+        {formatMessage({ id: 'toDo.empty1' })}
+        <FontIcon iconName="CirclePlus" />
+        {formatMessage({ id: 'toDo.empty2' })}
+      </Text>
+    </div>
+  );
+
+  // TODO: convert date UTC->local
+  const populatedListContent: JSX.Element = (
+    <div>
+      {todos.map((item, index) => {
+        const emptyNamePlaceholder = 'xxxx';
+        const statusIcon: JSX.Element = (
+          <FontIcon
+            iconName={item.status === Status.Complete ? 'CheckMark' : 'CircleRing'}
+            style={completeIconStyle}
+            onClick={e => {
+              alert('Status button clicked!');
+            }}
+          />
+        );
+        const name: JSX.Element = item.status === Status.Complete ? <Text styles={completedNameStyles}>{item.name}</Text> : <Text>{item.name}</Text>;
+        const dueDate: JSX.Element = item.dueDate ? (
+          <Text>{item.dueDate.toLocaleDateString()}</Text>
+        ) : (
+          <Text styles={emptyDueDateStyles}>{emptyNamePlaceholder}</Text>
+        );
+
+        return (
+          <div key={index}>
+            <Stack horizontal>
+              <Stack.Item>{statusIcon}</Stack.Item>
+              <Stack.Item align="stretch">
+                <div>{name}</div>
+                <div>{dueDate}</div>
+              </Stack.Item>
+            </Stack>
+            <hr />
+          </div>
+        );
+      })}
+    </div>
+  );
+
+  const toDoListContent: JSX.Element = todos.length === 0 ? emptyListContent : populatedListContent;
 
   return (
     <div style={mainDivStyle}>
       <Stack horizontal>
-        <Stack.Item grow style={headingLeftStyle}>
+        <Stack.Item grow>
           <Text variant="xxLarge">{formatMessage({ id: 'toDo.title' })}</Text>
           <Text variant="xLarge">
             <FontIcon style={addIconStyle} onClick={showTaskModal} iconName="CirclePlus" className={iconClass} />
@@ -75,13 +136,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({ updateProduct, envi
         </Stack.Item>
       </Stack>
       <hr />
-      <div style={contentDivStyle}>
-        <Text variant="xLarge">
-          {formatMessage({ id: 'toDo.empty1' })}
-          <FontIcon iconName="CirclePlus" />
-          {formatMessage({ id: 'toDo.empty2' })}
-        </Text>
-      </div>
+      {toDoListContent}
       <Modal
         titleAriaId="TaskModal"
         isOpen={isTaskModalOpen}
