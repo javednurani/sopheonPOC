@@ -49,6 +49,10 @@ const addIconStyle: React.CSSProperties = {
   cursor: 'pointer',
 };
 
+const completeIconStyle: React.CSSProperties = {
+  cursor: 'pointer',
+};
+
 const emptyDueDateStyles: Partial<ITextFieldStyles> = {
   root: {
     color: 'red',
@@ -81,7 +85,15 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({ updateProduct, envi
     <div>
       {todos.map((item, index) => {
         const emptyNamePlaceholder = 'xxxx';
-        const statusIcon: JSX.Element = item.status === Status.Complete ? <FontIcon iconName="CheckMark" /> : <FontIcon iconName="CircleRing" />;
+        const statusIcon: JSX.Element = (
+          <FontIcon
+            iconName={item.status === Status.Complete ? 'CheckMark' : 'CircleRing'}
+            style={completeIconStyle}
+            onClick={e => {
+              alert('Status button clicked!');
+            }}
+          />
+        );
         const name: JSX.Element = item.status === Status.Complete ? <Text styles={completedNameStyles}>{item.name}</Text> : <Text>{item.name}</Text>;
         const dueDate: JSX.Element = item.dueDate ? (
           <Text>{item.dueDate.toLocaleDateString()}</Text>
