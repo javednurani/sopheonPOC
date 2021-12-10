@@ -10,6 +10,9 @@ import {
   IDropdownOption,
   IDropdownStyles,
   IIconProps,
+  IStackItemStyles,
+  IStackStyles,
+  IStackTokens,
   mergeStyleSets,
   PrimaryButton,
   Stack,
@@ -84,8 +87,6 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
     root: {
       color: theme.palette.neutralPrimary,
       marginLeft: 'auto',
-      marginTop: '4px',
-      marginRight: '2px',
     },
     rootHovered: {
       color: theme.palette.neutralDark,
@@ -161,8 +162,8 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
 
   const datePickerClass = mergeStyleSets({
     control: {
-      margin: '10px 0 15px 0',
-      maxWidth: '300px',
+      margin: '0px 0 15px 0',
+      width: '300px',
     },
   });
 
@@ -251,6 +252,43 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
     setSelectedItemStatusDropdown(item);
   };
 
+  const stackStyles: IStackStyles = {
+    root: {
+      height: '100%',
+      width: '100%',
+    },
+  };
+
+  const mainStackTokens: IStackTokens = {
+    childrenGap: 5,
+  };
+
+  const nestedStackTokens: IStackTokens = {
+    childrenGap: 10,
+  };
+
+  const wideLeftStackItemStyles: IStackItemStyles = {
+    root: {
+      justifyContent: 'left',
+      width: '66%',
+      padding: '0px 30px 0px 0px',
+    },
+  };
+
+  const fullWidthControlStyle: React.CSSProperties = {
+    width: '100%',
+  };
+
+  const saveButtonStyle: React.CSSProperties = {
+    marginRight: '10px',
+  };
+
+  const controlButtonStackItemStyles: IStackItemStyles = {
+    root: {
+      margin: '30px 0px 0px 0px',
+    },
+  };
+
   return (
     <>
       <div className={contentStyles.header}>
@@ -258,54 +296,73 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
         <IconButton styles={iconButtonStyles} iconProps={cancelIcon} ariaLabel={formatMessage({ id: 'closemodal' })} onClick={hideModal} />
       </div>
       <div className={contentStyles.body}>
-        <Stack>
+        <Stack styles={stackStyles} tokens={mainStackTokens}>
           <Stack.Item>
-            <TextField
-              placeholder={formatMessage({ id: 'toDo.tasknameplaceholder' })}
-              onChange={handleTaskNameChange}
-              required
-              label={formatMessage({ id: 'name' })}
-              // TODO 1693 - possible taskName.errorMessage display pattern, remove if unneeded
-              onGetErrorMessage={value => (taskNameDirty && !value ? formatMessage({ id: 'fieldisrequired' }) : undefined)}
-            />
+            <Stack horizontal styles={stackStyles} tokens={nestedStackTokens}>
+              <Stack.Item styles={wideLeftStackItemStyles}>
+                <TextField
+                  style={fullWidthControlStyle}
+                  placeholder={formatMessage({ id: 'toDo.tasknameplaceholder' })}
+                  onChange={handleTaskNameChange}
+                  required
+                  label={formatMessage({ id: 'name' })}
+                  // TODO 1693 - possible taskName.errorMessage display pattern, remove if unneeded
+                  onGetErrorMessage={value => (taskNameDirty && !value ? formatMessage({ id: 'fieldisrequired' }) : undefined)}
+                />
+              </Stack.Item>
+              <Stack.Item>
+                <DatePicker
+                  value={taskDueDate.date}
+                  className={datePickerClass.control}
+                  firstDayOfWeek={firstDayOfWeek}
+                  placeholder={formatMessage({ id: 'calendar.selectadate' })}
+                  ariaLabel={formatMessage({ id: 'calendar.selectadate' })}
+                  // DatePicker uses English strings by default. For localized apps, you must override this prop.
+                  strings={datePickerStrings}
+                  label={formatMessage({ id: 'toDo.duedate' })}
+                  onSelectDate={handleTaskDueDateChange}
+                  formatDate={(date: Date | undefined): string => `${date?.getMonth()}/${date?.getDate()}/${date?.getFullYear()}`}
+                />
+              </Stack.Item>
+            </Stack>
           </Stack.Item>
           <Stack.Item>
-            <TextField
-              placeholder={formatMessage({ id: 'toDo.tasknotesplaceholder' })}
-              onChange={handleTaskNotesChange}
-              multiline
-              resizable={false}
-              label={formatMessage({ id: 'toDo.notes' })}
-            />
+            <Stack horizontal styles={stackStyles} tokens={nestedStackTokens}>
+              <Stack.Item styles={wideLeftStackItemStyles}>
+                <TextField
+                  placeholder={formatMessage({ id: 'toDo.tasknotesplaceholder' })}
+                  onChange={handleTaskNotesChange}
+                  multiline
+                  rows={15}
+                  resizable={false}
+                  label={formatMessage({ id: 'toDo.notes' })}
+                />
+              </Stack.Item>
+              <Stack.Item>
+                <Dropdown
+                  label={formatMessage({ id: 'status' })}
+                  selectedKey={selectedItemStatusDropdown ? selectedItemStatusDropdown.key : Status.NotStarted}
+                  // eslint-disable-next-line react/jsx-no-bind
+                  onChange={handleStatusDropdownChange}
+                  placeholder={formatMessage({ id: 'toDo.selectastatus' })}
+                  options={statusDropdownOptions}
+                  styles={statusDropdownStyles}
+                />
+              </Stack.Item>
+            </Stack>
           </Stack.Item>
           <Stack.Item>
-            <DatePicker
-              value={taskDueDate.date}
-              className={datePickerClass.control}
-              firstDayOfWeek={firstDayOfWeek}
-              placeholder={formatMessage({ id: 'calendar.selectadate' })}
-              ariaLabel={formatMessage({ id: 'calendar.selectadate' })}
-              // DatePicker uses English strings by default. For localized apps, you must override this prop.
-              strings={datePickerStrings}
-              label={formatMessage({ id: 'toDo.duedate' })}
-              onSelectDate={handleTaskDueDateChange}
-              formatDate={(date: Date | undefined): string => `${date?.getMonth()}/${date?.getDate()}/${date?.getFullYear()}`}
-            />
-          </Stack.Item>
-          <Stack.Item>
-            <Dropdown
-              label={formatMessage({ id: 'status' })}
-              selectedKey={selectedItemStatusDropdown ? selectedItemStatusDropdown.key : Status.NotStarted}
-              // eslint-disable-next-line react/jsx-no-bind
-              onChange={handleStatusDropdownChange}
-              placeholder={formatMessage({ id: 'toDo.selectastatus' })}
-              options={statusDropdownOptions}
-              styles={statusDropdownStyles}
-            />
-          </Stack.Item>
-          <Stack.Item>
-            <PrimaryButton text={formatMessage({ id: 'save' })} onClick={handleSaveButtonClick} disabled={saveButtonDisabled} />
-            <DefaultButton text={formatMessage({ id: 'cancel' })} onClick={handleCancelButtonClick} />
+            <Stack horizontal styles={stackStyles} tokens={nestedStackTokens}>
+              <Stack.Item styles={controlButtonStackItemStyles}>
+                <PrimaryButton
+                  style={saveButtonStyle}
+                  text={formatMessage({ id: 'save' })}
+                  onClick={handleSaveButtonClick}
+                  disabled={saveButtonDisabled}
+                />
+                <DefaultButton text={formatMessage({ id: 'cancel' })} onClick={handleCancelButtonClick} />
+              </Stack.Item>
+            </Stack>
           </Stack.Item>
         </Stack>
       </div>
