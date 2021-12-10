@@ -1,6 +1,6 @@
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 
-import { Attributes, Product } from '../types';
+import { Attributes, Product, ProductItemTypes, ToDoItem } from '../types';
 // eslint-disable-next-line max-len
 import {
   CreateProductAction,
@@ -23,18 +23,32 @@ export function* watchOnGetProducts(): Generator {
   yield takeEvery(ProductSagaActionTypes.GET_PRODUCTS, onGetProducts);
 }
 
+const productItemsToTasksHelper = (productItems: unknown[]): ToDoItem[] => {
+  const todos = productItems.filter(pi => pi.productItemTypeId === ProductItemTypes.TASK);
+
+  const typedTodos: ToDoItem[] = todos.map(td => ({
+    name: td.name,
+    notes: td.stringAttributeValues.filter(sav => sav.attributeId === Attributes.NOTES)[0].value,
+    dueDate: new Date(td.utcDateTimeAttributeValues.filter(dtav => dtav.attributeId === Attributes.DUEDATE)[0].value),
+    status: td.enumCollectionAttributeValues.filter(ecav => ecav.attributeId === Attributes.STATUS)[0].value[0].enumAttributeOptionId,
+  }));
+
+  return typedTodos;
+};
+
 export function* onGetProducts(action: GetProductsAction): Generator {
   try {
     yield put(getProductsRequest());
     const { data } = yield call(getProducts, action.payload);
 
-    const transformedProductsData = data.map(d => ({
+    const transformedProductsData: Product[] = data.map(d => ({
       id: d.id,
       key: d.key,
       name: d.name,
       industries: d.int32AttributeValues.filter(iav => iav.attributeId === Attributes.INDUSTRIES).map(iav => iav.value),
       kpis: d.keyPerformanceIndicators,
-      goals: d.goals
+      goals: d.goals,
+      todos: productItemsToTasksHelper(d.items)
     }));
     yield put(getProductsSuccess(transformedProductsData));
   } catch (error) {
@@ -56,8 +70,9 @@ export function* onCreateProduct(action: CreateProductAction): Generator {
       key: data.key,
       name: data.name,
       industries: data.int32AttributeValues.filter(iav => iav.attributeId === Attributes.INDUSTRIES).map(iav => iav.value),
-      goals: [],
-      kpis: [],
+      goals: data.goals,
+      kpis: data.keyPerformanceIndicators,
+      todos: productItemsToTasksHelper(data.items)
     };
 
     yield put(createProductSuccess(createdProduct));
@@ -81,7 +96,8 @@ export function* onUpdateProduct(action: UpdateProductAction): Generator {
       name: data.name,
       industries: data.int32AttributeValues.filter(iav => iav.attributeId === Attributes.INDUSTRIES).map(iav => iav.value),
       kpis: data.keyPerformanceIndicators,
-      goals: data.goals
+      goals: data.goals,
+      todos: productItemsToTasksHelper(data.items)
     };
 
 
