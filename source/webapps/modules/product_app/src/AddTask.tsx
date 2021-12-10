@@ -321,7 +321,7 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
                   strings={datePickerStrings}
                   label={formatMessage({ id: 'toDo.duedate' })}
                   onSelectDate={handleTaskDueDateChange}
-                  formatDate={(date: Date | undefined): string => `${date?.getMonth()}/${date?.getDate()}/${date?.getFullYear()}`}
+                  formatDate={(date: Date | undefined): string => `${date ? date.getMonth() + 1 : ''}/${date?.getDate()}/${date?.getFullYear()}`}
                 />
               </Stack.Item>
             </Stack>
