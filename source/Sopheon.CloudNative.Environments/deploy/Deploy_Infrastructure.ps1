@@ -2,6 +2,13 @@
 Param(
     [Parameter(Mandatory = $false)][string]$Environment = $env:Environment
 )
+
+function Test-LastExitCode() {
+    if ($LASTEXITCODE -ne 0) {
+        throw "Last Exit Code was not 0 but instead: $($LASTEXITCODE)";
+    }
+}
+
 # Deploy Azure Resources for release definitions to talk to
 $azureKeyVault = "Cloud-DevOps";
 if ($env:AzureEnvironment -eq "Prod") {
@@ -38,6 +45,7 @@ Set-Content -Value $masterTemplateContent -Path $MasterTemplate;
 Write-Host "Complete!";
 
 & "$($env:System_DefaultWorkingDirectory)\_TokenConfigurationManagement\TokenConfigManagement\TokenReplacer.exe" replace -c _StratusEnvironmentManagement\EnvironmentManagement\Environments_Configuration.json -f "$PSScriptRoot\*"  -e $Environment
+Test-LastExitCode;
 
 Write-Host "Deploying Storage Account Template to Resource Group: $($ResourceGroupValue)";
 # Creates a deployment for the given resource group and template.json
@@ -51,6 +59,7 @@ if('false' -eq $GroupExists)
 
 Write-Host "Deploying Master Template...";
 $MasterTemplateDeploy = az deployment group create --resource-group $ResourceGroupValue --template-file $MasterTemplate --name "$($DeploymentName)-MasterDeploy-EnvironmentManagement" --query "properties.provisioningState";
+Test-LastExitCode;
 Write-Host "Master Template Deployment: $($MasterTemplateDeploy)";
 
 $environmentManagementConnectionString = (az sql db show-connection-string --client ado.net --server "$($ResourceGroupValue.ToLower())" --name $EnvironmentManagementSQLServerDatabaseName).Replace('"', '');
@@ -58,3 +67,4 @@ $environmentManagementConnectionString = (az sql db show-connection-string --cli
 $environmentManagementConnectionString = $environmentManagementConnectionString.Replace('<username>', 'sopheon').Replace('<password>', $SqlAdminEnigma);
 
 $connectionString = az webapp config connection-string set --resource-group $ResourceGroupValue --name $ResourceGroupValue.ToLower() -t SQLServer --settings EnvironmentsSqlConnectionString=$environmentManagementConnectionString;
+Test-LastExitCode;
