@@ -47,8 +47,8 @@ export interface Product {
 
 export interface ToDoItem {
   name: string;
-  notes?: string;
-  dueDate?: Date;
+  notes: string | null;
+  dueDate: Date | null;
   status: Status;
 }
 

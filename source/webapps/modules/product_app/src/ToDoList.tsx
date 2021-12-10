@@ -1,4 +1,4 @@
-import { FontIcon, mergeStyles, mergeStyleSets, Modal, Stack } from '@fluentui/react';
+import { FontIcon, ITextFieldStyles, mergeStyles, mergeStyleSets, Modal, Stack } from '@fluentui/react';
 import { Text } from '@fluentui/react/lib/Text';
 import { useBoolean } from '@fluentui/react-hooks';
 import React from 'react';
@@ -49,6 +49,12 @@ const addIconStyle: React.CSSProperties = {
   cursor: 'pointer',
 };
 
+const textFieldStyles: Partial<ITextFieldStyles> = {
+  root: {
+    color: 'red',
+  },
+};
+
 const ToDoList: React.FunctionComponent<IToDoListProps> = ({ updateProduct, environmentKey, accessToken, products }: IToDoListProps) => {
   const { formatMessage } = useIntl();
   const [isTaskModalOpen, { setTrue: showTaskModal, setFalse: hideTaskModal }] = useBoolean(false);
@@ -68,8 +74,8 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({ updateProduct, envi
   const populatedListContent: JSX.Element = (
     <div>
       {todos.map((item, index) => {
-        const dueDateDisplay: string = item.dueDate ? item.dueDate.toLocaleDateString() : 'xxxx';
         const statusIcon = item.status === Status.Complete ? <FontIcon iconName="CheckMark" /> : <FontIcon iconName="CircleRing" />;
+        const dueDate: JSX.Element = item.dueDate ? <Text>{item.dueDate.toLocaleDateString()}</Text> : <Text styles={textFieldStyles}>xxxx</Text>;
 
         return (
           <div key={index}>
@@ -77,7 +83,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({ updateProduct, envi
               <Stack.Item>{statusIcon}</Stack.Item>
               <Stack.Item align="stretch">
                 <div>{item.name}</div>
-                <div>Due {dueDateDisplay}</div>
+                {dueDate}
               </Stack.Item>
             </Stack>
             <hr />
