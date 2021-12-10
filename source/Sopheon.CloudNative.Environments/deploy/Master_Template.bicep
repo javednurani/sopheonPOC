@@ -52,7 +52,7 @@ module EnvironmentManagementSqlServerTenantTemplateDatabase 'SQLServer_Database_
   params: {
     location: location
     administratorLoginEngima: sqlServer_Enigma
-    serverName: environmentManagement_sqlServer_name
+    serverName: EnvironmentManagementSqlServer.outputs.sqlServerName
     sqlDBName: 'TenantEnvironmentTemplate'
     administratorLogin: administratorLogin
   }
