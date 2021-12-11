@@ -24,7 +24,7 @@ az sql server firewall-rule delete --name DeployMachine --resource-group $Resour
 az functionapp deployment source config-zip --name "$($ResourceGroup.ToLower())-environment" --resource-group $ResourceGroup --src "_StratusEnvironmentManagement\EnvironmentManagement\EnvironmentManagement.zip";
 
 #upload function app
-az functionapp deployment source config-zip --name "$($ResourceGroup.ToLower())-resource" --resource-group $ResourceGroup --src "_StratusEnvironmentManagement\ResourceManagement\ResourceManagement.zip";
+az functionapp deployment source config-zip --name "$($ResourceGroup.ToLower())-resource" --resource-group $ResourceGroup --src "_StratusEnvironmentManagement\EnvironmentManagement\ResourceManagement.zip";
 
 
 az bicep build --file "$($PSScriptRoot)\ElasticPool_Database_Buffer.bicep";
