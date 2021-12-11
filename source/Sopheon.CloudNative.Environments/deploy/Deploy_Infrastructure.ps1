@@ -22,15 +22,18 @@ $DeploymentName = "ADO-Deployment";
 $ResourceGroupValue = "Stratus-$($Environment)";
 
 #Token values
-$EnvironmentFunctionAppName = $ResourceGroupValue.ToLower();
-$EnvironmentFunctionAppStorageAccountName = "stratus$($Environment.ToLower())envfuncapp"
+$EnvironmentFunctionAppName = "$($ResourceGroupValue.ToLower())-environment";
+$FunctionAppStorageAccountName = "stratus$($Environment.ToLower())funcapp"
 $AppInsightsName = $ResourceGroupValue;
 $EnvironmentSQLServerName = $ResourceGroupValue;
 $ElasticJobAgentSQLServerName = "$($ResourceGroupValue)-JobAgent";
 $TenantSQLServerName = "$($ResourceGroupValue)-TenantEnvironments";
 $EnvironmentManagementSQLServerDatabaseName = "EnvironmentManagement";
 $ElasticJobAgentSQLServerDatabaseName = "JobAgent";
-$WebServerFarmName = "ASP-$($ResourceGroupValue)";
+$WebServerFarmName = "ASP-$($ResourceGroupValue)-Environment";
+
+$ResourceFunctionAppName = "$($ResourceGroupValue.ToLower())-resource";
+$ResourceWebServerFarmName = "ASP-$($ResourceGroupValue)-Resource";
 
 $MasterTemplate = "$($PSScriptRoot)\Master_Template.bicep";
 
@@ -39,8 +42,9 @@ $masterTemplateContent = Get-Content $MasterTemplate -raw;
 $masterTemplateContent = $masterTemplateContent.Replace('^EnvironmentManagementSQLServerName^', $EnvironmentSQLServerName).Replace('^EnvironmentManagementSQLServerDatabaseName^', $EnvironmentManagementSQLServerDatabaseName);
 $masterTemplateContent = $masterTemplateContent.Replace('^ElasticJobAgentSQLServerName^', $ElasticJobAgentSQLServerName).Replace('^ElasticJobAgentSQLServerDatabaseName^', $ElasticJobAgentSQLServerDatabaseName);
 $masterTemplateContent = $masterTemplateContent.Replace('^EnvironmentFunctionAppName^', $EnvironmentFunctionAppName).Replace('^TenantSQLServerName^', $TenantSQLServerName);
-$masterTemplateContent = $masterTemplateContent.Replace('^AppInsightsName^', $AppInsightsName).Replace('^EnvironmentFunctionStorageAccountName^', $EnvironmentFunctionAppStorageAccountName);
-$masterTemplateContent = $masterTemplateContent.Replace('^SqlAdminEngima^', $SqlAdminEnigma).Replace('^WebServerFarmName^', $WebServerFarmName);
+$masterTemplateContent = $masterTemplateContent.Replace('^AppInsightsName^', $AppInsightsName).Replace('^FunctionStorageAccountName^', $FunctionAppStorageAccountName);
+$masterTemplateContent = $masterTemplateContent.Replace('^SqlAdminEngima^', $SqlAdminEnigma).Replace('^EnvironmentWebServerFarmName^', $WebServerFarmName);
+$masterTemplateContent = $masterTemplateContent.Replace('^ResourceWebServerFarmName^', $ResourceWebServerFarmName).Replace('^ResourceManagementFunctionAppName^', $ResourceFunctionAppName);
 Set-Content -Value $masterTemplateContent -Path $MasterTemplate;
 Write-Host "Complete!";
 
@@ -62,9 +66,9 @@ $MasterTemplateDeploy = az deployment group create --resource-group $ResourceGro
 Test-LastExitCode;
 Write-Host "Master Template Deployment: $($MasterTemplateDeploy)";
 
-$environmentManagementConnectionString = (az sql db show-connection-string --client ado.net --server "$($ResourceGroupValue.ToLower())" --name $EnvironmentManagementSQLServerDatabaseName).Replace('"', '');
+$environmentManagementConnectionString = (az sql db show-connection-string --client ado.net --server "$($EnvironmentSQLServerName.ToLower())" --name $EnvironmentManagementSQLServerDatabaseName).Replace('"', '');
 
 $environmentManagementConnectionString = $environmentManagementConnectionString.Replace('<username>', 'sopheon').Replace('<password>', $SqlAdminEnigma);
 
-$connectionString = az webapp config connection-string set --resource-group $ResourceGroupValue --name $ResourceGroupValue.ToLower() -t SQLServer --settings EnvironmentsSqlConnectionString=$environmentManagementConnectionString;
-Test-LastExitCode;
+$connectionString = az webapp config connection-string set --resource-group $ResourceGroupValue --name $EnvironmentFunctionAppName -t SQLServer --settings EnvironmentsSqlConnectionString=$environmentManagementConnectionString;
+$connectionString = az webapp config connection-string set --resource-group $ResourceGroupValue --name $ResourceFunctionAppName -t SQLServer --settings EnvironmentsSqlConnectionString=$environmentManagementConnectionString;

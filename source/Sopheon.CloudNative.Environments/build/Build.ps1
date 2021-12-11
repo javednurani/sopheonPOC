@@ -80,18 +80,22 @@ Foreach($file in $TestProjects) {
 #     $Process.Kill();
 # }
 
-# Write-Host "...Running dotnet publish on Functions.csproj";
-# dotnet publish "Sopheon.CloudNative.Environments.DurableFunctions\Sopheon.CloudNative.Environments.DurableFunctions.csproj" -c Release -o ".\PublishOutput\";
-# Check-LastExitCode;
+Write-Host "...Running dotnet publish on Functions.csproj";
+dotnet publish "Sopheon.CloudNative.Environments.DurableFunctions\Sopheon.CloudNative.Environments.DurableFunctions.csproj" -c Release -o ".\ResourcePublishOutput\";
+Check-LastExitCode;
 
 #All migrations and tests are done...let's publish it!
 Write-Host "...Running dotnet publish on Functions.csproj";
-dotnet publish "Sopheon.CloudNative.Environments.Functions\Sopheon.CloudNative.Environments.Functions.csproj" -c Release -o ".\PublishOutput\";
+dotnet publish "Sopheon.CloudNative.Environments.Functions\Sopheon.CloudNative.Environments.Functions.csproj" -c Release -o ".\EnvironmentPublishOutput\";
 Check-LastExitCode;
 
 # Zip/Archive Scripts 
 Write-Host "Zipping Artfacts for Environment Management...";
-& $ZipUtil "a" "-tzip" "$($env:Build_ArtifactStagingDirectory)\EnvironmentManagement" ".\PublishOutput\*" "-xr!build" "-xr!deploy";
+& $ZipUtil "a" "-tzip" "$($env:Build_ArtifactStagingDirectory)\EnvironmentManagement" ".\EnvironmentPublishOutput\*" "-xr!build" "-xr!deploy";
+Check-LastExitCode;
+
+Write-Host "Zipping Artfacts for Resource Management...";
+& $ZipUtil "a" "-tzip" "$($env:Build_ArtifactStagingDirectory)\ResourceManagement" ".\ResourcePublishOutput\*" "-xr!build" "-xr!deploy";
 Check-LastExitCode;
 
 Write-Host "Zipping Complete!";
