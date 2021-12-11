@@ -167,7 +167,9 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
                 return new Domain.Models.Resource
                 {
                    DomainResourceTypeId = (int)Domain.Enums.ResourceTypes.AzureSqlDb,
-                   Uri = $"Server=tcp:{list[0].ToLower()}.database.windows.net,1433;Database={list[1].ToLower()};Encrypt=true;Connection Timeout=30;"
+                   Uri = $"Server=tcp:{list[0].ToLower()}.database.windows.net,1433;Database={list[1].ToLower()};Encrypt=true;Connection Timeout=30;",
+                   Name = list[1].ToLower(),
+                   IsAssigned = false
                 };
              })
              .ToList();
@@ -197,7 +199,9 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
                 return new Domain.Models.Resource 
                 {
                    DomainResourceTypeId = (int)Domain.Enums.ResourceTypes.TenantAzureSqlServer,
-                   Uri = $"{list[0].ToLower()}.database.windows.net"
+                   Uri = $"{list[0].ToLower()}.database.windows.net",
+                   Name = list[0].ToLower(),
+                   IsAssigned = true
                 };
              })
              .ToList();

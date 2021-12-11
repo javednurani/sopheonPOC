@@ -186,7 +186,7 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
          if (!existingInstancesQueryResult)
          {
             // An instance with the specified ID prefix doesn't exist or an existing one stopped running, create one.
-            var instanceId = await starter.StartNewAsync<string>(functionName, $"{functionName}_{Guid.NewGuid()}");
+            var instanceId = await starter.StartNewAsync<string>(functionName, $"{functionName}_{Guid.NewGuid()}", null);
             log.LogInformation($"Started orchestration with ID = '{instanceId}'.");
             return starter.CreateCheckStatusResponse(req, instanceId);
          }

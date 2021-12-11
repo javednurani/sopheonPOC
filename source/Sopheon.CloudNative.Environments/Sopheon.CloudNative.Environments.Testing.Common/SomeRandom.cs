@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using Sopheon.CloudNative.Environments.Domain.Models;
 
 [assembly: ExcludeFromCodeCoverage]
 namespace Sopheon.CloudNative.Environments.Testing.Common
@@ -57,6 +58,16 @@ namespace Sopheon.CloudNative.Environments.Testing.Common
          Array enumValues = System.Enum.GetValues(typeof(T));
          int index = _random.Next(enumValues.Length);
          return (T)enumValues.GetValue(index);
+      }
+
+      public Resource Resource()
+      {
+         return new Resource
+         {
+            Uri = String(),
+            Name = String(),
+            IsAssigned = false
+         };
       }
    }
 }
