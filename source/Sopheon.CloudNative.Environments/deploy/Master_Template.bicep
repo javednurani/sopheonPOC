@@ -34,6 +34,18 @@ param administratorLogin string = 'sopheon'
 @description('The location of where to deploy the resource')
 param location string = resourceGroup().location
 
+@description('Name of the WebServer Farm being used')
+param webServerFarm_Named string = '^WebServerFarmNamed^'
+
+@description('The name of the Environment Function App')
+param environmentFunctionApp_Named string = '^EnvironmentFunctionAppNamed^'
+
+@description('The name of the Environment Management Function App Storage Account')
+param environmentFunctionAppStorage_named string = '^EnvironmentFunctionStorageAccountNamed^'
+
+@description('The name of the AppInsights instance')
+param appInsightsNamed string = '^AppInsightsNamed^'
+
 // Environment Management SQL Server module
 module EnvironmentManagementSqlServer 'SQLServer_Database_Template.bicep' = {
   name: 'EnvironmentMangement-Sql-Server-Deployment'
@@ -52,8 +64,8 @@ module EnvironmentManagementSqlServerTenantTemplateDatabase 'SQLServer_Database_
   params: {
     location: location
     administratorLoginEngima: sqlServer_Enigma
-    serverName: environmentManagement_sqlServer_name
-    sqlDBName: 'TenantEnvironmentTemplate'
+    serverName: EnvironmentManagementSqlServer.outputs.sqlServerName
+    sqlDBName: 'TenantEnvironmentTemplate' 
     administratorLogin: administratorLogin
   }
 }
@@ -94,3 +106,14 @@ module EnvironmentFunction 'Environments_Function_App.bicep' = {
   }
 }
 
+module EnvironmentFunctiond 'Environments_Function_App.bicep' = {
+  name: 'Function-App-Deploymentd'
+  params: {
+    location: location
+    storageAccountName: environmentFunctionAppStorage_named
+    appInsightsName: appInsightsNamed
+    functionAppName: environmentFunctionApp_Named
+    webServerFarm_Name: webServerFarm_Named
+    sqlServer_Name: toLower(EnvironmentManagementSqlServer.name)
+  }
+}

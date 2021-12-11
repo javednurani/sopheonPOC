@@ -21,9 +21,15 @@ $AppInsightsName = $ResourceGroupValue;
 $EnvironmentSQLServerName = $ResourceGroupValue;
 $ElasticJobAgentSQLServerName = "$($ResourceGroupValue)-JobAgent";
 $TenantSQLServerName = "$($ResourceGroupValue)-TenantEnvironments";
+$TenantSQLServerNamed = "$($ResourceGroupValue)-TenantEnvironments" + "d";
 $EnvironmentManagementSQLServerDatabaseName = "EnvironmentManagement";
 $ElasticJobAgentSQLServerDatabaseName = "JobAgent";
 $WebServerFarmName = "ASP-$($ResourceGroupValue)";
+
+$EnvironmentFunctionAppNamed = $ResourceGroupValue.ToLower() + "drbl";
+$EnvironmentFunctionAppStorageAccountNamed = "stratus$($Environment.ToLower())envfuncapp" +"drb";
+$AppInsightsNamed = $ResourceGroupValue + "drbl";
+$WebServerFarmNamed = "ASP-$($ResourceGroupValue)" + "drbl";
 
 $MasterTemplate = "$($PSScriptRoot)\Master_Template.bicep";
 
@@ -34,6 +40,9 @@ $masterTemplateContent = $masterTemplateContent.Replace('^ElasticJobAgentSQLServ
 $masterTemplateContent = $masterTemplateContent.Replace('^EnvironmentFunctionAppName^', $EnvironmentFunctionAppName).Replace('^TenantSQLServerName^', $TenantSQLServerName);
 $masterTemplateContent = $masterTemplateContent.Replace('^AppInsightsName^', $AppInsightsName).Replace('^EnvironmentFunctionStorageAccountName^', $EnvironmentFunctionAppStorageAccountName);
 $masterTemplateContent = $masterTemplateContent.Replace('^SqlAdminEngima^', $SqlAdminEnigma).Replace('^WebServerFarmName^', $WebServerFarmName);
+$masterTemplateContent = $masterTemplateContent.Replace('^SqlAdminEngimad^', $SqlAdminEnigmad).Replace('^WebServerFarmNamed^', $WebServerFarmNamed);
+$masterTemplateContent = $masterTemplateContent.Replace('^EnvironmentFunctionAppNamed^', $EnvironmentFunctionAppNamed).Replace('^TenantSQLServerNamed^', $TenantSQLServerNamed);
+$masterTemplateContent = $masterTemplateContent.Replace('^AppInsightsNamed^', $AppInsightsNamed).Replace('^EnvironmentFunctionStorageAccountNamed^', $EnvironmentFunctionAppStorageAccountNamed);
 Set-Content -Value $masterTemplateContent -Path $MasterTemplate;
 Write-Host "Complete!";
 
@@ -57,4 +66,4 @@ $environmentManagementConnectionString = (az sql db show-connection-string --cli
 
 $environmentManagementConnectionString = $environmentManagementConnectionString.Replace('<username>', 'sopheon').Replace('<password>', $SqlAdminEnigma);
 
-$connectionString = az webapp config connection-string set --resource-group $ResourceGroupValue --name $ResourceGroupValue.ToLower() -t SQLServer --settings EnvironmentsSqlConnectionString=$environmentManagementConnectionString;
+connectionString = az webapp config connection-string set --resource-group $ResourceGroupValue --name $ResourceGroupValue.ToLower() -t SQLServer --settings EnvironmentsSqlConnectionString=$environmentManagementConnectionString;
