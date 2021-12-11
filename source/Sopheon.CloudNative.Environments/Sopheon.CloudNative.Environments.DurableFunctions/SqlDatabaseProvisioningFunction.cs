@@ -34,7 +34,7 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
 
          if (currentUnallocatedSqlDatabaseCount < minimumBufferCapacity)
          {
-            log.LogInformation($"Unalloacted Database count was lower than 50. Actual count:{currentUnallocatedSqlDatabaseCount}");
+            log.LogInformation($"Unalloacted Database count was lower than {minimumBufferCapacity}. Actual count:{currentUnallocatedSqlDatabaseCount}");
 
             string deploymentName = await context.CallActivityAsync<string>(nameof(MaintainSqlDatabasePoolForOnboarding_DeployElasticPoolAndDatabases), targetResourceGroupName);
 
@@ -48,7 +48,7 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
             return outputs;
          }
 
-         log.LogInformation($"Unalloacted Database count was higher than 50. Actual count:{currentUnallocatedSqlDatabaseCount}");
+         log.LogInformation($"Unalloacted Database count was higher than {minimumBufferCapacity}. Actual count:{currentUnallocatedSqlDatabaseCount}");
 
          return outputs;
       }
