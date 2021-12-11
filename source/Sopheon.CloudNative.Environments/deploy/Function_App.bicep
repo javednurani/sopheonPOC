@@ -39,10 +39,13 @@ resource WebServerFarmForFunction 'Microsoft.Web/serverfarms@2021-01-15' = {
   kind: 'functionapp'
 }
 
-resource EnvironmentsFunctionApp 'Microsoft.Web/sites@2021-01-15' = {
+resource FunctionApp 'Microsoft.Web/sites@2021-01-15' = {
   location: location
   name: functionAppName
   kind: 'functionapp'
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {    
     serverFarmId: WebServerFarmForFunction.id
     siteConfig: {
@@ -108,3 +111,4 @@ resource EnvironmentsFunctionApp 'Microsoft.Web/sites@2021-01-15' = {
   }
 }
 
+output functionIdentity string = FunctionApp.identity.principalId
