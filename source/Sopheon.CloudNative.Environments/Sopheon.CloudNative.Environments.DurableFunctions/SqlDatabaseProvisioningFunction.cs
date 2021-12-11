@@ -8,7 +8,7 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
             ProvisioningState.Running
       };
 
-      private readonly List<string> InstancePrefixes = new List<string>() { nameof(RunSingle), nameof(RunTimer) };
+      private readonly List<string> InstancePrefixes = new List<string>() { nameof(RunSingle), nameof(RunTimer), nameof(MaintainSqlDatabasePoolForOnboarding) };
 
       private readonly EnvironmentContext _dbContext;
       private readonly Lazy<IAzure> _azureApi;
@@ -29,12 +29,12 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
          var outputs = new List<string>();
 
          int currentUnallocatedSqlDatabaseCount = await context.CallActivityAsync<int>(nameof(MaintainSqlDatabasePoolForOnboarding_GetUnallocatedDatabases), null);
-         string targetResourceGroupName = _configuration["TargetResourceGroupName"];
-         int minimumBufferCapacity = _configuration.GetValue<int>("MinimumBufferCapacity");
+         string targetResourceGroupName = _configuration["AzResourceGroupName"];
+         int minimumBufferCapacity = _configuration.GetValue<int>("DatabaseBufferCapacity");
 
          if (currentUnallocatedSqlDatabaseCount < minimumBufferCapacity)
          {
-            log.LogInformation($"Unalloacted Database count was lower than 50. Actual count:{currentUnallocatedSqlDatabaseCount}");
+            log.LogInformation($"Unalloacted Database count was lower than {minimumBufferCapacity}. Actual count:{currentUnallocatedSqlDatabaseCount}");
 
             string deploymentName = await context.CallActivityAsync<string>(nameof(MaintainSqlDatabasePoolForOnboarding_DeployElasticPoolAndDatabases), targetResourceGroupName);
 
@@ -48,7 +48,7 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
             return outputs;
          }
 
-         log.LogInformation($"Unalloacted Database count was higher than 50. Actual count:{currentUnallocatedSqlDatabaseCount}");
+         log.LogInformation($"Unalloacted Database count was higher than {minimumBufferCapacity}. Actual count:{currentUnallocatedSqlDatabaseCount}");
 
          return outputs;
       }
@@ -70,12 +70,16 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
       {
 
          string resourceGroupName = context.GetInput<string>();
-         string sqlServerName = _configuration["AzSqlServerName"];
+         string tenantSqlServerName = _configuration["AzTenantEnvironmentServer"];
          string adminLoginEnigma = _configuration["SqlServerAdminEnigma"]; // Pull admin enigma from app config (user secrets or key vault)
+         string envSqlServerName = _configuration["AzSqlServerName"];
+         string envSqlDatabaseName = "EnvironmentManagement";
 
          jsonTemplateData = jsonTemplateData
-            .Replace("^SqlServerName^", sqlServerName)
-            .Replace("^SqlAdminEngima^", adminLoginEnigma);
+            .Replace("^SqlServerName^", tenantSqlServerName)
+            .Replace("^SqlAdminEngima^", adminLoginEnigma)
+            .Replace("^EnvironmentManagementSQLServerName^", envSqlServerName)
+            .Replace("^EnvironmentManagementSQLServerDatabaseName^", envSqlDatabaseName);
 
          string deploymentName = $"{nameof(SqlDatabaseProvisioningFunction)}_Deployment_{DateTime.UtcNow:yyyyMMddTHHmmss}";
          log.LogInformation($"Creating new deployment: {deploymentName}");
@@ -188,7 +192,7 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
          if (!existingInstancesQueryResult)
          {
             // An instance with the specified ID prefix doesn't exist or an existing one stopped running, create one.
-            var instanceId = await starter.StartNewAsync<string>(functionName, $"{functionName}_{Guid.NewGuid()}");
+            var instanceId = await starter.StartNewAsync<string>(functionName, $"{functionName}_{Guid.NewGuid()}", null);
             log.LogInformation($"Started orchestration with ID = '{instanceId}'.");
             return starter.CreateCheckStatusResponse(req, instanceId);
          }
@@ -216,8 +220,13 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
          if (!existingInstancesQueryResult)
          {
             // An instance with the specified ID prefix doesn't exist or an existing one stopped running, create one.
-            var instanceId = await starter.StartNewAsync<string>(functionName, $"{functionName}_{Guid.NewGuid()}");
+            var instanceId = await starter.StartNewAsync<string>(functionName, $"{functionName}_{Guid.NewGuid()}", null);
             log.LogInformation($"Started orchestration with ID = '{instanceId}'.");
+         }
+         else
+         {
+            // An instance with the specified ID prefix exists or an existing one still running, don't create one.
+            log.LogInformation("An instance is already running under!");
          }
       }
       #endregion

@@ -28,8 +28,8 @@ resource SqlServer_SqlDBName 'Microsoft.Sql/servers/databases@2020-08-01-preview
   name: '${SqlServer.name}/${sqlDBName}'
   location: location
   sku: {
-    name: 'Basic'
-    tier: 'Basic'
+    name: 'Standard'
+    tier: 'Standard'
     capacity: 0
   }
 }
