@@ -29,7 +29,7 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
          var outputs = new List<string>();
 
          int currentUnallocatedSqlDatabaseCount = await context.CallActivityAsync<int>(nameof(MaintainSqlDatabasePoolForOnboarding_GetUnallocatedDatabases), null);
-         string targetResourceGroupName = _configuration["TargetResourceGroupName"];
+         string targetResourceGroupName = _configuration["AzResourceGroupName"];
          int minimumBufferCapacity = _configuration.GetValue<int>("DatabaseBufferCapacity");
 
          if (currentUnallocatedSqlDatabaseCount < minimumBufferCapacity)
