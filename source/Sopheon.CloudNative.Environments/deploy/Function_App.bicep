@@ -1,4 +1,3 @@
-
 param location string = resourceGroup().location
 
 @description('Name of the Azure Function App')
@@ -111,4 +110,35 @@ resource FunctionApp 'Microsoft.Web/sites@2021-01-15' = {
   }
 }
 
-output functionIdentity string = FunctionApp.identity.principalId
+resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' = {
+  name: resourceGroup().name
+  location: location
+  properties: {
+    enabledForDeployment: true
+    enabledForTemplateDeployment: true
+    enabledForDiskEncryption: true
+    tenantId: tenant().tenantId
+    accessPolicies: [
+      {
+        tenantId: tenant().tenantId
+        objectId: FunctionApp.identity.principalId
+        permissions: {
+          keys: [
+            'get'
+          ]
+          secrets: [
+            'list'
+            'get'
+          ]
+        }
+      }
+    ]
+    sku: {
+      name: 'standard'
+      family: 'A'
+    }
+  }
+}
+
+
+//output functionIdentity string = FunctionApp.identity.principalId

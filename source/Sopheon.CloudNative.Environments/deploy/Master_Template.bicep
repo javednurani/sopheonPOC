@@ -127,6 +127,5 @@ module EnvironmentFunctiond 'Function_App.bicep' = {
     webServerFarmName: resourceWebServerFarmName
     sqlServerName: toLower(EnvironmentManagementSqlServer.outputs.sqlServerName)
     tenantEnvironmentServer: toLower(TenantSqlServer.outputs.sqlServerName)
-
   }
 }
