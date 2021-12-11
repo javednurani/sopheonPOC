@@ -25,7 +25,7 @@ $EnvironmentManagementSQLServerDatabaseName = "EnvironmentManagement";
 $ElasticJobAgentSQLServerDatabaseName = "JobAgent";
 $WebServerFarmName = "ASP-$($ResourceGroupValue)-Environment";
 
-$ResourceFunctionAppName = "$($ResourceGroupValue)-resource";
+$ResourceFunctionAppName = "$($ResourceGroupValue.ToLower())-resource";
 $ResourceWebServerFarmName = "ASP-$($ResourceGroupValue)-Resource";
 
 $MasterTemplate = "$($PSScriptRoot)\Master_Template.bicep";
