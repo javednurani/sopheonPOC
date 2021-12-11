@@ -1,7 +1,7 @@
 #Adding blank comments to avoid bad artifact generation
 
 $ResourceGroup = "Stratus-$($env:Environment)";
-$FunctionAppStorageAccountName = "stratus$($env:Environment.ToLower())envfuncapp";
+$FunctionAppStorageAccountName = "stratus$($env:Environment.ToLower())funcapp";
 
 $azureKeyVault = "Cloud-DevOps";
 if ($env:AzureEnvironment -eq "Prod") {
@@ -21,7 +21,11 @@ Write-Host "Removing Firewall Rule";
 az sql server firewall-rule delete --name DeployMachine --resource-group $ResourceGroup --server $ResourceGroup.ToLower();
 
 #upload function app
-az functionapp deployment source config-zip --name $ResourceGroup.ToLower() --resource-group $ResourceGroup --src "_StratusEnvironmentManagement\EnvironmentManagement\EnvironmentManagement.zip";
+az functionapp deployment source config-zip --name "$($ResourceGroup.ToLower())-environment" --resource-group $ResourceGroup --src "_StratusEnvironmentManagement\EnvironmentManagement\EnvironmentManagement.zip";
+
+#upload function app
+az functionapp deployment source config-zip --name "$($ResourceGroup.ToLower())-resource" --resource-group $ResourceGroup --src "_StratusEnvironmentManagement\ResourceManagement\ResourceManagement.zip";
+
 
 az bicep build --file "$($PSScriptRoot)\ElasticPool_Database_Buffer.bicep";
 
