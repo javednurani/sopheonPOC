@@ -15,7 +15,7 @@ $DeploymentName = "ADO-Deployment";
 $ResourceGroupValue = "Stratus-$($Environment)";
 
 #Token values
-$EnvironmentFunctionAppName = "$($ResourceGroupValue.ToLower())-Environment";
+$EnvironmentFunctionAppName = "$($ResourceGroupValue.ToLower())-environment";
 $FunctionAppStorageAccountName = "stratus$($Environment.ToLower())funcapp"
 $AppInsightsName = $ResourceGroupValue;
 $EnvironmentSQLServerName = $ResourceGroupValue;
@@ -25,7 +25,7 @@ $EnvironmentManagementSQLServerDatabaseName = "EnvironmentManagement";
 $ElasticJobAgentSQLServerDatabaseName = "JobAgent";
 $WebServerFarmName = "ASP-$($ResourceGroupValue)-Environment";
 
-$ResourceFunctionAppName = "$($ResourceGroupValue)-Resource";
+$ResourceFunctionAppName = "$($ResourceGroupValue)-resource";
 $ResourceWebServerFarmName = "ASP-$($ResourceGroupValue)-Resource";
 
 $MasterTemplate = "$($PSScriptRoot)\Master_Template.bicep";
@@ -61,5 +61,5 @@ $environmentManagementConnectionString = (az sql db show-connection-string --cli
 
 $environmentManagementConnectionString = $environmentManagementConnectionString.Replace('<username>', 'sopheon').Replace('<password>', $SqlAdminEnigma);
 
-connectionString = az webapp config connection-string set --resource-group $ResourceGroupValue --name $EnvironmentFunctionAppName -t SQLServer --settings EnvironmentsSqlConnectionString=$environmentManagementConnectionString;
-connectionString = az webapp config connection-string set --resource-group $ResourceGroupValue --name $ResourceFunctionAppName -t SQLServer --settings EnvironmentsSqlConnectionString=$environmentManagementConnectionString;
+$connectionString = az webapp config connection-string set --resource-group $ResourceGroupValue --name $EnvironmentFunctionAppName -t SQLServer --settings EnvironmentsSqlConnectionString=$environmentManagementConnectionString;
+$connectionString = az webapp config connection-string set --resource-group $ResourceGroupValue --name $ResourceFunctionAppName -t SQLServer --settings EnvironmentsSqlConnectionString=$environmentManagementConnectionString;
