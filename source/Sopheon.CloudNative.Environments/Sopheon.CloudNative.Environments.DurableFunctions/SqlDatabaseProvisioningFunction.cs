@@ -8,7 +8,7 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
             ProvisioningState.Running
       };
 
-      private readonly List<string> InstancePrefixes = new List<string>() { nameof(RunSingle), nameof(RunTimer) };
+      private readonly List<string> InstancePrefixes = new List<string>() { nameof(RunSingle), nameof(RunTimer), nameof(MaintainSqlDatabasePoolForOnboarding) };
 
       private readonly EnvironmentContext _dbContext;
       private readonly Lazy<IAzure> _azureApi;
@@ -192,7 +192,7 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
          if (!existingInstancesQueryResult)
          {
             // An instance with the specified ID prefix doesn't exist or an existing one stopped running, create one.
-            var instanceId = await starter.StartNewAsync<string>(functionName, $"{functionName}_{Guid.NewGuid()}");
+            var instanceId = await starter.StartNewAsync<string>(functionName, $"{functionName}_{Guid.NewGuid()}", null);
             log.LogInformation($"Started orchestration with ID = '{instanceId}'.");
             return starter.CreateCheckStatusResponse(req, instanceId);
          }
@@ -220,8 +220,13 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
          if (!existingInstancesQueryResult)
          {
             // An instance with the specified ID prefix doesn't exist or an existing one stopped running, create one.
-            var instanceId = await starter.StartNewAsync<string>(functionName, $"{functionName}_{Guid.NewGuid()}");
+            var instanceId = await starter.StartNewAsync<string>(functionName, $"{functionName}_{Guid.NewGuid()}", null);
             log.LogInformation($"Started orchestration with ID = '{instanceId}'.");
+         }
+         else
+         {
+            // An instance with the specified ID prefix exists or an existing one still running, don't create one.
+            log.LogInformation("An instance is already running under!");
          }
       }
       #endregion
