@@ -8,6 +8,8 @@ export interface ThemeSelectorProps {
   changeTheme: (useDarkTheme: boolean) => ChangeThemeAction;
 }
 
+const boolean isWhiteTheme = true;
+
 const ThemeSelector: FunctionComponent<ThemeSelectorProps> = ({ changeTheme }: ThemeSelectorProps) => {
   const { formatMessage } = useIntl();
 

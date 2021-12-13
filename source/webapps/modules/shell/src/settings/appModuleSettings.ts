@@ -26,4 +26,13 @@ export const appModules: AppModule[] = [
     rank: 1,
     applicationDefinitionId: 1,
   },
+  {
+    displayNameResourceKey: 'nav.product_Planning',
+    scope: 'productAppModule',
+    url: isProd ? '/product/remoteEntry.js' : 'https://localhost:3001/remoteEntry.js',
+    routeName: '/planning',
+    iconName: 'CircleAddition',
+    rank: 2,
+    applicationDefinitionId: 2,
+  },
 ];
