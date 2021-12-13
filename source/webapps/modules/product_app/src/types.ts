@@ -46,6 +46,7 @@ export interface Product {
 }
 
 export interface ToDoItem {
+  id: number;
   name: string;
   notes: string | null;
   dueDate: Date | null;

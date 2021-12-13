@@ -29,6 +29,7 @@ const translateProductItemsToTasks = (productItems: unknown[]): ToDoItem[] =>
     .map(td => {
       const dueDateString: string = td.utcDateTimeAttributeValues.filter(dtav => dtav.attributeId === Attributes.DUEDATE)[0].value;
       return {
+        id: td.id,
         name: td.name,
         notes: td.stringAttributeValues.filter(sav => sav.attributeId === Attributes.NOTES)[0].value,
         dueDate: dueDateString ? new Date(dueDateString) : null,

@@ -1,12 +1,12 @@
 import { FontIcon, ITextFieldStyles, mergeStyles, mergeStyleSets, Modal, Stack } from '@fluentui/react';
 import { Text } from '@fluentui/react/lib/Text';
 import { useBoolean } from '@fluentui/react-hooks';
-import React from 'react';
+import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 
 import AddTask from './AddTask';
 import { UpdateProductAction } from './product/productReducer';
-import { Product, Status, UpdateProductModel } from './types';
+import { Product, Status, ToDoItem, UpdateProductModel } from './types';
 
 export interface IToDoListProps {
   updateProduct: (product: UpdateProductModel) => UpdateProductAction;
@@ -68,7 +68,17 @@ const completedNameStyles: Partial<ITextFieldStyles> = {
 const ToDoList: React.FunctionComponent<IToDoListProps> = ({ updateProduct, environmentKey, accessToken, products }: IToDoListProps) => {
   const { formatMessage } = useIntl();
   const [isTaskModalOpen, { setTrue: showTaskModal, setFalse: hideTaskModal }] = useBoolean(false);
-  const { todos } = products[0];
+  const [todos, setTodos] = useState(products[0].todos);
+
+  const handleStatusIconClick = (todo: ToDoItem, index: number) => {
+    // if it's not complete, mark it as complete, otherwise in progress
+    todo.status = todo.status !== Status.Complete ? Status.Complete : Status.InProgress;
+
+    // update component state
+    const newTodos = [...todos];
+    newTodos[index] = todo;
+    setTodos(newTodos);
+  };
 
   const emptyListContent: JSX.Element = (
     <div style={contentDivStyle}>
@@ -83,20 +93,18 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({ updateProduct, envi
   // TODO: convert date UTC->local
   const populatedListContent: JSX.Element = (
     <div>
-      {todos.map((item, index) => {
+      {todos.map((todo, index) => {
         const emptyNamePlaceholder = 'xxxx';
         const statusIcon: JSX.Element = (
           <FontIcon
-            iconName={item.status === Status.Complete ? 'CheckMark' : 'CircleRing'}
+            iconName={todo.status === Status.Complete ? 'CheckMark' : 'CircleRing'}
             style={completeIconStyle}
-            onClick={e => {
-              alert('Status button clicked!');
-            }}
+            onClick={() => handleStatusIconClick(todo, index)}
           />
         );
-        const name: JSX.Element = item.status === Status.Complete ? <Text styles={completedNameStyles}>{item.name}</Text> : <Text>{item.name}</Text>;
-        const dueDate: JSX.Element = item.dueDate ? (
-          <Text>{item.dueDate.toLocaleDateString()}</Text>
+        const name: JSX.Element = todo.status === Status.Complete ? <Text styles={completedNameStyles}>{todo.name}</Text> : <Text>{todo.name}</Text>;
+        const dueDate: JSX.Element = todo.dueDate ? (
+          <Text>{todo.dueDate.toLocaleDateString()}</Text>
         ) : (
           <Text styles={emptyDueDateStyles}>{emptyNamePlaceholder}</Text>
         );
