@@ -23,7 +23,7 @@ jest.mock('react-router-dom', () => ({
   useLocation: jest.fn().mockImplementation(() => mockUseLocationValue),
 }));
 
-describe('Header render tests', () => {
+describe.skip('Header render tests', () => {
   // Enzyme mount tests all of the file
   // If we have tests that change the pathname and FetchStatus, we can get 100% coverage
   it('enzyme mount render test - bad path', () => {
