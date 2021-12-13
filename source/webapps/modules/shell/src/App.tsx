@@ -1,4 +1,4 @@
-import { AuthenticatedTemplate } from '@azure/msal-react';
+import { AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-react';
 import { initializeIcons, registerIcons, ScrollablePane, ScrollbarVisibility, Stack } from '@fluentui/react';
 import { useTheme } from '@fluentui/react-theme-provider';
 import { GetAccessTokenAction } from '@sopheon/shell-api';
@@ -98,15 +98,18 @@ const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, head
               >
                 <main style={pageContainerStyle} role="main">
                   <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-                    <AuthenticatedTemplate>
-                      <Switch>
-                        {appModules.map(appModule => (
-                          <Route exact key={appModule.scope} path={appModule.routeName}>
+                    <Switch>
+                      {appModules.map(appModule => (
+                        <Route exact key={appModule.scope} path={appModule.routeName}>
+                          <AuthenticatedTemplate>
                             <DynamicModule module={appModule} loadingMessage={loadingMessage} shellApi={shellApi} />
-                          </Route>
-                        ))}
-                      </Switch>
-                    </AuthenticatedTemplate>
+                          </AuthenticatedTemplate>
+                          <UnauthenticatedTemplate>
+                            <Login />
+                          </UnauthenticatedTemplate>
+                        </Route>
+                      ))}
+                    </Switch>
                   </ScrollablePane>
                 </main>
               </Stack.Item>
