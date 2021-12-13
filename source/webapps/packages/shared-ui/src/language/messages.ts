@@ -11,7 +11,6 @@ export const messages: Record<string, Record<string, string>> = {
     'authlanding.signupspinner': 'Sign Up',
     'header.welcome': 'Page Title',
     'header.useDarkTheme': 'Dark Theme',
-    'footer.copyright': 'RSS Feeds | Sitemap | Privacy | Legal | Contact Us :: Copyright 2020-2021 Sopheon. All Rights Reserved',
     'app.add5': 'Add 5',
     'app.add5_aria': 'Increment value by 5',
     'acct.account': 'Account',

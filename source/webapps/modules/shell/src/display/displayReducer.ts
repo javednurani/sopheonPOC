@@ -1,5 +1,4 @@
-
-import { createAction, DisplayActionTypes, HideHeaderFooterAction, ShowHeaderFooterAction } from '@sopheon/shell-api';
+import { createAction, DisplayActionTypes, HideHeaderAction, ShowHeaderAction } from '@sopheon/shell-api';
 import { Reducer } from 'redux';
 
 import { DisplayShape } from '../types';
@@ -7,13 +6,13 @@ import { DisplayShape } from '../types';
 
 // REDUCER ACTION TYPES
 
-export type DisplayActions = HideHeaderFooterAction | ShowHeaderFooterAction;
+export type DisplayActions = HideHeaderAction | ShowHeaderAction;
 
 //#endregion
 
 //#region Action Creators
-export const showHeaderFooter = (): ShowHeaderFooterAction => createAction(DisplayActionTypes.SHOW_HEADER_FOOTER);
-export const hideHeaderFooter = (): HideHeaderFooterAction => createAction(DisplayActionTypes.HIDE_HEADER_FOOTER);
+export const showHeader = (): ShowHeaderAction => createAction(DisplayActionTypes.SHOW_HEADER);
+export const hideHeader = (): HideHeaderAction => createAction(DisplayActionTypes.HIDE_HEADER);
 
 //#endregion
 
@@ -22,29 +21,29 @@ export const hideHeaderFooter = (): HideHeaderFooterAction => createAction(Displ
 // INITIAL STATE & DEFAULTS
 
 export const initialState: DisplayShape = {
-  headerFooterAreShown: true,
+  headerShown: true,
 };
 
 // HANDLERS
 
-const showHeaderFooterHandler = (state: DisplayShape) => ({
+const showHeaderHandler = (state: DisplayShape) => ({
   ...state,
-  headerFooterAreShown: true,
+  headerShown: true,
 });
 
-const hideHeaderFooterHandler = (state: DisplayShape) => ({
+const hideHeaderHandler = (state: DisplayShape) => ({
   ...state,
-  headerFooterAreShown: false,
+  headerShown: false,
 });
 
 // ACTION SWITCH
 
 export const displayReducer: Reducer<DisplayShape, DisplayActions> = (state = initialState, action) => {
   switch (action.type) {
-    case DisplayActionTypes.SHOW_HEADER_FOOTER:
-      return showHeaderFooterHandler(state);
-    case DisplayActionTypes.HIDE_HEADER_FOOTER:
-      return hideHeaderFooterHandler(state);
+    case DisplayActionTypes.SHOW_HEADER:
+      return showHeaderHandler(state);
+    case DisplayActionTypes.HIDE_HEADER:
+      return hideHeaderHandler(state);
     default:
       return state;
   }

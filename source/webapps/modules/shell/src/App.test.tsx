@@ -5,7 +5,6 @@ import React from 'react';
 import { IntlProvider } from 'react-intl';
 
 import App, { AppProps } from './App';
-import Footer from './footer/Footer';
 import Header from './header/Header';
 
 expect.extend(toHaveNoViolations);
@@ -16,7 +15,7 @@ describe('Testing the App component', () => {
       changeTheme: jest.fn(),
       setEnvironmentKey: jest.fn(),
       environmentKey: 'asdf',
-      headerFooterAreShown: true,
+      headerShown: true,
       getAccessToken: jest.fn(),
     };
 
@@ -28,14 +27,13 @@ describe('Testing the App component', () => {
     expect(wrapper.find(Header)).toHaveLength(1);
     expect(wrapper.find('main')).toHaveLength(1);
     expect(wrapper.find('main').getDOMNode()).toHaveAttribute('role', 'main');
-    expect(wrapper.find(Footer)).toHaveLength(1);
   });
   it('Accessibility test for the App component', async () => {
     const appProps: AppProps = {
       changeTheme: jest.fn(),
       setEnvironmentKey: jest.fn(),
       environmentKey: '',
-      headerFooterAreShown: true,
+      headerShown: true,
       getAccessToken: jest.fn(),
     };
 

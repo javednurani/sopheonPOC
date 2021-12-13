@@ -11,7 +11,6 @@ import IdleMonitor from './authentication/IdleMonitor';
 import Login from './authentication/Login';
 import Signup from './authentication/Signup';
 import { DynamicModule } from './DynamicModule';
-import Footer from './footer/Footer';
 import Header from './header/Header';
 import { ReactComponent as SopheonLogoDark } from './images/sopheon_logo_blk_txt.svg';
 import { ReactComponent as SopheonLogoLight } from './images/sopheon_logo_wht_txt.svg';
@@ -23,11 +22,11 @@ export interface AppProps {
   changeTheme: (useDarkTheme: boolean) => ChangeThemeAction;
   setEnvironmentKey: (environmentKey: string) => SetEnvironmentKeyAction;
   environmentKey: string | null;
-  headerFooterAreShown: boolean;
+  headerShown: boolean;
   getAccessToken: () => GetAccessTokenAction;
 }
 
-const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, headerFooterAreShown, getAccessToken }: AppProps) => {
+const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, headerShown, getAccessToken }: AppProps) => {
   const { formatMessage } = useIntl();
 
   const loadingMessage: string = formatMessage({ id: 'fallback.loading' });
@@ -52,7 +51,7 @@ const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, head
     height: '100%',
   };
 
-  const hideHeaderFooterStyle = {
+  const hideHeaderStyle = {
     root: {
       height: '0',
     },
@@ -78,7 +77,7 @@ const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, head
                 },
               }}
             >
-              <Stack.Item styles={headerFooterAreShown ? {} : hideHeaderFooterStyle}>
+              <Stack.Item styles={headerShown ? {} : hideHeaderStyle}>
                 <Header changeTheme={changeTheme} setEnvironmentKey={setEnvironmentKey} getAccessToken={getAccessToken} />
               </Stack.Item>
 
@@ -112,9 +111,6 @@ const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, head
                     </Switch>
                   </ScrollablePane>
                 </main>
-              </Stack.Item>
-              <Stack.Item>
-                <Footer showFooter={headerFooterAreShown} />
               </Stack.Item>
             </Stack>
           </Route>
