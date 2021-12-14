@@ -80,7 +80,7 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
          string tenantSqlServerName = _configuration["AzTenantEnvironmentServer"];
          string adminLoginEnigma = _configuration["SqlServerAdminEnigma"]; // Pull admin enigma from app config (user secrets or key vault)
          string envSqlServerName = _configuration["AzSqlServerName"];
-         string envSqlDatabaseName = "EnvironmentManagement";
+         string envSqlDatabaseName = "TenantEnvironmentTemplate";
 
          jsonTemplateData = jsonTemplateData
             .Replace("^SqlServerName^", tenantSqlServerName)
