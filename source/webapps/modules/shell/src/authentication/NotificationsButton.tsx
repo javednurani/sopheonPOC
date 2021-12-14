@@ -1,5 +1,6 @@
 import { AuthenticatedTemplate } from '@azure/msal-react';
 import { IconButton, IIconProps, IIconStyles, ITooltipHostStyles, TooltipHost } from '@fluentui/react';
+import { FontSizes } from '@fluentui/theme';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -9,7 +10,7 @@ const NotificationsButton: React.FunctionComponent = () => {
 
   const notificationIconStyles: Partial<IIconStyles> = {
     root: {
-      fontSize: '18px',
+      fontSize: FontSizes.size18,
       transform: 'rotate(20deg)',
     },
   };

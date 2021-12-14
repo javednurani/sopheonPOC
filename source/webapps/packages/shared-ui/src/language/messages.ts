@@ -84,8 +84,7 @@ export const messages: Record<string, Record<string, string>> = {
     'onboarding.productgoal': 'What is your current product goal?',
     'onboarding.step3of3': 'Step 3 of 3: Set up your Goals',
     'onboarding.done': 'Done: Get Started!',
-    'nav.product_Planning': 'Planning',
+    'nav.planning_app': 'Planning',
     'auth.notifications': 'Notifications',
-    'header.useWhiteTheme': 'White Theme',
   },
 };

@@ -103,26 +103,21 @@ const LoginSignupButton: FunctionComponent<ILoginSignupButtonProps> = ({
   const loginButtonStyles: Partial<IButtonStyles> = {
     root: {
       height: '36px',
-      borderRadius: '2px',
       border: 'none',
     },
   };
 
   const contactIcon: IIconProps = { iconName: 'Contact', styles: contactIconStyles };
 
-  const hostStyles: Partial<ITooltipHostStyles> = { root: { display: 'inline-block' } };
-
   return (
     <React.Fragment>
       <AuthenticatedTemplate>
-        <TooltipHost content={account ? account.name : formatMessage({ id: 'auth.myprofile' })} id="profileImageTooltip" styles={hostStyles}>
-          <DefaultButton
-            text={account ? account.name : formatMessage({ id: 'auth.myprofile' })}
-            menuProps={menuProps}
-            iconProps={contactIcon}
-            styles={loginButtonStyles}
-          />
-        </TooltipHost>
+        <DefaultButton
+          text={account ? account.name : formatMessage({ id: 'auth.myprofile' })}
+          menuProps={menuProps}
+          iconProps={contactIcon}
+          styles={loginButtonStyles}
+        />
       </AuthenticatedTemplate>
       <UnauthenticatedTemplate>
         <DefaultButton text={formatMessage({ id: 'auth.loginbutton' })} onClick={() => instance.loginRedirect(loginButtonRequest)} />
