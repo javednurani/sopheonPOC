@@ -27,7 +27,16 @@ export function* onGetProducts(action: GetProductsAction): Generator {
   try {
     yield put(getProductsRequest());
     const { data } = yield call(getProducts, action.payload);
-    yield put(getProductsSuccess(data));
+
+    const transformedProductsData = data.map(d => ({
+      id: d.id,
+      key: d.key,
+      name: d.name,
+      industries: d.intAttributeValues.filter(iav => iav.attributeId === Attributes.INDUSTRIES).map(iav => iav.value),
+      kpis: d.keyPerformanceIndicators,
+      goals: d.goals
+    }));
+    yield put(getProductsSuccess(transformedProductsData));
   } catch (error) {
     yield put(getProductsFailure(error));
   }

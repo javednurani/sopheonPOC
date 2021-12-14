@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
@@ -64,7 +65,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore
 
          services
             .AddMemoryCache()
-            .AddHttpClient();
+            .AddHttpClient("EnvFunction", (servProd, client) => ConfigureEnvironmentFunctionClient(client, (HostBuilderContext)servProd.GetService(typeof(HostBuilderContext))));
 
          services
             .AddHealthChecks()//
@@ -227,6 +228,15 @@ namespace Sopheon.CloudNative.Products.AspNetCore
             HealthCheckDuration = report.TotalDuration
          };
          await context.Response.WriteAsJsonAsync(response);
+      }
+
+      private static HttpClient ConfigureEnvironmentFunctionClient(HttpClient client, HostBuilderContext context)
+      {
+         string baseUrl = context.Configuration["ServiceUrls:EnvironmentsBaseUrl"];
+         client.BaseAddress = new Uri(baseUrl);
+
+
+         return client;
       }
 
       private readonly Action<CorsPolicyBuilder> corsPolicyAllowAll =

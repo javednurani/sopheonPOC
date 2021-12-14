@@ -29,6 +29,12 @@
       "Pattern": "nonexistent.onmicrosoft.com",
       "IsKeyVaultSecret": true,
       "KeyVaultSecretName": "StratusB2CTenantName"
+    },
+    {
+      "TokenDisplayName": "Environment Management Function App Name",
+      "Pattern": "^EnvironmentsFunctionAppName^",
+      "IsKeyVaultSecret": true,
+      "KeyVaultSecretName": "StratusEnvironmentsManagementFunctionAppName"
     }
   ]
 }

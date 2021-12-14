@@ -4,7 +4,10 @@ import { Theme } from '@fluentui/theme';
 // Themes were generated using
 // https://fabricweb.z5.web.core.windows.net/pr-deploy-site/refs/heads/7.0/theming-designer/index.html
 
+const defaultFontStyle = { fontFamily: "'Source Sans Pro', sans-serif" };
+
 const lightTheme: Theme = createTheme({
+  defaultFontStyle: defaultFontStyle,
   palette: {
     themePrimary: '#33596f',
     themeLighterAlt: '#f4f7f9',
@@ -33,6 +36,7 @@ const lightTheme: Theme = createTheme({
 lightTheme.id = 'lightTheme';
 
 const darkTheme: Theme = createTheme({
+  defaultFontStyle: defaultFontStyle,
   palette: {
     themePrimary: '#61a39f',
     themeLighterAlt: '#f7fbfb',
