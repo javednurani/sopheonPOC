@@ -24,6 +24,8 @@ namespace Sopheon.CloudNative.Products.Domain
 
       public List<MoneyAttributeValue> MoneyAttributeValues { get; set; }
 
+      public List<EnumAttributeValue> EnumAttributeValues { get; set; }
+
       public List<EnumCollectionAttributeValue> EnumCollectionAttributeValues { get; set; }
 
       public string Name { get; set; }

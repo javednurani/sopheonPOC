@@ -11,27 +11,38 @@ namespace Sopheon.CloudNative.Products.DataAccess.Extensions
       public static void OwnsManyAttributeValues<TAttributeContainer>(this EntityTypeBuilder<TAttributeContainer> builder) where TAttributeContainer : class, IAllAttributesContainer
       {
          builder
-             .OwnsMany(product => product.Int32AttributeValues)
-             .WithOwner();
+             .OwnsMany(product => product.Int32AttributeValues, int32AttributeValue =>
+             {
+                int32AttributeValue.WithOwner();
+                int32AttributeValue.HasKey($"{typeof(TAttributeContainer).Name}Id", "AttributeId");
+             });
 
          builder
-             .OwnsMany(product => product.DecimalAttributeValues)
-             .WithOwner();
+             .OwnsMany(product => product.DecimalAttributeValues, decimalAttributeValue =>
+             {
+                decimalAttributeValue.WithOwner();
+                decimalAttributeValue.HasKey($"{typeof(TAttributeContainer).Name}Id", "AttributeId");
+             });
 
          builder
              .OwnsManyMoneyAttributeValues();
 
          builder
-             .OwnsMany(product => product.StringAttributeValues)
-             .WithOwner();
+             .OwnsMany(product => product.StringAttributeValues, stringAttributeValue =>
+             {
+                stringAttributeValue.WithOwner();
+                stringAttributeValue.HasKey($"{typeof(TAttributeContainer).Name}Id", "AttributeId");
+             });
 
          builder
-             .OwnsMany(product => product.UtcDateTimeAttributeValues)
-             .WithOwner();
+             .OwnsMany(product => product.UtcDateTimeAttributeValues, utcDateTimeAttributeValue =>
+             {
+                utcDateTimeAttributeValue.WithOwner();
+                utcDateTimeAttributeValue.HasKey($"{typeof(TAttributeContainer).Name}Id", "AttributeId");
+             });
 
          builder
-             .OwnsMany(product => product.EnumCollectionAttributeValues)
-             .WithOwner();
+            .OwnsManyEnumAttributeValues();
 
          builder
              .OwnsManyEnumCollectionAttributeValues();
@@ -42,12 +53,25 @@ namespace Sopheon.CloudNative.Products.DataAccess.Extensions
          builder
              .OwnsMany(entity => entity.MoneyAttributeValues, moneyAttributeValue =>
              {
+                moneyAttributeValue.WithOwner();
+                moneyAttributeValue.HasKey($"{typeof(TEntity).Name}Id", "AttributeId");
+
                 moneyAttributeValue.OwnsOne(mav => mav.Value, value =>
                 {
                    value.Property(mv => mv.Value).HasColumnName(nameof(MoneyValue.Value));
                    value.Property(mv => mv.CurrencyCode).HasColumnName(nameof(MoneyValue.CurrencyCode));
                 });
              });
+      }
+
+      public static void OwnsManyEnumAttributeValues<TEntity>(this EntityTypeBuilder<TEntity> builder) where TEntity : class, IEnumAttributeContainer
+      {
+         builder
+            .OwnsMany(entity => entity.EnumAttributeValues, enumAttributeValue =>
+            {
+               enumAttributeValue.WithOwner();
+               enumAttributeValue.HasKey($"{typeof(TEntity).Name}Id", "AttributeId");
+            });
       }
 
       public static void OwnsManyEnumCollectionAttributeValues<TEntity>(this EntityTypeBuilder<TEntity> builder) where TEntity : class, IEnumCollectionAttributeContainer

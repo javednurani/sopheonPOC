@@ -80,13 +80,12 @@ namespace Sopheon.CloudNative.Products.DataAccess.SeedData
 
       private static void DefineDefaultAttributes()
       {
-         // TODO, Status will be an EnumAttribute, NOT EnumCollectionAttribute
-         List<EnumCollectionAttribute> enumCollectionAttributes = new List<EnumCollectionAttribute>
+         // EnumAttributes = SINGLE-SELECT of Enum values
+         List<EnumAttribute> enumAttributes = new List<EnumAttribute>
          {
-            new EnumCollectionAttribute
+            new EnumAttribute
             {
                AttributeId = -4,
-               AttributeDataTypeId = (int)AttributeDataTypes.EnumCollection,
                Name = "Status",
                ShortName = "STATUS",
                EnumAttributeOptions = new List<EnumAttributeOption>
@@ -115,6 +114,48 @@ namespace Sopheon.CloudNative.Products.DataAccess.SeedData
             }
          };
 
+         enumAttributes.ForEach(attribute =>
+         {
+            foreach (EnumAttributeOption option in attribute.EnumAttributeOptions)
+            {
+               option.AttributeId = attribute.AttributeId;
+            }
+         });
+
+         // EnumCollectionAttributes = MULTI-SELECT of Enum values
+         List<EnumCollectionAttribute> enumCollectionAttributes = new List<EnumCollectionAttribute>
+         {
+            new EnumCollectionAttribute
+            {
+               AttributeId = -5,
+               Name = "BeverageTypes",
+               ShortName = "BEV",
+               EnumAttributeOptions = new List<EnumAttributeOption>
+               {
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -5,
+                     Name = "Alcoholic"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -6,
+                     Name = "Sweet"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -7,
+                     Name = "Fizzy"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -8,
+                     Name = "Dark"
+                  },
+               }
+            }
+         };
+
          enumCollectionAttributes.ForEach(attribute =>
          {
             foreach (EnumAttributeOption option in attribute.EnumAttributeOptions)
@@ -123,26 +164,24 @@ namespace Sopheon.CloudNative.Products.DataAccess.SeedData
             }
          });
 
+         // otherDefaultAttributes = arbitrary values, NOT related to Enums
          List<Domain.Attribute> otherDefaultAttributes = new List<Domain.Attribute>
          {
             new Int32Attribute
             {
                AttributeId = -1,
-               AttributeDataTypeId = (int)AttributeDataTypes.Int32,
                Name = "Industry",
                ShortName = "IND"
             },
             new StringAttribute
             {
                AttributeId = -2,
-               AttributeDataTypeId = (int)AttributeDataTypes.String,
                Name = "Notes",
                ShortName = "NOTES"
             },
             new UtcDateTimeAttribute
             {
                AttributeId = -3,
-               AttributeDataTypeId = (int)AttributeDataTypes.UtcDateTime,
                Name = "Due Date",
                ShortName = "DUE"
             }
@@ -150,6 +189,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.SeedData
 
          AddDefaultAttributes(otherDefaultAttributes);
          AddDefaultAttributes(enumCollectionAttributes);
+         AddDefaultAttributes(enumAttributes);
       }
    }
 }

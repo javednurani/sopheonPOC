@@ -99,7 +99,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
             .Include(p => p.Items)
             .ThenInclude(i => i.UtcDateTimeAttributeValues)
             .Include(p => p.Items)
-            .ThenInclude(i => i.EnumCollectionAttributeValues)
+            .ThenInclude(i => i.EnumAttributeValues)
             .Include(p => p.Goals)
             .Include(p => p.KeyPerformanceIndicators)
             .ThenInclude(kpi => kpi.Attribute)
