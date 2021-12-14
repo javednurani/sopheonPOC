@@ -8,7 +8,7 @@ $ResourceGroupValue = "Stratus-$($Environment)";
 # $CDNHostName = az cdn endpoint show --name $CDNProfileEndpointNameValue --profile-name $ResourceGroupValue --resource-group $ResourceGroupValue --query "hostName" --output tsv;
 # $CDNHttpsEndpoint = "https://" + $CDNHostName + "/";
 
-$DatabaseName = "6nfvuhsohiumi"
+$DatabaseName = "d4b5sepl3hpau"
 
 for ($i = 0; $i -lt 100; $i++) {
     Write-Output "Deleting Database: $($DatabaseName)-$($i)"

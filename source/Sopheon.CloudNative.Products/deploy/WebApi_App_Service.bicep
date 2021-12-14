@@ -159,11 +159,11 @@ resource ProductManagementWebApp 'Microsoft.Web/sites@2021-02-01' = {
         }
         {
           name: 'ServiceUrls:GetEnvironmentResourceBindingUri'
-          value: 'http://${toLower(resourceGroup().name)}.azurewebsites.net/GetEnvironmentResourceBindingUri'
+          value: 'http://${toLower(resourceGroup().name)}-environment.azurewebsites.net/GetEnvironmentResourceBindingUri'
         }
         {
           name: 'ServiceUrls:GetEnvironments'
-          value: 'http://${toLower(resourceGroup().name)}.azurewebsites.net/Environments'
+          value: 'http://${toLower(resourceGroup().name)}-environment.azurewebsites.net/Environments'
         }
         {
           name: 'WEBSITE_HTTPLOGGING_RETENTION_DAYS'
