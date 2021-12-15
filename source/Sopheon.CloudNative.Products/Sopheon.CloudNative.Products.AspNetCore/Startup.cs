@@ -155,12 +155,12 @@ namespace Sopheon.CloudNative.Products.AspNetCore
 
          // Entity Framework
          services.AddDbContext<ProductManagementContext>((serviceProvider, optionsBuilder) =>
-      {
-         // WARNING: As of EF 5, AddDbContext does not support an aysnc delegate
-         var connectionStringProvider = serviceProvider.GetService<IEnvironmentSqlConnectionStringProvider>();
-         string connectionString = connectionStringProvider.GetConnectionStringAsync().Result; // TODO: Need to find async registration method
-         optionsBuilder.UseSqlServer(connectionString);
-      });
+         {
+            // WARNING: As of EF 5, AddDbContext does not support an aysnc delegate
+            var connectionStringProvider = serviceProvider.GetService<IEnvironmentSqlConnectionStringProvider>();
+            string connectionString = connectionStringProvider.GetConnectionStringAsync().Result; // TODO: Need to find async registration method
+            optionsBuilder.UseSqlServer(connectionString);
+         });
       }
 
       /// <summary>
