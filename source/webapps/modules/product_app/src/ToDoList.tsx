@@ -5,11 +5,12 @@ import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 
 import AddTask from './AddTask';
-import { UpdateProductAction } from './product/productReducer';
-import { Product, Status, ToDoItem, UpdateProductModel } from './types';
+import { UpdateProductAction, UpdateProductItemAction } from './product/productReducer';
+import { Attributes, Product, Status, ToDoItem, UpdateProductItemModel, UpdateProductModel } from './types';
 
 export interface IToDoListProps {
   updateProduct: (product: UpdateProductModel) => UpdateProductAction;
+  updateProductItem: (productItem: UpdateProductItemModel) => UpdateProductItemAction;
   environmentKey: string;
   accessToken: string;
   products: Product[];
@@ -65,19 +66,44 @@ const completedNameStyles: Partial<ITextFieldStyles> = {
   },
 };
 
-const ToDoList: React.FunctionComponent<IToDoListProps> = ({ updateProduct, environmentKey, accessToken, products }: IToDoListProps) => {
+const ToDoList: React.FunctionComponent<IToDoListProps> = ({
+  updateProduct,
+  updateProductItem,
+  environmentKey,
+  accessToken,
+  products,
+}: IToDoListProps) => {
   const { formatMessage } = useIntl();
   const [isTaskModalOpen, { setTrue: showTaskModal, setFalse: hideTaskModal }] = useBoolean(false);
-  const [todos, setTodos] = useState(products[0].todos);
+  const { todos } = products[0];
 
   const handleStatusIconClick = (todo: ToDoItem, index: number) => {
     // if it's not complete, mark it as complete, otherwise in progress
     todo.status = todo.status !== Status.Complete ? Status.Complete : Status.InProgress;
+    callUpdateProductItemSaga(todo);
+  };
 
-    // update component state
-    const newTodos = [...todos];
-    newTodos[index] = todo;
-    setTodos(newTodos);
+  const callUpdateProductItemSaga = (todo: ToDoItem) => {
+    const updateProductItemDto: UpdateProductItemModel = {
+      ProductKey: products[0].key || 'BAD_PRODUCT_KEY',
+      EnvironmentKey: environmentKey,
+      AccessToken: accessToken,
+      ProductItem: {
+        Id: todo.id,
+        EnumCollectionAttributeValues: [
+          {
+            AttributeId: Attributes.STATUS,
+            Value: [
+              {
+                EnumAttributeOptionId: todo.status,
+              },
+            ],
+          },
+        ],
+        // TODO: might need to send other values in future
+      },
+    };
+    updateProductItem(updateProductItemDto);
   };
 
   const emptyListContent: JSX.Element = (

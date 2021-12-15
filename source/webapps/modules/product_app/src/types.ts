@@ -19,6 +19,11 @@ export type UpdateProductModel = {
 } & EnvironmentScopedApiRequestModel &
   ProductScopedApiRequestModel;
 
+export type UpdateProductItemModel = {
+  ProductItem: ProductItemDto;
+} & EnvironmentScopedApiRequestModel &
+  ProductScopedApiRequestModel;
+
 export type CreateProductModel = {
   Product: ProductPostDto;
 } & EnvironmentScopedApiRequestModel;
@@ -78,9 +83,24 @@ export interface Int32AttributeValueDto {
   Value: number | null;
 }
 
+// TODO: Tech Debt - these dtos come directly from our data model, which I don't think our UI should know about
+export interface EnumCollectionAttributeValueDto {
+  AttributeId: number;
+  Value: EnumAttributeOptionValueDto[];
+}
+
+export interface EnumAttributeOptionValueDto {
+  EnumAttributeOptionId: number;
+}
+
 export interface ProductPostDto {
   Name: string;
   Int32AttributeValues: Int32AttributeValueDto[];
+}
+
+export interface ProductItemDto {
+  Id: number;
+  EnumCollectionAttributeValues: EnumCollectionAttributeValueDto[];
 }
 
 export interface PatchOperation {
