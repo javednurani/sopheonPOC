@@ -1,7 +1,7 @@
 import { FontIcon, ITextFieldStyles, mergeStyles, mergeStyleSets, Modal, Stack } from '@fluentui/react';
 import { Text } from '@fluentui/react/lib/Text';
 import { useBoolean } from '@fluentui/react-hooks';
-import React, { useState } from 'react';
+import React from 'react';
 import { useIntl } from 'react-intl';
 
 import AddTask from './AddTask';
@@ -46,11 +46,7 @@ const addTaskModalStyles = mergeStyleSets({
   },
 });
 
-const addIconStyle: React.CSSProperties = {
-  cursor: 'pointer',
-};
-
-const completeIconStyle: React.CSSProperties = {
+const pointerCursorStyle: React.CSSProperties = {
   cursor: 'pointer',
 };
 
@@ -76,8 +72,9 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
   const { formatMessage } = useIntl();
   const [isTaskModalOpen, { setTrue: showTaskModal, setFalse: hideTaskModal }] = useBoolean(false);
   const { todos } = products[0];
+  const [isFilteredToComplete, { toggle: toggleFiltered }] = useBoolean(false);
 
-  const handleStatusIconClick = (todo: ToDoItem, index: number) => {
+  const handleStatusIconClick = (todo: ToDoItem) => {
     // if it's not complete, mark it as complete, otherwise in progress
     todo.status = todo.status !== Status.Complete ? Status.Complete : Status.InProgress;
     callUpdateProductItemSaga(todo);
@@ -106,6 +103,10 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
     updateProductItem(updateProductItemDto);
   };
 
+  const handleFilterIconClick = () => {
+    toggleFiltered();
+  };
+
   const emptyListContent: JSX.Element = (
     <div style={contentDivStyle}>
       <Text variant="xLarge">
@@ -116,38 +117,40 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
     </div>
   );
 
-  // TODO: convert date UTC->local
   const populatedListContent: JSX.Element = (
     <div>
-      {todos.map((todo, index) => {
-        const emptyNamePlaceholder = 'xxxx';
-        const statusIcon: JSX.Element = (
-          <FontIcon
-            iconName={todo.status === Status.Complete ? 'CheckMark' : 'CircleRing'}
-            style={completeIconStyle}
-            onClick={() => handleStatusIconClick(todo, index)}
-          />
-        );
-        const name: JSX.Element = todo.status === Status.Complete ? <Text styles={completedNameStyles}>{todo.name}</Text> : <Text>{todo.name}</Text>;
-        const dueDate: JSX.Element = todo.dueDate ? (
-          <Text>{todo.dueDate.toLocaleDateString()}</Text>
-        ) : (
-          <Text styles={emptyDueDateStyles}>{emptyNamePlaceholder}</Text>
-        );
+      {todos
+        .filter(todo => (isFilteredToComplete ? todo.status === Status.Complete : true))
+        .map((todo, index) => {
+          const emptyNamePlaceholder = 'xxxx';
+          const statusIcon: JSX.Element = (
+            <FontIcon
+              iconName={todo.status === Status.Complete ? 'CheckMark' : 'CircleRing'}
+              style={pointerCursorStyle}
+              onClick={() => handleStatusIconClick(todo)}
+            />
+          );
+          const name: JSX.Element =
+            todo.status === Status.Complete ? <Text styles={completedNameStyles}>{todo.name}</Text> : <Text>{todo.name}</Text>;
+          const dueDate: JSX.Element = todo.dueDate ? (
+            <Text>{todo.dueDate.toLocaleDateString()}</Text>
+          ) : (
+            <Text styles={emptyDueDateStyles}>{emptyNamePlaceholder}</Text>
+          );
 
-        return (
-          <div key={index}>
-            <Stack horizontal>
-              <Stack.Item>{statusIcon}</Stack.Item>
-              <Stack.Item align="stretch">
-                <div>{name}</div>
-                <div>{dueDate}</div>
-              </Stack.Item>
-            </Stack>
-            <hr />
-          </div>
-        );
-      })}
+          return (
+            <div key={index}>
+              <Stack horizontal>
+                <Stack.Item>{statusIcon}</Stack.Item>
+                <Stack.Item align="stretch">
+                  <div>{name}</div>
+                  <div>{dueDate}</div>
+                </Stack.Item>
+              </Stack>
+              <hr />
+            </div>
+          );
+        })}
     </div>
   );
 
@@ -159,12 +162,18 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
         <Stack.Item grow>
           <Text variant="xxLarge">{formatMessage({ id: 'toDo.title' })}</Text>
           <Text variant="xLarge">
-            <FontIcon style={addIconStyle} onClick={showTaskModal} iconName="CirclePlus" className={iconClass} />
+            <FontIcon style={pointerCursorStyle} onClick={showTaskModal} iconName="CirclePlus" className={iconClass} />
           </Text>
         </Stack.Item>
         <Stack.Item>
           <Text variant="xLarge">
-            <FontIcon iconName="Filter" className={filterSortIconClass} />
+            {/* TODO: combine class and styles? */}
+            <FontIcon
+              iconName={isFilteredToComplete ? 'FilterSolid' : 'Filter'}
+              className={filterSortIconClass}
+              style={pointerCursorStyle}
+              onClick={handleFilterIconClick}
+            />
             <FontIcon iconName="Sort" className={filterSortIconClass} />
           </Text>
         </Stack.Item>
