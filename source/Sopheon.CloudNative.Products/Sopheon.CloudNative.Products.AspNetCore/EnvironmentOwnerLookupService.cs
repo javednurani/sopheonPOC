@@ -54,9 +54,10 @@ namespace Sopheon.CloudNative.Products.AspNetCore
 
       private async Task<List<EnvironmentCatalogEntry>> GetEnvironments()
       {
+         string baseUrl = _configRoot.GetValue<string>("ServiceUrls:EnvironmentsBaseUrl");
          string requestUrl = _configRoot.GetValue<string>("ServiceUrls:GetEnvironments");
 
-         List<EnvironmentCatalogEntry> environments = await CallCatalogService(requestUrl); // TODO: Retry and Backoff Logic
+         List<EnvironmentCatalogEntry> environments = await CallCatalogService(baseUrl + requestUrl); // TODO: Retry and Backoff Logic
          return environments;
       }
 
@@ -65,7 +66,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore
          var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
          request.Headers.Add("User-Agent", "Sopheon.CloudNative.Products.AspNetCore");
 
-         var client = _clientFactory.CreateClient("EnvFunction");
+         var client = _clientFactory.CreateClient();
 
          List<EnvironmentCatalogEntry> environments = null;
          try

@@ -65,7 +65,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore
 
          services
             .AddMemoryCache()
-            .AddHttpClient("EnvFunction", (servProd, client) => ConfigureEnvironmentFunctionClient(client, (HostBuilderContext)servProd.GetService(typeof(HostBuilderContext))));
+            .AddHttpClient();
 
          services
             .AddHealthChecks()//
@@ -228,15 +228,6 @@ namespace Sopheon.CloudNative.Products.AspNetCore
             HealthCheckDuration = report.TotalDuration
          };
          await context.Response.WriteAsJsonAsync(response);
-      }
-
-      private static HttpClient ConfigureEnvironmentFunctionClient(HttpClient client, HostBuilderContext context)
-      {
-         string baseUrl = context.Configuration["ServiceUrls:EnvironmentsBaseUrl"];
-         client.BaseAddress = new Uri(baseUrl);
-
-
-         return client;
       }
 
       private readonly Action<CorsPolicyBuilder> corsPolicyAllowAll =

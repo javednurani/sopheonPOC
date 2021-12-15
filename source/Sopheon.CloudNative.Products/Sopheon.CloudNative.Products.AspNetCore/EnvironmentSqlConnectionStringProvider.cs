@@ -48,10 +48,11 @@ namespace Sopheon.CloudNative.Products.AspNetCore
 
       private async Task<string> LookupConnectionString(string environmentKey)
       {
+         string baseUrl = _configRoot.GetValue<string>("ServiceUrls:EnvironmentsBaseUrl");
          string apiUrl = _configRoot.GetValue<string>("ServiceUrls:GetEnvironmentResourceBindingUri"); 
          string businessServiceName = "ProductManagement";
          string dependencyName = "ProductManagementSqlDb";
-         string requestUrl = $"{apiUrl}({environmentKey}, {businessServiceName}, {dependencyName})";
+         string requestUrl = $"{baseUrl}{apiUrl}({environmentKey}, {businessServiceName}, {dependencyName})";
 
          string connectionString = await CallCatalogService(requestUrl); // TODO: Retry and Backoff Logic
          return connectionString;
@@ -62,7 +63,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore
          var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
          request.Headers.Add("User-Agent", "Sopheon.CloudNative.Products.AspNetCore");
 
-         var client = _clientFactory.CreateClient("EnvFunction");
+         var client = _clientFactory.CreateClient();
 
          
          var response = await client.SendAsync(request);
