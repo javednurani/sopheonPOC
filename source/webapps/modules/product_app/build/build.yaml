@@ -72,9 +72,10 @@ steps:
   inputs:
     checkCoverage: true
     coverageFailOption: fixed
+    coverageThreshold: 80
     coverageType: lines
     treat0of0as100: true
-  enabled: false
+  enabled: true
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: app'
