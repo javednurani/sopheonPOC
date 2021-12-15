@@ -94,7 +94,7 @@ namespace Sopheon.CloudNative.Environments.Functions
             // TODO: Better way to track what is being request and how that uri could be appended or transformed for end user
             if(businessServiceName.Equals("ProductManagement"))
             {
-               if (string.IsNullOrEmpty(_config["SqlServerAdminEngima"]))
+               if (string.IsNullOrEmpty(_config.GetValue<string>("SqlServerAdminEnigma")))
                {
                   //TODO: Update this with either new return error or just generic logging...
                   logger.LogDebug("Unable to find associated password for for Sql Server login");

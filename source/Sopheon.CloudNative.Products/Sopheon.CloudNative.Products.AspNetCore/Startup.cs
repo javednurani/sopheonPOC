@@ -170,7 +170,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore
       /// <param name="env"></param>
       public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
       {
-         if (env.IsDevelopment())
+         if (Configuration.GetValue<bool>("Swagger:EnableSwaggerUi"))
          {
             app.UseDeveloperExceptionPage();
             app.UseSwagger();

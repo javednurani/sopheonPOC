@@ -103,6 +103,9 @@ resource ProductManagementWebApp 'Microsoft.Web/sites@2021-02-01' = {
   name: webAppName
   location: 'West US'
   kind: 'app'
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
     enabled: true    
     serverFarmId: AppService_PlanPortal.id

@@ -45,7 +45,7 @@ namespace Sopheon.CloudNative.Environments.Functions
                }
                if (hostContext.HostingEnvironment.IsProduction())
                {
-                  var keyVaultName = Environment.GetEnvironmentVariable("KeyVaultName");
+                  var keyVaultName = hostContext.Configuration.GetValue<string>("KeyVaultName");
                   var builtConfig = builder.Build();
                   var secretClient = new SecretClient(
                       new Uri($"https://{keyVaultName}.vault.azure.net/"),

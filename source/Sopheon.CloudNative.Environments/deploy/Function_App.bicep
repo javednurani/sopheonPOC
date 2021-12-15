@@ -110,35 +110,35 @@ resource FunctionApp 'Microsoft.Web/sites@2021-01-15' = {
   }
 }
 
-resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' = {
-  name: resourceGroup().name
-  location: location
-  properties: {
-    enabledForDeployment: true
-    enabledForTemplateDeployment: true
-    enabledForDiskEncryption: true
-    tenantId: tenant().tenantId
-    accessPolicies: [
-      {
-        tenantId: tenant().tenantId
-        objectId: FunctionApp.identity.principalId
-        permissions: {
-          keys: [
-            'get'
-          ]
-          secrets: [
-            'list'
-            'get'
-          ]
-        }
-      }
-    ]
-    sku: {
-      name: 'standard'
-      family: 'A'
-    }
-  }
-}
+// resource keyVault 'Microsoft.KeyVault/vaults@2019-09-01' = {
+//   name: resourceGroup().name
+//   location: location
+//   properties: {
+//     enabledForDeployment: true
+//     enabledForTemplateDeployment: true
+//     enabledForDiskEncryption: true
+//     tenantId: tenant().tenantId
+//     accessPolicies: [
+//       {
+//         tenantId: tenant().tenantId
+//         objectId: FunctionApp.identity.principalId
+//         permissions: {
+//           keys: [
+//             'get'
+//           ]
+//           secrets: [
+//             'list'
+//             'get'
+//           ]
+//         }
+//       }
+//     ]
+//     sku: {
+//       name: 'standard'
+//       family: 'A'
+//     }
+//   }
+// }
 
 
 //output functionIdentity string = FunctionApp.identity.principalId
