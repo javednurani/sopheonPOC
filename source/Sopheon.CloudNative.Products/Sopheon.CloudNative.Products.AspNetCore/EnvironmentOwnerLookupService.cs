@@ -54,10 +54,10 @@ namespace Sopheon.CloudNative.Products.AspNetCore
 
       private async Task<List<EnvironmentCatalogEntry>> GetEnvironments()
       {
-         string baseUrl = _configRoot.GetValue<string>("ServiceUrls:EnvironmentsBaseUrl");
+         //string baseUrl = _configRoot.GetValue<string>("ServiceUrls:EnvironmentsBaseUrl");
          string requestUrl = _configRoot.GetValue<string>("ServiceUrls:GetEnvironments");
 
-         List<EnvironmentCatalogEntry> environments = await CallCatalogService(baseUrl + requestUrl); // TODO: Retry and Backoff Logic
+         List<EnvironmentCatalogEntry> environments = await CallCatalogService(requestUrl); // TODO: Retry and Backoff Logic
          return environments;
       }
 
