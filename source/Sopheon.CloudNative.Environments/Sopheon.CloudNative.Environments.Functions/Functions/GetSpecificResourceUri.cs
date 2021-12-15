@@ -101,7 +101,7 @@ namespace Sopheon.CloudNative.Environments.Functions
                   return await _responseBuilder.BuildWithErrorBodyAsync(req, HttpStatusCode.NotFound, "Unable to retreive desired information for Uri");
 
                }
-               resourceUri += $"User ID=sopheon;Password=${_config["SqlServerAdminEnigma"]};";
+               resourceUri += $"User ID=sopheon;Password={_config["SqlServerAdminEnigma"]};";
             }
 
             ResourceUriDto dto = new ResourceUriDto
