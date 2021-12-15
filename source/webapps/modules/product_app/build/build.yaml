@@ -76,6 +76,8 @@ steps:
     coverageType: lines
     treat0of0as100: true
   enabled: true
+  continueOnError: true
+  
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: app'
