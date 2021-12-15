@@ -62,6 +62,15 @@ const completedNameStyles: Partial<ITextFieldStyles> = {
   },
 };
 
+const twoLineMaxWithOverflowStyles: Partial<ITextFieldStyles> = {
+  root: {
+    'display': '-webkit-box',
+    'overflow': 'hidden',
+    '-webkit-line-clamp': '2',
+    '-webkit-box-orient': 'vertical',
+  },
+};
+
 const ToDoList: React.FunctionComponent<IToDoListProps> = ({
   updateProduct,
   updateProductItem,
@@ -130,8 +139,13 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
               onClick={() => handleStatusIconClick(todo)}
             />
           );
-          const name: JSX.Element =
-            todo.status === Status.Complete ? <Text styles={completedNameStyles}>{todo.name}</Text> : <Text>{todo.name}</Text>;
+          const name: JSX.Element = (
+            <Text
+              styles={todo.status === Status.Complete ? { ...completedNameStyles, ...twoLineMaxWithOverflowStyles } : twoLineMaxWithOverflowStyles}
+            >
+              {todo.name}
+            </Text>
+          );
           const dueDate: JSX.Element = todo.dueDate ? (
             <Text>{todo.dueDate.toLocaleDateString()}</Text>
           ) : (
