@@ -15,7 +15,7 @@ export const messages: Record<string, Record<string, string>> = {
     'app.add5_aria': 'Increment value by 5',
     'acct.account': 'Account',
     'nav.accoladeAlt': 'Accolade logo',
-    'nav.product_app': 'Home',
+    'nav.product_app': 'Product',
     'aria.increment': 'Increment',
     'aria.decrement': 'Decremement',
     'aria.submit': 'Submit',
@@ -83,5 +83,7 @@ export const messages: Record<string, Record<string, string>> = {
     'onboarding.productgoal': 'What is your current product goal?',
     'onboarding.step3of3': 'Step 3 of 3: Set up your Goals',
     'onboarding.done': 'Done: Get Started!',
+    'nav.planning_app': 'Planning',
+    'auth.notifications': 'Notifications',
   },
 };
