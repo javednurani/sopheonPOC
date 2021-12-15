@@ -12,7 +12,7 @@ using Sopheon.CloudNative.Products.Domain;
 namespace Sopheon.CloudNative.Products.DataAccess.Migrations
 {
     [DbContext(typeof(ProductManagementContext))]
-    [Migration("20211215003947_InitialCreate")]
+    [Migration("20211215143633_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -617,14 +617,14 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                             b1.Property<int>("AttributeId")
                                 .HasColumnType("int");
 
-                            b1.Property<int?>("ValueEnumAttributeOptionId")
+                            b1.Property<int>("EnumAttributeOptionId")
                                 .HasColumnType("int");
 
                             b1.HasKey("ProductId", "AttributeId");
 
                             b1.HasIndex("AttributeId");
 
-                            b1.HasIndex("ValueEnumAttributeOptionId");
+                            b1.HasIndex("EnumAttributeOptionId");
 
                             b1.ToTable("Products_EnumAttributeValues", "SPM");
 
@@ -634,12 +634,14 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                                 .OnDelete(DeleteBehavior.Cascade)
                                 .IsRequired();
 
-                            b1.WithOwner()
-                                .HasForeignKey("ProductId");
-
                             b1.HasOne("Sopheon.CloudNative.Products.Domain.Attributes.Enum.EnumAttributeOption", "Value")
                                 .WithMany()
-                                .HasForeignKey("ValueEnumAttributeOptionId");
+                                .HasForeignKey("EnumAttributeOptionId")
+                                .OnDelete(DeleteBehavior.NoAction)
+                                .IsRequired();
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProductId");
 
                             b1.Navigation("Attribute");
 
@@ -917,14 +919,14 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                             b1.Property<int>("AttributeId")
                                 .HasColumnType("int");
 
-                            b1.Property<int?>("ValueEnumAttributeOptionId")
+                            b1.Property<int>("EnumAttributeOptionId")
                                 .HasColumnType("int");
 
                             b1.HasKey("ProductItemId", "AttributeId");
 
                             b1.HasIndex("AttributeId");
 
-                            b1.HasIndex("ValueEnumAttributeOptionId");
+                            b1.HasIndex("EnumAttributeOptionId");
 
                             b1.ToTable("ProductItem_EnumAttributeValues", "SPM");
 
@@ -934,12 +936,14 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                                 .OnDelete(DeleteBehavior.Cascade)
                                 .IsRequired();
 
-                            b1.WithOwner()
-                                .HasForeignKey("ProductItemId");
-
                             b1.HasOne("Sopheon.CloudNative.Products.Domain.Attributes.Enum.EnumAttributeOption", "Value")
                                 .WithMany()
-                                .HasForeignKey("ValueEnumAttributeOptionId");
+                                .HasForeignKey("EnumAttributeOptionId")
+                                .OnDelete(DeleteBehavior.NoAction)
+                                .IsRequired();
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProductItemId");
 
                             b1.Navigation("Attribute");
 

@@ -76,8 +76,11 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
          return Ok(results);
       }
 
+      // INFO, this endpoint was added in Cloud-2183 story to support rapid development of adding ProductItems
+      // the ProductsController::Patch endpoint also supports this, and React SPA infrastructure for API calls is more in parity with the Patch endpoint
+      // For purpose of Cloud-2183, may not need to use this endpoint. But it may be valuable in the future
       [HttpPost("{key}/Items")]
-      public async Task<IActionResult> PostItems(string key)
+      public async Task<IActionResult> PostItems(string key, [FromBody] ProductItemDto itemDto) // TODO, PostItem vs PostItems, single Dto vs collection of Dto's in request...
       {
          Product product = await _dbContext.Products
              .Include(p => p.Items)
@@ -88,23 +91,13 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
             return NotFound();
          }
 
-         product.Items.Add(new ProductItem()
-         {
-            Name = DateTime.Now.Ticks.ToString(),
-            ProductItemTypeId = (int)SystemManagedProductItemTypeIds.Task,
-            EnumAttributeValues = new List<EnumAttributeValue>() 
-            {
-               new EnumAttributeValue()
-               {
-                  AttributeId = -5,
-                  EnumAttributeOptionId = -8
-               }
-            }
-         });
+         // TODO, validate Dto?
+         ProductItem item = _mapper.Map<ProductItem>(itemDto);
+         product.Items.Add(item);
 
          await _dbContext.SaveChangesAsync();
 
-         return Ok();
+         return Ok(); // TODO, return 201 Created w/ a Response Body including new Id(s)
       }
 
       [HttpPatch("{key}")]

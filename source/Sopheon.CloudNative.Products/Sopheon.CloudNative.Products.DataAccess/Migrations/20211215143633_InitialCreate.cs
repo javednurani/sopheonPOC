@@ -627,7 +627,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 {
                     AttributeId = table.Column<int>(type: "int", nullable: false),
                     ProductItemId = table.Column<int>(type: "int", nullable: false),
-                    ValueEnumAttributeOptionId = table.Column<int>(type: "int", nullable: true)
+                    EnumAttributeOptionId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -640,8 +640,8 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                         principalColumn: "AttributeId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProductItem_EnumAttributeValues_EnumAttributeOption_ValueEnumAttributeOptionId",
-                        column: x => x.ValueEnumAttributeOptionId,
+                        name: "FK_ProductItem_EnumAttributeValues_EnumAttributeOption_EnumAttributeOptionId",
+                        column: x => x.EnumAttributeOptionId,
                         principalSchema: "SPM",
                         principalTable: "EnumAttributeOption",
                         principalColumn: "EnumAttributeOptionId");
@@ -661,7 +661,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 {
                     AttributeId = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
-                    ValueEnumAttributeOptionId = table.Column<int>(type: "int", nullable: true)
+                    EnumAttributeOptionId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -674,8 +674,8 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                         principalColumn: "AttributeId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Products_EnumAttributeValues_EnumAttributeOption_ValueEnumAttributeOptionId",
-                        column: x => x.ValueEnumAttributeOptionId,
+                        name: "FK_Products_EnumAttributeValues_EnumAttributeOption_EnumAttributeOptionId",
+                        column: x => x.EnumAttributeOptionId,
                         principalSchema: "SPM",
                         principalTable: "EnumAttributeOption",
                         principalColumn: "EnumAttributeOptionId");
@@ -869,10 +869,10 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 column: "AttributeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductItem_EnumAttributeValues_ValueEnumAttributeOptionId",
+                name: "IX_ProductItem_EnumAttributeValues_EnumAttributeOptionId",
                 schema: "SPM",
                 table: "ProductItem_EnumAttributeValues",
-                column: "ValueEnumAttributeOptionId");
+                column: "EnumAttributeOptionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductItem_EnumCollectionAttributeValues_AttributeId",
@@ -937,10 +937,10 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 column: "AttributeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_EnumAttributeValues_ValueEnumAttributeOptionId",
+                name: "IX_Products_EnumAttributeValues_EnumAttributeOptionId",
                 schema: "SPM",
                 table: "Products_EnumAttributeValues",
-                column: "ValueEnumAttributeOptionId");
+                column: "EnumAttributeOptionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_EnumCollectionAttributeValues_AttributeId",

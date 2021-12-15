@@ -10,5 +10,7 @@
       public AttributeDto Attribute { get; set; }
 
       public EnumAttributeOptionDto Value { get; set; }
+
+      public int EnumAttributeOptionId { get; set; }
    }
 }
