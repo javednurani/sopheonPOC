@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@fluentui/react": "^7.155.4",
+    "@fluentui/react-hooks": "^8.3.7",
     "@fluentui/react-theme-provider": "^0.18.3",
     "@fluentui/theme": "^2.0.2",
     "@sopheon/controls": "file:../../packages/controls",

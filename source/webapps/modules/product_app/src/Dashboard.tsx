@@ -3,14 +3,18 @@ import { useTheme } from '@fluentui/react-theme-provider';
 import React from 'react';
 
 import KPIs from './KPIs';
+import { UpdateProductAction } from './product/productReducer';
 import ProductHealth from './ProductHealth';
 import ProductSection from './ProductSection';
 import ResourcesAndLinks from './ResourcesAndLinks';
 import Timeline from './Timeline';
 import ToDoList from './ToDoList';
-import { Product } from './types';
+import { Product, UpdateProductModel } from './types';
 
 export interface IDashboardProps {
+  updateProduct: (product: UpdateProductModel) => UpdateProductAction;
+  environmentKey: string;
+  accessToken: string;
   products: Product[];
 }
 
@@ -19,7 +23,7 @@ const stackTokens: IStackTokens = {
   padding: 10,
 };
 
-const Dashboard: React.FunctionComponent<IDashboardProps> = ({ products }: IDashboardProps) => {
+const Dashboard: React.FunctionComponent<IDashboardProps> = ({ updateProduct, environmentKey, accessToken, products }: IDashboardProps) => {
   const theme = useTheme();
 
   const sharedStackItemStyles: Partial<IStyle> = {
@@ -67,7 +71,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({ products }: IDash
             <ProductSection product={products[0]} />
           </Stack.Item>
           <Stack.Item styles={middleRowStackItemStyles}>
-            <ToDoList />
+            <ToDoList updateProduct={updateProduct} environmentKey={environmentKey} accessToken={accessToken} products={products} />
           </Stack.Item>
           <Stack.Item styles={bottomRowStackItemStyles}>
             <ResourcesAndLinks />
