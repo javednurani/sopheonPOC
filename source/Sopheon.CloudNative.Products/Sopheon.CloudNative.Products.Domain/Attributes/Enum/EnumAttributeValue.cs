@@ -7,5 +7,7 @@
       public Attribute Attribute { get; set; }
 
       public EnumAttributeOption Value { get; set; }
+
+      public int EnumAttributeOptionId { get; set; }
    }
 }

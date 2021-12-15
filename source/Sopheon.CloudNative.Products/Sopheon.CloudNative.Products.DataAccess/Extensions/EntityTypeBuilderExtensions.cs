@@ -71,6 +71,12 @@ namespace Sopheon.CloudNative.Products.DataAccess.Extensions
             {
                enumAttributeValue.WithOwner();
                enumAttributeValue.HasKey($"{typeof(TEntity).Name}Id", "AttributeId");
+
+               enumAttributeValue
+                  .HasOne<EnumAttributeOption>(e => e.Value)
+                  .WithMany()
+                  .HasForeignKey(g => g.EnumAttributeOptionId)
+                  .OnDelete(DeleteBehavior.NoAction);
             });
       }
 

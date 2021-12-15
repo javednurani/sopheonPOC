@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Sopheon.CloudNative.Products.AspNetCore.Filters;
 using Sopheon.CloudNative.Products.AspNetCore.Models;
 using Sopheon.CloudNative.Products.Domain;
+using Sopheon.CloudNative.Products.Domain.Attributes.Enum;
 
 namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
 {
@@ -60,14 +61,50 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
       [HttpGet("{key}/Items")]
       public async Task<IActionResult> GetItems(string key)
       {
-         var query = _dbContext.Products
+         Product product = await _dbContext.Products
              .AsNoTracking()
-             .Where(p => p.Key == key)
-             .Select(p => p.Items)
-             .ProjectTo<ProductItemDto>(_mapper.ConfigurationProvider);
+             .Include(p => p.Items)
+             .SingleOrDefaultAsync(p => p.Key == key);
 
-         var results = await query.ToArrayAsync();
+         if (product == null) 
+         {
+            return NotFound();
+         }
+
+         var results = _mapper.Map<ProductItemDto[]>(product.Items);;
+
          return Ok(results);
+      }
+
+      [HttpPost("{key}/Items")]
+      public async Task<IActionResult> PostItems(string key)
+      {
+         Product product = await _dbContext.Products
+             .Include(p => p.Items)
+             .SingleOrDefaultAsync(p => p.Key == key);
+
+         if (product == null)
+         {
+            return NotFound();
+         }
+
+         product.Items.Add(new ProductItem()
+         {
+            Name = DateTime.Now.Ticks.ToString(),
+            ProductItemTypeId = (int)SystemManagedProductItemTypeIds.Task,
+            EnumAttributeValues = new List<EnumAttributeValue>() 
+            {
+               new EnumAttributeValue()
+               {
+                  AttributeId = -5,
+                  EnumAttributeOptionId = -8
+               }
+            }
+         });
+
+         await _dbContext.SaveChangesAsync();
+
+         return Ok();
       }
 
       [HttpPatch("{key}")]
