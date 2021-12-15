@@ -65,7 +65,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore
          var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
          request.Headers.Add("User-Agent", "Sopheon.CloudNative.Products.AspNetCore");
 
-         var client = _clientFactory.CreateClient();
+         var client = _clientFactory.CreateClient("EnvFunction");
 
          List<EnvironmentCatalogEntry> environments = null;
          try
