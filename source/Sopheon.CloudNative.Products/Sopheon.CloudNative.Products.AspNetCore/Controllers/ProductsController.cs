@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Sopheon.CloudNative.Products.AspNetCore.Filters;
 using Sopheon.CloudNative.Products.AspNetCore.Models;
 using Sopheon.CloudNative.Products.Domain;
+using Sopheon.CloudNative.Products.Domain.Attributes.Enum;
 
 namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
 {
@@ -60,14 +61,43 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
       [HttpGet("{key}/Items")]
       public async Task<IActionResult> GetItems(string key)
       {
-         var query = _dbContext.Products
+         Product product = await _dbContext.Products
              .AsNoTracking()
-             .Where(p => p.Key == key)
-             .Select(p => p.Items)
-             .ProjectTo<ProductItemDto>(_mapper.ConfigurationProvider);
+             .Include(p => p.Items)
+             .SingleOrDefaultAsync(p => p.Key == key);
 
-         var results = await query.ToArrayAsync();
+         if (product == null) 
+         {
+            return NotFound();
+         }
+
+         var results = _mapper.Map<ProductItemDto[]>(product.Items);;
+
          return Ok(results);
+      }
+
+      // INFO, this endpoint was added in Cloud-2183 story to support rapid development of adding ProductItems
+      // the ProductsController::Patch endpoint also supports this, and React SPA infrastructure for API calls is more in parity with the Patch endpoint
+      // For purpose of Cloud-2183, may not need to use this endpoint. But it may be valuable in the future
+      [HttpPost("{key}/Items")]
+      public async Task<IActionResult> PostItems(string key, [FromBody] ProductItemDto itemDto) // TODO, PostItem vs PostItems, single Dto vs collection of Dto's in request...
+      {
+         Product product = await _dbContext.Products
+             .Include(p => p.Items)
+             .SingleOrDefaultAsync(p => p.Key == key);
+
+         if (product == null)
+         {
+            return NotFound();
+         }
+
+         // TODO, validate Dto?
+         ProductItem item = _mapper.Map<ProductItem>(itemDto);
+         product.Items.Add(item);
+
+         await _dbContext.SaveChangesAsync();
+
+         return Ok(); // TODO, return 201 Created w/ a Response Body including new Id(s)
       }
 
       [HttpPatch("{key}")]
@@ -99,7 +129,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
             .Include(p => p.Items)
             .ThenInclude(i => i.UtcDateTimeAttributeValues)
             .Include(p => p.Items)
-            .ThenInclude(i => i.EnumCollectionAttributeValues)
+            .ThenInclude(i => i.EnumAttributeValues)
             .Include(p => p.Goals)
             .Include(p => p.KeyPerformanceIndicators)
             .ThenInclude(kpi => kpi.Attribute)

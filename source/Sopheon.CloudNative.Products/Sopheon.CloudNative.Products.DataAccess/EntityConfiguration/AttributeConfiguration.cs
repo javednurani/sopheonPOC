@@ -24,11 +24,34 @@ namespace Sopheon.CloudNative.Products.DataAccess.EntityConfiguration
             .HasValue<DecimalAttribute>((int)AttributeDataTypes.Decimal)
             .HasValue<MoneyAttribute>((int)AttributeDataTypes.Money)
             .HasValue<UtcDateTimeAttribute>((int)AttributeDataTypes.UtcDateTime)
-            .HasValue<EnumCollectionAttribute>((int)AttributeDataTypes.EnumCollection);
+            .HasValue<EnumCollectionAttribute>((int)AttributeDataTypes.EnumCollection)
+            .HasValue<EnumAttribute>((int)AttributeDataTypes.Enum);
 
          builder.Property(a => a.Name)
             .HasMaxLength(ModelConstraints.NAME_LENGTH_60)
             .IsRequired();
+      }
+   }
+
+   public class EnumAttributeConfiguration : IEntityTypeConfiguration<EnumAttribute>
+   {
+      public void Configure(EntityTypeBuilder<EnumAttribute> builder)
+      {
+         builder
+             .HasMany(enumAttribute => enumAttribute.EnumAttributeOptions)
+             .WithOne()
+             .HasForeignKey(option => option.AttributeId)
+             .HasPrincipalKey(enumAttribute => enumAttribute.AttributeId);
+
+         EnumAttribute[] attributesWithoutOptions = ProductSeedData.GetDefaultAttributes<EnumAttribute>()
+             .Select(a => a.ShallowCopy())
+             .Cast<EnumAttribute>()
+             .ToArray();
+         foreach (var attribute in attributesWithoutOptions)
+         {
+            attribute.EnumAttributeOptions = null;
+         }
+         builder.HasData(attributesWithoutOptions);  // Exclude subentities so that they're populated by the EntityTypeBuilder for EntityAttributeOptions
       }
    }
 
@@ -38,7 +61,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.EntityConfiguration
       {
          builder
              .HasMany(enumCollectionAttribute => enumCollectionAttribute.EnumAttributeOptions)
-             .WithOne(option => option.EnumCollectionAttribute)
+             .WithOne()
              .HasForeignKey(option => option.AttributeId)
              .HasPrincipalKey(enumCollectionAttribute => enumCollectionAttribute.AttributeId);
 
@@ -50,8 +73,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.EntityConfiguration
          {
             attribute.EnumAttributeOptions = null;
          }
-         //System.Diagnostics.Debugger.Launch();
-         builder.HasData(attributesWithoutOptions);
+         builder.HasData(attributesWithoutOptions);  // Exclude subentities so that they're populated by the EntityTypeBuilder for EntityAttributeOptions
       }
    }
 
@@ -63,9 +85,9 @@ namespace Sopheon.CloudNative.Products.DataAccess.EntityConfiguration
              .HasIndex(nameof(EnumAttributeOption.AttributeId), nameof(EnumAttributeOption.Name))
              .IsUnique();
 
-         //System.Diagnostics.Debugger.Launch();
-         var data = ProductSeedData.GetDefaultAttributes<EnumCollectionAttribute>().SelectMany(a => a.EnumAttributeOptions).ToArray();
-         builder.HasData(data);
+         EnumAttributeOption[] enumData = ProductSeedData.GetDefaultAttributes<EnumAttribute>().SelectMany(a => a.EnumAttributeOptions).ToArray();
+         EnumAttributeOption[] enumCollectionData = ProductSeedData.GetDefaultAttributes<EnumCollectionAttribute>().SelectMany(a => a.EnumAttributeOptions).ToArray();
+         builder.HasData(enumData.Union(enumCollectionData));
       }
    }
 

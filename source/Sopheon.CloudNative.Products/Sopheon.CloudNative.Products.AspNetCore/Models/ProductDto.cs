@@ -19,6 +19,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
       public List<MoneyAttributeValueDto> MoneyAttributeValues { get; set; }
 
       public List<KeyPerformanceIndicatorDto> KeyPerformanceIndicators { get; set; }
+      public List<EnumAttributeValueDto> EnumAttributeValues { get; set; }
       public List<EnumCollectionAttributeValueDto> EnumCollectionAttributeValues { get; set; }
 
       public string Name { get; set; }
@@ -57,6 +58,8 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
       //public UtcDateTimeAttributeValueDto[] UtcDateTimeAttributeValues { get; set; }
 
       //public MoneyAttributeValueDto[] MoneyAttributeValues { get; set; }
+
+      public List<EnumAttributeValueDto> EnumAttributeValues { get; set; }
 
       [MaxLength(ModelConstraints.NAME_LENGTH_300)]
       public string Name { get; set; }

@@ -200,14 +200,10 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
                 value: taskDueDate.date?.toDateString(),
               },
             ],
-            enumCollectionAttributeValues: [
+            enumAttributeValues: [
               {
                 attributeId: Attributes.STATUS,
-                value: [
-                  {
-                    enumAttributeOptionId: selectedItemStatusDropdown?.key || Status.NotStarted,
-                  },
-                ],
+                enumAttributeOptionId: selectedItemStatusDropdown?.key || Status.NotStarted,
               },
             ],
           },

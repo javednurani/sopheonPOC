@@ -35,8 +35,10 @@ namespace Sopheon.CloudNative.Products.AspNetCore.MappingProfiles
 
          CreateMap<UtcDateTimeAttributeValue, UtcDateTimeAttributeValueDto>().ReverseMap();
 
+         CreateMap<EnumAttributeValue, EnumAttributeValueDto>().ReverseMap();
          CreateMap<EnumCollectionAttributeValue, EnumCollectionAttributeValueDto>().ReverseMap();
          CreateMap<EnumAttributeOptionValue, EnumAttributeOptionValueDto>().ReverseMap();
+         CreateMap<EnumAttributeOption, EnumAttributeOptionDto>().ReverseMap();
 
          CreateMap<MoneyAttributeValue, MoneyAttributeValueDto>().ReverseMap();
          CreateMap<MoneyValue, MoneyValueDto>().ReverseMap();
