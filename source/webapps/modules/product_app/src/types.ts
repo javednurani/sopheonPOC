@@ -5,6 +5,11 @@ export type UpdateProductModel = {
 } & EnvironmentScopedApiRequestModel &
   ProductScopedApiRequestModel;
 
+export type UpdateProductItemModel = {
+  ProductItem: ProductItemDto;
+} & EnvironmentScopedApiRequestModel &
+  ProductScopedApiRequestModel;
+
 export type CreateProductModel = {
   Product: ProductPostDto;
 } & EnvironmentScopedApiRequestModel;
@@ -54,6 +59,7 @@ export interface KeyPerformanceIndicator {
   attribute: AttributeDto;
 }
 
+// TODO: Tech Debt - these dtos come directly from our data model, which I don't think our UI should know about
 export interface Int32AttributeValueDto {
   AttributeId: number;
   Value: number | null;
@@ -69,6 +75,11 @@ export interface EnumCollectionAttributeValueDto {
 
 export interface ProductPostDto {
   Name: string;
+  EnumCollectionAttributeValues: EnumCollectionAttributeValueDto[];
+}
+
+export interface ProductItemDto {
+  Id: number;
   EnumCollectionAttributeValues: EnumCollectionAttributeValueDto[];
 }
 

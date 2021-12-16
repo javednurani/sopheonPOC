@@ -1,17 +1,21 @@
-import {
-  FetchStatus,
-  InjectReducerMap,
-  InjectSagaMap,
-  ShellApiProps,
-} from '@sopheon/shell-api';
+import { FetchStatus, InjectReducerMap, InjectSagaMap, ShellApiProps } from '@sopheon/shell-api';
 import { FunctionComponent } from 'react';
 
 import App from './App';
 import { nextStep, NextStepAction } from './onboarding/onboardingReducer';
-import { createProduct, CreateProductAction, getProducts, GetProductsAction, updateProduct, UpdateProductAction } from './product/productReducer';
+import {
+  createProduct,
+  CreateProductAction,
+  getProducts,
+  GetProductsAction,
+  updateProduct,
+  UpdateProductAction,
+  updateProductItem,
+  UpdateProductItemAction,
+} from './product/productReducer';
 import { NAMESPACE, rootReducer, RootState } from './rootReducer';
 import rootSaga from './rootSaga';
-import { CreateProductModel, EnvironmentScopedApiRequestModel, Product, UpdateProductModel } from './types';
+import { CreateProductModel, EnvironmentScopedApiRequestModel, Product, UpdateProductItemModel, UpdateProductModel } from './types';
 
 export type AppStateProps = {
   currentStep: number;
@@ -24,6 +28,7 @@ export type AppDispatchProps = {
   getProducts: (requestDto: EnvironmentScopedApiRequestModel) => GetProductsAction;
   createProduct: (product: CreateProductModel) => CreateProductAction;
   updateProduct: (product: UpdateProductModel) => UpdateProductAction;
+  updateProductItem: (product: UpdateProductItemModel) => UpdateProductItemAction;
 };
 
 const AppContainer: FunctionComponent<ShellApiProps> = ({ shellApi }: ShellApiProps) => {
@@ -38,6 +43,7 @@ const AppContainer: FunctionComponent<ShellApiProps> = ({ shellApi }: ShellApiPr
     getProducts: (requestDto: EnvironmentScopedApiRequestModel) => getProducts(requestDto),
     createProduct: (product: CreateProductModel) => createProduct(product),
     updateProduct: (product: UpdateProductModel) => updateProduct(product),
+    updateProductItem: (productItem: UpdateProductItemModel) => updateProductItem(productItem),
   });
 
   const appReducerMap: InjectReducerMap = {
