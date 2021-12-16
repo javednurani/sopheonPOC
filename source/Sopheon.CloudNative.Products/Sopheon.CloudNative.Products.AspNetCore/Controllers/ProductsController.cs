@@ -116,9 +116,9 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
 
          // update entity
          // TODO: currently only setting the value for the single ToDoItem
-         int newValue = itemFromRequest.EnumCollectionAttributeValues.Single(ecav => ecav.AttributeId == STATUS).Value.Single().EnumAttributeOptionId;
-         EnumCollectionAttributeValue toDoItems = itemFromDB.EnumCollectionAttributeValues.Single(ecav => ecav.AttributeId == STATUS);
-         toDoItems.Value = new List<EnumAttributeOptionValue> { new EnumAttributeOptionValue { EnumAttributeOptionId = newValue } };
+         int newValue = itemFromRequest.EnumAttributeValues.Single(ecav => ecav.AttributeId == STATUS).EnumAttributeOptionId;
+         EnumAttributeValue toDoItem = itemFromDB.EnumAttributeValues.Single(ecav => ecav.AttributeId == STATUS);
+         toDoItem.EnumAttributeOptionId = newValue;
 
          _ = await _dbContext.SaveChangesAsync();
 

@@ -114,15 +114,11 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
       EnvironmentKey: environmentKey,
       AccessToken: accessToken,
       ProductItem: {
-        Id: todo.id,
-        EnumCollectionAttributeValues: [
+        id: todo.id,
+        enumAttributeValues: [
           {
             attributeId: Attributes.STATUS,
-            value: [
-              {
-                enumAttributeOptionId: todo.status,
-              },
-            ],
+            enumAttributeOptionId: todo.status,
           },
         ],
         // TODO: might need to send other values in future

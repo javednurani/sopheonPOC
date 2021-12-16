@@ -53,7 +53,7 @@ export const updateProductItem: (productItemDto: UpdateProductItemModel) => Prom
   const updateProductItemUrlWithEnvironment = `${API_URL_BASE}${settings.UpdateProductItemUrlPath}`
     .replace(settings.TokenEnvironmentKey, updateProductItemModel.EnvironmentKey)
     .replace(settings.TokenProductKey, updateProductItemModel.ProductKey || '') // TODO, nullable Key? null check ?
-    .replace(settings.TokenProductItemId, updateProductItemModel.ProductItem.Id.toString());
+    .replace(settings.TokenProductItemId, updateProductItemModel.ProductItem.id.toString());
 
   const config: AxiosRequestConfig = {
     headers: {

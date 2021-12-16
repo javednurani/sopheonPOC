@@ -78,9 +78,14 @@ export interface ProductPostDto {
   EnumCollectionAttributeValues: EnumCollectionAttributeValueDto[];
 }
 
+export interface EnumAttributeValueDto {
+  attributeId: number;
+  enumAttributeOptionId: number;
+}
+
 export interface ProductItemDto {
-  Id: number;
-  EnumCollectionAttributeValues: EnumCollectionAttributeValueDto[];
+  id: number;
+  enumAttributeValues: EnumAttributeValueDto[];
 }
 
 export interface PatchOperation {
