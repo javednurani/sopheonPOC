@@ -6,7 +6,7 @@ import KPIs from './KPIs';
 import ProductHealth from './ProductHealth';
 import ProductSection from './ProductSection';
 import ResourcesAndLinks from './ResourcesAndLinks';
-import Timeline from './Timeline';
+import Timeline from './timeline/Timeline';
 import ToDoList from './ToDoList';
 import { Product } from './types';
 

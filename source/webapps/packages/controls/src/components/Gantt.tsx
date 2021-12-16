@@ -1,8 +1,7 @@
 import '../../../controls/ext/Gantt/codebase/dhtmlxgantt.css';
-import './Gantt.css';
+import '../../../controls/ext/Gantt/codebase/Gantt.css';
 
-import { useEffect } from '@storybook/addons';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Gantt } from '../../../controls/ext/Gantt/codebase/dhtmlxgantt';
 
@@ -30,7 +29,6 @@ const GanttComponent: React.FunctionComponent<GanttProps> = ({ taskInfo }: Gantt
       undo: true,
     });
 
-
     // Just hard coding some data for now.
     const taskData = {
       data: [
@@ -39,22 +37,12 @@ const GanttComponent: React.FunctionComponent<GanttProps> = ({ taskInfo }: Gantt
       ],
       links: [],
     };
-
-    // @ts-expect-error: Let's ignore a compil
-    const { ganttContainer } = this;
-
     // , new Date(2018, 3, 30), new Date(2020, 3, 30)
-    gantt.init(ganttContainer);
+    gantt.init('gantt_here');
     gantt.parse(taskData);
   });
   return (
-    <div
-      ref={input => {
-        // @ts-expect-error: Let's ignore a compil
-        this.ganttContainer = input;
-      }}
-      style={{}}
-    ></div>
+    <div className="gantt_here" id="gantt_here"></div>
   );
 };
 
