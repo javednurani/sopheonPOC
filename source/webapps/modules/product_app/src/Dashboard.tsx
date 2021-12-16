@@ -34,12 +34,12 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
   const theme = useTheme();
 
   const sharedStackItemStyles: Partial<IStyle> = {
-    //backgroundImage: `linear-gradient(to bottom right, ${theme.semanticColors.bodyBackground}, ${theme.semanticColors.bodyBackgroundHovered})`,
     display: 'flex',
     justifyContent: 'center',
     border: '1px solid',
     borderColor: theme.palette.neutralTertiary,
     borderRadius: '3px',
+    overflow: 'hidden',
   };
 
   const topRowStackItemStyles: IStackItemStyles = {

@@ -71,7 +71,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
 
       public List<ProductGoalDto> Goals { get; set; }
 
-      //public List<ProductItemDto> Items { get; set; }
+      public List<ProductItemDto> Items { get; set; }
 
       //public List<FileAttachment> FileAttachments { get; set; }
    }
