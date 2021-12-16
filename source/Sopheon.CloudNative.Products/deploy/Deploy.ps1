@@ -4,7 +4,7 @@ $ZipUtil = "C:\Program Files\7-Zip\7z.exe";
 $FunctionAppStorageAccountName = "stratus$($env:Environment.ToLower())funcapp";
 $ProductManagementPath = "$($env:System_DefaultWorkingDirectory)\ProductManagementApi";
 $ResourceGroup = "Stratus-$($env:Environment)";
-$EnvironmentSqlServer = "$($ResourceGroup.ToLower())-environment";
+$EnvironmentSqlServer = "$($ResourceGroup.ToLower())";
 $EnvironmentTenantTemplateDatabase = "TenantEnvironmentTemplate";
 
 $azureKeyVault = "Cloud-DevOps";
