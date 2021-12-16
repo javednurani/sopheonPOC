@@ -3,7 +3,7 @@
 $ResourceGroup = "Stratus-$($env:Environment)";
 $EnvironmentFunctionAppName = "";
 
-$EnvironmentServerName = "$($ResourceGroup.ToLower())-environment";
+$EnvironmentServerName = "$($ResourceGroup.ToLower())";
 $TenantEnvironmentServerName = "$($ResourceGroup.ToLower())-tenantenvironments"
 $FunctionAppStorageAccountName = "stratus$($env:Environment.ToLower())funcapp";
 
