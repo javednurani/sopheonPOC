@@ -81,7 +81,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
   const { formatMessage } = useIntl();
   const [isTaskModalOpen, { setTrue: showTaskModal, setFalse: hideTaskModal }] = useBoolean(false);
   const { todos } = products[0];
-  const [isFilteredToComplete, { toggle: toggleFiltered }] = useBoolean(false);
+  const [isFilteredToShowComplete, { toggle: toggleFiltered }] = useBoolean(false);
 
   const handleStatusIconClick = (todo: ToDoItem) => {
     // if it's not complete, mark it as complete, otherwise in progress
@@ -112,10 +112,6 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
     updateProductItem(updateProductItemDto);
   };
 
-  const handleFilterIconClick = () => {
-    toggleFiltered();
-  };
-
   const emptyListContent: JSX.Element = (
     <div style={contentDivStyle}>
       <Text variant="xLarge">
@@ -129,7 +125,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
   const populatedListContent: JSX.Element = (
     <div>
       {todos
-        .filter(todo => (isFilteredToComplete ? todo.status === Status.Complete : true))
+        .filter(todo => (isFilteredToShowComplete ? true : todo.status !== Status.Complete))
         .map((todo, index) => {
           const emptyNamePlaceholder = 'xxxx';
           const statusIcon: JSX.Element = (
@@ -183,10 +179,10 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
           <Text variant="xLarge">
             {/* TODO: combine class and styles? */}
             <FontIcon
-              iconName={isFilteredToComplete ? 'FilterSolid' : 'Filter'}
+              iconName={isFilteredToShowComplete ? 'FilterSolid' : 'Filter'}
               className={filterSortIconClass}
               style={pointerCursorStyle}
-              onClick={handleFilterIconClick}
+              onClick={toggleFiltered}
             />
             <FontIcon iconName="Sort" className={filterSortIconClass} />
           </Text>
