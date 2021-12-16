@@ -5,6 +5,7 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 
 import AddTask from './AddTask';
+import { Attributes } from './data/attributes';
 import { Status } from './data/status';
 import { UpdateProductAction, UpdateProductItemAction } from './product/productReducer';
 import { Product, ToDoItem, UpdateProductItemModel, UpdateProductModel } from './types';
@@ -116,10 +117,10 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
         Id: todo.id,
         EnumCollectionAttributeValues: [
           {
-            AttributeId: Attributes.STATUS,
-            Value: [
+            attributeId: Attributes.STATUS,
+            value: [
               {
-                EnumAttributeOptionId: todo.status,
+                enumAttributeOptionId: todo.status,
               },
             ],
           },
