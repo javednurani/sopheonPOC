@@ -71,6 +71,12 @@ const twoLineMaxWithOverflowStyles: Partial<ITextFieldStyles> = {
   },
 };
 
+// TODO: move to utility?
+const isToday = (someDate: Date) => {
+  const today = new Date();
+  return someDate.getDate() === today.getDate() && someDate.getMonth() === today.getMonth() && someDate.getFullYear() === today.getFullYear();
+};
+
 const ToDoList: React.FunctionComponent<IToDoListProps> = ({
   updateProduct,
   updateProductItem,
@@ -142,11 +148,17 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
               {todo.name}
             </Text>
           );
-          const dueDate: JSX.Element = todo.dueDate ? (
-            <Text>Due {todo.dueDate.toLocaleDateString(undefined, { year: '2-digit', month: 'numeric', day: 'numeric' })}</Text>
-          ) : (
-            <Text styles={emptyDueDateStyles}>{emptyNamePlaceholder}</Text>
-          );
+
+          let dueDate: JSX.Element;
+          if (todo.dueDate) {
+            if (isToday(todo.dueDate)) {
+              dueDate = <Text>Due Today</Text>;
+            } else {
+              dueDate = <Text>Due {todo.dueDate.toLocaleDateString(undefined, { year: '2-digit', month: 'numeric', day: 'numeric' })}</Text>;
+            }
+          } else {
+            dueDate = <Text styles={emptyDueDateStyles}>{emptyNamePlaceholder}</Text>;
+          }
 
           return (
             <div key={index}>
