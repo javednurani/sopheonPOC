@@ -1,39 +1,78 @@
-export interface Industry {
+
+// this enum is controlled by Sopheon.CloudNative.Products.DataAccess.SeedData.ProductSeedData.cs
+// (EnumAttributeOptions defined for the Industry EnumCollectionAttribute)
+// keep this TS enum in sync with changes to the C# file ProductSeedData.cs
+
+// eslint-disable-next-line no-shadow
+export enum Industries {
+  Advertising = -1,
+  AgricultureAndForestry = -2,
+  Construction = -3,
+  EducationHigherEd = -4,
+  EducationK12 = -5,
+  EnergyMiningOilAndGas = -6,
+  FinancialServices = -7,
+  GovernmentFederal = -8,
+  GovernmentLocal = -9,
+  GovernmentMilitary = -10,
+  GovernmentState = -11,
+  HealthCare = -12,
+  Insurance = -13,
+  ManufacturingAerospace = -14,
+  ManufacturingAutomotive = -15,
+  ManufacturingConsumerGoods = -16,
+  ManufacturingIndustrial = -17,
+  MediaAndEntertainment = -18,
+  MembershipOrganizations = -19,
+  NonProfit = -20,
+  PharmaceuticalsAndBiotech = -21,
+  ProfessionalAndTechnicalServices = -22,
+  RealEstateRentalAndLeasing = -23,
+  Retail = -24,
+  TechnologyHardware = -25,
+  TechnologySoftwareAndServices = -26,
+  Telecommunications = -27,
+  TransportationAndWarehousing = -28,
+  TravelLeisureAndHospitality = -29,
+  Utilities = -30
+}
+
+export interface IndustryUxMapItem {
   key: number;
   iconName: string;
   resourceKey: string;
 }
 
-export const industries: Industry[] = [
-  { key: 1, resourceKey: 'industryoption.advertising', iconName: 'MediaIndustryIcon' },
-  { key: 2, resourceKey: 'industryoption.agricuture', iconName: 'AgIndustryIcon' },
-  { key: 3, resourceKey: 'industryoption.construction', iconName: 'ConstREIndustryIcon' },
-  { key: 4, resourceKey: 'industryoption.eduhigher', iconName: 'EduIndustryIcon' },
-  { key: 5, resourceKey: 'industryoption.eduk12', iconName: 'EduIndustryIcon' },
-  { key: 6, resourceKey: 'industryoption.energy', iconName: 'EnergyIndustryIcon' },
-  { key: 7, resourceKey: 'industryoption.financialservices', iconName: 'FinIndustryIcon' },
-  { key: 8, resourceKey: 'industryoption.govfederal', iconName: 'GovtIndustryIcon' },
-  { key: 9, resourceKey: 'industryoption.govlocal', iconName: 'GovtIndustryIcon' },
-  { key: 10, resourceKey: 'industryoption.govmilitary', iconName: 'GovtIndustryIcon' },
-  { key: 11, resourceKey: 'industryoption.govstate', iconName: 'GovtIndustryIcon' },
-  { key: 12, resourceKey: 'industryoption.healthcare', iconName: 'HealthIndustryIcon' },
-  { key: 13, resourceKey: 'industryoption.insurance', iconName: 'FinIndustryIcon' },
-  { key: 14, resourceKey: 'industryoption.manuaero', iconName: 'AeroIndustryIcon' },
-  { key: 15, resourceKey: 'industryoption.manuauto', iconName: 'AutoIndustryIcon' },
-  { key: 16, resourceKey: 'industryoption.manuconsumergoods', iconName: 'ConsumerIndustryIcon' },
-  { key: 17, resourceKey: 'industryoption.manuindustrial', iconName: 'IndusIndustryIcon' },
-  { key: 18, resourceKey: 'industryoption.entertainment', iconName: 'MediaIndustryIcon' },
-  { key: 19, resourceKey: 'industryoption.membershiporg', iconName: 'MemberIndustryIcon' },
-  { key: 20, resourceKey: 'industryoption.nonprofit', iconName: 'MemberIndustryIcon' },
-  { key: 21, resourceKey: 'industryoption.pharma', iconName: 'HealthIndustryIcon' },
-  { key: 22, resourceKey: 'industryoption.protechservices', iconName: 'ServicesIndustryIcon' },
-  { key: 23, resourceKey: 'industryoption.realestate', iconName: 'ConstREIndustryIcon' },
-  { key: 24, resourceKey: 'industryoption.retail', iconName: 'ConsumerIndustryIcon' },
-  { key: 25, resourceKey: 'industryoption.techhardware', iconName: 'TechIndustryIcon' },
-  { key: 26, resourceKey: 'industryoption.techsoftware', iconName: 'TechIndustryIcon' },
-  { key: 27, resourceKey: 'industryoption.telecom', iconName: 'TeleIndustryIcon' },
-  { key: 28, resourceKey: 'industryoption.transportation', iconName: 'TransIndustryIcon' },
-  { key: 29, resourceKey: 'industryoption.travel', iconName: 'HospIndustryIcon' },
-  { key: 30, resourceKey: 'industryoption.utilities', iconName: 'TechIndustryIcon' },
+export const industriesUxMap: IndustryUxMapItem[] = [
+  { key: Industries.Advertising, resourceKey: 'industryoption.advertising', iconName: 'MediaIndustryIcon' },
+  { key: Industries.AgricultureAndForestry, resourceKey: 'industryoption.agricuture', iconName: 'AgIndustryIcon' },
+  { key: Industries.Construction, resourceKey: 'industryoption.construction', iconName: 'ConstREIndustryIcon' },
+  { key: Industries.EducationHigherEd, resourceKey: 'industryoption.eduhigher', iconName: 'EduIndustryIcon' },
+  { key: Industries.EducationK12, resourceKey: 'industryoption.eduk12', iconName: 'EduIndustryIcon' },
+  { key: Industries.EnergyMiningOilAndGas, resourceKey: 'industryoption.energy', iconName: 'EnergyIndustryIcon' },
+  { key: Industries.FinancialServices, resourceKey: 'industryoption.financialservices', iconName: 'FinIndustryIcon' },
+  { key: Industries.GovernmentFederal, resourceKey: 'industryoption.govfederal', iconName: 'GovtIndustryIcon' },
+  { key: Industries.GovernmentLocal, resourceKey: 'industryoption.govlocal', iconName: 'GovtIndustryIcon' },
+  { key: Industries.GovernmentMilitary, resourceKey: 'industryoption.govmilitary', iconName: 'GovtIndustryIcon' },
+  { key: Industries.GovernmentState, resourceKey: 'industryoption.govstate', iconName: 'GovtIndustryIcon' },
+  { key: Industries.HealthCare, resourceKey: 'industryoption.healthcare', iconName: 'HealthIndustryIcon' },
+  { key: Industries.Insurance, resourceKey: 'industryoption.insurance', iconName: 'FinIndustryIcon' },
+  { key: Industries.ManufacturingAerospace, resourceKey: 'industryoption.manuaero', iconName: 'AeroIndustryIcon' },
+  { key: Industries.ManufacturingAutomotive, resourceKey: 'industryoption.manuauto', iconName: 'AutoIndustryIcon' },
+  { key: Industries.ManufacturingConsumerGoods, resourceKey: 'industryoption.manuconsumergoods', iconName: 'ConsumerIndustryIcon' },
+  { key: Industries.ManufacturingIndustrial, resourceKey: 'industryoption.manuindustrial', iconName: 'IndusIndustryIcon' },
+  { key: Industries.MediaAndEntertainment, resourceKey: 'industryoption.entertainment', iconName: 'MediaIndustryIcon' },
+  { key: Industries.MembershipOrganizations, resourceKey: 'industryoption.membershiporg', iconName: 'MemberIndustryIcon' },
+  { key: Industries.NonProfit, resourceKey: 'industryoption.nonprofit', iconName: 'MemberIndustryIcon' },
+  { key: Industries.PharmaceuticalsAndBiotech, resourceKey: 'industryoption.pharma', iconName: 'HealthIndustryIcon' },
+  { key: Industries.ProfessionalAndTechnicalServices, resourceKey: 'industryoption.protechservices', iconName: 'ServicesIndustryIcon' },
+  { key: Industries.RealEstateRentalAndLeasing, resourceKey: 'industryoption.realestate', iconName: 'ConstREIndustryIcon' },
+  { key: Industries.Retail, resourceKey: 'industryoption.retail', iconName: 'ConsumerIndustryIcon' },
+  { key: Industries.TechnologyHardware, resourceKey: 'industryoption.techhardware', iconName: 'TechIndustryIcon' },
+  { key: Industries.TechnologySoftwareAndServices, resourceKey: 'industryoption.techsoftware', iconName: 'TechIndustryIcon' },
+  { key: Industries.Telecommunications, resourceKey: 'industryoption.telecom', iconName: 'TeleIndustryIcon' },
+  { key: Industries.TransportationAndWarehousing, resourceKey: 'industryoption.transportation', iconName: 'TransIndustryIcon' },
+  { key: Industries.TravelLeisureAndHospitality, resourceKey: 'industryoption.travel', iconName: 'HospIndustryIcon' },
+  { key: Industries.Utilities, resourceKey: 'industryoption.utilities', iconName: 'TechIndustryIcon' },
 ];
 

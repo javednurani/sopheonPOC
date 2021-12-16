@@ -1,18 +1,4 @@
-// TODO - (for domain/DTO types like Product), this file should serve as a temporary stub for Types for DTOs in the Sopheon.CloudNative.Products WebAPI project
-// In Cloud-2147, we should generate TS Types from Sopheon.CloudNative.Products.AspNetCore OpenAPI schema
-
-// eslint-disable-next-line no-shadow
-export enum Attributes {
-  INDUSTRIES = -1,
-  NOTES = -2,
-  DUEDATE = -3,
-  STATUS = -4,
-}
-
-// eslint-disable-next-line no-shadow
-export enum ProductItemTypes {
-  TASK = -1,
-}
+import { Status } from './data/status';
 
 export type UpdateProductModel = {
   ProductPatchData: PatchOperation[];
@@ -35,6 +21,9 @@ export type ProductScopedApiRequestModel = {
 // DTO definitions from Sopheon.CloudNative.Products
 // TODO Cloud-2147, generate from OpenAPI spec
 
+// TODO - (for domain/DTO types like Product), this file should serve as a temporary stub for Types for DTOs in the Sopheon.CloudNative.Products WebAPI project
+// In Cloud-2147, we should generate TS Types from Sopheon.CloudNative.Products.AspNetCore OpenAPI schema
+
 export interface Product {
   id: number | null;
   key: string | null;
@@ -46,18 +35,11 @@ export interface Product {
 }
 
 export interface ToDoItem {
+  id: number;
   name: string;
   notes: string | null;
   dueDate: Date | null;
   status: Status;
-}
-
-// eslint-disable-next-line no-shadow
-export enum Status {
-  NotStarted = -1,
-  InProgress = -2,
-  Assigned = -3,
-  Complete = -4,
 }
 
 export interface Goal {
@@ -77,9 +59,17 @@ export interface Int32AttributeValueDto {
   Value: number | null;
 }
 
+export interface EnumAttributeOptionValueDto {
+  enumAttributeOptionId: number;
+}
+export interface EnumCollectionAttributeValueDto {
+  attributeId: number;
+  value: EnumAttributeOptionValueDto[];
+}
+
 export interface ProductPostDto {
   Name: string;
-  Int32AttributeValues: Int32AttributeValueDto[];
+  EnumCollectionAttributeValues: EnumCollectionAttributeValueDto[];
 }
 
 export interface PatchOperation {

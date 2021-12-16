@@ -23,8 +23,11 @@ import { useTheme } from '@fluentui/react-theme-provider';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
+import { Attributes } from './data/attributes';
+import { ProductItemTypes } from './data/productItemTypes';
+import { Status } from './data/status';
 import { UpdateProductAction } from './product/productReducer';
-import { Attributes, PatchOperation, Product, ProductItemTypes, Status, UpdateProductModel } from './types';
+import { PatchOperation, Product, UpdateProductModel } from './types';
 
 export interface IAddTaskProps {
   hideModal: () => void;
