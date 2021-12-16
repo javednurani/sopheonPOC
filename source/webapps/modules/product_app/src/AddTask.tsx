@@ -2,6 +2,9 @@ import {
   DatePicker,
   DayOfWeek,
   DefaultButton,
+  Dialog,
+  DialogFooter,
+  DialogType,
   Dropdown,
   FontWeights,
   IButtonStyles,
@@ -19,6 +22,7 @@ import {
   Text,
   TextField,
 } from '@fluentui/react';
+import { useBoolean } from '@fluentui/react-hooks';
 import { useTheme } from '@fluentui/react-theme-provider';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -50,12 +54,13 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
 
   const [taskDueDate, setTaskDueDate] = useState<DateStateObject>({ date: undefined });
 
-  const [selectedItemStatusDropdown, setSelectedItemStatusDropdown] = React.useState<IDropdownOption>();
+  const [selectedItemStatusDropdown, setSelectedItemStatusDropdown] = useState<IDropdownOption>();
 
-  const [saveButtonDisabled, setSaveButtonDisabled] = React.useState(false);
+  const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
 
-  // TODO 1693 - possible taskName.errorMessage display pattern, remove if unneeded
-  const [taskNameDirty, setTaskNameDirty] = React.useState(false);
+  const [taskNameDirty, setTaskNameDirty] = useState(false);
+
+  const [hideDiscardDialog, { toggle: toggleHideDiscardDialog }] = useBoolean(true);
 
   useEffect(() => {
     setSaveButtonDisabled(taskName.length === 0);
@@ -226,8 +231,46 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
 
   // CANCEL BUTTON
   const handleCancelButtonClick = () => {
+    exitModalWithDiscardDialog();
+  };
+
+  // CANCEL BUTTON
+  const handleCloseIconClick = () => {
+    exitModalWithDiscardDialog();
+  };
+
+  // DISCARD DIALOG
+
+  const discardDialogModalPropsStyles = { main: { maxWidth: 450 } };
+
+  const discardDialogModalProps = {
+    isBlocking: true,
+    styles: discardDialogModalPropsStyles,
+    dragOptions: undefined,
+  };
+
+  const discardDialogContentProps = {
+    type: DialogType.normal,
+    title: formatMessage({ id: 'toDo.discardthistask' }),
+    subText: formatMessage({ id: 'unsaveddata' }),
+  };
+
+  const confirmDiscard = (): void => {
+    toggleHideDiscardDialog();
     hideModal();
   };
+
+  const formHasData = (): boolean => taskName.length > 0 || taskNotes.length > 0 || taskDueDate.date !== undefined;
+
+  const exitModalWithDiscardDialog = (): void => {
+    if (formHasData()) {
+      toggleHideDiscardDialog();
+    } else {
+      hideModal();
+    }
+  };
+
+  // EVENT HANDLERS
 
   const handleTaskNameChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string | undefined): void => {
     // TODO 1693 - possible taskName.errorMessage display pattern, remove if unneeded
@@ -295,7 +338,7 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
         <span id="AddTaskModal">
           <Text variant="xxLarge">{formatMessage({ id: 'toDo.newtask' })}</Text>
         </span>
-        <IconButton styles={iconButtonStyles} iconProps={cancelIcon} ariaLabel={formatMessage({ id: 'closemodal' })} onClick={hideModal} />
+        <IconButton styles={iconButtonStyles} iconProps={cancelIcon} ariaLabel={formatMessage({ id: 'closemodal' })} onClick={handleCloseIconClick} />
       </div>
       <div className={contentStyles.body}>
         <Stack styles={stackStyles} tokens={mainStackTokens}>
@@ -370,6 +413,17 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
           </Stack.Item>
         </Stack>
       </div>
+      <Dialog
+        hidden={hideDiscardDialog}
+        onDismiss={toggleHideDiscardDialog}
+        dialogContentProps={discardDialogContentProps}
+        modalProps={discardDialogModalProps}
+      >
+        <DialogFooter>
+          <PrimaryButton onClick={confirmDiscard} text={formatMessage({ id: 'discard' })} />
+          <DefaultButton onClick={toggleHideDiscardDialog} text={formatMessage({ id: 'cancel' })} />
+        </DialogFooter>
+      </Dialog>
     </>
   );
 };
