@@ -19,8 +19,8 @@ Write-Host "Running Sql Server Script for Environment Management";
 az sql server firewall-rule create --resource-group $ResourceGroup --server $ResourceGroup.ToLower() --name DeployMachine --start-ip-address 50.200.9.230 --end-ip-address 50.200.9.230;
 Write-Host "Firewall Rule created";
 Write-Host "Running EF Sql Script on Sql Server Database: $($ResourceGroup)...";
-Invoke-Sqlcmd -ServerInstance "$($EnvironmentServerName).database.windows.net" -Database 'master' -UsernName "sopheon" -Password $SqlAdminEnigma -InputFile "_StratusEnvironmentManagement\EnvironmentManagement\ElasticJobTarget_CreateCredentials.sql"
-Invoke-Sqlcmd -ServerInstance "$($TenantEnvironmentServerName).database.windows.net" -Database 'master' -UsernName "sopheon" -Password $SqlAdminEnigma -InputFile "_StratusEnvironmentManagement\EnvironmentManagement\ElasticJobTarget_CreateCredentials.sql"
+Invoke-Sqlcmd -ServerInstance "$($EnvironmentServerName).database.windows.net" -Database 'master' -UserName "sopheon" -Password $SqlAdminEnigma -InputFile "_StratusEnvironmentManagement\EnvironmentManagement\ElasticJobTarget_CreateCredentials.sql"
+Invoke-Sqlcmd -ServerInstance "$($TenantEnvironmentServerName).database.windows.net" -Database 'master' -UserName "sopheon" -Password $SqlAdminEnigma -InputFile "_StratusEnvironmentManagement\EnvironmentManagement\ElasticJobTarget_CreateCredentials.sql"
 Invoke-Sqlcmd -ServerInstance "$($EnvironmentServerName).database.windows.net" -Database "EnvironmentManagement" -UserName "sopheon" -Password $SqlAdminEnigma -InputFile "_StratusEnvironmentManagement\EnvironmentManagement\scripts.sql" -QueryTimeout 0;
 Invoke-Sqlcmd -ServerInstance "$($EnvironmentServerName).database.windows.net" -Database "TenantEnvironmentTemplate" -UserName "sopheon" -Password $SqlAdminEnigma -InputFile "_StratusEnvironmentManagement\EnvironmentManagement\ElasticJobTarget_CreateJobUser.sql";
 
