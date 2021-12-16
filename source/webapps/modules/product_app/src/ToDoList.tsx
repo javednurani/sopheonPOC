@@ -5,8 +5,9 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 
 import AddTask from './AddTask';
+import { Status } from './data/status';
 import { UpdateProductAction } from './product/productReducer';
-import { Product, Status, UpdateProductModel } from './types';
+import { Product, UpdateProductModel } from './types';
 
 export interface IToDoListProps {
   updateProduct: (product: UpdateProductModel) => UpdateProductAction;

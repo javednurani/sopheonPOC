@@ -1,6 +1,8 @@
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 
-import { Attributes, Product, ProductItemTypes, ToDoItem } from '../types';
+import { Attributes } from '../data/attributes';
+import { ProductItemTypes } from '../data/productItemTypes';
+import { Product, ToDoItem } from '../types';
 // eslint-disable-next-line max-len
 import {
   CreateProductAction,
@@ -29,6 +31,7 @@ const translateProductItemsToTasks = (productItems: unknown[]): ToDoItem[] =>
     .map(td => {
       const dueDateString: string = td.utcDateTimeAttributeValues.filter(dtav => dtav.attributeId === Attributes.DUEDATE)[0].value;
       return {
+        id: td.id,
         name: td.name,
         notes: td.stringAttributeValues.filter(sav => sav.attributeId === Attributes.NOTES)[0].value,
         dueDate: dueDateString ? new Date(dueDateString) : null,
@@ -36,8 +39,8 @@ const translateProductItemsToTasks = (productItems: unknown[]): ToDoItem[] =>
       };
     });
 
-const translateInt32AttributeValuesToIndustryIds = (int32AttributeValues: unknown[]): number[] =>
-  int32AttributeValues.filter(iav => iav.attributeId === Attributes.INDUSTRIES).map(iav => iav.value);
+const translateEnumCollectionAttributeValuesToIndustryIds = (enumCollectionAttributeValues: unknown[]): number[] =>
+  enumCollectionAttributeValues.find(ecav => ecav.attributeId === Attributes.INDUSTRIES).value.map(val => val.enumAttributeOptionId);
 
 export function* onGetProducts(action: GetProductsAction): Generator {
   try {
@@ -48,7 +51,7 @@ export function* onGetProducts(action: GetProductsAction): Generator {
       id: d.id,
       key: d.key,
       name: d.name,
-      industries: translateInt32AttributeValuesToIndustryIds(d.int32AttributeValues),
+      industries: translateEnumCollectionAttributeValuesToIndustryIds(d.enumCollectionAttributeValues),
       kpis: d.keyPerformanceIndicators,
       goals: d.goals,
       todos: translateProductItemsToTasks(d.items),
@@ -72,7 +75,7 @@ export function* onCreateProduct(action: CreateProductAction): Generator {
       id: data.id,
       key: data.key,
       name: data.name,
-      industries: translateInt32AttributeValuesToIndustryIds(data.int32AttributeValues),
+      industries: translateEnumCollectionAttributeValuesToIndustryIds(data.enumCollectionAttributeValues),
       goals: data.goals,
       kpis: data.keyPerformanceIndicators,
       todos: translateProductItemsToTasks(data.items),
@@ -97,7 +100,7 @@ export function* onUpdateProduct(action: UpdateProductAction): Generator {
       id: data.id,
       key: data.key,
       name: data.name,
-      industries: translateInt32AttributeValuesToIndustryIds(data.int32AttributeValues),
+      industries: translateEnumCollectionAttributeValuesToIndustryIds(data.enumCollectionAttributeValues),
       kpis: data.keyPerformanceIndicators,
       goals: data.goals,
       todos: translateProductItemsToTasks(data.items),

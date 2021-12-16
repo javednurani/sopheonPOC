@@ -784,8 +784,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 values: new object[,]
                 {
                     { -4, 8, "Status", "STATUS" },
-                    { -5, 7, "BeverageTypes", "BEV" },
-                    { -1, 2, "Industry", "IND" },
+                    { -1, 7, "Industry", "IND" },
                     { -2, 1, "Notes", "NOTES" },
                     { -3, 5, "Due Date", "DUE" }
                 });
@@ -796,14 +795,40 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 columns: new[] { "EnumAttributeOptionId", "AttributeId", "Name" },
                 values: new object[,]
                 {
-                    { -8, -5, "Dark" },
-                    { -7, -5, "Fizzy" },
-                    { -6, -5, "Sweet" },
-                    { -5, -5, "Alcoholic" },
-                    { -4, -4, "Complete" },
-                    { -3, -4, "Assigned" },
-                    { -2, -4, "In Progress" },
-                    { -1, -4, "Not Started" }
+                    { -34, -4, "Complete" },
+                    { -33, -4, "Assigned" },
+                    { -32, -4, "In Progress" },
+                    { -31, -4, "Not Started" },
+                    { -30, -1, "Utilities" },
+                    { -29, -1, "Travel, Leisure & Hospitality" },
+                    { -28, -1, "Transportation & Warehousing" },
+                    { -27, -1, "Telecommunications" },
+                    { -26, -1, "Technology Software & Services" },
+                    { -25, -1, "Technology Hardware" },
+                    { -24, -1, "Retail" },
+                    { -23, -1, "Real Estate, Rental & Leasing" },
+                    { -22, -1, "Professional & Technical Services" },
+                    { -21, -1, "Pharmaceuticals & Biotech" },
+                    { -20, -1, "Non-Profit" },
+                    { -19, -1, "Membership Organizations" },
+                    { -18, -1, "Media & Entertainment" },
+                    { -17, -1, "Manufacturing - Industrial" },
+                    { -16, -1, "Manufacturing - Consumer Goods" },
+                    { -15, -1, "Manufacturing - Automotive" },
+                    { -14, -1, "Manufacturing - Aerospace" },
+                    { -13, -1, "Insurance" },
+                    { -12, -1, "Health Care" },
+                    { -11, -1, "Government - State" },
+                    { -10, -1, "Government - Military" },
+                    { -9, -1, "Government - Local" },
+                    { -8, -1, "Government - Federal" },
+                    { -7, -1, "Financial Services" },
+                    { -6, -1, "Energy, Mining, Oil & Gas" },
+                    { -5, -1, "Education - K12" },
+                    { -4, -1, "Education - Higher Ed" },
+                    { -3, -1, "Construction" },
+                    { -2, -1, "Agriculture & Forestry" },
+                    { -1, -1, "Advertising" }
                 });
 
             migrationBuilder.CreateIndex(

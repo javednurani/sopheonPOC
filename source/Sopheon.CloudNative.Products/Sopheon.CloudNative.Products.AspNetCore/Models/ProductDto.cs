@@ -84,6 +84,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
       [Required()]
       [MaxLength(ModelConstraints.NAME_LENGTH_300)]
       public string Name { get; set; }
-      public List<Int32AttributeValueDto> Int32AttributeValues { get; set; }
+      //public List<Int32AttributeValueDto> Int32AttributeValues { get; set; }
+      public List<EnumCollectionAttributeValueDto> EnumCollectionAttributeValues { get; set; }
    }
 }

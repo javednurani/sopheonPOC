@@ -12,7 +12,7 @@ using Sopheon.CloudNative.Products.Domain;
 namespace Sopheon.CloudNative.Products.DataAccess.Migrations
 {
     [DbContext(typeof(ProductManagementContext))]
-    [Migration("20211215143633_InitialCreate")]
+    [Migration("20211216160608_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -136,51 +136,207 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            EnumAttributeOptionId = -1,
+                            EnumAttributeOptionId = -31,
                             AttributeId = -4,
                             Name = "Not Started"
                         },
                         new
                         {
-                            EnumAttributeOptionId = -2,
+                            EnumAttributeOptionId = -32,
                             AttributeId = -4,
                             Name = "In Progress"
                         },
                         new
                         {
-                            EnumAttributeOptionId = -3,
+                            EnumAttributeOptionId = -33,
                             AttributeId = -4,
                             Name = "Assigned"
                         },
                         new
                         {
-                            EnumAttributeOptionId = -4,
+                            EnumAttributeOptionId = -34,
                             AttributeId = -4,
                             Name = "Complete"
                         },
                         new
                         {
+                            EnumAttributeOptionId = -1,
+                            AttributeId = -1,
+                            Name = "Advertising"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -2,
+                            AttributeId = -1,
+                            Name = "Agriculture & Forestry"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -3,
+                            AttributeId = -1,
+                            Name = "Construction"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -4,
+                            AttributeId = -1,
+                            Name = "Education - Higher Ed"
+                        },
+                        new
+                        {
                             EnumAttributeOptionId = -5,
-                            AttributeId = -5,
-                            Name = "Alcoholic"
+                            AttributeId = -1,
+                            Name = "Education - K12"
                         },
                         new
                         {
                             EnumAttributeOptionId = -6,
-                            AttributeId = -5,
-                            Name = "Sweet"
+                            AttributeId = -1,
+                            Name = "Energy, Mining, Oil & Gas"
                         },
                         new
                         {
                             EnumAttributeOptionId = -7,
-                            AttributeId = -5,
-                            Name = "Fizzy"
+                            AttributeId = -1,
+                            Name = "Financial Services"
                         },
                         new
                         {
                             EnumAttributeOptionId = -8,
-                            AttributeId = -5,
-                            Name = "Dark"
+                            AttributeId = -1,
+                            Name = "Government - Federal"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -9,
+                            AttributeId = -1,
+                            Name = "Government - Local"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -10,
+                            AttributeId = -1,
+                            Name = "Government - Military"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -11,
+                            AttributeId = -1,
+                            Name = "Government - State"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -12,
+                            AttributeId = -1,
+                            Name = "Health Care"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -13,
+                            AttributeId = -1,
+                            Name = "Insurance"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -14,
+                            AttributeId = -1,
+                            Name = "Manufacturing - Aerospace"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -15,
+                            AttributeId = -1,
+                            Name = "Manufacturing - Automotive"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -16,
+                            AttributeId = -1,
+                            Name = "Manufacturing - Consumer Goods"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -17,
+                            AttributeId = -1,
+                            Name = "Manufacturing - Industrial"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -18,
+                            AttributeId = -1,
+                            Name = "Media & Entertainment"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -19,
+                            AttributeId = -1,
+                            Name = "Membership Organizations"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -20,
+                            AttributeId = -1,
+                            Name = "Non-Profit"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -21,
+                            AttributeId = -1,
+                            Name = "Pharmaceuticals & Biotech"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -22,
+                            AttributeId = -1,
+                            Name = "Professional & Technical Services"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -23,
+                            AttributeId = -1,
+                            Name = "Real Estate, Rental & Leasing"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -24,
+                            AttributeId = -1,
+                            Name = "Retail"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -25,
+                            AttributeId = -1,
+                            Name = "Technology Hardware"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -26,
+                            AttributeId = -1,
+                            Name = "Technology Software & Services"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -27,
+                            AttributeId = -1,
+                            Name = "Telecommunications"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -28,
+                            AttributeId = -1,
+                            Name = "Transportation & Warehousing"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -29,
+                            AttributeId = -1,
+                            Name = "Travel, Leisure & Hospitality"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -30,
+                            AttributeId = -1,
+                            Name = "Utilities"
                         });
                 });
 
@@ -444,10 +600,10 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            AttributeId = -5,
+                            AttributeId = -1,
                             AttributeDataTypeId = 0,
-                            Name = "BeverageTypes",
-                            ShortName = "BEV"
+                            Name = "Industry",
+                            ShortName = "IND"
                         });
                 });
 
@@ -456,15 +612,6 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                     b.HasBaseType("Sopheon.CloudNative.Products.Domain.Attribute");
 
                     b.HasDiscriminator().HasValue(2);
-
-                    b.HasData(
-                        new
-                        {
-                            AttributeId = -1,
-                            AttributeDataTypeId = 0,
-                            Name = "Industry",
-                            ShortName = "IND"
-                        });
                 });
 
             modelBuilder.Entity("Sopheon.CloudNative.Products.Domain.Attributes.Money.MoneyAttribute", b =>
