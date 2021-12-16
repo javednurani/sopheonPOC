@@ -8,7 +8,7 @@ param scheduledStartTime string = '^ScheduledStartTime^'
 param elasticJobStepCommandText string = '^SqlCommandText^'
 
 resource elasticjobDatabase 'Microsoft.Sql/servers/databases@2021-05-01-preview' = {
-  name: '${elasticJobAgentServerName}/JobDatabase}'
+  name: '${elasticJobAgentServerName}/JobDatabase'
   location: resourceGroup().location
 }
 
