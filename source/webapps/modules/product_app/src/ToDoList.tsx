@@ -143,7 +143,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
             </Text>
           );
           const dueDate: JSX.Element = todo.dueDate ? (
-            <Text>{todo.dueDate.toLocaleDateString()}</Text>
+            <Text>Due {todo.dueDate.toLocaleDateString(undefined, { year: '2-digit', month: 'numeric', day: 'numeric' })}</Text>
           ) : (
             <Text styles={emptyDueDateStyles}>{emptyNamePlaceholder}</Text>
           );
