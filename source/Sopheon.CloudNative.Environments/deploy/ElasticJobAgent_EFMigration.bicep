@@ -7,13 +7,18 @@ param targetSqlServerName string = '^TargetSqlServerName^'
 param scheduledStartTime string = '^ScheduledStartTime^'
 param elasticJobStepCommandText string = '^SqlCommandText^'
 
+resource elasticJobServer 'Microsoft.Sql/servers@2021-05-01-preview' = {
+  name: elasticJobAgentServerName
+  location: resourceGroup().location
+}
+
 resource elasticjobDatabase 'Microsoft.Sql/servers/databases@2021-05-01-preview' = {
-  name: '${elasticJobAgentServerName}/JobDatabase'
+  name: '${elasticJobServer.name}/JobDatabase'
   location: resourceGroup().location
 }
 
 resource elasticJobAgent 'Microsoft.Sql/servers/jobAgents@2021-02-01-preview' = {
-  name: '${elasticJobAgentServerName}/${elasticJobAgentName}'
+  name: '${elasticJobServer.name}/${elasticJobAgentName}'
   location: 'westus'
   sku: {
     name: 'Agent'
