@@ -7,6 +7,7 @@ import ProductHealth from './ProductHealth';
 import ProductSection from './ProductSection';
 import ResourcesAndLinks from './ResourcesAndLinks';
 import Timeline from './Timeline';
+import ToDoList from './ToDoList';
 import { Product } from './types';
 
 export interface IDashboardProps {
@@ -22,7 +23,6 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({ products }: IDash
   const theme = useTheme();
 
   const sharedStackItemStyles: Partial<IStyle> = {
-    background: theme.semanticColors.bodyBackground, // TODO: why needed?
     //backgroundImage: `linear-gradient(to bottom right, ${theme.semanticColors.bodyBackground}, ${theme.semanticColors.bodyBackgroundHovered})`,
     display: 'flex',
     justifyContent: 'center',
@@ -54,9 +54,8 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({ products }: IDash
 
   const stackStyles: IStackStyles = {
     root: {
-      background: theme.semanticColors.bodyBackground, // TODO: why needed?
       height: '100%',
-      width: '100%',
+      width: '620px',
     },
   };
 
@@ -65,9 +64,11 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({ products }: IDash
       <Stack.Item grow={4}>
         <Stack styles={stackStyles} tokens={stackTokens}>
           <Stack.Item styles={topRowStackItemStyles}>
-            <ProductSection productName={products[0].name} />
+            <ProductSection product={products[0]} />
           </Stack.Item>
-          <Stack.Item styles={middleRowStackItemStyles}>To Do List</Stack.Item>
+          <Stack.Item styles={middleRowStackItemStyles}>
+            <ToDoList />
+          </Stack.Item>
           <Stack.Item styles={bottomRowStackItemStyles}>
             <ResourcesAndLinks />
           </Stack.Item>

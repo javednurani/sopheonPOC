@@ -103,6 +103,9 @@ resource ProductManagementWebApp 'Microsoft.Web/sites@2021-02-01' = {
   name: webAppName
   location: 'West US'
   kind: 'app'
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
     enabled: true    
     serverFarmId: AppService_PlanPortal.id
@@ -156,14 +159,6 @@ resource ProductManagementWebApp 'Microsoft.Web/sites@2021-02-01' = {
         {
           name: 'XDT_MicrosoftApplicationInsights_Mode'
           value: 'default'
-        }
-        {
-          name: 'ServiceUrls:GetEnvironmentResourceBindingUri'
-          value: 'http://${toLower(resourceGroup().name)}.azurewebsites.net/GetEnvironmentResourceBindingUri'
-        }
-        {
-          name: 'ServiceUrls:GetEnvironments'
-          value: 'http://${toLower(resourceGroup().name)}.azurewebsites.net/Environments'
         }
         {
           name: 'WEBSITE_HTTPLOGGING_RETENTION_DAYS'
