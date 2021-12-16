@@ -95,6 +95,7 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
             .Replace("^ElasticJobAgentServerName^", config.ElasticJobAgentServerName)
             .Replace("^ElasticJobAgentName^", config.ElasticJobAgentName)
             .Replace("^TargetSqlServerName^", config.TargetedSqlServerName)
+            .Replace("^ScheduledStartTime^", config.ScheduledStartTime)
             .Replace("^SqlCommandText^", sqlCommandText)
             .Replace("^JobUserEnigma^", adminLoginEnigma)
             .Replace("^MasterUserEnigma^", adminLoginEnigma)            ;
