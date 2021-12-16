@@ -36,8 +36,7 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
       {
          // Setup variables...
          var outputs = new List<string>();
-         string targetResourceGroupName = _configuration["TargetResourceGroupName"];
-         int minimumBufferCapacity = _configuration.GetValue<int>("MinimumBufferCapacity");
+         string targetResourceGroupName = _configuration["AzResourceGroupName"];
 
          //STEP 1: Collect SQL Database resources...
          List<Domain.Models.Resource> currentSqlServerCount = 
