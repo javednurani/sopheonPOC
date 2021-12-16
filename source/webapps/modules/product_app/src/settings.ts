@@ -18,7 +18,7 @@ export const settings: Record<string, string> = {
   CreateProductUrlPath: `/Environments/${tokenEnvironmentKey}/Products`,
   getProductsUrlPath: `/Environments/${tokenEnvironmentKey}/Products`,
   UpdateProductUrlPath: `/Environments/${tokenEnvironmentKey}/Products/${tokenProductKey}`,
-  UpdateProductItemUrlPath: `/Environments/${tokenEnvironmentKey}/ProductItems/Products/${tokenProductKey}/Items/${tokenProductItemId}`, // TODO: route is funky CLOUD-2469
+  UpdateProductItemUrlPath: `/Environments/${tokenEnvironmentKey}/Products/${tokenProductKey}/Items/${tokenProductItemId}`,
   TokenEnvironmentKey: tokenEnvironmentKey,
   TokenProductKey: tokenProductKey,
   TokenProductItemId: tokenProductItemId,
