@@ -234,7 +234,7 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
     exitModalWithDiscardDialog();
   };
 
-  // CANCEL BUTTON
+  // CLOSE ICON
   const handleCloseIconClick = () => {
     exitModalWithDiscardDialog();
   };

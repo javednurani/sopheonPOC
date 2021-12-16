@@ -40,7 +40,6 @@ const translateProductItemToTask = (td: unknown): ToDoItem => {
     notes: td.stringAttributeValues.filter(sav => sav.attributeId === Attributes.NOTES)[0].value,
     dueDate: dueDateString ? new Date(dueDateString) : null,
     status: td.enumAttributeValues.filter(eav => eav.attributeId === Attributes.STATUS)[0].enumAttributeOptionId,
-    // status: td.enumCollectionAttributeValues.filter(ecav => ecav.attributeId === Attributes.STATUS)[0].value[0].enumAttributeOptionId,
   };
 };
 
