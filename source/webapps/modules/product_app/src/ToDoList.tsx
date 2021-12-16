@@ -1,4 +1,4 @@
-import { FontIcon, ITextFieldStyles, mergeStyles, mergeStyleSets, Modal, Stack } from '@fluentui/react';
+import { FontIcon, IStackItemStyles, IStackStyles, ITextFieldStyles, mergeStyles, mergeStyleSets, Modal, Stack } from '@fluentui/react';
 import { Text } from '@fluentui/react/lib/Text';
 import { useBoolean } from '@fluentui/react-hooks';
 import React from 'react';
@@ -68,7 +68,18 @@ const twoLineMaxWithOverflowStyles: Partial<ITextFieldStyles> = {
     'overflow': 'hidden',
     '-webkit-line-clamp': '2',
     '-webkit-box-orient': 'vertical',
+    'marginBottom': '5px',
   },
+};
+
+const marginRightStackItemStyles: IStackItemStyles = {
+  root: {
+    marginRight: '7px',
+  },
+};
+
+const todoContainterStyle: React.CSSProperties = {
+  marginTop: 10,
 };
 
 // TODO: move to utility?
@@ -135,11 +146,13 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
         .map((todo, index) => {
           const emptyNamePlaceholder = 'xxxx';
           const statusIcon: JSX.Element = (
-            <FontIcon
-              iconName={todo.status === Status.Complete ? 'CheckMark' : 'CircleRing'}
-              style={pointerCursorStyle}
-              onClick={() => handleStatusIconClick(todo)}
-            />
+            <Text variant="xLarge">
+              <FontIcon
+                iconName={todo.status === Status.Complete ? 'CheckMark' : 'CircleRing'}
+                style={pointerCursorStyle}
+                onClick={() => handleStatusIconClick(todo)}
+              />
+            </Text>
           );
           const name: JSX.Element = (
             <Text
@@ -161,10 +174,10 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
           }
 
           return (
-            <div key={index}>
+            <div key={index} style={todoContainterStyle}>
               <Stack horizontal>
-                <Stack.Item>{statusIcon}</Stack.Item>
-                <Stack.Item align="stretch">
+                <Stack.Item styles={marginRightStackItemStyles}>{statusIcon}</Stack.Item>
+                <Stack.Item>
                   <div>{name}</div>
                   <div>{dueDate}</div>
                 </Stack.Item>
