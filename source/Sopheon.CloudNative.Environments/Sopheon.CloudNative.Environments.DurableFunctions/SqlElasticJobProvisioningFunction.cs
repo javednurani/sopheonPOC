@@ -37,19 +37,21 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
          // Setup variables...
          var outputs = new List<string>();
          string targetResourceGroupName = _configuration["AzResourceGroupName"];
+         string startTime = DateTimeOffset.UtcNow.ToString("G");
 
          //STEP 1: Collect SQL Database resources...
          List<Domain.Models.Resource> currentSqlServerCount = 
             await context.CallActivityAsync<List<Domain.Models.Resource>>(nameof(ElasticJobsTask_GetServerResources), null);
          List<Task<List<string>>> tasks = new List<Task<List<string>>>();
-         
+
+         log.LogInformation($"Creating Elastic Job with start time: '{startTime}'");
          foreach(Domain.Models.Resource resource in currentSqlServerCount)
          {
             string targetedSqlServerName = resource.Uri.Replace(SqlEnvironmentUri, string.Empty);
             ElasticJobConfiguration config = new ElasticJobConfiguration()
             {
                TargetedSqlServerName = targetedSqlServerName,
-               ScheduledStartTime = DateTimeOffset.UtcNow.ToString("G"),
+               ScheduledStartTime = startTime,
                ElasticJobAgentServerName = _configuration["ElasticJobAgentServerName"],
                ResourceGroupName = targetResourceGroupName,
                ElasticJobAgentName = _configuration["ElasticJobAgentName"]
@@ -171,7 +173,7 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
       }
 
       [FunctionName(nameof(ElasticJobAgentTask_ReportResultsOfDeployment))]
-      public async Task ElasticJobAgentTask_ReportResultsOfDeployment([ActivityTrigger] List<string> databaseDeployments, ILogger log)
+      public async Task ElasticJobAgentTask_ReportResultsOfDeployment([ActivityTrigger] List<string>[] databaseDeployments, ILogger log)
       {
          
       }
