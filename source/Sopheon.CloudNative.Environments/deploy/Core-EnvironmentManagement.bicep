@@ -1,4 +1,3 @@
-
 @description('The name of the Storage Account for the function apps')
 @maxLength(24)
 param functionAppStorageName string = '^FunctionStorageAccountName^'
@@ -6,7 +5,6 @@ param functionAppStorageName string = '^FunctionStorageAccountName^'
 param appInsightsName string = '^AppInsightsName^'
 
 param location string = resourceGroup().location
-
 
 resource StorageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   name: functionAppStorageName
@@ -45,6 +43,15 @@ resource EnvironmentFunctionApp_Storage_BlobService 'Microsoft.Storage/storageAc
 
 resource StaticWebpage_Storage_BlobService_ArmTemplateContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-04-01' = {
   name: '${EnvironmentFunctionApp_Storage_BlobService.name}/armtemplates'
+  properties: {
+    defaultEncryptionScope: '$account-encryption-key'
+    denyEncryptionScopeOverride: false
+    publicAccess: 'Blob'
+  }
+}
+
+resource StaticWebpage_Storage_BlobService_EFMigrationsContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-04-01' = {
+  name: '${EnvironmentFunctionApp_Storage_BlobService.name}/efmigrations'
   properties: {
     defaultEncryptionScope: '$account-encryption-key'
     denyEncryptionScopeOverride: false

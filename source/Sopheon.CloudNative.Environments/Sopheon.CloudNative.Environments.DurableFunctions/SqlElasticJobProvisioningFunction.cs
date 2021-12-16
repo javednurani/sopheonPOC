@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sopheon.CloudNative.Environments.DurableFunctions.Configuration;
 
 namespace Sopheon.CloudNative.Environments.DurableFunctions
 {
@@ -15,6 +16,7 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
       };
 
       private readonly List<string> InstancePrefixes = new List<string>() { nameof(RunElasticJobs) };
+      private const string SqlEnvironmentUri = ".database.windows.net";
 
       private readonly EnvironmentContext _dbContext;
       private readonly Lazy<IAzure> _azureApi;
@@ -38,23 +40,33 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
          int minimumBufferCapacity = _configuration.GetValue<int>("MinimumBufferCapacity");
 
          //STEP 1: Collect SQL Database resources...
-         List<Domain.Models.Resource> currentUnallocatedSqlDatabaseCount = 
+         List<Domain.Models.Resource> currentSqlServerCount = 
             await context.CallActivityAsync<List<Domain.Models.Resource>>(nameof(ElasticJobsTask_GetServerResources), businessServiceName);
+         List<Task<List<string>>> tasks = new List<Task<List<string>>>();
+         
+         foreach(Domain.Models.Resource resource in currentSqlServerCount)
+         {
+            string targetedSqlServerName = resource.Uri.Replace(SqlEnvironmentUri, string.Empty);
+            ElasticJobConfiguration config = new ElasticJobConfiguration()
+            {
+               TargetedSqlServerName = targetedSqlServerName,
+               ScheduledStartTime = DateTimeOffset.UtcNow.ToString("G"),
+               ElasticJobAgentServerName = _configuration["ElasticJobAgentServerName"],
+               ResourceGroupName = targetResourceGroupName,
+               ElasticJobAgentName = _configuration["ElasticJobAgentName"]
+            };
 
-         //log.LogInformation($"Unalloacted Database count was lower than 50. Actual count:{currentUnallocatedSqlDatabaseCount}");
+            string deploymentName = await context.CallActivityAsync<string>(nameof(ElasticJobsTask_DeployElasticJob), config);
 
-         string deploymentName = await context.CallActivityAsync<string>(nameof(ElasticJobsTask_DeployElasticPoolAndDatabases), targetResourceGroupName);
+            tasks.Add(context.CallSubOrchestratorAsync<List<string>>(nameof(MonitorElasticJobsDeployment), deploymentName));
+         }        
 
-         List<string> deployedDatabases = await context.CallSubOrchestratorAsync<List<string>>(nameof(MonitorElasticJobsDeployment), deploymentName);
+         List<string>[] deployedDatabases = await Task.WhenAll(tasks);
 
          if (deployedDatabases.Any())
          {
             await context.CallActivityAsync(nameof(ElasticJobAgentTask_ReportResultsOfDeployment), deployedDatabases);
          }
-
-         return outputs;
-
-         log.LogInformation($"Unalloacted Database count was higher than 50. Actual count:{currentUnallocatedSqlDatabaseCount}");
 
          return outputs;
       }
@@ -63,30 +75,35 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
       public async Task<List<Domain.Models.Resource>> ElasticJobsTask_GetServerResources([ActivityTrigger] IDurableActivityContext context, ILogger log)
       {
          List<Domain.Models.Resource> serverResources = await _dbContext.Resources
-            .Where(resource => resource.DomainResourceTypeId == (int)Domain.Enums.ResourceTypes.TenantAzureSqlServer).ToListAsync();             
+            .Where(resource => resource.DomainResourceTypeId == (int)Domain.Enums.ResourceTypes.TenantAzureSqlServer)
+            .AsNoTracking().ToListAsync();             
 
          return serverResources;
       }
 
-      [FunctionName(nameof(ElasticJobsTask_DeployElasticPoolAndDatabases))]
-      public async Task<string> ElasticJobsTask_DeployElasticPoolAndDatabases([ActivityTrigger] IDurableActivityContext context,
-          [Blob("armtemplates/ElasticPoolWithBuffer/ElasticPool_Database_Buffer.json", Connection = "AzureWebJobsStorage")] string jsonTemplateData, ILogger log)
+      [FunctionName(nameof(ElasticJobsTask_DeployElasticJob))]
+      public async Task<string> ElasticJobsTask_DeployElasticJob([ActivityTrigger] IDurableActivityContext context, ILogger log,
+          [Blob("armtemplates/ElasticJobAgent/ElasticJobAgent_EFMigration.json", Connection = "AzureWebJobsStorage")] string jsonTemplateData,
+          [Blob("armtemplates/AppMigrations/products_migration.sql", Connection = "AzureWebJobsStorage")] string sqlCommandText)
       {
 
-         string resourceGroupName = context.GetInput<string>();
-         string sqlServerName = _configuration["AzSqlServerName"];
+         ElasticJobConfiguration config = context.GetInput<ElasticJobConfiguration>();
          string adminLoginEnigma = _configuration["SqlServerAdminEnigma"]; // Pull admin enigma from app config (user secrets or key vault)
 
          jsonTemplateData = jsonTemplateData
-            .Replace("^SqlServerName^", sqlServerName)
-            .Replace("^SqlAdminEngima^", adminLoginEnigma);
+            .Replace("^ElasticJobAgentServerName^", config.ElasticJobAgentServerName)
+            .Replace("^ElasticJobAgentName^", config.ElasticJobAgentName)
+            .Replace("^TargetSqlServerName^", config.TargetedSqlServerName)
+            .Replace("^SqlCommandText^", sqlCommandText)
+            .Replace("^JobUserEnigma^", adminLoginEnigma)
+            .Replace("^MasterUserEnigma^", adminLoginEnigma)            ;
 
          string deploymentName = $"{nameof(SqlDatabaseProvisioningFunction)}_Deployment_{DateTime.UtcNow:yyyyMMddTHHmmss}";
          log.LogInformation($"Creating new deployment: {deploymentName}");
 
          IDeployment deployment = await _azureApi.Value.Deployments
             .Define(deploymentName)
-            .WithExistingResourceGroup(resourceGroupName)
+            .WithExistingResourceGroup(config.ResourceGroupName)
             .WithTemplate(jsonTemplateData)
             .WithParameters("{ }")
             .WithMode(DeploymentMode.Incremental)
@@ -130,46 +147,34 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
       [FunctionName(nameof(GetDeploymentResults))]
       public async Task<(string State, List<string> DeployedDatabases)> GetDeploymentResults([ActivityTrigger] string deploymentName)
       {
-         IDeployment result = await _azureApi.Value.Deployments.GetByName(deploymentName).RefreshAsync();
+         //IDeployment result = await _azureApi.Value.Deployments.GetByName(deploymentName).RefreshAsync();
 
-         if (result.ProvisioningState != ProvisioningState.Succeeded)
-         {
-            return (result.ProvisioningState.Value, new List<string>());
-         }
+         //if (result.ProvisioningState != ProvisioningState.Succeeded)
+         //{
+         //   return (result.ProvisioningState.Value, new List<string>());
+         //}
 
-         var succesfulSqlDeployments = result.DeploymentOperations.List().ToList();
-         succesfulSqlDeployments = succesfulSqlDeployments
-             .Where(operation => ("Microsoft.Sql/servers/databases".Equals(operation.TargetResource?.ResourceType, StringComparison.OrdinalIgnoreCase)) &&
-                 ProvisioningState.Succeeded.Value.Equals(operation.ProvisioningState, StringComparison.OrdinalIgnoreCase))
-             .ToList();
+         //var succesfulSqlDeployments = result.DeploymentOperations.List().ToList();
+         //succesfulSqlDeployments = succesfulSqlDeployments
+         //    .Where(operation => ("Microsoft.Sql/servers/databases".Equals(operation.TargetResource?.ResourceType, StringComparison.OrdinalIgnoreCase)) &&
+         //        ProvisioningState.Succeeded.Value.Equals(operation.ProvisioningState, StringComparison.OrdinalIgnoreCase))
+         //    .ToList();
 
 
-         List<string> partialConnectionStrings = succesfulSqlDeployments
-             .Select(operation => {
-                var list = operation.TargetResource.ResourceName.Split('/');
-                return $"Server=tcp:{list[0].ToLower()}.database.windows.net,1433;Database={list[1].ToLower()};Encrypt=true;Connection Timeout=30;";
-             })
-             .ToList();
+         //List<string> partialConnectionStrings = succesfulSqlDeployments
+         //    .Select(operation => {
+         //       var list = operation.TargetResource.ResourceName.Split('/');
+         //       return $"Server=tcp:{list[0].ToLower()}.database.windows.net,1433;Database={list[1].ToLower()};Encrypt=true;Connection Timeout=30;";
+         //    })
+         //    .ToList();
 
-         return (result.ProvisioningState.Value, partialConnectionStrings);
+         return ("Success", new List<string>());
       }
 
       [FunctionName(nameof(ElasticJobAgentTask_ReportResultsOfDeployment))]
       public async Task ElasticJobAgentTask_ReportResultsOfDeployment([ActivityTrigger] List<string> databaseDeployments, ILogger log)
       {
-         foreach (string partialConnectionString in databaseDeployments)
-         {
-            if (!_dbContext.Resources.Any(r => r.DomainResourceTypeId == 1 && partialConnectionString == r.Uri))
-            {
-               _dbContext.Resources.Add(new Domain.Models.Resource()
-               {
-                  DomainResourceTypeId = 1, // TODO:Enum
-                  Uri = partialConnectionString
-               });
-            }
-         }
-
-         await _dbContext.SaveChangesAsync();
+         
       }
 
       #region Entry Functions
