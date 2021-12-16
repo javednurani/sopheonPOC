@@ -32,7 +32,7 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
       }
 
       [FunctionName(nameof(RunElasticJobsTask))]
-      public async Task<List<string>> RunElasticJobsTask([OrchestrationTrigger] IDurableOrchestrationContext context, string businessServiceName, ILogger log)
+      public async Task<List<string>> RunElasticJobsTask([OrchestrationTrigger] IDurableOrchestrationContext context, ILogger log)
       {
          // Setup variables...
          var outputs = new List<string>();
@@ -41,7 +41,7 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
 
          //STEP 1: Collect SQL Database resources...
          List<Domain.Models.Resource> currentSqlServerCount = 
-            await context.CallActivityAsync<List<Domain.Models.Resource>>(nameof(ElasticJobsTask_GetServerResources), businessServiceName);
+            await context.CallActivityAsync<List<Domain.Models.Resource>>(nameof(ElasticJobsTask_GetServerResources), null);
          List<Task<List<string>>> tasks = new List<Task<List<string>>>();
          
          foreach(Domain.Models.Resource resource in currentSqlServerCount)

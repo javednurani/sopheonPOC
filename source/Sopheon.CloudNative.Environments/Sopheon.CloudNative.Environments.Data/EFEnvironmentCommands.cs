@@ -25,6 +25,9 @@ namespace Sopheon.CloudNative.Environments.Data
       {
          try
          {
+            // resource is tracked...changing this will update the row when SaveChangesAsync() is called
+            resource.IsAssigned = true;
+
             Environment environment = await _context.Environments
                .SingleEnvironmentAsync(environmentKey);
 
