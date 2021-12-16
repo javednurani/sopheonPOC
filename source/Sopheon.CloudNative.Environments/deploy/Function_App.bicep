@@ -82,6 +82,14 @@ resource FunctionApp 'Microsoft.Web/sites@2021-01-15' = {
           value: '^DatabaseBufferTimerCron^'
         }
         {
+          name: 'ElasticJobAgentServerName'
+          value: '${toLower(resourceGroup().name)}-jobagent'
+        }
+        {
+          name: 'ElasticJobAgentName'
+          value: 'JobAgent'
+        }
+        {
           name: 'KeyVaultName'
           value: keyVaultName
         }
