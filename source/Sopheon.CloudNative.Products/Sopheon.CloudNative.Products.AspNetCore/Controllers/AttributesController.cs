@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -23,8 +24,10 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
       [HttpGet]
       public async Task<IEnumerable<Domain.Attribute>> Get()
       {
-         return await _dbContext.Attributes
+         // TODO, fully implement this endpoint. currently only returning Int32Attributes
+         return await _dbContext.Int32Attributes
                .AsNoTracking()
+               .Cast<Domain.Attribute>()
                .ToArrayAsync();
       }
    }

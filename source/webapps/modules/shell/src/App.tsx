@@ -90,7 +90,6 @@ const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, head
                   root: {
                     height: '100%',
                     overflow: 'auto',
-                    backgroundColor: 'white',
                     zIndex: '9999',
                   },
                 }}

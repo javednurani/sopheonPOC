@@ -8,7 +8,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
    {
       public int Id { get; set; }
 
-      public List<Int32AttributeValueDto> IntAttributeValues { get; set; }
+      public List<Int32AttributeValueDto> Int32AttributeValues { get; set; }
 
       public List<StringAttributeValueDto> StringAttributeValues { get; set; }
 
@@ -19,6 +19,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
       public List<MoneyAttributeValueDto> MoneyAttributeValues { get; set; }
 
       public List<KeyPerformanceIndicatorDto> KeyPerformanceIndicators { get; set; }
+      public List<EnumCollectionAttributeValueDto> EnumCollectionAttributeValues { get; set; }
 
       public string Name { get; set; }
 
@@ -32,7 +33,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
 
       public List<ProductGoalDto> Goals { get; set; }
 
-      //public List<ProductItem> Items { get; set; }
+      public List<ProductItemDto> Items { get; set; }
 
       //public List<FileAttachment> FileAttachments { get; set; }
 
@@ -45,7 +46,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
    {
       public int Id { get; set; }
 
-      public List<Int32AttributeValueDto> IntAttributeValues { get; set; }
+      public List<Int32AttributeValueDto> Int32AttributeValues { get; set; }
 
       //public StringAttributeValueDto[] StringAttributeValues { get; set; }
 
@@ -70,7 +71,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
 
       public List<ProductGoalDto> Goals { get; set; }
 
-      //public List<ProductItem> Items { get; set; }
+      public List<ProductItemDto> Items { get; set; }
 
       //public List<FileAttachment> FileAttachments { get; set; }
    }
@@ -80,6 +81,6 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
       [Required()]
       [MaxLength(ModelConstraints.NAME_LENGTH_300)]
       public string Name { get; set; }
-      public List<Int32AttributeValueDto> IntAttributeValues { get; set; }
+      public List<Int32AttributeValueDto> Int32AttributeValues { get; set; }
    }
 }

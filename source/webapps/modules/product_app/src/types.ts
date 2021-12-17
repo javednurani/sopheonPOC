@@ -5,6 +5,14 @@
 // eslint-disable-next-line no-shadow
 export enum Attributes {
   INDUSTRIES = -1,
+  NOTES = -2,
+  DUEDATE = -3,
+  STATUS = -4,
+}
+
+// eslint-disable-next-line no-shadow
+export enum ProductItemTypes {
+  TASK = -1,
 }
 
 export type UpdateProductModel = {
@@ -28,9 +36,6 @@ export type ProductScopedApiRequestModel = {
 // DTO definitions from Sopheon.CloudNative.Products
 // TODO Cloud-2147, generate from OpenAPI spec
 
-// TODO Cloud-1920
-// camelCase
-// Industry, Goal, KPI models
 export interface Product {
   id: number | null;
   key: string | null;
@@ -38,6 +43,22 @@ export interface Product {
   industries: number[];
   goals: Goal[];
   kpis: KeyPerformanceIndicator[];
+  todos: ToDoItem[];
+}
+
+export interface ToDoItem {
+  name: string;
+  notes: string;
+  dueDate: Date;
+  status: Status;
+}
+
+// eslint-disable-next-line no-shadow
+export enum Status {
+  NotStarted = -1,
+  InProgress = -2,
+  Assigned = -3,
+  Complete = -4
 }
 
 export interface Goal {
@@ -59,7 +80,7 @@ export interface Int32AttributeValueDto {
 
 export interface ProductPostDto {
   Name: string;
-  IntAttributeValues: Int32AttributeValueDto[];
+  Int32AttributeValues: Int32AttributeValueDto[];
 }
 
 export interface PatchOperation {

@@ -1,15 +1,19 @@
 import { IStackItemStyles, IStackStyles, IStackTokens, Stack } from '@fluentui/react';
-import { useTheme } from '@fluentui/react-theme-provider';
 import React from 'react';
 
 import KPIs from './KPIs';
+import { UpdateProductAction } from './product/productReducer';
 import ProductHealth from './ProductHealth';
 import ProductSection from './ProductSection';
 import ResourcesAndLinks from './ResourcesAndLinks';
 import Timeline from './Timeline';
-import { Product } from './types';
+import ToDoList from './ToDoList';
+import { Product, UpdateProductModel } from './types';
 
 export interface IDashboardProps {
+  updateProduct: (product: UpdateProductModel) => UpdateProductAction;
+  environmentKey: string;
+  accessToken: string;
   products: Product[];
 }
 
@@ -18,9 +22,7 @@ const stackTokens: IStackTokens = {
   padding: 5,
 };
 
-const Dashboard: React.FunctionComponent<IDashboardProps> = ({ products }: IDashboardProps) => {
-  const theme = useTheme();
-
+const Dashboard: React.FunctionComponent<IDashboardProps> = ({ updateProduct, environmentKey, accessToken, products }: IDashboardProps) => {
   const stackItemStyles: IStackItemStyles = {
     root: {
       display: 'flex',
@@ -30,9 +32,8 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({ products }: IDash
 
   const stackStyles: IStackStyles = {
     root: {
-      background: theme.semanticColors.bodyBackground, // TODO: why needed?
       height: '100%',
-      width: '100%',
+      width: '620px',
     },
   };
 
@@ -51,7 +52,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({ products }: IDash
       <Stack.Item grow={5}>
         <Stack horizontal styles={stackStyles} tokens={stackTokens}>
           <Stack.Item grow styles={stackItemStyles}>
-            To Do List
+            <ToDoList updateProduct={updateProduct} environmentKey={environmentKey} accessToken={accessToken} products={products} />
           </Stack.Item>
           <Stack.Item grow styles={stackItemStyles}>
             <Timeline />
