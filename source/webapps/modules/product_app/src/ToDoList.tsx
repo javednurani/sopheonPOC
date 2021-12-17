@@ -105,13 +105,8 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
   const { formatMessage } = useIntl();
   const [isTaskModalOpen, { setTrue: showTaskModal, setFalse: hideTaskModal }] = useBoolean(false);
   const [isFilteredToShowComplete, { toggle: toggleFiltered }] = useBoolean(false);
-  const [isFilterContextMenuShown, { setTrue: showFilterContextMenu, setFalse: hideFilterContextMenu }] = useBoolean(false);
+  const [isFilterContextMenuShown, { setFalse: hideFilterContextMenu, toggle: toggleFilterContextMenu }] = useBoolean(false);
   const filterContextMenuRef = useRef(null); // used to link context menu to element
-
-  const handleFilterIconClick = (ev: React.MouseEvent<HTMLElement>) => {
-    ev.preventDefault(); // don't navigate
-    showFilterContextMenu();
-  };
 
   const filterMenuItems: IContextualMenuItem[] = [
     {
@@ -243,7 +238,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
                 iconName={isFilteredToShowComplete ? 'FilterSolid' : 'Filter'}
                 className={filterSortIconClass}
                 style={pointerCursorStyle}
-                onClick={handleFilterIconClick}
+                onClick={toggleFilterContextMenu}
               />
             </span>
             <FontIcon iconName="Sort" className={filterSortIconClass} />
