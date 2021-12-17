@@ -28,8 +28,8 @@ export const appModules: AppModule[] = [
   },
   {
     displayNameResourceKey: 'nav.planning_app',
-    scope: 'productAppModule',
-    url: isProd ? '/planning/remoteEntry.js' : 'https://localhost:3001/remoteEntry.js',
+    scope: 'planningAppModule',
+    url: isProd ? '/planning/remoteEntry.js' : 'https://localhost:3002/remoteEntry.js',
     routeName: '/planning',
     iconName: 'CircleAddition',
     rank: 2,

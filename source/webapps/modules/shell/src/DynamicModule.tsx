@@ -37,11 +37,13 @@ function addElementLoadPromises(
   return new Promise((resolve, reject) => {
     // when <script> tag is loaded, and script executed
     element.onload = () => {
+      console.log('onload', url);
       setReady(true);
       resolve();
     };
     // if <script> tag load or script execution fails
-    element.onerror = () => {
+    element.onerror = e => {
+      console.log('onerror', url, e);
       setReady(false);
       setFailed(true);
       reject();
@@ -57,7 +59,7 @@ const loadScript = async (
   if (!url) {
     return;
   }
-
+  console.log('loadScript', url);
   // set initial state
   setReady(false);
   setFailed(false);
@@ -66,11 +68,14 @@ const loadScript = async (
   if (dynamicScripts[url]) {
     try {
       // await the Promise stored at dynamicScripts['/someRemoteLocation/remoteEntry.js']
+      console.log('loadScript existing');
       await dynamicScripts[url];
       setReady(true);
     } catch (e) {
+      console.log('loadScript catch', e);
       setReady(false);
       setFailed(true);
+      delete dynamicScripts[url];
     }
     return;
   }
@@ -107,13 +112,14 @@ const useRemoteEntryScript = (url: string) => {
 };
 
 const loadDynamicRemoteModule = async (scope: string, module: string): Promise<unknown> => {
+  console.log('loadDynamicRemoteModule - start');
   // Initializes the shared scope. This fills it with known provided modules from this build and all remotes.
   // @ts-ignore
   await __webpack_init_sharing__('default');
 
   // Get the remote container.
   const container = window[scope];
-
+  console.log(scope, container);
   // Initialize the container with the shared scope, it may provide shared modules.
   // @ts-ignore
   await container.init(__webpack_share_scopes__.default);
@@ -121,7 +127,7 @@ const loadDynamicRemoteModule = async (scope: string, module: string): Promise<u
   // Load the remote module (./App) from the remote container.
   // @ts-ignore
   const factory = await container.get(module);
-
+  console.log('loadDynamicRemoteModule - end');
   return factory();
 };
 
@@ -129,6 +135,7 @@ const loadDynamicRemoteModule = async (scope: string, module: string): Promise<u
 
 // this class should probably not be used directly, consider using "DynamicModule" instead
 const DynamicModuleInternal: React.FC<DynamicModuleProps> = ({ module, loadingMessage, shellApi }: DynamicModuleProps) => {
+  console.log('DynamicModuleInternal', module.url);
   const { ready, failed } = useRemoteEntryScript(module.url);
 
   if (!module) {
