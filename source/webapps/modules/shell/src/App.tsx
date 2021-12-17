@@ -51,12 +51,6 @@ const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, head
     height: '100%',
   };
 
-  const hideHeaderStyle = {
-    root: {
-      height: '0',
-    },
-  };
-
   return (
     <div className="App" style={appStyle}>
       <BrowserRouter>
@@ -77,10 +71,9 @@ const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, head
                 },
               }}
             >
-              <Stack.Item styles={headerShown ? {} : hideHeaderStyle}>
-                <Header changeTheme={changeTheme} setEnvironmentKey={setEnvironmentKey} getAccessToken={getAccessToken} />
+              <Stack.Item>
+                {headerShown && <Header changeTheme={changeTheme} setEnvironmentKey={setEnvironmentKey} getAccessToken={getAccessToken} />}
               </Stack.Item>
-
               <Stack.Item shrink>
                 <IdleMonitor />
               </Stack.Item>

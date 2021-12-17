@@ -1,4 +1,5 @@
 import { IStackItemStyles, IStackStyles, IStackTokens, Stack } from '@fluentui/react';
+import { useTheme } from '@fluentui/react-theme-provider';
 import React from 'react';
 
 import KPIs from './KPIs';
@@ -23,8 +24,11 @@ const stackTokens: IStackTokens = {
 };
 
 const Dashboard: React.FunctionComponent<IDashboardProps> = ({ updateProduct, environmentKey, accessToken, products }: IDashboardProps) => {
+  const theme = useTheme();
+
   const stackItemStyles: IStackItemStyles = {
     root: {
+      background: theme.semanticColors.bodyBackground, // TODO: why needed?
       display: 'flex',
       justifyContent: 'center',
     },
@@ -32,6 +36,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({ updateProduct, en
 
   const stackStyles: IStackStyles = {
     root: {
+      background: theme.semanticColors.bodyBackground, // TODO: why needed?
       height: '100%',
       width: '620px',
     },
@@ -42,7 +47,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({ updateProduct, en
       <Stack.Item shrink>
         <Stack horizontal styles={stackStyles} tokens={stackTokens}>
           <Stack.Item styles={stackItemStyles}>
-            <ProductSection productName={products[0].name} />
+            <ProductSection product={products[0]} />
           </Stack.Item>
           <Stack.Item grow styles={stackItemStyles}>
             <KPIs />

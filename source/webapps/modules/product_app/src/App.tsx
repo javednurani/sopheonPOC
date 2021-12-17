@@ -45,22 +45,8 @@ const App: React.FunctionComponent<Props> = ({
     }
   }, [currentStep, products, environmentKey, hideHeader, showHeader]);
 
-<<<<<<< HEAD
   if (!environmentKey || getProductsFetchStatus === FetchStatus.NotActive || getProductsFetchStatus === FetchStatus.InProgress) {
     return <Spinner label={formatMessage({ id: 'fallback.loading' })} />;
-=======
-  const { formatMessage } = useIntl();
-
-  // TODO: condition copied from above, can be simplified?
-  const userNeedsOnboarding = (products.length === 0 && environmentKey) || (currentStep === 3 && products.length === 1);
-
-  if (!environmentKey) {
-    return (
-      <Stack horizontalAlign="center">
-        <h2>{formatMessage({ id: 'onboarding.pleaseLogin' })}</h2>
-      </Stack>
-    );
->>>>>>> main
   }
 
   if (getProductsFetchStatus === FetchStatus.DoneFailure) {
