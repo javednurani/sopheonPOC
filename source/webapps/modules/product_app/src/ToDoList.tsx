@@ -1,7 +1,18 @@
-import { FontIcon, IStackItemStyles, IStackStyles, ITextFieldStyles, mergeStyles, mergeStyleSets, Modal, Stack } from '@fluentui/react';
+import {
+  ContextualMenu,
+  ContextualMenuItemType,
+  FontIcon,
+  IContextualMenuItem,
+  IStackItemStyles,
+  ITextFieldStyles,
+  mergeStyles,
+  mergeStyleSets,
+  Modal,
+  Stack,
+} from '@fluentui/react';
 import { Text } from '@fluentui/react/lib/Text';
 import { useBoolean } from '@fluentui/react-hooks';
-import React from 'react';
+import React, { useRef } from 'react';
 import { useIntl } from 'react-intl';
 
 import AddTask from './AddTask';
@@ -90,10 +101,46 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
   accessToken,
   products,
 }: IToDoListProps) => {
+  const { todos } = products[0];
   const { formatMessage } = useIntl();
   const [isTaskModalOpen, { setTrue: showTaskModal, setFalse: hideTaskModal }] = useBoolean(false);
-  const { todos } = products[0];
   const [isFilteredToShowComplete, { toggle: toggleFiltered }] = useBoolean(false);
+  const [isFilterContextMenuShown, { setTrue: showFilterContextMenu, setFalse: hideFilterContextMenu }] = useBoolean(false);
+  const filterContextMenuRef = useRef(null); // used to link context menu to element
+
+  const handleFilterIconClick = (ev: React.MouseEvent<HTMLElement>) => {
+    ev.preventDefault(); // don't navigate
+    showFilterContextMenu();
+  };
+
+  const filterMenuItems: IContextualMenuItem[] = [
+    {
+      key: 'filterSection',
+      itemType: ContextualMenuItemType.Section,
+      sectionProps: {
+        title: 'Filter',
+        items: [
+          {
+            key: 'showCompleted',
+            text: 'Show Completed',
+            canCheck: true,
+            checked: isFilteredToShowComplete,
+            onClick: toggleFiltered,
+          },
+        ],
+      },
+    },
+  ];
+
+  const filterContextMenu: JSX.Element = (
+    <ContextualMenu
+      items={filterMenuItems}
+      hidden={!isFilterContextMenuShown}
+      target={filterContextMenuRef}
+      onItemClick={hideFilterContextMenu}
+      onDismiss={hideFilterContextMenu}
+    />
+  );
 
   const handleStatusIconClick = (todo: ToDoItem) => {
     // if it's not complete, mark it as complete, otherwise in progress
@@ -190,13 +237,15 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
         </Stack.Item>
         <Stack.Item>
           <Text variant="xLarge">
-            {/* TODO: combine class and styles? */}
-            <FontIcon
-              iconName={isFilteredToShowComplete ? 'FilterSolid' : 'Filter'}
-              className={filterSortIconClass}
-              style={pointerCursorStyle}
-              onClick={toggleFiltered}
-            />
+            <span ref={filterContextMenuRef}>
+              {/* TODO: combine class and styles? */}
+              <FontIcon
+                iconName={isFilteredToShowComplete ? 'FilterSolid' : 'Filter'}
+                className={filterSortIconClass}
+                style={pointerCursorStyle}
+                onClick={handleFilterIconClick}
+              />
+            </span>
             <FontIcon iconName="Sort" className={filterSortIconClass} />
           </Text>
         </Stack.Item>
@@ -219,6 +268,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
           products={products}
         />
       </Modal>
+      {filterContextMenu}
     </div>
   );
 };
