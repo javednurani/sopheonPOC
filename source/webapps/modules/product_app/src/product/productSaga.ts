@@ -16,28 +16,32 @@ import {
   ProductSagaActionTypes,
   UpdateProductAction,
   updateProductFailure,
+  UpdateProductItemAction,
+  updateProductItemFailure,
+  updateProductItemRequest,
+  updateProductItemSuccess,
   updateProductRequest,
   updateProductSuccess,
 } from './productReducer';
-import { createProduct, getProducts, updateProduct } from './productService';
+import { createProduct, getProducts, updateProduct, updateProductItem } from './productService';
 
 export function* watchOnGetProducts(): Generator {
   yield takeEvery(ProductSagaActionTypes.GET_PRODUCTS, onGetProducts);
 }
 
 const translateProductItemsToTasks = (productItems: unknown[]): ToDoItem[] =>
-  productItems
-    .filter(pi => pi.productItemTypeId === ProductItemTypes.TASK)
-    .map(td => {
-      const dueDateString: string = td.utcDateTimeAttributeValues.filter(dtav => dtav.attributeId === Attributes.DUEDATE)[0].value;
-      return {
-        id: td.id,
-        name: td.name,
-        notes: td.stringAttributeValues.filter(sav => sav.attributeId === Attributes.NOTES)[0].value,
-        dueDate: dueDateString ? new Date(dueDateString) : null,
-        status: td.enumAttributeValues.filter(eav => eav.attributeId === Attributes.STATUS).enumAttributeOptionId,
-      };
-    });
+  productItems.filter(pi => pi.productItemTypeId === ProductItemTypes.TASK).map(td => translateProductItemToTask(td));
+
+const translateProductItemToTask = (td: unknown): ToDoItem => {
+  const dueDateString: string = td.utcDateTimeAttributeValues.filter(dtav => dtav.attributeId === Attributes.DUEDATE)[0].value;
+  return {
+    id: td.id,
+    name: td.name,
+    notes: td.stringAttributeValues.filter(sav => sav.attributeId === Attributes.NOTES)[0].value,
+    dueDate: dueDateString ? new Date(dueDateString) : null,
+    status: td.enumAttributeValues.filter(eav => eav.attributeId === Attributes.STATUS)[0].enumAttributeOptionId,
+  };
+};
 
 const translateEnumCollectionAttributeValuesToIndustryIds = (enumCollectionAttributeValues: unknown[]): number[] =>
   enumCollectionAttributeValues.find(ecav => ecav.attributeId === Attributes.INDUSTRIES).value.map(val => val.enumAttributeOptionId);
@@ -91,6 +95,10 @@ export function* watchOnUpdateProduct(): Generator {
   yield takeEvery(ProductSagaActionTypes.UPDATE_PRODUCT, onUpdateProduct);
 }
 
+export function* watchOnUpdateProductItem(): Generator {
+  yield takeEvery(ProductSagaActionTypes.UPDATE_PRODUCT_ITEM, onUpdateProductItem);
+}
+
 export function* onUpdateProduct(action: UpdateProductAction): Generator {
   try {
     yield put(updateProductRequest());
@@ -112,6 +120,17 @@ export function* onUpdateProduct(action: UpdateProductAction): Generator {
   }
 }
 
+export function* onUpdateProductItem(action: UpdateProductItemAction): Generator {
+  try {
+    yield put(updateProductItemRequest());
+    const { data } = yield call(updateProductItem, action.payload); // TODO , type response
+    const updatedProductItem = translateProductItemToTask(data);
+    yield put(updateProductItemSuccess(updatedProductItem));
+  } catch (error) {
+    yield put(updateProductItemFailure(error));
+  }
+}
+
 export default function* productSaga(): Generator {
-  yield all([fork(watchOnGetProducts), fork(watchOnCreateProduct), fork(watchOnUpdateProduct)]);
+  yield all([fork(watchOnGetProducts), fork(watchOnCreateProduct), fork(watchOnUpdateProduct), fork(watchOnUpdateProductItem)]);
 }
