@@ -50,12 +50,6 @@ const pointerCursorStyle: React.CSSProperties = {
   cursor: 'pointer',
 };
 
-const emptyDueDateStyles: Partial<ITextFieldStyles> = {
-  root: {
-    color: 'red',
-  },
-};
-
 const sharedNameStyles: Partial<ITextFieldStyles> = {
   root: {
     'display': '-webkit-box',
@@ -145,7 +139,6 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
       {todos
         .filter(todo => (isFilteredToShowComplete ? true : todo.status !== Status.Complete))
         .map((todo, index) => {
-          const emptyNamePlaceholder = 'xxxx';
           const statusIcon: JSX.Element = (
             <Text variant="xLarge">
               <FontIcon
@@ -165,7 +158,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
               dueDate = <Text>Due {todo.dueDate.toLocaleDateString(undefined, { year: '2-digit', month: 'numeric', day: 'numeric' })}</Text>;
             }
           } else {
-            dueDate = <Text styles={emptyDueDateStyles}>{emptyNamePlaceholder}</Text>;
+            dueDate = <Text />; // display nothing
           }
 
           return (
