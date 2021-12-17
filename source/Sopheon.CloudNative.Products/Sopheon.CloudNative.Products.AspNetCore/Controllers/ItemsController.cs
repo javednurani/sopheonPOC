@@ -18,7 +18,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
 {
    [TypeFilter(typeof(GeneralExceptionFilter))]
 
-   [Route("Environments/{EnvironmentId}/Products/{productKey}/[controller]")]   // 
+   [Route("Environments/{EnvironmentId}/Products/{productKey}/[controller]")]
    public class ItemsController : EnvironmentScopedControllerBase
    {
       private readonly int STATUS = -4; // TODO: do we have enum for these?  (SPM.Attribute)

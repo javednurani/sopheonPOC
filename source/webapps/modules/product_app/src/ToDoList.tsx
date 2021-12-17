@@ -118,11 +118,11 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
       key: 'filterSection',
       itemType: ContextualMenuItemType.Section,
       sectionProps: {
-        title: 'Filter',
+        title: formatMessage({ id: 'toDo.filter' }),
         items: [
           {
             key: 'showCompleted',
-            text: 'Show Completed',
+            text: formatMessage({ id: 'toDo.showCompleted' }),
             canCheck: true,
             checked: isFilteredToShowComplete,
             onClick: toggleFiltered,

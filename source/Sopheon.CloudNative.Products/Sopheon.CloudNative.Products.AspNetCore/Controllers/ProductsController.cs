@@ -19,7 +19,6 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
    [TypeFilter(typeof(GeneralExceptionFilter))]
    public class ProductsController : EnvironmentScopedControllerBase
    {
-      private readonly int STATUS = -4; // TODO: do we have enum for these?  (SPM.Attribute)
       private readonly ILogger<ProductsController> _logger;
       private readonly ProductManagementContext _dbContext;
       private readonly IMapper _mapper;
