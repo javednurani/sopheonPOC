@@ -56,19 +56,20 @@ const emptyDueDateStyles: Partial<ITextFieldStyles> = {
   },
 };
 
-const completedNameStyles: Partial<ITextFieldStyles> = {
-  root: {
-    textDecoration: 'line-through',
-  },
-};
-
-const twoLineMaxWithOverflowStyles: Partial<ITextFieldStyles> = {
+const sharedNameStyles: Partial<ITextFieldStyles> = {
   root: {
     'display': '-webkit-box',
     'overflow': 'hidden',
     '-webkit-line-clamp': '2',
     '-webkit-box-orient': 'vertical',
     'marginBottom': '5px',
+  },
+};
+
+const completedNameStyles: Partial<ITextFieldStyles> = {
+  ...sharedNameStyles,
+  root: {
+    textDecoration: 'line-through',
   },
 };
 
@@ -154,13 +155,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
               />
             </Text>
           );
-          const name: JSX.Element = (
-            <Text
-              styles={todo.status === Status.Complete ? { ...completedNameStyles, ...twoLineMaxWithOverflowStyles } : twoLineMaxWithOverflowStyles}
-            >
-              {todo.name}
-            </Text>
-          );
+          const name: JSX.Element = <Text styles={todo.status === Status.Complete ? completedNameStyles : sharedNameStyles}>{todo.name}</Text>;
 
           let dueDate: JSX.Element;
           if (todo.dueDate) {
