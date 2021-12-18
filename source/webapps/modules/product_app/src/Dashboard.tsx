@@ -39,7 +39,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
     border: '1px solid',
     borderColor: theme.palette.neutralTertiary,
     borderRadius: '3px',
-    overflow: 'hidden',
+    overflow: 'auto',
   };
 
   const topRowStackItemStyles: IStackItemStyles = {
