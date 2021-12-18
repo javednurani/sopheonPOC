@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -52,12 +48,12 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
       // INFO, this endpoint was added in Cloud-2183 story to support rapid development of adding ProductItems
       // the ProductsController::Patch endpoint also supports this, and React SPA infrastructure for API calls is more in parity with the Patch endpoint
       // For purpose of Cloud-2183, may not need to use this endpoint. But it may be valuable in the future
-      [HttpPost("{key}/Items")]
-      public async Task<IActionResult> PostItems(string key, [FromBody] ProductItemDto itemDto) // TODO, PostItem vs PostItems, single Dto vs collection of Dto's in request...
+      [HttpPost]
+      public async Task<IActionResult> PostItems(string productKey, [FromBody] ProductItemDto itemDto) // TODO, PostItem vs PostItems, single Dto vs collection of Dto's in request...
       {
          Product product = await _dbContext.Products
              .Include(p => p.Items)
-             .SingleOrDefaultAsync(p => p.Key == key);
+             .SingleOrDefaultAsync(p => p.Key == productKey);
 
          if (product == null)
          {
@@ -74,7 +70,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
       }
       
 
-      [HttpPut("{productKey}/Items/{itemId}")]
+      [HttpPut("{itemId}")]
       public async Task<IActionResult> PutItem(string productKey, int itemId, [FromBody] ProductItemDto productItemDto)
       {
          Product product = await _dbContext.Products
