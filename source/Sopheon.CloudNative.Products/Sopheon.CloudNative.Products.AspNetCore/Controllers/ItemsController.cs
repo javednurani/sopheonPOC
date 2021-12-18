@@ -48,7 +48,33 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
          return Ok(results);
       }
 
-      [HttpPut("{itemId}")]
+      
+      // INFO, this endpoint was added in Cloud-2183 story to support rapid development of adding ProductItems
+      // the ProductsController::Patch endpoint also supports this, and React SPA infrastructure for API calls is more in parity with the Patch endpoint
+      // For purpose of Cloud-2183, may not need to use this endpoint. But it may be valuable in the future
+      [HttpPost("{key}/Items")]
+      public async Task<IActionResult> PostItems(string key, [FromBody] ProductItemDto itemDto) // TODO, PostItem vs PostItems, single Dto vs collection of Dto's in request...
+      {
+         Product product = await _dbContext.Products
+             .Include(p => p.Items)
+             .SingleOrDefaultAsync(p => p.Key == key);
+
+         if (product == null)
+         {
+            return NotFound();
+         }
+
+         // TODO, validate Dto?
+         ProductItem item = _mapper.Map<ProductItem>(itemDto);
+         product.Items.Add(item);
+
+         await _dbContext.SaveChangesAsync();
+
+         return Ok(); // TODO, return 201 Created w/ a Response Body including new Id(s)
+      }
+      
+
+      [HttpPut("{productKey}/Items/{itemId}")]
       public async Task<IActionResult> PutItem(string productKey, int itemId, [FromBody] ProductItemDto productItemDto)
       {
          Product product = await _dbContext.Products
@@ -63,9 +89,9 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
 
          // update entity
          // TODO: currently only setting the value for the single ToDoItem
-         int newValue = itemFromRequest.EnumCollectionAttributeValues.Single(ecav => ecav.AttributeId == STATUS).Value.Single().EnumAttributeOptionId;
-         EnumCollectionAttributeValue toDoItems = itemFromDB.EnumCollectionAttributeValues.Single(ecav => ecav.AttributeId == STATUS);
-         toDoItems.Value = new List<EnumAttributeOptionValue> { new EnumAttributeOptionValue { EnumAttributeOptionId = newValue } };
+         int newValue = itemFromRequest.EnumAttributeValues.Single(ecav => ecav.AttributeId == STATUS).EnumAttributeOptionId;
+         EnumAttributeValue toDoItem = itemFromDB.EnumAttributeValues.Single(ecav => ecav.AttributeId == STATUS);
+         toDoItem.EnumAttributeOptionId = newValue;
 
          _ = await _dbContext.SaveChangesAsync();
 
