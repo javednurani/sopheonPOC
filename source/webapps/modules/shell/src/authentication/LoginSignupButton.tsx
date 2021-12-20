@@ -1,22 +1,12 @@
 import { AccountInfo } from '@azure/msal-browser';
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
-import {
-  DefaultButton,
-  IButtonStyles,
-  IconButton,
-  IContextualMenuProps,
-  IIconProps,
-  IIconStyles,
-  ITooltipHostStyles,
-  TooltipHost,
-} from '@fluentui/react';
+import { DefaultButton, IButtonStyles, IContextualMenuProps, IIconProps, IIconStyles } from '@fluentui/react';
 import { useTheme } from '@fluentui/react-theme-provider';
 import { isDarkTheme } from '@sopheon/shared-ui';
 import { GetAccessTokenAction } from '@sopheon/shell-api';
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
-import ThemeSelector from '../themes/components/themeSelector/ThemeSelector';
 import { ChangeThemeAction } from '../themes/themeReducer/themeReducer';
 import { changePasswordRequest, editProfileRequest, getMsalAccount, loginButtonRequest } from './authHelpers';
 import { SetEnvironmentKeyAction } from './authReducer';

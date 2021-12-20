@@ -1,6 +1,5 @@
 import { AuthenticatedTemplate } from '@azure/msal-react';
 import { IStackTokens, Stack, Sticky, StickyPositionType } from '@fluentui/react';
-import { useTheme } from '@fluentui/react-theme-provider';
 import { GetAccessTokenAction } from '@sopheon/shell-api';
 import React, { FunctionComponent } from 'react';
 import { useIntl } from 'react-intl';
@@ -10,7 +9,6 @@ import LoginSignupButton from '../authentication/LoginSignupButton';
 import NotificationsButton from '../authentication/NotificationsButton';
 import Navbar from '../navbar/Navbar';
 import SopheonLogo from '../SopheonLogo';
-import ThemeSelector from '../themes/components/themeSelector/ThemeSelector';
 import { ChangeThemeAction } from '../themes/themeReducer/themeReducer';
 
 interface HeaderProps {
