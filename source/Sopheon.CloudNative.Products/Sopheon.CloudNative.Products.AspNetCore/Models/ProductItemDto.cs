@@ -17,7 +17,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
 
       //public Rank Rank { get; set; }
 
-      public List<Int32AttributeValueDto> IntAttributeValues { get; set; }
+      public List<Int32AttributeValueDto> Int32AttributeValues { get; set; }
 
       public List<StringAttributeValueDto> StringAttributeValues { get; set; }
 
@@ -26,5 +26,6 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
       public List<UtcDateTimeAttributeValueDto> UtcDateTimeAttributeValues { get; set; }
 
       public List<MoneyAttributeValueDto> MoneyAttributeValues { get; set; }
+      public List<EnumCollectionAttributeValueDto> EnumCollectionAttributeValues { get; set; }
    }
 }
