@@ -66,6 +66,22 @@ $MasterTemplateDeploy = az deployment group create --resource-group $ResourceGro
 Test-LastExitCode;
 Write-Host "Master Template Deployment: $($MasterTemplateDeploy)";
 
+Write-Host "Configuring Elastic Job Agent Host..."
+$masterUser = Get-AzSqlElasticJobCredential -ResourceGroupName $ResourceGroupValue -ServerName $ElasticJobAgentSQLServerName -AgentName 'JobAgent' -Name 'masteruser';
+$jobUser = Get-AzSqlElasticJobCredential -ResourceGroupName $ResourceGroupValue -ServerName $ElasticJobAgentSQLServerName -AgentName 'JobAgent' -Name 'jobuser';
+if (-not $masterUser) {
+    $SecureSqlAdminEnigma1 = (ConvertTo-SecureString -String $SqlAdminEnigma -AsPlainText -Force)
+    $masterCred = New-Object-TypeName "System.Management.Automation.PSCredential" -ArgumentList "masteruser", $SecureSqlAdminEnigma1
+    New-AzSqlElasticJobCredential -ResourceGroupName $ResourceGroupValue -ServerName $ElasticJobAgentSQLServerName -Credential $masterCred
+}
+if (-not $jobUser) {
+    $SecureSqlAdminEnigma2 = (ConvertTo-SecureString -String $SqlAdminEnigma -AsPlainText -Force)
+    $jobCred = New-Object-TypeName "System.Management.Automation.PSCredential" -ArgumentList "jobuser", $SecureSqlAdminEnigma2
+    New-AzSqlElasticJobCredential -ResourceGroupName $ResourceGroupValue -ServerName $ElasticJobAgentSQLServerName -Credential $jobCred
+}
+
+Write-Host "Elastic Job Agent Host configured!"
+
 $environmentManagementConnectionString = (az sql db show-connection-string --client ado.net --server "$($EnvironmentSQLServerName.ToLower())" --name $EnvironmentManagementSQLServerDatabaseName).Replace('"', '');
 
 $environmentManagementConnectionString = $environmentManagementConnectionString.Replace('<username>', 'sopheon').Replace('<password>', $SqlAdminEnigma);

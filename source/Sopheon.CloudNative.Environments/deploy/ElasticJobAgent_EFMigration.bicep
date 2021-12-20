@@ -6,6 +6,8 @@ param elasticJobAgentName string = '^ElasticJobAgentName^'
 param targetSqlServerName string = '^TargetSqlServerName^'
 param scheduledStartTime string = '^ScheduledStartTime^'
 param elasticJobStepCommandText string = '^SqlCommandText^'
+@description('No need to set, this is setup to use utcNow() when generated on deploy')
+param dateTime string = uniqueString(utcNow())
 
 resource elasticJobServer 'Microsoft.Sql/servers@2021-05-01-preview' = {
   name: elasticJobAgentServerName
@@ -29,22 +31,14 @@ resource elasticJobAgent 'Microsoft.Sql/servers/jobAgents@2021-02-01-preview' = 
   }
 }
 
-resource elasticJobAgentCredentialJobUser 'Microsoft.Sql/servers/jobAgents/credentials@2021-02-01-preview' = {
+resource elasticJobAgentCredentialJobUser 'Microsoft.Sql/servers/jobAgents/credentials@2021-02-01-preview' existing = {
   parent: elasticJobAgent
   name: 'jobuser'
-  properties: {
-    username: 'jobuser'
-    password: credentialsJobUserPassword
-  }
 }
 
-resource elasticJobAgentCredentialMasterUser 'Microsoft.Sql/servers/jobAgents/credentials@2021-02-01-preview' = {
+resource elasticJobAgentCredentialMasterUser 'Microsoft.Sql/servers/jobAgents/credentials@2021-02-01-preview' existing = {
   parent: elasticJobAgent
   name: 'masteruser'
-  properties: {
-    username: 'masteruser'
-    password: credentialsMasterUserPassword
-  }
 }
 
 resource elasticJobAgentTargetGroupServerGroup 'Microsoft.Sql/servers/jobAgents/targetGroups@2021-02-01-preview' = {
@@ -64,7 +58,7 @@ resource elasticJobAgentTargetGroupServerGroup 'Microsoft.Sql/servers/jobAgents/
 
 resource elasticJobAgentExampleJobForBuild 'Microsoft.Sql/servers/jobAgents/jobs@2021-02-01-preview' = {
   parent: elasticJobAgent
-  name: uniqueString(elasticJobAgent.name, elasticJobAgentServerName)
+  name: uniqueString(elasticJobAgent.name, elasticJobAgentServerName, dateTime)
   properties: {
     schedule: {
       startTime: scheduledStartTime
