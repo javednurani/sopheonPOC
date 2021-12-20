@@ -9,15 +9,18 @@ function Test-LastExitCode() {
     }
 }
 
-Connect-AzAccount -Subscription $env:Subscription
-
-# Deploy Azure Resources for release definitions to talk to
 $azureKeyVault = "Cloud-DevOps";
 if ($env:AzureEnvironment -eq "Prod") {
-    $azureKeyVault = "Prod-Cloud-DevOps"
+    $azureKeyVault = "Prod-Cloud-DevOps";
 }
 
 $SqlAdminEnigma = (az keyvault secret show --vault-name $azureKeyVault --name "SqlServerAdminEnigma" --query value).Replace('"', '');
+$AzSpClientEnigma = (az keyvault secret show --vault-name azureKeyVault Cloud --name "AzSpClientEnigma" --query value).Replace('"', '');
+$AzSpClientId = (az keyvault secret show --vault-name azureKeyVault Cloud --name "AzSpClientId" --query value).Replace('"', '');
+
+$azurePassword = ConvertTo-SecureString "$($AzSpClientEnigma)" -AsPlainText -Force
+$psCred = New-Object System.Management.Automation.PSCredential($AzSpClientId , $azurePassword)
+Connect-AzAccount -Credential $psCred -TenantId $env:Tenant -ServicePrincipal
 
 $DeploymentName = "ADO-Deployment";
 
