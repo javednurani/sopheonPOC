@@ -9,6 +9,8 @@ function Test-LastExitCode() {
     }
 }
 
+Connect-AzAccount -Subscription $env:Subscription
+
 # Deploy Azure Resources for release definitions to talk to
 $azureKeyVault = "Cloud-DevOps";
 if ($env:AzureEnvironment -eq "Prod") {
@@ -86,5 +88,5 @@ $environmentManagementConnectionString = (az sql db show-connection-string --cli
 
 $environmentManagementConnectionString = $environmentManagementConnectionString.Replace('<username>', 'sopheon').Replace('<password>', $SqlAdminEnigma);
 
-$connectionString = az webapp config connection-string set --resource-group $ResourceGroupValue --name $EnvironmentFunctionAppName -t SQLServer --settings EnvironmentsSqlConnectionString=$environmentManagementConnectionString;
-$connectionString = az webapp config connection-string set --resource-group $ResourceGroupValue --name $ResourceFunctionAppName -t SQLServer --settings EnvironmentsSqlConnectionString=$environmentManagementConnectionString;
+$connectionString1 = az webapp config connection-string set --resource-group $ResourceGroupValue --name $EnvironmentFunctionAppName -t SQLServer --settings EnvironmentsSqlConnectionString=$environmentManagementConnectionString;
+$connectionString2 = az webapp config connection-string set --resource-group $ResourceGroupValue --name $ResourceFunctionAppName -t SQLServer --settings EnvironmentsSqlConnectionString=$environmentManagementConnectionString;
