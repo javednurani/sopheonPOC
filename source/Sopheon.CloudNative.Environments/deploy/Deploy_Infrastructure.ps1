@@ -15,8 +15,8 @@ if ($env:AzureEnvironment -eq "Prod") {
 }
 
 $SqlAdminEnigma = (az keyvault secret show --vault-name $azureKeyVault --name "SqlServerAdminEnigma" --query value).Replace('"', '');
-$AzSpClientEnigma = (az keyvault secret show --vault-name azureKeyVault $azureKeyVault --name "AzSpClientEnigma" --query value).Replace('"', '');
-$AzSpClientId = (az keyvault secret show --vault-name azureKeyVault $azureKeyVault --name "AzSpClientId" --query value).Replace('"', '');
+$AzSpClientEnigma = (az keyvault secret show --vault-name $azureKeyVault --name "AzSpClientEnigma" --query value).Replace('"', '');
+$AzSpClientId = (az keyvault secret show --vault-name $azureKeyVault --name "AzSpClientId" --query value).Replace('"', '');
 
 $azurePassword = ConvertTo-SecureString "$($AzSpClientEnigma)" -AsPlainText -Force
 $psCred = New-Object System.Management.Automation.PSCredential($AzSpClientId , $azurePassword)
