@@ -19,7 +19,6 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
    [TypeFilter(typeof(GeneralExceptionFilter))]
    public class ProductsController : EnvironmentScopedControllerBase
    {
-      private readonly int STATUS = -4; // TODO: do we have enum for these?  (SPM.Attribute)
       private readonly ILogger<ProductsController> _logger;
       private readonly ProductManagementContext _dbContext;
       private readonly IMapper _mapper;
@@ -57,72 +56,6 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
          if (product == null) { return NotFound(); }
 
          return Ok(_mapper.Map<ProductDto>(product));
-      }
-
-      [HttpGet("{key}/Items")]
-      public async Task<IActionResult> GetItems(string key)
-      {
-         Product product = await _dbContext.Products
-             .AsNoTracking()
-             .Include(p => p.Items)
-             .SingleOrDefaultAsync(p => p.Key == key);
-
-         if (product == null) 
-         {
-            return NotFound();
-         }
-
-         var results = _mapper.Map<ProductItemDto[]>(product.Items);;
-
-         return Ok(results);
-      }
-
-      // INFO, this endpoint was added in Cloud-2183 story to support rapid development of adding ProductItems
-      // the ProductsController::Patch endpoint also supports this, and React SPA infrastructure for API calls is more in parity with the Patch endpoint
-      // For purpose of Cloud-2183, may not need to use this endpoint. But it may be valuable in the future
-      [HttpPost("{key}/Items")]
-      public async Task<IActionResult> PostItems(string key, [FromBody] ProductItemDto itemDto) // TODO, PostItem vs PostItems, single Dto vs collection of Dto's in request...
-      {
-         Product product = await _dbContext.Products
-             .Include(p => p.Items)
-             .SingleOrDefaultAsync(p => p.Key == key);
-
-         if (product == null)
-         {
-            return NotFound();
-         }
-
-         // TODO, validate Dto?
-         ProductItem item = _mapper.Map<ProductItem>(itemDto);
-         product.Items.Add(item);
-
-         await _dbContext.SaveChangesAsync();
-
-         return Ok(); // TODO, return 201 Created w/ a Response Body including new Id(s)
-      }
-      
-      [HttpPut("{productKey}/Items/{itemId}")]
-      public async Task<IActionResult> PutItem(string productKey, int itemId, [FromBody] ProductItemDto productItemDto)
-      {
-         Product product = await _dbContext.Products
-            .Include(p => p.Items)
-            .SingleOrDefaultAsync(p => p.Key == productKey);
-         if (product == null) { return NotFound(); }
-
-         ProductItem itemFromDB = product.Items.SingleOrDefault(i => i.Id == itemId);
-         if (itemFromDB == null) { return NotFound(); }
-
-         ProductItem itemFromRequest = _mapper.Map<ProductItem>(productItemDto);
-
-         // update entity
-         // TODO: currently only setting the value for the single ToDoItem
-         int newValue = itemFromRequest.EnumAttributeValues.Single(ecav => ecav.AttributeId == STATUS).EnumAttributeOptionId;
-         EnumAttributeValue toDoItem = itemFromDB.EnumAttributeValues.Single(ecav => ecav.AttributeId == STATUS);
-         toDoItem.EnumAttributeOptionId = newValue;
-
-         _ = await _dbContext.SaveChangesAsync();
-
-         return Ok(_mapper.Map<ProductItemDto>(itemFromDB));
       }
 
       [HttpPatch("{key}")]

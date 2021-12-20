@@ -1,7 +1,18 @@
-import { FontIcon, IStackItemStyles, ITextFieldStyles, mergeStyles, mergeStyleSets, Modal, Stack } from '@fluentui/react';
+import {
+  ContextualMenu,
+  ContextualMenuItemType,
+  FontIcon,
+  IContextualMenuItem,
+  IStackItemStyles,
+  ITextFieldStyles,
+  mergeStyles,
+  mergeStyleSets,
+  Modal,
+  Stack,
+} from '@fluentui/react';
 import { Text } from '@fluentui/react/lib/Text';
 import { useBoolean } from '@fluentui/react-hooks';
-import React from 'react';
+import React, { useRef } from 'react';
 import { useIntl } from 'react-intl';
 
 import AddTask from './AddTask';
@@ -52,25 +63,20 @@ const pointerCursorStyle: React.CSSProperties = {
   cursor: 'pointer',
 };
 
-const emptyDueDateStyles: Partial<ITextFieldStyles> = {
-  root: {
-    color: 'red',
-  },
-};
-
-const completedNameStyles: Partial<ITextFieldStyles> = {
-  root: {
-    textDecoration: 'line-through',
-  },
-};
-
-const twoLineMaxWithOverflowStyles: Partial<ITextFieldStyles> = {
+const sharedNameStyles: Partial<ITextFieldStyles> = {
   root: {
     'display': '-webkit-box',
     'overflow': 'hidden',
     '-webkit-line-clamp': '2',
     '-webkit-box-orient': 'vertical',
     'marginBottom': '5px',
+  },
+};
+
+const completedNameStyles: Partial<ITextFieldStyles> = {
+  ...sharedNameStyles,
+  root: {
+    textDecoration: 'line-through',
   },
 };
 
@@ -97,10 +103,41 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
   accessToken,
   products,
 }: IToDoListProps) => {
+  const { todos } = products[0];
   const { formatMessage } = useIntl();
   const [isTaskModalOpen, { setTrue: showTaskModal, setFalse: hideTaskModal }] = useBoolean(false);
-  const { todos } = products[0];
   const [isFilteredToShowComplete, { toggle: toggleFiltered }] = useBoolean(false);
+  const [isFilterContextMenuShown, { setFalse: hideFilterContextMenu, toggle: toggleFilterContextMenu }] = useBoolean(false);
+  const filterContextMenuRef = useRef(null); // used to link context menu to element
+
+  const filterMenuItems: IContextualMenuItem[] = [
+    {
+      key: 'filterSection',
+      itemType: ContextualMenuItemType.Section,
+      sectionProps: {
+        title: formatMessage({ id: 'toDo.filter' }),
+        items: [
+          {
+            key: 'showCompleted',
+            text: formatMessage({ id: 'toDo.showCompleted' }),
+            canCheck: true,
+            checked: isFilteredToShowComplete,
+            onClick: toggleFiltered,
+          },
+        ],
+      },
+    },
+  ];
+
+  const filterContextMenu: JSX.Element = (
+    <ContextualMenu
+      items={filterMenuItems}
+      hidden={!isFilterContextMenuShown}
+      target={filterContextMenuRef}
+      onItemClick={hideFilterContextMenu}
+      onDismiss={hideFilterContextMenu}
+    />
+  );
 
   const handleStatusIconClick = (todo: ToDoItem) => {
     // if it's not complete, mark it as complete, otherwise in progress
@@ -142,7 +179,6 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
       {todos
         .filter(todo => (isFilteredToShowComplete ? true : todo.status !== Status.Complete))
         .map((todo, index) => {
-          const emptyNamePlaceholder = 'xxxx';
           const statusIcon: JSX.Element = (
             <Text variant="xLarge">
               <FontIcon
@@ -152,13 +188,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
               />
             </Text>
           );
-          const name: JSX.Element = (
-            <Text
-              styles={todo.status === Status.Complete ? { ...completedNameStyles, ...twoLineMaxWithOverflowStyles } : twoLineMaxWithOverflowStyles}
-            >
-              {todo.name}
-            </Text>
-          );
+          const name: JSX.Element = <Text styles={todo.status === Status.Complete ? completedNameStyles : sharedNameStyles}>{todo.name}</Text>;
 
           let dueDate: JSX.Element;
           if (todo.dueDate) {
@@ -168,7 +198,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
               dueDate = <Text>Due {todo.dueDate.toLocaleDateString(undefined, { year: '2-digit', month: 'numeric', day: 'numeric' })}</Text>;
             }
           } else {
-            dueDate = <Text styles={emptyDueDateStyles}>{emptyNamePlaceholder}</Text>;
+            dueDate = <Text />; // display nothing
           }
 
           return (
@@ -200,13 +230,15 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
         </Stack.Item>
         <Stack.Item>
           <Text variant="xLarge">
-            {/* TODO: combine class and styles? */}
-            <FontIcon
-              iconName={isFilteredToShowComplete ? 'FilterSolid' : 'Filter'}
-              className={filterSortIconClass}
-              style={pointerCursorStyle}
-              onClick={toggleFiltered}
-            />
+            <span ref={filterContextMenuRef}>
+              {/* TODO: combine class and styles? */}
+              <FontIcon
+                iconName={isFilteredToShowComplete ? 'FilterSolid' : 'Filter'}
+                className={filterSortIconClass}
+                style={pointerCursorStyle}
+                onClick={toggleFilterContextMenu}
+              />
+            </span>
             <FontIcon iconName="Sort" className={filterSortIconClass} />
           </Text>
         </Stack.Item>
@@ -229,6 +261,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
           products={products}
         />
       </Modal>
+      {filterContextMenu}
     </div>
   );
 };
