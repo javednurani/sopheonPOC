@@ -7,12 +7,15 @@ export interface ITimelineProps {}
 const Timeline: React.FunctionComponent<ITimelineProps> = ({}: ITimelineProps) => {
   const propData = {
     data: [
-      { id: 1, text: 'Task #1', start_date: '15-11-2021', duration: 1, progress: 0.6 },
-      { id: 2, text: 'Task #2', start_date: '18-01-2022', duration: 1, progress: 0.4 },
+      { id: 1, text: 'Alpha release', type: gantt.config.types.milestone,
+        start_date: new Date(2021, 10, 12) },
+      { id: 2, text: 'beta release', type: gantt.config.types.milestone,
+        start_date: new Date(2021, 12, 12) },
+      { id: 3, text: 'charlie release', type: gantt.config.types.milestone,
+        start_date: new Date(2022, 10, 12) }
     ],
     links: [],
   };
-
   const mainStackStyle: React.CSSProperties = {
     width: '100%',
     height: '100%',

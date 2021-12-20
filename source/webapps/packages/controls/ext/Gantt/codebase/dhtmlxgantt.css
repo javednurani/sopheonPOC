@@ -1908,6 +1908,7 @@ div.dhx_modal_cover {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  z-index: 9999;
 }
 .gantt_noselect {
   -moz-user-select: -moz-none;

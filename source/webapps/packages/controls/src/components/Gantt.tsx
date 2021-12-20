@@ -6,7 +6,10 @@ import React, { useEffect } from 'react';
 import { Gantt } from '../../../controls/ext/Gantt/codebase/dhtmlxgantt';
 
 export type GanttProps = {
-  taskInfo?: any;
+  taskInfo: {
+    data: [],
+    links: []
+  };
 };
 
 const GanttComponent: React.FunctionComponent<GanttProps> = ({ taskInfo }: GanttProps) => {
@@ -15,31 +18,45 @@ const GanttComponent: React.FunctionComponent<GanttProps> = ({ taskInfo }: Gantt
 
     gantt.plugins({
       auto_scheduling: true,
-      click_drag: true,
+      click_drag: false,
       critical_path: true,
       drag_timeline: true,
       // fullscreen: true,
       grouping: true,
       // keyboard_navigation: true,
       marker: true,
-      multiselect: true,
-      overlay: true,
-      quick_info: true,
+      multiselect: false,
+      overlay: false,
+      quick_info: false,
       tooltip: true,
-      undo: true,
+      undo: false,
     });
+    const today = new Date();
+    gantt.config.scales = [
+      {unit: 'year', step: 1, format: '%Y'},
+      {unit: 'month', step: 1, format: '%F'}
+    ];
 
-    // Just hard coding some data for now.
-    const taskData = {
-      data: [
-        { id: 1, text: 'Task #1', start_date: '15-11-2021', duration: 1, progress: 0.6 },
-        { id: 2, text: 'Task #2', start_date: '18-01-2022', duration: 1, progress: 0.4 },
-      ],
-      links: [],
+    gantt.addMarker({
+      start_date: today, //a Date object that sets the marker's date
+      css: 'today', //a CSS class applied to the marker
+      text: 'Today', //the marker title
+      title: today.toLocaleDateString() // the marker's tooltipd
+    });
+    gantt.templates.tooltip_text = function(start, end, task) {
+      return `<b>Task:</b> ${task.text} <br/><b>Due Date:</b> ${gantt.templates.tooltip_date_format(start)}`;
     };
-    // , new Date(2018, 3, 30), new Date(2020, 3, 30)
+    gantt.config.readonly = true;
+    gantt.config.show_grid = false;
+    gantt.config.show_tasks_outside_timescale = true;
+
+    if (taskInfo.data.length === 0) {
+      gantt.config.start_date = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+      gantt.config.end_date = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());
+    }
+
     gantt.init('gantt_here');
-    gantt.parse(taskData);
+    gantt.parse(taskInfo);
   });
   return (
     <div className="gantt_here" id="gantt_here"></div>
