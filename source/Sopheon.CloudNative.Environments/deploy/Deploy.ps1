@@ -25,9 +25,9 @@ $CredentialsForMasterAndJobScript = Get-Content "_StratusEnvironmentManagement\E
 $CredentialsForMasterAndJobScript = $CredentialsForMasterAndJobScript.Replace("^Enigma^", $SqlAdminEnigma);
 Set-Content -Path '_StratusEnvironmentManagement\EnvironmentManagement\ElasticJobTarget_CreateCredentials.sql' -Value $CredentialsForMasterAndJobScript -Force
 
-$CredentialsJobScript = Get-Content "_StratusEnvironmentManagement\EnvironmentManagement\CredentialsJobScript.sql" -Raw
+$CredentialsJobScript = Get-Content "_StratusEnvironmentManagement\EnvironmentManagement\ElasticJobTarget_CreateJobUser.sql" -Raw
 $CredentialsJobScript = $CredentialsJobScript.Replace("^Enigma^", $SqlAdminEnigma);
-Set-Content -Path '_StratusEnvironmentManagement\EnvironmentManagement\CredentialsJobScript.sql' -Value $CredentialsJobScript -Force
+Set-Content -Path '_StratusEnvironmentManagement\EnvironmentManagement\ElasticJobTarget_CreateJobUser.sql' -Value $CredentialsJobScript -Force
 
 Write-Host "Setting Job Agent Credentials on $EnvironmentServerName";
 Invoke-Sqlcmd -ServerInstance "$($EnvironmentServerName).database.windows.net" -Database 'master' -UserName "sopheon" -Password $SqlAdminEnigma -InputFile "_StratusEnvironmentManagement\EnvironmentManagement\ElasticJobTarget_CreateCredentials.sql"
