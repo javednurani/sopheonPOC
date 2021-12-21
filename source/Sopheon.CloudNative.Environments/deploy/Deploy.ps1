@@ -23,11 +23,11 @@ Write-Host "Firewall Rules created";
 
 $CredentialsForMasterAndJobScript = Get-Content "_StratusEnvironmentManagement\EnvironmentManagement\ElasticJobTarget_CreateCredentials.sql" -Raw
 $CredentialsForMasterAndJobScript = $CredentialsForMasterAndJobScript.Replace("^Enigma^", $SqlAdminEnigma);
-Set-Content -Path $CredentialsForMasterAndJobScript -Force
+Set-Content -Path '_StratusEnvironmentManagement\EnvironmentManagement\ElasticJobTarget_CreateCredentials.sql' -Value $CredentialsForMasterAndJobScript -Force
 
 $CredentialsJobScript = Get-Content "_StratusEnvironmentManagement\EnvironmentManagement\CredentialsJobScript.sql" -Raw
 $CredentialsJobScript = $CredentialsJobScript.Replace("^Enigma^", $SqlAdminEnigma);
-Set-Content -Path $CredentialsJobScript -Force
+Set-Content -Path '_StratusEnvironmentManagement\EnvironmentManagement\CredentialsJobScript.sql' -Value $CredentialsJobScript -Force
 
 Write-Host "Setting Job Agent Credentials on $EnvironmentServerName";
 Invoke-Sqlcmd -ServerInstance "$($EnvironmentServerName).database.windows.net" -Database 'master' -UserName "sopheon" -Password $SqlAdminEnigma -InputFile "_StratusEnvironmentManagement\EnvironmentManagement\ElasticJobTarget_CreateCredentials.sql"
