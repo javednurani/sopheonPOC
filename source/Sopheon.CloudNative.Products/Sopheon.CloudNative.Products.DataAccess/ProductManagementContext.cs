@@ -48,6 +48,7 @@ namespace Sopheon.CloudNative.Products.Domain
       #endregion
 
       public DbSet<Product> Products { get; set; }
+      public DbSet<Task> Tasks { get; set; }
 
       public ProductManagementContext(DbContextOptions<ProductManagementContext> options) : base(options)
       {

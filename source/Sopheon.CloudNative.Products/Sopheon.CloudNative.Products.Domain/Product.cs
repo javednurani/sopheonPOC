@@ -50,6 +50,8 @@ namespace Sopheon.CloudNative.Products.Domain
       public List<UrlLink> UrlLinks { get; set; }
 
       public List<Release> Releases { get; set; }
+
+      public List<Task> Tasks { get; set; }
    }
 
    public class ProductImage
