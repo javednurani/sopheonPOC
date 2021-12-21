@@ -67,6 +67,7 @@ const sharedNameStyles: Partial<ITextFieldStyles> = {
     'overflow': 'hidden',
     '-webkit-line-clamp': '2',
     '-webkit-box-orient': 'vertical',
+    'word-break': 'break-all',
     'marginBottom': '5px',
   },
 };
@@ -190,6 +191,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
               />
             </Text>
           );
+
           const name: JSX.Element = <Text styles={todo.status === Status.Complete ? completedNameStyles : sharedNameStyles}>{todo.name}</Text>;
 
           let dueDate: JSX.Element;
