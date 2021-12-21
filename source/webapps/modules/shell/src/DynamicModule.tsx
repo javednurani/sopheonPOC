@@ -41,7 +41,7 @@ function addElementLoadPromises(
       resolve();
     };
     // if <script> tag load or script execution fails
-    element.onerror = () => {
+    element.onerror = e => {
       setReady(false);
       setFailed(true);
       reject();
@@ -57,7 +57,6 @@ const loadScript = async (
   if (!url) {
     return;
   }
-
   // set initial state
   setReady(false);
   setFailed(false);
@@ -113,7 +112,6 @@ const loadDynamicRemoteModule = async (scope: string, module: string): Promise<u
 
   // Get the remote container.
   const container = window[scope];
-
   // Initialize the container with the shared scope, it may provide shared modules.
   // @ts-ignore
   await container.init(__webpack_share_scopes__.default);
@@ -121,7 +119,6 @@ const loadDynamicRemoteModule = async (scope: string, module: string): Promise<u
   // Load the remote module (./App) from the remote container.
   // @ts-ignore
   const factory = await container.get(module);
-
   return factory();
 };
 

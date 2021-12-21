@@ -1,5 +1,5 @@
 {
-  "name": "app-module",
+  "name": "product-module",
   "version": "0.1.0",
   "private": true,
   "author": "Sopheon PLC",
@@ -15,6 +15,7 @@
     "@azure/msal-browser": "^2.20.0",
     "@azure/msal-react": "^1.1.2",
     "@fluentui/react": "^7.155.4",
+    "@fluentui/react-hooks": "^8.3.7",
     "@fluentui/react-theme-provider": "^0.18.3",
     "@fluentui/theme": "^2.0.2",
     "@sopheon/controls": "file:../../packages/controls",

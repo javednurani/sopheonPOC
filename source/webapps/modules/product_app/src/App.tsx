@@ -75,6 +75,6 @@ const App: React.FunctionComponent<Props> = ({
     );
   }
 
-  return <Dashboard products={products} />;
+  return <Dashboard updateProduct={updateProduct} environmentKey={environmentKey} accessToken={accessToken} products={products} />;
 };
 export default App;

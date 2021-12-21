@@ -31,7 +31,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AttributeId"), 1L, 1);
 
-                    b.Property<int>("AttributeValueTypeId")
+                    b.Property<int>("AttributeDataTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -44,66 +44,112 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
 
                     b.HasKey("AttributeId");
 
-                    b.HasIndex("AttributeValueTypeId");
+                    b.HasIndex("AttributeDataTypeId");
 
-                    b.ToTable("Attributes", "SPM");
+                    b.ToTable("Attribute", "SPM");
 
-                    b.HasData(
-                        new
-                        {
-                            AttributeId = -1,
-                            AttributeValueTypeId = 2,
-                            Name = "Industry",
-                            ShortName = "IND"
-                        });
+                    b.HasDiscriminator<int>("AttributeDataTypeId");
                 });
 
-            modelBuilder.Entity("Sopheon.CloudNative.Products.Domain.AttributeValueType", b =>
+            modelBuilder.Entity("Sopheon.CloudNative.Products.Domain.AttributeDataType", b =>
                 {
-                    b.Property<int>("AttributeValueTypeId")
+                    b.Property<int>("AttributeDataTypeId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AttributeValueTypeId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AttributeDataTypeId"), 1L, 1);
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("AttributeValueTypeId");
+                    b.HasKey("AttributeDataTypeId");
 
-                    b.ToTable("AttributeValueType", "SPM");
+                    b.ToTable("AttributeDataType", "SPM");
 
                     b.HasData(
                         new
                         {
-                            AttributeValueTypeId = 1,
+                            AttributeDataTypeId = 1,
                             Name = "String"
                         },
                         new
                         {
-                            AttributeValueTypeId = 2,
+                            AttributeDataTypeId = 2,
                             Name = "Int32"
                         },
                         new
                         {
-                            AttributeValueTypeId = 3,
+                            AttributeDataTypeId = 3,
                             Name = "Decimal"
                         },
                         new
                         {
-                            AttributeValueTypeId = 4,
+                            AttributeDataTypeId = 4,
                             Name = "Money"
                         },
                         new
                         {
-                            AttributeValueTypeId = 5,
+                            AttributeDataTypeId = 5,
                             Name = "UtcDateTime"
                         },
                         new
                         {
-                            AttributeValueTypeId = 6,
+                            AttributeDataTypeId = 6,
                             Name = "MarkdownString"
+                        },
+                        new
+                        {
+                            AttributeDataTypeId = 7,
+                            Name = "EnumCollection"
+                        });
+                });
+
+            modelBuilder.Entity("Sopheon.CloudNative.Products.Domain.Attributes.Enum.EnumAttributeOption", b =>
+                {
+                    b.Property<int>("EnumAttributeOptionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EnumAttributeOptionId"), 1L, 1);
+
+                    b.Property<int>("AttributeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("EnumAttributeOptionId");
+
+                    b.HasIndex("AttributeId", "Name")
+                        .IsUnique()
+                        .HasFilter("[Name] IS NOT NULL");
+
+                    b.ToTable("EnumAttributeOption", "SPM");
+
+                    b.HasData(
+                        new
+                        {
+                            EnumAttributeOptionId = -1,
+                            AttributeId = -4,
+                            Name = "Not Started"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -2,
+                            AttributeId = -4,
+                            Name = "In Progress"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -3,
+                            AttributeId = -4,
+                            Name = "Assigned"
+                        },
+                        new
+                        {
+                            EnumAttributeOptionId = -4,
+                            AttributeId = -4,
+                            Name = "Complete"
                         });
                 });
 
@@ -116,7 +162,6 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FileAttachmentId"), 1L, 1);
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ProductId")
@@ -155,29 +200,6 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                     b.ToTable("Goal", "SPM");
                 });
 
-            modelBuilder.Entity("Sopheon.CloudNative.Products.Domain.KeyPerformanceIndicator", b =>
-                {
-                    b.Property<int>("KeyPerformanceIndicatorId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("KeyPerformanceIndicatorId"), 1L, 1);
-
-                    b.Property<int>("AttributeId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ProductId")
-                        .HasColumnType("int");
-
-                    b.HasKey("KeyPerformanceIndicatorId");
-
-                    b.HasIndex("AttributeId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("KeyPerformanceIndicator", "SPM");
-                });
-
             modelBuilder.Entity("Sopheon.CloudNative.Products.Domain.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -190,7 +212,6 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Key")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
@@ -201,7 +222,8 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Key")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[Key] IS NOT NULL");
 
                     b.ToTable("Products", "SPM");
                 });
@@ -215,7 +237,6 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ProductId")
@@ -224,7 +245,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                     b.Property<int>("ProductItemTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RankId")
+                    b.Property<int?>("RankId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -247,7 +268,6 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -281,7 +301,6 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RankId"), 1L, 1);
 
                     b.Property<string>("Value")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("RankId");
@@ -298,11 +317,9 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ProductId")
@@ -324,7 +341,6 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -353,7 +369,6 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UrlLinkId"), 1L, 1);
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ProductId")
@@ -366,15 +381,104 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                     b.ToTable("UrlLink", "SPM");
                 });
 
+            modelBuilder.Entity("Sopheon.CloudNative.Products.Domain.Attributes.Decimal.DecimalAttribute", b =>
+                {
+                    b.HasBaseType("Sopheon.CloudNative.Products.Domain.Attribute");
+
+                    b.HasDiscriminator().HasValue(3);
+                });
+
+            modelBuilder.Entity("Sopheon.CloudNative.Products.Domain.Attributes.Enum.EnumCollectionAttribute", b =>
+                {
+                    b.HasBaseType("Sopheon.CloudNative.Products.Domain.Attribute");
+
+                    b.HasDiscriminator().HasValue(7);
+
+                    b.HasData(
+                        new
+                        {
+                            AttributeId = -4,
+                            AttributeDataTypeId = 0,
+                            Name = "Status",
+                            ShortName = "STATUS"
+                        });
+                });
+
+            modelBuilder.Entity("Sopheon.CloudNative.Products.Domain.Attributes.Int32.Int32Attribute", b =>
+                {
+                    b.HasBaseType("Sopheon.CloudNative.Products.Domain.Attribute");
+
+                    b.HasDiscriminator().HasValue(2);
+
+                    b.HasData(
+                        new
+                        {
+                            AttributeId = -1,
+                            AttributeDataTypeId = 0,
+                            Name = "Industry",
+                            ShortName = "IND"
+                        });
+                });
+
+            modelBuilder.Entity("Sopheon.CloudNative.Products.Domain.Attributes.Money.MoneyAttribute", b =>
+                {
+                    b.HasBaseType("Sopheon.CloudNative.Products.Domain.Attribute");
+
+                    b.HasDiscriminator().HasValue(4);
+                });
+
+            modelBuilder.Entity("Sopheon.CloudNative.Products.Domain.Attributes.String.StringAttribute", b =>
+                {
+                    b.HasBaseType("Sopheon.CloudNative.Products.Domain.Attribute");
+
+                    b.HasDiscriminator().HasValue(1);
+
+                    b.HasData(
+                        new
+                        {
+                            AttributeId = -2,
+                            AttributeDataTypeId = 0,
+                            Name = "Notes",
+                            ShortName = "NOTES"
+                        });
+                });
+
+            modelBuilder.Entity("Sopheon.CloudNative.Products.Domain.Attributes.UtcDateTime.UtcDateTimeAttribute", b =>
+                {
+                    b.HasBaseType("Sopheon.CloudNative.Products.Domain.Attribute");
+
+                    b.HasDiscriminator().HasValue(5);
+
+                    b.HasData(
+                        new
+                        {
+                            AttributeId = -3,
+                            AttributeDataTypeId = 0,
+                            Name = "Due Date",
+                            ShortName = "DUE"
+                        });
+                });
+
             modelBuilder.Entity("Sopheon.CloudNative.Products.Domain.Attribute", b =>
                 {
-                    b.HasOne("Sopheon.CloudNative.Products.Domain.AttributeValueType", "AttributeValueType")
+                    b.HasOne("Sopheon.CloudNative.Products.Domain.AttributeDataType", "AttributeDataType")
                         .WithMany()
-                        .HasForeignKey("AttributeValueTypeId")
+                        .HasForeignKey("AttributeDataTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AttributeValueType");
+                    b.Navigation("AttributeDataType");
+                });
+
+            modelBuilder.Entity("Sopheon.CloudNative.Products.Domain.Attributes.Enum.EnumAttributeOption", b =>
+                {
+                    b.HasOne("Sopheon.CloudNative.Products.Domain.Attributes.Enum.EnumCollectionAttribute", "EnumCollectionAttribute")
+                        .WithMany("EnumAttributeOptions")
+                        .HasForeignKey("AttributeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EnumCollectionAttribute");
                 });
 
             modelBuilder.Entity("Sopheon.CloudNative.Products.Domain.FileAttachment", b =>
@@ -391,24 +495,41 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                         .HasForeignKey("ProductId");
                 });
 
-            modelBuilder.Entity("Sopheon.CloudNative.Products.Domain.KeyPerformanceIndicator", b =>
-                {
-                    b.HasOne("Sopheon.CloudNative.Products.Domain.Attribute", "Attribute")
-                        .WithMany()
-                        .HasForeignKey("AttributeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Sopheon.CloudNative.Products.Domain.Product", null)
-                        .WithMany("KeyPerformanceIndicators")
-                        .HasForeignKey("ProductId");
-
-                    b.Navigation("Attribute");
-                });
-
             modelBuilder.Entity("Sopheon.CloudNative.Products.Domain.Product", b =>
                 {
-                    b.OwnsMany("Sopheon.CloudNative.Products.Domain.DecimalAttributeValue", "DecimalAttributeValues", b1 =>
+                    b.OwnsMany("Sopheon.CloudNative.Products.Domain.KeyPerformanceIndicator", "KeyPerformanceIndicators", b1 =>
+                        {
+                            b1.Property<int>("ProductId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("KeyPerformanceIndicatorId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("KeyPerformanceIndicatorId"), 1L, 1);
+
+                            b1.Property<int>("AttributeId")
+                                .HasColumnType("int");
+
+                            b1.HasKey("ProductId", "KeyPerformanceIndicatorId");
+
+                            b1.HasIndex("AttributeId");
+
+                            b1.ToTable("KeyPerformanceIndicator", "SPM");
+
+                            b1.HasOne("Sopheon.CloudNative.Products.Domain.Attribute", "Attribute")
+                                .WithMany()
+                                .HasForeignKey("AttributeId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProductId");
+
+                            b1.Navigation("Attribute");
+                        });
+
+                    b.OwnsMany("Sopheon.CloudNative.Products.Domain.Attributes.Decimal.DecimalAttributeValue", "DecimalAttributeValues", b1 =>
                         {
                             b1.Property<int>("ProductId")
                                 .HasColumnType("int");
@@ -443,7 +564,69 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                             b1.Navigation("Attribute");
                         });
 
-                    b.OwnsMany("Sopheon.CloudNative.Products.Domain.Int32AttributeValue", "IntAttributeValues", b1 =>
+                    b.OwnsMany("Sopheon.CloudNative.Products.Domain.Attributes.Enum.EnumCollectionAttributeValue", "EnumCollectionAttributeValues", b1 =>
+                        {
+                            b1.Property<int>("ProductEnumCollectionAttributeValueId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("ProductEnumCollectionAttributeValueId"), 1L, 1);
+
+                            b1.Property<int>("AttributeId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("ProductId")
+                                .HasColumnType("int");
+
+                            b1.HasKey("ProductEnumCollectionAttributeValueId");
+
+                            b1.HasIndex("AttributeId");
+
+                            b1.HasIndex("ProductId");
+
+                            b1.ToTable("Products_EnumCollectionAttributeValues", "SPM");
+
+                            b1.HasOne("Sopheon.CloudNative.Products.Domain.Attribute", "Attribute")
+                                .WithMany()
+                                .HasForeignKey("AttributeId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProductId");
+
+                            b1.OwnsMany("Sopheon.CloudNative.Products.Domain.Attributes.Enum.EnumAttributeOptionValue", "Value", b2 =>
+                                {
+                                    b2.Property<int>("ProductEnumCollectionAttributeValueId")
+                                        .HasColumnType("int");
+
+                                    b2.Property<int>("EnumAttributeOptionId")
+                                        .HasColumnType("int");
+
+                                    b2.HasKey("ProductEnumCollectionAttributeValueId", "EnumAttributeOptionId");
+
+                                    b2.HasIndex("EnumAttributeOptionId");
+
+                                    b2.ToTable("Products_EnumCollectionAttributeValues_Value", "SPM");
+
+                                    b2.HasOne("Sopheon.CloudNative.Products.Domain.Attributes.Enum.EnumAttributeOption", "EnumAttributeOption")
+                                        .WithMany()
+                                        .HasForeignKey("EnumAttributeOptionId")
+                                        .OnDelete(DeleteBehavior.NoAction)
+                                        .IsRequired();
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("ProductEnumCollectionAttributeValueId");
+
+                                    b2.Navigation("EnumAttributeOption");
+                                });
+
+                            b1.Navigation("Attribute");
+
+                            b1.Navigation("Value");
+                        });
+
+                    b.OwnsMany("Sopheon.CloudNative.Products.Domain.Attributes.Int32.Int32AttributeValue", "Int32AttributeValues", b1 =>
                         {
                             b1.Property<int>("ProductId")
                                 .HasColumnType("int");
@@ -464,7 +647,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
 
                             b1.HasIndex("AttributeId");
 
-                            b1.ToTable("Products_IntAttributeValues", "SPM");
+                            b1.ToTable("Products_Int32AttributeValues", "SPM");
 
                             b1.HasOne("Sopheon.CloudNative.Products.Domain.Attribute", "Attribute")
                                 .WithMany()
@@ -478,7 +661,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                             b1.Navigation("Attribute");
                         });
 
-                    b.OwnsMany("Sopheon.CloudNative.Products.Domain.MoneyAttributeValue", "MoneyAttributeValues", b1 =>
+                    b.OwnsMany("Sopheon.CloudNative.Products.Domain.Attributes.Money.MoneyAttributeValue", "MoneyAttributeValues", b1 =>
                         {
                             b1.Property<int>("ProductId")
                                 .HasColumnType("int");
@@ -507,7 +690,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("ProductId");
 
-                            b1.OwnsOne("Sopheon.CloudNative.Products.Domain.MoneyValue", "Value", b2 =>
+                            b1.OwnsOne("Sopheon.CloudNative.Products.Domain.Attributes.Money.MoneyValue", "Value", b2 =>
                                 {
                                     b2.Property<int>("MoneyAttributeValueProductId")
                                         .HasColumnType("int");
@@ -516,7 +699,6 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                                         .HasColumnType("int");
 
                                     b2.Property<string>("CurrencyCode")
-                                        .IsRequired()
                                         .HasColumnType("nvarchar(max)")
                                         .HasColumnName("CurrencyCode");
 
@@ -534,11 +716,10 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
 
                             b1.Navigation("Attribute");
 
-                            b1.Navigation("Value")
-                                .IsRequired();
+                            b1.Navigation("Value");
                         });
 
-                    b.OwnsMany("Sopheon.CloudNative.Products.Domain.StringAttributeValue", "StringAttributeValues", b1 =>
+                    b.OwnsMany("Sopheon.CloudNative.Products.Domain.Attributes.String.StringAttributeValue", "StringAttributeValues", b1 =>
                         {
                             b1.Property<int>("ProductId")
                                 .HasColumnType("int");
@@ -553,7 +734,6 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                                 .HasColumnType("int");
 
                             b1.Property<string>("Value")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("ProductId", "Id");
@@ -574,7 +754,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                             b1.Navigation("Attribute");
                         });
 
-                    b.OwnsMany("Sopheon.CloudNative.Products.Domain.UtcDateTimeAttributeValue", "UtcDateTimeAttributeValues", b1 =>
+                    b.OwnsMany("Sopheon.CloudNative.Products.Domain.Attributes.UtcDateTime.UtcDateTimeAttributeValue", "UtcDateTimeAttributeValues", b1 =>
                         {
                             b1.Property<int>("ProductId")
                                 .HasColumnType("int");
@@ -611,7 +791,11 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
 
                     b.Navigation("DecimalAttributeValues");
 
-                    b.Navigation("IntAttributeValues");
+                    b.Navigation("EnumCollectionAttributeValues");
+
+                    b.Navigation("Int32AttributeValues");
+
+                    b.Navigation("KeyPerformanceIndicators");
 
                     b.Navigation("MoneyAttributeValues");
 
@@ -634,11 +818,9 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
 
                     b.HasOne("Sopheon.CloudNative.Products.Domain.Rank", "Rank")
                         .WithMany()
-                        .HasForeignKey("RankId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RankId");
 
-                    b.OwnsMany("Sopheon.CloudNative.Products.Domain.DecimalAttributeValue", "DecimalAttributeValues", b1 =>
+                    b.OwnsMany("Sopheon.CloudNative.Products.Domain.Attributes.Decimal.DecimalAttributeValue", "DecimalAttributeValues", b1 =>
                         {
                             b1.Property<int>("ProductItemId")
                                 .HasColumnType("int");
@@ -673,7 +855,69 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                             b1.Navigation("Attribute");
                         });
 
-                    b.OwnsMany("Sopheon.CloudNative.Products.Domain.Int32AttributeValue", "IntAttributeValues", b1 =>
+                    b.OwnsMany("Sopheon.CloudNative.Products.Domain.Attributes.Enum.EnumCollectionAttributeValue", "EnumCollectionAttributeValues", b1 =>
+                        {
+                            b1.Property<int>("ProductItemEnumCollectionAttributeValueId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("ProductItemEnumCollectionAttributeValueId"), 1L, 1);
+
+                            b1.Property<int>("AttributeId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("ProductItemId")
+                                .HasColumnType("int");
+
+                            b1.HasKey("ProductItemEnumCollectionAttributeValueId");
+
+                            b1.HasIndex("AttributeId");
+
+                            b1.HasIndex("ProductItemId");
+
+                            b1.ToTable("ProductItem_EnumCollectionAttributeValues", "SPM");
+
+                            b1.HasOne("Sopheon.CloudNative.Products.Domain.Attribute", "Attribute")
+                                .WithMany()
+                                .HasForeignKey("AttributeId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProductItemId");
+
+                            b1.OwnsMany("Sopheon.CloudNative.Products.Domain.Attributes.Enum.EnumAttributeOptionValue", "Value", b2 =>
+                                {
+                                    b2.Property<int>("ProductItemEnumCollectionAttributeValueId")
+                                        .HasColumnType("int");
+
+                                    b2.Property<int>("EnumAttributeOptionId")
+                                        .HasColumnType("int");
+
+                                    b2.HasKey("ProductItemEnumCollectionAttributeValueId", "EnumAttributeOptionId");
+
+                                    b2.HasIndex("EnumAttributeOptionId");
+
+                                    b2.ToTable("ProductItem_EnumCollectionAttributeValues_Value", "SPM");
+
+                                    b2.HasOne("Sopheon.CloudNative.Products.Domain.Attributes.Enum.EnumAttributeOption", "EnumAttributeOption")
+                                        .WithMany()
+                                        .HasForeignKey("EnumAttributeOptionId")
+                                        .OnDelete(DeleteBehavior.NoAction)
+                                        .IsRequired();
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("ProductItemEnumCollectionAttributeValueId");
+
+                                    b2.Navigation("EnumAttributeOption");
+                                });
+
+                            b1.Navigation("Attribute");
+
+                            b1.Navigation("Value");
+                        });
+
+                    b.OwnsMany("Sopheon.CloudNative.Products.Domain.Attributes.Int32.Int32AttributeValue", "Int32AttributeValues", b1 =>
                         {
                             b1.Property<int>("ProductItemId")
                                 .HasColumnType("int");
@@ -694,7 +938,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
 
                             b1.HasIndex("AttributeId");
 
-                            b1.ToTable("ProductItem_IntAttributeValues", "SPM");
+                            b1.ToTable("ProductItem_Int32AttributeValues", "SPM");
 
                             b1.HasOne("Sopheon.CloudNative.Products.Domain.Attribute", "Attribute")
                                 .WithMany()
@@ -708,7 +952,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                             b1.Navigation("Attribute");
                         });
 
-                    b.OwnsMany("Sopheon.CloudNative.Products.Domain.MoneyAttributeValue", "MoneyAttributeValues", b1 =>
+                    b.OwnsMany("Sopheon.CloudNative.Products.Domain.Attributes.Money.MoneyAttributeValue", "MoneyAttributeValues", b1 =>
                         {
                             b1.Property<int>("ProductItemId")
                                 .HasColumnType("int");
@@ -737,7 +981,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("ProductItemId");
 
-                            b1.OwnsOne("Sopheon.CloudNative.Products.Domain.MoneyValue", "Value", b2 =>
+                            b1.OwnsOne("Sopheon.CloudNative.Products.Domain.Attributes.Money.MoneyValue", "Value", b2 =>
                                 {
                                     b2.Property<int>("MoneyAttributeValueProductItemId")
                                         .HasColumnType("int");
@@ -746,7 +990,6 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                                         .HasColumnType("int");
 
                                     b2.Property<string>("CurrencyCode")
-                                        .IsRequired()
                                         .HasColumnType("nvarchar(max)")
                                         .HasColumnName("CurrencyCode");
 
@@ -764,11 +1007,10 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
 
                             b1.Navigation("Attribute");
 
-                            b1.Navigation("Value")
-                                .IsRequired();
+                            b1.Navigation("Value");
                         });
 
-                    b.OwnsMany("Sopheon.CloudNative.Products.Domain.StringAttributeValue", "StringAttributeValues", b1 =>
+                    b.OwnsMany("Sopheon.CloudNative.Products.Domain.Attributes.String.StringAttributeValue", "StringAttributeValues", b1 =>
                         {
                             b1.Property<int>("ProductItemId")
                                 .HasColumnType("int");
@@ -783,7 +1025,6 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                                 .HasColumnType("int");
 
                             b1.Property<string>("Value")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("ProductItemId", "Id");
@@ -804,7 +1045,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                             b1.Navigation("Attribute");
                         });
 
-                    b.OwnsMany("Sopheon.CloudNative.Products.Domain.UtcDateTimeAttributeValue", "UtcDateTimeAttributeValues", b1 =>
+                    b.OwnsMany("Sopheon.CloudNative.Products.Domain.Attributes.UtcDateTime.UtcDateTimeAttributeValue", "UtcDateTimeAttributeValues", b1 =>
                         {
                             b1.Property<int>("ProductItemId")
                                 .HasColumnType("int");
@@ -841,7 +1082,9 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
 
                     b.Navigation("DecimalAttributeValues");
 
-                    b.Navigation("IntAttributeValues");
+                    b.Navigation("EnumCollectionAttributeValues");
+
+                    b.Navigation("Int32AttributeValues");
 
                     b.Navigation("MoneyAttributeValues");
 
@@ -876,11 +1119,14 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
 
                     b.Navigation("Items");
 
-                    b.Navigation("KeyPerformanceIndicators");
-
                     b.Navigation("Releases");
 
                     b.Navigation("UrlLinks");
+                });
+
+            modelBuilder.Entity("Sopheon.CloudNative.Products.Domain.Attributes.Enum.EnumCollectionAttribute", b =>
+                {
+                    b.Navigation("EnumAttributeOptions");
                 });
 #pragma warning restore 612, 618
         }
