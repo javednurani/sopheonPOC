@@ -80,7 +80,7 @@ catch {
     Write-Host "Refresh credentials do not exist, creating..."
     $SecureSqlAdminEnigma1 = (ConvertTo-SecureString -String $SqlAdminEnigma -AsPlainText -Force)
     $masterCred = New-Object -TypeName "System.Management.Automation.PSCredential" -ArgumentList "masteruser", $SecureSqlAdminEnigma1
-    New-AzSqlElasticJobCredential -ResourceGroupName $ResourceGroupValue -ServerName $ElasticJobAgentSQLServerName -Credential $masterCred -AgentName 'JobAgent'
+    New-AzSqlElasticJobCredential -ResourceGroupName $ResourceGroupValue -ServerName $ElasticJobAgentSQLServerName -Credential $masterCred -AgentName 'JobAgent' -Name 'masteruser'
 }
 
 try {
@@ -91,7 +91,7 @@ catch {
     Write-Host "Job credentials do not exist, creating..."
     $SecureSqlAdminEnigma2 = (ConvertTo-SecureString -String $SqlAdminEnigma -AsPlainText -Force)
     $jobCred = New-Object -TypeName "System.Management.Automation.PSCredential" -ArgumentList "jobuser", $SecureSqlAdminEnigma2
-    New-AzSqlElasticJobCredential -ResourceGroupName $ResourceGroupValue -ServerName $ElasticJobAgentSQLServerName -Credential $jobCred -AgentName 'JobAgent'
+    New-AzSqlElasticJobCredential -ResourceGroupName $ResourceGroupValue -ServerName $ElasticJobAgentSQLServerName -Credential $jobCred -AgentName 'JobAgent'  -Name 'jobuser'
 }
 
 
