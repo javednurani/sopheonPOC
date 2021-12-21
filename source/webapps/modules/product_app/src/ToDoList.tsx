@@ -12,13 +12,13 @@ import {
 } from '@fluentui/react';
 import { Text } from '@fluentui/react/lib/Text';
 import { useBoolean } from '@fluentui/react-hooks';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 
-import AddTask from './AddTask';
 import { Attributes } from './data/attributes';
 import { Status } from './data/status';
 import { UpdateProductAction, UpdateProductItemAction } from './product/productReducer';
+import TaskDetails from './TaskDetails';
 import { Product, ToDoItem, UpdateProductItemModel, UpdateProductModel } from './types';
 
 export interface IToDoListProps {
@@ -51,8 +51,8 @@ const filterSortIconClass = mergeStyles({
   verticalAlign: 'bottom',
 });
 
-// AddTask modal style
-const addTaskModalStyles = mergeStyleSets({
+// TaskDetails modal style
+const taskDetailsModalStyles = mergeStyleSets({
   container: {
     height: '560px',
     width: '956px',
@@ -109,6 +109,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
   const [isFilteredToShowComplete, { toggle: toggleFiltered }] = useBoolean(false);
   const [isFilterContextMenuShown, { setFalse: hideFilterContextMenu, toggle: toggleFilterContextMenu }] = useBoolean(false);
   const filterContextMenuRef = useRef(null); // used to link context menu to element
+  const [selectedTask, setSelectedTask] = useState<ToDoItem | null>(null);
 
   const filterMenuItems: IContextualMenuItem[] = [
     {
@@ -143,6 +144,16 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
     // if it's not complete, mark it as complete, otherwise in progress
     todo.status = todo.status !== Status.Complete ? Status.Complete : Status.InProgress;
     callUpdateProductItemSaga(todo);
+  };
+
+  const handleToDoListItemClick = (todo: ToDoItem) => {
+    setSelectedTask(todo);
+    showTaskModal();
+  };
+
+  const handleCreateToDoIconClick = () => {
+    setSelectedTask(null);
+    showTaskModal();
   };
 
   const callUpdateProductItemSaga = (todo: ToDoItem) => {
@@ -188,7 +199,11 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
               />
             </Text>
           );
-          const name: JSX.Element = <Text styles={todo.status === Status.Complete ? completedNameStyles : sharedNameStyles}>{todo.name}</Text>;
+          const name: JSX.Element = (
+            <Text onClick={() => handleToDoListItemClick(todo)} styles={todo.status === Status.Complete ? completedNameStyles : sharedNameStyles}>
+              {todo.name}
+            </Text>
+          );
 
           let dueDate: JSX.Element;
           if (todo.dueDate) {
@@ -225,7 +240,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
         <Stack.Item grow>
           <Text variant="xxLarge">{formatMessage({ id: 'toDo.title' })}</Text>
           <Text variant="xLarge">
-            <FontIcon style={pointerCursorStyle} onClick={showTaskModal} iconName="CirclePlus" className={iconClass} />
+            <FontIcon style={pointerCursorStyle} onClick={handleCreateToDoIconClick} iconName="CirclePlus" className={iconClass} />
           </Text>
         </Stack.Item>
         <Stack.Item>
@@ -250,15 +265,17 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
         isOpen={isTaskModalOpen}
         onDismiss={hideTaskModal}
         isBlocking={true}
-        containerClassName={addTaskModalStyles.container}
+        containerClassName={taskDetailsModalStyles.container}
       >
         {/* <div>Display only Modal :) does it work nice with the IdleMonitor?</div> */}
-        <AddTask
+        <TaskDetails
           hideModal={hideTaskModal}
           updateProduct={updateProduct}
           environmentKey={environmentKey}
           accessToken={accessToken}
           products={products}
+          selectedTask={selectedTask}
+          updateProductItem={updateProductItem}
         />
       </Modal>
       {filterContextMenu}

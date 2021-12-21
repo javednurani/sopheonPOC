@@ -30,31 +30,44 @@ import { useIntl } from 'react-intl';
 import { Attributes } from './data/attributes';
 import { ProductItemTypes } from './data/productItemTypes';
 import { Status } from './data/status';
-import { UpdateProductAction } from './product/productReducer';
-import { PatchOperation, Product, UpdateProductModel } from './types';
+import { UpdateProductAction, UpdateProductItemAction } from './product/productReducer';
+import { PatchOperation, Product, ToDoItem, UpdateProductItemModel, UpdateProductModel } from './types';
 
-export interface IAddTaskProps {
+export interface ITaskDetailsProps {
   hideModal: () => void;
   updateProduct: (product: UpdateProductModel) => UpdateProductAction;
   environmentKey: string;
   accessToken: string;
   products: Product[];
+  selectedTask: ToDoItem | null;
+  updateProductItem: (productItem: UpdateProductItemModel) => UpdateProductItemAction;
 }
 
 export interface DateStateObject {
   date: Date | undefined;
 }
 
-const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProduct, environmentKey, accessToken, products }: IAddTaskProps) => {
+const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
+  hideModal,
+  updateProduct,
+  environmentKey,
+  accessToken,
+  products,
+  selectedTask,
+  updateProductItem,
+}: ITaskDetailsProps) => {
+  const { name, id, notes, dueDate, status } = selectedTask ?? {};
+
   const theme = useTheme();
   const { formatMessage } = useIntl();
 
-  const [taskName, setTaskName] = useState('');
-  const [taskNotes, setTaskNotes] = useState('');
+  const [taskName, setTaskName] = useState(name ?? '');
 
-  const [taskDueDate, setTaskDueDate] = useState<DateStateObject>({ date: undefined });
+  const [taskNotes, setTaskNotes] = useState(notes ?? '');
 
-  const [selectedItemStatusDropdown, setSelectedItemStatusDropdown] = useState<IDropdownOption>();
+  const [taskDueDate, setTaskDueDate] = useState<DateStateObject>({ date: dueDate ?? undefined });
+
+  const [selectedItemStatusDropdown, setSelectedItemStatusDropdown] = useState(status ?? Status.NotStarted);
 
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
 
@@ -188,44 +201,75 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
   ];
 
   const handleSaveButtonClick = () => {
-    const productPatchData: PatchOperation[] = [
-      {
-        op: 'add',
-        path: '/Items',
-        value: [
-          {
-            name: taskName,
-            productItemTypeId: ProductItemTypes.TASK,
-            stringAttributeValues: [
-              {
-                attributeId: Attributes.NOTES,
-                value: taskNotes,
-              },
-            ],
-            utcDateTimeAttributeValues: [
-              {
-                attributeId: Attributes.DUEDATE,
-                value: taskDueDate.date?.toDateString(),
-              },
-            ],
-            enumAttributeValues: [
-              {
-                attributeId: Attributes.STATUS,
-                enumAttributeOptionId: selectedItemStatusDropdown?.key || Status.NotStarted,
-              },
-            ],
-          },
-        ],
-      },
-    ];
+    if (!id) {
+      const productPatchData: PatchOperation[] = [
+        {
+          op: 'add',
+          path: '/Items',
+          value: [
+            {
+              name: taskName,
+              productItemTypeId: ProductItemTypes.TASK,
+              stringAttributeValues: [
+                {
+                  attributeId: Attributes.NOTES,
+                  value: taskNotes,
+                },
+              ],
+              utcDateTimeAttributeValues: [
+                {
+                  attributeId: Attributes.DUEDATE,
+                  value: taskDueDate.date?.toDateString(),
+                },
+              ],
+              enumAttributeValues: [
+                {
+                  attributeId: Attributes.STATUS,
+                  enumAttributeOptionId: selectedItemStatusDropdown,
+                },
+              ],
+            },
+          ],
+        },
+      ];
 
-    const updateProductDto: UpdateProductModel = {
-      ProductPatchData: productPatchData,
-      ProductKey: products[0].key || 'BAD_PRODUCT_KEY',
-      EnvironmentKey: environmentKey,
-      AccessToken: accessToken,
-    };
-    updateProduct(updateProductDto);
+      const updateProductDto: UpdateProductModel = {
+        ProductPatchData: productPatchData,
+        ProductKey: products[0].key || 'BAD_PRODUCT_KEY',
+        EnvironmentKey: environmentKey,
+        AccessToken: accessToken,
+      };
+      updateProduct(updateProductDto);
+    } else {
+      const updateProductItemDto: UpdateProductItemModel = {
+        ProductKey: products[0].key || 'BAD_PRODUCT_KEY',
+        EnvironmentKey: environmentKey,
+        AccessToken: accessToken,
+        ProductItem: {
+          id: id,
+          name: taskName,
+          stringAttributeValues: [
+            {
+              attributeId: Attributes.NOTES,
+              value: taskNotes,
+            },
+          ],
+          utcDateTimeAttributeValues: [
+            {
+              attributeId: Attributes.DUEDATE,
+              value: taskDueDate.date?.toDateString(),
+            },
+          ],
+          enumAttributeValues: [
+            {
+              attributeId: Attributes.STATUS,
+              enumAttributeOptionId: selectedItemStatusDropdown,
+            },
+          ],
+        },
+      };
+      updateProductItem(updateProductItemDto);
+    }
     hideModal();
   };
 
@@ -292,7 +336,7 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
   };
 
   const handleStatusDropdownChange = (event: React.FormEvent<HTMLDivElement>, item: IDropdownOption | undefined): void => {
-    setSelectedItemStatusDropdown(item);
+    setSelectedItemStatusDropdown(item?.key as Status);
   };
 
   const stackStyles: IStackStyles = {
@@ -335,8 +379,8 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
   return (
     <>
       <div className={contentStyles.header}>
-        <span id="AddTaskModal">
-          <Text variant="xxLarge">{formatMessage({ id: 'toDo.newtask' })}</Text>
+        <span id="TaskDetailsModal">
+          <Text variant="xxLarge">{formatMessage({ id: selectedTask ? 'toDo.edittask' : 'toDo.newtask' })}</Text>
         </span>
         <IconButton styles={iconButtonStyles} iconProps={cancelIcon} ariaLabel={formatMessage({ id: 'closemodal' })} onClick={handleCloseIconClick} />
       </div>
@@ -352,6 +396,7 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
                   required
                   maxLength={150}
                   label={formatMessage({ id: 'name' })}
+                  value={taskName}
                   // TODO 1693 - possible taskName.errorMessage display pattern, remove if unneeded
                   onGetErrorMessage={value => (taskNameDirty && !value ? formatMessage({ id: 'fieldisrequired' }) : undefined)}
                 />
@@ -383,12 +428,13 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
                   rows={15}
                   resizable={false}
                   label={formatMessage({ id: 'toDo.notes' })}
+                  value={taskNotes}
                 />
               </Stack.Item>
               <Stack.Item>
                 <Dropdown
                   label={formatMessage({ id: 'status' })}
-                  selectedKey={selectedItemStatusDropdown ? selectedItemStatusDropdown.key : Status.NotStarted}
+                  selectedKey={selectedItemStatusDropdown}
                   // eslint-disable-next-line react/jsx-no-bind
                   onChange={handleStatusDropdownChange}
                   placeholder={formatMessage({ id: 'toDo.selectastatus' })}
@@ -428,4 +474,4 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
   );
 };
 
-export default AddTask;
+export default TaskDetails;

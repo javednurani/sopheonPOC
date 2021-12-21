@@ -140,6 +140,7 @@ export const messages: Record<string, Record<string, string>> = {
     'toDo.empty2': ' above to add one.',
     'toDo.filter': 'Filter',
     'toDo.newtask': 'New Task',
+    'toDo.edittask': 'Edit Task',
     'toDo.tasknameplaceholder': 'Name your task',
     'toDo.tasknotesplaceholder': 'Add any details about the task',
     'toDo.notes': 'Notes',
