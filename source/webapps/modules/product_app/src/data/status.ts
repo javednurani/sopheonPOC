@@ -3,7 +3,7 @@
 // keep this TS enum in sync with changes to the C# file ProductSeedData.cs
 
 // eslint-disable-next-line no-shadow
-export enum Status {
+export enum Status { // TODO Cloud-2183 story, set these values to 1/2/3/4 after Cloud-2466 service layer work
   NotStarted = -31,
   InProgress = -32,
   Assigned = -33,

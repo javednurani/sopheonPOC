@@ -46,6 +46,8 @@ namespace Sopheon.CloudNative.Products.AspNetCore.MappingProfiles
          CreateMap<Status, StatusDto>().ReverseMap();
 
          CreateMap<KeyPerformanceIndicator, KeyPerformanceIndicatorDto>().ReverseMap();
+
+         CreateMap<Task, TaskDto>().ReverseMap();
       }
    }
 }
