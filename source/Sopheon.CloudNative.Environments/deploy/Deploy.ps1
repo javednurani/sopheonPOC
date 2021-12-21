@@ -4,7 +4,7 @@ $ResourceGroup = "Stratus-$($env:Environment)";
 $EnvironmentFunctionAppName = "";
 
 $EnvironmentServerName = "$($ResourceGroup.ToLower())";
-$TenantEnvironmentServerName = "$($ResourceGroup.ToLower())-tenantenvironments"
+$TenantEnvironmentServerName = "$($ResourceGroup.ToLower())-tenantenvironments";
 $FunctionAppStorageAccountName = "stratus$($env:Environment.ToLower())funcapp";
 
 $azureKeyVault = "Cloud-DevOps";
@@ -20,6 +20,14 @@ az sql server firewall-rule create --resource-group $ResourceGroup --server $Env
 az sql server firewall-rule create --resource-group $ResourceGroup --server $TenantEnvironmentServerName --name DeployMachine --start-ip-address 50.200.9.230 --end-ip-address 50.200.9.230;
 
 Write-Host "Firewall Rules created";
+
+$CredentialsForMasterAndJobScript = Get-Content "_StratusEnvironmentManagement\EnvironmentManagement\ElasticJobTarget_CreateCredentials.sql" -Raw
+$CredentialsForMasterAndJobScript = $CredentialsForMasterAndJobScript.Replace("^Enigma^", $SqlAdminEnigma);
+Set-Content -Path $CredentialsForMasterAndJobScript -Force
+
+$CredentialsJobScript = Get-Content "_StratusEnvironmentManagement\EnvironmentManagement\CredentialsJobScript.sql" -Raw
+$CredentialsJobScript = $CredentialsJobScript.Replace("^Enigma^", $SqlAdminEnigma);
+Set-Content -Path $CredentialsJobScript -Force
 
 Write-Host "Setting Job Agent Credentials on $EnvironmentServerName";
 Invoke-Sqlcmd -ServerInstance "$($EnvironmentServerName).database.windows.net" -Database 'master' -UserName "sopheon" -Password $SqlAdminEnigma -InputFile "_StratusEnvironmentManagement\EnvironmentManagement\ElasticJobTarget_CreateCredentials.sql"
