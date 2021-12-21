@@ -1,9 +1,6 @@
 @description('The name of the SQL logical server.')
 param serverName string = ''
 
-@description('The name of the SQL Database.')
-param sqlDBName string = 'DeleteMeIfDeployed'
-
 @description('The administrator username of the SQL logical server.')
 param administratorLogin string = ''
 
@@ -13,8 +10,6 @@ param administratorLoginEngima string = ''
 param elasticJobAgentName string = ''
 
 param location string
-
-var createSingleDatabase = (sqlDBName != 'DeleteMeIfDeployed')
 
 resource SqlServer 'Microsoft.Sql/servers@2020-02-02-preview' = {
   name: serverName
@@ -26,8 +21,18 @@ resource SqlServer 'Microsoft.Sql/servers@2020-02-02-preview' = {
   }
 }
 
-resource SqlServer_SqlDBName 'Microsoft.Sql/servers/databases@2020-08-01-preview' = if (createSingleDatabase) {
-  name: '${SqlServer.name}/${sqlDBName}'
+resource JobAgentDatabase 'Microsoft.Sql/servers/databases@2020-08-01-preview' = {
+  name: '${SqlServer.name}/JobAgent'
+  location: location
+  sku: {
+    name: 'Standard'
+    tier: 'Standard'
+    capacity: 0
+  }
+}
+
+resource JobDatabase 'Microsoft.Sql/servers/databases@2020-08-01-preview' = {
+  name: '${SqlServer.name}/JobDatabase'
   location: location
   sku: {
     name: 'Standard'
@@ -52,7 +57,7 @@ resource elasticJobAgent 'Microsoft.Sql/servers/jobAgents@2021-02-01-preview' = 
     capacity: 100
   }
   properties: {
-    databaseId: SqlServer_SqlDBName.id
+    databaseId: JobAgentDatabase.id
   }
 }
 

@@ -89,7 +89,6 @@ module ElasticJobAgentSqlServer 'ElasticJobs_AgentServerDatabase.bicep' = {
     location: location
     administratorLoginEngima: sqlServerEnigma
     serverName: elasticJobAgentSQLServerName
-    sqlDBName: elasticJobAgentSQLServerDatabaseName
     administratorLogin: administratorLogin
     elasticJobAgentName: elasticJobAgentName
   }
