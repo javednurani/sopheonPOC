@@ -12,7 +12,7 @@ using Sopheon.CloudNative.Products.Domain;
 namespace Sopheon.CloudNative.Products.DataAccess.Migrations
 {
     [DbContext(typeof(ProductManagementContext))]
-    [Migration("20211216160608_InitialCreate")]
+    [Migration("20211221190149_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -545,6 +545,60 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                             Id = -1,
                             Name = "Open"
                         });
+                });
+
+            modelBuilder.Entity("Sopheon.CloudNative.Products.Domain.Task", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(5000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("PeriodEnd")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("PeriodEnd");
+
+                    b.Property<DateTime>("PeriodStart")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("PeriodStart");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Tasks", "SPM");
+
+                    b.ToTable(tb => tb.IsTemporal(ttb =>
+                        {
+                            ttb
+                                .HasPeriodStart("PeriodStart")
+                                .HasColumnName("PeriodStart");
+                            ttb
+                                .HasPeriodEnd("PeriodEnd")
+                                .HasColumnName("PeriodEnd");
+                        }
+                    ));
                 });
 
             modelBuilder.Entity("Sopheon.CloudNative.Products.Domain.UrlLink", b =>
@@ -1324,6 +1378,17 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                         .HasForeignKey("ProductId");
                 });
 
+            modelBuilder.Entity("Sopheon.CloudNative.Products.Domain.Task", b =>
+                {
+                    b.HasOne("Sopheon.CloudNative.Products.Domain.Product", "Product")
+                        .WithMany("Tasks")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("Sopheon.CloudNative.Products.Domain.UrlLink", b =>
                 {
                     b.HasOne("Sopheon.CloudNative.Products.Domain.Product", null)
@@ -1340,6 +1405,8 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                     b.Navigation("Items");
 
                     b.Navigation("Releases");
+
+                    b.Navigation("Tasks");
 
                     b.Navigation("UrlLinks");
                 });

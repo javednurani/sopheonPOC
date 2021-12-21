@@ -24,11 +24,11 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
       private readonly int DATE = -3;
       private readonly int NOTES = -2;
 
-      private readonly ILogger<ProductsController> _logger;
+      private readonly ILogger<ItemsController> _logger;
       private readonly ProductManagementContext _dbContext;
       private readonly IMapper _mapper;
 
-      public ItemsController(ILogger<ProductsController> logger,
+      public ItemsController(ILogger<ItemsController> logger,
          ProductManagementContext dbContext,
          IMapper mapper)
       {

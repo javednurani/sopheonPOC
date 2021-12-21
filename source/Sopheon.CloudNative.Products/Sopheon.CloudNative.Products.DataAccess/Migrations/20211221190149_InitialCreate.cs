@@ -173,6 +173,43 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Tasks",
+                schema: "SPM",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PeriodEnd = table.Column<DateTime>(type: "datetime2", nullable: false)
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
+                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
+                    PeriodStart = table.Column<DateTime>(type: "datetime2", nullable: false)
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
+                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tasks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tasks_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalSchema: "SPM",
+                        principalTable: "Products",
+                        principalColumn: "Id");
+                })
+                .Annotation("SqlServer:IsTemporal", true)
+                .Annotation("SqlServer:TemporalHistoryTableName", "TasksHistory")
+                .Annotation("SqlServer:TemporalHistoryTableSchema", null)
+                .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
+                .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart");
+
+            migrationBuilder.CreateTable(
                 name: "UrlLink",
                 schema: "SPM",
                 columns: table => new
@@ -1016,6 +1053,12 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Tasks_ProductId",
+                schema: "SPM",
+                table: "Tasks",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UrlLink_ProductId",
                 schema: "SPM",
                 table: "UrlLink",
@@ -1099,6 +1142,15 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
             migrationBuilder.DropTable(
                 name: "Status",
                 schema: "SPM");
+
+            migrationBuilder.DropTable(
+                name: "Tasks",
+                schema: "SPM")
+                .Annotation("SqlServer:IsTemporal", true)
+                .Annotation("SqlServer:TemporalHistoryTableName", "TasksHistory")
+                .Annotation("SqlServer:TemporalHistoryTableSchema", null)
+                .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
+                .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart");
 
             migrationBuilder.DropTable(
                 name: "UrlLink",

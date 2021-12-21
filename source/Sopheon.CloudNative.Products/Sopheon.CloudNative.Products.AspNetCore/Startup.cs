@@ -21,6 +21,7 @@ using Sopheon.CloudNative.Products.AspNetCore.Policies;
 using Sopheon.CloudNative.Products.AspNetCore.Policies.Handlers;
 using Sopheon.CloudNative.Products.AspNetCore.Policies.Requirements;
 using Sopheon.CloudNative.Products.Domain;
+using Task = System.Threading.Tasks.Task;
 
 namespace Sopheon.CloudNative.Products.AspNetCore
 {

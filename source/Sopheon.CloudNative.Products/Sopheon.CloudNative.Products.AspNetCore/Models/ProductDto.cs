@@ -36,6 +36,8 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
 
       public List<ProductItemDto> Items { get; set; }
 
+      public List<TaskDto> Tasks { get; set; }
+
       //public List<FileAttachment> FileAttachments { get; set; }
 
       //public List<UrlLink> UrlLinks { get; set; }
@@ -75,6 +77,8 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
       public List<ProductGoalDto> Goals { get; set; }
 
       public List<ProductItemDto> Items { get; set; }
+
+      public List<TaskDto> Tasks { get; set; }
 
       //public List<FileAttachment> FileAttachments { get; set; }
    }
