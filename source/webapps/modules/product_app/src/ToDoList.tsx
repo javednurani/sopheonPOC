@@ -73,8 +73,9 @@ const sharedNameStyles: Partial<ITextFieldStyles> = {
 };
 
 const completedNameStyles: Partial<ITextFieldStyles> = {
-  ...sharedNameStyles,
   root: {
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    ...(sharedNameStyles.root as {}),
     textDecoration: 'line-through',
   },
 };
