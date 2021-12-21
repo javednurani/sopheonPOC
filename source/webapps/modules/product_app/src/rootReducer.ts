@@ -17,7 +17,7 @@ type AppState = {
 //They should be identical, and reflective of module/microFrontEnd name, eg, 'app1', 'app3', environments'
 
 export type RootState = {
-  app: AppState;
+  product: AppState;
 };
 
-export const NAMESPACE = 'product_app';
+export const NAMESPACE = 'product';

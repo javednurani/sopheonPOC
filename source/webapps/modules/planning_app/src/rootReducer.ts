@@ -8,7 +8,7 @@ type AppState = unknown;
 //They should be identical, and reflective of module/microFrontEnd name, eg, 'app1', 'app3', environments'
 
 export type RootState = {
-  planningApp: AppState;
+  planning: AppState;
 };
 
-export const NAMESPACE = 'planning_app';
+export const NAMESPACE = 'planning';
