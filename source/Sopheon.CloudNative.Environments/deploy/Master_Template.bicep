@@ -26,6 +26,9 @@ param elasticJobAgentSQLServerDatabaseName string = '^ElasticJobAgentSQLServerDa
 @description('Environment Management SQL server database name')
 param envManagementSQLServerDatabaseName string = '^EnvironmentManagementSQLServerDatabaseName^'
 
+@description('Elastic Job Agent Name')
+param elasticJobAgentName string = '^ElasticJobAgentName^'
+
 @description('The name of the Storage Account for the function apps')
 @maxLength(24)
 param functionAppStorageName string = '^FunctionStorageAccountName^'
@@ -80,7 +83,7 @@ module EnvironmentManagementSqlServerTenantTemplateDatabase 'SQLServer_SingleDat
 }
 
 // Elastic Job Agent SQL Server module
-module ElasticJobAgentSqlServer 'SQLServer_SingleDatabase.bicep' = {
+module ElasticJobAgentSqlServer 'ElasticJobs_AgentServerDatabase.bicep' = {
   name: 'ElasticJobAgent-Sql-Server-Deployment'
   params: {
     location: location
@@ -88,6 +91,7 @@ module ElasticJobAgentSqlServer 'SQLServer_SingleDatabase.bicep' = {
     serverName: elasticJobAgentSQLServerName
     sqlDBName: elasticJobAgentSQLServerDatabaseName
     administratorLogin: administratorLogin
+    elasticJobAgentName: elasticJobAgentName
   }
 }
 

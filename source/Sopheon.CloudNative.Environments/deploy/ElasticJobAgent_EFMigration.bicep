@@ -9,26 +9,16 @@ param elasticJobStepCommandText string = '^SqlCommandText^'
 @description('No need to set, this is setup to use utcNow() when generated on deploy')
 param dateTime string = uniqueString(utcNow())
 
-resource elasticJobServer 'Microsoft.Sql/servers@2021-05-01-preview' = {
+resource elasticJobServer 'Microsoft.Sql/servers@2021-05-01-preview' existing = {
   name: elasticJobAgentServerName
-  location: resourceGroup().location
 }
 
-resource elasticjobDatabase 'Microsoft.Sql/servers/databases@2021-05-01-preview' = {
+resource elasticjobDatabase 'Microsoft.Sql/servers/databases@2021-05-01-preview' existing = {
   name: '${elasticJobServer.name}/JobDatabase'
-  location: resourceGroup().location
 }
 
-resource elasticJobAgent 'Microsoft.Sql/servers/jobAgents@2021-02-01-preview' = {
+resource elasticJobAgent 'Microsoft.Sql/servers/jobAgents@2021-02-01-preview' existing = {
   name: '${elasticJobServer.name}/${elasticJobAgentName}'
-  location: 'westus'
-  sku: {
-    name: 'Agent'
-    capacity: 100
-  }
-  properties: {
-    databaseId: elasticjobDatabase.id
-  }
 }
 
 resource elasticJobAgentCredentialJobUser 'Microsoft.Sql/servers/jobAgents/credentials@2021-02-01-preview' existing = {
@@ -89,7 +79,4 @@ resource elasticJobAgentExampleJobForBuildStep1 'Microsoft.Sql/servers/jobAgents
       retryIntervalBackoffMultiplier: 2
     }
   }
-  dependsOn: [
-    elasticJobAgent
-  ]
 }

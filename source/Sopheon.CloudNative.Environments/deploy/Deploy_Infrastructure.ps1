@@ -35,6 +35,7 @@ $ElasticJobAgentSQLServerName = "$($ResourceGroupValue)-JobAgent";
 $TenantSQLServerName = "$($ResourceGroupValue)-TenantEnvironments";
 $EnvironmentManagementSQLServerDatabaseName = "EnvironmentManagement";
 $ElasticJobAgentSQLServerDatabaseName = "JobAgent";
+$ElasticJobAgentName = "JobAgent";
 $WebServerFarmName = "ASP-$($ResourceGroupValue)-Environment";
 
 $ResourceFunctionAppName = "$($ResourceGroupValue.ToLower())-resource";
@@ -46,6 +47,7 @@ Write-Host "Replacing tokens on Master Template...";
 $masterTemplateContent = Get-Content $MasterTemplate -raw;
 $masterTemplateContent = $masterTemplateContent.Replace('^EnvironmentManagementSQLServerName^', $EnvironmentSQLServerName).Replace('^EnvironmentManagementSQLServerDatabaseName^', $EnvironmentManagementSQLServerDatabaseName);
 $masterTemplateContent = $masterTemplateContent.Replace('^ElasticJobAgentSQLServerName^', $ElasticJobAgentSQLServerName).Replace('^ElasticJobAgentSQLServerDatabaseName^', $ElasticJobAgentSQLServerDatabaseName);
+$masterTemplateContent = $masterTemplateContent.Replace('^ElasticJobAgentName^', $ElasticJobAgentName)
 $masterTemplateContent = $masterTemplateContent.Replace('^EnvironmentFunctionAppName^', $EnvironmentFunctionAppName).Replace('^TenantSQLServerName^', $TenantSQLServerName);
 $masterTemplateContent = $masterTemplateContent.Replace('^AppInsightsName^', $AppInsightsName).Replace('^FunctionStorageAccountName^', $FunctionAppStorageAccountName);
 $masterTemplateContent = $masterTemplateContent.Replace('^SqlAdminEngima^', $SqlAdminEnigma).Replace('^EnvironmentWebServerFarmName^', $WebServerFarmName);
@@ -93,10 +95,6 @@ catch {
     $jobCred = New-Object -TypeName "System.Management.Automation.PSCredential" -ArgumentList "jobuser", $SecureSqlAdminEnigma2
     New-AzSqlElasticJobCredential -ResourceGroupName $ResourceGroupValue -ServerName $ElasticJobAgentSQLServerName -Credential $jobCred -AgentName 'JobAgent'  -Name 'jobuser'
 }
-
-
-
-
 
 Write-Host "Elastic Job Agent Host configured!"
 
