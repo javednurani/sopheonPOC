@@ -22,6 +22,7 @@ const Header: FunctionComponent<HeaderProps> = ({ changeTheme, setEnvironmentKey
 
   const headerStyle: React.CSSProperties = {
     margin: '0 0 5px 0',
+    padding: '0 5px',
     height: '42px',
     boxShadow: '0 0 5px 0 #888888',
   };
@@ -42,8 +43,8 @@ const Header: FunctionComponent<HeaderProps> = ({ changeTheme, setEnvironmentKey
 
   return (
     <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced>
-      <header style={headerStyle} role="banner">
-        <Stack horizontal verticalAlign="center">
+      <header role="banner">
+        <Stack horizontal verticalAlign="center" style={headerStyle}>
           <Stack.Item shrink>
             <div title={formatMessage({ id: 'sopheon' })}>
               <SopheonLogo style={logoStyle} />
