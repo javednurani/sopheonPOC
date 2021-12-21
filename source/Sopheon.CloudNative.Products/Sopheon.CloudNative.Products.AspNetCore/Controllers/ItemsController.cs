@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -9,6 +10,8 @@ using Sopheon.CloudNative.Products.AspNetCore.Filters;
 using Sopheon.CloudNative.Products.AspNetCore.Models;
 using Sopheon.CloudNative.Products.Domain;
 using Sopheon.CloudNative.Products.Domain.Attributes.Enum;
+using Sopheon.CloudNative.Products.Domain.Attributes.String;
+using Sopheon.CloudNative.Products.Domain.Attributes.UtcDateTime;
 
 namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
 {
@@ -18,6 +21,9 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
    public class ItemsController : EnvironmentScopedControllerBase
    {
       private readonly int STATUS = -4; // TODO: do we have enum for these?  (SPM.Attribute)
+      private readonly int DATE = -3;
+      private readonly int NOTES = -2;
+
       private readonly ILogger<ProductsController> _logger;
       private readonly ProductManagementContext _dbContext;
       private readonly IMapper _mapper;
@@ -89,6 +95,15 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
          EnumAttributeValue toDoItem = itemFromDB.EnumAttributeValues.Single(ecav => ecav.AttributeId == STATUS);
          toDoItem.EnumAttributeOptionId = newValue;
 
+         DateTime? newDate = itemFromRequest.UtcDateTimeAttributeValues.Single(ecav => ecav.AttributeId == DATE).Value;
+         UtcDateTimeAttributeValue toDoDate = itemFromDB.UtcDateTimeAttributeValues.Single(ecav => ecav.AttributeId == DATE);
+         toDoDate.Value = newDate;
+
+         string newNote = itemFromRequest.StringAttributeValues.Single(ecav => ecav.AttributeId == NOTES).Value;
+         StringAttributeValue toDoItemNote = itemFromDB.StringAttributeValues.Single(ecav => ecav.AttributeId == NOTES);
+         toDoItemNote.Value = newNote;
+
+         itemFromDB.Name = itemFromRequest.Name;
          _ = await _dbContext.SaveChangesAsync();
 
          return Ok(_mapper.Map<ProductItemDto>(itemFromDB));

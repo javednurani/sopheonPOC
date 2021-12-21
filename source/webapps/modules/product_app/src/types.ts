@@ -83,9 +83,22 @@ export interface EnumAttributeValueDto {
   enumAttributeOptionId: number;
 }
 
+export interface UtcDateAttributeValueDto {
+  attributeId: number;
+  value: string | undefined;
+}
+
+export interface StringAttributeValueDto {
+  attributeId: number;
+  value: string;
+}
+
 export interface ProductItemDto {
   id: number;
-  enumAttributeValues: EnumAttributeValueDto[];
+  name?: string;
+  utcDateTimeAttributeValues?: UtcDateAttributeValueDto[];
+  stringAttributeValues?: StringAttributeValueDto[];
+  enumAttributeValues?: EnumAttributeValueDto[];
 }
 
 export interface PatchOperation {
