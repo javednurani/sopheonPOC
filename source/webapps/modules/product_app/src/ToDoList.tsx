@@ -162,14 +162,28 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
       EnvironmentKey: environmentKey,
       AccessToken: accessToken,
       ProductItem: {
+        // INFO: currently sending all properties to support PUT behavior
+        // TODO: use Patch for this partial update (will be reworked to Tasks under 2183)
         id: todo.id,
+        name: todo.name,
         enumAttributeValues: [
           {
             attributeId: Attributes.STATUS,
             enumAttributeOptionId: todo.status,
           },
         ],
-        // TODO: might need to send other values in future
+        stringAttributeValues: [
+          {
+            attributeId: Attributes.NOTES,
+            value: todo.notes || '',
+          },
+        ],
+        utcDateTimeAttributeValues: [
+          {
+            attributeId: Attributes.DUEDATE,
+            value: (todo.dueDate || new Date()).toDateString(),
+          },
+        ],
       },
     };
     updateProductItem(updateProductItemDto);
