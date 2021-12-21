@@ -85,7 +85,7 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
       [FunctionName(nameof(ElasticJobsTask_DeployElasticJob))]
       public async Task<string> ElasticJobsTask_DeployElasticJob([ActivityTrigger] IDurableActivityContext context, ILogger log,
           [Blob("armtemplates/ElasticJobAgent/ElasticJobAgent_EFMigration.json", Connection = "AzureWebJobsStorage")] string jsonTemplateData,
-          [Blob("armtemplates/AppMigrations/products_migration.sql", Connection = "AzureWebJobsStorage")] string sqlCommandText)
+          [Blob("efmigrations/AppMigrations/products_migration.sql", Connection = "AzureWebJobsStorage")] string sqlCommandText)
       {
 
          ElasticJobConfiguration config = context.GetInput<ElasticJobConfiguration>();
