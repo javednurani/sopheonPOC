@@ -197,7 +197,12 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
             if (isToday(todo.dueDate)) {
               dueDate = <Text>Due Today</Text>;
             } else {
-              dueDate = <Text>Due {todo.dueDate.toLocaleDateString(undefined, { year: '2-digit', month: 'numeric', day: 'numeric' })}</Text>;
+              const isPastDue: boolean = todo.dueDate < new Date();
+              dueDate = (
+                <Text style={isPastDue ? { color: 'red' } : {}}>
+                  Due {todo.dueDate.toLocaleDateString(undefined, { year: '2-digit', month: 'numeric', day: 'numeric' })}
+                </Text>
+              );
             }
           } else {
             dueDate = <Text />; // display nothing
