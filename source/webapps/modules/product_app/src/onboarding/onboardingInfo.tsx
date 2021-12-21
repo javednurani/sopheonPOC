@@ -180,7 +180,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
   const handleOnboardingContinueClick = () => {
     const productData: ProductPostDto = {
       Name: productName,
-      IntAttributeValues: industryKeys.map(ik => ({
+      Int32AttributeValues: industryKeys.map(ik => ({
         AttributeId: Attributes.INDUSTRIES,
         Value: ik,
       })),
@@ -214,7 +214,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
 
     const productPatchData: PatchOperation[] = [
       {
-        op: 'replace',
+        op: 'add',
         path: '/Goals',
         value: [
           {
@@ -223,7 +223,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
         ],
       },
       {
-        op: 'replace',
+        op: 'add',
         path: '/KeyPerformanceIndicators',
         value: kpiAttributes,
       },
