@@ -42,7 +42,6 @@ const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, head
   });
 
   const appStyle: CSSProperties = {
-    textAlign: 'center',
     height: '100vh',
   };
 
