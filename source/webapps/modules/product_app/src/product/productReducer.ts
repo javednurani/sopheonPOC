@@ -1,7 +1,7 @@
 import { Action, createAction, createPayloadAction, FetchStatus, PayloadAction } from '@sopheon/shell-api';
 import { Reducer } from 'redux';
 
-import { CreateProductModel, EnvironmentScopedApiRequestModel, Product, ToDoItem, UpdateProductItemModel, UpdateProductModel } from '../types';
+import { CreateProductModel, CreateTaskModel, EnvironmentScopedApiRequestModel, Product, ToDoItem, UpdateProductItemModel, UpdateProductModel } from '../types';
 
 //#region  Action Types
 
@@ -24,6 +24,10 @@ enum ProductActionTypes {
   UPDATE_PRODUCT_ITEM_REQUEST = 'PRODUCT/PRODUCT/UPDATE_PRODUCT_ITEM_REQUEST',
   UPDATE_PRODUCT_ITEM_SUCCESS = 'PRODUCT/PRODUCT/UPDATE_PRODUCT_ITEM_SUCCESS',
   UPDATE_PRODUCT_ITEM_FAILURE = 'PRODUCT/PRODUCT/UPDATE_PRODUCT_ITEM_FAILURE',
+
+  CREATE_TASK_REQUEST = 'PRODUCT/PRODUCT/CREATE_TASK_REQUEST',
+  CREATE_TASK_SUCCESS = 'PRODUCT/PRODUCT/CREATE_TASK_SUCCESS',
+  CREATE_TASK_FAILURE = 'PRODUCT/PRODUCT/CREATE_TASK_FAILURE',
 }
 
 export type GetProductsRequestAction = Action<ProductActionTypes.GET_PRODUCTS_REQUEST>;
@@ -42,6 +46,10 @@ export type UpdateProductItemRequestAction = Action<ProductActionTypes.UPDATE_PR
 export type UpdateProductItemSuccessAction = PayloadAction<ProductActionTypes.UPDATE_PRODUCT_ITEM_SUCCESS, ToDoItem>; // TODO: ProductItem vs ToDo?
 export type UpdateProductItemFailureAction = PayloadAction<ProductActionTypes.UPDATE_PRODUCT_ITEM_FAILURE, Error>;
 
+export type CreateTaskRequestAction = Action<ProductActionTypes.CREATE_TASK_REQUEST>;
+export type CreateTaskSuccessAction = PayloadAction<ProductActionTypes.CREATE_TASK_SUCCESS, ToDoItem>;
+export type CreateTaskFailureAction = PayloadAction<ProductActionTypes.CREATE_TASK_FAILURE, Error>;
+
 export type ProductReducerActions =
   | GetProductsRequestAction
   | GetProductsSuccessAction
@@ -54,7 +62,10 @@ export type ProductReducerActions =
   | UpdateProductFailureAction
   | UpdateProductItemRequestAction
   | UpdateProductItemSuccessAction
-  | UpdateProductItemFailureAction;
+  | UpdateProductItemFailureAction
+  | CreateTaskRequestAction
+  | CreateTaskSuccessAction
+  | CreateTaskFailureAction;
 
 // SAGA ACTION TYPES
 
@@ -64,12 +75,14 @@ export enum ProductSagaActionTypes {
   UPDATE_PRODUCT = 'PRODUCT/PRODUCT/UPDATE_PRODUCT',
   GET_PRODUCTS = 'PRODUCT/PRODUCT/GET_PRODUCTS',
   UPDATE_PRODUCT_ITEM = 'PRODUCT/PRODUCT/UPDATE_PRODUCT_ITEM',
+  CREATE_TASK = 'PRODUCT/PRODUCT/CREATE_TASK'
 }
 
 export type GetProductsAction = PayloadAction<ProductSagaActionTypes.GET_PRODUCTS, EnvironmentScopedApiRequestModel>;
 export type CreateProductAction = PayloadAction<ProductSagaActionTypes.CREATE_PRODUCT, CreateProductModel>;
 export type UpdateProductAction = PayloadAction<ProductSagaActionTypes.UPDATE_PRODUCT, UpdateProductModel>;
 export type UpdateProductItemAction = PayloadAction<ProductSagaActionTypes.UPDATE_PRODUCT_ITEM, UpdateProductItemModel>;
+export type CreateTaskAction = PayloadAction<ProductSagaActionTypes.CREATE_TASK, CreateTaskModel>;
 
 //#endregion
 
@@ -100,6 +113,13 @@ export const updateProductItemSuccess = (productItem: ToDoItem): UpdateProductIt
 export const updateProductItemFailure = (error: Error): UpdateProductItemFailureAction =>
   createPayloadAction(ProductActionTypes.UPDATE_PRODUCT_ITEM_FAILURE, error);
 
+export const createTaskRequest = (): CreateTaskRequestAction => createAction(ProductActionTypes.CREATE_TASK_REQUEST);
+export const createTaskSuccess = (task: ToDoItem): CreateTaskSuccessAction =>
+  createPayloadAction(ProductActionTypes.CREATE_TASK_SUCCESS, task);
+export const createTaskFailure = (error: Error): CreateTaskFailureAction =>
+  createPayloadAction(ProductActionTypes.CREATE_TASK_FAILURE, error);
+
+
 // SAGA ACTIONS
 
 export const getProducts = (requestDto: EnvironmentScopedApiRequestModel): GetProductsAction =>
@@ -110,6 +130,8 @@ export const updateProduct = (product: UpdateProductModel): UpdateProductAction 
   createPayloadAction(ProductSagaActionTypes.UPDATE_PRODUCT, product);
 export const updateProductItem = (productItem: UpdateProductItemModel): UpdateProductItemAction =>
   createPayloadAction(ProductSagaActionTypes.UPDATE_PRODUCT_ITEM, productItem);
+export const createTask = (task: CreateTaskModel): CreateTaskAction =>
+  createPayloadAction(ProductSagaActionTypes.CREATE_TASK, task);
 
 //#endregion
 
@@ -122,6 +144,7 @@ export type ProductStateShape = {
   getProductsFetchStatus: FetchStatus;
   createProductFetchStatus: FetchStatus;
   updateProductFetchStatus: FetchStatus;
+  createTaskFetchStatus: FetchStatus; // INFO, this call could be made frequently. is there value in tracking the Fetch status?
 };
 
 export const initialState: ProductStateShape = {
@@ -129,6 +152,7 @@ export const initialState: ProductStateShape = {
   getProductsFetchStatus: FetchStatus.NotActive,
   createProductFetchStatus: FetchStatus.NotActive,
   updateProductFetchStatus: FetchStatus.NotActive,
+  createTaskFetchStatus: FetchStatus.NotActive,
 };
 
 // HANDLERS
@@ -223,6 +247,35 @@ const updateProductItemFailureHandler = (state: ProductStateShape, error: Error)
   };
 };
 
+
+const createTaskRequestHandler = (state: ProductStateShape) => ({
+  ...state,
+  createTaskFetchStatus: FetchStatus.InProgress,
+});
+
+const createTaskSuccessHandler = (state: ProductStateShape, createdTask: ToDoItem) => {
+  const updatedProducts = [...state.products];
+  updatedProducts.forEach(existingProduct => {
+    if (existingProduct.key === createdTask.productKey) {
+      existingProduct.todos.push(createdTask); // task has a redundant productKey, could delete property from object, or make a new object here
+    }
+  });
+  return {
+    ...state,
+    products: updatedProducts,
+    createTaskFetchStatus: FetchStatus.DoneSuccess,
+  };
+};
+
+const createTaskFailureHandler = (state: ProductStateShape, error: Error) => {
+  console.log(error);
+  return {
+    ...state,
+    updateProductItemFetchStatus: FetchStatus.DoneFailure,
+  };
+};
+
+
 // ACTION SWITCH
 
 export const productReducer: Reducer<ProductStateShape, ProductReducerActions> = (state = initialState, action) => {
@@ -251,6 +304,12 @@ export const productReducer: Reducer<ProductStateShape, ProductReducerActions> =
       return updateProductItemSuccessHandler(state, action.payload);
     case ProductActionTypes.UPDATE_PRODUCT_ITEM_FAILURE:
       return updateProductItemFailureHandler(state, action.payload);
+    case ProductActionTypes.CREATE_TASK_REQUEST:
+      return createTaskRequestHandler(state);
+    case ProductActionTypes.CREATE_TASK_SUCCESS:
+      return createTaskSuccessHandler(state, action.payload);
+    case ProductActionTypes.CREATE_TASK_FAILURE:
+      return createTaskFailureHandler(state, action.payload);
     default:
       return state;
   }

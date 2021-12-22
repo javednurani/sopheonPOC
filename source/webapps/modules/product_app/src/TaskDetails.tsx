@@ -28,10 +28,9 @@ import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
 import { Attributes } from './data/attributes';
-import { ProductItemTypes } from './data/productItemTypes';
 import { Status } from './data/status';
-import { UpdateProductAction, UpdateProductItemAction } from './product/productReducer';
-import { PatchOperation, Product, ToDoItem, UpdateProductItemModel, UpdateProductModel } from './types';
+import { CreateTaskAction, UpdateProductAction, UpdateProductItemAction } from './product/productReducer';
+import { CreateTaskModel, Product, TaskDto, ToDoItem, UpdateProductItemModel, UpdateProductModel } from './types';
 
 export interface ITaskDetailsProps {
   hideModal: () => void;
@@ -41,6 +40,7 @@ export interface ITaskDetailsProps {
   products: Product[];
   selectedTask: ToDoItem | null;
   updateProductItem: (productItem: UpdateProductItemModel) => UpdateProductItemAction;
+  createTask: (task: CreateTaskModel) => CreateTaskAction;
 }
 
 export interface DateStateObject {
@@ -55,6 +55,7 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
   products,
   selectedTask,
   updateProductItem,
+  createTask,
 }: ITaskDetailsProps) => {
   const { name, id, notes, dueDate, status } = selectedTask ?? {};
 
@@ -202,45 +203,24 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
 
   const handleSaveButtonClick = () => {
     if (!id) {
-      const productPatchData: PatchOperation[] = [
-        {
-          op: 'add',
-          path: '/Items',
-          value: [
-            {
-              name: taskName,
-              productItemTypeId: ProductItemTypes.TASK,
-              stringAttributeValues: [
-                {
-                  attributeId: Attributes.NOTES,
-                  value: taskNotes,
-                },
-              ],
-              utcDateTimeAttributeValues: [
-                {
-                  attributeId: Attributes.DUEDATE,
-                  value: taskDueDate.date?.toDateString(),
-                },
-              ],
-              enumAttributeValues: [
-                {
-                  attributeId: Attributes.STATUS,
-                  enumAttributeOptionId: selectedItemStatusDropdown,
-                },
-              ],
-            },
-          ],
-        },
-      ];
+      // create new task
+      const task: TaskDto = {
+        id: 0, // creating a new task, update type instead of 0?
+        name: taskName,
+        notes: taskNotes,
+        status: selectedItemStatusDropdown,
+        dueDate: taskDueDate.date?.toDateString(),
+      };
 
-      const updateProductDto: UpdateProductModel = {
-        ProductPatchData: productPatchData,
+      const createTaskModel: CreateTaskModel = {
         ProductKey: products[0].key || 'BAD_PRODUCT_KEY',
         EnvironmentKey: environmentKey,
         AccessToken: accessToken,
+        Task: task,
       };
-      updateProduct(updateProductDto);
+      createTask(createTaskModel);
     } else {
+      // updating existing task
       const updateProductItemDto: UpdateProductItemModel = {
         ProductKey: products[0].key || 'BAD_PRODUCT_KEY',
         EnvironmentKey: environmentKey,

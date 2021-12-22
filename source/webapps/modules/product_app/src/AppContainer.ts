@@ -6,6 +6,8 @@ import { nextStep, NextStepAction } from './onboarding/onboardingReducer';
 import {
   createProduct,
   CreateProductAction,
+  createTask,
+  CreateTaskAction,
   getProducts,
   GetProductsAction,
   updateProduct,
@@ -15,7 +17,7 @@ import {
 } from './product/productReducer';
 import { NAMESPACE, rootReducer, RootState } from './rootReducer';
 import rootSaga from './rootSaga';
-import { CreateProductModel, EnvironmentScopedApiRequestModel, Product, UpdateProductItemModel, UpdateProductModel } from './types';
+import { CreateProductModel, CreateTaskModel, EnvironmentScopedApiRequestModel, Product, UpdateProductItemModel, UpdateProductModel } from './types';
 
 export type AppStateProps = {
   currentStep: number;
@@ -29,6 +31,7 @@ export type AppDispatchProps = {
   createProduct: (product: CreateProductModel) => CreateProductAction;
   updateProduct: (product: UpdateProductModel) => UpdateProductAction;
   updateProductItem: (product: UpdateProductItemModel) => UpdateProductItemAction;
+  createTask: (task: CreateTaskModel) => CreateTaskAction;
 };
 
 const AppContainer: FunctionComponent<ShellApiProps> = ({ shellApi }: ShellApiProps) => {
@@ -44,6 +47,7 @@ const AppContainer: FunctionComponent<ShellApiProps> = ({ shellApi }: ShellApiPr
     createProduct: (product: CreateProductModel) => createProduct(product),
     updateProduct: (product: UpdateProductModel) => updateProduct(product),
     updateProductItem: (productItem: UpdateProductItemModel) => updateProductItem(productItem),
+    createTask: (task: CreateTaskModel) => createTask(task),
   });
 
   const appReducerMap: InjectReducerMap = {

@@ -14,6 +14,11 @@ export type CreateProductModel = {
   Product: ProductPostDto;
 } & EnvironmentScopedApiRequestModel;
 
+export type CreateTaskModel = {
+  Task: TaskDto;
+} & EnvironmentScopedApiRequestModel &
+  ProductScopedApiRequestModel;
+
 export type EnvironmentScopedApiRequestModel = {
   EnvironmentKey: string;
   AccessToken: string;
@@ -41,6 +46,7 @@ export interface Product {
 
 export interface ToDoItem {
   id: number;
+  productKey: string | undefined; // INFO: used for Redux state assignment after create Task API call
   name: string;
   notes: string | null;
   dueDate: Date | null;
@@ -57,6 +63,14 @@ export interface KeyPerformanceIndicator {
   keyPerformanceIndicatorId: number;
   attributeId: number;
   attribute: AttributeDto;
+}
+
+export interface TaskDto {
+  id: number | undefined;
+  name: string;
+  notes: string | null;
+  status: number | null;
+  dueDate: string | undefined;
 }
 
 // TODO: Tech Debt - these dtos come directly from our data model, which I don't think our UI should know about

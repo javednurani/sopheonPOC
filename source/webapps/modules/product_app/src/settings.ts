@@ -19,6 +19,7 @@ export const settings: Record<string, string> = {
   getProductsUrlPath: `/Environments/${tokenEnvironmentKey}/Products`,
   UpdateProductUrlPath: `/Environments/${tokenEnvironmentKey}/Products/${tokenProductKey}`,
   UpdateProductItemUrlPath: `/Environments/${tokenEnvironmentKey}/Products/${tokenProductKey}/Items/${tokenProductItemId}`,
+  CreateTaskUrlPath: `/Environments/${tokenEnvironmentKey}/Products/${tokenProductKey}/Tasks`,
   TokenEnvironmentKey: tokenEnvironmentKey,
   TokenProductKey: tokenProductKey,
   TokenProductItemId: tokenProductItemId,

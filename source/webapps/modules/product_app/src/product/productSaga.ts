@@ -9,6 +9,10 @@ import {
   createProductFailure,
   createProductRequest,
   createProductSuccess,
+  CreateTaskAction,
+  createTaskFailure,
+  createTaskRequest,
+  createTaskSuccess,
   GetProductsAction,
   getProductsFailure,
   getProductsRequest,
@@ -23,12 +27,9 @@ import {
   updateProductRequest,
   updateProductSuccess,
 } from './productReducer';
-import { createProduct, getProducts, updateProduct, updateProductItem } from './productService';
+import { createProduct, createTask, getProducts, updateProduct, updateProductItem } from './productService';
 
-export function* watchOnGetProducts(): Generator {
-  yield takeEvery(ProductSagaActionTypes.GET_PRODUCTS, onGetProducts);
-}
-
+// TRANSLATION HELPERS, TODO, MOVE OUT OF SAGA
 const translateProductItemsToTasks = (productItems: unknown[]): ToDoItem[] =>
   productItems.filter(pi => pi.productItemTypeId === ProductItemTypes.TASK).map(td => translateProductItemToTask(td));
 
@@ -45,6 +46,12 @@ const translateProductItemToTask = (td: unknown): ToDoItem => {
 
 const translateEnumCollectionAttributeValuesToIndustryIds = (enumCollectionAttributeValues: unknown[]): number[] =>
   enumCollectionAttributeValues.find(ecav => ecav.attributeId === Attributes.INDUSTRIES).value.map(val => val.enumAttributeOptionId);
+
+// END TRANSLATION HELPERS
+
+export function* watchOnGetProducts(): Generator {
+  yield takeEvery(ProductSagaActionTypes.GET_PRODUCTS, onGetProducts);
+}
 
 export function* onGetProducts(action: GetProductsAction): Generator {
   try {
@@ -95,10 +102,6 @@ export function* watchOnUpdateProduct(): Generator {
   yield takeEvery(ProductSagaActionTypes.UPDATE_PRODUCT, onUpdateProduct);
 }
 
-export function* watchOnUpdateProductItem(): Generator {
-  yield takeEvery(ProductSagaActionTypes.UPDATE_PRODUCT_ITEM, onUpdateProductItem);
-}
-
 export function* onUpdateProduct(action: UpdateProductAction): Generator {
   try {
     yield put(updateProductRequest());
@@ -120,6 +123,10 @@ export function* onUpdateProduct(action: UpdateProductAction): Generator {
   }
 }
 
+export function* watchOnUpdateProductItem(): Generator {
+  yield takeEvery(ProductSagaActionTypes.UPDATE_PRODUCT_ITEM, onUpdateProductItem);
+}
+
 export function* onUpdateProductItem(action: UpdateProductItemAction): Generator {
   try {
     yield put(updateProductItemRequest());
@@ -131,6 +138,28 @@ export function* onUpdateProductItem(action: UpdateProductItemAction): Generator
   }
 }
 
+export function* watchOnCreateTask(): Generator {
+  yield takeEvery(ProductSagaActionTypes.CREATE_TASK, onCreateTask);
+}
+
+export function* onCreateTask(action: CreateTaskAction): Generator {
+  try {
+    yield put(createTaskRequest());
+    const { data } = yield call(createTask, action.payload);
+    const createdTask: ToDoItem = {
+      id: data.id,
+      productKey: action.payload.ProductKey, // used for assignment to correct Product in Redux store
+      name: data.name,
+      notes: data.notes,
+      dueDate: data.dueDate ? new Date(data.dueDate) : null,
+      status: data.status
+    };
+    yield put(createTaskSuccess(createdTask));
+  } catch (error) {
+    yield put(createTaskFailure(error));
+  }
+}
+
 export default function* productSaga(): Generator {
-  yield all([fork(watchOnGetProducts), fork(watchOnCreateProduct), fork(watchOnUpdateProduct), fork(watchOnUpdateProductItem)]);
+  yield all([fork(watchOnGetProducts), fork(watchOnCreateProduct), fork(watchOnUpdateProduct), fork(watchOnUpdateProductItem), fork(watchOnCreateTask)]);
 }

@@ -16,6 +16,6 @@ namespace Sopheon.CloudNative.Products.Domain
 
       public DateTime DueDate { get; set; }
 
-      public Product Product { get; set; }
+      public virtual Product Product { get; set; }
    }
 }

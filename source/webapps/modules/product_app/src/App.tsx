@@ -23,6 +23,7 @@ const App: React.FunctionComponent<Props> = ({
   accessToken,
   hideHeaderFooter,
   showHeaderFooter,
+  createTask,
 }: Props) => {
   useEffect(() => {
     if (accessToken && getProductsFetchStatus === FetchStatus.NotActive) {
@@ -75,6 +76,15 @@ const App: React.FunctionComponent<Props> = ({
     );
   }
 
-  return <Dashboard updateProduct={updateProduct} updateProductItem={updateProductItem} environmentKey={environmentKey} accessToken={accessToken} products={products} />;
+  return (
+    <Dashboard
+      updateProduct={updateProduct}
+      updateProductItem={updateProductItem}
+      environmentKey={environmentKey}
+      accessToken={accessToken}
+      products={products}
+      createTask={createTask}
+    />
+  );
 };
 export default App;
