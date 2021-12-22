@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Sopheon.CloudNative.Products.AspNetCore.Filters;
 using Sopheon.CloudNative.Products.AspNetCore.Models;
 using Sopheon.CloudNative.Products.Domain;
+using Sopheon.CloudNative.Products.Domain.Attributes.Enum;
 
 namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
 {

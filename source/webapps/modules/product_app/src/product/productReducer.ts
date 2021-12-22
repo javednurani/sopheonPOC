@@ -1,18 +1,7 @@
-import {
-  Action,
-  createAction,
-  createPayloadAction,
-  FetchStatus,
-  PayloadAction,
-} from '@sopheon/shell-api';
+import { Action, createAction, createPayloadAction, FetchStatus, PayloadAction } from '@sopheon/shell-api';
 import { Reducer } from 'redux';
 
-import {
-  CreateProductModel,
-  EnvironmentScopedApiRequestModel,
-  Product,
-  UpdateProductModel
-} from '../types';
+import { CreateProductModel, EnvironmentScopedApiRequestModel, Product, ToDoItem, UpdateProductItemModel, UpdateProductModel } from '../types';
 
 //#region  Action Types
 
@@ -31,6 +20,10 @@ enum ProductActionTypes {
   UPDATE_PRODUCT_REQUEST = 'PRODUCT/PRODUCT/UPDATE_PRODUCT_REQUEST',
   UPDATE_PRODUCT_SUCCESS = 'PRODUCT/PRODUCT/UPDATE_PRODUCT_SUCCESS',
   UPDATE_PRODUCT_FAILURE = 'PRODUCT/PRODUCT/UPDATE_PRODUCT_FAILURE',
+
+  UPDATE_PRODUCT_ITEM_REQUEST = 'PRODUCT/PRODUCT/UPDATE_PRODUCT_ITEM_REQUEST',
+  UPDATE_PRODUCT_ITEM_SUCCESS = 'PRODUCT/PRODUCT/UPDATE_PRODUCT_ITEM_SUCCESS',
+  UPDATE_PRODUCT_ITEM_FAILURE = 'PRODUCT/PRODUCT/UPDATE_PRODUCT_ITEM_FAILURE',
 }
 
 export type GetProductsRequestAction = Action<ProductActionTypes.GET_PRODUCTS_REQUEST>;
@@ -45,8 +38,12 @@ export type UpdateProductRequestAction = Action<ProductActionTypes.UPDATE_PRODUC
 export type UpdateProductSuccessAction = PayloadAction<ProductActionTypes.UPDATE_PRODUCT_SUCCESS, Product>;
 export type UpdateProductFailureAction = PayloadAction<ProductActionTypes.UPDATE_PRODUCT_FAILURE, Error>;
 
+export type UpdateProductItemRequestAction = Action<ProductActionTypes.UPDATE_PRODUCT_ITEM_REQUEST>;
+export type UpdateProductItemSuccessAction = PayloadAction<ProductActionTypes.UPDATE_PRODUCT_ITEM_SUCCESS, ToDoItem>; // TODO: ProductItem vs ToDo?
+export type UpdateProductItemFailureAction = PayloadAction<ProductActionTypes.UPDATE_PRODUCT_ITEM_FAILURE, Error>;
+
 export type ProductReducerActions =
-  GetProductsRequestAction
+  | GetProductsRequestAction
   | GetProductsSuccessAction
   | GetProductsFailureAction
   | CreateProductRequestAction
@@ -54,8 +51,10 @@ export type ProductReducerActions =
   | CreateProductFailureAction
   | UpdateProductRequestAction
   | UpdateProductSuccessAction
-  | UpdateProductFailureAction;
-
+  | UpdateProductFailureAction
+  | UpdateProductItemRequestAction
+  | UpdateProductItemSuccessAction
+  | UpdateProductItemFailureAction;
 
 // SAGA ACTION TYPES
 
@@ -63,13 +62,14 @@ export type ProductReducerActions =
 export enum ProductSagaActionTypes {
   CREATE_PRODUCT = 'PRODUCT/PRODUCT/CREATE_PRODUCT',
   UPDATE_PRODUCT = 'PRODUCT/PRODUCT/UPDATE_PRODUCT',
-  GET_PRODUCTS = 'PRODUCT/PRODUCT/GET_PRODUCTS'
+  GET_PRODUCTS = 'PRODUCT/PRODUCT/GET_PRODUCTS',
+  UPDATE_PRODUCT_ITEM = 'PRODUCT/PRODUCT/UPDATE_PRODUCT_ITEM',
 }
 
 export type GetProductsAction = PayloadAction<ProductSagaActionTypes.GET_PRODUCTS, EnvironmentScopedApiRequestModel>;
 export type CreateProductAction = PayloadAction<ProductSagaActionTypes.CREATE_PRODUCT, CreateProductModel>;
 export type UpdateProductAction = PayloadAction<ProductSagaActionTypes.UPDATE_PRODUCT, UpdateProductModel>;
-
+export type UpdateProductItemAction = PayloadAction<ProductSagaActionTypes.UPDATE_PRODUCT_ITEM, UpdateProductItemModel>;
 
 //#endregion
 
@@ -94,12 +94,22 @@ export const updateProductSuccess = (product: Product): UpdateProductSuccessActi
 export const updateProductFailure = (error: Error): UpdateProductFailureAction =>
   createPayloadAction(ProductActionTypes.UPDATE_PRODUCT_FAILURE, error);
 
+export const updateProductItemRequest = (): UpdateProductItemRequestAction => createAction(ProductActionTypes.UPDATE_PRODUCT_ITEM_REQUEST);
+export const updateProductItemSuccess = (productItem: ToDoItem): UpdateProductItemSuccessAction =>
+  createPayloadAction(ProductActionTypes.UPDATE_PRODUCT_ITEM_SUCCESS, productItem);
+export const updateProductItemFailure = (error: Error): UpdateProductItemFailureAction =>
+  createPayloadAction(ProductActionTypes.UPDATE_PRODUCT_ITEM_FAILURE, error);
 
 // SAGA ACTIONS
 
-export const getProducts = (requestDto: EnvironmentScopedApiRequestModel): GetProductsAction => createPayloadAction(ProductSagaActionTypes.GET_PRODUCTS, requestDto);
-export const createProduct = (product: CreateProductModel): CreateProductAction => createPayloadAction(ProductSagaActionTypes.CREATE_PRODUCT, product);
-export const updateProduct = (product: UpdateProductModel): UpdateProductAction => createPayloadAction(ProductSagaActionTypes.UPDATE_PRODUCT, product);
+export const getProducts = (requestDto: EnvironmentScopedApiRequestModel): GetProductsAction =>
+  createPayloadAction(ProductSagaActionTypes.GET_PRODUCTS, requestDto);
+export const createProduct = (product: CreateProductModel): CreateProductAction =>
+  createPayloadAction(ProductSagaActionTypes.CREATE_PRODUCT, product);
+export const updateProduct = (product: UpdateProductModel): UpdateProductAction =>
+  createPayloadAction(ProductSagaActionTypes.UPDATE_PRODUCT, product);
+export const updateProductItem = (productItem: UpdateProductItemModel): UpdateProductItemAction =>
+  createPayloadAction(ProductSagaActionTypes.UPDATE_PRODUCT_ITEM, productItem);
 
 //#endregion
 
@@ -169,9 +179,7 @@ const updateProductRequestHandler = (state: ProductStateShape) => ({
 // TODO - 'update state' code here will need to be reworked per the Product API Post endpoint behavior
 const updateProductSuccessHandler = (state: ProductStateShape, updatedProduct: Product) => {
   const stateProducts = [...state.products];
-  const updatedProducts = stateProducts.map(existingProduct => ((existingProduct.key !== updatedProduct.key)
-    ? existingProduct
-    : updatedProduct));
+  const updatedProducts = stateProducts.map(existingProduct => (existingProduct.key !== updatedProduct.key ? existingProduct : updatedProduct));
 
   return {
     ...state,
@@ -185,6 +193,33 @@ const updateProductFailureHandler = (state: ProductStateShape, error: Error) => 
   return {
     ...state,
     updateProductFetchStatus: FetchStatus.DoneFailure,
+  };
+};
+
+const updateProductItemRequestHandler = (state: ProductStateShape) => ({
+  ...state,
+  updateProductItemFetchStatus: FetchStatus.InProgress,
+});
+
+const updateProductItemSuccessHandler = (state: ProductStateShape, updatedProductItem: ToDoItem) => {
+  const stateProducts = [...state.products];
+  const updatedProducts = stateProducts.map(existingProduct => {
+    existingProduct.todos = existingProduct.todos.map(todo => (todo.id === updatedProductItem.id ? updatedProductItem : todo));
+    return existingProduct; // we're not updating the product, just it's todos
+  });
+
+  return {
+    ...state,
+    products: updatedProducts,
+    updateProductItemFetchStatus: FetchStatus.DoneSuccess,
+  };
+};
+
+const updateProductItemFailureHandler = (state: ProductStateShape, error: Error) => {
+  console.log(error);
+  return {
+    ...state,
+    updateProductItemFetchStatus: FetchStatus.DoneFailure,
   };
 };
 
@@ -210,6 +245,12 @@ export const productReducer: Reducer<ProductStateShape, ProductReducerActions> =
       return updateProductSuccessHandler(state, action.payload);
     case ProductActionTypes.UPDATE_PRODUCT_FAILURE:
       return updateProductFailureHandler(state, action.payload);
+    case ProductActionTypes.UPDATE_PRODUCT_ITEM_REQUEST:
+      return updateProductItemRequestHandler(state);
+    case ProductActionTypes.UPDATE_PRODUCT_ITEM_SUCCESS:
+      return updateProductItemSuccessHandler(state, action.payload);
+    case ProductActionTypes.UPDATE_PRODUCT_ITEM_FAILURE:
+      return updateProductItemFailureHandler(state, action.payload);
     default:
       return state;
   }

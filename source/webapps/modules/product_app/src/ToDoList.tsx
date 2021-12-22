@@ -1,16 +1,27 @@
-import { mergeStyleSets, Modal } from '@fluentui/react';
+import {
+  ContextualMenu,
+  ContextualMenuItemType,
+  FontIcon,
+  IContextualMenuItem,
+  IStackItemStyles,
+  ITextFieldStyles,
+  mergeStyles,
+  mergeStyleSets,
+  Modal,
+  Stack,
+} from '@fluentui/react';
 import { Text } from '@fluentui/react/lib/Text';
 import { useBoolean } from '@fluentui/react-hooks';
-import { FontIcon, mergeStyles, Stack } from 'office-ui-fabric-react';
-import React from 'react';
+import React, { useRef } from 'react';
 import { useIntl } from 'react-intl';
 
 import AddTask from './AddTask';
-import { UpdateProductAction } from './product/productReducer';
-import { Product, UpdateProductModel } from './types';
+import { UpdateProductAction, UpdateProductItemAction } from './product/productReducer';
+import { Attributes, Product, Status, ToDoItem, UpdateProductItemModel, UpdateProductModel } from './types';
 
 export interface IToDoListProps {
   updateProduct: (product: UpdateProductModel) => UpdateProductAction;
+  updateProductItem: (productItem: UpdateProductItemModel) => UpdateProductItemAction;
   environmentKey: string;
   accessToken: string;
   products: Product[];
@@ -21,10 +32,6 @@ const mainDivStyle: React.CSSProperties = {
   marginLeft: '48px',
   marginRight: '48px',
   marginTop: '35px',
-};
-
-const headingLeftStyle: React.CSSProperties = {
-  textAlign: 'left',
 };
 
 const contentDivStyle: React.CSSProperties = {
@@ -50,38 +57,204 @@ const addTaskModalStyles = mergeStyleSets({
   },
 });
 
-const addIconStyle: React.CSSProperties = {
+const pointerCursorStyle: React.CSSProperties = {
   cursor: 'pointer',
 };
 
-const ToDoList: React.FunctionComponent<IToDoListProps> = ({ updateProduct, environmentKey, accessToken, products }: IToDoListProps) => {
+const sharedNameStyles: Partial<ITextFieldStyles> = {
+  root: {
+    'display': '-webkit-box',
+    'overflow': 'hidden',
+    '-webkit-line-clamp': '2',
+    '-webkit-box-orient': 'vertical',
+    'word-break': 'break-all',
+    'marginBottom': '5px',
+  },
+};
+
+const completedNameStyles: Partial<ITextFieldStyles> = {
+  root: {
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    ...(sharedNameStyles.root as {}),
+    textDecoration: 'line-through',
+  },
+};
+
+const marginRightStackItemStyles: IStackItemStyles = {
+  root: {
+    marginRight: '7px',
+  },
+};
+
+const todoContainterStyle: React.CSSProperties = {
+  marginTop: 10,
+};
+
+// TODO: move to utility?
+const isToday = (someDate: Date) => {
+  const today = new Date();
+  return someDate.getDate() === today.getDate() && someDate.getMonth() === today.getMonth() && someDate.getFullYear() === today.getFullYear();
+};
+
+const ToDoList: React.FunctionComponent<IToDoListProps> = ({
+  updateProduct,
+  updateProductItem,
+  environmentKey,
+  accessToken,
+  products,
+}: IToDoListProps) => {
+  const { todos } = products[0];
   const { formatMessage } = useIntl();
   const [isTaskModalOpen, { setTrue: showTaskModal, setFalse: hideTaskModal }] = useBoolean(false);
+  const [isFilteredToShowComplete, { toggle: toggleFiltered }] = useBoolean(false);
+  const [isFilterContextMenuShown, { setFalse: hideFilterContextMenu, toggle: toggleFilterContextMenu }] = useBoolean(false);
+  const filterContextMenuRef = useRef(null); // used to link context menu to element
+
+  const filterMenuItems: IContextualMenuItem[] = [
+    {
+      key: 'filterSection',
+      itemType: ContextualMenuItemType.Section,
+      sectionProps: {
+        title: formatMessage({ id: 'toDo.filter' }),
+        items: [
+          {
+            key: 'showCompleted',
+            text: formatMessage({ id: 'toDo.showCompleted' }),
+            canCheck: true,
+            checked: isFilteredToShowComplete,
+            onClick: toggleFiltered,
+          },
+        ],
+      },
+    },
+  ];
+
+  const filterContextMenu: JSX.Element = (
+    <ContextualMenu
+      items={filterMenuItems}
+      hidden={!isFilterContextMenuShown}
+      target={filterContextMenuRef}
+      onItemClick={hideFilterContextMenu}
+      onDismiss={hideFilterContextMenu}
+    />
+  );
+
+  const handleStatusIconClick = (todo: ToDoItem) => {
+    // if it's not complete, mark it as complete, otherwise in progress
+    todo.status = todo.status !== Status.Complete ? Status.Complete : Status.InProgress;
+    callUpdateProductItemSaga(todo);
+  };
+
+  const callUpdateProductItemSaga = (todo: ToDoItem) => {
+    const updateProductItemDto: UpdateProductItemModel = {
+      ProductKey: products[0].key || 'BAD_PRODUCT_KEY',
+      EnvironmentKey: environmentKey,
+      AccessToken: accessToken,
+      ProductItem: {
+        Id: todo.id,
+        EnumCollectionAttributeValues: [
+          {
+            AttributeId: Attributes.STATUS,
+            Value: [
+              {
+                EnumAttributeOptionId: todo.status,
+              },
+            ],
+          },
+        ],
+        // TODO: might need to send other values in future
+      },
+    };
+    updateProductItem(updateProductItemDto);
+  };
+
+  const emptyListContent: JSX.Element = (
+    <div style={contentDivStyle}>
+      <Text variant="xLarge">
+        {formatMessage({ id: 'toDo.empty1' })}
+        <FontIcon iconName="CirclePlus" />
+        {formatMessage({ id: 'toDo.empty2' })}
+      </Text>
+    </div>
+  );
+
+  const populatedListContent: JSX.Element = (
+    <div>
+      {todos
+        .filter(todo => (isFilteredToShowComplete ? true : todo.status !== Status.Complete))
+        .map((todo, index) => {
+          const statusIcon: JSX.Element = (
+            <Text variant="xLarge">
+              <FontIcon
+                iconName={todo.status === Status.Complete ? 'CheckMark' : 'CircleRing'}
+                style={pointerCursorStyle}
+                onClick={() => handleStatusIconClick(todo)}
+              />
+            </Text>
+          );
+
+          const name: JSX.Element = <Text styles={todo.status === Status.Complete ? completedNameStyles : sharedNameStyles}>{todo.name}</Text>;
+
+          let dueDate: JSX.Element;
+          if (todo.dueDate) {
+            if (isToday(todo.dueDate)) {
+              dueDate = <Text>Due Today</Text>;
+            } else {
+              const isPastDue: boolean = todo.dueDate < new Date();
+              dueDate = (
+                <Text style={isPastDue ? { color: 'red' } : {}}>
+                  Due {todo.dueDate.toLocaleDateString(undefined, { year: '2-digit', month: 'numeric', day: 'numeric' })}
+                </Text>
+              );
+            }
+          } else {
+            dueDate = <Text />; // display nothing
+          }
+
+          return (
+            <div key={index} style={todoContainterStyle}>
+              <Stack horizontal>
+                <Stack.Item styles={marginRightStackItemStyles}>{statusIcon}</Stack.Item>
+                <Stack.Item>
+                  <div>{name}</div>
+                  <div>{dueDate}</div>
+                </Stack.Item>
+              </Stack>
+              <hr />
+            </div>
+          );
+        })}
+    </div>
+  );
+
+  const toDoListContent: JSX.Element = todos.length === 0 ? emptyListContent : populatedListContent;
 
   return (
     <div style={mainDivStyle}>
       <Stack horizontal>
-        <Stack.Item grow style={headingLeftStyle}>
+        <Stack.Item grow>
           <Text variant="xxLarge">{formatMessage({ id: 'toDo.title' })}</Text>
           <Text variant="xLarge">
-            <FontIcon style={addIconStyle} onClick={showTaskModal} iconName="CirclePlus" className={iconClass} />
+            <FontIcon style={pointerCursorStyle} onClick={showTaskModal} iconName="CirclePlus" className={iconClass} />
           </Text>
         </Stack.Item>
         <Stack.Item>
           <Text variant="xLarge">
-            <FontIcon iconName="Filter" className={filterSortIconClass} />
+            <span ref={filterContextMenuRef}>
+              {/* TODO: combine class and styles? */}
+              <FontIcon
+                iconName={isFilteredToShowComplete ? 'FilterSolid' : 'Filter'}
+                className={filterSortIconClass}
+                style={pointerCursorStyle}
+                onClick={toggleFilterContextMenu}
+              />
+            </span>
             <FontIcon iconName="Sort" className={filterSortIconClass} />
           </Text>
         </Stack.Item>
       </Stack>
       <hr />
-      <div style={contentDivStyle}>
-        <Text variant="xLarge">
-          {formatMessage({ id: 'toDo.empty1' })}
-          <FontIcon iconName="CirclePlus" />
-          {formatMessage({ id: 'toDo.empty2' })}
-        </Text>
-      </div>
+      {toDoListContent}
       <Modal
         titleAriaId="TaskModal"
         isOpen={isTaskModalOpen}
@@ -98,6 +271,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({ updateProduct, envi
           products={products}
         />
       </Modal>
+      {filterContextMenu}
     </div>
   );
 };
