@@ -25,12 +25,8 @@ $CredentialsForMasterAndJobScript = Get-Content "_StratusEnvironmentManagement\E
 $CredentialsForMasterAndJobScript = $CredentialsForMasterAndJobScript.Replace("^Enigma^", $SqlAdminEnigma);
 Set-Content -Path '_StratusEnvironmentManagement\EnvironmentManagement\ElasticJobTarget_CreateCredentials.sql' -Value $CredentialsForMasterAndJobScript -Force
 
-$CredentialsJobScript = Get-Content "_StratusEnvironmentManagement\EnvironmentManagement\ElasticJobTarget_CreateJobUser.sql" -Raw
-$CredentialsJobScript = $CredentialsJobScript.Replace("^Enigma^", $SqlAdminEnigma);
-Set-Content -Path '_StratusEnvironmentManagement\EnvironmentManagement\ElasticJobTarget_CreateJobUser.sql' -Value $CredentialsJobScript -Force
-
-Write-Host "Setting Job Agent Credentials on $EnvironmentServerName";
-Invoke-Sqlcmd -ServerInstance "$($EnvironmentServerName).database.windows.net" -Database 'master' -UserName "sopheon" -Password $SqlAdminEnigma -InputFile "_StratusEnvironmentManagement\EnvironmentManagement\ElasticJobTarget_CreateCredentials.sql"
+#Write-Host "Setting Job Agent Credentials on $EnvironmentServerName";
+#Invoke-Sqlcmd -ServerInstance "$($EnvironmentServerName).database.windows.net" -Database 'master' -UserName "sopheon" -Password $SqlAdminEnigma -InputFile "_StratusEnvironmentManagement\EnvironmentManagement\ElasticJobTarget_CreateCredentials.sql"
 
 Write-Host "Setting Job Agent Credentials on $TenantEnvironmentServerName";
 Invoke-Sqlcmd -ServerInstance "$($TenantEnvironmentServerName).database.windows.net" -Database 'master' -UserName "sopheon" -Password $SqlAdminEnigma -InputFile "_StratusEnvironmentManagement\EnvironmentManagement\ElasticJobTarget_CreateCredentials.sql"
@@ -38,8 +34,8 @@ Invoke-Sqlcmd -ServerInstance "$($TenantEnvironmentServerName).database.windows.
 Write-Host "Running EF Sql Script on Sql Server Database: $($EnvironmentServerName)...";
 Invoke-Sqlcmd -ServerInstance "$($EnvironmentServerName).database.windows.net" -Database "EnvironmentManagement" -UserName "sopheon" -Password $SqlAdminEnigma -InputFile "_StratusEnvironmentManagement\EnvironmentManagement\scripts.sql" -QueryTimeout 0;
 
-Write-Host "Setting Job User Credentials on $EnvironmentServerName";
-Invoke-Sqlcmd -ServerInstance "$($EnvironmentServerName).database.windows.net" -Database "TenantEnvironmentTemplate" -UserName "sopheon" -Password $SqlAdminEnigma -InputFile "_StratusEnvironmentManagement\EnvironmentManagement\ElasticJobTarget_CreateJobUser.sql";
+# Write-Host "Setting Job User Credentials on $EnvironmentServerName";
+# Invoke-Sqlcmd -ServerInstance "$($EnvironmentServerName).database.windows.net" -Database "TenantEnvironmentTemplate" -UserName "sopheon" -Password $SqlAdminEnigma -InputFile "_StratusEnvironmentManagement\EnvironmentManagement\ElasticJobTarget_CreateJobUser.sql";
 
 Write-Host "Complete!";
 

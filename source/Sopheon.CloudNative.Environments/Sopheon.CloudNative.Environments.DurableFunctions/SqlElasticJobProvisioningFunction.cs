@@ -100,7 +100,7 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
             .Replace("^JobUserEnigma^", adminLoginEnigma)
             .Replace("^MasterUserEnigma^", adminLoginEnigma)            ;
 
-         string deploymentName = $"{nameof(SqlDatabaseProvisioningFunction)}_Deployment_{DateTime.UtcNow:yyyyMMddTHHmmss}";
+         string deploymentName = $"{nameof(SqlElasticJobProvisioningFunction)}_Deployment_{DateTime.UtcNow:yyyyMMddTHHmmss}";
          log.LogInformation($"Creating new deployment: {deploymentName}");
 
          IDeployment deployment = await _azureApi.Value.Deployments

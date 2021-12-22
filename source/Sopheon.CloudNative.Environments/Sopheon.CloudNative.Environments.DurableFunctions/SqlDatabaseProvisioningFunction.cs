@@ -1,3 +1,4 @@
+
 namespace Sopheon.CloudNative.Environments.DurableFunctions
 {
    public class SqlDatabaseProvisioningFunction
@@ -209,7 +210,6 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
          return (result.ProvisioningState.Value, sqlServerResources);
       }
 
-
       [FunctionName(nameof(MaintainSqlDatabasePoolForOnboarding_RegisterNewlyCreatedDatabases))]
       public async Task MaintainSqlDatabasePoolForOnboarding_RegisterNewlyCreatedDatabases([ActivityTrigger] List<Domain.Models.Resource> databaseDeployments, ILogger log)
       {
@@ -220,8 +220,40 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
                _dbContext.Resources.Add(resource);
             }
          }
-
+         // Save all the new resources to the tables
          await _dbContext.SaveChangesAsync();
+
+         // Run a sql command on all the new databases
+         foreach (Domain.Models.Resource resource1 in databaseDeployments)
+         {
+            try {
+               using (SqlConnection conn = new SqlConnection($"{resource1.Uri}User ID=sopheon;Password={_configuration["SqlServerAdminEnigma"]}"))
+               {
+                  conn.Open();
+                  string sqlcommand =
+                     @"
+                  IF EXISTS (SELECT name FROM sys.database_principals WHERE name = 'jobuser')
+                     BEGIN
+                        DROP USER jobuser
+                     END
+
+                  CREATE USER jobuser FROM LOGIN jobuser
+                  GRANT ALTER ON SCHEMA::dbo TO jobuser
+                  GRANT CREATE TABLE TO jobuser
+                  GRANT CREATE SCHEMA TO jobuser";
+
+                  using (SqlCommand command = new SqlCommand(sqlcommand, conn))
+                  {
+                     var row = await command.ExecuteNonQueryAsync();
+                     log.LogInformation($"{row} rows were updated");
+                  }
+               }
+            }
+            catch (Exception ex)
+            {
+               log.LogError(ex, ex.Message);
+            }
+         }
       }
 
       [FunctionName(nameof(MaintainSqlDatabasePoolForOnboarding_RegisterNewlyCreatedSqlServers))]
