@@ -2,70 +2,83 @@
 
 namespace Sopheon.CloudNative.Environments.DurableFunctions
 {
-    public class Startup : FunctionsStartup
-    {
-        public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
-        {
-            FunctionsHostBuilderContext context = builder.GetContext();
+   public class Startup : FunctionsStartup
+   {
+      public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
+      {
+         FunctionsHostBuilderContext context = builder.GetContext();
 
-            builder.ConfigurationBuilder
+         builder.ConfigurationBuilder
                 .AddJsonFile(Path.Combine(context.ApplicationRootPath, "appsettings.json"), optional: true, reloadOnChange: false)
                 .AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.{context.EnvironmentName}.json"), optional: true, reloadOnChange: false)
                 .AddEnvironmentVariables();
-        }
 
-        public override void Configure(IFunctionsHostBuilder builder)
-        {
-            FunctionsHostBuilderContext context = builder.GetContext();            
+         if ("production".Equals(context.EnvironmentName, StringComparison.OrdinalIgnoreCase))
+         {
+            var keyVaultName = Environment.GetEnvironmentVariable("KeyVaultName");
+            var secretClient = new SecretClient(
+                new Uri($"https://{keyVaultName}.vault.azure.net/"),
+                new DefaultAzureCredential());
+            builder.ConfigurationBuilder.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
+         }
+         else if ("development".Equals(context.EnvironmentName, StringComparison.OrdinalIgnoreCase))
+         {
+            builder.ConfigurationBuilder.AddUserSecrets<Startup>();
+         }
+      }
 
-            ConfigureServices(context, builder.Services);
-        }
+      public override void Configure(IFunctionsHostBuilder builder)
+      {
+         FunctionsHostBuilderContext context = builder.GetContext();
 
-        private void ConfigureServices(FunctionsHostBuilderContext hostContext, IServiceCollection services)
-        {
-            string connString = string.Empty;
-            if ("production".Equals(hostContext.EnvironmentName, StringComparison.OrdinalIgnoreCase))
-            {
-                connString = Environment.GetEnvironmentVariable("SQLCONNSTR_EnvironmentsSqlConnectionString");
-            }
-            else if ("development".Equals(hostContext.EnvironmentName, StringComparison.OrdinalIgnoreCase))
-            {
-                connString =
-                   hostContext.Configuration.GetConnectionString("EnvironmentsSqlConnectionString") ?? // local dev, if stored in local.settings.json under key SQLCONNSTR_EnvironmentsSqlConnectionString
-                   hostContext.Configuration["SQLCONNSTR_EnvironmentsSqlConnectionString"] ??          // local dev
-                   Environment.GetEnvironmentVariable("SQLCONNSTR_EnvironmentsSqlConnectionString");   // CI pipeline
-            }
+         ConfigureServices(context, builder.Services);
+      }
 
-            // Add Logging
-            services.AddLogging();
+      private void ConfigureServices(FunctionsHostBuilderContext hostContext, IServiceCollection services)
+      {
+         string connString = string.Empty;
+         if ("production".Equals(hostContext.EnvironmentName, StringComparison.OrdinalIgnoreCase))
+         {
+            connString = Environment.GetEnvironmentVariable("SQLCONNSTR_EnvironmentsSqlConnectionString");
+         }
+         else if ("development".Equals(hostContext.EnvironmentName, StringComparison.OrdinalIgnoreCase))
+         {
+            connString =
+               hostContext.Configuration.GetConnectionString("EnvironmentsSqlConnectionString") ?? // local dev, if stored in local.settings.json under key SQLCONNSTR_EnvironmentsSqlConnectionString
+               hostContext.Configuration["SQLCONNSTR_EnvironmentsSqlConnectionString"] ??          // local dev
+               Environment.GetEnvironmentVariable("SQLCONNSTR_EnvironmentsSqlConnectionString");   // CI pipeline
+         }
 
-            services.AddDbContext<EnvironmentContext>(options => options.UseSqlServer(connString));
+         // Add Logging
+         services.AddLogging();
 
-            services.AddSingleton<Lazy<IAzure>>(sp => new Lazy<IAzure>(GetAzureInstance(hostContext)));   // single instance shared across functions
-        }
+         services.AddDbContext<EnvironmentContext>(options => options.UseSqlServer(connString));
 
-        private static IAzure GetAzureInstance(FunctionsHostBuilderContext hostContext)
-        {
-            AzureCredentials credentials;
-            if ("Production".Equals(hostContext.EnvironmentName, StringComparison.OrdinalIgnoreCase))
-            {
-                string tenantId = Environment.GetEnvironmentVariable("AzSpTenantId"); 
-                credentials = SdkContext.AzureCredentialsFactory
-                   .FromSystemAssignedManagedServiceIdentity(MSIResourceType.AppService, AzureEnvironment.AzureGlobalCloud, tenantId);
-            }
-            else
-            {
-                // authenticate with Service Principal credentials
-                string tenantId = hostContext.Configuration["AzSpTenantId"];
-                string clientId = hostContext.Configuration["AzSpClientId"]; 
-                string clientSecret = hostContext.Configuration["AzSpClientSecret"];
-                credentials = SdkContext.AzureCredentialsFactory
-                   .FromServicePrincipal(clientId, clientSecret, tenantId, environment: AzureEnvironment.AzureGlobalCloud);
-            }
+         services.AddSingleton<Lazy<IAzure>>(sp => new Lazy<IAzure>(GetAzureInstance(hostContext)));   // single instance shared across functions
+      }
 
-            return Microsoft.Azure.Management.Fluent.Azure
-               .Authenticate(credentials)
-               .WithDefaultSubscription();
-        }
-    }
+      private static IAzure GetAzureInstance(FunctionsHostBuilderContext hostContext)
+      {
+         AzureCredentials credentials;
+         if ("Production".Equals(hostContext.EnvironmentName, StringComparison.OrdinalIgnoreCase))
+         {
+            string tenantId = Environment.GetEnvironmentVariable("AzSpTenantId");
+            credentials = SdkContext.AzureCredentialsFactory
+               .FromSystemAssignedManagedServiceIdentity(MSIResourceType.AppService, AzureEnvironment.AzureGlobalCloud, tenantId);
+         }
+         else
+         {
+            // authenticate with Service Principal credentials
+            string tenantId = hostContext.Configuration["AzSpTenantId"];
+            string clientId = hostContext.Configuration["AzSpClientId"];
+            string clientSecret = hostContext.Configuration["AzSpClientSecret"];
+            credentials = SdkContext.AzureCredentialsFactory
+               .FromServicePrincipal(clientId, clientSecret, tenantId, environment: AzureEnvironment.AzureGlobalCloud);
+         }
+
+         return Microsoft.Azure.Management.Fluent.Azure
+            .Authenticate(credentials)
+            .WithDefaultSubscription();
+      }
+   }
 }
