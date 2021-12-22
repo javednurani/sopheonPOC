@@ -8,6 +8,7 @@ const productManagementApiUrlBase = isDev ? PRODUCT_MANAGEMENT_API_BASE_URL : '^
 // INFO: {*token*} is meant to be replaced in React SPA
 const tokenEnvironmentKey = '{*environmentKey*}';
 const tokenProductKey = '{*productKey*}';
+const tokenProductItemId = '{*productItemKey*}';
 
 // TODO, unify this file and product_app/settings.ts
 
@@ -17,6 +18,8 @@ export const settings: Record<string, string> = {
   CreateProductUrlPath: `/Environments/${tokenEnvironmentKey}/Products`,
   getProductsUrlPath: `/Environments/${tokenEnvironmentKey}/Products`,
   UpdateProductUrlPath: `/Environments/${tokenEnvironmentKey}/Products/${tokenProductKey}`,
+  UpdateProductItemUrlPath: `/Environments/${tokenEnvironmentKey}/Products/${tokenProductKey}/Items/${tokenProductItemId}`,
   TokenEnvironmentKey: tokenEnvironmentKey,
   TokenProductKey: tokenProductKey,
+  TokenProductItemId: tokenProductItemId,
 };

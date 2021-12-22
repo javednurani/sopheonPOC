@@ -1,7 +1,6 @@
 // TODO - (for domain/DTO types like Product), this file should serve as a temporary stub for Types for DTOs in the Sopheon.CloudNative.Products WebAPI project
 // In Cloud-2147, we should generate TS Types from Sopheon.CloudNative.Products.AspNetCore OpenAPI schema
 
-
 // eslint-disable-next-line no-shadow
 export enum Attributes {
   INDUSTRIES = -1,
@@ -17,8 +16,13 @@ export enum ProductItemTypes {
 
 export type UpdateProductModel = {
   ProductPatchData: PatchOperation[];
-} & EnvironmentScopedApiRequestModel
-  & ProductScopedApiRequestModel;
+} & EnvironmentScopedApiRequestModel &
+  ProductScopedApiRequestModel;
+
+export type UpdateProductItemModel = {
+  ProductItem: ProductItemDto;
+} & EnvironmentScopedApiRequestModel &
+  ProductScopedApiRequestModel;
 
 export type CreateProductModel = {
   Product: ProductPostDto;
@@ -27,7 +31,7 @@ export type CreateProductModel = {
 export type EnvironmentScopedApiRequestModel = {
   EnvironmentKey: string;
   AccessToken: string;
-}
+};
 
 export type ProductScopedApiRequestModel = {
   ProductKey: string;
@@ -47,9 +51,10 @@ export interface Product {
 }
 
 export interface ToDoItem {
+  id: number;
   name: string;
-  notes: string;
-  dueDate: Date;
+  notes: string | null;
+  dueDate: Date | null;
   status: Status;
 }
 
@@ -58,7 +63,7 @@ export enum Status {
   NotStarted = -1,
   InProgress = -2,
   Assigned = -3,
-  Complete = -4
+  Complete = -4,
 }
 
 export interface Goal {
@@ -70,7 +75,7 @@ export interface Goal {
 export interface KeyPerformanceIndicator {
   keyPerformanceIndicatorId: number;
   attributeId: number;
-  attribute: AttributeDto,
+  attribute: AttributeDto;
 }
 
 export interface Int32AttributeValueDto {
@@ -78,9 +83,24 @@ export interface Int32AttributeValueDto {
   Value: number | null;
 }
 
+// TODO: Tech Debt - these dtos come directly from our data model, which I don't think our UI should know about
+export interface EnumCollectionAttributeValueDto {
+  AttributeId: number;
+  Value: EnumAttributeOptionValueDto[];
+}
+
+export interface EnumAttributeOptionValueDto {
+  EnumAttributeOptionId: number;
+}
+
 export interface ProductPostDto {
   Name: string;
   Int32AttributeValues: Int32AttributeValueDto[];
+}
+
+export interface ProductItemDto {
+  Id: number;
+  EnumCollectionAttributeValues: EnumCollectionAttributeValueDto[];
 }
 
 export interface PatchOperation {
