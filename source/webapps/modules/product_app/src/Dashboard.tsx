@@ -84,7 +84,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({ updateProduct, en
             <KPIs />
           </Stack.Item>
           <Stack.Item styles={middleRowStackItemStyles}>
-            <Timeline />
+            <Timeline product={products[0]}/>
           </Stack.Item>
           <Stack.Item styles={bottomRowStackItemStyles}>
             <ProductHealth />

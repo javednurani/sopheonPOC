@@ -6,24 +6,28 @@ import React, { useEffect } from 'react';
 import { Gantt } from '../../../controls/ext/Gantt/codebase/dhtmlxgantt';
 
 export type GanttProps = {
-  taskInfo: {
-    data: [],
-    links: []
-  };
+  todoItems: {
+    id: string;
+    text: string;
+    type: any;
+    // eslint-disable-next-line camelcase
+    start_date: Date;
+  }[];
 };
 
-const GanttComponent: React.FunctionComponent<GanttProps> = ({ taskInfo }: GanttProps) => {
+const GanttComponent: React.FunctionComponent<GanttProps> = ({ todoItems }: GanttProps) => {
   useEffect(() => {
     const gantt = Gantt.getGanttInstance();
+    const tasksData = {
+      data: todoItems,
+      links: []
+    };
 
     gantt.plugins({
       auto_scheduling: true,
       click_drag: false,
-      critical_path: true,
       drag_timeline: true,
-      // fullscreen: true,
       grouping: true,
-      // keyboard_navigation: true,
       marker: true,
       multiselect: false,
       overlay: false,
@@ -50,13 +54,13 @@ const GanttComponent: React.FunctionComponent<GanttProps> = ({ taskInfo }: Gantt
     gantt.config.show_grid = false;
     gantt.config.show_tasks_outside_timescale = true;
 
-    if (taskInfo.data.length === 0) {
+    if (tasksData.data.length === 0) {
       gantt.config.start_date = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
       gantt.config.end_date = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());
     }
 
     gantt.init('gantt_here');
-    gantt.parse(taskInfo);
+    gantt.parse(tasksData);
   });
   return (
     <div className="gantt_here" id="gantt_here"></div>

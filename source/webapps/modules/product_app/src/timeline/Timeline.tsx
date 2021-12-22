@@ -1,21 +1,17 @@
+import { gantt } from '@sopheon/controls/ext/Gantt';
 import Gantt from '@sopheon/controls/src/components/Gantt';
 import { Stack } from 'office-ui-fabric-react';
 import React from 'react';
 
-export interface ITimelineProps {}
+import { Product } from '../types';
 
-const Timeline: React.FunctionComponent<ITimelineProps> = ({}: ITimelineProps) => {
-  const propData = {
-    data: [
-      { id: 1, text: 'Alpha release', type: gantt.config.types.milestone,
-        start_date: new Date(2021, 10, 12) },
-      { id: 2, text: 'beta release', type: gantt.config.types.milestone,
-        start_date: new Date(2021, 12, 12) },
-      { id: 3, text: 'charlie release', type: gantt.config.types.milestone,
-        start_date: new Date(2022, 10, 12) }
-    ],
-    links: [],
-  };
+export interface ITimelineProps {
+  product: Product;
+}
+
+const Timeline: React.FunctionComponent<ITimelineProps> = ({ product }: ITimelineProps) => {
+  const todoItems = product.todos.map(todo => ({ id: `${todo.name}_${todo.dueDate}`, text: todo.name, type: gantt.config.types.milestone, start_date: todo.dueDate }));
+
   const mainStackStyle: React.CSSProperties = {
     width: '100%',
     height: '100%',
@@ -27,7 +23,7 @@ const Timeline: React.FunctionComponent<ITimelineProps> = ({}: ITimelineProps) =
 
   return (
     <Stack style={mainStackStyle}>
-      <Gantt taskInfo={propData}></Gantt>
+      <Gantt todoItems={todoItems}></Gantt>
     </Stack>
   );
 };
