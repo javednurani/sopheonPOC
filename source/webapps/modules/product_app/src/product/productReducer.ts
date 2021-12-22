@@ -1,7 +1,16 @@
 import { Action, createAction, createPayloadAction, FetchStatus, PayloadAction } from '@sopheon/shell-api';
 import { Reducer } from 'redux';
 
-import { CreateProductModel, CreateTaskModel, EnvironmentScopedApiRequestModel, Product, ToDoItem, UpdateProductItemModel, UpdateProductModel } from '../types';
+import {
+  CreateProductModel,
+  CreateTaskModel,
+  EnvironmentScopedApiRequestModel,
+  Product,
+  ProductScopedToDoItem,
+  ToDoItem,
+  UpdateProductItemModel,
+  UpdateProductModel
+} from '../types';
 
 //#region  Action Types
 
@@ -47,7 +56,7 @@ export type UpdateProductItemSuccessAction = PayloadAction<ProductActionTypes.UP
 export type UpdateProductItemFailureAction = PayloadAction<ProductActionTypes.UPDATE_PRODUCT_ITEM_FAILURE, Error>;
 
 export type CreateTaskRequestAction = Action<ProductActionTypes.CREATE_TASK_REQUEST>;
-export type CreateTaskSuccessAction = PayloadAction<ProductActionTypes.CREATE_TASK_SUCCESS, ToDoItem>;
+export type CreateTaskSuccessAction = PayloadAction<ProductActionTypes.CREATE_TASK_SUCCESS, ProductScopedToDoItem>;
 export type CreateTaskFailureAction = PayloadAction<ProductActionTypes.CREATE_TASK_FAILURE, Error>;
 
 export type ProductReducerActions =
@@ -114,7 +123,7 @@ export const updateProductItemFailure = (error: Error): UpdateProductItemFailure
   createPayloadAction(ProductActionTypes.UPDATE_PRODUCT_ITEM_FAILURE, error);
 
 export const createTaskRequest = (): CreateTaskRequestAction => createAction(ProductActionTypes.CREATE_TASK_REQUEST);
-export const createTaskSuccess = (task: ToDoItem): CreateTaskSuccessAction =>
+export const createTaskSuccess = (task: ProductScopedToDoItem): CreateTaskSuccessAction =>
   createPayloadAction(ProductActionTypes.CREATE_TASK_SUCCESS, task);
 export const createTaskFailure = (error: Error): CreateTaskFailureAction =>
   createPayloadAction(ProductActionTypes.CREATE_TASK_FAILURE, error);
@@ -253,11 +262,11 @@ const createTaskRequestHandler = (state: ProductStateShape) => ({
   createTaskFetchStatus: FetchStatus.InProgress,
 });
 
-const createTaskSuccessHandler = (state: ProductStateShape, createdTask: ToDoItem) => {
+const createTaskSuccessHandler = (state: ProductStateShape, createdTask: ProductScopedToDoItem) => {
   const updatedProducts = [...state.products];
   updatedProducts.forEach(existingProduct => {
-    if (existingProduct.key === createdTask.productKey) {
-      existingProduct.todos.push(createdTask); // task has a redundant productKey, could delete property from object, or make a new object here
+    if (existingProduct.key === createdTask.ProductKey) {
+      existingProduct.todos.push(createdTask.toDoItem);
     }
   });
   return {

@@ -3,12 +3,12 @@ import { Status } from './data/status';
 export type UpdateProductModel = {
   ProductPatchData: PatchOperation[];
 } & EnvironmentScopedApiRequestModel &
-  ProductScopedApiRequestModel;
+  ProductScopedModel;
 
 export type UpdateProductItemModel = {
   ProductItem: ProductItemDto;
 } & EnvironmentScopedApiRequestModel &
-  ProductScopedApiRequestModel;
+  ProductScopedModel;
 
 export type CreateProductModel = {
   Product: ProductPostDto;
@@ -17,14 +17,14 @@ export type CreateProductModel = {
 export type CreateTaskModel = {
   Task: TaskDto;
 } & EnvironmentScopedApiRequestModel &
-  ProductScopedApiRequestModel;
+  ProductScopedModel;
 
 export type EnvironmentScopedApiRequestModel = {
   EnvironmentKey: string;
   AccessToken: string;
 };
 
-export type ProductScopedApiRequestModel = {
+export type ProductScopedModel = {
   ProductKey: string;
 };
 
@@ -46,12 +46,15 @@ export interface Product {
 
 export interface ToDoItem {
   id: number;
-  productKey: string | undefined; // INFO: used for Redux state assignment after create Task API call
   name: string;
   notes: string | null;
   dueDate: Date | null;
   status: Status;
 }
+
+export type ProductScopedToDoItem = {
+  toDoItem: ToDoItem;
+} & ProductScopedModel;  // INFO: used for Redux state assignment to correct Product after create Task API call
 
 export interface Goal {
   id: number;
