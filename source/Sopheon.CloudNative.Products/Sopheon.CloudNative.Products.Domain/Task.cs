@@ -14,7 +14,7 @@ namespace Sopheon.CloudNative.Products.Domain
 
       public TaskStatus Status { get; set; }
 
-      public DateTime DueDate { get; set; }
+      public DateTime? DueDate { get; set; }
 
       public virtual Product Product { get; set; }
    }

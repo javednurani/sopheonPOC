@@ -34,22 +34,18 @@ import {
 import { createProduct, createTask, getProducts, updateProduct, updateProductItem, updateTask } from './productService';
 
 // TRANSLATION HELPERS, TODO, MOVE OUT OF SAGA
-const translateProductItemsToTasks = (productItems: unknown[]): ToDoItem[] =>
-  productItems.filter(pi => pi.productItemTypeId === ProductItemTypes.TASK).map(td => translateProductItemToTask(td));
-
-const translateProductItemToTask = (td: unknown): ToDoItem => {
-  const dueDateString: string = td.utcDateTimeAttributeValues.filter(dtav => dtav.attributeId === Attributes.DUEDATE)[0].value;
-  return {
-    id: td.id,
-    name: td.name,
-    notes: td.stringAttributeValues.filter(sav => sav.attributeId === Attributes.NOTES)[0].value,
-    dueDate: dueDateString ? new Date(dueDateString) : null,
-    status: td.enumAttributeValues.filter(eav => eav.attributeId === Attributes.STATUS)[0].enumAttributeOptionId,
-  };
-};
-
 const translateEnumCollectionAttributeValuesToIndustryIds = (enumCollectionAttributeValues: unknown[]): number[] =>
   enumCollectionAttributeValues.find(ecav => ecav.attributeId === Attributes.INDUSTRIES).value.map(val => val.enumAttributeOptionId);
+
+// INFO, Task object from service and ToDoItem object in SPA are similar, but we at least need the Date() translation...possibly we can reduce this
+const translateTasksToToDoItems = (tasks: unknown[]): ToDoItem[] => tasks.map(task => ({
+  id: task.id,
+  name: task.name,
+  notes: task.notes,
+  dueDate: task.dueDate ? new Date(task.dueDate) : null,
+  status: task.status
+}));
+
 
 // END TRANSLATION HELPERS
 
@@ -69,7 +65,7 @@ export function* onGetProducts(action: GetProductsAction): Generator {
       industries: translateEnumCollectionAttributeValuesToIndustryIds(d.enumCollectionAttributeValues),
       kpis: d.keyPerformanceIndicators,
       goals: d.goals,
-      todos: translateProductItemsToTasks(d.items),
+      todos: translateTasksToToDoItems(d.tasks),
     }));
     yield put(getProductsSuccess(transformedProductsData));
   } catch (error) {
@@ -93,7 +89,7 @@ export function* onCreateProduct(action: CreateProductAction): Generator {
       industries: translateEnumCollectionAttributeValuesToIndustryIds(data.enumCollectionAttributeValues),
       goals: data.goals,
       kpis: data.keyPerformanceIndicators,
-      todos: translateProductItemsToTasks(data.items),
+      todos: translateTasksToToDoItems(data.tasks),
     };
 
     yield put(createProductSuccess(createdProduct));
@@ -118,7 +114,7 @@ export function* onUpdateProduct(action: UpdateProductAction): Generator {
       industries: translateEnumCollectionAttributeValuesToIndustryIds(data.enumCollectionAttributeValues),
       kpis: data.keyPerformanceIndicators,
       goals: data.goals,
-      todos: translateProductItemsToTasks(data.items),
+      todos: translateTasksToToDoItems(data.tasks),
     };
 
     yield put(updateProductSuccess(updatedProduct));

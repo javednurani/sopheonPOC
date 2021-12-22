@@ -38,6 +38,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
       {
          _logger.LogInformation("ProductsController::Get");
          var query = _dbContext.Products
+               .Include(p => p.Tasks)
                .AsNoTracking()
                .ProjectTo<ProductDto>(_mapper.ConfigurationProvider);
 
@@ -48,6 +49,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
       public async Task<IActionResult> GetByKey(string key)
       {
          var product = await _dbContext.Products
+             .Include(p => p.Tasks)
              .Include(p => p.Goals)
              .Include(p => p.KeyPerformanceIndicators)
              .AsNoTracking()

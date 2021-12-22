@@ -73,7 +73,7 @@ export interface TaskDto {
   name: string;
   notes: string | null;
   status: number | null;
-  dueDate: string | undefined;
+  dueDate: string | null;
 }
 
 // TODO: Tech Debt - these dtos come directly from our data model, which I don't think our UI should know about
