@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sopheon.CloudNative.Environments.DurableFunctions.Configuration;
-
-namespace Sopheon.CloudNative.Environments.DurableFunctions
+﻿namespace Sopheon.CloudNative.Environments.DurableFunctions
 {
    public class SqlElasticJobProvisioningFunction
    {

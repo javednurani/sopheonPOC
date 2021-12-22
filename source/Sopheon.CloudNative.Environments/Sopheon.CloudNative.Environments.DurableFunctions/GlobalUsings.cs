@@ -20,3 +20,4 @@ global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Logging;
 global using Sopheon.CloudNative.Environments.Data;
+global using Sopheon.CloudNative.Environments.DurableFunctions.Configuration;

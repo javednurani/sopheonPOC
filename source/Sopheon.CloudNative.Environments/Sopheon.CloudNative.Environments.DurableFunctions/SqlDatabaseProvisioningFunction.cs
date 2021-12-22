@@ -1,4 +1,3 @@
-
 namespace Sopheon.CloudNative.Environments.DurableFunctions
 {
    public class SqlDatabaseProvisioningFunction
