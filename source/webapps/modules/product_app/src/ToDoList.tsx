@@ -15,11 +15,10 @@ import { useBoolean } from '@fluentui/react-hooks';
 import React, { useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 
-import { Attributes } from './data/attributes';
 import { Status } from './data/status';
 import { CreateTaskAction, UpdateProductAction, UpdateProductItemAction, UpdateTaskAction } from './product/productReducer';
 import TaskDetails from './TaskDetails';
-import { PostPutTaskModel, Product, ToDoItem, UpdateProductItemModel, UpdateProductModel } from './types';
+import { PostPutTaskModel, Product, TaskDto, ToDoItem, UpdateProductItemModel, UpdateProductModel } from './types';
 
 export interface IToDoListProps {
   updateProduct: (product: UpdateProductModel) => UpdateProductAction;
@@ -100,7 +99,7 @@ const isToday = (someDate: Date) => {
 
 const ToDoList: React.FunctionComponent<IToDoListProps> = ({
   updateProduct,
-  updateProductItem,
+  updateProductItem, // INFO: createTask/updateTask pipes have replace use of updateProduct/updateProductItem.  can verify and remove dead code
   environmentKey,
   accessToken,
   products,
@@ -147,7 +146,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
   const handleStatusIconClick = (todo: ToDoItem) => {
     // if it's not complete, mark it as complete, otherwise in progress
     todo.status = todo.status !== Status.Complete ? Status.Complete : Status.InProgress;
-    callUpdateProductItemSaga(todo);
+    makeUpdateTaskCall(todo);
   };
 
   const handleToDoListItemClick = (todo: ToDoItem) => {
@@ -160,37 +159,23 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
     showTaskModal();
   };
 
-  const callUpdateProductItemSaga = (todo: ToDoItem) => {
-    const updateProductItemDto: UpdateProductItemModel = {
+  const makeUpdateTaskCall = (todo: ToDoItem) => {
+    // use PUT /Tasks to make full update, even though we're only changing Status
+    // see
+    const task: TaskDto = {
+      id: todo.id,
+      name: todo.name,
+      notes: todo.notes,
+      status: todo.status,
+      dueDate: todo.dueDate ? todo.dueDate.toDateString() : null,
+    };
+    const updateTaskModel: PostPutTaskModel = {
       ProductKey: products[0].key || 'BAD_PRODUCT_KEY',
       EnvironmentKey: environmentKey,
       AccessToken: accessToken,
-      ProductItem: {
-        // INFO: currently sending all properties to support PUT behavior
-        // TODO: use Patch for this partial update (will be reworked to Tasks under 2183)
-        id: todo.id,
-        name: todo.name,
-        enumAttributeValues: [
-          {
-            attributeId: Attributes.STATUS,
-            enumAttributeOptionId: todo.status,
-          },
-        ],
-        stringAttributeValues: [
-          {
-            attributeId: Attributes.NOTES,
-            value: todo.notes || '',
-          },
-        ],
-        utcDateTimeAttributeValues: [
-          {
-            attributeId: Attributes.DUEDATE,
-            value: (todo.dueDate || new Date()).toDateString(),
-          },
-        ],
-      },
+      Task: task,
     };
-    updateProductItem(updateProductItemDto);
+    updateTask(updateTaskModel);
   };
 
   const emptyListContent: JSX.Element = (
