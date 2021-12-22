@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Sopheon.CloudNative.Products.AspNetCore.Filters;
 using Sopheon.CloudNative.Products.AspNetCore.Models;
 using Sopheon.CloudNative.Products.Domain;
+using Sopheon.CloudNative.Products.Domain.Attributes.Enum;
 
 namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
 {
@@ -55,19 +56,6 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
          if (product == null) { return NotFound(); }
 
          return Ok(_mapper.Map<ProductDto>(product));
-      }
-
-      [HttpGet("{key}/Items")]
-      public async Task<IActionResult> GetItems(string key)
-      {
-         var query = _dbContext.Products
-             .AsNoTracking()
-             .Where(p => p.Key == key)
-             .Select(p => p.Items)
-             .ProjectTo<ProductItemDto>(_mapper.ConfigurationProvider);
-
-         var results = await query.ToArrayAsync();
-         return Ok(results);
       }
 
       [HttpPatch("{key}")]
