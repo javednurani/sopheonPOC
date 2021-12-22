@@ -210,7 +210,7 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
         name: taskName,
         notes: taskNotes,
         status: selectedItemStatusDropdown,
-        dueDate: taskDueDate.date?.toDateString(),
+        dueDate: taskDueDate.date ? taskDueDate.date.toDateString() : null,
       };
 
       const createTaskModel: PostPutTaskModel = {
@@ -227,7 +227,7 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
         name: taskName,
         notes: taskNotes,
         status: selectedItemStatusDropdown,
-        dueDate: taskDueDate.date?.toDateString(),
+        dueDate: taskDueDate.date ? taskDueDate.date.toDateString() : null,
       };
 
       const updateTaskModel: PostPutTaskModel = {
