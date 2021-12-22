@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 import { settings } from '../settings';
-import { CreateProductModel, EnvironmentScopedApiRequestModel, Product, UpdateProductItemModel, UpdateProductModel } from '../types';
+import { CreateProductModel, CreateTaskModel, EnvironmentScopedApiRequestModel, Product, TaskDto, UpdateProductItemModel, UpdateProductModel } from '../types';
 
 const API_URL_BASE: string = settings.ProductManagementApiUrlBase;
 const API_URL_PATH_GET_PRODUCT: string = settings.getProductsUrlPath;
@@ -20,7 +20,7 @@ export const getProducts: (requestDto: EnvironmentScopedApiRequestModel) => Prom
   return await axios.get(getProductsUrlWithEnvironment, config);
 };
 
-export const createProduct: (productDto: CreateProductModel) => Promise<Product> = async createProductModel => {
+export const createProduct: (createProductModel: CreateProductModel) => Promise<Product> = async createProductModel => {
   const createProductUrlWithEnvironment = `${API_URL_BASE}${API_URL_PATH_CREATE_PRODUCT}`.replace(
     settings.TokenEnvironmentKey,
     createProductModel.EnvironmentKey
@@ -35,7 +35,7 @@ export const createProduct: (productDto: CreateProductModel) => Promise<Product>
   return await axios.post(createProductUrlWithEnvironment, createProductModel.Product, config);
 };
 
-export const updateProduct: (productDto: UpdateProductModel) => Promise<Product> = async updateProductModel => {
+export const updateProduct: (updateProductModel: UpdateProductModel) => Promise<Product> = async updateProductModel => {
   const updateProductUrlWithEnvironment = `${API_URL_BASE}${API_URL_PATH_UPDATE_PRODUCT}`
     .replace(settings.TokenEnvironmentKey, updateProductModel.EnvironmentKey)
     .replace(settings.TokenProductKey, updateProductModel.ProductKey || ''); // TODO, nullable Key? null check ?
@@ -49,7 +49,7 @@ export const updateProduct: (productDto: UpdateProductModel) => Promise<Product>
   return await axios.patch(updateProductUrlWithEnvironment, updateProductModel.ProductPatchData, config);
 };
 
-export const updateProductItem: (productItemDto: UpdateProductItemModel) => Promise<Product> = async updateProductItemModel => {
+export const updateProductItem: (updateProductItemModel: UpdateProductItemModel) => Promise<Product> = async updateProductItemModel => {
   const updateProductItemUrlWithEnvironment = `${API_URL_BASE}${settings.UpdateProductItemUrlPath}`
     .replace(settings.TokenEnvironmentKey, updateProductItemModel.EnvironmentKey)
     .replace(settings.TokenProductKey, updateProductItemModel.ProductKey || '') // TODO, nullable Key? null check ?
@@ -62,4 +62,18 @@ export const updateProductItem: (productItemDto: UpdateProductItemModel) => Prom
   };
 
   return await axios.put(updateProductItemUrlWithEnvironment, updateProductItemModel.ProductItem, config);
+};
+
+export const createTask: (createTaskModel: CreateTaskModel) => Promise<TaskDto> = async createTaskModel => {
+  const createTaskUrlWithEnvironment = `${API_URL_BASE}${settings.CreateTaskUrlPath}`
+    .replace(settings.TokenEnvironmentKey, createTaskModel.EnvironmentKey)
+    .replace(settings.TokenProductKey, createTaskModel.ProductKey || ''); // TODO, nullable Key? null check ?;
+
+  const config: AxiosRequestConfig = {
+    headers: {
+      Authorization: `Bearer ${createTaskModel.AccessToken}`,
+    },
+  };
+
+  return await axios.post(createTaskUrlWithEnvironment, createTaskModel.Task, config);
 };

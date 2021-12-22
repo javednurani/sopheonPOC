@@ -3,13 +3,13 @@ import { useTheme } from '@fluentui/react-theme-provider';
 import React from 'react';
 
 import KPIs from './KPIs';
-import { UpdateProductAction, UpdateProductItemAction } from './product/productReducer';
+import { CreateTaskAction, UpdateProductAction, UpdateProductItemAction } from './product/productReducer';
 import ProductHealth from './ProductHealth';
 import ProductSection from './ProductSection';
 import ResourcesAndLinks from './ResourcesAndLinks';
 import Timeline from './Timeline';
 import ToDoList from './ToDoList';
-import { Product, UpdateProductItemModel, UpdateProductModel } from './types';
+import { CreateTaskModel, Product, UpdateProductItemModel, UpdateProductModel } from './types';
 
 export interface IDashboardProps {
   updateProduct: (product: UpdateProductModel) => UpdateProductAction;
@@ -17,6 +17,7 @@ export interface IDashboardProps {
   environmentKey: string;
   accessToken: string;
   products: Product[];
+  createTask: (task: CreateTaskModel) => CreateTaskAction;
 }
 
 const stackTokens: IStackTokens = {
@@ -30,6 +31,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
   environmentKey,
   accessToken,
   products,
+  createTask,
 }: IDashboardProps) => {
   const theme = useTheme();
 
@@ -84,6 +86,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
               environmentKey={environmentKey}
               accessToken={accessToken}
               products={products}
+              createTask={createTask}
             />
           </Stack.Item>
           <Stack.Item styles={bottomRowStackItemStyles}>

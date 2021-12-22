@@ -3,23 +3,28 @@ import { Status } from './data/status';
 export type UpdateProductModel = {
   ProductPatchData: PatchOperation[];
 } & EnvironmentScopedApiRequestModel &
-  ProductScopedApiRequestModel;
+  ProductScopedModel;
 
 export type UpdateProductItemModel = {
   ProductItem: ProductItemDto;
 } & EnvironmentScopedApiRequestModel &
-  ProductScopedApiRequestModel;
+  ProductScopedModel;
 
 export type CreateProductModel = {
   Product: ProductPostDto;
 } & EnvironmentScopedApiRequestModel;
+
+export type CreateTaskModel = {
+  Task: TaskDto;
+} & EnvironmentScopedApiRequestModel &
+  ProductScopedModel;
 
 export type EnvironmentScopedApiRequestModel = {
   EnvironmentKey: string;
   AccessToken: string;
 };
 
-export type ProductScopedApiRequestModel = {
+export type ProductScopedModel = {
   ProductKey: string;
 };
 
@@ -47,6 +52,10 @@ export interface ToDoItem {
   status: Status;
 }
 
+export type ProductScopedToDoItem = {
+  toDoItem: ToDoItem;
+} & ProductScopedModel;  // INFO: used for Redux state assignment to correct Product after create Task API call
+
 export interface Goal {
   id: number;
   name: string;
@@ -57,6 +66,14 @@ export interface KeyPerformanceIndicator {
   keyPerformanceIndicatorId: number;
   attributeId: number;
   attribute: AttributeDto;
+}
+
+export interface TaskDto {
+  id: number | undefined;
+  name: string;
+  notes: string | null;
+  status: number | null;
+  dueDate: string | undefined;
 }
 
 // TODO: Tech Debt - these dtos come directly from our data model, which I don't think our UI should know about

@@ -17,9 +17,9 @@ import { useIntl } from 'react-intl';
 
 import { Attributes } from './data/attributes';
 import { Status } from './data/status';
-import { UpdateProductAction, UpdateProductItemAction } from './product/productReducer';
+import { CreateTaskAction, UpdateProductAction, UpdateProductItemAction } from './product/productReducer';
 import TaskDetails from './TaskDetails';
-import { Product, ToDoItem, UpdateProductItemModel, UpdateProductModel } from './types';
+import { CreateTaskModel, Product, ToDoItem, UpdateProductItemModel, UpdateProductModel } from './types';
 
 export interface IToDoListProps {
   updateProduct: (product: UpdateProductModel) => UpdateProductAction;
@@ -27,6 +27,7 @@ export interface IToDoListProps {
   environmentKey: string;
   accessToken: string;
   products: Product[];
+  createTask: (task: CreateTaskModel) => CreateTaskAction;
 }
 
 const mainDivStyle: React.CSSProperties = {
@@ -102,6 +103,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
   environmentKey,
   accessToken,
   products,
+  createTask,
 }: IToDoListProps) => {
   const { todos } = products[0];
   const { formatMessage } = useIntl();
@@ -290,6 +292,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
           products={products}
           selectedTask={selectedTask}
           updateProductItem={updateProductItem}
+          createTask={createTask}
         />
       </Modal>
       {filterContextMenu}
