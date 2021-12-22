@@ -230,12 +230,7 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
                {
                   conn.Open();
                   string sqlcommand =
-                     @"
-                  IF EXISTS (SELECT name FROM sys.database_principals WHERE name = 'jobuser')
-                     BEGIN
-                        DROP USER jobuser
-                     END
-
+                  @"
                   CREATE USER jobuser FROM LOGIN jobuser
                   GRANT ALTER ON SCHEMA::dbo TO jobuser
                   GRANT CREATE TABLE TO jobuser
