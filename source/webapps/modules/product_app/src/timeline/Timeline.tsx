@@ -10,15 +10,20 @@ export interface ITimelineProps {
 }
 
 const Timeline: React.FunctionComponent<ITimelineProps> = ({ product }: ITimelineProps) => {
-  const todoItems = product.todos.map(todo => ({ id: `${todo.name}_${todo.dueDate}`, text: todo.name, type: gantt.config.types.milestone, start_date: todo.dueDate }));
+  const todoItems = product.todos.map(todo => ({
+    id: `${todo.name}_${todo.dueDate}`,
+    text: todo.name,
+    type: gantt.config.types.milestone,
+    start_date: todo.dueDate,
+  }));
 
   const mainStackStyle: React.CSSProperties = {
     width: '100%',
-    height: '100%',
+    height: '98%',
     marginLeft: '10px',
     marginRight: '10px',
     marginTop: '10px',
-    paddingBottom: '20px',
+    paddingBottom: '10px',
   };
 
   return (

@@ -9,9 +9,10 @@ export type GanttProps = {
   todoItems: {
     id: string;
     text: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     type: any;
     // eslint-disable-next-line camelcase
-    start_date: Date;
+    start_date: Date | null;
   }[];
 };
 
@@ -22,6 +23,7 @@ const GanttComponent: React.FunctionComponent<GanttProps> = ({ todoItems }: Gant
       data: todoItems,
       links: []
     };
+    const today = new Date();
 
     gantt.plugins({
       auto_scheduling: true,
@@ -35,33 +37,35 @@ const GanttComponent: React.FunctionComponent<GanttProps> = ({ todoItems }: Gant
       tooltip: true,
       undo: false,
     });
-    const today = new Date();
+
     gantt.config.scales = [
       {unit: 'year', step: 1, format: '%Y'},
       {unit: 'month', step: 1, format: '%F'}
     ];
+    gantt.config.readonly = true;
+    gantt.config.show_grid = false;
+    gantt.config.show_tasks_outside_timescale = true;
 
     gantt.addMarker({
       start_date: today, //a Date object that sets the marker's date
       css: 'today', //a CSS class applied to the marker
       text: 'Today', //the marker title
-      title: today.toLocaleDateString() // the marker's tooltipd
+      title: today.toLocaleDateString() // the marker's tooltip
     });
+
     gantt.templates.tooltip_text = function(start, end, task) {
       return `<b>Task:</b> ${task.text} <br/><b>Due Date:</b> ${gantt.templates.tooltip_date_format(start)}`;
     };
-    gantt.config.readonly = true;
-    gantt.config.show_grid = false;
-    gantt.config.show_tasks_outside_timescale = true;
 
     if (tasksData.data.length === 0) {
-      gantt.config.start_date = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
-      gantt.config.end_date = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());
+      gantt.config.start_date = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      gantt.config.end_date = new Date(today.getFullYear(), today.getMonth() + 2, today.getDate());
     }
 
     gantt.init('gantt_here');
     gantt.parse(tasksData);
   });
+
   return (
     <div className="gantt_here" id="gantt_here"></div>
   );
