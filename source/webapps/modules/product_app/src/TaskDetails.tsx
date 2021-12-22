@@ -27,10 +27,9 @@ import { useTheme } from '@fluentui/react-theme-provider';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
-import { Attributes } from './data/attributes';
 import { Status } from './data/status';
-import { CreateTaskAction, UpdateProductAction, UpdateProductItemAction } from './product/productReducer';
-import { CreateTaskModel, Product, TaskDto, ToDoItem, UpdateProductItemModel, UpdateProductModel } from './types';
+import { CreateTaskAction, UpdateProductAction, UpdateProductItemAction, UpdateTaskAction } from './product/productReducer';
+import { PostPutTaskModel, Product, TaskDto, ToDoItem, UpdateProductItemModel, UpdateProductModel } from './types';
 
 export interface ITaskDetailsProps {
   hideModal: () => void;
@@ -40,7 +39,8 @@ export interface ITaskDetailsProps {
   products: Product[];
   selectedTask: ToDoItem | null;
   updateProductItem: (productItem: UpdateProductItemModel) => UpdateProductItemAction;
-  createTask: (task: CreateTaskModel) => CreateTaskAction;
+  createTask: (task: PostPutTaskModel) => CreateTaskAction;
+  updateTask: (task: PostPutTaskModel) => UpdateTaskAction;
 }
 
 export interface DateStateObject {
@@ -56,6 +56,7 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
   selectedTask,
   updateProductItem,
   createTask,
+  updateTask,
 }: ITaskDetailsProps) => {
   const { name, id, notes, dueDate, status } = selectedTask ?? {};
 
@@ -205,14 +206,14 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
     if (!id) {
       // create new task
       const task: TaskDto = {
-        id: 0, // creating a new task, update type instead of 0?
+        id: 0, // update type to have optional id instead of 0?  id is not consumed by service POST call
         name: taskName,
         notes: taskNotes,
         status: selectedItemStatusDropdown,
         dueDate: taskDueDate.date?.toDateString(),
       };
 
-      const createTaskModel: CreateTaskModel = {
+      const createTaskModel: PostPutTaskModel = {
         ProductKey: products[0].key || 'BAD_PRODUCT_KEY',
         EnvironmentKey: environmentKey,
         AccessToken: accessToken,
@@ -221,34 +222,21 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
       createTask(createTaskModel);
     } else {
       // updating existing task
-      const updateProductItemDto: UpdateProductItemModel = {
+      const task: TaskDto = {
+        id: id,
+        name: taskName,
+        notes: taskNotes,
+        status: selectedItemStatusDropdown,
+        dueDate: taskDueDate.date?.toDateString(),
+      };
+
+      const updateTaskModel: PostPutTaskModel = {
         ProductKey: products[0].key || 'BAD_PRODUCT_KEY',
         EnvironmentKey: environmentKey,
         AccessToken: accessToken,
-        ProductItem: {
-          id: id,
-          name: taskName,
-          stringAttributeValues: [
-            {
-              attributeId: Attributes.NOTES,
-              value: taskNotes,
-            },
-          ],
-          utcDateTimeAttributeValues: [
-            {
-              attributeId: Attributes.DUEDATE,
-              value: taskDueDate.date?.toDateString(),
-            },
-          ],
-          enumAttributeValues: [
-            {
-              attributeId: Attributes.STATUS,
-              enumAttributeOptionId: selectedItemStatusDropdown,
-            },
-          ],
-        },
+        Task: task,
       };
-      updateProductItem(updateProductItemDto);
+      updateTask(updateTaskModel);
     }
     hideModal();
   };

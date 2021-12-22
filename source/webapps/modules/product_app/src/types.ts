@@ -14,7 +14,7 @@ export type CreateProductModel = {
   Product: ProductPostDto;
 } & EnvironmentScopedApiRequestModel;
 
-export type CreateTaskModel = {
+export type PostPutTaskModel = {
   Task: TaskDto;
 } & EnvironmentScopedApiRequestModel &
   ProductScopedModel;
@@ -69,7 +69,7 @@ export interface KeyPerformanceIndicator {
 }
 
 export interface TaskDto {
-  id: number | undefined;
+  id: number;
   name: string;
   notes: string | null;
   status: number | null;

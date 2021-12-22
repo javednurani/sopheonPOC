@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 import { settings } from '../settings';
-import { CreateProductModel, CreateTaskModel, EnvironmentScopedApiRequestModel, Product, TaskDto, UpdateProductItemModel, UpdateProductModel } from '../types';
+import { CreateProductModel, EnvironmentScopedApiRequestModel, PostPutTaskModel, Product, TaskDto, UpdateProductItemModel, UpdateProductModel } from '../types';
 
 const API_URL_BASE: string = settings.ProductManagementApiUrlBase;
 const API_URL_PATH_GET_PRODUCT: string = settings.getProductsUrlPath;
@@ -64,7 +64,7 @@ export const updateProductItem: (updateProductItemModel: UpdateProductItemModel)
   return await axios.put(updateProductItemUrlWithEnvironment, updateProductItemModel.ProductItem, config);
 };
 
-export const createTask: (createTaskModel: CreateTaskModel) => Promise<TaskDto> = async createTaskModel => {
+export const createTask: (createTaskModel: PostPutTaskModel) => Promise<TaskDto> = async createTaskModel => {
   const createTaskUrlWithEnvironment = `${API_URL_BASE}${settings.CreateTaskUrlPath}`
     .replace(settings.TokenEnvironmentKey, createTaskModel.EnvironmentKey)
     .replace(settings.TokenProductKey, createTaskModel.ProductKey || ''); // TODO, nullable Key? null check ?;
@@ -76,4 +76,19 @@ export const createTask: (createTaskModel: CreateTaskModel) => Promise<TaskDto> 
   };
 
   return await axios.post(createTaskUrlWithEnvironment, createTaskModel.Task, config);
+};
+
+export const updateTask: (updateTaskModel: PostPutTaskModel) => Promise<TaskDto> = async updateTaskModel => {
+  const updateTaskUrlWithEnvironment = `${API_URL_BASE}${settings.UpdateTaskUrlPath}`
+    .replace(settings.TokenEnvironmentKey, updateTaskModel.EnvironmentKey)
+    .replace(settings.TokenProductKey, updateTaskModel.ProductKey || '') // TODO, nullable Key? null check ?;
+    .replace(settings.TokenTaskId, updateTaskModel.Task.id.toString());
+
+  const config: AxiosRequestConfig = {
+    headers: {
+      Authorization: `Bearer ${updateTaskModel.AccessToken}`,
+    },
+  };
+
+  return await axios.put(updateTaskUrlWithEnvironment, updateTaskModel.Task, config);
 };
