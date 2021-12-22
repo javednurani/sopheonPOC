@@ -161,7 +161,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
 
   const makeUpdateTaskCall = (todo: ToDoItem) => {
     // use PUT /Tasks to make full update, even though we're only changing Status
-    // see
+    // Cloud-2157 captures an optional rework to use PATCH /Tasks for a partial update
     const task: TaskDto = {
       id: todo.id,
       name: todo.name,
