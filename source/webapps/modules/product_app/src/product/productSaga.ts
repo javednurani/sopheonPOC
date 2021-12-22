@@ -2,7 +2,7 @@ import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 
 import { Attributes } from '../data/attributes';
 import { ProductItemTypes } from '../data/productItemTypes';
-import { Product, ToDoItem } from '../types';
+import { Product, ProductScopedToDoItem, ToDoItem } from '../types';
 // eslint-disable-next-line max-len
 import {
   CreateProductAction,
@@ -146,13 +146,15 @@ export function* onCreateTask(action: CreateTaskAction): Generator {
   try {
     yield put(createTaskRequest());
     const { data } = yield call(createTask, action.payload);
-    const createdTask: ToDoItem = {
-      id: data.id,
-      productKey: action.payload.ProductKey, // used for assignment to correct Product in Redux store
-      name: data.name,
-      notes: data.notes,
-      dueDate: data.dueDate ? new Date(data.dueDate) : null,
-      status: data.status
+    const createdTask: ProductScopedToDoItem = {
+      toDoItem: {
+        id: data.id,
+        name: data.name,
+        notes: data.notes,
+        dueDate: data.dueDate ? new Date(data.dueDate) : null,
+        status: data.status
+      },
+      ProductKey: action.payload.ProductKey, // used for assignment to correct Product in Redux store
     };
     yield put(createTaskSuccess(createdTask));
   } catch (error) {
