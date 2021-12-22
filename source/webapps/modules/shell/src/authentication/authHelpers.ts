@@ -1,4 +1,11 @@
-import { AccountInfo, Configuration, IPublicClientApplication, PublicClientApplication, RedirectRequest } from '@azure/msal-browser';
+import {
+  AccountInfo,
+  Configuration,
+  EndSessionRequest,
+  IPublicClientApplication,
+  PublicClientApplication,
+  RedirectRequest,
+} from '@azure/msal-browser';
 
 import { azureSettings, getAuthorityDomain, getAuthorityUrl, getProductManagementApiScopeCoreReadWrite } from '../settings/azureSettings';
 
@@ -29,7 +36,7 @@ export const getAccessToken: () => Promise<string> = async () => {
     if (account) {
       const acquireTokenResponse = await pca.acquireTokenSilent({
         scopes: PRODUCT_MANAGEMENT_SCOPES,
-        account: account
+        account: account,
       });
 
       return acquireTokenResponse.accessToken || FAILURE_MESSAGE;
@@ -43,30 +50,34 @@ export const getAccessToken: () => Promise<string> = async () => {
 
 export const loginButtonRequest: RedirectRequest = {
   scopes: ALL_SCOPES,
-  redirectUri: azureSettings.SPA_Root_URL,
-  redirectStartPage: azureSettings.SPA_Root_URL,
+  redirectUri: azureSettings.SPA_Redirect_URL,
+  redirectStartPage: azureSettings.SPA_Redirect_URL,
+};
+
+export const logoutRequest: EndSessionRequest = {
+  postLogoutRedirectUri: azureSettings.SPA_Logout_URL,
 };
 
 export const changePasswordRequest: RedirectRequest = {
   authority: getAuthorityUrl(azureSettings.AD_B2C_PasswordChange_Policy),
-  redirectUri: azureSettings.SPA_Root_URL,
+  redirectUri: azureSettings.SPA_Redirect_URL,
   scopes: [],
 };
 
 export const editProfileRequest: RedirectRequest = {
   authority: getAuthorityUrl(azureSettings.AD_B2C_ProfileEdit_Policy),
-  redirectUri: azureSettings.SPA_Root_URL,
+  redirectUri: azureSettings.SPA_Redirect_URL,
   scopes: [],
 };
 
 export const getAuthLandingRedirectRequest = (adB2cPolicyName: string): RedirectRequest => ({
   authority: getAuthorityUrl(adB2cPolicyName),
   scopes: ALL_SCOPES,
-  redirectUri: azureSettings.SPA_Root_URL,
-  redirectStartPage: azureSettings.SPA_Root_URL,
+  redirectUri: azureSettings.SPA_Redirect_URL,
+  redirectStartPage: azureSettings.SPA_Redirect_URL,
   // extraQueryParameters object can be used to pass in values that are resolved as custom policy claims
   // https://docs.microsoft.com/en-us/azure/active-directory-b2c/claim-resolver-overview#oauth2-key-value-parameters
-  extraQueryParameters: undefined
+  extraQueryParameters: undefined,
 });
 
 // Important to set MSAL account correctly - "accounts" provided by useMsal() hook can include auth responses from initiating any user flow,
@@ -96,7 +107,6 @@ export const getMsalAccount = (instance: IPublicClientApplication): AccountInfo 
         // Either of these policies can result in valid Account responses
         (msalAccount.homeAccountId.toUpperCase().includes(azureSettings.AD_B2C_SignUpSignIn_Policy.toUpperCase()) ||
           msalAccount.homeAccountId.toUpperCase().includes(azureSettings.AD_B2C_SignUp_Policy.toUpperCase())) &&
-
         msalAccount.idTokenClaims !== undefined &&
         // AccountInfo.idTokenClaims is typed as 'object' by Microsoft
         // @ts-ignore

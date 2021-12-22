@@ -8,7 +8,7 @@ import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
 import { ChangeThemeAction } from '../themes/themeReducer/themeReducer';
-import { changePasswordRequest, editProfileRequest, getMsalAccount, loginButtonRequest } from './authHelpers';
+import { changePasswordRequest, editProfileRequest, getMsalAccount, loginButtonRequest, logoutRequest } from './authHelpers';
 import { SetEnvironmentKeyAction } from './authReducer';
 
 export interface ILoginSignupButtonProps {
@@ -48,7 +48,7 @@ const LoginSignupButton: FunctionComponent<ILoginSignupButtonProps> = ({
   };
 
   const logoutClick = () => {
-    instance.logoutRedirect();
+    instance.logoutRedirect(logoutRequest);
   };
 
   const switchTheme = () => {

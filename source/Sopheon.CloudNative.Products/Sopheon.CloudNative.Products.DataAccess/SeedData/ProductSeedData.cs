@@ -1,13 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Sopheon.CloudNative.Products.Domain;
+using Sopheon.CloudNative.Products.Domain.Attributes.Enum;
+using Sopheon.CloudNative.Products.Domain.Attributes.Int32;
+using Sopheon.CloudNative.Products.Domain.Attributes.String;
+using Sopheon.CloudNative.Products.Domain.Attributes.UtcDateTime;
 
 namespace Sopheon.CloudNative.Products.DataAccess.SeedData
 {
    public static class ProductSeedData
    {
-      private static readonly AttributeValueType[] _systemAttributeValueTypes;
-      public static AttributeValueType[] SystemAttributeValueTypes => _systemAttributeValueTypes.ToArray();
+      private static readonly AttributeDataType[] _systemAttributeDataTypes;
+      public static AttributeDataType[] SystemAttributeDataTypes => _systemAttributeDataTypes.ToArray();
 
       private static readonly ProductItemType[] _systemManagedProductItemTypes;
       public static ProductItemType[] SystemManagedProductItemTypes => _systemManagedProductItemTypes.ToArray();
@@ -15,29 +20,34 @@ namespace Sopheon.CloudNative.Products.DataAccess.SeedData
       private static readonly Status[] _systemManagedStatuses;
       public static Status[] SystemManagedStatuses => _systemManagedStatuses.ToArray();
 
-      private static readonly Domain.Attribute[] _defaultAttributes;
-      public static Domain.Attribute[] DefaultAttributes => _defaultAttributes.ToArray();
+      private static readonly List<Domain.Attribute> _defaultAttributes = new List<Domain.Attribute>();
 
       static ProductSeedData()
       {
-         _systemAttributeValueTypes = GetDefaultAttributeValueTypes();
-         _systemManagedProductItemTypes = GetSystemManagedProductItemTypes();
-         _systemManagedStatuses = GetSystemManagedStatuses();
-         _defaultAttributes = GetDefaultAttributes();
+         _systemAttributeDataTypes = DefineDefaultAttributeDataTypes();
+         _systemManagedProductItemTypes = DefineSystemManagedProductItemTypes();
+         _systemManagedStatuses = DefineSystemManagedStatuses();
+
+         DefineDefaultAttributes();
       }
 
-      private static AttributeValueType[] GetDefaultAttributeValueTypes()
+      public static TEntity[] GetDefaultAttributes<TEntity>() where TEntity : Domain.Attribute
       {
-         return Enum.GetValues(typeof(AttributeValueTypes))
-                     .Cast<AttributeValueTypes>()
-                     .Select(e => new AttributeValueType()
+         return _defaultAttributes.OfType<TEntity>().ToArray();
+      }
+
+      private static AttributeDataType[] DefineDefaultAttributeDataTypes()
+      {
+         return Enum.GetValues(typeof(AttributeDataTypes))
+                     .Cast<AttributeDataTypes>()
+                     .Select(e => new AttributeDataType()
                      {
-                        AttributeValueTypeId = (int)e,
+                        AttributeDataTypeId = (int)e,
                         Name = e.ToString()
                      }).ToArray();
       }
 
-      private static Status[] GetSystemManagedStatuses()
+      private static Status[] DefineSystemManagedStatuses()
       {
          return Enum.GetValues(typeof(SystemManagedStatusIds))
                         .Cast<SystemManagedStatusIds>()
@@ -48,7 +58,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.SeedData
                         }).ToArray();
       }
 
-      private static ProductItemType[] GetSystemManagedProductItemTypes()
+      private static ProductItemType[] DefineSystemManagedProductItemTypes()
       {
          return Enum.GetValues(typeof(SystemManagedProductItemTypeIds))
                         .Cast<SystemManagedProductItemTypeIds>()
@@ -60,18 +70,86 @@ namespace Sopheon.CloudNative.Products.DataAccess.SeedData
                         .ToArray();
       }
 
-      private static Domain.Attribute[] GetDefaultAttributes()
+      private static void AddDefaultAttributes<TAttribute>(IEnumerable<TAttribute> attributes) where TAttribute : Domain.Attribute
       {
-         return new[]
+         foreach (TAttribute attribute in attributes)
+         {
+            _defaultAttributes.Add(attribute);
+         }
+      }
+
+      private static void DefineDefaultAttributes()
+      {
+         // TODO, Status will be an EnumAttribute, NOT EnumCollectionAttribute
+         List<EnumCollectionAttribute> enumCollectionAttributes = new List<EnumCollectionAttribute>
+         {
+            new EnumCollectionAttribute
             {
-               new Domain.Attribute()
+               AttributeId = -4,
+               AttributeDataTypeId = (int)AttributeDataTypes.EnumCollection,
+               Name = "Status",
+               ShortName = "STATUS",
+               EnumAttributeOptions = new List<EnumAttributeOption>
                {
-                  AttributeId = -1,
-                  Name = "Industry",
-                  ShortName = "IND",
-                  AttributeValueTypeId = (int)AttributeValueTypes.Int32
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -1,
+                     Name = "Not Started"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -2,
+                     Name = "In Progress"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -3,
+                     Name = "Assigned"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -4,
+                     Name = "Complete"
+                  },
                }
-            };
+            }
+         };
+
+         enumCollectionAttributes.ForEach(attribute =>
+         {
+            foreach (EnumAttributeOption option in attribute.EnumAttributeOptions)
+            {
+               option.AttributeId = attribute.AttributeId;
+            }
+         });
+
+         List<Domain.Attribute> otherDefaultAttributes = new List<Domain.Attribute>
+         {
+            new Int32Attribute
+            {
+               AttributeId = -1,
+               AttributeDataTypeId = (int)AttributeDataTypes.Int32,
+               Name = "Industry",
+               ShortName = "IND"
+            },
+            new StringAttribute
+            {
+               AttributeId = -2,
+               AttributeDataTypeId = (int)AttributeDataTypes.String,
+               Name = "Notes",
+               ShortName = "NOTES"
+            },
+            new UtcDateTimeAttribute
+            {
+               AttributeId = -3,
+               AttributeDataTypeId = (int)AttributeDataTypes.UtcDateTime,
+               Name = "Due Date",
+               ShortName = "DUE"
+            }
+         };
+
+         AddDefaultAttributes(otherDefaultAttributes);
+         AddDefaultAttributes(enumCollectionAttributes);
       }
    }
 }

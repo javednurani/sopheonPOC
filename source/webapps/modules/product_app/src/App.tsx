@@ -22,8 +22,8 @@ const App: React.FunctionComponent<Props> = ({
   getProductsFetchStatus,
   environmentKey,
   accessToken,
-  hideHeaderFooter,
-  showHeaderFooter,
+  hideHeader,
+  showHeader,
 }: Props) => {
   const { formatMessage } = useIntl();
 
@@ -41,18 +41,18 @@ const App: React.FunctionComponent<Props> = ({
   // TODO: move this into onboarding component, but right now this is helping work around our injected saga delay issue
   useEffect(() => {
     if ((products.length === 0 && environmentKey) || (currentStep === 3 && products.length === 1)) {
-      hideHeaderFooter();
+      hideHeader();
     } else {
-      showHeaderFooter();
+      showHeader();
     }
-  }, [currentStep, products, environmentKey, hideHeaderFooter, showHeaderFooter]);
+  }, [currentStep, products, environmentKey, hideHeader, showHeader]);
 
   if (!environmentKey || getProductsFetchStatus === FetchStatus.NotActive || getProductsFetchStatus === FetchStatus.InProgress) {
     return <Spinner label={formatMessage({ id: 'fallback.loading' })} />;
   }
 
   if (getProductsFetchStatus === FetchStatus.DoneFailure) {
-    showHeaderFooter();
+    showHeader();
     throw new Error(formatMessage({ id: 'error.erroroccurred' }));
   }
 
@@ -108,7 +108,7 @@ const App: React.FunctionComponent<Props> = ({
         <SideNav {...sideProps} />
       </Stack.Item>
       <Stack.Item grow>
-        <Dashboard products={products} />
+        <Dashboard updateProduct={updateProduct} environmentKey={environmentKey} accessToken={accessToken} products={products} />
       </Stack.Item>
     </Stack>
   );

@@ -21,21 +21,16 @@ const Header: FunctionComponent<HeaderProps> = ({ changeTheme, setEnvironmentKey
   const { formatMessage } = useIntl();
 
   const headerStyle: React.CSSProperties = {
-    margin: '8px 10px 3px',
+    margin: '0 0 5px 0',
+    padding: '0 5px',
     height: '42px',
-    boxShadow: '0px 1px 10px 1px #888888',
+    boxShadow: '0 0 5px 0 #888888',
   };
 
   const logoStyle: React.CSSProperties = {
-    height: '80%',
-    width: '80%',
-    maxWidth: '200px',
-    maxHeight: '200px',
-    minWidth: '25px',
-    minHeight: '25px',
+    width: '150px',
     overflow: 'visible',
     marginLeft: '20px',
-    marginTop: '5px',
   };
 
   const navContainerStyle: React.CSSProperties = {
@@ -48,8 +43,8 @@ const Header: FunctionComponent<HeaderProps> = ({ changeTheme, setEnvironmentKey
 
   return (
     <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced>
-      <header style={headerStyle} role="banner">
-        <Stack horizontal verticalAlign="center">
+      <header role="banner">
+        <Stack horizontal verticalAlign="center" style={headerStyle}>
           <Stack.Item shrink>
             <div title={formatMessage({ id: 'sopheon' })}>
               <SopheonLogo style={logoStyle} />

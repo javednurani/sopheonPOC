@@ -3,11 +3,8 @@ import { InferableComponentEnhancerWithProps } from 'react-redux';
 import { Store } from 'redux';
 
 import { GetAccessTokenAction } from './store/auth/types';
-import { HideHeaderFooterAction, ShowHeaderFooterAction } from './store/display/types';
-import {
-  InjectReducerMap,
-  InjectSagaMap,
-} from './store/types';
+import { HideHeaderAction, ShowHeaderAction } from './store/display/types';
+import { InjectReducerMap, InjectSagaMap } from './store/types';
 
 export type AppProps<TStateProps, TDispatchProps> = {
   // expose main-shell concerns as state (read) here
@@ -16,8 +13,8 @@ export type AppProps<TStateProps, TDispatchProps> = {
 } & {
   // expose main-shell concerns as dispatch (action) here
   getAccessToken: () => GetAccessTokenAction;
-  showHeaderFooter: () => ShowHeaderFooterAction;
-  hideHeaderFooter: () => HideHeaderFooterAction;
+  showHeader: () => ShowHeaderAction;
+  hideHeader: () => HideHeaderAction;
 } & TStateProps &
   TDispatchProps; // include StateProps and DispatchProps handed to getConnector
 
