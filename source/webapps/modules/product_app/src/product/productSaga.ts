@@ -26,8 +26,12 @@ import {
   updateProductItemSuccess,
   updateProductRequest,
   updateProductSuccess,
+  UpdateTaskAction,
+  updateTaskFailure,
+  updateTaskRequest,
+  updateTaskSuccess,
 } from './productReducer';
-import { createProduct, createTask, getProducts, updateProduct, updateProductItem } from './productService';
+import { createProduct, createTask, getProducts, updateProduct, updateProductItem, updateTask } from './productService';
 
 // TRANSLATION HELPERS, TODO, MOVE OUT OF SAGA
 const translateProductItemsToTasks = (productItems: unknown[]): ToDoItem[] =>
@@ -162,6 +166,37 @@ export function* onCreateTask(action: CreateTaskAction): Generator {
   }
 }
 
+export function* watchOnUpdateTask(): Generator {
+  yield takeEvery(ProductSagaActionTypes.UPDATE_TASK, onUpdateTask);
+}
+
+export function* onUpdateTask(action: UpdateTaskAction): Generator {
+  try {
+    yield put(updateTaskRequest());
+    const { data } = yield call(updateTask, action.payload);
+    const updatedTask: ProductScopedToDoItem = {
+      toDoItem: {
+        id: data.id,
+        name: data.name,
+        notes: data.notes,
+        dueDate: data.dueDate ? new Date(data.dueDate) : null,
+        status: data.status
+      },
+      ProductKey: action.payload.ProductKey, // used for assignment to correct Product in Redux store
+    };
+    yield put(updateTaskSuccess(updatedTask));
+  } catch (error) {
+    yield put(updateTaskFailure(error));
+  }
+}
+
 export default function* productSaga(): Generator {
-  yield all([fork(watchOnGetProducts), fork(watchOnCreateProduct), fork(watchOnUpdateProduct), fork(watchOnUpdateProductItem), fork(watchOnCreateTask)]);
+  yield all([
+    fork(watchOnGetProducts),
+    fork(watchOnCreateProduct),
+    fork(watchOnUpdateProduct),
+    fork(watchOnUpdateProductItem),
+    fork(watchOnCreateTask),
+    fork(watchOnUpdateTask)
+  ]);
 }

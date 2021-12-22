@@ -9,6 +9,7 @@ const productManagementApiUrlBase = isDev ? PRODUCT_MANAGEMENT_API_BASE_URL : '^
 const tokenEnvironmentKey = '{*environmentKey*}';
 const tokenProductKey = '{*productKey*}';
 const tokenProductItemId = '{*productItemKey*}';
+const tokenTaskId = '{*taskId*}';
 
 // TODO, unify this file and product_app/settings.ts
 
@@ -20,7 +21,9 @@ export const settings: Record<string, string> = {
   UpdateProductUrlPath: `/Environments/${tokenEnvironmentKey}/Products/${tokenProductKey}`,
   UpdateProductItemUrlPath: `/Environments/${tokenEnvironmentKey}/Products/${tokenProductKey}/Items/${tokenProductItemId}`,
   CreateTaskUrlPath: `/Environments/${tokenEnvironmentKey}/Products/${tokenProductKey}/Tasks`,
+  UpdateTaskUrlPath: `/Environments/${tokenEnvironmentKey}/Products/${tokenProductKey}/Tasks/${tokenTaskId}`,
   TokenEnvironmentKey: tokenEnvironmentKey,
   TokenProductKey: tokenProductKey,
   TokenProductItemId: tokenProductItemId,
+  TokenTaskId: tokenTaskId,
 };

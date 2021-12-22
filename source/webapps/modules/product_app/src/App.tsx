@@ -24,6 +24,7 @@ const App: React.FunctionComponent<Props> = ({
   hideHeaderFooter,
   showHeaderFooter,
   createTask,
+  updateTask,
 }: Props) => {
   useEffect(() => {
     if (accessToken && getProductsFetchStatus === FetchStatus.NotActive) {
@@ -84,6 +85,7 @@ const App: React.FunctionComponent<Props> = ({
       accessToken={accessToken}
       products={products}
       createTask={createTask}
+      updateTask={updateTask}
     />
   );
 };
