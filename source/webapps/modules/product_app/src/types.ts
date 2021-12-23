@@ -52,9 +52,17 @@ export interface ToDoItem {
   status: Status;
 }
 
+export type HistoryItem = {
+  id: number;
+  event: string; // Created, Updated, Deleted?
+  eventDate: Date;
+  item?: string; // field updated
+  value?: string | number | Date | null;
+};
+
 export type ProductScopedToDoItem = {
   toDoItem: ToDoItem;
-} & ProductScopedModel;  // INFO: used for Redux state assignment to correct Product after create Task API call
+} & ProductScopedModel; // INFO: used for Redux state assignment to correct Product after create Task API call
 
 export interface Goal {
   id: number;

@@ -24,12 +24,16 @@ import {
 } from '@fluentui/react';
 import { useBoolean } from '@fluentui/react-hooks';
 import { useTheme } from '@fluentui/react-theme-provider';
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
 import { Status } from './data/status';
+import ExpandablePanel from './ExpandablePanel';
+import HistoryList from './HistoryList';
 import { CreateTaskAction, UpdateProductAction, UpdateProductItemAction, UpdateTaskAction } from './product/productReducer';
-import { PostPutTaskModel, Product, TaskDto, ToDoItem, UpdateProductItemModel, UpdateProductModel } from './types';
+import { settings } from './settings';
+import { HistoryItem, PostPutTaskModel, Product, TaskDto, ToDoItem, UpdateProductItemModel, UpdateProductModel } from './types';
 
 export interface ITaskDetailsProps {
   hideModal: () => void;
@@ -46,6 +50,8 @@ export interface ITaskDetailsProps {
 export interface DateStateObject {
   date: Date | undefined;
 }
+
+const API_URL_BASE: string = settings.ProductManagementApiUrlBase;
 
 const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
   hideModal,
@@ -64,6 +70,8 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
   const { formatMessage } = useIntl();
 
   const [taskName, setTaskName] = useState(name ?? '');
+
+  const [taskHistory, setTaskHistory] = useState<HistoryItem[] | null>(null);
 
   const [taskNotes, setTaskNotes] = useState(notes ?? '');
 
@@ -344,6 +352,26 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
     },
   };
 
+  const handleHistoryExpandClick = () => {
+    if (!taskHistory) {
+      // replace with some sort of productApi.getTaskHistory(productKey, taskId) or similar
+      axios
+        .get(`${API_URL_BASE}/environments/${environmentKey}/products/${products[0].key}/tasks/${id}/history`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then(response => {
+          // replace with setTaskHistory(response.data)
+          setTaskHistory([
+            { id: 1, event: 'Created', eventDate: new Date() },
+            { id: 2, event: 'Updated', eventDate: new Date(), item: 'Name', value: 'new name' },
+          ]);
+        })
+        .catch(response => setTaskHistory([]));
+    }
+  };
+
   return (
     <>
       <div className={contentStyles.header}>
@@ -412,6 +440,13 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
               </Stack.Item>
             </Stack>
           </Stack.Item>
+          {id && (
+            <Stack.Item>
+              <ExpandablePanel title="History" onExpand={handleHistoryExpandClick}>
+                <HistoryList events={taskHistory} />
+              </ExpandablePanel>
+            </Stack.Item>
+          )}
           <Stack.Item>
             <Stack horizontal styles={stackStyles} tokens={nestedStackTokens}>
               <Stack.Item styles={controlButtonStackItemStyles}>
