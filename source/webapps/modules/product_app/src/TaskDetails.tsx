@@ -28,6 +28,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
+import { ChangeEvent } from './data/changeEvents';
 import { Status } from './data/status';
 import ExpandablePanel from './ExpandablePanel';
 import HistoryList from './HistoryList';
@@ -362,11 +363,11 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
           },
         })
         .then(response => {
-          // replace with setTaskHistory(response.data)
-          setTaskHistory([
-            { id: 1, event: 'Created', eventDate: new Date() },
-            { id: 2, event: 'Updated', eventDate: new Date(), item: 'Name', value: 'new name' },
-          ]);
+          const historyItems: HistoryItem[] = response.data.map((e: any) => ({
+            event: ChangeEvent[e.entityChangeEventType],
+            eventDate: new Date(e.timestamp),
+          }));
+          setTaskHistory(historyItems);
         })
         .catch(response => setTaskHistory([]));
     }

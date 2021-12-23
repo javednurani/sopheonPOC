@@ -53,11 +53,11 @@ export interface ToDoItem {
 }
 
 export type HistoryItem = {
-  id: number;
+  //id: number;
   event: string; // Created, Updated, Deleted?
   eventDate: Date;
-  item?: string; // field updated
-  value?: string | number | Date | null;
+  //item?: string; // field updated
+  //value?: string | number | Date | null;
 };
 
 export type ProductScopedToDoItem = {
