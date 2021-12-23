@@ -18,7 +18,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       public GetSpecificResourceUri_Run_UnitTests()
       {
          // create Sut
-         Sut = new GetSpecificResourceUri(_mockEnvironmentQueries.Object, _mapper, _responseBuilder);
+         Sut = new GetSpecificResourceUri(_mockEnvironmentQueries.Object, _mapper, _responseBuilder, _mockConfiguration.Object);
       }
 
       [Fact]

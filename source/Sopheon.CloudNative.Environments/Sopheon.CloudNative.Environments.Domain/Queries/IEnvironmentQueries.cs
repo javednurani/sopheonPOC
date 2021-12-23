@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sopheon.CloudNative.Environments.Domain.Models;
 
 namespace Sopheon.CloudNative.Environments.Domain.Queries
 {
@@ -24,5 +25,12 @@ namespace Sopheon.CloudNative.Environments.Domain.Queries
       /// <param name="dependencyName">BusinessServiceDependency name</param>
       /// <returns>URI of a resource that matches the keys/names provided</returns>
       Task<string> GetSpecificResourceUri(Guid environmentKey, string businessServiceName, string dependencyName);
+
+      /// <summary>
+      /// Returns Resource ID for a resource that matches the requested type and unassigned
+      /// </summary>
+      /// <param name="resourceTypes">Requested resource type</param>
+      /// <returns>Id of the Resource</returns>
+      Task<Resource> GetUnassignedResource(Enums.ResourceTypes resourceTypes);
    }
 }

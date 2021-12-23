@@ -21,15 +21,12 @@ namespace Sopheon.CloudNative.Environments.Data
          _context = context;
       }
 
-      public async Task AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(Guid environmentKey, string resourceUri)
+      public async Task AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(Guid environmentKey, Resource resource)
       {
          try
          {
-            Resource azureSqlDatabaseResource = new Resource
-            {
-               DomainResourceTypeId = (int)ResourceTypes.AzureSqlDb,
-               Uri = resourceUri
-            };
+            // resource is tracked...changing this will update the row when SaveChangesAsync() is called
+            resource.IsAssigned = true;
 
             Environment environment = await _context.Environments
                .SingleEnvironmentAsync(environmentKey);
@@ -41,14 +38,14 @@ namespace Sopheon.CloudNative.Environments.Data
             DedicatedEnvironmentResource dedicatedEnvironmentResource = new DedicatedEnvironmentResource
             {
                Environment = environment,
-               Resource = azureSqlDatabaseResource
+               Resource = resource
             };
 
             IEnumerable<EnvironmentResourceBinding> environmentResourceBindings = azureSqlDbBusinessServiceDependencies.Select(bsd => new EnvironmentResourceBinding
             {
                BusinessServiceDependency = bsd,
                Environment = environment,
-               Resource = azureSqlDatabaseResource
+               Resource = resource
             });
 
             _context.DedicatedEnvironmentResources.Add(dedicatedEnvironmentResource);
