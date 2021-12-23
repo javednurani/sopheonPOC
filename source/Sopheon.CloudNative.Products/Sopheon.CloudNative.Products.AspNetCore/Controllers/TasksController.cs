@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
@@ -36,23 +38,26 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
          Product product = await _dbContext.Products
              .Include(p => p.Tasks)
              .SingleOrDefaultAsync(p => p.Key == productKey);
+         if (product == null) { return NotFound(); }
 
-         if (product == null)
-         {
-            return NotFound();
-         }
+         List<EntitySnapshot<Task>> taskSnapshots = await _dbContext.Tasks
+            .TemporalAll()
+            .Where(t => t.Id == taskId)
+            .Select(t => new EntitySnapshot<Task>
+            {
+               Snapshot = t,
+               PeriodStart = EF.Property<DateTime>(t, "PeriodStart"),
+               PeriodEnd = EF.Property<DateTime>(t, "PeriodEnd")
+            })
+            .OrderByDescending(snapshot => snapshot.PeriodStart)
+            .ToListAsync();
+         if (!taskSnapshots.Any()) { return NotFound(); }
 
-         Task task = product.Tasks.SingleOrDefault(t => t.Id == taskId);
+         List<EntityChangeEvent<Task>> changeEvents = ProcessSnapshots(taskSnapshots);
 
-         if (task == null)
-         {
-            return NotFound();
-         }
+         List<TaskChangeEventDto> changeEventDtos = _mapper.Map<List<TaskChangeEventDto>>(changeEvents);
 
-         // TODO, implement History using dbContext.Tasks.TemporalAll
-         // build an array of TaskHistoryItemDto's to return
-
-         return Ok();
+         return Ok(changeEventDtos);
       }
 
       [HttpPost]
@@ -74,7 +79,6 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
 
          return Created("TODO-implement Get single Task endpoint", _mapper.Map<TaskDto>(task));
       }
-      
 
       [HttpPut("{taskId}")]
       public async Task<IActionResult> PutTask(string productKey, int taskId, [FromBody] TaskDto taskDto)
@@ -98,6 +102,23 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
          _ = await _dbContext.SaveChangesAsync();
 
          return Ok(_mapper.Map<TaskDto>(taskFromDB));
+      }
+
+      [HttpDelete("{taskId}")]
+      public async Task<IActionResult> DeleteTask(string productKey, int taskId)
+      {
+         Product product = await _dbContext.Products
+             .Include(p => p.Tasks)
+             .SingleOrDefaultAsync(p => p.Key == productKey);
+         if (product == null) { return NotFound(); }
+
+         Task task = product.Tasks.SingleOrDefault(t => t.Id == taskId);
+         if (task == null) { return NotFound(); }
+
+         _ = _dbContext.Remove(task);
+         _ = await _dbContext.SaveChangesAsync();
+
+         return Ok();
       }
 
       // INFO, the Patch endpoint below is not tested.
@@ -130,5 +151,60 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
 
       //   return Ok(_mapper.Map<TaskDto>(taskFromDatabase));
       //}
+
+      private static List<EntityChangeEvent<Task>> ProcessSnapshots(List<EntitySnapshot<Task>> taskSnapshots)
+      {
+         EntitySnapshot<Task> oldestSnapshot = taskSnapshots.LastOrDefault();
+         EntitySnapshot<Task> mostRecentSnapshot = taskSnapshots.FirstOrDefault();
+         List<EntityChangeEvent<Task>> changeEvents = new();
+
+         // add 'deleted' change event if necessary
+         if (mostRecentSnapshot != null)
+         {
+            if (mostRecentSnapshot.PeriodEnd != DateTime.MaxValue)
+            {
+               changeEvents.Add(new EntityChangeEvent<Task>
+               {
+                  Timestamp = mostRecentSnapshot.PeriodEnd,
+                  EntityChangeEventType = EntityChangeEventTypes.Deleted
+               });
+            }
+         }
+
+         // add change event for each snapshot
+         for (int i = 0; i < taskSnapshots.Count - 1; i++)
+         {
+            EntitySnapshot<Task> postSnapshot = taskSnapshots[i];
+            EntitySnapshot<Task> preSnapshot = taskSnapshots[i + 1];
+
+            changeEvents.Add(new EntityChangeEvent<Task>
+            {
+               Timestamp = postSnapshot.PeriodStart,
+               EntityChangeEventType = EntityChangeEventTypes.Updated,
+               PreValue = new DeltaPair<Task>
+               {
+                  Entity = preSnapshot.Snapshot,
+                  CompareTarget = postSnapshot.Snapshot
+               },
+               PostValue = new DeltaPair<Task>
+               {
+                  Entity = postSnapshot.Snapshot,
+                  CompareTarget = preSnapshot.Snapshot
+               }
+            });
+         }
+
+         // add 'created' change event if necessary
+         if (oldestSnapshot != null)
+         {
+            changeEvents.Add(new EntityChangeEvent<Task>
+            {
+               Timestamp = oldestSnapshot.PeriodStart,
+               EntityChangeEventType = EntityChangeEventTypes.Created
+            });
+         }
+
+         return changeEvents;
+      }
    }
 }
