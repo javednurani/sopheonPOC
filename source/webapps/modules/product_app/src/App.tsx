@@ -15,6 +15,7 @@ const App: React.FunctionComponent<Props> = ({
   nextStep,
   createProduct,
   updateProduct,
+  updateProductItem,
   products,
   getProducts,
   getProductsFetchStatus,
@@ -75,6 +76,6 @@ const App: React.FunctionComponent<Props> = ({
     );
   }
 
-  return <Dashboard updateProduct={updateProduct} environmentKey={environmentKey} accessToken={accessToken} products={products} />;
+  return <Dashboard updateProduct={updateProduct} updateProductItem={updateProductItem} environmentKey={environmentKey} accessToken={accessToken} products={products} />;
 };
 export default App;

@@ -14,27 +14,35 @@ import {
   ProductSagaActionTypes,
   UpdateProductAction,
   updateProductFailure,
+  UpdateProductItemAction,
+  updateProductItemFailure,
+  updateProductItemRequest,
+  updateProductItemSuccess,
   updateProductRequest,
-  updateProductSuccess
+  updateProductSuccess,
 } from './productReducer';
-import { createProduct, getProducts, updateProduct } from './productService';
+import { createProduct, getProducts, updateProduct, updateProductItem } from './productService';
 
 export function* watchOnGetProducts(): Generator {
   yield takeEvery(ProductSagaActionTypes.GET_PRODUCTS, onGetProducts);
 }
 
-const translateProductItemsToTasks = (productItems: unknown[]): ToDoItem[] => productItems
-  .filter(pi => pi.productItemTypeId === ProductItemTypes.TASK)
-  .map(td => ({
+const translateProductItemsToTasks = (productItems: unknown[]): ToDoItem[] =>
+  productItems.filter(pi => pi.productItemTypeId === ProductItemTypes.TASK).map(td => translateProductItemToTask(td));
+
+const translateProductItemToTask = (td: unknown): ToDoItem => {
+  const dueDateString: string = td.utcDateTimeAttributeValues.filter(dtav => dtav.attributeId === Attributes.DUEDATE)[0].value;
+  return {
+    id: td.id,
     name: td.name,
     notes: td.stringAttributeValues.filter(sav => sav.attributeId === Attributes.NOTES)[0].value,
-    dueDate: new Date(td.utcDateTimeAttributeValues.filter(dtav => dtav.attributeId === Attributes.DUEDATE)[0].value),
+    dueDate: dueDateString ? new Date(dueDateString) : null,
     status: td.enumCollectionAttributeValues.filter(ecav => ecav.attributeId === Attributes.STATUS)[0].value[0].enumAttributeOptionId,
-  }));
+  };
+};
 
-const translateInt32AttributeValuesToIndustryIds = (int32AttributeValues: unknown[]): number[] => int32AttributeValues
-  .filter(iav => iav.attributeId === Attributes.INDUSTRIES)
-  .map(iav => iav.value);
+const translateInt32AttributeValuesToIndustryIds = (int32AttributeValues: unknown[]): number[] =>
+  int32AttributeValues.filter(iav => iav.attributeId === Attributes.INDUSTRIES).map(iav => iav.value);
 
 export function* onGetProducts(action: GetProductsAction): Generator {
   try {
@@ -48,7 +56,7 @@ export function* onGetProducts(action: GetProductsAction): Generator {
       industries: translateInt32AttributeValuesToIndustryIds(d.int32AttributeValues),
       kpis: d.keyPerformanceIndicators,
       goals: d.goals,
-      todos: translateProductItemsToTasks(d.items)
+      todos: translateProductItemsToTasks(d.items),
     }));
     yield put(getProductsSuccess(transformedProductsData));
   } catch (error) {
@@ -63,7 +71,7 @@ export function* watchOnCreateProduct(): Generator {
 export function* onCreateProduct(action: CreateProductAction): Generator {
   try {
     yield put(createProductRequest());
-    const { data } = yield call(createProduct, action.payload);  // TODO , type response
+    const { data } = yield call(createProduct, action.payload); // TODO , type response
 
     const createdProduct: Product = {
       id: data.id,
@@ -72,7 +80,7 @@ export function* onCreateProduct(action: CreateProductAction): Generator {
       industries: translateInt32AttributeValuesToIndustryIds(data.int32AttributeValues),
       goals: data.goals,
       kpis: data.keyPerformanceIndicators,
-      todos: translateProductItemsToTasks(data.items)
+      todos: translateProductItemsToTasks(data.items),
     };
 
     yield put(createProductSuccess(createdProduct));
@@ -85,10 +93,14 @@ export function* watchOnUpdateProduct(): Generator {
   yield takeEvery(ProductSagaActionTypes.UPDATE_PRODUCT, onUpdateProduct);
 }
 
+export function* watchOnUpdateProductItem(): Generator {
+  yield takeEvery(ProductSagaActionTypes.UPDATE_PRODUCT_ITEM, onUpdateProductItem);
+}
+
 export function* onUpdateProduct(action: UpdateProductAction): Generator {
   try {
     yield put(updateProductRequest());
-    const { data } = yield call(updateProduct, action.payload);  // TODO , type response
+    const { data } = yield call(updateProduct, action.payload); // TODO , type response
 
     const updatedProduct: Product = {
       id: data.id,
@@ -97,9 +109,8 @@ export function* onUpdateProduct(action: UpdateProductAction): Generator {
       industries: translateInt32AttributeValuesToIndustryIds(data.int32AttributeValues),
       kpis: data.keyPerformanceIndicators,
       goals: data.goals,
-      todos: translateProductItemsToTasks(data.items)
+      todos: translateProductItemsToTasks(data.items),
     };
-
 
     yield put(updateProductSuccess(updatedProduct));
   } catch (error) {
@@ -107,7 +118,17 @@ export function* onUpdateProduct(action: UpdateProductAction): Generator {
   }
 }
 
+export function* onUpdateProductItem(action: UpdateProductItemAction): Generator {
+  try {
+    yield put(updateProductItemRequest());
+    const { data } = yield call(updateProductItem, action.payload); // TODO , type response
+    const updatedProductItem = translateProductItemToTask(data);
+    yield put(updateProductItemSuccess(updatedProductItem));
+  } catch (error) {
+    yield put(updateProductItemFailure(error));
+  }
+}
 
 export default function* productSaga(): Generator {
-  yield all([fork(watchOnGetProducts), fork(watchOnCreateProduct), fork(watchOnUpdateProduct)]);
+  yield all([fork(watchOnGetProducts), fork(watchOnCreateProduct), fork(watchOnUpdateProduct), fork(watchOnUpdateProductItem)]);
 }
