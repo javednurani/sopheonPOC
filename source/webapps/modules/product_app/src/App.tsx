@@ -58,21 +58,20 @@ const App: React.FunctionComponent<Props> = ({
 
   // TODO: once we fix the header toggle timing issue, this would probably get changed to getProductsFetchStatus === FetchStatus.DoneSuccess && products.length === 0
   const userNeedsOnboarding = (products.length === 0 && environmentKey) || (currentStep === 3 && products.length === 1);
+  const selectedKey = formatMessage({ id: 'sidebar.dashboard' });
 
   const sideProps: SideBarProps = {
     menuItems: [
       {
         links: [
           {
-            name: 'Home',
-            url: 'http://example.com',
-            expandAriaLabel: 'Expand Home section',
-            collapseAriaLabel: 'Collapse Home section',
+            name: selectedKey,
+            url: '/product', //TODO: Will need to be updated to be dynamic from actual app module
             isExpanded: true,
-            key: 'Home',
+            key: selectedKey,
           },
           {
-            name: 'Documents',
+            name: 'Page Next', //Placeholder text, will be updated to actual menu later on.
             url: 'http://example.com',
             key: 'key3',
             isExpanded: true,
@@ -81,7 +80,7 @@ const App: React.FunctionComponent<Props> = ({
         ],
       },
     ],
-    selectedMenuKey: 'Home',
+    selectedMenuKey: selectedKey,
   };
 
   if (userNeedsOnboarding) {

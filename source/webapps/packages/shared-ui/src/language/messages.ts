@@ -151,5 +151,6 @@ export const messages: Record<string, Record<string, string>> = {
     'status.inprogress': 'In Progress',
     'status.assigned': 'Assigned',
     'status.complete': 'Complete',
+    'sidebar.dashboard': 'Dashboard',
   },
 };
