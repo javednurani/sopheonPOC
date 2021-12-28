@@ -135,6 +135,8 @@ export const messages: Record<string, Record<string, string>> = {
     'calendar.closedatepicker': 'Close date picker',
     'calendar.selecttochangeyear': '{0}, select to change the year',
     'calendar.selecttochangemonth': '{0}, select to change the month',
+    'history.none': 'There is no history available.',
+    'history.title': 'History',
     'toDo.title': 'To Do',
     'toDo.empty1': "You don't have any tasks yet. Click ",
     'toDo.empty2': ' above to add one.',

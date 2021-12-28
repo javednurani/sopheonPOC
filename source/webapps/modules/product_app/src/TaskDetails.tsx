@@ -24,12 +24,17 @@ import {
 } from '@fluentui/react';
 import { useBoolean } from '@fluentui/react-hooks';
 import { useTheme } from '@fluentui/react-theme-provider';
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
+import { ChangeEvent } from './data/changeEvents';
 import { Status } from './data/status';
+import ExpandablePanel from './ExpandablePanel';
+import HistoryList from './HistoryList';
 import { CreateTaskAction, UpdateProductAction, UpdateProductItemAction, UpdateTaskAction } from './product/productReducer';
-import { PostPutTaskModel, Product, TaskDto, ToDoItem, UpdateProductItemModel, UpdateProductModel } from './types';
+import { settings } from './settings';
+import { HistoryItem, PostPutTaskModel, Product, TaskChangeEventDto, TaskDto, ToDoItem, UpdateProductItemModel, UpdateProductModel } from './types';
 
 export interface ITaskDetailsProps {
   hideModal: () => void;
@@ -46,6 +51,8 @@ export interface ITaskDetailsProps {
 export interface DateStateObject {
   date: Date | undefined;
 }
+
+const API_URL_BASE: string = settings.ProductManagementApiUrlBase;
 
 const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
   hideModal,
@@ -64,6 +71,8 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
   const { formatMessage } = useIntl();
 
   const [taskName, setTaskName] = useState(name ?? '');
+
+  const [taskHistory, setTaskHistory] = useState<HistoryItem[] | null>(null);
 
   const [taskNotes, setTaskNotes] = useState(notes ?? '');
 
@@ -307,6 +316,61 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
     setSelectedItemStatusDropdown(item?.key as Status);
   };
 
+  const processTaskChangeEvents = (taskChangeEvents: TaskChangeEventDto[]): HistoryItem[] => {
+    const taskHistories: HistoryItem[] = [];
+
+    taskChangeEvents.forEach((taskChange: TaskChangeEventDto) => {
+      if (taskChange.entityChangeEventType === ChangeEvent.Updated) {
+        const preTask = taskChange.preValue;
+        const newLocal = taskChange.postValue;
+        if (preTask.name !== newLocal.name) {
+          // TODO: is pushing to this variable in outer scope safe?
+          taskHistories.push({
+            event: taskChange.entityChangeEventType,
+            eventDate: new Date(taskChange.timestamp),
+            item: formatMessage({ id: 'name' }),
+            previousValue: preTask.name,
+          });
+        }
+
+        if (preTask.notes !== newLocal.notes) {
+          taskHistories.push({
+            event: taskChange.entityChangeEventType,
+            eventDate: new Date(taskChange.timestamp),
+            item: formatMessage({ id: 'toDo.notes' }),
+            previousValue: preTask.notes,
+          });
+        }
+
+        if (preTask.status !== newLocal.status) {
+          taskHistories.push({
+            event: taskChange.entityChangeEventType,
+            eventDate: new Date(taskChange.timestamp),
+            item: formatMessage({ id: 'status' }),
+            previousValue: Status[preTask.status as number],
+          });
+        }
+
+        if (preTask.dueDate !== newLocal.dueDate) {
+          taskHistories.push({
+            event: taskChange.entityChangeEventType,
+            eventDate: new Date(taskChange.timestamp),
+            item: formatMessage({ id: 'toDo.duedate' }),
+            previousValue: preTask.dueDate,
+          });
+        }
+      } else {
+        taskHistories.push({
+          event: taskChange.entityChangeEventType,
+          eventDate: new Date(taskChange.timestamp),
+          item: null, // no property to update for these events (i.e. created, deleted)
+          previousValue: null,
+        });
+      }
+    });
+    return taskHistories;
+  };
+
   const stackStyles: IStackStyles = {
     root: {
       height: '100%',
@@ -342,6 +406,23 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
     root: {
       margin: '30px 0px 0px 0px',
     },
+  };
+
+  const handleHistoryExpandClick = () => {
+    if (!taskHistory) {
+      // replace with some sort of productApi.getTaskHistory(productKey, taskId) or similar
+      axios
+        .get(`${API_URL_BASE}/environments/${environmentKey}/products/${products[0].key}/tasks/${id}/history`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then(response => {
+          const historyItems: HistoryItem[] = processTaskChangeEvents(response.data);
+          setTaskHistory(historyItems);
+        })
+        .catch(response => setTaskHistory([]));
+    }
   };
 
   return (
@@ -412,6 +493,13 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
               </Stack.Item>
             </Stack>
           </Stack.Item>
+          {id && (
+            <Stack.Item>
+              <ExpandablePanel title={formatMessage({ id: 'history.title' })} onExpand={handleHistoryExpandClick}>
+                <HistoryList events={taskHistory} />
+              </ExpandablePanel>
+            </Stack.Item>
+          )}
           <Stack.Item>
             <Stack horizontal styles={stackStyles} tokens={nestedStackTokens}>
               <Stack.Item styles={controlButtonStackItemStyles}>

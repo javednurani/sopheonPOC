@@ -1,3 +1,4 @@
+import { ChangeEvent } from './data/changeEvents';
 import { Status } from './data/status';
 
 export type UpdateProductModel = {
@@ -52,9 +53,16 @@ export interface ToDoItem {
   status: Status;
 }
 
+export type HistoryItem = {
+  event: ChangeEvent;
+  eventDate: Date;
+  item: string | null; // field updated
+  previousValue: string | number | Date | null;
+};
+
 export type ProductScopedToDoItem = {
   toDoItem: ToDoItem;
-} & ProductScopedModel;  // INFO: used for Redux state assignment to correct Product after create Task API call
+} & ProductScopedModel; // INFO: used for Redux state assignment to correct Product after create Task API call
 
 export interface Goal {
   id: number;
@@ -74,6 +82,13 @@ export interface TaskDto {
   notes: string | null;
   status: number | null;
   dueDate: string | null;
+}
+
+export interface TaskChangeEventDto {
+  entityChangeEventType: number;
+  preValue: TaskDto;
+  postValue: TaskDto;
+  timestamp: string;
 }
 
 // TODO: Tech Debt - these dtos come directly from our data model, which I don't think our UI should know about
