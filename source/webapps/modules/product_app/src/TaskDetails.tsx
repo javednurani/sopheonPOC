@@ -324,32 +324,32 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
         const preTask = taskChange.preValue;
         const newLocal = taskChange.postValue;
         if (preTask.name !== newLocal.name) {
-          // TODO: is pushing to this variable in pouter scope safe?
+          // TODO: is pushing to this variable in outer scope safe?
           taskHistories.push({
             event: ChangeEvent[taskChange.entityChangeEventType],
             eventDate: new Date(taskChange.timestamp),
-            item: 'Name', // TODO: handle property names...
+            item: formatMessage({ id: 'name' }),
             previousValue: preTask.name,
           });
         } else if (preTask.notes !== newLocal.notes) {
           taskHistories.push({
             event: ChangeEvent[taskChange.entityChangeEventType],
             eventDate: new Date(taskChange.timestamp),
-            item: 'Notes',
+            item: formatMessage({ id: 'toDo.notes' }),
             previousValue: preTask.notes,
           });
         } else if (preTask.status !== newLocal.status) {
           taskHistories.push({
             event: ChangeEvent[taskChange.entityChangeEventType],
             eventDate: new Date(taskChange.timestamp),
-            item: 'Status',
+            item: formatMessage({ id: 'status' }),
             previousValue: Status[preTask.status as number],
           });
         } else if (preTask.dueDate !== newLocal.dueDate) {
           taskHistories.push({
             event: ChangeEvent[taskChange.entityChangeEventType],
             eventDate: new Date(taskChange.timestamp),
-            item: 'Due Date',
+            item: formatMessage({ id: 'toDo.duedate' }),
             previousValue: preTask.dueDate,
           });
         }
