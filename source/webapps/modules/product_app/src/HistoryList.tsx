@@ -1,5 +1,6 @@
 import { Spinner } from '@fluentui/react';
 import React from 'react';
+import { useIntl } from 'react-intl';
 
 import { HistoryItem } from './types';
 
@@ -8,12 +9,14 @@ export type HistoryListProps = {
 };
 
 const HistoryList: React.FC<HistoryListProps> = ({ events }: HistoryListProps) => {
+  const { formatMessage } = useIntl();
+
   if (!events) {
     return <Spinner />;
   }
 
   if (events.length === 0) {
-    return <div>There is no history available.</div>;
+    return <div>{formatMessage({ id: 'history.none' })}</div>;
   }
   return (
     <>

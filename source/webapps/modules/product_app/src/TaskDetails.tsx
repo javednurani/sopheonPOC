@@ -331,21 +331,27 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
             item: formatMessage({ id: 'name' }),
             previousValue: preTask.name,
           });
-        } else if (preTask.notes !== newLocal.notes) {
+        }
+
+        if (preTask.notes !== newLocal.notes) {
           taskHistories.push({
             event: ChangeEvent[taskChange.entityChangeEventType],
             eventDate: new Date(taskChange.timestamp),
             item: formatMessage({ id: 'toDo.notes' }),
             previousValue: preTask.notes,
           });
-        } else if (preTask.status !== newLocal.status) {
+        }
+
+        if (preTask.status !== newLocal.status) {
           taskHistories.push({
             event: ChangeEvent[taskChange.entityChangeEventType],
             eventDate: new Date(taskChange.timestamp),
             item: formatMessage({ id: 'status' }),
             previousValue: Status[preTask.status as number],
           });
-        } else if (preTask.dueDate !== newLocal.dueDate) {
+        }
+
+        if (preTask.dueDate !== newLocal.dueDate) {
           taskHistories.push({
             event: ChangeEvent[taskChange.entityChangeEventType],
             eventDate: new Date(taskChange.timestamp),
