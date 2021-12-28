@@ -1,4 +1,6 @@
 import { Spinner, Stack } from '@fluentui/react';
+import { SideNav } from '@sopheon/controls';
+import { SideBarProps } from '@sopheon/controls/dist/components/SideNav';
 import { AppProps, FetchStatus } from '@sopheon/shell-api';
 import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
@@ -57,6 +59,30 @@ const App: React.FunctionComponent<Props> = ({
 
   // TODO: once we fix the header toggle timing issue, this would probably get changed to getProductsFetchStatus === FetchStatus.DoneSuccess && products.length === 0
   const userNeedsOnboarding = (products.length === 0 && environmentKey) || (currentStep === 3 && products.length === 1);
+  const selectedKey = formatMessage({ id: 'sidebar.dashboard' });
+
+  const sideProps: SideBarProps = {
+    menuItems: [
+      {
+        links: [
+          {
+            name: selectedKey,
+            url: '/product', //TODO: Will need to be updated to be dynamic from actual app module
+            isExpanded: true,
+            key: selectedKey,
+          },
+          {
+            name: 'Page Next', //Placeholder text, will be updated to actual menu later on.
+            url: 'http://example.com',
+            key: 'key3',
+            isExpanded: true,
+            target: '_blank',
+          },
+        ],
+      },
+    ],
+    selectedMenuKey: selectedKey,
+  };
 
   if (userNeedsOnboarding) {
     return (
@@ -76,6 +102,21 @@ const App: React.FunctionComponent<Props> = ({
     );
   }
 
-  return <Dashboard updateProduct={updateProduct} updateProductItem={updateProductItem} environmentKey={environmentKey} accessToken={accessToken} products={products} />;
+  return (
+    <Stack horizontal disableShrink>
+      <Stack.Item>
+        <SideNav {...sideProps} />
+      </Stack.Item>
+      <Stack.Item grow>
+        <Dashboard
+          updateProduct={updateProduct}
+          updateProductItem={updateProductItem}
+          environmentKey={environmentKey}
+          accessToken={accessToken}
+          products={products}
+        />
+      </Stack.Item>
+    </Stack>
+  );
 };
 export default App;
