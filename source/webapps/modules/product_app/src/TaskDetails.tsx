@@ -495,7 +495,7 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
           </Stack.Item>
           {id && (
             <Stack.Item>
-              <ExpandablePanel title="History" onExpand={handleHistoryExpandClick}>
+              <ExpandablePanel title={formatMessage({ id: 'history.title' })} onExpand={handleHistoryExpandClick}>
                 <HistoryList events={taskHistory} />
               </ExpandablePanel>
             </Stack.Item>
