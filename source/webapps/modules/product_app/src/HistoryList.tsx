@@ -2,6 +2,7 @@ import { Spinner } from '@fluentui/react';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
+import { ChangeEvent } from './data/changeEvents';
 import { HistoryItem } from './types';
 
 export type HistoryListProps = {
@@ -23,7 +24,7 @@ const HistoryList: React.FC<HistoryListProps> = ({ events }: HistoryListProps) =
       {events.map((evt, idx) => (
         <div key={idx} style={{ marginBottom: 15 }}>
           <div>
-            {evt.event} {evt.item}
+            {ChangeEvent[evt.event]} {evt.item}
           </div>
           <div>{evt.eventDate.toLocaleString()}</div>
           <div>{evt.previousValue}</div>

@@ -1,3 +1,4 @@
+import { ChangeEvent } from './data/changeEvents';
 import { Status } from './data/status';
 
 export type UpdateProductModel = {
@@ -53,7 +54,7 @@ export interface ToDoItem {
 }
 
 export type HistoryItem = {
-  event: string; // Created, Updated, Deleted?
+  event: ChangeEvent;
   eventDate: Date;
   item: string | null; // field updated
   previousValue: string | number | Date | null;

@@ -326,7 +326,7 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
         if (preTask.name !== newLocal.name) {
           // TODO: is pushing to this variable in outer scope safe?
           taskHistories.push({
-            event: ChangeEvent[taskChange.entityChangeEventType],
+            event: taskChange.entityChangeEventType,
             eventDate: new Date(taskChange.timestamp),
             item: formatMessage({ id: 'name' }),
             previousValue: preTask.name,
@@ -335,7 +335,7 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
 
         if (preTask.notes !== newLocal.notes) {
           taskHistories.push({
-            event: ChangeEvent[taskChange.entityChangeEventType],
+            event: taskChange.entityChangeEventType,
             eventDate: new Date(taskChange.timestamp),
             item: formatMessage({ id: 'toDo.notes' }),
             previousValue: preTask.notes,
@@ -344,7 +344,7 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
 
         if (preTask.status !== newLocal.status) {
           taskHistories.push({
-            event: ChangeEvent[taskChange.entityChangeEventType],
+            event: taskChange.entityChangeEventType,
             eventDate: new Date(taskChange.timestamp),
             item: formatMessage({ id: 'status' }),
             previousValue: Status[preTask.status as number],
@@ -353,7 +353,7 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
 
         if (preTask.dueDate !== newLocal.dueDate) {
           taskHistories.push({
-            event: ChangeEvent[taskChange.entityChangeEventType],
+            event: taskChange.entityChangeEventType,
             eventDate: new Date(taskChange.timestamp),
             item: formatMessage({ id: 'toDo.duedate' }),
             previousValue: preTask.dueDate,
@@ -361,7 +361,7 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
         }
       } else {
         taskHistories.push({
-          event: ChangeEvent[taskChange.entityChangeEventType],
+          event: taskChange.entityChangeEventType,
           eventDate: new Date(taskChange.timestamp),
           item: null, // no property to update for these events (i.e. created, deleted)
           previousValue: null,
