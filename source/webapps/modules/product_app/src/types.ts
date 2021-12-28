@@ -53,11 +53,10 @@ export interface ToDoItem {
 }
 
 export type HistoryItem = {
-  //id: number;
   event: string; // Created, Updated, Deleted?
   eventDate: Date;
-  //item?: string; // field updated
-  //value?: string | number | Date | null;
+  item: string | null; // field updated
+  previousValue: string | number | Date | null;
 };
 
 export type ProductScopedToDoItem = {
@@ -82,6 +81,13 @@ export interface TaskDto {
   notes: string | null;
   status: number | null;
   dueDate: string | null;
+}
+
+export interface TaskChangeEventDto {
+  entityChangeEventType: number;
+  preValue: TaskDto;
+  postValue: TaskDto;
+  timestamp: string;
 }
 
 // TODO: Tech Debt - these dtos come directly from our data model, which I don't think our UI should know about

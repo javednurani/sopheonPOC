@@ -34,7 +34,7 @@ import ExpandablePanel from './ExpandablePanel';
 import HistoryList from './HistoryList';
 import { CreateTaskAction, UpdateProductAction, UpdateProductItemAction, UpdateTaskAction } from './product/productReducer';
 import { settings } from './settings';
-import { HistoryItem, PostPutTaskModel, Product, TaskDto, ToDoItem, UpdateProductItemModel, UpdateProductModel } from './types';
+import { HistoryItem, PostPutTaskModel, Product, TaskChangeEventDto, TaskDto, ToDoItem, UpdateProductItemModel, UpdateProductModel } from './types';
 
 export interface ITaskDetailsProps {
   hideModal: () => void;
@@ -316,6 +316,55 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
     setSelectedItemStatusDropdown(item?.key as Status);
   };
 
+  const processTaskChangeEvents = (taskChangeEvents: TaskChangeEventDto[]): HistoryItem[] => {
+    const taskHistories: HistoryItem[] = [];
+
+    taskChangeEvents.forEach((taskChange: TaskChangeEventDto) => {
+      if (taskChange.entityChangeEventType === ChangeEvent.Updated) {
+        const preTask = taskChange.preValue;
+        const newLocal = taskChange.postValue;
+        if (preTask.name !== newLocal.name) {
+          // TODO: is pushing to this variable in pouter scope safe?
+          taskHistories.push({
+            event: ChangeEvent[taskChange.entityChangeEventType],
+            eventDate: new Date(taskChange.timestamp),
+            item: 'Name', // TODO: handle property names...
+            previousValue: preTask.name,
+          });
+        } else if (preTask.notes !== newLocal.notes) {
+          taskHistories.push({
+            event: ChangeEvent[taskChange.entityChangeEventType],
+            eventDate: new Date(taskChange.timestamp),
+            item: 'Notes',
+            previousValue: preTask.notes,
+          });
+        } else if (preTask.status !== newLocal.status) {
+          taskHistories.push({
+            event: ChangeEvent[taskChange.entityChangeEventType],
+            eventDate: new Date(taskChange.timestamp),
+            item: 'Status',
+            previousValue: Status[preTask.status as number],
+          });
+        } else if (preTask.dueDate !== newLocal.dueDate) {
+          taskHistories.push({
+            event: ChangeEvent[taskChange.entityChangeEventType],
+            eventDate: new Date(taskChange.timestamp),
+            item: 'Due Date',
+            previousValue: preTask.dueDate,
+          });
+        }
+      } else {
+        taskHistories.push({
+          event: ChangeEvent[taskChange.entityChangeEventType],
+          eventDate: new Date(taskChange.timestamp),
+          item: null, // no property to update for these events (i.e. created, deleted)
+          previousValue: null,
+        });
+      }
+    });
+    return taskHistories;
+  };
+
   const stackStyles: IStackStyles = {
     root: {
       height: '100%',
@@ -363,10 +412,7 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
           },
         })
         .then(response => {
-          const historyItems: HistoryItem[] = response.data.map((e: any) => ({
-            event: ChangeEvent[e.entityChangeEventType],
-            eventDate: new Date(e.timestamp),
-          }));
+          const historyItems: HistoryItem[] = processTaskChangeEvents(response.data);
           setTaskHistory(historyItems);
         })
         .catch(response => setTaskHistory([]));

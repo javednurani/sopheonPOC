@@ -17,9 +17,13 @@ const HistoryList: React.FC<HistoryListProps> = ({ events }: HistoryListProps) =
   }
   return (
     <>
-      {events.map(evt => (
-        <div key={evt.id}>
-          {evt.event} on {evt.eventDate.toDateString()}
+      {events.map((evt, idx) => (
+        <div key={idx} style={{ marginBottom: 15 }}>
+          <div>
+            {evt.event} {evt.item}
+          </div>
+          <div>{evt.eventDate.toLocaleString()}</div>
+          <div>{evt.previousValue}</div>
         </div>
       ))}
     </>
