@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Sopheon.CloudNative.Environments.Domain.Exceptions;
+using Sopheon.CloudNative.Environments.Domain.Models;
 using Sopheon.CloudNative.Environments.Domain.Queries;
 
 namespace Sopheon.CloudNative.Environments.Data
@@ -42,6 +43,12 @@ namespace Sopheon.CloudNative.Environments.Data
          }
 
          return resourceUri;
+      }
+
+      public async Task<Resource> GetUnassignedResource(Domain.Enums.ResourceTypes resourceTypes)
+      {
+         Resource resource = await _context.Resources.FirstAsync(x => x.DomainResourceTypeId == (int)resourceTypes && x.IsAssigned == false);
+         return resource;
       }
    }
 }
