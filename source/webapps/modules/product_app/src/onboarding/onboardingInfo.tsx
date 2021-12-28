@@ -125,13 +125,11 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
   const textFieldStyles: Partial<ITextFieldStyles> = {
     root: {
       width: fieldWidth,
-      textAlign: 'left',
     },
   };
   const dropdownStyles: Partial<IDropdownStyles> = {
     root: {
       width: fieldWidth,
-      textAlign: 'left',
     },
   };
 

@@ -17,6 +17,7 @@ const App: React.FunctionComponent<Props> = ({
   nextStep,
   createProduct,
   updateProduct,
+  updateProductItem,
   products,
   getProducts,
   getProductsFetchStatus,
@@ -107,7 +108,13 @@ const App: React.FunctionComponent<Props> = ({
         <SideNav {...sideProps} />
       </Stack.Item>
       <Stack.Item grow>
-        <Dashboard updateProduct={updateProduct} environmentKey={environmentKey} accessToken={accessToken} products={products} />
+        <Dashboard
+          updateProduct={updateProduct}
+          updateProductItem={updateProductItem}
+          environmentKey={environmentKey}
+          accessToken={accessToken}
+          products={products}
+        />
       </Stack.Item>
     </Stack>
   );
