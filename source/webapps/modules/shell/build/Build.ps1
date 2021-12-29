@@ -4,11 +4,11 @@ Copy-Item -Path "$($env:System_DefaultWorkingDirectory)\source\webapps\modules\s
 
 # Set location to packages controls
 Set-Location -Path "$($env:System_DefaultWorkingDirectory)\source\webapps\packages\controls";
-Write-Host "Location set for shared packages 'Controls'";
+Write-Host "Location set for shared packages 'controls'";
 npm ci;
 Check-LastExitCode;
 
-Write-Host "Building package.json at Controls location";
+Write-Host "Building package.json at controls location";
 npm run build;
 Check-LastExitCode;
 
