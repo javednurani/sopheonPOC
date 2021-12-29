@@ -1,7 +1,11 @@
+import { AccountInfo } from '@azure/msal-browser';
+import { useMsal } from '@azure/msal-react';
 import { INavLinkGroup, INavStyleProps, INavStyles, IStyleFunctionOrObject, Link, Nav, Stack } from '@fluentui/react';
 import { useTheme } from '@fluentui/react-theme-provider';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
+
+import { getMsalAccount } from '../authHelpers';
 
 export type SideBarProps = {
   menuItems: INavLinkGroup[];
@@ -17,6 +21,17 @@ const fullHeight: IStyleFunctionOrObject<INavStyleProps, INavStyles> = {
 const SideNav: React.FC<SideBarProps> = ({ menuItems, selectedMenuKey }): JSX.Element => {
   const { formatMessage } = useIntl();
   const theme = useTheme();
+
+  const { instance, accounts } = useMsal();
+
+  const [account, setAccount] = useState<AccountInfo>();
+
+  useEffect(() => {
+    const msalAccount: AccountInfo | undefined = getMsalAccount(instance);
+    if (msalAccount !== undefined) {
+      setAccount(msalAccount);
+    }
+  }, [instance, accounts]);
 
   const sideBarStyles: IStyleFunctionOrObject<INavStyleProps, INavStyles> = {
     root: {
@@ -51,7 +66,7 @@ const SideNav: React.FC<SideBarProps> = ({ menuItems, selectedMenuKey }): JSX.El
     },
   };
 
-  const mailToUrl = `mailto:support@sopheon.com?subject= App User has a question or comment`;
+  const mailToUrl = `mailto:support@sopheon.com?subject=${account?.name} has a question or comment`;
 
   return (
     <Stack verticalAlign="space-between" styles={fullHeight}>
