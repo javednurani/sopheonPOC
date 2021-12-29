@@ -1,6 +1,5 @@
-import { gantt } from '@sopheon/controls/ext/Gantt';
-import Gantt from '@sopheon/controls/src/components/Gantt';
-import { Stack } from 'office-ui-fabric-react';
+import { Stack } from '@fluentui/react';
+import { Gantt } from '@sopheon/controls';
 import React from 'react';
 
 import { Product } from '../types';
@@ -13,7 +12,7 @@ const Timeline: React.FunctionComponent<ITimelineProps> = ({ product }: ITimelin
   const todoItems = product.todos.map(todo => ({
     id: `${todo.name}_${todo.dueDate}`,
     text: todo.name,
-    type: gantt.config.types.milestone,
+    type: 'milestone',
     start_date: todo.dueDate,
   }));
 
