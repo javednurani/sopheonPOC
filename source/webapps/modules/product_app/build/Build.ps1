@@ -2,6 +2,14 @@ Import-Module "$($env:System_DefaultWorkingDirectory)\DevOps\PowerShell\CloudNat
 
 Copy-Item -Path "$($env:System_DefaultWorkingDirectory)\source\webapps\modules\product_app\deploy\*" -Destination "$($env:Build_ArtifactStagingDirectory)";
 
+# Set location to packages controls
+Set-Location -Path "$($env:System_DefaultWorkingDirectory)\source\webapps\packages\controls";
+Write-Host "Location set for shared packages 'controls'";
+npm ci
+
+Write-Host "Building package.json at controls location"
+npm run build
+
 # Set location to packages shell-api
 Set-Location -Path "$($env:System_DefaultWorkingDirectory)\source\webapps\packages\shell-api";
 Write-Host "Location set for shared packages 'Shell-Api'";
