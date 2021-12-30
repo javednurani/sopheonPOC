@@ -33,7 +33,7 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
 
          // Act + Assert
          // No Exception implies success
-         await sut.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environment.EnvironmentKey, Some.Random.String());
+         await sut.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environment.EnvironmentKey, Some.Random.Resource());
       }
 
       [Fact]
@@ -50,7 +50,7 @@ namespace Sopheon.CloudNative.Environments.Data.UnitTests
          EFEnvironmentCommands sut = new EFEnvironmentCommands(context);
 
          // Act + Assert
-         await Assert.ThrowsAsync<EntityNotFoundException>(() => sut.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(Some.Random.Guid(), Some.Random.String()));
+         await Assert.ThrowsAsync<EntityNotFoundException>(() => sut.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(Some.Random.Guid(), Some.Random.Resource()));
       }
    }
 }

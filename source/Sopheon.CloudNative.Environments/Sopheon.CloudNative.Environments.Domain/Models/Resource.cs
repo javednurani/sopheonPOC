@@ -16,6 +16,18 @@ namespace Sopheon.CloudNative.Environments.Domain.Models
          set;
       }
 
+      public bool IsAssigned
+      {
+         get;
+         set;
+      }
+
+      public string Name
+      {
+         get;
+         set;
+      }
+
       public virtual DomainResourceType DomainResourceType
       {
          get;

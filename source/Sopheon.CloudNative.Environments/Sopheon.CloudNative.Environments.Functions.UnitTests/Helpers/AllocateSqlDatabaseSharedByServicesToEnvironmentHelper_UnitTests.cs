@@ -3,6 +3,8 @@ using Microsoft.Azure.Management.Sql.Fluent;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Sopheon.CloudNative.Environments.Domain.Commands;
+using Sopheon.CloudNative.Environments.Domain.Models;
+using Sopheon.CloudNative.Environments.Domain.Queries;
 using Sopheon.CloudNative.Environments.Functions.Helpers;
 using Sopheon.CloudNative.Environments.Testing.Common;
 using System;
@@ -18,6 +20,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
    {
       private readonly AllocateSqlDatabaseSharedByServicesToEnvironmentHelper _sut;
       private readonly Mock<IEnvironmentCommands> _mockEnvironmentCommands;
+      private readonly Mock<IEnvironmentQueries> _mockEnvironmentQueries;
       private readonly Mock<IAzure> _mockAzure;
       private readonly Mock<IHttpClientFactory> _mockHttpClientFactory;
       private readonly Mock<HttpClient> _mockHttpClient;
@@ -25,6 +28,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
       public AllocateSqlDatabaseSharedByServicesToEnvironmentHelper_UnitTests()
       {
          _mockEnvironmentCommands = new Mock<IEnvironmentCommands>();
+         _mockEnvironmentQueries = new Mock<IEnvironmentQueries>();
          _mockAzure = new Mock<IAzure>();
          _mockHttpClientFactory = new Mock<IHttpClientFactory>();
          _mockHttpClient = new Mock<HttpClient>();
@@ -35,8 +39,9 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
          _sut = new AllocateSqlDatabaseSharedByServicesToEnvironmentHelper(
             new Mock<ILogger<AllocateSqlDatabaseSharedByServicesToEnvironmentHelper>>().Object,
             _mockHttpClientFactory.Object,
-            _mockAzure.Object,
-            _mockEnvironmentCommands.Object);
+            _mockEnvironmentQueries.Object,
+            _mockEnvironmentCommands.Object
+            );
       }
 
       [Fact]
@@ -44,11 +49,17 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
       {
          // Arrange
          _mockEnvironmentCommands
-            .Setup(m => m.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(It.IsAny<Guid>(), It.IsAny<string>()))
+            .Setup(m => m.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(It.IsAny<Guid>(), It.IsAny<Resource>()))
             .Returns(() =>
             {
                return Task.CompletedTask;
             });
+
+         Resource randomResource = Some.Random.Resource();
+         _mockEnvironmentQueries
+            .Setup(m => m.GetUnassignedResource(Domain.Enums.ResourceTypes.AzureSqlDb))
+            .Returns(() => Task.FromResult(randomResource));
+
          Mock<ISqlServers> mockSqlServers = new Mock<ISqlServers>();
          _mockAzure.Setup(ma => ma.SqlServers).Returns(mockSqlServers.Object);
          Mock<ISqlDatabaseOperations> mockDbOperations = new Mock<ISqlDatabaseOperations>();
@@ -85,7 +96,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Helpers
 
          // Assert
          _mockEnvironmentCommands.Verify(
-            ec => ec.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environmentKey, $"Server=https://{sqlServerName}.database.windows.net;Database={databaseName};"),
+            ec => ec.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environmentKey, randomResource),
             Times.Once);
       }
    }
