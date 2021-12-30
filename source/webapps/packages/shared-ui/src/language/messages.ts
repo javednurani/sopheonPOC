@@ -154,5 +154,7 @@ export const messages: Record<string, Record<string, string>> = {
     'status.assigned': 'Assigned',
     'status.complete': 'Complete',
     'sidebar.dashboard': 'Dashboard',
+    'sidebar.resourcesHelp': 'Resources and Help',
+    'sidebar.contactus': 'Contact Us',
   },
 };

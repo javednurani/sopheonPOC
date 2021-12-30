@@ -1,4 +1,4 @@
-import { Spinner, Stack } from '@fluentui/react';
+import { INavStyleProps, INavStyles, IStyleFunctionOrObject, Spinner, Stack } from '@fluentui/react';
 import { SideNav } from '@sopheon/controls';
 import { SideBarProps } from '@sopheon/controls/dist/components/SideNav';
 import { AppProps, FetchStatus } from '@sopheon/shell-api';
@@ -60,6 +60,16 @@ const App: React.FunctionComponent<Props> = ({
   // TODO: once we fix the header toggle timing issue, this would probably get changed to getProductsFetchStatus === FetchStatus.DoneSuccess && products.length === 0
   const userNeedsOnboarding = (products.length === 0 && environmentKey) || (currentStep === 3 && products.length === 1);
   const selectedKey = formatMessage({ id: 'sidebar.dashboard' });
+  const sideBarContainerStyle: IStyleFunctionOrObject<INavStyleProps, INavStyles> = {
+    root: {
+      backgroundColor: '#eAeef0',
+    },
+  };
+  const fullHeight: IStyleFunctionOrObject<INavStyleProps, INavStyles> = {
+    root: {
+      height: '100%',
+    },
+  };
 
   const sideProps: SideBarProps = {
     menuItems: [
@@ -103,8 +113,8 @@ const App: React.FunctionComponent<Props> = ({
   }
 
   return (
-    <Stack horizontal disableShrink>
-      <Stack.Item>
+    <Stack horizontal disableShrink styles={fullHeight}>
+      <Stack.Item styles={sideBarContainerStyle}>
         <SideNav {...sideProps} />
       </Stack.Item>
       <Stack.Item grow>
