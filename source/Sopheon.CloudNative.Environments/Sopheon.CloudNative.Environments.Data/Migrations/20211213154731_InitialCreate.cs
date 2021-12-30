@@ -95,7 +95,9 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
                     ResourceId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DomainResourceTypeId = table.Column<int>(type: "int", nullable: false),
-                    Uri = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false)
+                    Uri = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
+                    IsAssigned = table.Column<bool>(type: "bit", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -185,13 +187,12 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
                 schema: "ENV",
                 table: "DomainResourceTypes",
                 columns: new[] { "DomainResourceTypeId", "IsDedicated", "Name" },
-                values: new object[] { 1, true, "AzureSqlDb" });
-
-            migrationBuilder.InsertData(
-                schema: "ENV",
-                table: "DomainResourceTypes",
-                columns: new[] { "DomainResourceTypeId", "IsDedicated", "Name" },
-                values: new object[] { 2, false, "AzureBlobStorage" });
+                values: new object[,]
+                {
+                    { 1, true, "AzureSqlDb" },
+                    { 2, false, "AzureBlobStorage" },
+                    { 3, false, "TenantAzureSqlServer" }
+                });
 
             migrationBuilder.InsertData(
                 schema: "ENV",

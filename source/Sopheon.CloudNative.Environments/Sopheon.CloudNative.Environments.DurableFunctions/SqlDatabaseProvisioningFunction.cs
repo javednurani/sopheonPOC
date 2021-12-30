@@ -8,7 +8,7 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
             ProvisioningState.Running
       };
 
-      private readonly List<string> InstancePrefixes = new List<string>() { nameof(RunSingle), nameof(RunTimer) };
+      private readonly List<string> InstancePrefixes = new List<string>() { nameof(RunSingle), nameof(RunTimer), nameof(MaintainSqlDatabasePoolForOnboarding) };
 
       private readonly EnvironmentContext _dbContext;
       private readonly Lazy<IAzure> _azureApi;
@@ -29,26 +29,33 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
          var outputs = new List<string>();
 
          int currentUnallocatedSqlDatabaseCount = await context.CallActivityAsync<int>(nameof(MaintainSqlDatabasePoolForOnboarding_GetUnallocatedDatabases), null);
-         string targetResourceGroupName = _configuration["TargetResourceGroupName"];
-         int minimumBufferCapacity = _configuration.GetValue<int>("MinimumBufferCapacity");
+         string targetResourceGroupName = _configuration["AzResourceGroupName"];
+         int minimumBufferCapacity = _configuration.GetValue<int>("DatabaseBufferCapacity");
 
          if (currentUnallocatedSqlDatabaseCount < minimumBufferCapacity)
          {
-            log.LogInformation($"Unalloacted Database count was lower than 50. Actual count:{currentUnallocatedSqlDatabaseCount}");
+            log.LogInformation($"Unalloacted Database count was lower than {minimumBufferCapacity}. Actual count:{currentUnallocatedSqlDatabaseCount}");
 
             string deploymentName = await context.CallActivityAsync<string>(nameof(MaintainSqlDatabasePoolForOnboarding_DeployElasticPoolAndDatabases), targetResourceGroupName);
 
-            List<string> deployedDatabases = await context.CallSubOrchestratorAsync<List<string>>(nameof(MonitorDeployment), deploymentName);
+            List<Domain.Models.Resource> deployedResources = await context.CallSubOrchestratorAsync<List<Domain.Models.Resource>>(nameof(MonitorDeployment), deploymentName);
 
-            if (deployedDatabases.Any())
+            if (deployedResources.Any(res => res.DomainResourceTypeId == (int)Domain.Enums.ResourceTypes.AzureSqlDb))
             {
-               await context.CallActivityAsync(nameof(MaintainSqlDatabasePoolForOnboarding_RegisterNewlyCreatedDatabases), deployedDatabases);
+               await context.CallActivityAsync(nameof(MaintainSqlDatabasePoolForOnboarding_RegisterNewlyCreatedDatabases),
+                  deployedResources.Where(res => res.DomainResourceTypeId == (int)Domain.Enums.ResourceTypes.AzureSqlDb));
+            }
+
+            if (deployedResources.Any(res => res.DomainResourceTypeId == (int)Domain.Enums.ResourceTypes.TenantAzureSqlServer))
+            {
+               await context.CallActivityAsync(nameof(MaintainSqlDatabasePoolForOnboarding_RegisterNewlyCreatedSqlServers),
+                  deployedResources.Where(res => res.DomainResourceTypeId == (int)Domain.Enums.ResourceTypes.TenantAzureSqlServer));
             }
 
             return outputs;
          }
 
-         log.LogInformation($"Unalloacted Database count was higher than 50. Actual count:{currentUnallocatedSqlDatabaseCount}");
+         log.LogInformation($"Unalloacted Database count was higher than {minimumBufferCapacity}. Actual count:{currentUnallocatedSqlDatabaseCount}");
 
          return outputs;
       }
@@ -70,12 +77,16 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
       {
 
          string resourceGroupName = context.GetInput<string>();
-         string sqlServerName = _configuration["AzSqlServerName"];
+         string tenantSqlServerName = _configuration["AzTenantEnvironmentServer"];
          string adminLoginEnigma = _configuration["SqlServerAdminEnigma"]; // Pull admin enigma from app config (user secrets or key vault)
+         string envSqlServerName = _configuration["AzSqlServerName"];
+         string envSqlDatabaseName = "TenantEnvironmentTemplate";
 
          jsonTemplateData = jsonTemplateData
-            .Replace("^SqlServerName^", sqlServerName)
-            .Replace("^SqlAdminEngima^", adminLoginEnigma);
+            .Replace("^SqlServerName^", tenantSqlServerName)
+            .Replace("^SqlAdminEngima^", adminLoginEnigma)
+            .Replace("^EnvironmentManagementSQLServerName^", envSqlServerName)
+            .Replace("^EnvironmentManagementSQLServerDatabaseName^", envSqlDatabaseName);
 
          string deploymentName = $"{nameof(SqlDatabaseProvisioningFunction)}_Deployment_{DateTime.UtcNow:yyyyMMddTHHmmss}";
          log.LogInformation($"Creating new deployment: {deploymentName}");
@@ -98,10 +109,11 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
       /// <param name="log"></param>
       /// <returns>True if the deployment was successful</returns>
       [FunctionName(nameof(MonitorDeployment))]
-      public async Task<List<string>> MonitorDeployment([OrchestrationTrigger] IDurableOrchestrationContext monitorContext, ILogger log)
+      public async Task<List<Domain.Models.Resource>> MonitorDeployment([OrchestrationTrigger] IDurableOrchestrationContext monitorContext, ILogger log)
       {
          int pollingDelaySeconds = 10;
          log = monitorContext.CreateReplaySafeLogger(log);
+         List<Domain.Models.Resource> resources = new List<Domain.Models.Resource>();
 
          string deploymentName = monitorContext.GetInput<string>();
 
@@ -111,11 +123,15 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
          {
             log.LogInformation($"Polling status of deployment {deploymentName}");
 
-            (string state, List<string> operations) = await monitorContext.CallActivityAsync<(string, List<string>)>(nameof(GetDeploymentResults), deploymentName);
+            (string databaseState, List<Domain.Models.Resource> databaseOps) = await monitorContext.CallActivityAsync<(string, List<Domain.Models.Resource>)>(nameof(GetDeploymentResultsForSQLDatabases), deploymentName);
+            (string serverState, List<Domain.Models.Resource> serverOps) = await monitorContext.CallActivityAsync<(string, List<Domain.Models.Resource>)>(nameof(GetDeploymentResultsForSQLServers), deploymentName);
 
-            if (!_activeProvisioningStates.Any(activeState => activeState.Value.Equals(state, StringComparison.OrdinalIgnoreCase)))
+            if (!_activeProvisioningStates.Any(activeState => activeState.Value.Equals(databaseState, StringComparison.OrdinalIgnoreCase)) &&
+               !_activeProvisioningStates.Any(state => state.Value.Equals(serverState, StringComparison.OrdinalIgnoreCase)))
             {
-               return operations;
+               resources.AddRange(databaseOps);
+               resources.AddRange(serverOps);
+               return resources;
             }
             else
             {
@@ -126,44 +142,122 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
          }
 
          log.LogInformation($"Monitor expiring.");
-         return new List<string>();
+         return resources;
       }
 
-      [FunctionName(nameof(GetDeploymentResults))]
-      public async Task<(string State, List<string> DeployedDatabases)> GetDeploymentResults([ActivityTrigger] string deploymentName)
+      [FunctionName(nameof(GetDeploymentResultsForSQLDatabases))]
+      public async Task<(string State, List<Domain.Models.Resource> DeployedDatabases)> GetDeploymentResultsForSQLDatabases([ActivityTrigger] string deploymentName)
       {
          IDeployment result = await _azureApi.Value.Deployments.GetByName(deploymentName).RefreshAsync();
 
          if (result.ProvisioningState != ProvisioningState.Succeeded)
          {
-            return (result.ProvisioningState.Value, new List<string>());
+            return (result.ProvisioningState.Value, new List<Domain.Models.Resource>());
          }
 
-         var succesfulSqlDeployments = result.DeploymentOperations.List().ToList();
-         succesfulSqlDeployments = succesfulSqlDeployments
+         List<IDeploymentOperation> succesfulSqlDatabaseDeployments = result.DeploymentOperations.List().ToList();
+         succesfulSqlDatabaseDeployments = succesfulSqlDatabaseDeployments
              .Where(operation => ("Microsoft.Sql/servers/databases".Equals(operation.TargetResource?.ResourceType, StringComparison.OrdinalIgnoreCase)) &&
                  ProvisioningState.Succeeded.Value.Equals(operation.ProvisioningState, StringComparison.OrdinalIgnoreCase))
              .ToList();
 
-         List<string> partialConnectionStrings = succesfulSqlDeployments
-             .Select(operation => String.Format("Server={0};Database={1};", operation.TargetResource.ResourceName.Split("/")))
+         List<Domain.Models.Resource> partialConnectionStrings = succesfulSqlDatabaseDeployments
+             .Select(operation => {
+                var list = operation.TargetResource.ResourceName.Split('/');
+                return new Domain.Models.Resource
+                {
+                   DomainResourceTypeId = (int)Domain.Enums.ResourceTypes.AzureSqlDb,
+                   Uri = $"Server=tcp:{list[0].ToLower()}.database.windows.net,1433;Database={list[1].ToLower()};Encrypt=true;Connection Timeout=30;",
+                   Name = list[1].ToLower(),
+                   IsAssigned = false
+                };
+             })
              .ToList();
 
          return (result.ProvisioningState.Value, partialConnectionStrings);
       }
 
-      [FunctionName(nameof(MaintainSqlDatabasePoolForOnboarding_RegisterNewlyCreatedDatabases))]
-      public async Task MaintainSqlDatabasePoolForOnboarding_RegisterNewlyCreatedDatabases([ActivityTrigger] List<string> databaseDeployments, ILogger log)
+      [FunctionName(nameof(GetDeploymentResultsForSQLServers))]
+      public async Task<(string State, List<Domain.Models.Resource> DeployedSqlServers)> GetDeploymentResultsForSQLServers([ActivityTrigger] string deploymentName)
       {
-         foreach (string partialConnectionString in databaseDeployments)
+         IDeployment result = await _azureApi.Value.Deployments.GetByName(deploymentName).RefreshAsync();
+
+         if (result.ProvisioningState != ProvisioningState.Succeeded)
          {
-            if (!_dbContext.Resources.Any(r => r.DomainResourceTypeId == 1 && partialConnectionString == r.Uri))
+            return (result.ProvisioningState.Value, new List<Domain.Models.Resource>());
+         }
+
+         List<IDeploymentOperation> succesfulSqlServerDeployments = result.DeploymentOperations.List().ToList();
+         succesfulSqlServerDeployments = succesfulSqlServerDeployments
+             .Where(operation => ("Microsoft.Sql/servers".Equals(operation.TargetResource?.ResourceType, StringComparison.OrdinalIgnoreCase)) &&
+                 ProvisioningState.Succeeded.Value.Equals(operation.ProvisioningState, StringComparison.OrdinalIgnoreCase))
+             .ToList();
+
+         List<Domain.Models.Resource> sqlServerResources = succesfulSqlServerDeployments
+             .Select(operation => {
+                var list = operation.TargetResource.ResourceName.Split('/');
+                return new Domain.Models.Resource 
+                {
+                   DomainResourceTypeId = (int)Domain.Enums.ResourceTypes.TenantAzureSqlServer,
+                   Uri = $"{list[0].ToLower()}.database.windows.net",
+                   Name = list[0].ToLower(),
+                   IsAssigned = true
+                };
+             })
+             .ToList();
+
+         return (result.ProvisioningState.Value, sqlServerResources);
+      }
+
+      [FunctionName(nameof(MaintainSqlDatabasePoolForOnboarding_RegisterNewlyCreatedDatabases))]
+      public async Task MaintainSqlDatabasePoolForOnboarding_RegisterNewlyCreatedDatabases([ActivityTrigger] List<Domain.Models.Resource> databaseDeployments, ILogger log)
+      {
+         foreach (Domain.Models.Resource resource in databaseDeployments)
+         {
+            if (!_dbContext.Resources.Any(r => r.DomainResourceTypeId == (int)Domain.Enums.ResourceTypes.AzureSqlDb && resource.Uri == r.Uri))
             {
-               _dbContext.Resources.Add(new Domain.Models.Resource()
+               _dbContext.Resources.Add(resource);
+            }
+         }
+         // Save all the new resources to the tables
+         await _dbContext.SaveChangesAsync();
+
+         // Run a sql command on all the new databases
+         foreach (Domain.Models.Resource resource1 in databaseDeployments)
+         {
+            try {
+               using (SqlConnection conn = new SqlConnection($"{resource1.Uri}User ID=sopheon;Password={_configuration["SqlServerAdminEnigma"]}"))
                {
-                  DomainResourceTypeId = 1, // TODO:Enum
-                  Uri = partialConnectionString
-               });
+                  conn.Open();
+                  string sqlcommand =
+                  @"
+                  CREATE USER jobuser FROM LOGIN jobuser
+                  GRANT ALTER ON SCHEMA::dbo TO jobuser
+                  GRANT CREATE TABLE TO jobuser
+                  GRANT CREATE SCHEMA TO jobuser";
+
+                  using (SqlCommand command = new SqlCommand(sqlcommand, conn))
+                  {
+                     var row = await command.ExecuteNonQueryAsync();
+                     log.LogInformation($"{row} rows were updated");
+                  }
+               }
+            }
+            catch (Exception ex)
+            {
+               log.LogError(ex, ex.Message);
+            }
+         }
+      }
+
+      [FunctionName(nameof(MaintainSqlDatabasePoolForOnboarding_RegisterNewlyCreatedSqlServers))]
+      public async Task MaintainSqlDatabasePoolForOnboarding_RegisterNewlyCreatedSqlServers([ActivityTrigger] List<Domain.Models.Resource> sqlServerDeployments, ILogger log)
+      {
+         foreach (Domain.Models.Resource server in sqlServerDeployments)
+         {
+            if (!_dbContext.Resources.Any(r => r.DomainResourceTypeId == (int)Domain.Enums.ResourceTypes.TenantAzureSqlServer && server.Uri == r.Uri))
+            {
+               _dbContext.Resources.Add(server);
             }
          }
 
@@ -184,7 +278,7 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
          if (!existingInstancesQueryResult)
          {
             // An instance with the specified ID prefix doesn't exist or an existing one stopped running, create one.
-            var instanceId = await starter.StartNewAsync<string>(functionName, $"{functionName}_{Guid.NewGuid()}");
+            var instanceId = await starter.StartNewAsync<string>(functionName, $"{functionName}_{Guid.NewGuid()}", null);
             log.LogInformation($"Started orchestration with ID = '{instanceId}'.");
             return starter.CreateCheckStatusResponse(req, instanceId);
          }
@@ -212,8 +306,13 @@ namespace Sopheon.CloudNative.Environments.DurableFunctions
          if (!existingInstancesQueryResult)
          {
             // An instance with the specified ID prefix doesn't exist or an existing one stopped running, create one.
-            var instanceId = await starter.StartNewAsync<string>(functionName, $"{functionName}_{Guid.NewGuid()}");
+            var instanceId = await starter.StartNewAsync<string>(functionName, $"{functionName}_{Guid.NewGuid()}", null);
             log.LogInformation($"Started orchestration with ID = '{instanceId}'.");
+         }
+         else
+         {
+            // An instance with the specified ID prefix exists or an existing one still running, don't create one.
+            log.LogInformation("An instance is already running under!");
          }
       }
       #endregion

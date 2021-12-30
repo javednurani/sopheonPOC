@@ -73,7 +73,7 @@ namespace Sopheon.CloudNative.Environments.Functions.Functions
 
             string subscriptionId = Environment.GetEnvironmentVariable("AzSubscriptionId");
             string resourceGroupName = Environment.GetEnvironmentVariable("AzResourceGroupName");
-            string sqlServerName = Environment.GetEnvironmentVariable("AzSqlServerName");
+            string sqlServerName = Environment.GetEnvironmentVariable("AzTenantEnvironmentServer");
 
             await _resourceAllocationHelper.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environmentKey, subscriptionId, resourceGroupName, sqlServerName);
             return await _responseBuilder.BuildWithJsonBodyAsync(req, HttpStatusCode.Created, new ResourceAllocationResponseDto());

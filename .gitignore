@@ -369,4 +369,6 @@ usersignup/tests/User SignUp SpecFlow/Sopheon.Cloud.SpecFlow.UserSignUp.Tests/Fe
 source/Sopheon.CloudNative.EnvironmentAdmin/PublishOutput/
 /source/Sopheon.CloudNative.Environments/Sopheon.CloudNative.Environments.Functions/Properties
 /source/Sopheon.CloudNative.Environments/dockervolumes/
-source/Sopheon.CloudNative.Products/Sopheon.CloudNative.Products.AspNetCore/appsettings.Development.json
+/source/Sopheon.CloudNative.Products/Sopheon.CloudNative.Products.AspNetCore/appsettings.Development.json
+/source/Sopheon.CloudNative.Products/Sopheon.CloudNative.Products.AspNetCore/Properties/ServiceDependencies/stratus-productmanagement-devops - Web Deploy
+/source/Sopheon.CloudNative.Products/Sopheon.CloudNative.Products.AspNetCore/Properties/serviceDependencies.stratus-productmanagement-devops - Web Deploy.json

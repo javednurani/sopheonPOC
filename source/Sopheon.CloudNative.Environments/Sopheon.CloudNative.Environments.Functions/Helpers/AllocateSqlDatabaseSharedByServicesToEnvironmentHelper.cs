@@ -9,6 +9,8 @@ using Microsoft.Azure.Management.Sql.Fluent;
 using Microsoft.Extensions.Logging;
 using Sopheon.CloudNative.Environments.Domain.Commands;
 using Sopheon.CloudNative.Environments.Domain.Exceptions;
+using Sopheon.CloudNative.Environments.Domain.Models;
+using Sopheon.CloudNative.Environments.Domain.Queries;
 
 namespace Sopheon.CloudNative.Environments.Functions.Helpers
 {
@@ -16,63 +18,37 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
    {
       private readonly ILogger<AllocateSqlDatabaseSharedByServicesToEnvironmentHelper> _logger;
       private readonly HttpClient _httpClient;
-      private readonly IAzure _azure;
       private readonly IEnvironmentCommands _environmentCommands;
+      private readonly IEnvironmentQueries _environmentQueries;
 
       public AllocateSqlDatabaseSharedByServicesToEnvironmentHelper(
          ILogger<AllocateSqlDatabaseSharedByServicesToEnvironmentHelper> logger,
          IHttpClientFactory httpClientFactory,
-         IAzure azure,
-         IEnvironmentCommands environmentCommands)
+         IEnvironmentQueries environmentQueries,
+         IEnvironmentCommands environmentCommands
+      )
       {
          _logger = logger;
          _httpClient = httpClientFactory.CreateClient(StringConstants.HTTP_CLIENT_NAME_AZURE_REST_API);
-         _azure = azure;
          _environmentCommands = environmentCommands;
+         _environmentQueries = environmentQueries;
       }
 
       public async Task AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(Guid environmentKey, string subscriptionId, string resourceGroupName, string sqlServerName)
       {
          _logger.LogInformation($"Executing {nameof(AllocateSqlDatabaseSharedByServicesToEnvironmentAsync)}");
 
-         ISqlDatabase sqlDatabase = await GetUnassignedSqlDatabaseAsync(subscriptionId, resourceGroupName, sqlServerName);
+         Resource resource = await _environmentQueries.GetUnassignedResource(Domain.Enums.ResourceTypes.AzureSqlDb);
 
          // INFO: For ENV.Resources of type AzureSqlDb, ENV.Resources.Uri contains the Server & Database components of a SQL connection string
-         string azureSqlDbResourceUri = $"Server=https://{sqlServerName}.database.windows.net;Database={sqlDatabase.Name};";
-         await _environmentCommands.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environmentKey, azureSqlDbResourceUri);
+         await _environmentCommands.AllocateSqlDatabaseSharedByServicesToEnvironmentAsync(environmentKey, resource);
 
-         await TagSqlDatabaseAsAssignedToCustomerAsync(sqlDatabase, subscriptionId, resourceGroupName, sqlServerName);
+         await TagSqlDatabaseAsAssignedToCustomerAsync(resource.Name, subscriptionId, resourceGroupName, sqlServerName);
       }
 
-      private async Task<ISqlDatabase> GetUnassignedSqlDatabaseAsync(string subscriptionId, string resourceGroupName, string sqlServerName)
+      private async Task TagSqlDatabaseAsAssignedToCustomerAsync(string sqlDatabase, string subscriptionId, string resourceGroupName, string sqlServerName)
       {
-         ISqlServer sqlServer = await _azure.SqlServers
-                    .GetByIdAsync($"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Sql/servers/{sqlServerName}");
-
-         IReadOnlyList<ISqlDatabase> allDatabasesOnServer = await _azure.SqlServers.Databases.ListBySqlServerAsync(sqlServer);
-
-         // find first unassigned database
-         foreach (var database in allDatabasesOnServer)
-         {
-            ISqlDatabase databaseWithDetails = await _azure.SqlServers.Databases.GetBySqlServerAsync(sqlServer, database.Name);
-
-            if (databaseWithDetails?.Tags == null)
-            {
-               _logger.LogInformation($"Database details for '{database.Name}' were not found on Azure SQL Server: {sqlServer.Name}");
-            }
-            else if (databaseWithDetails.Tags.TryGetValue(StringConstants.CUSTOMER_PROVISIONED_DATABASE_TAG_NAME, out string tagValue)
-               && tagValue == StringConstants.CUSTOMER_PROVISIONED_DATABASE_TAG_VALUE_INITIAL)
-            {
-               return databaseWithDetails;
-            }
-         }
-
-         throw new CloudServiceException("No available database in buffer!");
-      }
-
-      private async Task TagSqlDatabaseAsAssignedToCustomerAsync(ISqlDatabase sqlDatabase, string subscriptionId, string resourceGroupName, string sqlServerName)
-      {
-         string url = $"https://management.azure.com/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.Sql/servers/{sqlServerName}/databases/{sqlDatabase.Name}/providers/Microsoft.Resources/tags/default?api-version=2021-04-01";
+         string url = $"https://management.azure.com/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.Sql/servers/{sqlServerName}/databases/{sqlDatabase}/providers/Microsoft.Resources/tags/default?api-version=2021-04-01";
          string body =
             "{" +
               "'operation': 'merge'," +
@@ -91,8 +67,8 @@ namespace Sopheon.CloudNative.Environments.Functions.Helpers
          HttpResponseMessage response = await _httpClient.SendAsync(httpRequestMessage, CancellationToken.None);
          if (!response.IsSuccessStatusCode)
          {
-            string logMessage = "Error calling Azure REST API to update SQL Database tag." + Environment.NewLine +
-               $"Status Code: {response.StatusCode}" + Environment.NewLine +
+            string logMessage = "Error calling Azure REST API to update SQL Database tag." + System.Environment.NewLine +
+               $"Status Code: {response.StatusCode}" + System.Environment.NewLine +
                $"Reason: {response.ReasonPhrase}";
             _logger.LogError(logMessage);
 
