@@ -117,8 +117,10 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
             patchDocument.ApplyTo(productDto); //Apply the patch to that DTO. 
             _mapper.Map(productDto, productFromDatabase); //Use automapper to map the DTO back ontop of the database object. 
 
-         // fetch updated product to ensure related entity Id's are populated (eg Attributes, KPIs, Goals)
-         var updatedProduct = await _dbContext.Products
+            await _dbContext.SaveChangesAsync();
+
+            // fetch updated product to ensure related entity Id's are populated (eg Attributes, KPIs, Goals)
+            var updatedProduct = await _dbContext.Products
             .Include(p => p.Items)
             .ThenInclude(i => i.StringAttributeValues)
             .Include(p => p.Items)
