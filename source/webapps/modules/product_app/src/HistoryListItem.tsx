@@ -1,4 +1,5 @@
 import { Link } from '@fluentui/react';
+import { useBoolean } from '@fluentui/react-hooks';
 import { useTheme } from '@fluentui/react-theme-provider';
 import React, { CSSProperties } from 'react';
 import { useIntl } from 'react-intl';
@@ -7,25 +8,20 @@ import { ChangeEvent } from './data/changeEvents';
 import { HistoryItem } from './types';
 
 // extending HistoryItem since thats all this component needs
-export type HistoryListItemProps = {
-} & HistoryItem;
+export type HistoryListItemProps = {} & HistoryItem;
 
-const HistoryListItem: React.FC<HistoryItem> = ({ event: changeEvent, item: fieldName, eventDate: date, previousValue }: HistoryItem) => {
+const HistoryListItem: React.FC<HistoryListItemProps> = ({
+  event: changeEvent,
+  item: fieldName,
+  eventDate: date,
+  previousValue,
+}: HistoryListItemProps) => {
   const { formatMessage } = useIntl();
+  const [isPrevValueShown, { toggle: togglePrevValueShown }] = useBoolean(false);
   const theme = useTheme();
+
   const linkStyles: CSSProperties = {
     color: theme.palette.themePrimary,
-  };
-  const handleTogglePreviousValueClick = () => {
-    alert('clicked');
-    // const previousValueElement = event.target.parentElement.nextElementSibling;
-    // if (previousValueElement.style.display === 'none') {
-    //   previousValueElement.style.display = 'block';
-    //   event.target.innerHTML = formatMessage({ id: 'history.hidePreviousValue' });
-    // } else {
-    //   previousValueElement.style.display = 'none';
-    //   event.target.innerHTML = formatMessage({ id: 'history.showPreviousValue' });
-    // }
   };
 
   return (
@@ -35,11 +31,11 @@ const HistoryListItem: React.FC<HistoryItem> = ({ event: changeEvent, item: fiel
       </div>
       <div>{date.toLocaleString()}</div>
       <div>
-        <Link variant="xSmall" onClick={handleTogglePreviousValueClick} style={linkStyles}>
-          {formatMessage({ id: 'history.showPreviousValue' })}
+        <Link variant="xSmall" onClick={togglePrevValueShown} style={linkStyles}>
+          {formatMessage({ id: isPrevValueShown ? 'history.hidePreviousValue' : 'history.showPreviousValue' })}
         </Link>
       </div>
-      <div style={{ display: 'none' }}>{previousValue}</div>
+      {isPrevValueShown && <div> {previousValue}</div>}
     </>
   );
 };
