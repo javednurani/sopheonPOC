@@ -6,6 +6,10 @@ import { useIntl } from 'react-intl';
 import { ChangeEvent } from './data/changeEvents';
 import { HistoryItem } from './types';
 
+// extending HistoryItem since thats all this component needs
+export type HistoryListItemProps = {
+} & HistoryItem;
+
 const HistoryListItem: React.FC<HistoryItem> = ({ event: changeEvent, item: fieldName, eventDate: date, previousValue }: HistoryItem) => {
   const { formatMessage } = useIntl();
   const theme = useTheme();

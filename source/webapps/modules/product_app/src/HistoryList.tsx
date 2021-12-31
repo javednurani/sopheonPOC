@@ -24,9 +24,9 @@ const HistoryList: React.FC<HistoryListProps> = ({ events }: HistoryListProps) =
     return <div>{formatMessage({ id: 'history.none' })}</div>;
   }
 
-  const items: JSX.Element[] = events.map((evt, idx) => (
+  const items: JSX.Element[] = events.map((event, idx) => (
     <div key={idx} style={itemStyles}>
-      <HistoryListItem {...evt} />
+      <HistoryListItem {...event} />
     </div>
   ));
 
