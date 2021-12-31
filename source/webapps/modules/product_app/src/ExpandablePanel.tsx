@@ -1,4 +1,4 @@
-import { FontIcon, Link, Text } from '@fluentui/react';
+import { FontIcon, Link } from '@fluentui/react';
 import React, { useState } from 'react';
 
 export interface IExpandablePanelProps {
