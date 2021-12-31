@@ -72,6 +72,7 @@ const sharedNameStyles: Partial<ITextFieldStyles> = {
     '-webkit-box-orient': 'vertical',
     'word-break': 'break-all',
     'marginBottom': '5px',
+    'cursor': 'pointer',
   },
 };
 
