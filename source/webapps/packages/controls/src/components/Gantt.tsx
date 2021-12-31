@@ -53,6 +53,11 @@ const GanttComponent: React.FunctionComponent<GanttProps> = ({ todoItems }: Gant
       title: today.toLocaleDateString() // the marker's tooltip
     });
 
+    gantt.templates.tooltip_date_format = function(date) {
+      const formatFunc = gantt.date.date_to_str('%m/%d/%y');
+      return formatFunc(date);
+    };
+
     gantt.templates.tooltip_text = function(start, end, task) {
       return `<b>Task:</b> ${task.text} <br/><b>Due Date:</b> ${gantt.templates.tooltip_date_format(start)}`;
     };
