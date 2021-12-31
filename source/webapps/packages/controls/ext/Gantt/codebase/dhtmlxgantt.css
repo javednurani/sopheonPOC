@@ -1561,6 +1561,8 @@ div.dhx_modal_cover {
   position: absolute;
   z-index: 50;
   white-space: nowrap;
+  overflow-wrap: break-word;
+  max-width: 364px;
 }
 .gantt_resource_marker {
   position: absolute;
