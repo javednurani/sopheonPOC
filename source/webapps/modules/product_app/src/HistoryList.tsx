@@ -1,8 +1,6 @@
-import { jSXElement } from '@babel/types';
-import { Link } from '@fluentui/react';
-import { Spinner } from '@fluentui/react';
+import { Link, Spinner } from '@fluentui/react';
 import { useTheme } from '@fluentui/react-theme-provider';
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import { useIntl } from 'react-intl';
 
 import { ChangeEvent } from './data/changeEvents';
@@ -15,7 +13,9 @@ export type HistoryListProps = {
 const HistoryList: React.FC<HistoryListProps> = ({ events }: HistoryListProps) => {
   const { formatMessage } = useIntl();
   const theme = useTheme();
-
+  const linkStyles: CSSProperties = {
+    color: theme.palette.themePrimary,
+  };
   const handleTogglePreviousValueClick = () => {
     const previousValueElement = event.target.parentElement.nextElementSibling;
     if (previousValueElement.style.display === 'none') {
@@ -44,7 +44,7 @@ const HistoryList: React.FC<HistoryListProps> = ({ events }: HistoryListProps) =
           </div>
           <div>{evt.eventDate.toLocaleString()}</div>
           <div>
-            <Link variant="xSmall" onClick={handleTogglePreviousValueClick} style={{ color: theme.palette.themePrimary }}>
+            <Link variant="xSmall" onClick={handleTogglePreviousValueClick} style={linkStyles}>
               {formatMessage({ id: 'history.showPreviousValue' })}
             </Link>
           </div>
