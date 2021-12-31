@@ -57,6 +57,7 @@ const taskDetailsModalStyles = mergeStyleSets({
   container: {
     height: '560px',
     width: '956px',
+    display: 'flex',
   },
 });
 

@@ -404,7 +404,7 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
                   onChange={handleTaskNotesChange}
                   multiline
                   maxLength={5000}
-                  rows={15}
+                  rows={13}
                   resizable={false}
                   label={formatMessage({ id: 'toDo.notes' })}
                   value={taskNotes}
