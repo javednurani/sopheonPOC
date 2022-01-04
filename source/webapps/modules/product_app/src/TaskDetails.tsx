@@ -32,7 +32,7 @@ import ExpandablePanel from './ExpandablePanel';
 import HistoryList from './HistoryList';
 import ProductApi from './product/productApi';
 import { CreateTaskAction, UpdateProductAction, UpdateProductItemAction, UpdateTaskAction } from './product/productReducer';
-import { HistoryItem, PostPutTaskModel, Product, TaskDto, ToDoItem, UpdateProductItemModel, UpdateProductModel } from './types';
+import { HistoryItem, PostPutTaskModel, Product, Task, TaskDto, UpdateProductItemModel, UpdateProductModel } from './types';
 
 export interface ITaskDetailsProps {
   hideModal: () => void;
@@ -40,7 +40,7 @@ export interface ITaskDetailsProps {
   environmentKey: string;
   accessToken: string;
   products: Product[];
-  selectedTask: ToDoItem | null;
+  selectedTask: Task | null;
   updateProductItem: (productItem: UpdateProductItemModel) => UpdateProductItemAction;
   createTask: (task: PostPutTaskModel) => CreateTaskAction;
   updateTask: (task: PostPutTaskModel) => UpdateTaskAction;

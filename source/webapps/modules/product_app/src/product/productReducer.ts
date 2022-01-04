@@ -6,8 +6,8 @@ import {
   EnvironmentScopedApiRequestModel,
   PostPutTaskModel,
   Product,
-  ProductScopedToDoItem,
-  ToDoItem,
+  ProductScopedTask,
+  Task,
   UpdateProductItemModel,
   UpdateProductModel
 } from '../types';
@@ -56,15 +56,15 @@ export type UpdateProductSuccessAction = PayloadAction<ProductActionTypes.UPDATE
 export type UpdateProductFailureAction = PayloadAction<ProductActionTypes.UPDATE_PRODUCT_FAILURE, Error>;
 
 export type UpdateProductItemRequestAction = Action<ProductActionTypes.UPDATE_PRODUCT_ITEM_REQUEST>;
-export type UpdateProductItemSuccessAction = PayloadAction<ProductActionTypes.UPDATE_PRODUCT_ITEM_SUCCESS, ToDoItem>; // TODO: ProductItem vs ToDo?
+export type UpdateProductItemSuccessAction = PayloadAction<ProductActionTypes.UPDATE_PRODUCT_ITEM_SUCCESS, Task>; // TODO: ProductItem vs ToDo?
 export type UpdateProductItemFailureAction = PayloadAction<ProductActionTypes.UPDATE_PRODUCT_ITEM_FAILURE, Error>;
 
 export type CreateTaskRequestAction = Action<ProductActionTypes.CREATE_TASK_REQUEST>;
-export type CreateTaskSuccessAction = PayloadAction<ProductActionTypes.CREATE_TASK_SUCCESS, ProductScopedToDoItem>;
+export type CreateTaskSuccessAction = PayloadAction<ProductActionTypes.CREATE_TASK_SUCCESS, ProductScopedTask>;
 export type CreateTaskFailureAction = PayloadAction<ProductActionTypes.CREATE_TASK_FAILURE, Error>;
 
 export type UpdateTaskRequestAction = Action<ProductActionTypes.UPDATE_TASK_REQUEST>;
-export type UpdateTaskSuccessAction = PayloadAction<ProductActionTypes.UPDATE_TASK_SUCCESS, ProductScopedToDoItem>;
+export type UpdateTaskSuccessAction = PayloadAction<ProductActionTypes.UPDATE_TASK_SUCCESS, ProductScopedTask>;
 export type UpdateTaskFailureAction = PayloadAction<ProductActionTypes.UPDATE_TASK_FAILURE, Error>;
 
 export type ProductReducerActions =
@@ -130,19 +130,19 @@ export const updateProductFailure = (error: Error): UpdateProductFailureAction =
   createPayloadAction(ProductActionTypes.UPDATE_PRODUCT_FAILURE, error);
 
 export const updateProductItemRequest = (): UpdateProductItemRequestAction => createAction(ProductActionTypes.UPDATE_PRODUCT_ITEM_REQUEST);
-export const updateProductItemSuccess = (productItem: ToDoItem): UpdateProductItemSuccessAction =>
+export const updateProductItemSuccess = (productItem: Task): UpdateProductItemSuccessAction =>
   createPayloadAction(ProductActionTypes.UPDATE_PRODUCT_ITEM_SUCCESS, productItem);
 export const updateProductItemFailure = (error: Error): UpdateProductItemFailureAction =>
   createPayloadAction(ProductActionTypes.UPDATE_PRODUCT_ITEM_FAILURE, error);
 
 export const createTaskRequest = (): CreateTaskRequestAction => createAction(ProductActionTypes.CREATE_TASK_REQUEST);
-export const createTaskSuccess = (task: ProductScopedToDoItem): CreateTaskSuccessAction =>
+export const createTaskSuccess = (task: ProductScopedTask): CreateTaskSuccessAction =>
   createPayloadAction(ProductActionTypes.CREATE_TASK_SUCCESS, task);
 export const createTaskFailure = (error: Error): CreateTaskFailureAction =>
   createPayloadAction(ProductActionTypes.CREATE_TASK_FAILURE, error);
 
 export const updateTaskRequest = (): UpdateTaskRequestAction => createAction(ProductActionTypes.UPDATE_TASK_REQUEST);
-export const updateTaskSuccess = (task: ProductScopedToDoItem): UpdateTaskSuccessAction =>
+export const updateTaskSuccess = (task: ProductScopedTask): UpdateTaskSuccessAction =>
   createPayloadAction(ProductActionTypes.UPDATE_TASK_SUCCESS, task);
 export const updateTaskFailure = (error: Error): UpdateTaskFailureAction =>
   createPayloadAction(ProductActionTypes.UPDATE_TASK_FAILURE, error);
@@ -261,12 +261,12 @@ const updateProductItemRequestHandler = (state: ProductStateShape) => ({
   updateProductItemFetchStatus: FetchStatus.InProgress,
 });
 
-// INFO: this helper is specific to a product.todos collection. updateProductItem pipeline is NOT currently being used, as of Cloud-2183, rework to Tasks pattern
-const updateProductItemSuccessHandler = (state: ProductStateShape, updatedProductItem: ToDoItem) => {
+// INFO: this helper is specific to a product.tasks collection. updateProductItem pipeline is NOT currently being used, as of Cloud-2183, rework to Tasks pattern
+const updateProductItemSuccessHandler = (state: ProductStateShape, updatedProductItem: Task) => {
   const stateProducts = [...state.products];
   const updatedProducts = stateProducts.map(existingProduct => {
-    existingProduct.todos = existingProduct.todos.map(todo => (todo.id === updatedProductItem.id ? updatedProductItem : todo));
-    return existingProduct; // we're not updating the product, just it's todos
+    existingProduct.tasks = existingProduct.tasks.map(task => (task.id === updatedProductItem.id ? updatedProductItem : task));
+    return existingProduct; // we're not updating the product, just it's tasks
   });
 
   return {
@@ -290,11 +290,11 @@ const createTaskRequestHandler = (state: ProductStateShape) => ({
   createTaskFetchStatus: FetchStatus.InProgress,
 });
 
-const createTaskSuccessHandler = (state: ProductStateShape, createdTask: ProductScopedToDoItem) => {
+const createTaskSuccessHandler = (state: ProductStateShape, createdTask: ProductScopedTask) => {
   const updatedProducts = [...state.products];
   updatedProducts.forEach(existingProduct => { // TODO, use .some() instead of .forEach(), to short-circuit loop after a product key match?
     if (existingProduct.key === createdTask.ProductKey) {
-      existingProduct.todos.push(createdTask.toDoItem);
+      existingProduct.tasks.push(createdTask.task);
     }
   });
   return {
@@ -318,11 +318,11 @@ const updateTaskRequestHandler = (state: ProductStateShape) => ({
   updateTaskFetchStatus: FetchStatus.InProgress,
 });
 
-const updateTaskSuccessHandler = (state: ProductStateShape, createdTask: ProductScopedToDoItem) => {
+const updateTaskSuccessHandler = (state: ProductStateShape, createdTask: ProductScopedTask) => {
   const updatedProducts = [...state.products];
   updatedProducts.forEach(existingProduct => { // TODO, use .some() instead of .forEach(), to short-circuit loop after a product key match?
     if (existingProduct.key === createdTask.ProductKey) {
-      existingProduct.todos = existingProduct.todos.map(todo => (todo.id === createdTask.toDoItem.id ? createdTask.toDoItem : todo)); // replace single todo with updated version
+      existingProduct.tasks = existingProduct.tasks.map(task => (task.id === createdTask.task.id ? createdTask.task : task)); // replace single todo with updated version
     }
   });
   return {

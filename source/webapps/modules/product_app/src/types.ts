@@ -42,10 +42,10 @@ export interface Product {
   industries: number[];
   goals: Goal[];
   kpis: KeyPerformanceIndicator[];
-  todos: ToDoItem[];
+  tasks: Task[];
 }
 
-export interface ToDoItem {
+export interface Task {
   id: number;
   name: string;
   notes: string | null;
@@ -60,8 +60,8 @@ export type HistoryItem = {
   previousValue: string | number | Date | null;
 };
 
-export type ProductScopedToDoItem = {
-  toDoItem: ToDoItem;
+export type ProductScopedTask = {
+  task: Task;
 } & ProductScopedModel; // INFO: used for Redux state assignment to correct Product after create Task API call
 
 export interface Goal {

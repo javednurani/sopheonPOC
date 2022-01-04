@@ -52,7 +52,7 @@ describe('Testing the onboardingInfo component', () => {
       industries: [1, 2, 3],
       goals: [],
       kpis: [],
-      todos: [],
+      tasks: [],
     };
 
     const componentProps: IOnboardingInfoProps = {
@@ -89,7 +89,7 @@ describe('Testing the onboardingInfo component', () => {
       industries: [1, 2, 3],
       goals: [],
       kpis: [],
-      todos: [],
+      tasks: [],
     };
 
     const componentProps: IOnboardingInfoProps = {

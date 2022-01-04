@@ -1,8 +1,7 @@
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 
 import { Attributes } from '../data/attributes';
-import { ProductItemTypes } from '../data/productItemTypes';
-import { Product, ProductScopedToDoItem, ToDoItem } from '../types';
+import { Product, ProductScopedTask, Task } from '../types';
 // eslint-disable-next-line max-len
 import {
   CreateProductAction,
@@ -37,8 +36,8 @@ import { createProduct, createTask, getProducts, updateProduct, updateProductIte
 const translateEnumCollectionAttributeValuesToIndustryIds = (enumCollectionAttributeValues: unknown[]): number[] =>
   enumCollectionAttributeValues.find(ecav => ecav.attributeId === Attributes.INDUSTRIES).value.map(val => val.enumAttributeOptionId);
 
-// INFO, Task object from service and ToDoItem object in SPA are similar, but we at least need the Date() translation...possibly we can reduce this
-const translateTasksToToDoItems = (tasks: unknown[]): ToDoItem[] => tasks.map(task => ({
+// INFO, Task object from service and Task object in SPA are similar, but we at least need the Date() translation...possibly we can reduce this
+const translateTasksFromService = (tasks: unknown[]): Task[] => tasks.map(task => ({
   id: task.id,
   name: task.name,
   notes: task.notes,
@@ -65,7 +64,7 @@ export function* onGetProducts(action: GetProductsAction): Generator {
       industries: translateEnumCollectionAttributeValuesToIndustryIds(d.enumCollectionAttributeValues),
       kpis: d.keyPerformanceIndicators,
       goals: d.goals,
-      todos: translateTasksToToDoItems(d.tasks),
+      tasks: translateTasksFromService(d.tasks),
     }));
     yield put(getProductsSuccess(transformedProductsData));
   } catch (error) {
@@ -89,7 +88,7 @@ export function* onCreateProduct(action: CreateProductAction): Generator {
       industries: translateEnumCollectionAttributeValuesToIndustryIds(data.enumCollectionAttributeValues),
       goals: data.goals,
       kpis: data.keyPerformanceIndicators,
-      todos: translateTasksToToDoItems(data.tasks),
+      tasks: translateTasksFromService(data.tasks),
     };
 
     yield put(createProductSuccess(createdProduct));
@@ -114,7 +113,7 @@ export function* onUpdateProduct(action: UpdateProductAction): Generator {
       industries: translateEnumCollectionAttributeValuesToIndustryIds(data.enumCollectionAttributeValues),
       kpis: data.keyPerformanceIndicators,
       goals: data.goals,
-      todos: translateTasksToToDoItems(data.tasks),
+      tasks: translateTasksFromService(data.tasks),
     };
 
     yield put(updateProductSuccess(updatedProduct));
@@ -122,6 +121,9 @@ export function* onUpdateProduct(action: UpdateProductAction): Generator {
     yield put(updateProductFailure(error));
   }
 }
+
+// INFO, updateProductItem pipe was used to add Tasks under old E-A-V pattern. this can be removed.
+// some references to obsolete/removed helpers (eg translateProductItemToTask) would need to be reworked.
 
 export function* watchOnUpdateProductItem(): Generator {
   yield takeEvery(ProductSagaActionTypes.UPDATE_PRODUCT_ITEM, onUpdateProductItem);
@@ -146,8 +148,8 @@ export function* onCreateTask(action: CreateTaskAction): Generator {
   try {
     yield put(createTaskRequest());
     const { data } = yield call(createTask, action.payload);
-    const createdTask: ProductScopedToDoItem = {
-      toDoItem: {
+    const createdTask: ProductScopedTask = {
+      task: {
         id: data.id,
         name: data.name,
         notes: data.notes,
@@ -170,8 +172,8 @@ export function* onUpdateTask(action: UpdateTaskAction): Generator {
   try {
     yield put(updateTaskRequest());
     const { data } = yield call(updateTask, action.payload);
-    const updatedTask: ProductScopedToDoItem = {
-      toDoItem: {
+    const updatedTask: ProductScopedTask = {
+      task: {
         id: data.id,
         name: data.name,
         notes: data.notes,
