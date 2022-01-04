@@ -1,4 +1,4 @@
-import { Link } from '@fluentui/react';
+import { Link, Text } from '@fluentui/react';
 import { useBoolean } from '@fluentui/react-hooks';
 import { useTheme } from '@fluentui/react-theme-provider';
 import React, { CSSProperties } from 'react';
@@ -27,15 +27,23 @@ const HistoryListItem: React.FC<HistoryListItemProps> = ({
   return (
     <>
       <div>
-        {ChangeEvent[changeEvent]} {fieldName}
+        <Text variant="small">
+          {ChangeEvent[changeEvent]} {fieldName}
+        </Text>
       </div>
-      <div>{date.toLocaleString()}</div>
       <div>
-        <Link variant="xSmall" onClick={togglePrevValueShown} style={linkStyles}>
-          {formatMessage({ id: isPrevValueShown ? 'history.hidePreviousValue' : 'history.showPreviousValue' })}
+        <Text variant="xSmall">{date.toLocaleString()}</Text>
+      </div>
+      <div>
+        <Link onClick={togglePrevValueShown} style={linkStyles}>
+          <Text variant="xSmall">{formatMessage({ id: isPrevValueShown ? 'history.hidePreviousValue' : 'history.showPreviousValue' })}</Text>
         </Link>
       </div>
-      {isPrevValueShown && <div> {previousValue}</div>}
+      {isPrevValueShown && (
+        <div>
+          <Text variant="xSmall">{previousValue}</Text>
+        </div>
+      )}
     </>
   );
 };
