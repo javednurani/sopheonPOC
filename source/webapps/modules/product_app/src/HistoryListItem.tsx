@@ -28,7 +28,7 @@ const HistoryListItem: React.FC<HistoryListItemProps> = ({
     <>
       <div>
         <Text variant="small">
-          {ChangeEvent[changeEvent]} {fieldName}
+          {ChangeEvent[changeEvent]} {fieldName && formatMessage({ id: `${fieldName}` })}
         </Text>
       </div>
       <div>
