@@ -36,7 +36,14 @@ const HistoryListItem: React.FC<HistoryListItemProps> = ({
           </Link>
         </div>
       )}
-      {isPrevValueShown && <div> {previousValue instanceof Date ? (previousValue as Date).toLocaleString() : previousValue}</div>}
+      {isPrevValueShown && previousValue && (
+        <div>
+          {/* could use toDateString() or toLocaleDateString(), but AC implied mm/dd/yyyy format. */}
+          {previousValue instanceof Date
+            ? `${previousValue.getMonth() + 1}/${previousValue.getDate()}/${previousValue.getFullYear()}`
+            : previousValue}
+        </div>
+      )}
     </>
   );
 };
