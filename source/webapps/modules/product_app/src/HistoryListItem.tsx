@@ -1,4 +1,4 @@
-import { Link } from '@fluentui/react';
+import { Link, Text } from '@fluentui/react';
 import { useBoolean } from '@fluentui/react-hooks';
 import { useTheme } from '@fluentui/react-theme-provider';
 import React, { CSSProperties } from 'react';
@@ -26,22 +26,28 @@ const HistoryListItem: React.FC<HistoryListItemProps> = ({
   return (
     <>
       <div>
-        {ChangeEvent[changeEvent]} {fieldName}
+        <Text variant="small">
+          {ChangeEvent[changeEvent]} {fieldName && formatMessage({ id: `${fieldName}` })}
+        </Text>
       </div>
-      <div>{date.toLocaleString()}</div>
+      <div>
+        <Text variant="xSmall">{date.toLocaleString()}</Text>
+      </div>
       {changeEvent === ChangeEvent.Updated && (
         <div>
-          <Link variant="xSmall" onClick={togglePrevValueShown} style={linkStyles}>
-            {formatMessage({ id: isPrevValueShown ? 'history.hidePreviousValue' : 'history.showPreviousValue' })}
+          <Link onClick={togglePrevValueShown} style={linkStyles}>
+            <Text variant="xSmall">{formatMessage({ id: isPrevValueShown ? 'history.hidePreviousValue' : 'history.showPreviousValue' })}</Text>
           </Link>
         </div>
       )}
       {isPrevValueShown && previousValue && (
         <div>
-          {/* could use toDateString() or toLocaleDateString(), but AC implied mm/dd/yyyy format. */}
-          {previousValue instanceof Date
-            ? `${previousValue.getMonth() + 1}/${previousValue.getDate()}/${previousValue.getFullYear()}`
-            : previousValue}
+          <Text variant="xSmall">
+            {/* could use toDateString() or toLocaleDateString(), but AC implied mm/dd/yyyy format. */}
+            {previousValue instanceof Date
+              ? `${previousValue.getMonth() + 1}/${previousValue.getDate()}/${previousValue.getFullYear()}`
+              : previousValue}
+          </Text>
         </div>
       )}
     </>
