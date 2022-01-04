@@ -1560,8 +1560,7 @@ div.dhx_modal_cover {
   padding: 10px;
   position: absolute;
   z-index: 50;
-  overflow-wrap: break-word;
-  max-width: 364px;
+  white-space: nowrap;
 }
 .gantt_resource_marker {
   position: absolute;
@@ -1909,7 +1908,6 @@ div.dhx_modal_cover {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  z-index: 9999;
 }
 .gantt_noselect {
   -moz-user-select: -moz-none;

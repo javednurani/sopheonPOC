@@ -1,4 +1,5 @@
 import '../../../controls/ext/Gantt/codebase/dhtmlxgantt.css';
+import '../../../controls/ext/Gantt/codebase/sopheon_dhtmlxgantt.css';
 import '../../../controls/ext/Gantt/codebase/Gantt.css';
 
 import React, { useEffect } from 'react';
