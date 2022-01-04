@@ -1,4 +1,4 @@
-import { Link } from '@fluentui/react';
+import { FontIcon, Link } from '@fluentui/react';
 import React, { useState } from 'react';
 
 export interface IExpandablePanelProps {
@@ -25,10 +25,12 @@ const ExpandablePanel: React.FC<IExpandablePanelProps> = ({
     onCollapse && onCollapse();
   };
 
+  const icon = <FontIcon iconName={expanded ? 'ChevronUpMed' : 'ChevronDownMed'} style={{ verticalAlign: 'middle' }} />;
+
   return (
     <>
       <Link variant="large" onClick={expanded ? handleCollapseClick : handleExpandClick}>
-        {title}
+        {icon} {title}
       </Link>
       {expanded && children && <div>{children}</div>}
     </>
