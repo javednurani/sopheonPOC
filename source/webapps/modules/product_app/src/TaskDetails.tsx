@@ -441,7 +441,7 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
                   style={saveButtonStyle}
                   text={formatMessage({ id: 'save' })}
                   onClick={handleSaveButtonClick}
-                  disabled={saveButtonDisabled}
+                  disabled={saveButtonDisabled || !formDirty}
                 />
                 <DefaultButton text={formatMessage({ id: 'cancel' })} onClick={handleCancelButtonClick} />
               </Stack.Item>
