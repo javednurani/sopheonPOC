@@ -45,7 +45,7 @@ const HistoryListItem: React.FC<HistoryListItemProps> = ({
           <Text variant="xSmall">
             {/* could use toDateString() or toLocaleDateString(), but AC implied mm/dd/yyyy format. */}
             {previousValue instanceof Date
-              ? previousValue.toLocaleDateString(undefined, { year: '2-digit', month: 'numeric', day: 'numeric' })
+              ? previousValue.toLocaleDateString(undefined, { year: 'numeric', month: 'numeric', day: 'numeric' })
               : previousValue}
           </Text>
         </div>
