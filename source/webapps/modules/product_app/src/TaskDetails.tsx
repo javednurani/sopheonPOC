@@ -78,6 +78,8 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
 
   const [taskNameDirty, setTaskNameDirty] = useState(false);
 
+  const [formDirty, setFormDirty] = useState(false);
+
   const [hideDiscardDialog, { toggle: toggleHideDiscardDialog }] = useBoolean(true);
 
   useEffect(() => {
@@ -275,10 +277,8 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
     hideModal();
   };
 
-  const formHasData = (): boolean => taskName.length > 0 || taskNotes.length > 0 || taskDueDate.date !== undefined;
-
   const exitModalWithDiscardDialog = (): void => {
-    if (formHasData()) {
+    if (formDirty) {
       toggleHideDiscardDialog();
     } else {
       hideModal();
@@ -291,23 +291,27 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
     // TODO 1693 - possible taskName.errorMessage display pattern, remove if unneeded
     if (!taskNameDirty) {
       setTaskNameDirty(true);
+      setFormDirty(true);
     }
     setTaskName(newValue || '');
   };
 
   const handleTaskNotesChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string | undefined): void => {
     setTaskNotes(newValue || '');
+    setFormDirty(true);
   };
 
   const handleTaskDueDateChange = (date: Date | null | undefined) => {
     if (date) {
       // eslint-disable-next-line object-shorthand
       setTaskDueDate({ date: date });
+      setFormDirty(true);
     }
   };
 
   const handleStatusDropdownChange = (event: React.FormEvent<HTMLDivElement>, item: IDropdownOption | undefined): void => {
     setSelectedItemStatusDropdown(item?.key as Status);
+    setFormDirty(true);
   };
 
   const stackStyles: IStackStyles = {
