@@ -66,7 +66,7 @@ const processTaskChangeEvents = (taskChangeEvents: TaskChangeEventDto[]): Histor
           event: taskChange.entityChangeEventType,
           eventDate: new Date(taskChange.timestamp),
           item: 'toDo.duedate',
-          previousValue: preTask.dueDate,
+          previousValue: preTask.dueDate ? new Date(preTask.dueDate) : null, // INFO, cannot currently remove dates in UI, null value shouldn't be hit here
         });
       }
     } else {

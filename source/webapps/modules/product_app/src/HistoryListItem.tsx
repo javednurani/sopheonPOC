@@ -19,7 +19,6 @@ const HistoryListItem: React.FC<HistoryListItemProps> = ({
   const { formatMessage } = useIntl();
   const [isPrevValueShown, { toggle: togglePrevValueShown }] = useBoolean(false);
   const theme = useTheme();
-
   const linkStyles: CSSProperties = {
     color: theme.palette.themePrimary,
   };
@@ -41,9 +40,13 @@ const HistoryListItem: React.FC<HistoryListItemProps> = ({
           </Link>
         </div>
       )}
-      {isPrevValueShown && (
+      {isPrevValueShown && previousValue && (
         <div>
-          <Text variant="xSmall">{previousValue}</Text>
+          <Text variant="xSmall">
+            {previousValue instanceof Date
+              ? previousValue.toLocaleDateString(undefined, { year: 'numeric', month: 'numeric', day: 'numeric' })
+              : previousValue}
+          </Text>
         </div>
       )}
     </>
