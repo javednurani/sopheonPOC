@@ -34,11 +34,13 @@ const HistoryListItem: React.FC<HistoryListItemProps> = ({
       <div>
         <Text variant="xSmall">{date.toLocaleString()}</Text>
       </div>
-      <div>
-        <Link onClick={togglePrevValueShown} style={linkStyles}>
-          <Text variant="xSmall">{formatMessage({ id: isPrevValueShown ? 'history.hidePreviousValue' : 'history.showPreviousValue' })}</Text>
-        </Link>
-      </div>
+      {changeEvent === ChangeEvent.Updated && (
+        <div>
+          <Link onClick={togglePrevValueShown} style={linkStyles}>
+            <Text variant="xSmall">{formatMessage({ id: isPrevValueShown ? 'history.hidePreviousValue' : 'history.showPreviousValue' })}</Text>
+          </Link>
+        </div>
+      )}
       {isPrevValueShown && (
         <div>
           <Text variant="xSmall">{previousValue}</Text>
