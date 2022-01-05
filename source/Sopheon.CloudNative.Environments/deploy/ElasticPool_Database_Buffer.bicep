@@ -16,7 +16,7 @@ param environmentDatabaseSQLServerName string = '^EnvironmentManagementSQLServer
 
 param location string = resourceGroup().location
 
-var bufferCapacity = 100
+var bufferCapacity = 40
 
 resource SqlServer 'Microsoft.Sql/servers@2020-02-02-preview' = {
   name: serverName
