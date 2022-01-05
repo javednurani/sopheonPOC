@@ -72,14 +72,6 @@ const configuration: webpack.Configuration = {
           : ['style-loader', ...cssRules],
       },
       {
-        test: /\.css$/i,
-        // eslint-disable-next-line sort-keys
-        //issuer: [{ test: /\.html$/i }],
-        // CSS required in templates cannot be extracted safely
-        // because Aurelia would try to require it again in runtime
-        use: cssRules,
-      },
-      {
         test: /\.scss$/,
         // eslint-disable-next-line sort-keys
         issuer: /\.[tj]sx?$/i,

@@ -1,0 +1,7 @@
+
+.gantt_tooltip {
+  max-width: 364px;
+  overflow-wrap: break-word;
+  white-space: normal !important;
+  z-index: 9999;
+}
