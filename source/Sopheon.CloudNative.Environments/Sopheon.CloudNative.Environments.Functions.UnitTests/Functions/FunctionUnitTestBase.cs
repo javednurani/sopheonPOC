@@ -6,6 +6,7 @@ using AutoMapper;
 using FluentValidation;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -26,6 +27,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
       protected HttpResponseDataBuilder _responseBuilder;
       protected IValidator<EnvironmentDto> _environmentDtoValidator;
       protected Mock<IEnvironmentQueries> _mockEnvironmentQueries;
+      protected Mock<IConfiguration> _mockConfiguration;
 
       public FunctionUnitTestBase()
       {
@@ -33,6 +35,7 @@ namespace Sopheon.CloudNative.Environments.Functions.UnitTests.Functions
          _responseBuilder = new HttpResponseDataBuilder();
          _environmentDtoValidator = new EnvironmentDtoValidator();
          _mockEnvironmentQueries = new Mock<IEnvironmentQueries>();
+         _mockConfiguration = new Mock<IConfiguration>();
 
          SetupFunctionContext();
          SetupAutoMapper();

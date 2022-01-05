@@ -12,7 +12,7 @@ using Sopheon.CloudNative.Products.Domain;
 namespace Sopheon.CloudNative.Products.DataAccess.Migrations
 {
     [DbContext(typeof(ProductManagementContext))]
-    [Migration("20211222173246_InitialCreate")]
+    [Migration("20220105153210_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

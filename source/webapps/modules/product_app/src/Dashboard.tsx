@@ -7,7 +7,7 @@ import { CreateTaskAction, UpdateProductAction, UpdateProductItemAction, UpdateT
 import ProductHealth from './ProductHealth';
 import ProductSection from './ProductSection';
 import ResourcesAndLinks from './ResourcesAndLinks';
-import Timeline from './Timeline';
+import Timeline from './timeline/Timeline';
 import ToDoList from './ToDoList';
 import { PostPutTaskModel, Product, UpdateProductItemModel, UpdateProductModel } from './types';
 
@@ -103,7 +103,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
             <KPIs />
           </Stack.Item>
           <Stack.Item styles={middleRowStackItemStyles}>
-            <Timeline />
+            <Timeline product={products[0]}/>
           </Stack.Item>
           <Stack.Item styles={bottomRowStackItemStyles}>
             <ProductHealth />

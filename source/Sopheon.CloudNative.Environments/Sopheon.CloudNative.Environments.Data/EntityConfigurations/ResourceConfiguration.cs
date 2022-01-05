@@ -16,6 +16,12 @@ namespace Sopheon.CloudNative.Environments.Data.EntityConfigurations
             .HasMaxLength(ModelConstraints.URI_LENGTH)
             .IsRequired();
 
+         builder.Property(r => r.IsAssigned)
+            .IsRequired();
+
+         builder.Property(r => r.Name)
+            .IsRequired();
+
          builder.HasIndex(r => r.Uri)
             .IsUnique();
 
