@@ -11,5 +11,7 @@ namespace Sopheon.CloudNative.Environments.Domain.Enums
       AzureSqlDb = 1,
       [Dedicated(false)]
       AzureBlobStorage = 2,
+      [Dedicated(false)]
+      TenantAzureSqlServer = 3
    }
 }

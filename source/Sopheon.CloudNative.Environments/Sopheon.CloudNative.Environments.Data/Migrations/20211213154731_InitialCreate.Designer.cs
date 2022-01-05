@@ -10,7 +10,7 @@ using Sopheon.CloudNative.Environments.Data;
 namespace Sopheon.CloudNative.Environments.Data.Migrations
 {
     [DbContext(typeof(EnvironmentContext))]
-    [Migration("20211103225819_InitialCreate")]
+    [Migration("20211213154731_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -144,6 +144,12 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
                             Id = 2,
                             IsDedicated = false,
                             Name = "AzureBlobStorage"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            IsDedicated = false,
+                            Name = "TenantAzureSqlServer"
                         });
                 });
 
@@ -220,6 +226,13 @@ namespace Sopheon.CloudNative.Environments.Data.Migrations
 
                     b.Property<int>("DomainResourceTypeId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsAssigned")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Uri")
                         .IsRequired()

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
@@ -155,12 +156,12 @@ namespace Sopheon.CloudNative.Products.AspNetCore
 
          // Entity Framework
          services.AddDbContext<ProductManagementContext>((serviceProvider, optionsBuilder) =>
-      {
-         // WARNING: As of EF 5, AddDbContext does not support an aysnc delegate
-         var connectionStringProvider = serviceProvider.GetService<IEnvironmentSqlConnectionStringProvider>();
-         string connectionString = connectionStringProvider.GetConnectionStringAsync().Result; // TODO: Need to find async registration method
-         optionsBuilder.UseSqlServer(connectionString);
-      });
+         {
+            // WARNING: As of EF 5, AddDbContext does not support an aysnc delegate
+            var connectionStringProvider = serviceProvider.GetService<IEnvironmentSqlConnectionStringProvider>();
+            string connectionString = connectionStringProvider.GetConnectionStringAsync().Result; // TODO: Need to find async registration method
+            optionsBuilder.UseSqlServer(connectionString);
+         });
       }
 
       /// <summary>
@@ -170,7 +171,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore
       /// <param name="env"></param>
       public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
       {
-         if (env.IsDevelopment())
+         if (Configuration.GetValue<bool>("Swagger:EnableSwaggerUi"))
          {
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
