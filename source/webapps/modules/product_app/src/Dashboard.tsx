@@ -1,4 +1,4 @@
-import { IStackItemStyles, IStackStyles, IStackTokens, Stack } from '@fluentui/react';
+import { IStackItemStyles, IStackStyles, IStackTokens, IStyle, Stack } from '@fluentui/react';
 import { useTheme } from '@fluentui/react-theme-provider';
 import React from 'react';
 
@@ -7,7 +7,7 @@ import { UpdateProductAction, UpdateProductItemAction } from './product/productR
 import ProductHealth from './ProductHealth';
 import ProductSection from './ProductSection';
 import ResourcesAndLinks from './ResourcesAndLinks';
-import Timeline from './Timeline';
+import Timeline from './timeline/Timeline';
 import ToDoList from './ToDoList';
 import { Product, UpdateProductItemModel, UpdateProductModel } from './types';
 
@@ -38,6 +38,29 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
       background: theme.semanticColors.bodyBackground, // TODO: why needed?
       display: 'flex',
       justifyContent: 'center',
+    },
+  };
+
+  const sharedStackItemStyles: Partial<IStyle> = {
+    display: 'flex',
+    justifyContent: 'center',
+    border: '1px solid',
+    borderColor: theme.palette.neutralTertiary,
+    borderRadius: '3px',
+    overflow: 'auto',
+  };
+
+  const topRowStackItemStyles: IStackItemStyles = {
+    root: {
+      ...sharedStackItemStyles,
+      height: '14vh',
+    },
+  };
+
+  const middleRowStackItemStyles: IStackItemStyles = {
+    root: {
+      ...sharedStackItemStyles,
+      height: '52vh',
     },
   };
 
@@ -72,7 +95,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
             />
           </Stack.Item>
           <Stack.Item grow styles={stackItemStyles}>
-            <Timeline />
+            <Timeline product={products[0]} />
           </Stack.Item>
         </Stack>
       </Stack.Item>
@@ -80,6 +103,16 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
         <Stack horizontal styles={stackStyles} tokens={stackTokens}>
           <Stack.Item grow styles={stackItemStyles}>
             <ResourcesAndLinks />
+          </Stack.Item>
+        </Stack>
+      </Stack.Item>
+      <Stack.Item grow={7}>
+        <Stack styles={stackStyles} tokens={stackTokens}>
+          <Stack.Item styles={topRowStackItemStyles}>
+            <KPIs />
+          </Stack.Item>
+          <Stack.Item styles={middleRowStackItemStyles}>
+            <Timeline product={products[0]} />
           </Stack.Item>
           <Stack.Item grow styles={stackItemStyles}>
             <ProductHealth />

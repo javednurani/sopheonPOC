@@ -1,4 +1,5 @@
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import path from 'path';
 import webpack from 'webpack';
 
@@ -20,6 +21,7 @@ export default (): webpack.Configuration => ({
   performance: { hints: false },
   plugins: [
     new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin(),
     new ModuleFederationPlugin({
       name: 'mainshellModule',
       filename: 'remoteEntry.js',
