@@ -46,8 +46,8 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
             .Select(t => new EntitySnapshot<Task>
             {
                Snapshot = t,
-               PeriodStart = EF.Property<DateTime>(t, "PeriodStart"),
-               PeriodEnd = EF.Property<DateTime>(t, "PeriodEnd")
+               PeriodStart = EF.Property<DateTime>(t, ProductManagementContext.PERIOD_START),
+               PeriodEnd = EF.Property<DateTime>(t, ProductManagementContext.PERIOD_END)
             })
             .OrderByDescending(snapshot => snapshot.PeriodStart)
             .ToListAsync();
