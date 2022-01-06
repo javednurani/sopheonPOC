@@ -48,6 +48,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.MappingProfiles
          CreateMap<KeyPerformanceIndicator, KeyPerformanceIndicatorDto>().ReverseMap();
 
          CreateMap<Task, TaskDto>().ReverseMap();
+         CreateMap<Milestone, MilestoneDto>().ReverseMap();
 
          CreateMap<DeltaPair<Task>, TaskDeltaDto>()
             .ForMember(dest => dest.Name,
