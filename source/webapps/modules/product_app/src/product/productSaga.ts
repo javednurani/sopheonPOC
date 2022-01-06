@@ -65,6 +65,7 @@ export function* onGetProducts(action: GetProductsAction): Generator {
       kpis: d.keyPerformanceIndicators,
       goals: d.goals,
       tasks: translateTasksFromService(d.tasks),
+      milestones: []
     }));
     yield put(getProductsSuccess(transformedProductsData));
   } catch (error) {
@@ -89,6 +90,7 @@ export function* onCreateProduct(action: CreateProductAction): Generator {
       goals: data.goals,
       kpis: data.keyPerformanceIndicators,
       tasks: translateTasksFromService(data.tasks),
+      milestones: []
     };
 
     yield put(createProductSuccess(createdProduct));
@@ -114,6 +116,7 @@ export function* onUpdateProduct(action: UpdateProductAction): Generator {
       kpis: data.keyPerformanceIndicators,
       goals: data.goals,
       tasks: translateTasksFromService(data.tasks),
+      milestones: []
     };
 
     yield put(updateProductSuccess(updatedProduct));

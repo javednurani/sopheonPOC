@@ -43,6 +43,7 @@ export interface Product {
   goals: Goal[];
   kpis: KeyPerformanceIndicator[];
   tasks: Task[];
+  milestones: Milestone[];
 }
 
 export interface Task {
@@ -51,6 +52,13 @@ export interface Task {
   notes: string | null;
   dueDate: Date | null;
   status: Status;
+}
+
+export interface Milestone {
+  id: number;
+  name: string;
+  notes: string | null;
+  date: string;
 }
 
 export type HistoryItem = {
