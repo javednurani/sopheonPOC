@@ -139,6 +139,7 @@ export const messages: Record<string, Record<string, string>> = {
     'history.title': 'History',
     'history.showPreviousValue': 'Show Previous Value',
     'history.hidePreviousValue': 'Hide Previous Value',
+    'history.noPreviousValue': 'No Previous Value',
     'toDo.title': 'To Do',
     'toDo.empty1': "You don't have any tasks yet. Click ",
     'toDo.empty2': ' above to add one.',
