@@ -4,26 +4,24 @@ using Sopheon.CloudNative.Products.Domain;
 
 namespace Sopheon.CloudNative.Products.DataAccess.EntityConfiguration
 {
-   public class TaskConfiguration :IEntityTypeConfiguration<Task>
+   public class MilestoneConfiguration :IEntityTypeConfiguration<Milestone>
    {
-      public void Configure(EntityTypeBuilder<Task> builder)
+      public void Configure(EntityTypeBuilder<Milestone> builder)
       {
          builder
-            .Property(t => t.Name)
+            .Property(m => m.Name)
             .HasMaxLength(ModelConstraints.NAME_LENGTH_150)
             .IsRequired();
 
          builder
-            .Property(t => t.Notes)
+            .Property(m => m.Notes)
             .HasMaxLength(ModelConstraints.NOTES_LENGTH_4000);
 
          builder
-            .HasOne(t => t.Product)
-            .WithMany(p => p.Tasks)
-            .HasForeignKey(t => t.ProductId)
+            .HasOne(m => m.Product)
+            .WithMany(p => p.Milestones)
+            .HasForeignKey(m => m.ProductId)
             .OnDelete(DeleteBehavior.NoAction);
-
-         builder.ToTable(t => t.IsTemporal());
       }
    }
 }
