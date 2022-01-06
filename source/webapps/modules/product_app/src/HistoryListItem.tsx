@@ -23,6 +23,15 @@ const HistoryListItem: React.FC<HistoryListItemProps> = ({
     color: theme.palette.themePrimary,
   };
 
+  const formatPreviousValue: (prevValue: string | number | Date | null) => string | React.ReactText = prevValue => {
+    if (prevValue) {
+      const formattedPrevValue =
+        prevValue instanceof Date ? prevValue.toLocaleDateString(undefined, { year: 'numeric', month: 'numeric', day: 'numeric' }) : prevValue;
+      return formattedPrevValue;
+    }
+    return formatMessage({ id: 'history.noPreviousValue' });
+  };
+
   return (
     <>
       <div>
@@ -40,13 +49,9 @@ const HistoryListItem: React.FC<HistoryListItemProps> = ({
           </Link>
         </div>
       )}
-      {isPrevValueShown && previousValue && (
+      {isPrevValueShown && (
         <div>
-          <Text variant="xSmall">
-            {previousValue instanceof Date
-              ? previousValue.toLocaleDateString(undefined, { year: 'numeric', month: 'numeric', day: 'numeric' })
-              : previousValue}
-          </Text>
+          <Text variant="xSmall">{formatPreviousValue(previousValue)}</Text>
         </div>
       )}
     </>
