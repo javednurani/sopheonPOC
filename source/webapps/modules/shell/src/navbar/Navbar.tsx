@@ -16,7 +16,7 @@ const Navbar: React.FunctionComponent = () => {
     lineHeight: '40px',
     display: 'inline-block',
     textDecoration: 'none',
-    color: theme.palette.themeDark,
+    color: theme.palette.neutralSecondary,
     marginLeft: '20px',
     borderBottomStyle: 'none',
   };
@@ -25,7 +25,7 @@ const Navbar: React.FunctionComponent = () => {
     ...linkStyles,
     borderBottomWidth: 3,
     borderBottomStyle: 'solid',
-    borderBottomColor: theme.palette.themePrimary,
+    borderBottomColor: theme.palette.neutralSecondary,
     fontWeight: 'bold',
   };
 

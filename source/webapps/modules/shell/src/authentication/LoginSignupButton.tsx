@@ -94,6 +94,7 @@ const LoginSignupButton: FunctionComponent<ILoginSignupButtonProps> = ({
     root: {
       height: '36px',
       border: 'none',
+      color: theme.palette.neutralSecondary,
     },
   };
 
