@@ -1,7 +1,6 @@
 import { INavStyleProps, INavStyles, IStyleFunctionOrObject, Spinner, Stack } from '@fluentui/react';
 import { useTheme } from '@fluentui/react-theme-provider';
-import { SideNav } from '@sopheon/controls';
-import { SideBarProps } from '@sopheon/controls/dist/components/SideNav';
+import { SideBarProps, SideNav } from '@sopheon/controls';
 import { AppProps, FetchStatus } from '@sopheon/shell-api';
 import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';

@@ -1,5 +1,4 @@
-import { IStackItemStyles, IStackStyles, IStackTokens, IStyle, Stack } from '@fluentui/react';
-import { useTheme } from '@fluentui/react-theme-provider';
+import { IStackItemStyles, IStackStyles, IStackTokens, Stack } from '@fluentui/react';
 import React from 'react';
 
 import KPIs from './KPIs';
@@ -31,42 +30,15 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
   accessToken,
   products,
 }: IDashboardProps) => {
-  const theme = useTheme();
-
   const stackItemStyles: IStackItemStyles = {
     root: {
-      background: theme.semanticColors.bodyBackground, // TODO: why needed?
       display: 'flex',
       justifyContent: 'center',
     },
   };
 
-  const sharedStackItemStyles: Partial<IStyle> = {
-    display: 'flex',
-    justifyContent: 'center',
-    border: '1px solid',
-    borderColor: theme.palette.neutralTertiary,
-    borderRadius: '3px',
-    overflow: 'auto',
-  };
-
-  const topRowStackItemStyles: IStackItemStyles = {
-    root: {
-      ...sharedStackItemStyles,
-      height: '14vh',
-    },
-  };
-
-  const middleRowStackItemStyles: IStackItemStyles = {
-    root: {
-      ...sharedStackItemStyles,
-      height: '52vh',
-    },
-  };
-
   const stackStyles: IStackStyles = {
     root: {
-      background: theme.semanticColors.bodyBackground, // TODO: why needed?
       height: '100%',
     },
   };
@@ -103,16 +75,6 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
         <Stack horizontal styles={stackStyles} tokens={stackTokens}>
           <Stack.Item grow styles={stackItemStyles}>
             <ResourcesAndLinks />
-          </Stack.Item>
-        </Stack>
-      </Stack.Item>
-      <Stack.Item grow={7}>
-        <Stack styles={stackStyles} tokens={stackTokens}>
-          <Stack.Item styles={topRowStackItemStyles}>
-            <KPIs />
-          </Stack.Item>
-          <Stack.Item styles={middleRowStackItemStyles}>
-            <Timeline product={products[0]} />
           </Stack.Item>
           <Stack.Item grow styles={stackItemStyles}>
             <ProductHealth />

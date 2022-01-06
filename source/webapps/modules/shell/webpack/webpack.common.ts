@@ -31,7 +31,6 @@ export default (): webpack.Configuration => ({
         'react': {},
         'react-intl': {},
         'react-redux': {},
-        'react-router-dom': {},
         '@azure/msal-react': { singleton: true },
         '@azure/msal-browser': { singleton: true },
       },
