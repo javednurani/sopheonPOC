@@ -27,35 +27,58 @@ import { useTheme } from '@fluentui/react-theme-provider';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
-import { UpdateProductAction } from './product/productReducer';
-import { Attributes, PatchOperation, Product, ProductItemTypes, Status, UpdateProductModel } from './types';
+import { Status } from './data/status';
+import ExpandablePanel from './ExpandablePanel';
+import HistoryList from './HistoryList';
+import ProductApi from './product/productApi';
+import { CreateTaskAction, UpdateProductAction, UpdateProductItemAction, UpdateTaskAction } from './product/productReducer';
+import { HistoryItem, PostPutTaskModel, Product, Task, TaskDto, UpdateProductItemModel, UpdateProductModel } from './types';
 
-export interface IAddTaskProps {
+export interface ITaskDetailsProps {
   hideModal: () => void;
   updateProduct: (product: UpdateProductModel) => UpdateProductAction;
   environmentKey: string;
   accessToken: string;
   products: Product[];
+  selectedTask: Task | null;
+  updateProductItem: (productItem: UpdateProductItemModel) => UpdateProductItemAction;
+  createTask: (task: PostPutTaskModel) => CreateTaskAction;
+  updateTask: (task: PostPutTaskModel) => UpdateTaskAction;
 }
 
 export interface DateStateObject {
   date: Date | undefined;
 }
 
-const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProduct, environmentKey, accessToken, products }: IAddTaskProps) => {
+const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
+  hideModal,
+  environmentKey,
+  accessToken,
+  products,
+  selectedTask,
+  createTask,
+  updateTask,
+}: ITaskDetailsProps) => {
+  const { name, id, notes, dueDate, status } = selectedTask ?? {};
+
   const theme = useTheme();
   const { formatMessage } = useIntl();
 
-  const [taskName, setTaskName] = useState('');
-  const [taskNotes, setTaskNotes] = useState('');
+  const [taskName, setTaskName] = useState(name ?? '');
 
-  const [taskDueDate, setTaskDueDate] = useState<DateStateObject>({ date: undefined });
+  const [taskHistory, setTaskHistory] = useState<HistoryItem[] | null>(null);
 
-  const [selectedItemStatusDropdown, setSelectedItemStatusDropdown] = useState<IDropdownOption>();
+  const [taskNotes, setTaskNotes] = useState(notes ?? '');
+
+  const [taskDueDate, setTaskDueDate] = useState<DateStateObject>({ date: dueDate ?? undefined });
+
+  const [selectedItemStatusDropdown, setSelectedItemStatusDropdown] = useState(status ?? Status.NotStarted);
 
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
 
   const [taskNameDirty, setTaskNameDirty] = useState(false);
+
+  const [formDirty, setFormDirty] = useState(false);
 
   const [hideDiscardDialog, { toggle: toggleHideDiscardDialog }] = useBoolean(true);
 
@@ -185,48 +208,41 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
   ];
 
   const handleSaveButtonClick = () => {
-    const productPatchData: PatchOperation[] = [
-      {
-        op: 'add',
-        path: '/Items',
-        value: [
-          {
-            name: taskName,
-            productItemTypeId: ProductItemTypes.TASK,
-            stringAttributeValues: [
-              {
-                attributeId: Attributes.NOTES,
-                value: taskNotes,
-              },
-            ],
-            utcDateTimeAttributeValues: [
-              {
-                attributeId: Attributes.DUEDATE,
-                value: taskDueDate.date?.toDateString(),
-              },
-            ],
-            enumCollectionAttributeValues: [
-              {
-                attributeId: Attributes.STATUS,
-                value: [
-                  {
-                    enumAttributeOptionId: selectedItemStatusDropdown?.key || Status.NotStarted,
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-    ];
+    if (!id) {
+      // create new task
+      const task: TaskDto = {
+        id: 0, // update type to have optional id instead of 0?  id is not consumed by service POST call
+        name: taskName,
+        notes: taskNotes,
+        status: selectedItemStatusDropdown,
+        dueDate: taskDueDate.date ? taskDueDate.date.toDateString() : null,
+      };
 
-    const updateProductDto: UpdateProductModel = {
-      ProductPatchData: productPatchData,
-      ProductKey: products[0].key || 'BAD_PRODUCT_KEY',
-      EnvironmentKey: environmentKey,
-      AccessToken: accessToken,
-    };
-    updateProduct(updateProductDto);
+      const createTaskModel: PostPutTaskModel = {
+        ProductKey: products[0].key || 'BAD_PRODUCT_KEY',
+        EnvironmentKey: environmentKey,
+        AccessToken: accessToken,
+        Task: task,
+      };
+      createTask(createTaskModel);
+    } else {
+      // updating existing task
+      const task: TaskDto = {
+        id: id,
+        name: taskName,
+        notes: taskNotes,
+        status: selectedItemStatusDropdown,
+        dueDate: taskDueDate.date ? taskDueDate.date.toDateString() : null,
+      };
+
+      const updateTaskModel: PostPutTaskModel = {
+        ProductKey: products[0].key || 'BAD_PRODUCT_KEY',
+        EnvironmentKey: environmentKey,
+        AccessToken: accessToken,
+        Task: task,
+      };
+      updateTask(updateTaskModel);
+    }
     hideModal();
   };
 
@@ -235,7 +251,7 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
     exitModalWithDiscardDialog();
   };
 
-  // CANCEL BUTTON
+  // CLOSE ICON
   const handleCloseIconClick = () => {
     exitModalWithDiscardDialog();
   };
@@ -261,10 +277,8 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
     hideModal();
   };
 
-  const formHasData = (): boolean => taskName.length > 0 || taskNotes.length > 0 || taskDueDate.date !== undefined;
-
   const exitModalWithDiscardDialog = (): void => {
-    if (formHasData()) {
+    if (formDirty) {
       toggleHideDiscardDialog();
     } else {
       hideModal();
@@ -277,23 +291,27 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
     // TODO 1693 - possible taskName.errorMessage display pattern, remove if unneeded
     if (!taskNameDirty) {
       setTaskNameDirty(true);
+      setFormDirty(true);
     }
     setTaskName(newValue || '');
   };
 
   const handleTaskNotesChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string | undefined): void => {
     setTaskNotes(newValue || '');
+    setFormDirty(true);
   };
 
   const handleTaskDueDateChange = (date: Date | null | undefined) => {
     if (date) {
       // eslint-disable-next-line object-shorthand
       setTaskDueDate({ date: date });
+      setFormDirty(true);
     }
   };
 
   const handleStatusDropdownChange = (event: React.FormEvent<HTMLDivElement>, item: IDropdownOption | undefined): void => {
-    setSelectedItemStatusDropdown(item);
+    setSelectedItemStatusDropdown(item?.key as Status);
+    setFormDirty(true);
   };
 
   const stackStyles: IStackStyles = {
@@ -333,11 +351,19 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
     },
   };
 
+  const handleHistoryExpandClick = () => {
+    if (!taskHistory) {
+      ProductApi.getTaskHistory(environmentKey, accessToken, products[0].key as string, id as number).then(historyItems =>
+        setTaskHistory(historyItems)
+      );
+    }
+  };
+
   return (
     <>
       <div className={contentStyles.header}>
-        <span id="AddTaskModal">
-          <Text variant="xxLarge">{formatMessage({ id: 'toDo.newtask' })}</Text>
+        <span id="TaskDetailsModal">
+          <Text variant="xxLarge">{formatMessage({ id: selectedTask ? 'toDo.edittask' : 'toDo.newtask' })}</Text>
         </span>
         <IconButton styles={iconButtonStyles} iconProps={cancelIcon} ariaLabel={formatMessage({ id: 'closemodal' })} onClick={handleCloseIconClick} />
       </div>
@@ -353,6 +379,7 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
                   required
                   maxLength={150}
                   label={formatMessage({ id: 'name' })}
+                  value={taskName}
                   // TODO 1693 - possible taskName.errorMessage display pattern, remove if unneeded
                   onGetErrorMessage={value => (taskNameDirty && !value ? formatMessage({ id: 'fieldisrequired' }) : undefined)}
                 />
@@ -381,15 +408,16 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
                   onChange={handleTaskNotesChange}
                   multiline
                   maxLength={5000}
-                  rows={15}
+                  rows={13}
                   resizable={false}
                   label={formatMessage({ id: 'toDo.notes' })}
+                  value={taskNotes}
                 />
               </Stack.Item>
               <Stack.Item>
                 <Dropdown
                   label={formatMessage({ id: 'status' })}
-                  selectedKey={selectedItemStatusDropdown ? selectedItemStatusDropdown.key : Status.NotStarted}
+                  selectedKey={selectedItemStatusDropdown}
                   // eslint-disable-next-line react/jsx-no-bind
                   onChange={handleStatusDropdownChange}
                   placeholder={formatMessage({ id: 'toDo.selectastatus' })}
@@ -399,6 +427,13 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
               </Stack.Item>
             </Stack>
           </Stack.Item>
+          {id && (
+            <Stack.Item>
+              <ExpandablePanel title={formatMessage({ id: 'history.title' })} onExpand={handleHistoryExpandClick}>
+                <HistoryList events={taskHistory} />
+              </ExpandablePanel>
+            </Stack.Item>
+          )}
           <Stack.Item>
             <Stack horizontal styles={stackStyles} tokens={nestedStackTokens}>
               <Stack.Item styles={controlButtonStackItemStyles}>
@@ -406,7 +441,7 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
                   style={saveButtonStyle}
                   text={formatMessage({ id: 'save' })}
                   onClick={handleSaveButtonClick}
-                  disabled={saveButtonDisabled}
+                  disabled={saveButtonDisabled || !formDirty}
                 />
                 <DefaultButton text={formatMessage({ id: 'cancel' })} onClick={handleCancelButtonClick} />
               </Stack.Item>
@@ -429,4 +464,4 @@ const AddTask: React.FunctionComponent<IAddTaskProps> = ({ hideModal, updateProd
   );
 };
 
-export default AddTask;
+export default TaskDetails;

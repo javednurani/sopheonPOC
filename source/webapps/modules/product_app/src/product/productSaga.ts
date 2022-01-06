@@ -1,12 +1,17 @@
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 
-import { Attributes, Product, ProductItemTypes, ToDoItem } from '../types';
+import { Attributes } from '../data/attributes';
+import { Product, ProductScopedTask, Task } from '../types';
 // eslint-disable-next-line max-len
 import {
   CreateProductAction,
   createProductFailure,
   createProductRequest,
   createProductSuccess,
+  CreateTaskAction,
+  createTaskFailure,
+  createTaskRequest,
+  createTaskSuccess,
   GetProductsAction,
   getProductsFailure,
   getProductsRequest,
@@ -20,29 +25,32 @@ import {
   updateProductItemSuccess,
   updateProductRequest,
   updateProductSuccess,
+  UpdateTaskAction,
+  updateTaskFailure,
+  updateTaskRequest,
+  updateTaskSuccess,
 } from './productReducer';
-import { createProduct, getProducts, updateProduct, updateProductItem } from './productService';
+import { createProduct, createTask, getProducts, updateProduct, updateProductItem, updateTask } from './productService';
+
+// TRANSLATION HELPERS, TODO, MOVE OUT OF SAGA
+const translateEnumCollectionAttributeValuesToIndustryIds = (enumCollectionAttributeValues: unknown[]): number[] =>
+  enumCollectionAttributeValues.find(ecav => ecav.attributeId === Attributes.INDUSTRIES).value.map(val => val.enumAttributeOptionId);
+
+// INFO, Task object from service and Task object in SPA are similar, but we at least need the Date() translation...possibly we can reduce this
+const translateTasksFromService = (tasks: unknown[]): Task[] => tasks.map(task => ({
+  id: task.id,
+  name: task.name,
+  notes: task.notes,
+  dueDate: task.dueDate ? new Date(task.dueDate) : null,
+  status: task.status
+}));
+
+
+// END TRANSLATION HELPERS
 
 export function* watchOnGetProducts(): Generator {
   yield takeEvery(ProductSagaActionTypes.GET_PRODUCTS, onGetProducts);
 }
-
-const translateProductItemsToTasks = (productItems: unknown[]): ToDoItem[] =>
-  productItems.filter(pi => pi.productItemTypeId === ProductItemTypes.TASK).map(td => translateProductItemToTask(td));
-
-const translateProductItemToTask = (td: unknown): ToDoItem => {
-  const dueDateString: string = td.utcDateTimeAttributeValues.filter(dtav => dtav.attributeId === Attributes.DUEDATE)[0].value;
-  return {
-    id: td.id,
-    name: td.name,
-    notes: td.stringAttributeValues.filter(sav => sav.attributeId === Attributes.NOTES)[0].value,
-    dueDate: dueDateString ? new Date(dueDateString) : null,
-    status: td.enumCollectionAttributeValues.filter(ecav => ecav.attributeId === Attributes.STATUS)[0].value[0].enumAttributeOptionId,
-  };
-};
-
-const translateInt32AttributeValuesToIndustryIds = (int32AttributeValues: unknown[]): number[] =>
-  int32AttributeValues.filter(iav => iav.attributeId === Attributes.INDUSTRIES).map(iav => iav.value);
 
 export function* onGetProducts(action: GetProductsAction): Generator {
   try {
@@ -53,10 +61,10 @@ export function* onGetProducts(action: GetProductsAction): Generator {
       id: d.id,
       key: d.key,
       name: d.name,
-      industries: translateInt32AttributeValuesToIndustryIds(d.int32AttributeValues),
+      industries: translateEnumCollectionAttributeValuesToIndustryIds(d.enumCollectionAttributeValues),
       kpis: d.keyPerformanceIndicators,
       goals: d.goals,
-      todos: translateProductItemsToTasks(d.items),
+      tasks: translateTasksFromService(d.tasks),
     }));
     yield put(getProductsSuccess(transformedProductsData));
   } catch (error) {
@@ -77,10 +85,10 @@ export function* onCreateProduct(action: CreateProductAction): Generator {
       id: data.id,
       key: data.key,
       name: data.name,
-      industries: translateInt32AttributeValuesToIndustryIds(data.int32AttributeValues),
+      industries: translateEnumCollectionAttributeValuesToIndustryIds(data.enumCollectionAttributeValues),
       goals: data.goals,
       kpis: data.keyPerformanceIndicators,
-      todos: translateProductItemsToTasks(data.items),
+      tasks: translateTasksFromService(data.tasks),
     };
 
     yield put(createProductSuccess(createdProduct));
@@ -93,10 +101,6 @@ export function* watchOnUpdateProduct(): Generator {
   yield takeEvery(ProductSagaActionTypes.UPDATE_PRODUCT, onUpdateProduct);
 }
 
-export function* watchOnUpdateProductItem(): Generator {
-  yield takeEvery(ProductSagaActionTypes.UPDATE_PRODUCT_ITEM, onUpdateProductItem);
-}
-
 export function* onUpdateProduct(action: UpdateProductAction): Generator {
   try {
     yield put(updateProductRequest());
@@ -106,16 +110,23 @@ export function* onUpdateProduct(action: UpdateProductAction): Generator {
       id: data.id,
       key: data.key,
       name: data.name,
-      industries: translateInt32AttributeValuesToIndustryIds(data.int32AttributeValues),
+      industries: translateEnumCollectionAttributeValuesToIndustryIds(data.enumCollectionAttributeValues),
       kpis: data.keyPerformanceIndicators,
       goals: data.goals,
-      todos: translateProductItemsToTasks(data.items),
+      tasks: translateTasksFromService(data.tasks),
     };
 
     yield put(updateProductSuccess(updatedProduct));
   } catch (error) {
     yield put(updateProductFailure(error));
   }
+}
+
+// INFO, updateProductItem pipe was used to add Tasks under old E-A-V pattern. this can be removed.
+// some references to obsolete/removed helpers (eg translateProductItemToTask) would need to be reworked.
+
+export function* watchOnUpdateProductItem(): Generator {
+  yield takeEvery(ProductSagaActionTypes.UPDATE_PRODUCT_ITEM, onUpdateProductItem);
 }
 
 export function* onUpdateProductItem(action: UpdateProductItemAction): Generator {
@@ -129,6 +140,61 @@ export function* onUpdateProductItem(action: UpdateProductItemAction): Generator
   }
 }
 
+export function* watchOnCreateTask(): Generator {
+  yield takeEvery(ProductSagaActionTypes.CREATE_TASK, onCreateTask);
+}
+
+export function* onCreateTask(action: CreateTaskAction): Generator {
+  try {
+    yield put(createTaskRequest());
+    const { data } = yield call(createTask, action.payload);
+    const createdTask: ProductScopedTask = {
+      task: {
+        id: data.id,
+        name: data.name,
+        notes: data.notes,
+        dueDate: data.dueDate ? new Date(data.dueDate) : null,
+        status: data.status
+      },
+      ProductKey: action.payload.ProductKey, // used for assignment to correct Product in Redux store
+    };
+    yield put(createTaskSuccess(createdTask));
+  } catch (error) {
+    yield put(createTaskFailure(error));
+  }
+}
+
+export function* watchOnUpdateTask(): Generator {
+  yield takeEvery(ProductSagaActionTypes.UPDATE_TASK, onUpdateTask);
+}
+
+export function* onUpdateTask(action: UpdateTaskAction): Generator {
+  try {
+    yield put(updateTaskRequest());
+    const { data } = yield call(updateTask, action.payload);
+    const updatedTask: ProductScopedTask = {
+      task: {
+        id: data.id,
+        name: data.name,
+        notes: data.notes,
+        dueDate: data.dueDate ? new Date(data.dueDate) : null,
+        status: data.status
+      },
+      ProductKey: action.payload.ProductKey, // used for assignment to correct Product in Redux store
+    };
+    yield put(updateTaskSuccess(updatedTask));
+  } catch (error) {
+    yield put(updateTaskFailure(error));
+  }
+}
+
 export default function* productSaga(): Generator {
-  yield all([fork(watchOnGetProducts), fork(watchOnCreateProduct), fork(watchOnUpdateProduct), fork(watchOnUpdateProductItem)]);
+  yield all([
+    fork(watchOnGetProducts),
+    fork(watchOnCreateProduct),
+    fork(watchOnUpdateProduct),
+    fork(watchOnUpdateProductItem),
+    fork(watchOnCreateTask),
+    fork(watchOnUpdateTask)
+  ]);
 }

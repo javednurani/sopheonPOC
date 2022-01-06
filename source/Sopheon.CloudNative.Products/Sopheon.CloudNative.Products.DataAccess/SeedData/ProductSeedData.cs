@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Sopheon.CloudNative.Products.Domain;
 using Sopheon.CloudNative.Products.Domain.Attributes.Enum;
-using Sopheon.CloudNative.Products.Domain.Attributes.Int32;
 using Sopheon.CloudNative.Products.Domain.Attributes.String;
 using Sopheon.CloudNative.Products.Domain.Attributes.UtcDateTime;
 
@@ -80,36 +79,207 @@ namespace Sopheon.CloudNative.Products.DataAccess.SeedData
 
       private static void DefineDefaultAttributes()
       {
-         // TODO, Status will be an EnumAttribute, NOT EnumCollectionAttribute
-         List<EnumCollectionAttribute> enumCollectionAttributes = new List<EnumCollectionAttribute>
+         // EnumAttributes = SINGLE-SELECT of Enum values
+         List<EnumAttribute> enumAttributes = new List<EnumAttribute>
          {
-            new EnumCollectionAttribute
+            new EnumAttribute
             {
                AttributeId = -4,
-               AttributeDataTypeId = (int)AttributeDataTypes.EnumCollection,
                Name = "Status",
                ShortName = "STATUS",
                EnumAttributeOptions = new List<EnumAttributeOption>
                {
                   new EnumAttributeOption
                   {
-                     EnumAttributeOptionId = -1,
+                     EnumAttributeOptionId = -31,
                      Name = "Not Started"
                   },
                   new EnumAttributeOption
                   {
-                     EnumAttributeOptionId = -2,
+                     EnumAttributeOptionId = -32,
                      Name = "In Progress"
                   },
                   new EnumAttributeOption
                   {
-                     EnumAttributeOptionId = -3,
+                     EnumAttributeOptionId = -33,
                      Name = "Assigned"
                   },
                   new EnumAttributeOption
                   {
-                     EnumAttributeOptionId = -4,
+                     EnumAttributeOptionId = -34,
                      Name = "Complete"
+                  },
+               }
+            }
+         };
+
+         enumAttributes.ForEach(attribute =>
+         {
+            foreach (EnumAttributeOption option in attribute.EnumAttributeOptions)
+            {
+               option.AttributeId = attribute.AttributeId;
+            }
+         });
+
+         // EnumCollectionAttributes = MULTI-SELECT of Enum values
+         List<EnumCollectionAttribute> enumCollectionAttributes = new List<EnumCollectionAttribute>
+         {
+            new EnumCollectionAttribute
+            {
+               AttributeId = -1,
+               Name = "Industry",
+               ShortName = "IND",
+               EnumAttributeOptions = new List<EnumAttributeOption>
+               {
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -1,
+                     Name = "Advertising"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -2,
+                     Name = "Agriculture & Forestry"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -3,
+                     Name = "Construction"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -4,
+                     Name = "Education - Higher Ed"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -5,
+                     Name = "Education - K12"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -6,
+                     Name = "Energy, Mining, Oil & Gas"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -7,
+                     Name = "Financial Services"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -8,
+                     Name = "Government - Federal"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -9,
+                     Name = "Government - Local"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -10,
+                     Name = "Government - Military"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -11,
+                     Name = "Government - State"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -12,
+                     Name = "Health Care"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -13,
+                     Name = "Insurance"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -14,
+                     Name = "Manufacturing - Aerospace"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -15,
+                     Name = "Manufacturing - Automotive"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -16,
+                     Name = "Manufacturing - Consumer Goods"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -17,
+                     Name = "Manufacturing - Industrial"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -18,
+                     Name = "Media & Entertainment"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -19,
+                     Name = "Membership Organizations"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -20,
+                     Name = "Non-Profit"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -21,
+                     Name = "Pharmaceuticals & Biotech"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -22,
+                     Name = "Professional & Technical Services"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -23,
+                     Name = "Real Estate, Rental & Leasing"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -24,
+                     Name = "Retail"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -25,
+                     Name = "Technology Hardware"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -26,
+                     Name = "Technology Software & Services"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -27,
+                     Name = "Telecommunications"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -28,
+                     Name = "Transportation & Warehousing"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -29,
+                     Name = "Travel, Leisure & Hospitality"
+                  },
+                  new EnumAttributeOption
+                  {
+                     EnumAttributeOptionId = -30,
+                     Name = "Utilities"
                   },
                }
             }
@@ -123,26 +293,18 @@ namespace Sopheon.CloudNative.Products.DataAccess.SeedData
             }
          });
 
+         // otherDefaultAttributes = arbitrary values, NOT related to Enums
          List<Domain.Attribute> otherDefaultAttributes = new List<Domain.Attribute>
          {
-            new Int32Attribute
-            {
-               AttributeId = -1,
-               AttributeDataTypeId = (int)AttributeDataTypes.Int32,
-               Name = "Industry",
-               ShortName = "IND"
-            },
             new StringAttribute
             {
                AttributeId = -2,
-               AttributeDataTypeId = (int)AttributeDataTypes.String,
                Name = "Notes",
                ShortName = "NOTES"
             },
             new UtcDateTimeAttribute
             {
                AttributeId = -3,
-               AttributeDataTypeId = (int)AttributeDataTypes.UtcDateTime,
                Name = "Due Date",
                ShortName = "DUE"
             }
@@ -150,6 +312,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.SeedData
 
          AddDefaultAttributes(otherDefaultAttributes);
          AddDefaultAttributes(enumCollectionAttributes);
+         AddDefaultAttributes(enumAttributes);
       }
    }
 }

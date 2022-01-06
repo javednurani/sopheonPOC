@@ -16,7 +16,7 @@ param environmentDatabaseSQLServerName string = '^EnvironmentManagementSQLServer
 
 param location string = resourceGroup().location
 
-var bufferCapacity = 100
+var bufferCapacity = 50
 
 resource SqlServer 'Microsoft.Sql/servers@2020-02-02-preview' = {
   name: serverName
@@ -47,7 +47,7 @@ resource SqlServer_Pool 'Microsoft.Sql/servers/elasticPools@2020-08-01-preview' 
   properties: {
     perDatabaseSettings: {
       minCapacity: 0
-      maxCapacity: 100
+      maxCapacity: bufferCapacity
     }
     zoneRedundant: false
   }
