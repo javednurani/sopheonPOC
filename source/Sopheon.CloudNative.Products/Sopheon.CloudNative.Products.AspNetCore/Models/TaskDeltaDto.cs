@@ -5,7 +5,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
    {
       public string Name { get; set; }
       public string Notes { get; set; }
-      public DateTime DueDate { get; set; }
+      public DateTime? DueDate { get; set; }
       public TaskStatusDto Status { get; set; }
    }
 }
