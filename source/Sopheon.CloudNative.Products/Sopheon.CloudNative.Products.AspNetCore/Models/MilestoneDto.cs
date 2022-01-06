@@ -10,6 +10,6 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
 
       public string Notes { get; set; }
 
-      public DateTime? Date { get; set; }
+      public DateTime Date { get; set; }
    }
 }
