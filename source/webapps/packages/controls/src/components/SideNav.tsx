@@ -36,11 +36,11 @@ const SideNav: React.FC<SideBarProps> = ({ menuItems, selectedMenuKey }): JSX.El
   const sideBarStyles: IStyleFunctionOrObject<INavStyleProps, INavStyles> = {
     root: {
       width: '150px',
-      backgroundColor: '#eAeef0',
+      backgroundColor: theme.palette.neutralLight,
     },
     navItem: {
       selectors: {
-        '.is-selected': { backgroundColor: theme.semanticColors.bodyBackground },
+        '.is-selected': { backgroundColor: theme.semanticColors.bodyBackground, color: theme.semanticColors.bodyTextChecked },
       },
     },
 
@@ -60,7 +60,7 @@ const SideNav: React.FC<SideBarProps> = ({ menuItems, selectedMenuKey }): JSX.El
       fontSize: theme.fonts.medium.fontSize,
       display: 'inline-block',
       textDecoration: 'none !important',
-      color: theme.palette.themeDark,
+      color: theme.palette.neutralPrimary,
       marginBottom: '10px',
       borderBottomStyle: 'none',
     },

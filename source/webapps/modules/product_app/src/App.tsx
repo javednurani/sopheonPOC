@@ -1,4 +1,5 @@
 import { INavStyleProps, INavStyles, IStyleFunctionOrObject, Spinner, Stack } from '@fluentui/react';
+import { useTheme } from '@fluentui/react-theme-provider';
 import { SideNav } from '@sopheon/controls';
 import { SideBarProps } from '@sopheon/controls/dist/components/SideNav';
 import { AppProps, FetchStatus } from '@sopheon/shell-api';
@@ -27,7 +28,7 @@ const App: React.FunctionComponent<Props> = ({
   showHeader,
 }: Props) => {
   const { formatMessage } = useIntl();
-
+  const theme = useTheme();
   useEffect(() => {
     if (accessToken && getProductsFetchStatus === FetchStatus.NotActive) {
       const requestDto: EnvironmentScopedApiRequestModel = {
@@ -62,7 +63,7 @@ const App: React.FunctionComponent<Props> = ({
   const selectedKey = formatMessage({ id: 'sidebar.dashboard' });
   const sideBarContainerStyle: IStyleFunctionOrObject<INavStyleProps, INavStyles> = {
     root: {
-      backgroundColor: '#eAeef0',
+      backgroundColor: theme.palette.neutralLight,
     },
   };
   const fullHeight: IStyleFunctionOrObject<INavStyleProps, INavStyles> = {
