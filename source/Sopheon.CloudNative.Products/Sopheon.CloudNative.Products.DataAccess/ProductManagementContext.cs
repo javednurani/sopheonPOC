@@ -29,6 +29,8 @@ namespace Sopheon.CloudNative.Products.Domain
    public class ProductManagementContext : TenantEnvironmentDbContext
    {
       public static readonly string DEFAULT_SCHEMA = "SPM"; // Sopheon Product Management
+      public static readonly string PERIOD_START = "PeriodStart"; // Period Start property/column name for Temporal entities/tables
+      public static readonly string PERIOD_END = "PeriodEnd"; // Period End property/column name for Temporal entities/tables
 
       #region Process Configuration and Domain Value Entities
 
