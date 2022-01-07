@@ -1,4 +1,6 @@
-import { Stack } from '@fluentui/react';
+import { INavStyleProps, INavStyles, IStyleFunctionOrObject, Spinner, Stack } from '@fluentui/react';
+import { useTheme } from '@fluentui/react-theme-provider';
+import { SideBarProps, SideNav } from '@sopheon/controls';
 import { AppProps, FetchStatus } from '@sopheon/shell-api';
 import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
@@ -21,11 +23,13 @@ const App: React.FunctionComponent<Props> = ({
   getProductsFetchStatus,
   environmentKey,
   accessToken,
-  hideHeaderFooter,
-  showHeaderFooter,
+  hideHeader,
+  showHeader,
   createTask,
   updateTask,
 }: Props) => {
+  const { formatMessage } = useIntl();
+  const theme = useTheme();
   useEffect(() => {
     if (accessToken && getProductsFetchStatus === FetchStatus.NotActive) {
       const requestDto: EnvironmentScopedApiRequestModel = {
@@ -35,29 +39,62 @@ const App: React.FunctionComponent<Props> = ({
 
       getProducts(requestDto);
     }
-  }, [accessToken, getProductsFetchStatus]);
+  }, [accessToken, environmentKey, getProducts, getProductsFetchStatus]);
 
-  // TODO: maybe this should be the respnsibility of the onbaording component to control?
+  // TODO: move this into onboarding component, but right now this is helping work around our injected saga delay issue
   useEffect(() => {
     if ((products.length === 0 && environmentKey) || (currentStep === 3 && products.length === 1)) {
-      hideHeaderFooter();
+      hideHeader();
     } else {
-      showHeaderFooter();
+      showHeader();
     }
-  }, [products, environmentKey]);
+  }, [currentStep, products, environmentKey, hideHeader, showHeader]);
 
-  const { formatMessage } = useIntl();
-
-  // TODO: condition copied from above, can be simplified?
-  const userNeedsOnboarding = (products.length === 0 && environmentKey) || (currentStep === 3 && products.length === 1);
-
-  if (!environmentKey) {
-    return (
-      <Stack horizontalAlign="center">
-        <h2>{formatMessage({ id: 'onboarding.pleaseLogin' })}</h2>
-      </Stack>
-    );
+  if (!environmentKey || getProductsFetchStatus === FetchStatus.NotActive || getProductsFetchStatus === FetchStatus.InProgress) {
+    return <Spinner label={formatMessage({ id: 'fallback.loading' })} />;
   }
+
+  if (getProductsFetchStatus === FetchStatus.DoneFailure) {
+    showHeader();
+    throw new Error(formatMessage({ id: 'error.erroroccurred' }));
+  }
+
+  // TODO: once we fix the header toggle timing issue, this would probably get changed to getProductsFetchStatus === FetchStatus.DoneSuccess && products.length === 0
+  const userNeedsOnboarding = (products.length === 0 && environmentKey) || (currentStep === 3 && products.length === 1);
+  const selectedKey = formatMessage({ id: 'sidebar.dashboard' });
+  const sideBarContainerStyle: IStyleFunctionOrObject<INavStyleProps, INavStyles> = {
+    root: {
+      backgroundColor: theme.palette.neutralLight,
+    },
+  };
+  const fullHeight: IStyleFunctionOrObject<INavStyleProps, INavStyles> = {
+    root: {
+      height: '100%',
+    },
+  };
+
+  const sideProps: SideBarProps = {
+    menuItems: [
+      {
+        links: [
+          {
+            name: selectedKey,
+            url: '/product', //TODO: Will need to be updated to be dynamic from actual app module
+            isExpanded: true,
+            key: selectedKey,
+          },
+          {
+            name: 'Page Next', //Placeholder text, will be updated to actual menu later on.
+            url: 'http://example.com',
+            key: 'key3',
+            isExpanded: true,
+            target: '_blank',
+          },
+        ],
+      },
+    ],
+    selectedMenuKey: selectedKey,
+  };
 
   if (userNeedsOnboarding) {
     return (
@@ -78,15 +115,22 @@ const App: React.FunctionComponent<Props> = ({
   }
 
   return (
-    <Dashboard
-      updateProduct={updateProduct}
-      updateProductItem={updateProductItem}
-      environmentKey={environmentKey}
-      accessToken={accessToken}
-      products={products}
-      createTask={createTask}
-      updateTask={updateTask}
-    />
+    <Stack horizontal disableShrink styles={fullHeight}>
+      <Stack.Item styles={sideBarContainerStyle}>
+        <SideNav {...sideProps} />
+      </Stack.Item>
+      <Stack.Item grow>
+        <Dashboard
+          updateProduct={updateProduct}
+          updateProductItem={updateProductItem}
+          environmentKey={environmentKey}
+          accessToken={accessToken}
+          products={products}
+          createTask={createTask}
+          updateTask={updateTask}
+        />
+      </Stack.Item>
+    </Stack>
   );
 };
 export default App;

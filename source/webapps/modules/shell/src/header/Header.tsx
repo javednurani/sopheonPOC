@@ -1,3 +1,4 @@
+import { AuthenticatedTemplate } from '@azure/msal-react';
 import { IStackTokens, Stack, Sticky, StickyPositionType } from '@fluentui/react';
 import { GetAccessTokenAction } from '@sopheon/shell-api';
 import React, { FunctionComponent } from 'react';
@@ -5,9 +6,9 @@ import { useIntl } from 'react-intl';
 
 import { SetEnvironmentKeyAction } from '../authentication/authReducer';
 import LoginSignupButton from '../authentication/LoginSignupButton';
+import NotificationsButton from '../authentication/NotificationsButton';
 import Navbar from '../navbar/Navbar';
 import SopheonLogo from '../SopheonLogo';
-import ThemeSelector from '../themes/components/themeSelector/ThemeSelector';
 import { ChangeThemeAction } from '../themes/themeReducer/themeReducer';
 
 interface HeaderProps {
@@ -20,63 +21,47 @@ const Header: FunctionComponent<HeaderProps> = ({ changeTheme, setEnvironmentKey
   const { formatMessage } = useIntl();
 
   const headerStyle: React.CSSProperties = {
-    marginTop: '8px',
-    borderBottom: '1px solid',
+    margin: '0 0 5px 0',
+    padding: '0 5px',
+    height: '42px',
+    boxShadow: '0 0 5px 0 #888888',
   };
 
   const logoStyle: React.CSSProperties = {
-    height: '100%',
-    width: '100%',
-    maxWidth: '200px',
-    maxHeight: '200px',
-    minWidth: '25px',
-    minHeight: '25px',
+    width: '150px',
     overflow: 'visible',
+    marginLeft: '20px',
   };
 
-  const logoContainerStyle: React.CSSProperties = {
-    margin: '5px',
+  const navContainerStyle: React.CSSProperties = {
+    marginLeft: '40px',
   };
 
   const stackTokensWithGap: IStackTokens = {
-    childrenGap: 2,
+    childrenGap: 1,
   };
-
-  /*
-  const location = useLocation();
-
-  const getTitle = (path: string): string => {
-    const currentApp: AppModule | undefined = appModules.find(appModule => appModule.routeName === path);
-    return currentApp ? formatMessage({ id: currentApp.displayNameResourceKey }) : formatMessage({ id: 'defaultTitle' });
-  };
-
-  const pageTitle: string = getTitle(location.pathname);
-  */
 
   return (
     <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced>
-      <header style={headerStyle} role="banner">
-        <Stack horizontal verticalAlign="center">
+      <header role="banner">
+        <Stack horizontal verticalAlign="center" style={headerStyle}>
           <Stack.Item shrink>
-            <div style={logoContainerStyle} title={formatMessage({ id: 'sopheon' })}>
+            <div title={formatMessage({ id: 'sopheon' })}>
               <SopheonLogo style={logoStyle} />
             </div>
           </Stack.Item>
-          <Stack.Item>
-            <Navbar />
+          <Stack.Item style={navContainerStyle}>
+            <AuthenticatedTemplate>
+              <Navbar />
+            </AuthenticatedTemplate>
           </Stack.Item>
-          <Stack.Item grow align="center">
-            <div id="page-title" className="page-title">
-              {/* {pageTitle} */}
-            </div>
-          </Stack.Item>
-          <Stack.Item>
-            <Stack tokens={stackTokensWithGap}>
-              <Stack.Item align={'end'}>
-                <LoginSignupButton setEnvironmentKey={setEnvironmentKey} getAccessToken={getAccessToken}/>
+          <Stack.Item grow>
+            <Stack tokens={stackTokensWithGap} horizontal verticalAlign="center" horizontalAlign="end">
+              <Stack.Item>
+                <NotificationsButton />
               </Stack.Item>
               <Stack.Item>
-                <ThemeSelector changeTheme={changeTheme} />
+                <LoginSignupButton setEnvironmentKey={setEnvironmentKey} getAccessToken={getAccessToken} changeTheme={changeTheme} />
               </Stack.Item>
             </Stack>
           </Stack.Item>

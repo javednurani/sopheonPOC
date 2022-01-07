@@ -1,12 +1,12 @@
 import { constants, messages } from '@sopheon/shared-ui';
-import {InjectReducerMap, InjectSagaMap, IShellApi } from '@sopheon/shell-api';
+import { InjectReducerMap, InjectSagaMap, IShellApi } from '@sopheon/shell-api';
 import React, { ComponentType, useEffect } from 'react';
 import { connect, Provider } from 'react-redux';
 import { CombinedState, combineReducers, Reducer, ReducersMapObject, Store } from 'redux';
 import { Saga } from 'redux-saga';
 
 import { getAccessToken, setEnvironmentKey } from './authentication/authReducer';
-import { hideHeaderFooter, showHeaderFooter } from './display/displayReducer';
+import { hideHeader, showHeader } from './display/displayReducer';
 import { shell } from './rootReducer';
 import { sagaMiddleware, store as mainShellStore } from './store';
 import { changeTheme } from './themes/themeReducer/themeReducer';
@@ -94,15 +94,15 @@ export class ShellApi implements IShellApi {
       accessToken: this.store.getState().shell.auth.accessToken,
       // the below stateProps are not exposed to MFE's via IShellApi. only used by, and private to, the shell
       theme: this.store.getState().shell.theme,
-      headerFooterAreShown: this.store.getState().shell.display.headerFooterAreShown,
+      headerShown: this.store.getState().shell.display.headerShown,
       language: initialLanguageState,
     });
 
     const mapDispatch = {
       ...(mapDispatchProps && mapDispatchProps(this.store.getState() as unknown as TState)),
       getAccessToken: () => getAccessToken(),
-      showHeaderFooter: () => showHeaderFooter(),
-      hideHeaderFooter: () => hideHeaderFooter(),
+      showHeader: () => showHeader(),
+      hideHeader: () => hideHeader(),
       // the below dispatchProps are not exposed to MFE's via IShellApi. only used by, and private to, the shell
       changeTheme: (useDarkTheme: boolean) => changeTheme(useDarkTheme),
       setEnvironmentKey: (environmentKey: string) => setEnvironmentKey(environmentKey),
