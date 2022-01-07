@@ -27,7 +27,7 @@ const ThemeSelector: FunctionComponent<ThemeSelectorProps> = ({ changeTheme }: T
   return (
     <Stack horizontal>
       <FormattedMessage id="header.useDarkTheme" />
-      <Toggle styles={toggleStyle} onChange={onChange} ariaLabel={formatMessage({ id: 'header.useDarkTheme' })} />
+      <Toggle id="themeSelector" styles={toggleStyle} onChange={onChange} ariaLabel={formatMessage({ id: 'header.useDarkTheme' })} />
     </Stack>
   );
 };
