@@ -1,9 +1,13 @@
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 
 import { Attributes } from '../data/attributes';
-import { Product, ProductScopedTask, Task } from '../types';
+import { Product, ProductScopedMilestone, ProductScopedTask, Task } from '../types';
 // eslint-disable-next-line max-len
 import {
+  CreateMilestoneAction,
+  createMilestoneFailure,
+  createMilestoneRequest,
+  createMilestoneSuccess,
   CreateProductAction,
   createProductFailure,
   createProductRequest,
@@ -30,21 +34,21 @@ import {
   updateTaskRequest,
   updateTaskSuccess,
 } from './productReducer';
-import { createProduct, createTask, getProducts, updateProduct, updateProductItem, updateTask } from './productService';
+import { createMilestone, createProduct, createTask, getProducts, updateProduct, updateProductItem, updateTask } from './productService';
 
 // TRANSLATION HELPERS, TODO, MOVE OUT OF SAGA
 const translateEnumCollectionAttributeValuesToIndustryIds = (enumCollectionAttributeValues: unknown[]): number[] =>
   enumCollectionAttributeValues.find(ecav => ecav.attributeId === Attributes.INDUSTRIES).value.map(val => val.enumAttributeOptionId);
 
 // INFO, Task object from service and Task object in SPA are similar, but we at least need the Date() translation...possibly we can reduce this
-const translateTasksFromService = (tasks: unknown[]): Task[] => tasks.map(task => ({
-  id: task.id,
-  name: task.name,
-  notes: task.notes,
-  dueDate: task.dueDate ? new Date(task.dueDate) : null,
-  status: task.status
-}));
-
+const translateTasksFromService = (tasks: unknown[]): Task[] =>
+  tasks.map(task => ({
+    id: task.id,
+    name: task.name,
+    notes: task.notes,
+    dueDate: task.dueDate ? new Date(task.dueDate) : null,
+    status: task.status,
+  }));
 
 // END TRANSLATION HELPERS
 
@@ -65,7 +69,7 @@ export function* onGetProducts(action: GetProductsAction): Generator {
       kpis: d.keyPerformanceIndicators,
       goals: d.goals,
       tasks: translateTasksFromService(d.tasks),
-      milestones: []
+      milestones: d.milestones,
     }));
     yield put(getProductsSuccess(transformedProductsData));
   } catch (error) {
@@ -89,8 +93,8 @@ export function* onCreateProduct(action: CreateProductAction): Generator {
       industries: translateEnumCollectionAttributeValuesToIndustryIds(data.enumCollectionAttributeValues),
       goals: data.goals,
       kpis: data.keyPerformanceIndicators,
-      tasks: translateTasksFromService(data.tasks),
-      milestones: []
+      tasks: [],
+      milestones: [],
     };
 
     yield put(createProductSuccess(createdProduct));
@@ -115,8 +119,8 @@ export function* onUpdateProduct(action: UpdateProductAction): Generator {
       industries: translateEnumCollectionAttributeValuesToIndustryIds(data.enumCollectionAttributeValues),
       kpis: data.keyPerformanceIndicators,
       goals: data.goals,
-      tasks: translateTasksFromService(data.tasks),
-      milestones: []
+      tasks: [], // TODO: when able to update product, need to get this data
+      milestones: [], // TODO: when able to update product, need to get this data
     };
 
     yield put(updateProductSuccess(updatedProduct));
@@ -157,7 +161,7 @@ export function* onCreateTask(action: CreateTaskAction): Generator {
         name: data.name,
         notes: data.notes,
         dueDate: data.dueDate ? new Date(data.dueDate) : null,
-        status: data.status
+        status: data.status,
       },
       ProductKey: action.payload.ProductKey, // used for assignment to correct Product in Redux store
     };
@@ -181,13 +185,36 @@ export function* onUpdateTask(action: UpdateTaskAction): Generator {
         name: data.name,
         notes: data.notes,
         dueDate: data.dueDate ? new Date(data.dueDate) : null,
-        status: data.status
+        status: data.status,
       },
       ProductKey: action.payload.ProductKey, // used for assignment to correct Product in Redux store
     };
     yield put(updateTaskSuccess(updatedTask));
   } catch (error) {
     yield put(updateTaskFailure(error));
+  }
+}
+
+export function* watchOnCreateMilestone(): Generator {
+  yield takeEvery(ProductSagaActionTypes.CREATE_MILESTONE, onCreateMilestone);
+}
+
+export function* onCreateMilestone(action: CreateMilestoneAction): Generator {
+  try {
+    yield put(createMilestoneRequest());
+    const { data } = yield call(createMilestone, action.payload);
+    const createdMilestone: ProductScopedMilestone = {
+      milestone: {
+        id: data.id,
+        name: data.name,
+        notes: data.notes,
+        date: data.date,
+      },
+      ProductKey: action.payload.ProductKey, // used for assignment to correct Product in Redux store
+    };
+    yield put(createMilestoneSuccess(createdMilestone));
+  } catch (error) {
+    yield put(createMilestoneFailure(error));
   }
 }
 
@@ -198,6 +225,7 @@ export default function* productSaga(): Generator {
     fork(watchOnUpdateProduct),
     fork(watchOnUpdateProductItem),
     fork(watchOnCreateTask),
-    fork(watchOnUpdateTask)
+    fork(watchOnUpdateTask),
+    fork(watchOnCreateMilestone),
   ]);
 }

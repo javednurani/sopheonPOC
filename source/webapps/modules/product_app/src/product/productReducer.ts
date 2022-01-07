@@ -4,12 +4,14 @@ import { Reducer } from 'redux';
 import {
   CreateProductModel,
   EnvironmentScopedApiRequestModel,
+  PostMilestoneModel,
   PostPutTaskModel,
   Product,
+  ProductScopedMilestone,
   ProductScopedTask,
   Task,
   UpdateProductItemModel,
-  UpdateProductModel
+  UpdateProductModel,
 } from '../types';
 
 //#region  Action Types
@@ -41,6 +43,10 @@ enum ProductActionTypes {
   UPDATE_TASK_REQUEST = 'PRODUCT/PRODUCT/UPDATE_TASK_REQUEST',
   UPDATE_TASK_SUCCESS = 'PRODUCT/PRODUCT/UPDATE_TASK_SUCCESS',
   UPDATE_TASK_FAILURE = 'PRODUCT/PRODUCT/UPDATE_TASK_FAILURE',
+
+  CREATE_MILESTONE_REQUEST = 'PRODUCT/PRODUCT/CREATE_MILESTONE_REQUEST',
+  CREATE_MILESTONE_SUCCESS = 'PRODUCT/PRODUCT/CREATE_MILESTONE_SUCCESS',
+  CREATE_MILESTONE_FAILURE = 'PRODUCT/PRODUCT/CREATE_MILESTONE_FAILURE',
 }
 
 export type GetProductsRequestAction = Action<ProductActionTypes.GET_PRODUCTS_REQUEST>;
@@ -67,6 +73,10 @@ export type UpdateTaskRequestAction = Action<ProductActionTypes.UPDATE_TASK_REQU
 export type UpdateTaskSuccessAction = PayloadAction<ProductActionTypes.UPDATE_TASK_SUCCESS, ProductScopedTask>;
 export type UpdateTaskFailureAction = PayloadAction<ProductActionTypes.UPDATE_TASK_FAILURE, Error>;
 
+export type CreateMilestoneRequestAction = Action<ProductActionTypes.CREATE_MILESTONE_REQUEST>;
+export type CreateMilestoneSuccessAction = PayloadAction<ProductActionTypes.CREATE_MILESTONE_SUCCESS, ProductScopedMilestone>;
+export type CreateMilestoneFailureAction = PayloadAction<ProductActionTypes.CREATE_MILESTONE_FAILURE, Error>;
+
 export type ProductReducerActions =
   | GetProductsRequestAction
   | GetProductsSuccessAction
@@ -85,7 +95,10 @@ export type ProductReducerActions =
   | CreateTaskFailureAction
   | UpdateTaskRequestAction
   | UpdateTaskSuccessAction
-  | UpdateTaskFailureAction;
+  | UpdateTaskFailureAction
+  | CreateMilestoneRequestAction
+  | CreateMilestoneSuccessAction
+  | CreateMilestoneFailureAction;
 
 // SAGA ACTION TYPES
 
@@ -96,7 +109,8 @@ export enum ProductSagaActionTypes {
   GET_PRODUCTS = 'PRODUCT/PRODUCT/GET_PRODUCTS',
   UPDATE_PRODUCT_ITEM = 'PRODUCT/PRODUCT/UPDATE_PRODUCT_ITEM',
   CREATE_TASK = 'PRODUCT/PRODUCT/CREATE_TASK',
-  UPDATE_TASK = 'PRODUCT/PRODUCT/UPDATE_TASK'
+  UPDATE_TASK = 'PRODUCT/PRODUCT/UPDATE_TASK',
+  CREATE_MILESTONE = 'PRODUCT/PRODUCT/CREATE_MILESTONE',
 }
 
 export type GetProductsAction = PayloadAction<ProductSagaActionTypes.GET_PRODUCTS, EnvironmentScopedApiRequestModel>;
@@ -105,6 +119,7 @@ export type UpdateProductAction = PayloadAction<ProductSagaActionTypes.UPDATE_PR
 export type UpdateProductItemAction = PayloadAction<ProductSagaActionTypes.UPDATE_PRODUCT_ITEM, UpdateProductItemModel>;
 export type CreateTaskAction = PayloadAction<ProductSagaActionTypes.CREATE_TASK, PostPutTaskModel>;
 export type UpdateTaskAction = PayloadAction<ProductSagaActionTypes.UPDATE_TASK, PostPutTaskModel>;
+export type CreateMilestoneAction = PayloadAction<ProductSagaActionTypes.CREATE_MILESTONE, PostMilestoneModel>;
 
 //#endregion
 
@@ -138,15 +153,18 @@ export const updateProductItemFailure = (error: Error): UpdateProductItemFailure
 export const createTaskRequest = (): CreateTaskRequestAction => createAction(ProductActionTypes.CREATE_TASK_REQUEST);
 export const createTaskSuccess = (task: ProductScopedTask): CreateTaskSuccessAction =>
   createPayloadAction(ProductActionTypes.CREATE_TASK_SUCCESS, task);
-export const createTaskFailure = (error: Error): CreateTaskFailureAction =>
-  createPayloadAction(ProductActionTypes.CREATE_TASK_FAILURE, error);
+export const createTaskFailure = (error: Error): CreateTaskFailureAction => createPayloadAction(ProductActionTypes.CREATE_TASK_FAILURE, error);
 
 export const updateTaskRequest = (): UpdateTaskRequestAction => createAction(ProductActionTypes.UPDATE_TASK_REQUEST);
 export const updateTaskSuccess = (task: ProductScopedTask): UpdateTaskSuccessAction =>
   createPayloadAction(ProductActionTypes.UPDATE_TASK_SUCCESS, task);
-export const updateTaskFailure = (error: Error): UpdateTaskFailureAction =>
-  createPayloadAction(ProductActionTypes.UPDATE_TASK_FAILURE, error);
+export const updateTaskFailure = (error: Error): UpdateTaskFailureAction => createPayloadAction(ProductActionTypes.UPDATE_TASK_FAILURE, error);
 
+export const createMilestoneRequest = (): CreateMilestoneRequestAction => createAction(ProductActionTypes.CREATE_MILESTONE_REQUEST);
+export const createMilestoneSuccess = (milestone: ProductScopedMilestone): CreateMilestoneSuccessAction =>
+  createPayloadAction(ProductActionTypes.CREATE_MILESTONE_SUCCESS, milestone);
+export const createMilestoneFailure = (error: Error): CreateMilestoneFailureAction =>
+  createPayloadAction(ProductActionTypes.CREATE_MILESTONE_FAILURE, error);
 
 // SAGA ACTIONS
 
@@ -158,10 +176,10 @@ export const updateProduct = (product: UpdateProductModel): UpdateProductAction 
   createPayloadAction(ProductSagaActionTypes.UPDATE_PRODUCT, product);
 export const updateProductItem = (productItem: UpdateProductItemModel): UpdateProductItemAction =>
   createPayloadAction(ProductSagaActionTypes.UPDATE_PRODUCT_ITEM, productItem);
-export const createTask = (task: PostPutTaskModel): CreateTaskAction =>
-  createPayloadAction(ProductSagaActionTypes.CREATE_TASK, task);
-export const updateTask = (task: PostPutTaskModel): UpdateTaskAction =>
-  createPayloadAction(ProductSagaActionTypes.UPDATE_TASK, task);
+export const createTask = (task: PostPutTaskModel): CreateTaskAction => createPayloadAction(ProductSagaActionTypes.CREATE_TASK, task);
+export const updateTask = (task: PostPutTaskModel): UpdateTaskAction => createPayloadAction(ProductSagaActionTypes.UPDATE_TASK, task);
+export const createMilestone = (milestone: PostMilestoneModel): CreateMilestoneAction =>
+  createPayloadAction(ProductSagaActionTypes.CREATE_MILESTONE, milestone);
 
 //#endregion
 
@@ -176,6 +194,7 @@ export type ProductStateShape = {
   updateProductFetchStatus: FetchStatus;
   createTaskFetchStatus: FetchStatus; // INFO, this call could be made frequently. is there value in tracking the Fetch status?
   updateTaskFetchStatus: FetchStatus; // INFO, this call could be made frequently. is there value in tracking the Fetch status?
+  createMilestoneFetchStatus: FetchStatus;
 };
 
 export const initialState: ProductStateShape = {
@@ -185,6 +204,7 @@ export const initialState: ProductStateShape = {
   updateProductFetchStatus: FetchStatus.NotActive,
   createTaskFetchStatus: FetchStatus.NotActive,
   updateTaskFetchStatus: FetchStatus.NotActive,
+  createMilestoneFetchStatus: FetchStatus.NotActive,
 };
 
 // HANDLERS
@@ -292,7 +312,8 @@ const createTaskRequestHandler = (state: ProductStateShape) => ({
 
 const createTaskSuccessHandler = (state: ProductStateShape, createdTask: ProductScopedTask) => {
   const updatedProducts = [...state.products];
-  updatedProducts.forEach(existingProduct => { // TODO, use .some() instead of .forEach(), to short-circuit loop after a product key match?
+  updatedProducts.forEach(existingProduct => {
+    // TODO, use .some() instead of .forEach(), to short-circuit loop after a product key match?
     if (existingProduct.key === createdTask.ProductKey) {
       existingProduct.tasks.push(createdTask.task);
     }
@@ -320,7 +341,8 @@ const updateTaskRequestHandler = (state: ProductStateShape) => ({
 
 const updateTaskSuccessHandler = (state: ProductStateShape, createdTask: ProductScopedTask) => {
   const updatedProducts = [...state.products];
-  updatedProducts.forEach(existingProduct => { // TODO, use .some() instead of .forEach(), to short-circuit loop after a product key match?
+  updatedProducts.forEach(existingProduct => {
+    // TODO, use .some() instead of .forEach(), to short-circuit loop after a product key match?
     if (existingProduct.key === createdTask.ProductKey) {
       existingProduct.tasks = existingProduct.tasks.map(task => (task.id === createdTask.task.id ? createdTask.task : task)); // replace single todo with updated version
     }
@@ -340,6 +362,36 @@ const updateTaskFailureHandler = (state: ProductStateShape, error: Error) => {
   };
 };
 
+// CREATE MILESTONE
+const createMilestoneRequestHandler = (state: ProductStateShape) => ({
+  ...state,
+  createMilestoneFetchStatus: FetchStatus.InProgress,
+});
+
+const createMilestoneSuccessHandler = (state: ProductStateShape, createdMilestone: ProductScopedMilestone) => {
+  const updatedProducts = [...state.products];
+
+  for (const existingProduct of updatedProducts) {
+    if (existingProduct.key === createdMilestone.ProductKey) {
+      existingProduct.milestones.push(createdMilestone.milestone);
+      break;
+    }
+  }
+
+  return {
+    ...state,
+    products: updatedProducts,
+    createMilestoneFetchStatus: FetchStatus.DoneSuccess,
+  };
+};
+
+const createMilestoneFailureHandler = (state: ProductStateShape, error: Error) => {
+  console.log(error);
+  return {
+    ...state,
+    createMilestoneFetchStatus: FetchStatus.DoneFailure,
+  };
+};
 
 // ACTION SWITCH
 
@@ -381,6 +433,12 @@ export const productReducer: Reducer<ProductStateShape, ProductReducerActions> =
       return updateTaskSuccessHandler(state, action.payload);
     case ProductActionTypes.UPDATE_TASK_FAILURE:
       return updateTaskFailureHandler(state, action.payload);
+    case ProductActionTypes.CREATE_MILESTONE_REQUEST:
+      return createMilestoneRequestHandler(state);
+    case ProductActionTypes.CREATE_MILESTONE_SUCCESS:
+      return createMilestoneSuccessHandler(state, action.payload);
+    case ProductActionTypes.CREATE_MILESTONE_FAILURE:
+      return createMilestoneFailureHandler(state, action.payload);
     default:
       return state;
   }

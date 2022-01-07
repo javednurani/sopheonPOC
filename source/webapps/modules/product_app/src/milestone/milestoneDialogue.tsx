@@ -105,7 +105,7 @@ const MilestoneDialogue: React.FunctionComponent<IMilestoneDialogueProps> = ({
   const cancelIcon: IIconProps = { iconName: 'Cancel' };
 
   // DATEPICKER
-  // Thoughts: we should pull this out somewhere else instead of creating it in line for our components.
+  // TODO: date config is duplicated in TaskDetails.  Consolidate to a single location.
 
   const firstDayOfWeek = DayOfWeek.Sunday;
 
@@ -291,7 +291,7 @@ const MilestoneDialogue: React.FunctionComponent<IMilestoneDialogueProps> = ({
               </Stack.Item>
               <Stack.Item>
                 <DatePicker
-                  value={ undefined } // milestoneDueDate.date
+                  value={undefined} // milestoneDueDate.date
                   className={datePickerClass.control}
                   firstDayOfWeek={firstDayOfWeek}
                   placeholder={formatMessage({ id: 'calendar.selectadate' })}

@@ -4,6 +4,8 @@ import { FunctionComponent } from 'react';
 import App from './App';
 import { nextStep, NextStepAction } from './onboarding/onboardingReducer';
 import {
+  createMilestone,
+  CreateMilestoneAction,
   createProduct,
   CreateProductAction,
   createTask,
@@ -19,7 +21,15 @@ import {
 } from './product/productReducer';
 import { NAMESPACE, rootReducer, RootState } from './rootReducer';
 import rootSaga from './rootSaga';
-import { CreateProductModel, EnvironmentScopedApiRequestModel, PostPutTaskModel, Product, UpdateProductItemModel, UpdateProductModel } from './types';
+import {
+  CreateProductModel,
+  EnvironmentScopedApiRequestModel,
+  PostMilestoneModel,
+  PostPutTaskModel,
+  Product,
+  UpdateProductItemModel,
+  UpdateProductModel,
+} from './types';
 
 export type AppStateProps = {
   currentStep: number;
@@ -35,6 +45,7 @@ export type AppDispatchProps = {
   updateProductItem: (product: UpdateProductItemModel) => UpdateProductItemAction;
   createTask: (task: PostPutTaskModel) => CreateTaskAction;
   updateTask: (task: PostPutTaskModel) => UpdateTaskAction;
+  createMilestone: (milestone: PostMilestoneModel) => CreateMilestoneAction;
 };
 
 const AppContainer: FunctionComponent<ShellApiProps> = ({ shellApi }: ShellApiProps) => {
@@ -52,6 +63,7 @@ const AppContainer: FunctionComponent<ShellApiProps> = ({ shellApi }: ShellApiPr
     updateProductItem: (productItem: UpdateProductItemModel) => updateProductItem(productItem),
     createTask: (task: PostPutTaskModel) => createTask(task),
     updateTask: (task: PostPutTaskModel) => updateTask(task),
+    createMilestone: (milestone: PostMilestoneModel) => createMilestone(milestone),
   });
 
   const appReducerMap: InjectReducerMap = {
