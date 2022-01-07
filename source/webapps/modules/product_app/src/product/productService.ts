@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 import { settings } from '../settings';
-import { CreateProductModel, EnvironmentScopedApiRequestModel, PostPutTaskModel, Product, TaskDto, UpdateProductItemModel, UpdateProductModel } from '../types';
+import { CreateProductModel, DeleteTaskModel, EnvironmentScopedApiRequestModel, PostPutTaskModel, Product, TaskDto, UpdateProductItemModel, UpdateProductModel } from '../types';
 
 const API_URL_BASE: string = settings.ProductManagementApiUrlBase;
 const API_URL_PATH_GET_PRODUCT: string = settings.getProductsUrlPath;
@@ -79,7 +79,7 @@ export const createTask: (createTaskModel: PostPutTaskModel) => Promise<TaskDto>
 };
 
 export const updateTask: (updateTaskModel: PostPutTaskModel) => Promise<TaskDto> = async updateTaskModel => {
-  const updateTaskUrlWithEnvironment = `${API_URL_BASE}${settings.UpdateTaskUrlPath}`
+  const updateTaskUrlWithEnvironment = `${API_URL_BASE}${settings.UpdateDeleteTaskUrlPath}`
     .replace(settings.TokenEnvironmentKey, updateTaskModel.EnvironmentKey)
     .replace(settings.TokenProductKey, updateTaskModel.ProductKey || '') // TODO, nullable Key? null check ?;
     .replace(settings.TokenTaskId, updateTaskModel.Task.id.toString());
@@ -91,4 +91,19 @@ export const updateTask: (updateTaskModel: PostPutTaskModel) => Promise<TaskDto>
   };
 
   return await axios.put(updateTaskUrlWithEnvironment, updateTaskModel.Task, config);
+};
+
+export const deleteTask: (deleteTaskModel: DeleteTaskModel) => Promise<TaskDto> = async deleteTaskModel => {
+  const deleteTaskUrlWithEnvironment = `${API_URL_BASE}${settings.UpdateDeleteTaskUrlPath}`
+    .replace(settings.TokenEnvironmentKey, deleteTaskModel.EnvironmentKey)
+    .replace(settings.TokenProductKey, deleteTaskModel.ProductKey || '') // TODO, nullable Key? null check ?;
+    .replace(settings.TokenTaskId, deleteTaskModel.TaskId.toString());
+
+  const config: AxiosRequestConfig = {
+    headers: {
+      Authorization: `Bearer ${deleteTaskModel.AccessToken}`,
+    },
+  };
+
+  return await axios.delete(deleteTaskUrlWithEnvironment, config);
 };

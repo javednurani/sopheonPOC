@@ -375,7 +375,7 @@ const deleteTaskSuccessHandler = (state: ProductStateShape, deletedTask: Product
   const updatedProducts = [...state.products];
   updatedProducts.forEach(existingProduct => { // TODO, use .some() instead of .forEach(), to short-circuit loop after a product key match?
     if (existingProduct.key === deletedTask.ProductKey) {
-      existingProduct.tasks = existingProduct.tasks.filter(t => t.id !== deletedTask.TaskId);
+      existingProduct.tasks = existingProduct.tasks.filter(t => t.id !== deletedTask.taskId);
     }
   });
   return {
