@@ -3,13 +3,13 @@ import { useTheme } from '@fluentui/react-theme-provider';
 import React from 'react';
 
 import KPIs from './KPIs';
-import { CreateTaskAction, UpdateProductAction, UpdateProductItemAction, UpdateTaskAction } from './product/productReducer';
+import { CreateMilestoneAction, CreateTaskAction, UpdateProductAction, UpdateProductItemAction, UpdateTaskAction } from './product/productReducer';
 import ProductHealth from './ProductHealth';
 import ProductSection from './ProductSection';
 import ResourcesAndLinks from './ResourcesAndLinks';
 import Timeline from './timeline/Timeline';
 import ToDoList from './ToDoList';
-import { PostPutTaskModel, Product, UpdateProductItemModel, UpdateProductModel } from './types';
+import { PostMilestoneModel, PostPutTaskModel, Product, UpdateProductItemModel, UpdateProductModel } from './types';
 
 export interface IDashboardProps {
   updateProduct: (product: UpdateProductModel) => UpdateProductAction;
@@ -19,6 +19,7 @@ export interface IDashboardProps {
   products: Product[];
   createTask: (task: PostPutTaskModel) => CreateTaskAction;
   updateTask: (task: PostPutTaskModel) => UpdateTaskAction;
+  createMilestone: (milestone: PostMilestoneModel) => CreateMilestoneAction;
 }
 
 const stackTokens: IStackTokens = {
@@ -34,6 +35,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
   products,
   createTask,
   updateTask,
+  createMilestone,
 }: IDashboardProps) => {
   const theme = useTheme();
 
@@ -103,7 +105,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
             <KPIs />
           </Stack.Item>
           <Stack.Item styles={middleRowStackItemStyles}>
-            <Timeline product={products[0]}/>
+            <Timeline product={products[0]} createMilestone={createMilestone} />
           </Stack.Item>
           <Stack.Item styles={bottomRowStackItemStyles}>
             <ProductHealth />

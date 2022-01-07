@@ -2,13 +2,15 @@ import { Stack } from '@fluentui/react';
 import { Gantt } from '@sopheon/controls';
 import React from 'react';
 
-import { Product } from '../types';
+import { CreateMilestoneAction } from '../product/productReducer';
+import { PostMilestoneModel, Product } from '../types';
 
 export interface ITimelineProps {
   product: Product;
+  createMilestone: (milestone: PostMilestoneModel) => CreateMilestoneAction;
 }
 
-const Timeline: React.FunctionComponent<ITimelineProps> = ({ product }: ITimelineProps) => {
+const Timeline: React.FunctionComponent<ITimelineProps> = ({ product, createMilestone }: ITimelineProps) => {
   const todoItems = product.tasks.map(task => ({
     id: `${task.name}_${task.dueDate}`,
     text: task.name,

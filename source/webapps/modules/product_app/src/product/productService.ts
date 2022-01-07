@@ -1,7 +1,17 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 import { settings } from '../settings';
-import { CreateProductModel, EnvironmentScopedApiRequestModel, PostPutTaskModel, Product, TaskDto, UpdateProductItemModel, UpdateProductModel } from '../types';
+import {
+  CreateProductModel,
+  EnvironmentScopedApiRequestModel,
+  MilestoneDto,
+  PostMilestoneModel,
+  PostPutTaskModel,
+  Product,
+  TaskDto,
+  UpdateProductItemModel,
+  UpdateProductModel,
+} from '../types';
 
 const API_URL_BASE: string = settings.ProductManagementApiUrlBase;
 const API_URL_PATH_GET_PRODUCT: string = settings.getProductsUrlPath;
@@ -91,4 +101,18 @@ export const updateTask: (updateTaskModel: PostPutTaskModel) => Promise<TaskDto>
   };
 
   return await axios.put(updateTaskUrlWithEnvironment, updateTaskModel.Task, config);
+};
+
+export const createMilestone: (createMilestoneModel: PostMilestoneModel) => Promise<MilestoneDto> = async createMilestoneModel => {
+  const createMilestoneUrlWithEnvironment = `${API_URL_BASE}${settings.CreateMilestoneUrlPath}`
+    .replace(settings.TokenEnvironmentKey, createMilestoneModel.EnvironmentKey)
+    .replace(settings.TokenProductKey, createMilestoneModel.ProductKey);
+
+  const config: AxiosRequestConfig = {
+    headers: {
+      Authorization: `Bearer ${createMilestoneModel.AccessToken}`,
+    },
+  };
+
+  return await axios.post(createMilestoneUrlWithEnvironment, createMilestoneModel.Milestone, config);
 };

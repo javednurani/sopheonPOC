@@ -105,7 +105,7 @@ const MilestoneDialogue: React.FunctionComponent<IMilestoneDialogueProps> = ({
   const cancelIcon: IIconProps = { iconName: 'Cancel' };
 
   // DATEPICKER
-  // Thoughts: we should pull this out somewhere else instead of creating it in line for our components.
+  // TODO: date config is duplicated in TaskDetails.  Consolidate to a single location.
 
   const firstDayOfWeek = DayOfWeek.Sunday;
 
@@ -264,11 +264,7 @@ const MilestoneDialogue: React.FunctionComponent<IMilestoneDialogueProps> = ({
     },
   };
 
-  return (
-    <>
-      
-    </>
-  );
+  return <></>;
 };
 
 export default MilestoneDialogue;
