@@ -93,7 +93,7 @@ export function* onCreateProduct(action: CreateProductAction): Generator {
       industries: translateEnumCollectionAttributeValuesToIndustryIds(data.enumCollectionAttributeValues),
       goals: data.goals,
       kpis: data.keyPerformanceIndicators,
-      tasks: translateTasksFromService(data.tasks),
+      tasks: [],
       milestones: [],
     };
 
@@ -119,8 +119,8 @@ export function* onUpdateProduct(action: UpdateProductAction): Generator {
       industries: translateEnumCollectionAttributeValuesToIndustryIds(data.enumCollectionAttributeValues),
       kpis: data.keyPerformanceIndicators,
       goals: data.goals,
-      tasks: translateTasksFromService(data.tasks),
-      milestones: [],
+      tasks: [], // TODO: when able to update product, need to get this data
+      milestones: [], // TODO: when able to update product, need to get this data
     };
 
     yield put(updateProductSuccess(updatedProduct));
