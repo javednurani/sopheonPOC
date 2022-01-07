@@ -619,6 +619,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
 
                     b.ToTable(tb => tb.IsTemporal(ttb =>
                         {
+                            ttb.UseHistoryTable("TasksHistory", "SPM");
                             ttb
                                 .HasPeriodStart("PeriodStart")
                                 .HasColumnName("PeriodStart");
@@ -667,7 +668,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                         new
                         {
                             AttributeId = -4,
-                            AttributeDataTypeId = 0,
+                            AttributeDataTypeId = 8,
                             Name = "Status",
                             ShortName = "STATUS"
                         });
@@ -683,7 +684,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                         new
                         {
                             AttributeId = -1,
-                            AttributeDataTypeId = 0,
+                            AttributeDataTypeId = 7,
                             Name = "Industry",
                             ShortName = "IND"
                         });
@@ -713,7 +714,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                         new
                         {
                             AttributeId = -2,
-                            AttributeDataTypeId = 0,
+                            AttributeDataTypeId = 1,
                             Name = "Notes",
                             ShortName = "NOTES"
                         });
@@ -729,7 +730,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                         new
                         {
                             AttributeId = -3,
-                            AttributeDataTypeId = 0,
+                            AttributeDataTypeId = 5,
                             Name = "Due Date",
                             ShortName = "DUE"
                         });

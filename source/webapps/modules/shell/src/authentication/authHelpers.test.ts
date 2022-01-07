@@ -14,7 +14,7 @@ describe('Test getAuthLandingRedirectRequest', () => {
 
     // Assert
     expect(result.authority).toBe(authorityUrl);
-    expect(result.redirectUri).toEqual(azureSettings.SPA_Root_URL);
+    expect(result.redirectUri).toEqual(azureSettings.SPA_Redirect_URL);
     expect(result.extraQueryParameters).toBeUndefined();
   });
 });
@@ -43,7 +43,7 @@ describe('Test getMsalAccount', () => {
     signUpSignInAccount1.localAccountId = sharedLocalAccountId;
     signUpSignInAccount1.idTokenClaims = {
       iss: `${randomString()}-${getAuthorityDomain()}`,
-      aud: azureSettings.AD_B2C_ClientId
+      aud: azureSettings.AD_B2C_ClientId,
     };
 
     const signUpSignInAccount2: AccountInfo = randomMsalAccount();
@@ -51,7 +51,7 @@ describe('Test getMsalAccount', () => {
     signUpSignInAccount2.localAccountId = sharedLocalAccountId;
     signUpSignInAccount2.idTokenClaims = {
       iss: `${randomString()}-${getAuthorityDomain()}`,
-      aud: azureSettings.AD_B2C_ClientId
+      aud: azureSettings.AD_B2C_ClientId,
     };
 
     const pca = testMsalInstance();
@@ -72,14 +72,14 @@ describe('Test getMsalAccount', () => {
     signUpSignInAccount1.homeAccountId = `${randomString()}-${azureSettings.AD_B2C_SignUpSignIn_Policy}`;
     signUpSignInAccount1.idTokenClaims = {
       iss: `${randomString()}-${getAuthorityDomain()}`,
-      aud: azureSettings.AD_B2C_ClientId
+      aud: azureSettings.AD_B2C_ClientId,
     };
 
     const signUpSignInAccount2: AccountInfo = randomMsalAccount();
     signUpSignInAccount2.homeAccountId = `${randomString()}-${azureSettings.AD_B2C_SignUpSignIn_Policy}`;
     signUpSignInAccount2.idTokenClaims = {
       iss: `${randomString()}-${getAuthorityDomain()}`,
-      aud: azureSettings.AD_B2C_ClientId
+      aud: azureSettings.AD_B2C_ClientId,
     };
 
     const pca = testMsalInstance();
@@ -106,7 +106,7 @@ describe('Test getMsalAccount', () => {
     signUpSignInAccount.localAccountId = sharedLocalAccountId;
     signUpSignInAccount.idTokenClaims = {
       iss: `${randomString()}-${getAuthorityDomain()}`,
-      aud: azureSettings.AD_B2C_ClientId
+      aud: azureSettings.AD_B2C_ClientId,
     };
 
     const otherUserFlowAccount: AccountInfo = randomMsalAccount();

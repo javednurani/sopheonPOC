@@ -95,6 +95,10 @@ registerIcons({
 });
 
 const ProductSection: React.FunctionComponent<IProductSectionProps> = ({ product }: IProductSectionProps) => {
+  if (!product) {
+    return null;
+  }
+
   const theme = useTheme();
   const { formatMessage } = useIntl();
   const [darkThemeState, setdarkThemeState] = useState(false);

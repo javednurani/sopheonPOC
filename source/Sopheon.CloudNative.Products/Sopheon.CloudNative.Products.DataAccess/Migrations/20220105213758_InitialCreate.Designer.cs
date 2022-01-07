@@ -12,7 +12,7 @@ using Sopheon.CloudNative.Products.Domain;
 namespace Sopheon.CloudNative.Products.DataAccess.Migrations
 {
     [DbContext(typeof(ProductManagementContext))]
-    [Migration("20220105153210_InitialCreate")]
+    [Migration("20220105213758_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -591,6 +591,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
 
                     b.ToTable(tb => tb.IsTemporal(ttb =>
                         {
+                            ttb.UseHistoryTable("TasksHistory", "SPM");
                             ttb
                                 .HasPeriodStart("PeriodStart")
                                 .HasColumnName("PeriodStart");
@@ -639,7 +640,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                         new
                         {
                             AttributeId = -4,
-                            AttributeDataTypeId = 0,
+                            AttributeDataTypeId = 8,
                             Name = "Status",
                             ShortName = "STATUS"
                         });
@@ -655,7 +656,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                         new
                         {
                             AttributeId = -1,
-                            AttributeDataTypeId = 0,
+                            AttributeDataTypeId = 7,
                             Name = "Industry",
                             ShortName = "IND"
                         });
@@ -685,7 +686,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                         new
                         {
                             AttributeId = -2,
-                            AttributeDataTypeId = 0,
+                            AttributeDataTypeId = 1,
                             Name = "Notes",
                             ShortName = "NOTES"
                         });
@@ -701,7 +702,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                         new
                         {
                             AttributeId = -3,
-                            AttributeDataTypeId = 0,
+                            AttributeDataTypeId = 5,
                             Name = "Due Date",
                             ShortName = "DUE"
                         });
