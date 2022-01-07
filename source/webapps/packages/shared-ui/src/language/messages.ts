@@ -89,7 +89,7 @@ export const messages: Record<string, Record<string, string>> = {
     'onboarding.done': 'Done: Get Started!',
     'nav.planning_app': 'Planning',
     'auth.notifications': 'Notifications',
-    'calendar.selectadate': 'Select a date',
+    'calendar.selectDate': 'Select a date',
     'calendar.jan': 'Jan',
     'calendar.feb': 'Feb',
     'calendar.mar': 'Mar',
