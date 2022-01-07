@@ -1,29 +1,29 @@
 import { AccountInfo } from '@azure/msal-browser';
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
-import {
-  DefaultButton,
-  IButtonStyles,
-  IconButton,
-  IContextualMenuProps,
-  IIconProps,
-  IIconStyles,
-  ITooltipHostStyles,
-  TooltipHost,
-} from '@fluentui/react';
+import { DefaultButton, IButtonStyles, IContextualMenuProps, IIconProps, IIconStyles } from '@fluentui/react';
+import { useTheme } from '@fluentui/react-theme-provider';
+import { isDarkTheme } from '@sopheon/shared-ui';
 import { GetAccessTokenAction } from '@sopheon/shell-api';
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
-import { changePasswordRequest, editProfileRequest, getMsalAccount, loginButtonRequest } from './authHelpers';
+import { ChangeThemeAction } from '../themes/themeReducer/themeReducer';
+import { changePasswordRequest, editProfileRequest, getMsalAccount, loginButtonRequest, logoutRequest } from './authHelpers';
 import { SetEnvironmentKeyAction } from './authReducer';
 
 export interface ILoginSignupButtonProps {
+  changeTheme: (useDarkTheme: boolean) => ChangeThemeAction;
   setEnvironmentKey: (environmentKey: string) => SetEnvironmentKeyAction;
   getAccessToken: () => GetAccessTokenAction;
 }
 
-const LoginSignupButton: FunctionComponent<ILoginSignupButtonProps> = ({ setEnvironmentKey, getAccessToken }: ILoginSignupButtonProps) => {
+const LoginSignupButton: FunctionComponent<ILoginSignupButtonProps> = ({
+  setEnvironmentKey,
+  getAccessToken,
+  changeTheme,
+}: ILoginSignupButtonProps) => {
   const { formatMessage } = useIntl();
+  const theme = useTheme();
   const { instance, accounts } = useMsal();
 
   const [account, setAccount] = useState<AccountInfo>();
@@ -48,11 +48,21 @@ const LoginSignupButton: FunctionComponent<ILoginSignupButtonProps> = ({ setEnvi
   };
 
   const logoutClick = () => {
-    instance.logoutRedirect();
+    instance.logoutRedirect(logoutRequest);
+  };
+
+  const switchTheme = () => {
+    changeTheme(!isDarkTheme(theme));
   };
 
   const menuProps: IContextualMenuProps = {
     items: [
+      {
+        key: 'themeToggle',
+        text: formatMessage({ id: 'header.useDarkTheme' }),
+        iconProps: { iconName: isDarkTheme(theme) ? 'ToggleRight' : 'ToggleLeft' },
+        onClick: switchTheme,
+      },
       {
         key: 'profile',
         text: formatMessage({ id: 'auth.myprofile' }),
@@ -83,20 +93,22 @@ const LoginSignupButton: FunctionComponent<ILoginSignupButtonProps> = ({ setEnvi
   const loginButtonStyles: Partial<IButtonStyles> = {
     root: {
       height: '36px',
-      borderRadius: '2px',
+      border: 'none',
+      color: theme.palette.neutralSecondary,
     },
   };
 
   const contactIcon: IIconProps = { iconName: 'Contact', styles: contactIconStyles };
 
-  const hostStyles: Partial<ITooltipHostStyles> = { root: { display: 'inline-block' } };
-
   return (
     <React.Fragment>
       <AuthenticatedTemplate>
-        <TooltipHost content={account ? account.name : formatMessage({ id: 'auth.myprofile' })} id="profileImageTooltip" styles={hostStyles}>
-          <IconButton menuProps={menuProps} iconProps={contactIcon} styles={loginButtonStyles} />
-        </TooltipHost>
+        <DefaultButton
+          text={account ? account.name : formatMessage({ id: 'auth.myprofile' })}
+          menuProps={menuProps}
+          iconProps={contactIcon}
+          styles={loginButtonStyles}
+        />
       </AuthenticatedTemplate>
       <UnauthenticatedTemplate>
         <DefaultButton text={formatMessage({ id: 'auth.loginbutton' })} onClick={() => instance.loginRedirect(loginButtonRequest)} />

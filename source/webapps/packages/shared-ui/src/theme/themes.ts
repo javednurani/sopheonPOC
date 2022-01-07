@@ -64,4 +64,6 @@ const darkTheme: Theme = createTheme({
 });
 darkTheme.id = 'darkTheme';
 
-export { lightTheme, darkTheme };
+const isDarkTheme = (theme: Theme): boolean => theme.id?.includes(darkTheme.id ?? 'darkTheme') || false;
+
+export { lightTheme, darkTheme, isDarkTheme };

@@ -34,6 +34,8 @@ export default (): webpack.Configuration => ({
         'react': {},
         'react-intl': {},
         'react-redux': {},
+        '@azure/msal-react': { singleton: true },
+        '@azure/msal-browser': { singleton: true },
       },
     }),
     /* Hides warning on start in development mode in axe-core

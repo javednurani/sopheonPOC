@@ -18,7 +18,7 @@ const Shell: FunctionComponent<ShellProps> = ({
   setEnvironmentKey,
   environmentKey,
   language,
-  headerFooterAreShown,
+  headerShown,
   getAccessToken,
 }: ShellProps) => (
   <MsalProvider instance={msalInstance()}>
@@ -28,7 +28,7 @@ const Shell: FunctionComponent<ShellProps> = ({
           changeTheme={changeTheme}
           setEnvironmentKey={setEnvironmentKey}
           environmentKey={environmentKey}
-          headerFooterAreShown={headerFooterAreShown}
+          headerShown={headerShown}
           getAccessToken={getAccessToken}
         />
       </ConnectedThemeProvider>
