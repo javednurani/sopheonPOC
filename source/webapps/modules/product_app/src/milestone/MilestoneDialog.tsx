@@ -35,7 +35,7 @@ import ProductApi from '../product/productApi';
 import { CreateTaskAction, UpdateProductAction, UpdateProductItemAction, UpdateTaskAction } from '../product/productReducer';
 import { HistoryItem, PostPutTaskModel, Product, Task, TaskDto, UpdateProductItemModel, UpdateProductModel, Milestone } from '../types';
 
-export interface IMilestoneDialogueProps {
+export interface IMilestoneDialogProps {
   hideModal: () => void;
   updateProduct: (product: UpdateProductModel) => UpdateProductAction;
   environmentKey: string;
@@ -47,12 +47,12 @@ export interface DateStateObject {
   date: Date | null;
 }
 
-const MilestoneDialogue: React.FunctionComponent<IMilestoneDialogueProps> = ({
+const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({
   hideModal,
   environmentKey,
   accessToken,
   products,
-}: IMilestoneDialogueProps) => {
+}: IMilestoneDialogProps) => {
   const theme = useTheme();
   const { formatMessage } = useIntl();
 
@@ -351,4 +351,4 @@ const MilestoneDialogue: React.FunctionComponent<IMilestoneDialogueProps> = ({
   );
 };
 
-export default MilestoneDialogue;
+export default MilestoneDialog;
