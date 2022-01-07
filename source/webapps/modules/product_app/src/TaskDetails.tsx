@@ -6,6 +6,7 @@ import {
   DialogFooter,
   DialogType,
   Dropdown,
+  FontIcon,
   FontWeights,
   IButtonStyles,
   IconButton,
@@ -31,8 +32,8 @@ import { Status } from './data/status';
 import ExpandablePanel from './ExpandablePanel';
 import HistoryList from './HistoryList';
 import ProductApi from './product/productApi';
-import { CreateTaskAction, UpdateProductAction, UpdateProductItemAction, UpdateTaskAction } from './product/productReducer';
-import { HistoryItem, PostPutTaskModel, Product, Task, TaskDto, UpdateProductItemModel, UpdateProductModel } from './types';
+import { CreateTaskAction, DeleteTaskAction, UpdateProductAction, UpdateProductItemAction, UpdateTaskAction } from './product/productReducer';
+import { DeleteTaskModel, HistoryItem, PostPutTaskModel, Product, Task, TaskDto, UpdateProductItemModel, UpdateProductModel } from './types';
 
 export interface ITaskDetailsProps {
   hideModal: () => void;
@@ -44,6 +45,7 @@ export interface ITaskDetailsProps {
   updateProductItem: (productItem: UpdateProductItemModel) => UpdateProductItemAction;
   createTask: (task: PostPutTaskModel) => CreateTaskAction;
   updateTask: (task: PostPutTaskModel) => UpdateTaskAction;
+  deleteTask: (task: DeleteTaskModel) => DeleteTaskAction;
 }
 
 export interface DateStateObject {
@@ -58,6 +60,7 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
   selectedTask,
   createTask,
   updateTask,
+  deleteTask,
 }: ITaskDetailsProps) => {
   const { name, id, notes, dueDate, status } = selectedTask ?? {};
 
@@ -256,6 +259,24 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
     exitModalWithDiscardDialog();
   };
 
+  // DELETE ICON
+  const pointerCursorStyle: React.CSSProperties = {
+    cursor: 'pointer',
+  };
+
+  const handleDeleteIconClick = () => {
+    if (id) {
+      const deleteTaskModel: DeleteTaskModel = {
+        ProductKey: products[0].key || 'BAD_PRODUCT_KEY',
+        EnvironmentKey: environmentKey,
+        AccessToken: accessToken,
+        TaskId: id,
+      };
+      deleteTask(deleteTaskModel);
+    }
+    hideModal();
+  };
+
   // DISCARD DIALOG
 
   const discardDialogModalPropsStyles = { main: { maxWidth: 450 } };
@@ -436,7 +457,7 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
           )}
           <Stack.Item>
             <Stack horizontal styles={stackStyles} tokens={nestedStackTokens}>
-              <Stack.Item styles={controlButtonStackItemStyles}>
+              <Stack.Item grow styles={controlButtonStackItemStyles}>
                 <PrimaryButton
                   style={saveButtonStyle}
                   text={formatMessage({ id: 'save' })}
@@ -445,6 +466,13 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
                 />
                 <DefaultButton text={formatMessage({ id: 'cancel' })} onClick={handleCancelButtonClick} />
               </Stack.Item>
+              {id && (
+                <Stack.Item styles={controlButtonStackItemStyles}>
+                  <Text variant="xLarge">
+                    <FontIcon style={pointerCursorStyle} onClick={handleDeleteIconClick} iconName="Delete" />
+                  </Text>
+                </Stack.Item>
+              )}
             </Stack>
           </Stack.Item>
         </Stack>

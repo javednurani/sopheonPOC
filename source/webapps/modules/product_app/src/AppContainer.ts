@@ -8,6 +8,8 @@ import {
   CreateProductAction,
   createTask,
   CreateTaskAction,
+  deleteTask,
+  DeleteTaskAction,
   getProducts,
   GetProductsAction,
   updateProduct,
@@ -19,7 +21,7 @@ import {
 } from './product/productReducer';
 import { NAMESPACE, rootReducer, RootState } from './rootReducer';
 import rootSaga from './rootSaga';
-import { CreateProductModel, EnvironmentScopedApiRequestModel, PostPutTaskModel, Product, UpdateProductItemModel, UpdateProductModel } from './types';
+import { CreateProductModel, DeleteTaskModel, EnvironmentScopedApiRequestModel, PostPutTaskModel, Product, UpdateProductItemModel, UpdateProductModel } from './types';
 
 export type AppStateProps = {
   currentStep: number;
@@ -35,6 +37,7 @@ export type AppDispatchProps = {
   updateProductItem: (product: UpdateProductItemModel) => UpdateProductItemAction;
   createTask: (task: PostPutTaskModel) => CreateTaskAction;
   updateTask: (task: PostPutTaskModel) => UpdateTaskAction;
+  deleteTask: (task: DeleteTaskModel) => DeleteTaskAction;
 };
 
 const AppContainer: FunctionComponent<ShellApiProps> = ({ shellApi }: ShellApiProps) => {
@@ -52,6 +55,7 @@ const AppContainer: FunctionComponent<ShellApiProps> = ({ shellApi }: ShellApiPr
     updateProductItem: (productItem: UpdateProductItemModel) => updateProductItem(productItem),
     createTask: (task: PostPutTaskModel) => createTask(task),
     updateTask: (task: PostPutTaskModel) => updateTask(task),
+    deleteTask: (task: DeleteTaskModel) => deleteTask(task),
   });
 
   const appReducerMap: InjectReducerMap = {
