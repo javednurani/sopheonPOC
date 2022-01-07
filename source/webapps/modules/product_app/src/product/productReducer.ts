@@ -3,10 +3,12 @@ import { Reducer } from 'redux';
 
 import {
   CreateProductModel,
+  DeleteTaskModel,
   EnvironmentScopedApiRequestModel,
   PostPutTaskModel,
   Product,
   ProductScopedTask,
+  ProductScopedTaskId,
   Task,
   UpdateProductItemModel,
   UpdateProductModel
@@ -41,6 +43,10 @@ enum ProductActionTypes {
   UPDATE_TASK_REQUEST = 'PRODUCT/PRODUCT/UPDATE_TASK_REQUEST',
   UPDATE_TASK_SUCCESS = 'PRODUCT/PRODUCT/UPDATE_TASK_SUCCESS',
   UPDATE_TASK_FAILURE = 'PRODUCT/PRODUCT/UPDATE_TASK_FAILURE',
+
+  DELETE_TASK_REQUEST = 'PRODUCT/PRODUCT/DELETE_TASK_REQUEST',
+  DELETE_TASK_SUCCESS = 'PRODUCT/PRODUCT/DELETE_TASK_SUCCESS',
+  DELETE_TASK_FAILURE = 'PRODUCT/PRODUCT/DELETE_TASK_FAILURE',
 }
 
 export type GetProductsRequestAction = Action<ProductActionTypes.GET_PRODUCTS_REQUEST>;
@@ -67,6 +73,10 @@ export type UpdateTaskRequestAction = Action<ProductActionTypes.UPDATE_TASK_REQU
 export type UpdateTaskSuccessAction = PayloadAction<ProductActionTypes.UPDATE_TASK_SUCCESS, ProductScopedTask>;
 export type UpdateTaskFailureAction = PayloadAction<ProductActionTypes.UPDATE_TASK_FAILURE, Error>;
 
+export type DeleteTaskRequestAction = Action<ProductActionTypes.DELETE_TASK_REQUEST>;
+export type DeleteTaskSuccessAction = PayloadAction<ProductActionTypes.DELETE_TASK_SUCCESS, ProductScopedTaskId>;
+export type DeleteTaskFailureAction = PayloadAction<ProductActionTypes.DELETE_TASK_FAILURE, Error>;
+
 export type ProductReducerActions =
   | GetProductsRequestAction
   | GetProductsSuccessAction
@@ -85,7 +95,10 @@ export type ProductReducerActions =
   | CreateTaskFailureAction
   | UpdateTaskRequestAction
   | UpdateTaskSuccessAction
-  | UpdateTaskFailureAction;
+  | UpdateTaskFailureAction
+  | DeleteTaskRequestAction
+  | DeleteTaskSuccessAction
+  | DeleteTaskFailureAction;
 
 // SAGA ACTION TYPES
 
@@ -96,7 +109,8 @@ export enum ProductSagaActionTypes {
   GET_PRODUCTS = 'PRODUCT/PRODUCT/GET_PRODUCTS',
   UPDATE_PRODUCT_ITEM = 'PRODUCT/PRODUCT/UPDATE_PRODUCT_ITEM',
   CREATE_TASK = 'PRODUCT/PRODUCT/CREATE_TASK',
-  UPDATE_TASK = 'PRODUCT/PRODUCT/UPDATE_TASK'
+  UPDATE_TASK = 'PRODUCT/PRODUCT/UPDATE_TASK',
+  DELETE_TASK = 'PRODUCT/PRODUCT/DELETE_TASK'
 }
 
 export type GetProductsAction = PayloadAction<ProductSagaActionTypes.GET_PRODUCTS, EnvironmentScopedApiRequestModel>;
@@ -105,6 +119,7 @@ export type UpdateProductAction = PayloadAction<ProductSagaActionTypes.UPDATE_PR
 export type UpdateProductItemAction = PayloadAction<ProductSagaActionTypes.UPDATE_PRODUCT_ITEM, UpdateProductItemModel>;
 export type CreateTaskAction = PayloadAction<ProductSagaActionTypes.CREATE_TASK, PostPutTaskModel>;
 export type UpdateTaskAction = PayloadAction<ProductSagaActionTypes.UPDATE_TASK, PostPutTaskModel>;
+export type DeleteTaskAction = PayloadAction<ProductSagaActionTypes.DELETE_TASK, DeleteTaskModel>;
 
 //#endregion
 
@@ -147,6 +162,12 @@ export const updateTaskSuccess = (task: ProductScopedTask): UpdateTaskSuccessAct
 export const updateTaskFailure = (error: Error): UpdateTaskFailureAction =>
   createPayloadAction(ProductActionTypes.UPDATE_TASK_FAILURE, error);
 
+export const deleteTaskRequest = (): DeleteTaskRequestAction => createAction(ProductActionTypes.DELETE_TASK_REQUEST);
+export const deleteTaskSuccess = (deletedTask: ProductScopedTaskId): DeleteTaskSuccessAction =>
+  createPayloadAction(ProductActionTypes.DELETE_TASK_SUCCESS, deletedTask);
+export const deleteTaskFailure = (error: Error): DeleteTaskFailureAction =>
+  createPayloadAction(ProductActionTypes.DELETE_TASK_FAILURE, error);
+
 
 // SAGA ACTIONS
 
@@ -162,6 +183,8 @@ export const createTask = (task: PostPutTaskModel): CreateTaskAction =>
   createPayloadAction(ProductSagaActionTypes.CREATE_TASK, task);
 export const updateTask = (task: PostPutTaskModel): UpdateTaskAction =>
   createPayloadAction(ProductSagaActionTypes.UPDATE_TASK, task);
+export const deleteTask = (task: DeleteTaskModel): DeleteTaskAction =>
+  createPayloadAction(ProductSagaActionTypes.DELETE_TASK, task);
 
 //#endregion
 
@@ -176,6 +199,7 @@ export type ProductStateShape = {
   updateProductFetchStatus: FetchStatus;
   createTaskFetchStatus: FetchStatus; // INFO, this call could be made frequently. is there value in tracking the Fetch status?
   updateTaskFetchStatus: FetchStatus; // INFO, this call could be made frequently. is there value in tracking the Fetch status?
+  deleteTaskFetchStatus: FetchStatus; // INFO, this call could be made frequently. is there value in tracking the Fetch status?
 };
 
 export const initialState: ProductStateShape = {
@@ -185,6 +209,7 @@ export const initialState: ProductStateShape = {
   updateProductFetchStatus: FetchStatus.NotActive,
   createTaskFetchStatus: FetchStatus.NotActive,
   updateTaskFetchStatus: FetchStatus.NotActive,
+  deleteTaskFetchStatus: FetchStatus.NotActive,
 };
 
 // HANDLERS
@@ -340,6 +365,34 @@ const updateTaskFailureHandler = (state: ProductStateShape, error: Error) => {
   };
 };
 
+// DELETE TASK
+const deleteTaskRequestHandler = (state: ProductStateShape) => ({
+  ...state,
+  deleteTaskFetchStatus: FetchStatus.InProgress,
+});
+
+const deleteTaskSuccessHandler = (state: ProductStateShape, deletedTask: ProductScopedTaskId) => {
+  const updatedProducts = [...state.products];
+  updatedProducts.forEach(existingProduct => { // TODO, use .some() instead of .forEach(), to short-circuit loop after a product key match?
+    if (existingProduct.key === deletedTask.ProductKey) {
+      existingProduct.tasks = existingProduct.tasks.filter(t => t.id !== deletedTask.TaskId);
+    }
+  });
+  return {
+    ...state,
+    products: updatedProducts,
+    deleteTaskFetchStatus: FetchStatus.DoneSuccess,
+  };
+};
+
+const deleteTaskFailureHandler = (state: ProductStateShape, error: Error) => {
+  console.log(error);
+  return {
+    ...state,
+    deleteTaskFetchStatus: FetchStatus.DoneFailure,
+  };
+};
+
 
 // ACTION SWITCH
 
@@ -381,6 +434,12 @@ export const productReducer: Reducer<ProductStateShape, ProductReducerActions> =
       return updateTaskSuccessHandler(state, action.payload);
     case ProductActionTypes.UPDATE_TASK_FAILURE:
       return updateTaskFailureHandler(state, action.payload);
+    case ProductActionTypes.DELETE_TASK_REQUEST:
+      return deleteTaskRequestHandler(state);
+    case ProductActionTypes.DELETE_TASK_SUCCESS:
+      return deleteTaskSuccessHandler(state, action.payload);
+    case ProductActionTypes.DELETE_TASK_FAILURE:
+      return deleteTaskFailureHandler(state, action.payload);
     default:
       return state;
   }
