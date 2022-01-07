@@ -19,6 +19,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
       public List<MoneyAttributeValueDto> MoneyAttributeValues { get; set; }
 
       public List<KeyPerformanceIndicatorDto> KeyPerformanceIndicators { get; set; }
+      public List<EnumAttributeValueDto> EnumAttributeValues { get; set; }
       public List<EnumCollectionAttributeValueDto> EnumCollectionAttributeValues { get; set; }
 
       public string Name { get; set; }
@@ -34,6 +35,8 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
       public List<ProductGoalDto> Goals { get; set; }
 
       public List<ProductItemDto> Items { get; set; }
+
+      public List<TaskDto> Tasks { get; set; }
 
       //public List<FileAttachment> FileAttachments { get; set; }
 
@@ -58,6 +61,8 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
 
       //public MoneyAttributeValueDto[] MoneyAttributeValues { get; set; }
 
+      public List<EnumAttributeValueDto> EnumAttributeValues { get; set; }
+
       [MaxLength(ModelConstraints.NAME_LENGTH_300)]
       public string Name { get; set; }
 
@@ -73,6 +78,8 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
 
       public List<ProductItemDto> Items { get; set; }
 
+      public List<TaskDto> Tasks { get; set; }
+
       //public List<FileAttachment> FileAttachments { get; set; }
    }
 
@@ -81,6 +88,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
       [Required()]
       [MaxLength(ModelConstraints.NAME_LENGTH_300)]
       public string Name { get; set; }
-      public List<Int32AttributeValueDto> Int32AttributeValues { get; set; }
+      //public List<Int32AttributeValueDto> Int32AttributeValues { get; set; }
+      public List<EnumCollectionAttributeValueDto> EnumCollectionAttributeValues { get; set; }
    }
 }

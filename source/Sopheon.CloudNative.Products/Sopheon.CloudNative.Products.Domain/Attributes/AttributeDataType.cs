@@ -13,7 +13,8 @@ namespace Sopheon.CloudNative.Products.Domain
       Money = 4,
       UtcDateTime = 5,
       MarkdownString = 6,
-      EnumCollection = 7 // list of constant values, tied to a numeric Id
+      EnumCollection = 7, // list of constant values, tied to a numeric Id
+      Enum = 8 // constant value, from allowed list of constant values, tied to a numeric Id
    }
 
    public class AttributeDataType

@@ -24,6 +24,8 @@ namespace Sopheon.CloudNative.Products.Domain
 
       public List<MoneyAttributeValue> MoneyAttributeValues { get; set; }
 
+      public List<EnumAttributeValue> EnumAttributeValues { get; set; }
+
       public List<EnumCollectionAttributeValue> EnumCollectionAttributeValues { get; set; }
 
       public string Name { get; set; }
@@ -48,6 +50,8 @@ namespace Sopheon.CloudNative.Products.Domain
       public List<UrlLink> UrlLinks { get; set; }
 
       public List<Release> Releases { get; set; }
+
+      public List<Task> Tasks { get; set; }
    }
 
    public class ProductImage

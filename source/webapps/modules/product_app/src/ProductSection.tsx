@@ -4,7 +4,7 @@ import { darkTheme } from '@sopheon/shared-ui';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
-import { industries } from './data/industries';
+import { industriesUxMap } from './data/industries';
 import { ReactComponent as AeroIndustry } from './images/industryico_Aero.svg';
 import { ReactComponent as AgIndustry } from './images/industryico_Ag.svg';
 import { ReactComponent as AutoIndustry } from './images/industryico_Auto.svg';
@@ -166,7 +166,7 @@ const ProductSection: React.FunctionComponent<IProductSectionProps> = ({ product
   });
 
   const sortedProductIndustries = product.industries.sort();
-  const industryIconName = industries.find(ind => ind.key === sortedProductIndustries[0])?.iconName;
+  const industryIconName = industriesUxMap.find(ind => ind.key === sortedProductIndustries[0])?.iconName;
 
   return (
     <Stack horizontal styles={stackStyles} tokens={mainStackTokens}>

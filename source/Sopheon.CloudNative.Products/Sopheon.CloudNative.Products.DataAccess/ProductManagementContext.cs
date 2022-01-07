@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sopheon.CloudNative.Products.Domain.Attributes.Decimal;
 using Sopheon.CloudNative.Products.Domain.Attributes.Enum;
 using Sopheon.CloudNative.Products.Domain.Attributes.Int32;
@@ -27,6 +29,8 @@ namespace Sopheon.CloudNative.Products.Domain
    public class ProductManagementContext : TenantEnvironmentDbContext
    {
       public static readonly string DEFAULT_SCHEMA = "SPM"; // Sopheon Product Management
+      public static readonly string PERIOD_START = "PeriodStart"; // Period Start property/column name for Temporal entities/tables
+      public static readonly string PERIOD_END = "PeriodEnd"; // Period End property/column name for Temporal entities/tables
 
       #region Process Configuration and Domain Value Entities
 
@@ -48,6 +52,7 @@ namespace Sopheon.CloudNative.Products.Domain
       #endregion
 
       public DbSet<Product> Products { get; set; }
+      public DbSet<Task> Tasks { get; set; }
 
       public ProductManagementContext(DbContextOptions<ProductManagementContext> options) : base(options)
       {
@@ -71,7 +76,44 @@ namespace Sopheon.CloudNative.Products.Domain
 
          modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProductManagementContext).Assembly);
 
+         modelBuilder.ApplyKindUtcToAllDateTimes();
+
          base.OnModelCreating(modelBuilder);
+      }
+   }
+
+   public static class ModelBuilderExtensions
+   {
+      /// <summary>
+      /// Applies the DateTimeKind.Utc to all DateTime and DateTime? model properties
+      /// </summary>
+      /// <param name="modelBuilder"></param>
+      public static void ApplyKindUtcToAllDateTimes(this ModelBuilder modelBuilder)
+      {
+         var dateTimeConverter = new ValueConverter<DateTime, DateTime>(
+            v => v.ToUniversalTime(),
+            v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+
+         var nullableDateTimeConverter = new ValueConverter<DateTime?, DateTime?>(
+            v => v.HasValue ? v.Value.ToUniversalTime() : v,
+            v => v.HasValue ? DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v);
+
+         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+         {
+            if (entityType.IsKeyless) { continue; }
+
+            foreach (var property in entityType.GetProperties())
+            {
+               if (property.ClrType == typeof(DateTime))
+               {
+                  property.SetValueConverter(dateTimeConverter);
+               }
+               else if (property.ClrType == typeof(DateTime?))
+               {
+                  property.SetValueConverter(nullableDateTimeConverter);
+               }
+            }
+         }
       }
    }
 }

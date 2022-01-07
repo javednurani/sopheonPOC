@@ -9,6 +9,7 @@ namespace Sopheon.CloudNative.Products.Domain
 {
    public interface IAllAttributesContainer :
       IDecimalAttributeContainer,
+      IEnumAttributeContainer,
       IEnumCollectionAttributeContainer,
       IInt32AttributeContainer,
       IMoneyAttributeContainer,

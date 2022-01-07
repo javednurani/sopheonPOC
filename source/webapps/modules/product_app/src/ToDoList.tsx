@@ -12,12 +12,13 @@ import {
 } from '@fluentui/react';
 import { Text } from '@fluentui/react/lib/Text';
 import { useBoolean } from '@fluentui/react-hooks';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 
-import AddTask from './AddTask';
-import { UpdateProductAction, UpdateProductItemAction } from './product/productReducer';
-import { Attributes, Product, Status, ToDoItem, UpdateProductItemModel, UpdateProductModel } from './types';
+import { Status } from './data/status';
+import { CreateTaskAction, UpdateProductAction, UpdateProductItemAction, UpdateTaskAction } from './product/productReducer';
+import TaskDetails from './TaskDetails';
+import { PostPutTaskModel, Product, Task, TaskDto, UpdateProductItemModel, UpdateProductModel } from './types';
 
 export interface IToDoListProps {
   updateProduct: (product: UpdateProductModel) => UpdateProductAction;
@@ -25,6 +26,8 @@ export interface IToDoListProps {
   environmentKey: string;
   accessToken: string;
   products: Product[];
+  createTask: (task: PostPutTaskModel) => CreateTaskAction;
+  updateTask: (task: PostPutTaskModel) => UpdateTaskAction;
 }
 
 const mainDivStyle: React.CSSProperties = {
@@ -49,11 +52,12 @@ const filterSortIconClass = mergeStyles({
   verticalAlign: 'bottom',
 });
 
-// AddTask modal style
-const addTaskModalStyles = mergeStyleSets({
+// TaskDetails modal style
+const taskDetailsModalStyles = mergeStyleSets({
   container: {
     height: '560px',
     width: '956px',
+    display: 'flex',
   },
 });
 
@@ -69,6 +73,7 @@ const sharedNameStyles: Partial<ITextFieldStyles> = {
     '-webkit-box-orient': 'vertical',
     'word-break': 'break-all',
     'marginBottom': '5px',
+    'cursor': 'pointer',
   },
 };
 
@@ -98,17 +103,20 @@ const isToday = (someDate: Date) => {
 
 const ToDoList: React.FunctionComponent<IToDoListProps> = ({
   updateProduct,
-  updateProductItem,
+  updateProductItem, // INFO: createTask/updateTask pipes have replace use of updateProduct/updateProductItem.  can verify and remove dead code
   environmentKey,
   accessToken,
   products,
+  createTask,
+  updateTask,
 }: IToDoListProps) => {
-  const { todos } = products[0];
+  const { tasks } = products[0];
   const { formatMessage } = useIntl();
   const [isTaskModalOpen, { setTrue: showTaskModal, setFalse: hideTaskModal }] = useBoolean(false);
   const [isFilteredToShowComplete, { toggle: toggleFiltered }] = useBoolean(false);
   const [isFilterContextMenuShown, { setFalse: hideFilterContextMenu, toggle: toggleFilterContextMenu }] = useBoolean(false);
   const filterContextMenuRef = useRef(null); // used to link context menu to element
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
   const filterMenuItems: IContextualMenuItem[] = [
     {
@@ -139,33 +147,39 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
     />
   );
 
-  const handleStatusIconClick = (todo: ToDoItem) => {
+  const handleStatusIconClick = (todo: Task) => {
     // if it's not complete, mark it as complete, otherwise in progress
     todo.status = todo.status !== Status.Complete ? Status.Complete : Status.InProgress;
-    callUpdateProductItemSaga(todo);
+    makeUpdateTaskCall(todo);
   };
 
-  const callUpdateProductItemSaga = (todo: ToDoItem) => {
-    const updateProductItemDto: UpdateProductItemModel = {
+  const handleToDoListItemClick = (todo: Task) => {
+    setSelectedTask(todo);
+    showTaskModal();
+  };
+
+  const handleCreateToDoIconClick = () => {
+    setSelectedTask(null);
+    showTaskModal();
+  };
+
+  const makeUpdateTaskCall = (todo: Task) => {
+    // use PUT /Tasks to make full update, even though we're only changing Status
+    // Cloud-2157 captures an optional rework to use PATCH /Tasks for a partial update
+    const task: TaskDto = {
+      id: todo.id,
+      name: todo.name,
+      notes: todo.notes,
+      status: todo.status,
+      dueDate: todo.dueDate ? todo.dueDate.toDateString() : null,
+    };
+    const updateTaskModel: PostPutTaskModel = {
       ProductKey: products[0].key || 'BAD_PRODUCT_KEY',
       EnvironmentKey: environmentKey,
       AccessToken: accessToken,
-      ProductItem: {
-        Id: todo.id,
-        EnumCollectionAttributeValues: [
-          {
-            AttributeId: Attributes.STATUS,
-            Value: [
-              {
-                EnumAttributeOptionId: todo.status,
-              },
-            ],
-          },
-        ],
-        // TODO: might need to send other values in future
-      },
+      Task: task,
     };
-    updateProductItem(updateProductItemDto);
+    updateTask(updateTaskModel);
   };
 
   const emptyListContent: JSX.Element = (
@@ -180,7 +194,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
 
   const populatedListContent: JSX.Element = (
     <div>
-      {todos
+      {tasks
         .filter(todo => (isFilteredToShowComplete ? true : todo.status !== Status.Complete))
         .map((todo, index) => {
           const statusIcon: JSX.Element = (
@@ -192,8 +206,11 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
               />
             </Text>
           );
-
-          const name: JSX.Element = <Text styles={todo.status === Status.Complete ? completedNameStyles : sharedNameStyles}>{todo.name}</Text>;
+          const name: JSX.Element = (
+            <Text onClick={() => handleToDoListItemClick(todo)} styles={todo.status === Status.Complete ? completedNameStyles : sharedNameStyles}>
+              {todo.name}
+            </Text>
+          );
 
           let dueDate: JSX.Element;
           if (todo.dueDate) {
@@ -227,7 +244,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
     </div>
   );
 
-  const toDoListContent: JSX.Element = todos.length === 0 ? emptyListContent : populatedListContent;
+  const toDoListContent: JSX.Element = tasks.length === 0 ? emptyListContent : populatedListContent;
 
   return (
     <div style={mainDivStyle}>
@@ -235,7 +252,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
         <Stack.Item grow>
           <Text variant="xxLarge">{formatMessage({ id: 'toDo.title' })}</Text>
           <Text variant="xLarge">
-            <FontIcon style={pointerCursorStyle} onClick={showTaskModal} iconName="CirclePlus" className={iconClass} />
+            <FontIcon style={pointerCursorStyle} onClick={handleCreateToDoIconClick} iconName="CirclePlus" className={iconClass} />
           </Text>
         </Stack.Item>
         <Stack.Item>
@@ -260,15 +277,19 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
         isOpen={isTaskModalOpen}
         onDismiss={hideTaskModal}
         isBlocking={true}
-        containerClassName={addTaskModalStyles.container}
+        containerClassName={taskDetailsModalStyles.container}
       >
         {/* <div>Display only Modal :) does it work nice with the IdleMonitor?</div> */}
-        <AddTask
+        <TaskDetails
           hideModal={hideTaskModal}
           updateProduct={updateProduct}
           environmentKey={environmentKey}
           accessToken={accessToken}
           products={products}
+          selectedTask={selectedTask}
+          updateProductItem={updateProductItem}
+          createTask={createTask}
+          updateTask={updateTask}
         />
       </Modal>
       {filterContextMenu}

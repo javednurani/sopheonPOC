@@ -9,11 +9,11 @@ export interface ITimelineProps {
 }
 
 const Timeline: React.FunctionComponent<ITimelineProps> = ({ product }: ITimelineProps) => {
-  const todoItems = product.todos.map(todo => ({
-    id: `${todo.name}_${todo.dueDate}`,
-    text: todo.name,
+  const todoItems = product.tasks.map(task => ({
+    id: `${task.name}_${task.dueDate}`,
+    text: task.name,
     type: 'milestone',
-    start_date: todo.dueDate,
+    start_date: task.dueDate,
   }));
 
   const mainStackStyle: React.CSSProperties = {

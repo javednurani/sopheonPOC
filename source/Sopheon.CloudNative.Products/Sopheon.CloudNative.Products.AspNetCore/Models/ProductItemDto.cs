@@ -26,6 +26,9 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Models
       public List<UtcDateTimeAttributeValueDto> UtcDateTimeAttributeValues { get; set; }
 
       public List<MoneyAttributeValueDto> MoneyAttributeValues { get; set; }
+
+      public List<EnumAttributeValueDto> EnumAttributeValues { get; set; }
+
       public List<EnumCollectionAttributeValueDto> EnumCollectionAttributeValues { get; set; }
    }
 }

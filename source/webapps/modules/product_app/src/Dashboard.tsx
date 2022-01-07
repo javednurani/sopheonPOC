@@ -2,13 +2,13 @@ import { IStackItemStyles, IStackStyles, IStackTokens, Stack } from '@fluentui/r
 import React from 'react';
 
 import KPIs from './KPIs';
-import { UpdateProductAction, UpdateProductItemAction } from './product/productReducer';
+import { CreateTaskAction, UpdateProductAction, UpdateProductItemAction, UpdateTaskAction } from './product/productReducer';
 import ProductHealth from './ProductHealth';
 import ProductSection from './ProductSection';
 import ResourcesAndLinks from './ResourcesAndLinks';
 import Timeline from './timeline/Timeline';
 import ToDoList from './ToDoList';
-import { Product, UpdateProductItemModel, UpdateProductModel } from './types';
+import { PostPutTaskModel, Product, UpdateProductItemModel, UpdateProductModel } from './types';
 
 export interface IDashboardProps {
   updateProduct: (product: UpdateProductModel) => UpdateProductAction;
@@ -16,6 +16,8 @@ export interface IDashboardProps {
   environmentKey: string;
   accessToken: string;
   products: Product[];
+  createTask: (task: PostPutTaskModel) => CreateTaskAction;
+  updateTask: (task: PostPutTaskModel) => UpdateTaskAction;
 }
 
 const stackTokens: IStackTokens = {
@@ -29,6 +31,8 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
   environmentKey,
   accessToken,
   products,
+  createTask,
+  updateTask,
 }: IDashboardProps) => {
   const stackItemStyles: IStackItemStyles = {
     root: {
@@ -64,6 +68,8 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
               environmentKey={environmentKey}
               accessToken={accessToken}
               products={products}
+              createTask={createTask}
+              updateTask={updateTask}
             />
           </Stack.Item>
           <Stack.Item grow styles={stackItemStyles}>

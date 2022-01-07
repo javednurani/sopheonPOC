@@ -16,10 +16,11 @@ import {
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { industries } from '../data/industries';
+import { Attributes } from '../data/attributes';
+import { industriesUxMap } from '../data/industries';
 import { CreateProductAction, UpdateProductAction } from '../product/productReducer';
 import SopheonLogo from '../SopheonLogo';
-import { Attributes, CreateProductModel, KeyPerformanceIndicatorDto, PatchOperation, Product, ProductPostDto, UpdateProductModel } from '../types';
+import { CreateProductModel, KeyPerformanceIndicatorDto, PatchOperation, Product, ProductPostDto, UpdateProductModel } from '../types';
 import { ReactComponent as AeroIndustry } from './../images/industryico_Aero.svg';
 import { ReactComponent as AgIndustry } from './../images/industryico_Ag.svg';
 import { ReactComponent as AutoIndustry } from './../images/industryico_Auto.svg';
@@ -133,7 +134,7 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
     },
   };
 
-  const industryOptions: IDropdownOption[] = industries.map(ind => ({
+  const industryOptions: IDropdownOption[] = industriesUxMap.map(ind => ({
     key: ind.key,
     text: formatMessage({ id: ind.resourceKey }),
     data: {
@@ -178,10 +179,14 @@ const OnboardingInfo: React.FunctionComponent<IOnboardingInfoProps> = ({
   const handleOnboardingContinueClick = () => {
     const productData: ProductPostDto = {
       Name: productName,
-      Int32AttributeValues: industryKeys.map(ik => ({
-        AttributeId: Attributes.INDUSTRIES,
-        Value: ik,
-      })),
+      EnumCollectionAttributeValues: [
+        {
+          attributeId: Attributes.INDUSTRIES,
+          value: industryKeys.map(ik => ({
+            enumAttributeOptionId: ik,
+          })),
+        },
+      ],
     };
 
     const createProductDto: CreateProductModel = {

@@ -173,6 +173,43 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Tasks",
+                schema: "SPM",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    PeriodEnd = table.Column<DateTime>(type: "datetime2", nullable: false)
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
+                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
+                    PeriodStart = table.Column<DateTime>(type: "datetime2", nullable: false)
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
+                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tasks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tasks_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalSchema: "SPM",
+                        principalTable: "Products",
+                        principalColumn: "Id");
+                })
+                .Annotation("SqlServer:IsTemporal", true)
+                .Annotation("SqlServer:TemporalHistoryTableName", "TasksHistory")
+                .Annotation("SqlServer:TemporalHistoryTableSchema", "SPM")
+                .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
+                .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart");
+
+            migrationBuilder.CreateTable(
                 name: "UrlLink",
                 schema: "SPM",
                 columns: table => new
@@ -285,15 +322,13 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 schema: "SPM",
                 columns: table => new
                 {
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     AttributeId = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
                     Value = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products_DecimalAttributeValues", x => new { x.ProductId, x.Id });
+                    table.PrimaryKey("PK_Products_DecimalAttributeValues", x => new { x.ProductId, x.AttributeId });
                     table.ForeignKey(
                         name: "FK_Products_DecimalAttributeValues_Attribute_AttributeId",
                         column: x => x.AttributeId,
@@ -344,15 +379,13 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 schema: "SPM",
                 columns: table => new
                 {
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     AttributeId = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
                     Value = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products_Int32AttributeValues", x => new { x.ProductId, x.Id });
+                    table.PrimaryKey("PK_Products_Int32AttributeValues", x => new { x.ProductId, x.AttributeId });
                     table.ForeignKey(
                         name: "FK_Products_Int32AttributeValues_Attribute_AttributeId",
                         column: x => x.AttributeId,
@@ -374,16 +407,14 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 schema: "SPM",
                 columns: table => new
                 {
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     AttributeId = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
                     CurrencyCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Value = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products_MoneyAttributeValues", x => new { x.ProductId, x.Id });
+                    table.PrimaryKey("PK_Products_MoneyAttributeValues", x => new { x.ProductId, x.AttributeId });
                     table.ForeignKey(
                         name: "FK_Products_MoneyAttributeValues_Attribute_AttributeId",
                         column: x => x.AttributeId,
@@ -405,15 +436,13 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 schema: "SPM",
                 columns: table => new
                 {
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     AttributeId = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products_StringAttributeValues", x => new { x.ProductId, x.Id });
+                    table.PrimaryKey("PK_Products_StringAttributeValues", x => new { x.ProductId, x.AttributeId });
                     table.ForeignKey(
                         name: "FK_Products_StringAttributeValues_Attribute_AttributeId",
                         column: x => x.AttributeId,
@@ -435,15 +464,13 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 schema: "SPM",
                 columns: table => new
                 {
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     AttributeId = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
                     Value = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products_UtcDateTimeAttributeValues", x => new { x.ProductId, x.Id });
+                    table.PrimaryKey("PK_Products_UtcDateTimeAttributeValues", x => new { x.ProductId, x.AttributeId });
                     table.ForeignKey(
                         name: "FK_Products_UtcDateTimeAttributeValues_Attribute_AttributeId",
                         column: x => x.AttributeId,
@@ -465,15 +492,13 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 schema: "SPM",
                 columns: table => new
                 {
-                    ProductItemId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     AttributeId = table.Column<int>(type: "int", nullable: false),
+                    ProductItemId = table.Column<int>(type: "int", nullable: false),
                     Value = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductItem_DecimalAttributeValues", x => new { x.ProductItemId, x.Id });
+                    table.PrimaryKey("PK_ProductItem_DecimalAttributeValues", x => new { x.ProductItemId, x.AttributeId });
                     table.ForeignKey(
                         name: "FK_ProductItem_DecimalAttributeValues_Attribute_AttributeId",
                         column: x => x.AttributeId,
@@ -524,15 +549,13 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 schema: "SPM",
                 columns: table => new
                 {
-                    ProductItemId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     AttributeId = table.Column<int>(type: "int", nullable: false),
+                    ProductItemId = table.Column<int>(type: "int", nullable: false),
                     Value = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductItem_Int32AttributeValues", x => new { x.ProductItemId, x.Id });
+                    table.PrimaryKey("PK_ProductItem_Int32AttributeValues", x => new { x.ProductItemId, x.AttributeId });
                     table.ForeignKey(
                         name: "FK_ProductItem_Int32AttributeValues_Attribute_AttributeId",
                         column: x => x.AttributeId,
@@ -554,16 +577,14 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 schema: "SPM",
                 columns: table => new
                 {
-                    ProductItemId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     AttributeId = table.Column<int>(type: "int", nullable: false),
+                    ProductItemId = table.Column<int>(type: "int", nullable: false),
                     CurrencyCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Value = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductItem_MoneyAttributeValues", x => new { x.ProductItemId, x.Id });
+                    table.PrimaryKey("PK_ProductItem_MoneyAttributeValues", x => new { x.ProductItemId, x.AttributeId });
                     table.ForeignKey(
                         name: "FK_ProductItem_MoneyAttributeValues_Attribute_AttributeId",
                         column: x => x.AttributeId,
@@ -585,15 +606,13 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 schema: "SPM",
                 columns: table => new
                 {
-                    ProductItemId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     AttributeId = table.Column<int>(type: "int", nullable: false),
+                    ProductItemId = table.Column<int>(type: "int", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductItem_StringAttributeValues", x => new { x.ProductItemId, x.Id });
+                    table.PrimaryKey("PK_ProductItem_StringAttributeValues", x => new { x.ProductItemId, x.AttributeId });
                     table.ForeignKey(
                         name: "FK_ProductItem_StringAttributeValues_Attribute_AttributeId",
                         column: x => x.AttributeId,
@@ -615,15 +634,13 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 schema: "SPM",
                 columns: table => new
                 {
-                    ProductItemId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     AttributeId = table.Column<int>(type: "int", nullable: false),
+                    ProductItemId = table.Column<int>(type: "int", nullable: false),
                     Value = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductItem_UtcDateTimeAttributeValues", x => new { x.ProductItemId, x.Id });
+                    table.PrimaryKey("PK_ProductItem_UtcDateTimeAttributeValues", x => new { x.ProductItemId, x.AttributeId });
                     table.ForeignKey(
                         name: "FK_ProductItem_UtcDateTimeAttributeValues_Attribute_AttributeId",
                         column: x => x.AttributeId,
@@ -636,6 +653,74 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                         column: x => x.ProductItemId,
                         principalSchema: "SPM",
                         principalTable: "ProductItem",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductItem_EnumAttributeValues",
+                schema: "SPM",
+                columns: table => new
+                {
+                    AttributeId = table.Column<int>(type: "int", nullable: false),
+                    ProductItemId = table.Column<int>(type: "int", nullable: false),
+                    EnumAttributeOptionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductItem_EnumAttributeValues", x => new { x.ProductItemId, x.AttributeId });
+                    table.ForeignKey(
+                        name: "FK_ProductItem_EnumAttributeValues_Attribute_AttributeId",
+                        column: x => x.AttributeId,
+                        principalSchema: "SPM",
+                        principalTable: "Attribute",
+                        principalColumn: "AttributeId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductItem_EnumAttributeValues_EnumAttributeOption_EnumAttributeOptionId",
+                        column: x => x.EnumAttributeOptionId,
+                        principalSchema: "SPM",
+                        principalTable: "EnumAttributeOption",
+                        principalColumn: "EnumAttributeOptionId");
+                    table.ForeignKey(
+                        name: "FK_ProductItem_EnumAttributeValues_ProductItem_ProductItemId",
+                        column: x => x.ProductItemId,
+                        principalSchema: "SPM",
+                        principalTable: "ProductItem",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Products_EnumAttributeValues",
+                schema: "SPM",
+                columns: table => new
+                {
+                    AttributeId = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    EnumAttributeOptionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products_EnumAttributeValues", x => new { x.ProductId, x.AttributeId });
+                    table.ForeignKey(
+                        name: "FK_Products_EnumAttributeValues_Attribute_AttributeId",
+                        column: x => x.AttributeId,
+                        principalSchema: "SPM",
+                        principalTable: "Attribute",
+                        principalColumn: "AttributeId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Products_EnumAttributeValues_EnumAttributeOption_EnumAttributeOptionId",
+                        column: x => x.EnumAttributeOptionId,
+                        principalSchema: "SPM",
+                        principalTable: "EnumAttributeOption",
+                        principalColumn: "EnumAttributeOptionId");
+                    table.ForeignKey(
+                        name: "FK_Products_EnumAttributeValues_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalSchema: "SPM",
+                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -704,7 +789,8 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                     { 4, "Money" },
                     { 5, "UtcDateTime" },
                     { 6, "MarkdownString" },
-                    { 7, "EnumCollection" }
+                    { 7, "EnumCollection" },
+                    { 8, "Enum" }
                 });
 
             migrationBuilder.InsertData(
@@ -734,8 +820,8 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 columns: new[] { "AttributeId", "AttributeDataTypeId", "Name", "ShortName" },
                 values: new object[,]
                 {
-                    { -4, 7, "Status", "STATUS" },
-                    { -1, 2, "Industry", "IND" },
+                    { -4, 8, "Status", "STATUS" },
+                    { -1, 7, "Industry", "IND" },
                     { -2, 1, "Notes", "NOTES" },
                     { -3, 5, "Due Date", "DUE" }
                 });
@@ -746,10 +832,40 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 columns: new[] { "EnumAttributeOptionId", "AttributeId", "Name" },
                 values: new object[,]
                 {
-                    { -4, -4, "Complete" },
-                    { -3, -4, "Assigned" },
-                    { -2, -4, "In Progress" },
-                    { -1, -4, "Not Started" }
+                    { -34, -4, "Complete" },
+                    { -33, -4, "Assigned" },
+                    { -32, -4, "In Progress" },
+                    { -31, -4, "Not Started" },
+                    { -30, -1, "Utilities" },
+                    { -29, -1, "Travel, Leisure & Hospitality" },
+                    { -28, -1, "Transportation & Warehousing" },
+                    { -27, -1, "Telecommunications" },
+                    { -26, -1, "Technology Software & Services" },
+                    { -25, -1, "Technology Hardware" },
+                    { -24, -1, "Retail" },
+                    { -23, -1, "Real Estate, Rental & Leasing" },
+                    { -22, -1, "Professional & Technical Services" },
+                    { -21, -1, "Pharmaceuticals & Biotech" },
+                    { -20, -1, "Non-Profit" },
+                    { -19, -1, "Membership Organizations" },
+                    { -18, -1, "Media & Entertainment" },
+                    { -17, -1, "Manufacturing - Industrial" },
+                    { -16, -1, "Manufacturing - Consumer Goods" },
+                    { -15, -1, "Manufacturing - Automotive" },
+                    { -14, -1, "Manufacturing - Aerospace" },
+                    { -13, -1, "Insurance" },
+                    { -12, -1, "Health Care" },
+                    { -11, -1, "Government - State" },
+                    { -10, -1, "Government - Military" },
+                    { -9, -1, "Government - Local" },
+                    { -8, -1, "Government - Federal" },
+                    { -7, -1, "Financial Services" },
+                    { -6, -1, "Energy, Mining, Oil & Gas" },
+                    { -5, -1, "Education - K12" },
+                    { -4, -1, "Education - Higher Ed" },
+                    { -3, -1, "Construction" },
+                    { -2, -1, "Agriculture & Forestry" },
+                    { -1, -1, "Advertising" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -809,6 +925,18 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 column: "AttributeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProductItem_EnumAttributeValues_AttributeId",
+                schema: "SPM",
+                table: "ProductItem_EnumAttributeValues",
+                column: "AttributeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductItem_EnumAttributeValues_EnumAttributeOptionId",
+                schema: "SPM",
+                table: "ProductItem_EnumAttributeValues",
+                column: "EnumAttributeOptionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProductItem_EnumCollectionAttributeValues_AttributeId",
                 schema: "SPM",
                 table: "ProductItem_EnumCollectionAttributeValues",
@@ -865,6 +993,18 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 column: "AttributeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Products_EnumAttributeValues_AttributeId",
+                schema: "SPM",
+                table: "Products_EnumAttributeValues",
+                column: "AttributeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_EnumAttributeValues_EnumAttributeOptionId",
+                schema: "SPM",
+                table: "Products_EnumAttributeValues",
+                column: "EnumAttributeOptionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Products_EnumCollectionAttributeValues_AttributeId",
                 schema: "SPM",
                 table: "Products_EnumCollectionAttributeValues",
@@ -913,6 +1053,12 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Tasks_ProductId",
+                schema: "SPM",
+                table: "Tasks",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UrlLink_ProductId",
                 schema: "SPM",
                 table: "UrlLink",
@@ -938,6 +1084,10 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                 schema: "SPM");
 
             migrationBuilder.DropTable(
+                name: "ProductItem_EnumAttributeValues",
+                schema: "SPM");
+
+            migrationBuilder.DropTable(
                 name: "ProductItem_EnumCollectionAttributeValues_Value",
                 schema: "SPM");
 
@@ -959,6 +1109,10 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "Products_DecimalAttributeValues",
+                schema: "SPM");
+
+            migrationBuilder.DropTable(
+                name: "Products_EnumAttributeValues",
                 schema: "SPM");
 
             migrationBuilder.DropTable(
@@ -988,6 +1142,15 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
             migrationBuilder.DropTable(
                 name: "Status",
                 schema: "SPM");
+
+            migrationBuilder.DropTable(
+                name: "Tasks",
+                schema: "SPM")
+                .Annotation("SqlServer:IsTemporal", true)
+                .Annotation("SqlServer:TemporalHistoryTableName", "TasksHistory")
+                .Annotation("SqlServer:TemporalHistoryTableSchema", "SPM")
+                .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
+                .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart");
 
             migrationBuilder.DropTable(
                 name: "UrlLink",

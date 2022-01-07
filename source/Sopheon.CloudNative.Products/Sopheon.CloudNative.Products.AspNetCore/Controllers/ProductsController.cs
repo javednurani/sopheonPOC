@@ -40,8 +40,9 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
          {
             _logger.LogInformation("ProductsController::Get");
             var query = _dbContext.Products
-                  .AsNoTracking()
-                  .ProjectTo<ProductDto>(_mapper.ConfigurationProvider);
+               .Include(p => p.Tasks)
+               .AsNoTracking()
+               .ProjectTo<ProductDto>(_mapper.ConfigurationProvider);
 
             return await query.ToArrayAsync();
          }
@@ -58,10 +59,11 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
          try
          {
             var product = await _dbContext.Products
-                .Include(p => p.Goals)
-                .Include(p => p.KeyPerformanceIndicators)
-                .AsNoTracking()
-                .SingleOrDefaultAsync(p => p.Key == key);
+               .Include(p => p.Tasks)
+               .Include(p => p.Goals)
+               .Include(p => p.KeyPerformanceIndicators)
+               .AsNoTracking()
+               .SingleOrDefaultAsync(p => p.Key == key);
 
             if (product == null) { return NotFound(); }
 
@@ -126,7 +128,7 @@ namespace Sopheon.CloudNative.Products.AspNetCore.Controllers
             .Include(p => p.Items)
             .ThenInclude(i => i.UtcDateTimeAttributeValues)
             .Include(p => p.Items)
-            .ThenInclude(i => i.EnumCollectionAttributeValues)
+            .ThenInclude(i => i.EnumAttributeValues)
             .Include(p => p.Goals)
             .Include(p => p.KeyPerformanceIndicators)
             .ThenInclude(kpi => kpi.Attribute)

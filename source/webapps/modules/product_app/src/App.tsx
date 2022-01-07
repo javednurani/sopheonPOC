@@ -25,6 +25,8 @@ const App: React.FunctionComponent<Props> = ({
   accessToken,
   hideHeader,
   showHeader,
+  createTask,
+  updateTask,
 }: Props) => {
   const { formatMessage } = useIntl();
   const theme = useTheme();
@@ -124,6 +126,8 @@ const App: React.FunctionComponent<Props> = ({
           environmentKey={environmentKey}
           accessToken={accessToken}
           products={products}
+          createTask={createTask}
+          updateTask={updateTask}
         />
       </Stack.Item>
     </Stack>
