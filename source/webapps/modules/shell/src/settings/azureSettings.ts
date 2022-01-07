@@ -11,13 +11,13 @@ const azureRawSettings: Record<string, string> = {
   AD_B2C_SignUp_Policy: 'B2C_1A_SIGNUP',
   AD_B2C_PasswordChange_Policy: 'B2C_1A_PROFILEEDIT_PASSWORDCHANGE',
   AD_B2C_ProfileEdit_Policy: 'B2C_1A_PROFILEEDIT',
-  SPA_Root_URL: 'https://^BrowserWebAppUrl^.azureedge.net/product',
-  SPA_Root_URL_Dev: 'https://localhost:3000/product',
+  SPA_Root_URL: 'https://^BrowserWebAppUrl^.azureedge.net',
+  SPA_Root_URL_Dev: 'https://localhost:3000',
   // TODO Cloud-2259, query Graph API for App Reg "PMAPI"
   // https://docs.microsoft.com/en-us/graph/api/application-list?view=graph-rest-1.0&tabs=http#http-request
   Product_Management_API_Application_Client_Id: '^B2CProductManagementApiClientId^',
   Product_Management_API_Application_Client_Id_Dev: 'd7c97f69-2f27-43a0-b998-c659ab05d8ba',
-  Product_Management_API_Scope_PMCore_ReadWrite: 'PMCore.ReadWrite'
+  Product_Management_API_Scope_PMCore_ReadWrite: 'PMCore.ReadWrite',
 };
 
 // these collapsed settings incorporate the current environment to assign the relevant raw setting
@@ -28,7 +28,8 @@ export const azureSettings: Record<string, string> = {
   AD_B2C_SignUp_Policy: azureRawSettings.AD_B2C_SignUp_Policy,
   AD_B2C_PasswordChange_Policy: azureRawSettings.AD_B2C_PasswordChange_Policy,
   AD_B2C_ProfileEdit_Policy: azureRawSettings.AD_B2C_ProfileEdit_Policy,
-  SPA_Root_URL: isDev ? azureRawSettings.SPA_Root_URL_Dev : azureRawSettings.SPA_Root_URL,
+  SPA_Redirect_URL: isDev ? `${azureRawSettings.SPA_Root_URL_Dev}/product` : `${azureRawSettings.SPA_Root_URL}/product`,
+  SPA_Logout_URL: isDev ? azureRawSettings.SPA_Root_URL_Dev : azureRawSettings.SPA_Root_URL,
   Product_Management_API_Application_Client_Id: isDev
     ? azureRawSettings.Product_Management_API_Application_Client_Id_Dev
     : azureRawSettings.Product_Management_API_Application_Client_Id,

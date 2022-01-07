@@ -97,8 +97,8 @@ export class IsolatedShellApi implements IShellApi {
       ...(mapDispatchProps && mapDispatchProps(this.store.getState() as TState)),
       // stub out Shell-provided dispatch (found in AppProps) here
       getAccessToken: () => createAction(AuthSagaActionTypes.GET_ACCESS_TOKEN),
-      showHeaderFooter: () => createAction(DisplayActionTypes.SHOW_HEADER_FOOTER),
-      hideHeaderFooter: () => createAction(DisplayActionTypes.HIDE_HEADER_FOOTER),
+      showHeader: () => createAction(DisplayActionTypes.SHOW_HEADER),
+      hideHeader: () => createAction(DisplayActionTypes.HIDE_HEADER),
     };
 
     return connect(mapState, mapDispatch);
