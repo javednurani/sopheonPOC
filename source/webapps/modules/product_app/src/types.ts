@@ -102,7 +102,7 @@ export interface TaskDto {
 }
 
 export interface MilestoneDto {
-  id: number | null;
+  id: number;
   name: string;
   notes: string | null;
   date: string | null;

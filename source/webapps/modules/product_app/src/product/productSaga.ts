@@ -69,7 +69,7 @@ export function* onGetProducts(action: GetProductsAction): Generator {
       kpis: d.keyPerformanceIndicators,
       goals: d.goals,
       tasks: translateTasksFromService(d.tasks),
-      milestones: [],
+      milestones: d.milestones,
     }));
     yield put(getProductsSuccess(transformedProductsData));
   } catch (error) {
@@ -208,7 +208,7 @@ export function* onCreateMilestone(action: CreateMilestoneAction): Generator {
         id: data.id,
         name: data.name,
         notes: data.notes,
-        date: new Date(data.dueDate),
+        date: data.date,
       },
       ProductKey: action.payload.ProductKey, // used for assignment to correct Product in Redux store
     };
