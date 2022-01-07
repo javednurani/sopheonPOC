@@ -1,6 +1,6 @@
 import { AccountInfo } from '@azure/msal-browser';
 import { useMsal } from '@azure/msal-react';
-import { INavLinkGroup, INavStyleProps, INavStyles, IStyleFunctionOrObject, Link, Nav, Stack } from '@fluentui/react';
+import { INavLinkGroup, INavStyleProps, INavStyles, IStyleFunctionOrObject, Link, Nav, Stack, Text } from '@fluentui/react';
 import { useTheme } from '@fluentui/react-theme-provider';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -77,7 +77,7 @@ const SideNav: React.FC<SideBarProps> = ({ menuItems, selectedMenuKey }): JSX.El
         <Stack>
           <Stack.Item>
             <Link styles={linkStyles} href="">
-              {formatMessage({ id: 'sidebar.resourcesHelp' })}
+              <Text variant="medium">{formatMessage({ id: 'sidebar.resourcesHelp' })}</Text>
             </Link>
           </Stack.Item>
           <Stack.Item>

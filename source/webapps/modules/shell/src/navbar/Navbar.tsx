@@ -1,4 +1,5 @@
 //import { Theme, useTheme } from '@fluentui/react-theme-provider';
+import { Text } from '@fluentui/react';
 import { useTheme } from '@fluentui/react-theme-provider';
 import React, { CSSProperties } from 'react';
 import { useIntl } from 'react-intl';
@@ -12,7 +13,6 @@ const Navbar: React.FunctionComponent = () => {
   const location = useLocation();
 
   const linkStyles: CSSProperties = {
-    fontSize: theme.fonts.medium.fontSize,
     lineHeight: '40px',
     display: 'inline-block',
     textDecoration: 'none',
@@ -35,7 +35,7 @@ const Navbar: React.FunctionComponent = () => {
         const isCurrentPath: boolean = location.pathname.toLowerCase().startsWith(appModule.routeName.toLowerCase());
         return (
           <Link to={appModule.routeName} key={`key${appModule.routeName}`} style={isCurrentPath ? activeLinkStyles : linkStyles}>
-            {formatMessage({ id: appModule.displayNameResourceKey })}
+            <Text variant="medium">{formatMessage({ id: appModule.displayNameResourceKey })}</Text>
           </Link>
         );
       })}
