@@ -69,7 +69,7 @@ const MilestoneDialogue: React.FunctionComponent<IMilestoneDialogueProps> = ({
   const contentStyles = mergeStyleSets({
     header: [
       // eslint-disable-next-line deprecation/deprecation
-      theme.fonts.xLargePlus,
+      theme.fonts.xxLarge,
       {
         flex: '1 1 auto',
         borderTop: `4px solid ${theme.palette.themePrimary}`,
@@ -77,12 +77,12 @@ const MilestoneDialogue: React.FunctionComponent<IMilestoneDialogueProps> = ({
         display: 'flex',
         alignItems: 'center',
         fontWeight: FontWeights.semibold,
-        padding: '25px 50px 10px 50px',
+        padding: '32px',
       },
     ],
     body: {
       flex: '4 4 auto',
-      padding: '10px 50px 25px 50px',
+      padding: '32px',
       overflowY: 'hidden',
       selectors: {
         'p': { margin: '14px 0' },
@@ -264,7 +264,91 @@ const MilestoneDialogue: React.FunctionComponent<IMilestoneDialogueProps> = ({
     },
   };
 
-  return <></>;
+  return (
+    <>
+      <div className={contentStyles.header}>
+        <span id="TaskDetailsModal">
+          <Text variant="xxLarge">{formatMessage({ id: 'milestone.newmilestone' })}</Text>
+        </span>
+        <IconButton styles={iconButtonStyles} iconProps={cancelIcon} ariaLabel={formatMessage({ id: 'closemodal' })} onClick={handleCloseIconClick} />
+      </div>
+      <div className={contentStyles.body}>
+        <Stack styles={stackStyles} tokens={mainStackTokens}>
+          <Stack.Item>
+            <Stack horizontal styles={stackStyles} tokens={nestedStackTokens}>
+              <Stack.Item styles={wideLeftStackItemStyles}>
+                <TextField
+                  style={fullWidthControlStyle}
+                  placeholder={formatMessage({ id: 'toDo.tasknameplaceholder' })}
+                  // onChange={handleMilestoneNameChange}
+                  required
+                  maxLength={150}
+                  label={formatMessage({ id: 'name' })}
+                  value={''} // milestoneName
+                  // TODO 1693 - possible taskName.errorMessage display pattern, remove if unneeded
+                  // onGetErrorMessage={value => (taskNameDirty && !value ? formatMessage({ id: 'fieldisrequired' }) : undefined)}
+                />
+              </Stack.Item>
+              <Stack.Item>
+                <DatePicker
+                  value={undefined} // milestoneDueDate.date
+                  className={datePickerClass.control}
+                  firstDayOfWeek={firstDayOfWeek}
+                  placeholder={formatMessage({ id: 'calendar.selectadate' })}
+                  ariaLabel={formatMessage({ id: 'calendar.selectadate' })}
+                  // DatePicker uses English strings by default. For localized apps, you must override this prop.
+                  strings={datePickerStrings}
+                  label={formatMessage({ id: 'toDo.duedate' })}
+                  // onSelectDate={handleMilestoneDueDateChange}
+                  formatDate={(date: Date | undefined): string => `${date ? date.getMonth() + 1 : ''}/${date?.getDate()}/${date?.getFullYear()}`}
+                />
+              </Stack.Item>
+            </Stack>
+          </Stack.Item>
+          <Stack.Item>
+            <Stack horizontal styles={stackStyles} tokens={nestedStackTokens}>
+              <Stack.Item styles={wideLeftStackItemStyles}>
+                <TextField
+                  placeholder={formatMessage({ id: 'milestone.notesplaceholder' })}
+                  // onChange={handleMilestoneNotesChange}
+                  multiline
+                  maxLength={5000}
+                  rows={13}
+                  resizable={false}
+                  label={formatMessage({ id: 'milestone.notes' })}
+                  value={''} // milestoneNotes
+                />
+              </Stack.Item>
+            </Stack>
+          </Stack.Item>
+          <Stack.Item>
+            <Stack horizontal styles={stackStyles} tokens={nestedStackTokens}>
+              <Stack.Item styles={controlButtonStackItemStyles}>
+                <PrimaryButton
+                  style={saveButtonStyle}
+                  text={formatMessage({ id: 'save' })}
+                  onClick={handleSaveButtonClick}
+                  disabled={saveButtonDisabled || !formDirty}
+                />
+                <DefaultButton text={formatMessage({ id: 'cancel' })} onClick={handleCancelButtonClick} />
+              </Stack.Item>
+            </Stack>
+          </Stack.Item>
+        </Stack>
+      </div>
+      <Dialog
+        hidden={hideDiscardDialog}
+        onDismiss={toggleHideDiscardDialog}
+        dialogContentProps={discardDialogContentProps}
+        modalProps={discardDialogModalProps}
+      >
+        <DialogFooter>
+          <PrimaryButton onClick={confirmDiscard} text={formatMessage({ id: 'discard' })} />
+          <DefaultButton onClick={toggleHideDiscardDialog} text={formatMessage({ id: 'cancel' })} />
+        </DialogFooter>
+      </Dialog>
+    </>
+  );
 };
 
 export default MilestoneDialogue;
