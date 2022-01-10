@@ -38,19 +38,14 @@ export interface IMilestoneDialogProps {
   updateProduct: (product: UpdateProductModel) => UpdateProductAction;
   environmentKey: string;
   accessToken: string;
-  product: Product;
+  // TODO: may need product key?
 }
 
 export interface DateStateObject {
   date: Date | null;
 }
 
-const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({
-  hideModal,
-  environmentKey,
-  accessToken,
-  product,
-}: IMilestoneDialogProps) => {
+const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({ hideModal, environmentKey, accessToken }: IMilestoneDialogProps) => {
   const theme = useTheme();
   const { formatMessage } = useIntl();
 

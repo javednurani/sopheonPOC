@@ -1,29 +1,35 @@
 import { CommandButton, IIconProps, mergeStyleSets, Modal, Stack } from '@fluentui/react';
 import { Text } from '@fluentui/react/lib/Text';
 import { useBoolean } from '@fluentui/react-hooks';
-import { Gantt } from '@sopheon/controls';
+import { Gantt, GanttMilestone, GanttTask } from '@sopheon/controls';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
 import MilestoneDialog from '../milestone/MilestoneDialog';
 import { CreateMilestoneAction, UpdateProductAction } from '../product/productReducer';
-import { PostMilestoneModel, Product, UpdateProductModel } from '../types';
+import { Milestone, PostMilestoneModel, Task, UpdateProductModel } from '../types';
 
 export interface ITimelineProps {
-  product: Product;
+  tasks: Task[];
+  milestones: Milestone[];
   createMilestone: (milestone: PostMilestoneModel) => CreateMilestoneAction;
   updateProduct: (product: UpdateProductModel) => UpdateProductAction;
 }
 
-const Timeline: React.FunctionComponent<ITimelineProps> = ({ product, createMilestone, updateProduct }: ITimelineProps) => {
+const Timeline: React.FunctionComponent<ITimelineProps> = ({ tasks, milestones, createMilestone, updateProduct }: ITimelineProps) => {
   const [isMilestoneModalOpen, { setTrue: showMilestoneDialog, setFalse: hideMilestoneModal }] = useBoolean(false);
-  const {formatMessage } = useIntl();
+  const { formatMessage } = useIntl();
 
-  const todoItems = product.tasks.map(task => ({
+  const ganttTasks: GanttTask[] = tasks.map(task => ({
     id: `${task.name}_${task.dueDate}`,
     text: task.name,
-    type: 'milestone',
-    start_date: task.dueDate,
+    date: task.dueDate,
+  }));
+
+  const ganttMilestones: GanttMilestone[] = milestones.map(m => ({
+    id: `${m.name}_${m.date}`,
+    text: m.name,
+    date: m.date,
   }));
 
   const mainStackStyle: React.CSSProperties = {
@@ -63,9 +69,14 @@ const Timeline: React.FunctionComponent<ITimelineProps> = ({ product, createMile
     <>
       <Stack style={mainStackStyle}>
         <Text variant="xLarge">
-          <CommandButton style={addMilestoneButtonStyles} onClick={handleCreateMilestoneIconClick} iconProps={addIcon} text={formatMessage({ id: 'milestone.newmilestone' })}/>
+          <CommandButton
+            style={addMilestoneButtonStyles}
+            onClick={handleCreateMilestoneIconClick}
+            iconProps={addIcon}
+            text={formatMessage({ id: 'milestone.newmilestone' })}
+          />
         </Text>
-        <Gantt todoItems={todoItems}></Gantt>
+        <Gantt tasks={ganttTasks} milestones={ganttMilestones}></Gantt>
       </Stack>
       <Modal
         titleAriaId="Modal"
@@ -74,13 +85,7 @@ const Timeline: React.FunctionComponent<ITimelineProps> = ({ product, createMile
         isBlocking={true}
         containerClassName={milestoneDetailsModalStyles.container}
       >
-        <MilestoneDialog
-          hideModal={hideMilestoneModal}
-          updateProduct={updateProduct}
-          environmentKey=''
-          accessToken=''
-          product={product}
-        />
+        <MilestoneDialog hideModal={hideMilestoneModal} updateProduct={updateProduct} environmentKey="" accessToken="" />
       </Modal>
     </>
   );
