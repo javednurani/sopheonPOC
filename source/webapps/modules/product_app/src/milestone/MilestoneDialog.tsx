@@ -1,15 +1,11 @@
-/* eslint-disable */
 import {
   DefaultButton,
   Dialog,
   DialogFooter,
   DialogType,
-  Dropdown,
   FontWeights,
   IButtonStyles,
   IconButton,
-  IDropdownOption,
-  IDropdownStyles,
   IIconProps,
   IStackItemStyles,
   IStackStyles,
@@ -26,12 +22,8 @@ import { DatePicker } from '@sopheon/controls';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
-import { Status } from '../data/status';
-import ExpandablePanel from '../ExpandablePanel';
-import HistoryList from '../HistoryList';
-import ProductApi from '../product/productApi';
-import { CreateTaskAction, UpdateProductAction, UpdateProductItemAction, UpdateTaskAction } from '../product/productReducer';
-import { HistoryItem, PostPutTaskModel, Product, Task, TaskDto, UpdateProductItemModel, UpdateProductModel, Milestone } from '../types';
+import { UpdateProductAction } from '../product/productReducer';
+import { UpdateProductModel } from '../types';
 
 export interface IMilestoneDialogProps {
   hideModal: () => void;
@@ -39,10 +31,6 @@ export interface IMilestoneDialogProps {
   environmentKey: string;
   accessToken: string;
   // TODO: may need product key?
-}
-
-export interface DateStateObject {
-  date: Date | null;
 }
 
 const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({ hideModal, environmentKey, accessToken }: IMilestoneDialogProps) => {
@@ -60,12 +48,11 @@ const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({ hideM
   const [formDirty, setFormDirty] = useState(false);
 
   useEffect(() => {
-    setSaveButtonDisabled(true);
-  }, ['']);
+    setSaveButtonDisabled(name ? false : true);
+  }, [name]);
 
   const contentStyles = mergeStyleSets({
     header: [
-      // eslint-disable-next-line deprecation/deprecation
       theme.fonts.xxLarge,
       {
         flex: '1 1 auto',
@@ -221,8 +208,7 @@ const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({ hideM
                   maxLength={150}
                   label={formatMessage({ id: 'name' })}
                   value={name}
-                  // TODO 1693 - possible taskName.errorMessage display pattern, remove if unneeded
-                  // onGetErrorMessage={value => (taskNameDirty && !value ? formatMessage({ id: 'fieldisrequired' }) : undefined)}
+                  onGetErrorMessage={value => (nameDirty && !value ? formatMessage({ id: 'fieldisrequired' }) : undefined)}
                 />
               </Stack.Item>
               <Stack.Item>
