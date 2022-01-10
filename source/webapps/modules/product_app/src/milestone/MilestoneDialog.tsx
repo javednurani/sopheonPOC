@@ -1,15 +1,11 @@
-/* eslint-disable */
 import {
   DefaultButton,
   Dialog,
   DialogFooter,
   DialogType,
-  Dropdown,
   FontWeights,
   IButtonStyles,
   IconButton,
-  IDropdownOption,
-  IDropdownStyles,
   IIconProps,
   IStackItemStyles,
   IStackStyles,
@@ -26,42 +22,43 @@ import { DatePicker } from '@sopheon/controls';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
-import { Status } from '../data/status';
-import ExpandablePanel from '../ExpandablePanel';
-import HistoryList from '../HistoryList';
-import ProductApi from '../product/productApi';
-import { CreateTaskAction, UpdateProductAction, UpdateProductItemAction, UpdateTaskAction } from '../product/productReducer';
-import { HistoryItem, PostPutTaskModel, Product, Task, TaskDto, UpdateProductItemModel, UpdateProductModel, Milestone } from '../types';
+import { CreateMilestoneAction } from '../product/productReducer';
+import { MilestoneDto, PostMilestoneModel } from '../types';
 
 export interface IMilestoneDialogProps {
-  hideModal: () => void;
-  updateProduct: (product: UpdateProductModel) => UpdateProductAction;
-  environmentKey: string;
   accessToken: string;
-  // TODO: may need product key?
+  createMilestone: (milestone: PostMilestoneModel) => CreateMilestoneAction;
+  environmentKey: string;
+  hideModal: () => void;
+  productKey: string;
 }
 
-export interface DateStateObject {
-  date: Date | null;
-}
-
-const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({ hideModal, environmentKey, accessToken }: IMilestoneDialogProps) => {
+const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({
+  accessToken,
+  createMilestone,
+  environmentKey,
+  hideModal,
+  productKey,
+}: IMilestoneDialogProps) => {
   const theme = useTheme();
   const { formatMessage } = useIntl();
 
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
-
-  const [formDirty, setFormDirty] = useState(false);
-
   const [hideDiscardDialog, { toggle: toggleHideDiscardDialog }] = useBoolean(true);
 
+  const [name, setName] = useState<string | undefined>(undefined);
+  const [date, setDate] = useState<Date | undefined>(undefined);
+  const [notes, setNotes] = useState<string | undefined>(undefined);
+
+  const [nameDirty, setNameDirty] = useState(false);
+  const [formDirty, setFormDirty] = useState(false);
+
   useEffect(() => {
-    setSaveButtonDisabled(true);
-  }, ['']);
+    setSaveButtonDisabled(name ? false : true);
+  }, [name]);
 
   const contentStyles = mergeStyleSets({
     header: [
-      // eslint-disable-next-line deprecation/deprecation
       theme.fonts.xxLarge,
       {
         flex: '1 1 auto',
@@ -98,8 +95,21 @@ const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({ hideM
   const cancelIcon: IIconProps = { iconName: 'Cancel' };
 
   const handleSaveButtonClick = () => {
-    //hideModal();
-    exitModalWithDiscardDialog();
+    // create new milestone
+    const milestone: MilestoneDto = {
+      id: 0,
+      name: name as string,
+      notes: notes === undefined ? null : notes,
+      date: date ? date.toDateString() : null,
+    };
+    const createMilestoneModel: PostMilestoneModel = {
+      ProductKey: productKey,
+      EnvironmentKey: environmentKey,
+      AccessToken: accessToken,
+      Milestone: milestone,
+    };
+    createMilestone(createMilestoneModel);
+    hideModal();
   };
 
   // CANCEL BUTTON
@@ -141,11 +151,23 @@ const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({ hideM
     }
   };
 
-  /* 
-    TODO: Setup EVENT HANDLERS here.
+  const handleNameChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string | undefined): void => {
+    setName(newValue);
+    setNameDirty(true);
+    setFormDirty(true);
+  };
 
-    MilestoneName, MilestoneDate, MilestoneNotes
-  */
+  const handleDateChange = (newValue: Date | null | undefined): void => {
+    if (newValue) {
+      setDate(newValue);
+      setFormDirty(true);
+    }
+  };
+
+  const handleNotesChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string | undefined): void => {
+    setNotes(newValue);
+    setFormDirty(true);
+  };
 
   const stackStyles: IStackStyles = {
     root: {
@@ -200,17 +222,16 @@ const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({ hideM
                 <TextField
                   style={fullWidthControlStyle}
                   placeholder={formatMessage({ id: 'toDo.tasknameplaceholder' })}
-                  // onChange={handleMilestoneNameChange}
+                  onChange={handleNameChange}
                   required
                   maxLength={150}
                   label={formatMessage({ id: 'name' })}
-                  value={''} // milestoneName
-                  // TODO 1693 - possible taskName.errorMessage display pattern, remove if unneeded
-                  // onGetErrorMessage={value => (taskNameDirty && !value ? formatMessage({ id: 'fieldisrequired' }) : undefined)}
+                  value={name}
+                  onGetErrorMessage={value => (nameDirty && !value ? formatMessage({ id: 'fieldisrequired' }) : undefined)}
                 />
               </Stack.Item>
               <Stack.Item>
-                <DatePicker value={undefined} /> {/* TODO:  onSelectDate={handleMilestoneDateChange} */}
+                <DatePicker value={date} onSelectDate={handleDateChange} />
               </Stack.Item>
             </Stack>
           </Stack.Item>
@@ -219,13 +240,13 @@ const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({ hideM
               <Stack.Item styles={wideLeftStackItemStyles}>
                 <TextField
                   placeholder={formatMessage({ id: 'milestone.notesplaceholder' })}
-                  // onChange={handleMilestoneNotesChange}
+                  onChange={handleNotesChange}
                   multiline
                   maxLength={5000}
                   rows={13}
                   resizable={false}
                   label={formatMessage({ id: 'milestone.notes' })}
-                  value={''} // milestoneNotes
+                  value={notes}
                 />
               </Stack.Item>
             </Stack>

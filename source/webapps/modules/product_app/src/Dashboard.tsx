@@ -75,7 +75,14 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
             />
           </Stack.Item>
           <Stack.Item grow styles={stackItemStyles}>
-            <Timeline tasks={products[0].tasks} milestones={products[0].milestones} createMilestone={createMilestone} updateProduct={updateProduct} />
+            <Timeline
+              accessToken={accessToken}
+              createMilestone={createMilestone}
+              environmentKey={environmentKey}
+              milestones={products[0].milestones}
+              productKey={products[0].key as string}
+              tasks={products[0].tasks}
+            />
           </Stack.Item>
         </Stack>
       </Stack.Item>
