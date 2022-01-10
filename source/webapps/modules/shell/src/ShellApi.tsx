@@ -96,6 +96,8 @@ export class ShellApi implements IShellApi {
       theme: this.store.getState().shell.theme,
       headerShown: this.store.getState().shell.display.headerShown,
       language: initialLanguageState,
+      announcementShown: this.store.getState().shell.display.announcementShown,
+      announcementContent: this.store.getState().shell.display.announcementContent,
     });
 
     const mapDispatch = {

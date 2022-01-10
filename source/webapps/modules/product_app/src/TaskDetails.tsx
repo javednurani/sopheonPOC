@@ -278,7 +278,7 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
       deleteTask(deleteTaskModel);
 
       const deletedTaskAnnouncement: ShowAnnouncementModel = {
-        message: 'hello announcement!',
+        message: formatMessage({ id: 'toDo.taskDeleted' }),
         durationSeconds: 5,
       };
       showAnnouncement(deletedTaskAnnouncement);

@@ -51,7 +51,7 @@ const hideHeaderHandler = (state: DisplayShape) => ({
 
 const showAnnouncementHandler = (state: DisplayShape, announcement: ShowAnnouncementModel) => ({
   ...state,
-  announcementShown: false,
+  announcementShown: true,
   announcementContent: announcement,
 });
 
