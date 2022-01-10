@@ -134,8 +134,8 @@ const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({
 
   const discardDialogContentProps = {
     type: DialogType.normal,
-    title: formatMessage({ id: 'toDo.discardthistask' }),
-    subText: formatMessage({ id: 'unsaveddata' }),
+    title: formatMessage({ id: 'discardChanges' }),
+    subText: formatMessage({ id: 'unsavedChangesLost' }),
   };
 
   const confirmDiscard = (): void => {
