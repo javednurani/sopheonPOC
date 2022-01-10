@@ -50,10 +50,14 @@ const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({ hideM
   const { formatMessage } = useIntl();
 
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
-
-  const [formDirty, setFormDirty] = useState(false);
-
   const [hideDiscardDialog, { toggle: toggleHideDiscardDialog }] = useBoolean(true);
+
+  const [name, setName] = useState<string | undefined>(undefined);
+  const [date, setDate] = useState<Date | undefined>(undefined);
+  const [notes, setNotes] = useState<string | undefined>(undefined);
+
+  const [nameDirty, setNameDirty] = useState(false);
+  const [formDirty, setFormDirty] = useState(false);
 
   useEffect(() => {
     setSaveButtonDisabled(true);
@@ -141,11 +145,23 @@ const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({ hideM
     }
   };
 
-  /* 
-    TODO: Setup EVENT HANDLERS here.
+  const handleNameChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string | undefined): void => {
+    setName(newValue);
+    setNameDirty(true);
+    setFormDirty(true);
+  };
 
-    MilestoneName, MilestoneDate, MilestoneNotes
-  */
+  const handleDateChange = (newValue: Date | null | undefined): void => {
+    if (newValue) {
+      setDate(newValue);
+      setFormDirty(true);
+    }
+  };
+
+  const handleNotesChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string | undefined): void => {
+    setNotes(newValue);
+    setFormDirty(true);
+  };
 
   const stackStyles: IStackStyles = {
     root: {
@@ -200,17 +216,17 @@ const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({ hideM
                 <TextField
                   style={fullWidthControlStyle}
                   placeholder={formatMessage({ id: 'toDo.tasknameplaceholder' })}
-                  // onChange={handleMilestoneNameChange}
+                  onChange={handleNameChange}
                   required
                   maxLength={150}
                   label={formatMessage({ id: 'name' })}
-                  value={''} // milestoneName
+                  value={name}
                   // TODO 1693 - possible taskName.errorMessage display pattern, remove if unneeded
                   // onGetErrorMessage={value => (taskNameDirty && !value ? formatMessage({ id: 'fieldisrequired' }) : undefined)}
                 />
               </Stack.Item>
               <Stack.Item>
-                <DatePicker value={undefined} /> {/* TODO:  onSelectDate={handleMilestoneDateChange} */}
+                <DatePicker value={date} onSelectDate={handleDateChange} />
               </Stack.Item>
             </Stack>
           </Stack.Item>
@@ -219,13 +235,13 @@ const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({ hideM
               <Stack.Item styles={wideLeftStackItemStyles}>
                 <TextField
                   placeholder={formatMessage({ id: 'milestone.notesplaceholder' })}
-                  // onChange={handleMilestoneNotesChange}
+                  onChange={handleNotesChange}
                   multiline
                   maxLength={5000}
                   rows={13}
                   resizable={false}
                   label={formatMessage({ id: 'milestone.notes' })}
-                  value={''} // milestoneNotes
+                  value={notes}
                 />
               </Stack.Item>
             </Stack>
