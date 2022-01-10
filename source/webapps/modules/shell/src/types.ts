@@ -26,7 +26,7 @@ export interface LanguageShape {
 }
 
 export interface DisplayShape {
-  headerFooterAreShown: boolean;
+  headerShown: boolean;
 }
 
 export interface NavBarItem {
