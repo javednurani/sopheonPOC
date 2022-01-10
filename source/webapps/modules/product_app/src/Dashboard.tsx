@@ -1,4 +1,5 @@
 import { IStackItemStyles, IStackStyles, IStackTokens, Stack } from '@fluentui/react';
+import { ShowAnnouncementAction, ShowAnnouncementModel } from '@sopheon/shell-api';
 import React from 'react';
 
 import KPIs from './KPIs';
@@ -19,6 +20,7 @@ export interface IDashboardProps {
   createTask: (task: PostPutTaskModel) => CreateTaskAction;
   updateTask: (task: PostPutTaskModel) => UpdateTaskAction;
   deleteTask: (task: DeleteTaskModel) => DeleteTaskAction;
+  showAnnouncement: (announcement: ShowAnnouncementModel) => ShowAnnouncementAction;
 }
 
 const stackTokens: IStackTokens = {
@@ -35,6 +37,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
   createTask,
   updateTask,
   deleteTask,
+  showAnnouncement,
 }: IDashboardProps) => {
   const stackItemStyles: IStackItemStyles = {
     root: {
@@ -73,6 +76,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
               createTask={createTask}
               updateTask={updateTask}
               deleteTask={deleteTask}
+              showAnnouncement={showAnnouncement}
             />
           </Stack.Item>
           <Stack.Item grow styles={stackItemStyles}>

@@ -25,6 +25,7 @@ import {
 } from '@fluentui/react';
 import { useBoolean } from '@fluentui/react-hooks';
 import { useTheme } from '@fluentui/react-theme-provider';
+import { ShowAnnouncementAction, ShowAnnouncementModel } from '@sopheon/shell-api';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
@@ -46,6 +47,7 @@ export interface ITaskDetailsProps {
   createTask: (task: PostPutTaskModel) => CreateTaskAction;
   updateTask: (task: PostPutTaskModel) => UpdateTaskAction;
   deleteTask: (task: DeleteTaskModel) => DeleteTaskAction;
+  showAnnouncement: (announcement: ShowAnnouncementModel) => ShowAnnouncementAction;
 }
 
 export interface DateStateObject {
@@ -61,6 +63,7 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
   createTask,
   updateTask,
   deleteTask,
+  showAnnouncement,
 }: ITaskDetailsProps) => {
   const { name, id, notes, dueDate, status } = selectedTask ?? {};
 
@@ -273,6 +276,12 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
         TaskId: id,
       };
       deleteTask(deleteTaskModel);
+
+      const deletedTaskAnnouncement: ShowAnnouncementModel = {
+        message: 'hello announcement!',
+        durationSeconds: 5,
+      };
+      showAnnouncement(deletedTaskAnnouncement);
     }
     hideModal();
   };

@@ -12,6 +12,7 @@ import {
 } from '@fluentui/react';
 import { Text } from '@fluentui/react/lib/Text';
 import { useBoolean } from '@fluentui/react-hooks';
+import { ShowAnnouncementAction, ShowAnnouncementModel } from '@sopheon/shell-api';
 import React, { useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 
@@ -29,6 +30,7 @@ export interface IToDoListProps {
   createTask: (task: PostPutTaskModel) => CreateTaskAction;
   updateTask: (task: PostPutTaskModel) => UpdateTaskAction;
   deleteTask: (task: DeleteTaskModel) => DeleteTaskAction;
+  showAnnouncement: (announcement: ShowAnnouncementModel) => ShowAnnouncementAction;
 }
 
 const mainDivStyle: React.CSSProperties = {
@@ -111,6 +113,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
   createTask,
   updateTask,
   deleteTask,
+  showAnnouncement,
 }: IToDoListProps) => {
   const { tasks } = products[0];
   const { formatMessage } = useIntl();
@@ -293,6 +296,7 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
           createTask={createTask}
           updateTask={updateTask}
           deleteTask={deleteTask}
+          showAnnouncement={showAnnouncement}
         />
       </Modal>
       {filterContextMenu}

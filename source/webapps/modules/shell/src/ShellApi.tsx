@@ -1,12 +1,12 @@
 import { constants, messages } from '@sopheon/shared-ui';
-import { InjectReducerMap, InjectSagaMap, IShellApi } from '@sopheon/shell-api';
+import { InjectReducerMap, InjectSagaMap, IShellApi, ShowAnnouncementModel } from '@sopheon/shell-api';
 import React, { ComponentType, useEffect } from 'react';
 import { connect, Provider } from 'react-redux';
 import { CombinedState, combineReducers, Reducer, ReducersMapObject, Store } from 'redux';
 import { Saga } from 'redux-saga';
 
 import { getAccessToken, setEnvironmentKey } from './authentication/authReducer';
-import { hideHeader, showHeader } from './display/displayReducer';
+import { hideAnnouncement, hideHeader, showAnnouncement, showHeader } from './display/displayReducer';
 import { shell } from './rootReducer';
 import { sagaMiddleware, store as mainShellStore } from './store';
 import { changeTheme } from './themes/themeReducer/themeReducer';
@@ -103,6 +103,8 @@ export class ShellApi implements IShellApi {
       getAccessToken: () => getAccessToken(),
       showHeader: () => showHeader(),
       hideHeader: () => hideHeader(),
+      showAnnouncement: (announcement: ShowAnnouncementModel) => showAnnouncement(announcement),
+      hideAnnouncement: () => hideAnnouncement(),
       // the below dispatchProps are not exposed to MFE's via IShellApi. only used by, and private to, the shell
       changeTheme: (useDarkTheme: boolean) => changeTheme(useDarkTheme),
       setEnvironmentKey: (environmentKey: string) => setEnvironmentKey(environmentKey),
