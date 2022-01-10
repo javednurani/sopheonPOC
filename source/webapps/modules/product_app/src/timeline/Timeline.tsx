@@ -6,17 +6,26 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 
 import MilestoneDialog from '../milestone/MilestoneDialog';
-import { CreateMilestoneAction, UpdateProductAction } from '../product/productReducer';
-import { Milestone, PostMilestoneModel, Task, UpdateProductModel } from '../types';
+import { CreateMilestoneAction } from '../product/productReducer';
+import { Milestone, PostMilestoneModel, Task } from '../types';
 
 export interface ITimelineProps {
-  tasks: Task[];
-  milestones: Milestone[];
+  accessToken: string;
   createMilestone: (milestone: PostMilestoneModel) => CreateMilestoneAction;
-  updateProduct: (product: UpdateProductModel) => UpdateProductAction;
+  environmentKey: string;
+  milestones: Milestone[];
+  productKey: string;
+  tasks: Task[];
 }
 
-const Timeline: React.FunctionComponent<ITimelineProps> = ({ tasks, milestones, createMilestone, updateProduct }: ITimelineProps) => {
+const Timeline: React.FunctionComponent<ITimelineProps> = ({
+  accessToken,
+  createMilestone,
+  environmentKey,
+  milestones,
+  productKey,
+  tasks,
+}: ITimelineProps) => {
   const [isMilestoneModalOpen, { setTrue: showMilestoneDialog, setFalse: hideMilestoneModal }] = useBoolean(false);
   const { formatMessage } = useIntl();
 
@@ -85,7 +94,13 @@ const Timeline: React.FunctionComponent<ITimelineProps> = ({ tasks, milestones, 
         isBlocking={true}
         containerClassName={milestoneDetailsModalStyles.container}
       >
-        <MilestoneDialog hideModal={hideMilestoneModal} updateProduct={updateProduct} environmentKey="" accessToken="" />
+        <MilestoneDialog
+          accessToken={accessToken}
+          hideModal={hideMilestoneModal}
+          createMilestone={createMilestone}
+          environmentKey={environmentKey}
+          productKey={productKey}
+        />
       </Modal>
     </>
   );

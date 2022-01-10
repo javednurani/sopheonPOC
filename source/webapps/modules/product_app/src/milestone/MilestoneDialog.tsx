@@ -22,18 +22,24 @@ import { DatePicker } from '@sopheon/controls';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
-import { UpdateProductAction } from '../product/productReducer';
-import { UpdateProductModel } from '../types';
+import { CreateMilestoneAction } from '../product/productReducer';
+import { MilestoneDto, PostMilestoneModel } from '../types';
 
 export interface IMilestoneDialogProps {
-  hideModal: () => void;
-  updateProduct: (product: UpdateProductModel) => UpdateProductAction;
-  environmentKey: string;
   accessToken: string;
-  // TODO: may need product key?
+  createMilestone: (milestone: PostMilestoneModel) => CreateMilestoneAction;
+  environmentKey: string;
+  hideModal: () => void;
+  productKey: string;
 }
 
-const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({ hideModal, environmentKey, accessToken }: IMilestoneDialogProps) => {
+const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({
+  accessToken,
+  createMilestone,
+  environmentKey,
+  hideModal,
+  productKey,
+}: IMilestoneDialogProps) => {
   const theme = useTheme();
   const { formatMessage } = useIntl();
 
@@ -89,8 +95,21 @@ const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({ hideM
   const cancelIcon: IIconProps = { iconName: 'Cancel' };
 
   const handleSaveButtonClick = () => {
-    //hideModal();
-    exitModalWithDiscardDialog();
+    // create new milestone
+    const milestone: MilestoneDto = {
+      id: 0,
+      name: name as string,
+      notes: notes === undefined ? null : notes,
+      date: date ? date.toDateString() : null,
+    };
+    const createMilestoneModel: PostMilestoneModel = {
+      ProductKey: productKey,
+      EnvironmentKey: environmentKey,
+      AccessToken: accessToken,
+      Milestone: milestone,
+    };
+    createMilestone(createMilestoneModel);
+    hideModal();
   };
 
   // CANCEL BUTTON
