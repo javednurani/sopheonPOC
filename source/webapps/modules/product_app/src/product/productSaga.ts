@@ -1,7 +1,7 @@
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 
 import { Attributes } from '../data/attributes';
-import { Product, ProductScopedMilestone,ProductScopedTaskId,  ProductScopedTask, Task } from '../types';
+import { Product, ProductScopedMilestone, ProductScopedTask, ProductScopedTaskId, Task } from '../types';
 // eslint-disable-next-line max-len
 import {
   CreateMilestoneAction,
@@ -219,7 +219,9 @@ export function* onCreateMilestone(action: CreateMilestoneAction): Generator {
     yield put(createMilestoneSuccess(createdMilestone));
   } catch (error) {
     yield put(createMilestoneFailure(error));
-    
+  }
+}
+
 export function* watchOnDeleteTask(): Generator {
   yield takeEvery(ProductSagaActionTypes.DELETE_TASK, onDeleteTask);
 }

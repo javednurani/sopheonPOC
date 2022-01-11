@@ -4,6 +4,7 @@ import React from 'react';
 
 import KPIs from './KPIs';
 import {
+  CreateMilestoneAction,
   CreateTaskAction,
   DeleteTaskAction,
   UpdateProductAction,
