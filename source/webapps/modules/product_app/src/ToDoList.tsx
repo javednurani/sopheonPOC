@@ -12,13 +12,14 @@ import {
 } from '@fluentui/react';
 import { Text } from '@fluentui/react/lib/Text';
 import { useBoolean } from '@fluentui/react-hooks';
+import { ShowAnnouncementAction, ShowAnnouncementModel } from '@sopheon/shell-api';
 import React, { useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 
 import { Status } from './data/status';
-import { CreateTaskAction, UpdateProductAction, UpdateProductItemAction, UpdateTaskAction } from './product/productReducer';
+import { CreateTaskAction, DeleteTaskAction, UpdateProductAction, UpdateProductItemAction, UpdateTaskAction } from './product/productReducer';
 import TaskDetails from './TaskDetails';
-import { PostPutTaskModel, Product, Task, TaskDto, UpdateProductItemModel, UpdateProductModel } from './types';
+import { DeleteTaskModel, PostPutTaskModel, Product, Task, TaskDto, UpdateProductItemModel, UpdateProductModel } from './types';
 
 export interface IToDoListProps {
   updateProduct: (product: UpdateProductModel) => UpdateProductAction;
@@ -28,6 +29,8 @@ export interface IToDoListProps {
   products: Product[];
   createTask: (task: PostPutTaskModel) => CreateTaskAction;
   updateTask: (task: PostPutTaskModel) => UpdateTaskAction;
+  deleteTask: (task: DeleteTaskModel) => DeleteTaskAction;
+  showAnnouncement: (announcement: ShowAnnouncementModel) => ShowAnnouncementAction;
 }
 
 const mainDivStyle: React.CSSProperties = {
@@ -109,6 +112,8 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
   products,
   createTask,
   updateTask,
+  deleteTask,
+  showAnnouncement,
 }: IToDoListProps) => {
   const { tasks } = products[0];
   const { formatMessage } = useIntl();
@@ -290,6 +295,8 @@ const ToDoList: React.FunctionComponent<IToDoListProps> = ({
           updateProductItem={updateProductItem}
           createTask={createTask}
           updateTask={updateTask}
+          deleteTask={deleteTask}
+          showAnnouncement={showAnnouncement}
         />
       </Modal>
       {filterContextMenu}
