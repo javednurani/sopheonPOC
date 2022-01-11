@@ -5,8 +5,8 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { Saga } from 'redux-saga';
 
 import { IShellApi } from './IShellApi';
-import { createAction } from './store/actions';
-import { DisplayActionTypes } from './store/display/types';
+import { createAction, createPayloadAction } from './store/actions';
+import { DisplayActionTypes, ShowAnnouncementModel } from './store/display/types';
 import { AuthSagaActionTypes, InjectReducerMap, InjectSagaMap } from './store/types';
 
 // REDUCER INJECTION HELPERS / UTILITY VARIABLES
@@ -99,6 +99,8 @@ export class IsolatedShellApi implements IShellApi {
       getAccessToken: () => createAction(AuthSagaActionTypes.GET_ACCESS_TOKEN),
       showHeader: () => createAction(DisplayActionTypes.SHOW_HEADER),
       hideHeader: () => createAction(DisplayActionTypes.HIDE_HEADER),
+      showAnnouncement: (announcement: ShowAnnouncementModel) => createPayloadAction(DisplayActionTypes.SHOW_ANNOUNCEMENT, announcement),
+      hideAnnouncement: () => createAction(DisplayActionTypes.HIDE_ANNOUNCEMENT),
     };
 
     return connect(mapState, mapDispatch);
