@@ -39,22 +39,49 @@ const GanttComponent: React.FunctionComponent<GanttProps> = ({ tasks, milestones
     const taskData: DhtmlxGanttData[] = tasks.map(task => ({
       id: task.id,
       text: task.text,
+      // Type is always set to milestone so dhtmlxgantt uses the milestone renderer
       type: 'milestone',
       start_date: task.date,
+      // The sopheon type is used to customize the plotted icon
+      sopheonType: 'sopheonTask',
     }));
 
-    // const milestoneData: DhtmlxGanttData[] = milestones.map(m => ({
-    //   id: m.id,
-    //   text: m.text,
-    //   type: 'milestone', // TODO: new type
-    //   start_date: m.date,
-    // }));
+    const milestoneData: DhtmlxGanttData[] = milestones.map(m => ({
+      id: m.id,
+      text: m.text,
+      // Type is always set to milestone so dhtmlxgantt uses the milestone renderer
+      type: 'milestone',
+      start_date: m.date,
+      // The sopheon type is used to customize the plotted icon
+      sopheonType: 'sopheonMilestone',
+    }));
 
     const ganttdata = {
-      data: [...taskData],
+      data: [...taskData, ...milestoneData],
       links: [],
     };
     const today = new Date();
+
+    gantt.config.type_renderers[gantt.config.types.milestone] = function (task, defaultRender) {
+      const mainEl = document.createElement('div');
+      mainEl.setAttribute(gantt.config.task_attribute, task.id);
+      const size = gantt.getTaskPosition(task, task.start_date, task.end_date);
+      if (task.sopheonType === 'sopheonMilestone') {
+        mainEl.innerHTML = `<div class='sopheon_milestone'></div>`;
+      } else {
+        mainEl.innerHTML = `<div class='sopheon_task'></div>`;
+      }
+
+      mainEl.className = 'gantt_task_content';
+
+      mainEl.style.left = `${size.left - 12}px`;
+      mainEl.style.top = `${size.top + 7}px`;
+      // Hardcode the width since there's no end date to go to for milestones
+      // Needs to be the width of the icons you're using
+      mainEl.style.width = `24px`;
+
+      return mainEl;
+    };
 
     gantt.plugins({
       auto_scheduling: true,

@@ -1,7 +1,21 @@
-
 .gantt_tooltip {
   max-width: 364px;
   overflow-wrap: break-word;
   white-space: normal !important;
   z-index: 9999;
+}
+
+.sopheon_task {
+  height: 24px;
+  width: 24px;
+  background-color: #bbb;
+  border-radius: 50%;
+}
+
+.sopheon_milestone {
+  width: 0px;
+  height: 0px;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 24px solid black;
 }
