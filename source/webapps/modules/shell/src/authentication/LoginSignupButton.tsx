@@ -87,6 +87,7 @@ const LoginSignupButton: FunctionComponent<ILoginSignupButtonProps> = ({
     items: [
       {
         key: 'themeToggle',
+        id: 'themeToggle',
         text: formatMessage({ id: 'header.useDarkTheme' }),
         iconProps: { iconName: isDarkTheme(theme) ? 'ToggleRight' : 'ToggleLeft' },
         onClick: switchTheme,
