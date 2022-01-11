@@ -341,7 +341,7 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
                 />
               </Stack.Item>
               <Stack.Item>
-                <DatePicker value={taskDueDate.date} onSelectDate={handleTaskDueDateChange} />
+                <DatePicker value={taskDueDate.date} onSelectDate={handleTaskDueDateChange} width={300} />
               </Stack.Item>
             </Stack>
           </Stack.Item>
