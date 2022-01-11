@@ -123,6 +123,8 @@ const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({
     setFormDirty(true);
   };
 
+  const nameErrorMessage = (value: string): string | undefined => (nameDirty && !value ? formatMessage({ id: 'fieldisrequired' }) : undefined);
+
   const confirmCancelDialog = (
     <Dialog hidden={hideDiscardDialog} onDismiss={toggleHideDiscardDialog} dialogContentProps={discardDialogContentProps}>
       <DialogFooter>
@@ -150,7 +152,7 @@ const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({
           maxLength={150}
           label={formatMessage({ id: 'name' })}
           value={name}
-          onGetErrorMessage={value => (nameDirty && !value ? formatMessage({ id: 'fieldisrequired' }) : undefined)}
+          onGetErrorMessage={nameErrorMessage}
         />
         <DatePicker value={date} onSelectDate={handleDateChange} required={true} />
         <TextField
