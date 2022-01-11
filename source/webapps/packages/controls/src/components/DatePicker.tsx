@@ -8,9 +8,10 @@ export type DatePickerProps = {
   onSelectDate?: (date: Date | null | undefined) => void;
   required?: boolean;
   value?: Date;
+  width?: number;
 };
 
-const DatePicker: React.FC<DatePickerProps> = ({ disabled, label, onSelectDate, required, value }): JSX.Element => {
+const DatePicker: React.FC<DatePickerProps> = ({ disabled, label, onSelectDate, required, value, width: _width }): JSX.Element => {
   const { formatMessage } = useIntl();
 
   const datePickerStrings: IDatePickerStrings = {
@@ -72,8 +73,10 @@ const DatePicker: React.FC<DatePickerProps> = ({ disabled, label, onSelectDate, 
   };
 
   const defaultLabel = formatMessage({ id: 'date' });
-  // eslint-disable-next-line no-confusing-arrow
+
   const formatDate = (date: Date | undefined): string => (date ? date.toLocaleDateString() : '');
+
+  const styles = { root: { width: _width } };
 
   return (
     <FluentDatePicker
@@ -87,6 +90,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ disabled, label, onSelectDate, 
       isRequired={required ?? false}
       strings={datePickerStrings}
       value={value}
+      styles={styles}
     />
   );
 };
