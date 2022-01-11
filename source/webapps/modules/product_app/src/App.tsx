@@ -27,6 +27,8 @@ const App: React.FunctionComponent<Props> = ({
   showHeader,
   createTask,
   updateTask,
+  deleteTask,
+  showAnnouncement,
 }: Props) => {
   const { formatMessage } = useIntl();
   const theme = useTheme();
@@ -128,6 +130,8 @@ const App: React.FunctionComponent<Props> = ({
           products={products}
           createTask={createTask}
           updateTask={updateTask}
+          deleteTask={deleteTask}
+          showAnnouncement={showAnnouncement}
         />
       </Stack.Item>
     </Stack>

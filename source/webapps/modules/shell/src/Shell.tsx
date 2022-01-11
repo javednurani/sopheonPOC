@@ -20,6 +20,9 @@ const Shell: FunctionComponent<ShellProps> = ({
   language,
   headerShown,
   getAccessToken,
+  hideAnnouncement,
+  announcementShown,
+  announcementContent,
 }: ShellProps) => (
   <MsalProvider instance={msalInstance()}>
     <ConnectedIntlProvider language={language}>
@@ -30,6 +33,9 @@ const Shell: FunctionComponent<ShellProps> = ({
           environmentKey={environmentKey}
           headerShown={headerShown}
           getAccessToken={getAccessToken}
+          hideAnnouncement={hideAnnouncement}
+          announcementShown={announcementShown}
+          announcementContent={announcementContent}
         />
       </ConnectedThemeProvider>
     </ConnectedIntlProvider>

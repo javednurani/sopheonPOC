@@ -1,4 +1,5 @@
 import { ITheme } from '@fluentui/react';
+import { ShowAnnouncementModel } from '@sopheon/shell-api';
 
 export type State = {
   shell: ShellState;
@@ -27,8 +28,9 @@ export interface LanguageShape {
 
 export interface DisplayShape {
   headerShown: boolean;
+  announcementShown: boolean;
+  announcementContent: ShowAnnouncementModel | null;
 }
-
 export interface NavBarItem {
   resourceKey: string;
   routeUrl: string;

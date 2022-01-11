@@ -20,6 +20,11 @@ export type PostPutTaskModel = {
 } & EnvironmentScopedApiRequestModel &
   ProductScopedModel;
 
+export type DeleteTaskModel = {
+  TaskId: number;
+} & EnvironmentScopedApiRequestModel &
+  ProductScopedModel;
+
 export type EnvironmentScopedApiRequestModel = {
   EnvironmentKey: string;
   AccessToken: string;
@@ -62,6 +67,10 @@ export type HistoryItem = {
 
 export type ProductScopedTask = {
   task: Task;
+} & ProductScopedModel; // INFO: used for Redux state assignment to correct Product after create Task API call
+
+export type ProductScopedTaskId = {
+  taskId: number;
 } & ProductScopedModel; // INFO: used for Redux state assignment to correct Product after create Task API call
 
 export interface Goal {
