@@ -97,15 +97,6 @@ const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({
     hideModal();
   };
 
-  const confirmCancelDialog = (
-    <Dialog hidden={hideDiscardDialog} onDismiss={toggleHideDiscardDialog} dialogContentProps={discardDialogContentProps}>
-      <DialogFooter>
-        <PrimaryButton onClick={confirmDiscard} text={formatMessage({ id: 'discard' })} />
-        <DefaultButton onClick={toggleHideDiscardDialog} text={formatMessage({ id: 'cancel' })} />
-      </DialogFooter>
-    </Dialog>
-  );
-
   const exitModalWithDiscardDialog = (): void => {
     if (formDirty) {
       toggleHideDiscardDialog();
@@ -131,6 +122,15 @@ const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({
     setNotes(newValue);
     setFormDirty(true);
   };
+
+  const confirmCancelDialog = (
+    <Dialog hidden={hideDiscardDialog} onDismiss={toggleHideDiscardDialog} dialogContentProps={discardDialogContentProps}>
+      <DialogFooter>
+        <PrimaryButton onClick={confirmDiscard} text={formatMessage({ id: 'discard' })} />
+        <DefaultButton onClick={toggleHideDiscardDialog} text={formatMessage({ id: 'cancel' })} />
+      </DialogFooter>
+    </Dialog>
+  );
 
   return (
     <>
