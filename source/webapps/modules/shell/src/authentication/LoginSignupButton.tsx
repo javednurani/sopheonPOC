@@ -7,6 +7,7 @@ import { GetAccessTokenAction } from '@sopheon/shell-api';
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
+import { pendo } from '../pendo';
 import { ChangeThemeAction } from '../themes/themeReducer/themeReducer';
 import { changePasswordRequest, editProfileRequest, getMsalAccount, loginButtonRequest, logoutRequest } from './authHelpers';
 import { SetEnvironmentKeyAction } from './authReducer';
@@ -36,6 +37,33 @@ const LoginSignupButton: FunctionComponent<ILoginSignupButtonProps> = ({
       }
       setAccount(msalAccount);
       getAccessToken();
+
+      if (pendo !== undefined) {
+        pendo.initialize({
+          visitor: {
+            id: msalAccount.localAccountId, // Required if user is logged in
+            // email:        // Recommended if using Pendo Feedback, or NPS Email
+            // full_name:    // Recommended if using Pendo Feedback
+            // role:         // Optional
+
+            // You can add any additional visitor level key-values here,
+            // as long as it's not one of the above reserved names.
+          },
+
+          account: {
+            id: 'SUBSCRIPTION-UNIQUE-ID', // TODO: Use SubscriptionId when available // Required if using Pendo Feedback
+            // name:         // Optional
+            // is_paying:    // Recommended if using Pendo Feedback
+            // monthly_value:// Recommended if using Pendo Feedback
+            // planLevel:    // Optional
+            // planPrice:    // Optional
+            // creationDate: // Optional
+
+            // You can add any additional account level key-values here,
+            // as long as it's not one of the above reserved names.
+          },
+        });
+      }
     }
   }, [instance, accounts]);
 
@@ -59,24 +87,28 @@ const LoginSignupButton: FunctionComponent<ILoginSignupButtonProps> = ({
     items: [
       {
         key: 'themeToggle',
+        id: 'themeToggle',
         text: formatMessage({ id: 'header.useDarkTheme' }),
         iconProps: { iconName: isDarkTheme(theme) ? 'ToggleRight' : 'ToggleLeft' },
         onClick: switchTheme,
       },
       {
         key: 'profile',
+        id: 'profile',
         text: formatMessage({ id: 'auth.myprofile' }),
         iconProps: { iconName: 'EditContact' },
         onClick: editProfileClick,
       },
       {
         key: 'changepassword',
+        id: 'changepassword',
         text: formatMessage({ id: 'auth.changepassword' }),
         iconProps: { iconName: 'Permissions' },
         onClick: changePasswordClick,
       },
       {
         key: 'signout',
+        id: 'signout',
         text: formatMessage({ id: 'auth.signout' }),
         iconProps: { iconName: 'SignOut' },
         onClick: logoutClick,
