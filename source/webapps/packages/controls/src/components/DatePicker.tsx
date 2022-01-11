@@ -76,6 +76,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ disabled, label, onSelectDate, 
 
   const formatDate = (date: Date | undefined): string => (date ? date.toLocaleDateString() : '');
 
+  // TODO: need to merge styles...?
   const styles = { root: { width: _width } };
 
   return (
