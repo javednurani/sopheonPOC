@@ -1,14 +1,21 @@
 import { IStackItemStyles, IStackStyles, IStackTokens, Stack } from '@fluentui/react';
+import { ShowAnnouncementAction, ShowAnnouncementModel } from '@sopheon/shell-api';
 import React from 'react';
 
 import KPIs from './KPIs';
-import { CreateMilestoneAction, CreateTaskAction, UpdateProductAction, UpdateProductItemAction, UpdateTaskAction } from './product/productReducer';
+import {
+  CreateTaskAction,
+  DeleteTaskAction,
+  UpdateProductAction,
+  UpdateProductItemAction,
+  UpdateTaskAction,
+} from './product/productReducer';
 import ProductHealth from './ProductHealth';
 import ProductSection from './ProductSection';
 import ResourcesAndLinks from './ResourcesAndLinks';
 import Timeline from './timeline/Timeline';
 import ToDoList from './ToDoList';
-import { PostMilestoneModel, PostPutTaskModel, Product, UpdateProductItemModel, UpdateProductModel } from './types';
+import { DeleteTaskModel, PostMilestoneModel, PostPutTaskModel, Product, UpdateProductItemModel, UpdateProductModel } from './types';
 
 export interface IDashboardProps {
   updateProduct: (product: UpdateProductModel) => UpdateProductAction;
@@ -19,6 +26,8 @@ export interface IDashboardProps {
   createTask: (task: PostPutTaskModel) => CreateTaskAction;
   updateTask: (task: PostPutTaskModel) => UpdateTaskAction;
   createMilestone: (milestone: PostMilestoneModel) => CreateMilestoneAction;
+  deleteTask: (task: DeleteTaskModel) => DeleteTaskAction;
+  showAnnouncement: (announcement: ShowAnnouncementModel) => ShowAnnouncementAction;
 }
 
 const stackTokens: IStackTokens = {
@@ -35,6 +44,8 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
   createTask,
   updateTask,
   createMilestone,
+  deleteTask,
+  showAnnouncement,
 }: IDashboardProps) => {
   const stackItemStyles: IStackItemStyles = {
     root: {
@@ -72,6 +83,8 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
               products={products}
               createTask={createTask}
               updateTask={updateTask}
+              deleteTask={deleteTask}
+              showAnnouncement={showAnnouncement}
             />
           </Stack.Item>
           <Stack.Item grow styles={stackItemStyles}>

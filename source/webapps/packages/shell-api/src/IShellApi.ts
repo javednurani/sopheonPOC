@@ -3,7 +3,7 @@ import { InferableComponentEnhancerWithProps } from 'react-redux';
 import { Store } from 'redux';
 
 import { GetAccessTokenAction } from './store/auth/types';
-import { HideHeaderAction, ShowHeaderAction } from './store/display/types';
+import { HideHeaderAction, ShowAnnouncementAction, ShowAnnouncementModel, ShowHeaderAction } from './store/display/types';
 import { InjectReducerMap, InjectSagaMap } from './store/types';
 
 export type AppProps<TStateProps, TDispatchProps> = {
@@ -15,6 +15,7 @@ export type AppProps<TStateProps, TDispatchProps> = {
   getAccessToken: () => GetAccessTokenAction;
   showHeader: () => ShowHeaderAction;
   hideHeader: () => HideHeaderAction;
+  showAnnouncement: (announcement: ShowAnnouncementModel) => ShowAnnouncementAction;
 } & TStateProps &
   TDispatchProps; // include StateProps and DispatchProps handed to getConnector
 

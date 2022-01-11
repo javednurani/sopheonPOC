@@ -1,11 +1,12 @@
 import { AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-react';
 import { initializeIcons, registerIcons, ScrollablePane, ScrollbarVisibility, Stack } from '@fluentui/react';
 import { useTheme } from '@fluentui/react-theme-provider';
-import { GetAccessTokenAction } from '@sopheon/shell-api';
+import { GetAccessTokenAction, HideAnnouncementAction, ShowAnnouncementModel } from '@sopheon/shell-api';
 import React, { CSSProperties, FunctionComponent } from 'react';
 import { useIntl } from 'react-intl';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
+import Announcement from './Announcement';
 import { SetEnvironmentKeyAction } from './authentication/authReducer';
 import IdleMonitor from './authentication/IdleMonitor';
 import Login from './authentication/Login';
@@ -24,9 +25,20 @@ export interface AppProps {
   environmentKey: string | null;
   headerShown: boolean;
   getAccessToken: () => GetAccessTokenAction;
+  hideAnnouncement: () => HideAnnouncementAction;
+  announcementShown: boolean;
+  announcementContent: ShowAnnouncementModel | null;
 }
 
-const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, headerShown, getAccessToken }: AppProps) => {
+const App: FunctionComponent<AppProps> = ({
+  changeTheme,
+  setEnvironmentKey,
+  headerShown,
+  getAccessToken,
+  hideAnnouncement,
+  announcementShown,
+  announcementContent,
+}: AppProps) => {
   const { formatMessage } = useIntl();
 
   const loadingMessage: string = formatMessage({ id: 'fallback.loading' });
@@ -72,6 +84,7 @@ const App: FunctionComponent<AppProps> = ({ changeTheme, setEnvironmentKey, head
             >
               <Stack.Item>
                 {headerShown && <Header changeTheme={changeTheme} setEnvironmentKey={setEnvironmentKey} getAccessToken={getAccessToken} />}
+                {announcementShown && <Announcement hideAnnouncement={hideAnnouncement} announcementContent={announcementContent} />}
               </Stack.Item>
               <Stack.Item shrink>
                 <IdleMonitor />

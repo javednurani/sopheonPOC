@@ -35,6 +35,12 @@
       "Pattern": "^B2CProductManagementApiClientId^",
       "IsKeyVaultSecret": true,
       "KeyVaultSecretName": "StratusB2CProductManagementApiClientId"
+    },
+    {
+      "TokenDisplayName": "Pendo API Key",
+      "Pattern": "^PendoApiKey^",
+      "EnvironmentVariableName": "PendoApiKey",
+      "IsKeyVaultSecret": false
     }
   ]
 }

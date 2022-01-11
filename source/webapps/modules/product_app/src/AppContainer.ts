@@ -10,6 +10,8 @@ import {
   CreateProductAction,
   createTask,
   CreateTaskAction,
+  deleteTask,
+  DeleteTaskAction,
   getProducts,
   GetProductsAction,
   updateProduct,
@@ -23,6 +25,7 @@ import { NAMESPACE, rootReducer, RootState } from './rootReducer';
 import rootSaga from './rootSaga';
 import {
   CreateProductModel,
+  DeleteTaskModel,
   EnvironmentScopedApiRequestModel,
   PostMilestoneModel,
   PostPutTaskModel,
@@ -46,6 +49,7 @@ export type AppDispatchProps = {
   createTask: (task: PostPutTaskModel) => CreateTaskAction;
   updateTask: (task: PostPutTaskModel) => UpdateTaskAction;
   createMilestone: (milestone: PostMilestoneModel) => CreateMilestoneAction;
+  deleteTask: (task: DeleteTaskModel) => DeleteTaskAction;
 };
 
 const AppContainer: FunctionComponent<ShellApiProps> = ({ shellApi }: ShellApiProps) => {
@@ -64,6 +68,7 @@ const AppContainer: FunctionComponent<ShellApiProps> = ({ shellApi }: ShellApiPr
     createTask: (task: PostPutTaskModel) => createTask(task),
     updateTask: (task: PostPutTaskModel) => updateTask(task),
     createMilestone: (milestone: PostMilestoneModel) => createMilestone(milestone),
+    deleteTask: (task: DeleteTaskModel) => deleteTask(task),
   });
 
   const appReducerMap: InjectReducerMap = {

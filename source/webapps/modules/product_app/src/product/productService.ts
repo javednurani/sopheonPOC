@@ -3,6 +3,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { settings } from '../settings';
 import {
   CreateProductModel,
+  DeleteTaskModel,
   EnvironmentScopedApiRequestModel,
   MilestoneDto,
   PostMilestoneModel,
@@ -89,7 +90,7 @@ export const createTask: (createTaskModel: PostPutTaskModel) => Promise<TaskDto>
 };
 
 export const updateTask: (updateTaskModel: PostPutTaskModel) => Promise<TaskDto> = async updateTaskModel => {
-  const updateTaskUrlWithEnvironment = `${API_URL_BASE}${settings.UpdateTaskUrlPath}`
+  const updateTaskUrlWithEnvironment = `${API_URL_BASE}${settings.UpdateDeleteTaskUrlPath}`
     .replace(settings.TokenEnvironmentKey, updateTaskModel.EnvironmentKey)
     .replace(settings.TokenProductKey, updateTaskModel.ProductKey || '') // TODO, nullable Key? null check ?;
     .replace(settings.TokenTaskId, updateTaskModel.Task.id.toString());
@@ -115,4 +116,19 @@ export const createMilestone: (createMilestoneModel: PostMilestoneModel) => Prom
   };
 
   return await axios.post(createMilestoneUrlWithEnvironment, createMilestoneModel.Milestone, config);
+};
+
+export const deleteTask: (deleteTaskModel: DeleteTaskModel) => Promise<TaskDto> = async deleteTaskModel => {
+  const deleteTaskUrlWithEnvironment = `${API_URL_BASE}${settings.UpdateDeleteTaskUrlPath}`
+    .replace(settings.TokenEnvironmentKey, deleteTaskModel.EnvironmentKey)
+    .replace(settings.TokenProductKey, deleteTaskModel.ProductKey || '') // TODO, nullable Key? null check ?;
+    .replace(settings.TokenTaskId, deleteTaskModel.TaskId.toString());
+
+  const config: AxiosRequestConfig = {
+    headers: {
+      Authorization: `Bearer ${deleteTaskModel.AccessToken}`,
+    },
+  };
+
+  return await axios.delete(deleteTaskUrlWithEnvironment, config);
 };
