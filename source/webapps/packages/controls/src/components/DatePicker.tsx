@@ -3,12 +3,14 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 
 export type DatePickerProps = {
-  value?: Date;
   disabled?: boolean;
+  label?: string;
   onSelectDate?: (date: Date | null | undefined) => void;
+  required?: boolean;
+  value?: Date;
 };
 
-const DatePicker: React.FC<DatePickerProps> = ({ value, disabled, onSelectDate }): JSX.Element => {
+const DatePicker: React.FC<DatePickerProps> = ({ disabled, label, onSelectDate, required, value }): JSX.Element => {
   const { formatMessage } = useIntl();
 
   const datePickerStrings: IDatePickerStrings = {
@@ -68,27 +70,22 @@ const DatePicker: React.FC<DatePickerProps> = ({ value, disabled, onSelectDate }
     yearPickerHeaderAriaLabel: formatMessage({ id: 'calendar.selecttochangeyear' }),
   };
 
-  const datePickerClass = mergeStyleSets({
-    control: {
-      margin: '0px 0 15px 0',
-      width: '300px',
-    },
-  });
-
-  const formatDate = (date: Date | undefined): string => `${date ? date.getMonth() + 1 : ''}/${date?.getDate()}/${date?.getFullYear()}`;
+  const defaultLabel = formatMessage({ id: 'date' });
+  // eslint-disable-next-line no-confusing-arrow
+  const formatDate = (date: Date | undefined): string => (date ? date.toLocaleDateString() : '');
 
   return (
     <FluentDatePicker
-      value={value}
-      disabled={disabled}
-      className={datePickerClass.control}
-      firstDayOfWeek={DayOfWeek.Sunday}
-      placeholder={formatMessage({ id: 'calendar.selectDate' })}
       ariaLabel={formatMessage({ id: 'calendar.selectDate' })}
-      strings={datePickerStrings}
-      label={formatMessage({ id: 'toDo.duedate' })}
-      onSelectDate={onSelectDate}
+      disabled={disabled}
+      firstDayOfWeek={DayOfWeek.Sunday}
       formatDate={formatDate}
+      label={label ?? defaultLabel}
+      onSelectDate={onSelectDate}
+      placeholder={formatMessage({ id: 'calendar.selectDate' })}
+      isRequired={required ?? false}
+      strings={datePickerStrings}
+      value={value}
     />
   );
 };
