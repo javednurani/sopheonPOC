@@ -63,7 +63,6 @@ const Timeline: React.FunctionComponent<ITimelineProps> = ({
       width: '600px',
       display: 'flex',
       padding: '32px',
-      border: '2px',
       borderRadius: '8px',
     },
   });
