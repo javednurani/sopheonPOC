@@ -3,12 +3,14 @@ import { Reducer } from 'redux';
 
 import {
   CreateProductModel,
+  DeleteTaskModel,
   EnvironmentScopedApiRequestModel,
   PostMilestoneModel,
   PostPutTaskModel,
   Product,
   ProductScopedMilestone,
   ProductScopedTask,
+  ProductScopedTaskId,
   Task,
   UpdateProductItemModel,
   UpdateProductModel,
@@ -47,6 +49,10 @@ enum ProductActionTypes {
   CREATE_MILESTONE_REQUEST = 'PRODUCT/PRODUCT/CREATE_MILESTONE_REQUEST',
   CREATE_MILESTONE_SUCCESS = 'PRODUCT/PRODUCT/CREATE_MILESTONE_SUCCESS',
   CREATE_MILESTONE_FAILURE = 'PRODUCT/PRODUCT/CREATE_MILESTONE_FAILURE',
+
+  DELETE_TASK_REQUEST = 'PRODUCT/PRODUCT/DELETE_TASK_REQUEST',
+  DELETE_TASK_SUCCESS = 'PRODUCT/PRODUCT/DELETE_TASK_SUCCESS',
+  DELETE_TASK_FAILURE = 'PRODUCT/PRODUCT/DELETE_TASK_FAILURE',
 }
 
 export type GetProductsRequestAction = Action<ProductActionTypes.GET_PRODUCTS_REQUEST>;
@@ -77,6 +83,10 @@ export type CreateMilestoneRequestAction = Action<ProductActionTypes.CREATE_MILE
 export type CreateMilestoneSuccessAction = PayloadAction<ProductActionTypes.CREATE_MILESTONE_SUCCESS, ProductScopedMilestone>;
 export type CreateMilestoneFailureAction = PayloadAction<ProductActionTypes.CREATE_MILESTONE_FAILURE, Error>;
 
+export type DeleteTaskRequestAction = Action<ProductActionTypes.DELETE_TASK_REQUEST>;
+export type DeleteTaskSuccessAction = PayloadAction<ProductActionTypes.DELETE_TASK_SUCCESS, ProductScopedTaskId>;
+export type DeleteTaskFailureAction = PayloadAction<ProductActionTypes.DELETE_TASK_FAILURE, Error>;
+
 export type ProductReducerActions =
   | GetProductsRequestAction
   | GetProductsSuccessAction
@@ -98,7 +108,10 @@ export type ProductReducerActions =
   | UpdateTaskFailureAction
   | CreateMilestoneRequestAction
   | CreateMilestoneSuccessAction
-  | CreateMilestoneFailureAction;
+  | CreateMilestoneFailureAction
+  | DeleteTaskRequestAction
+  | DeleteTaskSuccessAction
+  | DeleteTaskFailureAction;
 
 // SAGA ACTION TYPES
 
@@ -111,6 +124,7 @@ export enum ProductSagaActionTypes {
   CREATE_TASK = 'PRODUCT/PRODUCT/CREATE_TASK',
   UPDATE_TASK = 'PRODUCT/PRODUCT/UPDATE_TASK',
   CREATE_MILESTONE = 'PRODUCT/PRODUCT/CREATE_MILESTONE',
+  DELETE_TASK = 'PRODUCT/PRODUCT/DELETE_TASK',
 }
 
 export type GetProductsAction = PayloadAction<ProductSagaActionTypes.GET_PRODUCTS, EnvironmentScopedApiRequestModel>;
@@ -120,6 +134,7 @@ export type UpdateProductItemAction = PayloadAction<ProductSagaActionTypes.UPDAT
 export type CreateTaskAction = PayloadAction<ProductSagaActionTypes.CREATE_TASK, PostPutTaskModel>;
 export type UpdateTaskAction = PayloadAction<ProductSagaActionTypes.UPDATE_TASK, PostPutTaskModel>;
 export type CreateMilestoneAction = PayloadAction<ProductSagaActionTypes.CREATE_MILESTONE, PostMilestoneModel>;
+export type DeleteTaskAction = PayloadAction<ProductSagaActionTypes.DELETE_TASK, DeleteTaskModel>;
 
 //#endregion
 
@@ -166,6 +181,11 @@ export const createMilestoneSuccess = (milestone: ProductScopedMilestone): Creat
 export const createMilestoneFailure = (error: Error): CreateMilestoneFailureAction =>
   createPayloadAction(ProductActionTypes.CREATE_MILESTONE_FAILURE, error);
 
+export const deleteTaskRequest = (): DeleteTaskRequestAction => createAction(ProductActionTypes.DELETE_TASK_REQUEST);
+export const deleteTaskSuccess = (deletedTask: ProductScopedTaskId): DeleteTaskSuccessAction =>
+  createPayloadAction(ProductActionTypes.DELETE_TASK_SUCCESS, deletedTask);
+export const deleteTaskFailure = (error: Error): DeleteTaskFailureAction => createPayloadAction(ProductActionTypes.DELETE_TASK_FAILURE, error);
+
 // SAGA ACTIONS
 
 export const getProducts = (requestDto: EnvironmentScopedApiRequestModel): GetProductsAction =>
@@ -180,6 +200,7 @@ export const createTask = (task: PostPutTaskModel): CreateTaskAction => createPa
 export const updateTask = (task: PostPutTaskModel): UpdateTaskAction => createPayloadAction(ProductSagaActionTypes.UPDATE_TASK, task);
 export const createMilestone = (milestone: PostMilestoneModel): CreateMilestoneAction =>
   createPayloadAction(ProductSagaActionTypes.CREATE_MILESTONE, milestone);
+export const deleteTask = (task: DeleteTaskModel): DeleteTaskAction => createPayloadAction(ProductSagaActionTypes.DELETE_TASK, task);
 
 //#endregion
 
@@ -195,6 +216,7 @@ export type ProductStateShape = {
   createTaskFetchStatus: FetchStatus; // INFO, this call could be made frequently. is there value in tracking the Fetch status?
   updateTaskFetchStatus: FetchStatus; // INFO, this call could be made frequently. is there value in tracking the Fetch status?
   createMilestoneFetchStatus: FetchStatus;
+  deleteTaskFetchStatus: FetchStatus; // INFO, this call could be made frequently. is there value in tracking the Fetch status?
 };
 
 export const initialState: ProductStateShape = {
@@ -205,6 +227,7 @@ export const initialState: ProductStateShape = {
   createTaskFetchStatus: FetchStatus.NotActive,
   updateTaskFetchStatus: FetchStatus.NotActive,
   createMilestoneFetchStatus: FetchStatus.NotActive,
+  deleteTaskFetchStatus: FetchStatus.NotActive,
 };
 
 // HANDLERS
@@ -392,6 +415,34 @@ const createMilestoneFailureHandler = (state: ProductStateShape, error: Error) =
     createMilestoneFetchStatus: FetchStatus.DoneFailure,
   };
 };
+// DELETE TASK
+const deleteTaskRequestHandler = (state: ProductStateShape) => ({
+  ...state,
+  deleteTaskFetchStatus: FetchStatus.InProgress,
+});
+
+const deleteTaskSuccessHandler = (state: ProductStateShape, deletedTask: ProductScopedTaskId) => {
+  const updatedProducts = [...state.products];
+  updatedProducts.forEach(existingProduct => {
+    // TODO, use .some() instead of .forEach(), to short-circuit loop after a product key match?
+    if (existingProduct.key === deletedTask.ProductKey) {
+      existingProduct.tasks = existingProduct.tasks.filter(t => t.id !== deletedTask.taskId);
+    }
+  });
+  return {
+    ...state,
+    products: updatedProducts,
+    deleteTaskFetchStatus: FetchStatus.DoneSuccess,
+  };
+};
+
+const deleteTaskFailureHandler = (state: ProductStateShape, error: Error) => {
+  console.log(error);
+  return {
+    ...state,
+    deleteTaskFetchStatus: FetchStatus.DoneFailure,
+  };
+};
 
 // ACTION SWITCH
 
@@ -439,6 +490,12 @@ export const productReducer: Reducer<ProductStateShape, ProductReducerActions> =
       return createMilestoneSuccessHandler(state, action.payload);
     case ProductActionTypes.CREATE_MILESTONE_FAILURE:
       return createMilestoneFailureHandler(state, action.payload);
+    case ProductActionTypes.DELETE_TASK_REQUEST:
+      return deleteTaskRequestHandler(state);
+    case ProductActionTypes.DELETE_TASK_SUCCESS:
+      return deleteTaskSuccessHandler(state, action.payload);
+    case ProductActionTypes.DELETE_TASK_FAILURE:
+      return deleteTaskFailureHandler(state, action.payload);
     default:
       return state;
   }

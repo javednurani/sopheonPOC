@@ -156,6 +156,7 @@ export const messages: Record<string, Record<string, string>> = {
     'toDo.selectastatus': 'Select a status',
     'toDo.showCompleted': 'Show Completed',
     'toDo.discardthistask': 'Discard this task?',
+    'toDo.taskDeleted': 'Task deleted.',
     'status': 'Status',
     'status.notstarted': 'Not Started',
     'status.inprogress': 'In Progress',

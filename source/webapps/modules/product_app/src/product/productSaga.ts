@@ -1,7 +1,7 @@
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 
 import { Attributes } from '../data/attributes';
-import { Product, ProductScopedMilestone, ProductScopedTask, Task } from '../types';
+import { Product, ProductScopedMilestone, ProductScopedTask, ProductScopedTaskId, Task } from '../types';
 // eslint-disable-next-line max-len
 import {
   CreateMilestoneAction,
@@ -16,6 +16,10 @@ import {
   createTaskFailure,
   createTaskRequest,
   createTaskSuccess,
+  DeleteTaskAction,
+  deleteTaskFailure,
+  deleteTaskRequest,
+  deleteTaskSuccess,
   GetProductsAction,
   getProductsFailure,
   getProductsRequest,
@@ -34,7 +38,7 @@ import {
   updateTaskRequest,
   updateTaskSuccess,
 } from './productReducer';
-import { createMilestone, createProduct, createTask, getProducts, updateProduct, updateProductItem, updateTask } from './productService';
+import { createMilestone, createProduct, createTask, deleteTask, getProducts, updateProduct, updateProductItem, updateTask } from './productService';
 
 // TRANSLATION HELPERS, TODO, MOVE OUT OF SAGA
 const translateEnumCollectionAttributeValuesToIndustryIds = (enumCollectionAttributeValues: unknown[]): number[] =>
@@ -218,6 +222,24 @@ export function* onCreateMilestone(action: CreateMilestoneAction): Generator {
   }
 }
 
+export function* watchOnDeleteTask(): Generator {
+  yield takeEvery(ProductSagaActionTypes.DELETE_TASK, onDeleteTask);
+}
+
+export function* onDeleteTask(action: DeleteTaskAction): Generator {
+  try {
+    yield put(deleteTaskRequest());
+    const { data } = yield call(deleteTask, action.payload);
+    const deletedTask: ProductScopedTaskId = {
+      taskId: action.payload.TaskId,
+      ProductKey: action.payload.ProductKey, // used for assignment to correct Product in Redux store
+    };
+    yield put(deleteTaskSuccess(deletedTask));
+  } catch (error) {
+    yield put(deleteTaskFailure(error));
+  }
+}
+
 export default function* productSaga(): Generator {
   yield all([
     fork(watchOnGetProducts),
@@ -227,5 +249,6 @@ export default function* productSaga(): Generator {
     fork(watchOnCreateTask),
     fork(watchOnUpdateTask),
     fork(watchOnCreateMilestone),
+    fork(watchOnDeleteTask),
   ]);
 }
