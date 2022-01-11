@@ -68,6 +68,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ disabled, label, onSelectDate, 
     closeButtonAriaLabel: formatMessage({ id: 'calendar.closedatepicker' }),
     monthPickerHeaderAriaLabel: formatMessage({ id: 'calendar.selecttochangemonth' }),
     yearPickerHeaderAriaLabel: formatMessage({ id: 'calendar.selecttochangeyear' }),
+    isRequiredErrorMessage: formatMessage({ id: 'fieldisrequired' }),
   };
 
   const defaultLabel = formatMessage({ id: 'date' });
