@@ -3,21 +3,15 @@ import {
   Dialog,
   DialogFooter,
   DialogType,
-  FontWeights,
-  IButtonStyles,
   IconButton,
   IIconProps,
-  IStackItemStyles,
-  IStackStyles,
   IStackTokens,
-  mergeStyleSets,
   PrimaryButton,
   Stack,
   Text,
   TextField,
 } from '@fluentui/react';
 import { useBoolean } from '@fluentui/react-hooks';
-import { useTheme } from '@fluentui/react-theme-provider';
 import { DatePicker } from '@sopheon/controls';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -40,7 +34,6 @@ const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({
   hideModal,
   productKey,
 }: IMilestoneDialogProps) => {
-  const theme = useTheme();
   const { formatMessage } = useIntl();
 
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
