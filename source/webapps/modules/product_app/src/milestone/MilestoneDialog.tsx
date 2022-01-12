@@ -43,7 +43,6 @@ const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [notes, setNotes] = useState<string | undefined>(undefined);
 
-  const [nameDirty, setNameDirty] = useState(false);
   const [formDirty, setFormDirty] = useState(false);
 
   useEffect(() => {
@@ -106,8 +105,7 @@ const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({
   };
 
   const handleNameChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string | undefined): void => {
-    setName(newValue);
-    setNameDirty(true);
+    setName(newValue || '');
     setFormDirty(true);
   };
 
@@ -122,8 +120,6 @@ const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({
     setNotes(newValue);
     setFormDirty(true);
   };
-
-  const nameErrorMessage = (value: string): string | undefined => (nameDirty && !value ? formatMessage({ id: 'fieldisrequired' }) : undefined);
 
   const confirmCancelDialog = (
     <Dialog hidden={hideDiscardDialog} onDismiss={toggleHideDiscardDialog} dialogContentProps={discardDialogContentProps}>
@@ -152,7 +148,8 @@ const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({
           maxLength={150}
           label={formatMessage({ id: 'name' })}
           value={name}
-          onGetErrorMessage={nameErrorMessage}
+          onGetErrorMessage={value => (value ? undefined : formatMessage({ id: 'fieldisrequired' }))}
+          validateOnLoad={false}
         />
         <DatePicker value={date} onSelectDate={handleDateChange} required={true} />
         <TextField
