@@ -162,7 +162,7 @@ export const messages: Record<string, Record<string, string>> = {
     'status.inprogress': 'In Progress',
     'status.assigned': 'Assigned',
     'status.complete': 'Complete',
-    'milestone.newmilestone': 'Add Milestone',
+    'milestone.newMilestone': 'Add Milestone',
     'milestone.namePlaceholder': 'Name your milestone',
     'milestone.notesPlaceholder': 'Add any notes',
     'milestone.notes': 'Notes',

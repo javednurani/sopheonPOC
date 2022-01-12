@@ -81,7 +81,7 @@ const Timeline: React.FunctionComponent<ITimelineProps> = ({
             style={addMilestoneButtonStyles}
             onClick={handleCreateMilestoneIconClick}
             iconProps={addIcon}
-            text={formatMessage({ id: 'milestone.newmilestone' })}
+            text={formatMessage({ id: 'milestone.newMilestone' })}
           />
         </Text>
         <Gantt tasks={ganttTasks} milestones={ganttMilestones}></Gantt>
