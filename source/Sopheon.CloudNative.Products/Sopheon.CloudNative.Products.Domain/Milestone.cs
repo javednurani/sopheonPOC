@@ -10,7 +10,6 @@
 
       public string Notes { get; set; }
 
-      // TODO: nullable?
       public DateTime? Date { get; set; }
 
       public virtual Product Product { get; set; }

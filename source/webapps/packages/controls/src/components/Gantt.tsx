@@ -20,7 +20,6 @@ export interface GanttTask {
   date: Date | null;
 }
 
-// TODO: should these duplciate types be handled differently?
 export interface GanttMilestone {
   id: string;
   text: string;
