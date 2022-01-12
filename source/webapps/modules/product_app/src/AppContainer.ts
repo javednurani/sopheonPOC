@@ -48,8 +48,8 @@ export type AppDispatchProps = {
   updateProductItem: (product: UpdateProductItemModel) => UpdateProductItemAction;
   createTask: (task: PostPutTaskModel) => CreateTaskAction;
   updateTask: (task: PostPutTaskModel) => UpdateTaskAction;
-  createMilestone: (milestone: PostMilestoneModel) => CreateMilestoneAction;
   deleteTask: (task: DeleteTaskModel) => DeleteTaskAction;
+  createMilestone: (milestone: PostMilestoneModel) => CreateMilestoneAction;
 };
 
 const AppContainer: FunctionComponent<ShellApiProps> = ({ shellApi }: ShellApiProps) => {
@@ -67,8 +67,8 @@ const AppContainer: FunctionComponent<ShellApiProps> = ({ shellApi }: ShellApiPr
     updateProductItem: (productItem: UpdateProductItemModel) => updateProductItem(productItem),
     createTask: (task: PostPutTaskModel) => createTask(task),
     updateTask: (task: PostPutTaskModel) => updateTask(task),
-    createMilestone: (milestone: PostMilestoneModel) => createMilestone(milestone),
     deleteTask: (task: DeleteTaskModel) => deleteTask(task),
+    createMilestone: (milestone: PostMilestoneModel) => createMilestone(milestone),
   });
 
   const appReducerMap: InjectReducerMap = {

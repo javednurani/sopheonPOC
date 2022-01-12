@@ -27,8 +27,8 @@ const App: React.FunctionComponent<Props> = ({
   showHeader,
   createTask,
   updateTask,
-  createMilestone,
   deleteTask,
+  createMilestone,
   showAnnouncement,
 }: Props) => {
   const { formatMessage } = useIntl();
@@ -131,8 +131,8 @@ const App: React.FunctionComponent<Props> = ({
           products={products}
           createTask={createTask}
           updateTask={updateTask}
-          createMilestone={createMilestone}
           deleteTask={deleteTask}
+          createMilestone={createMilestone}
           showAnnouncement={showAnnouncement}
         />
       </Stack.Item>

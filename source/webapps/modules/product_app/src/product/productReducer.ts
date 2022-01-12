@@ -46,13 +46,13 @@ enum ProductActionTypes {
   UPDATE_TASK_SUCCESS = 'PRODUCT/PRODUCT/UPDATE_TASK_SUCCESS',
   UPDATE_TASK_FAILURE = 'PRODUCT/PRODUCT/UPDATE_TASK_FAILURE',
 
-  CREATE_MILESTONE_REQUEST = 'PRODUCT/PRODUCT/CREATE_MILESTONE_REQUEST',
-  CREATE_MILESTONE_SUCCESS = 'PRODUCT/PRODUCT/CREATE_MILESTONE_SUCCESS',
-  CREATE_MILESTONE_FAILURE = 'PRODUCT/PRODUCT/CREATE_MILESTONE_FAILURE',
-
   DELETE_TASK_REQUEST = 'PRODUCT/PRODUCT/DELETE_TASK_REQUEST',
   DELETE_TASK_SUCCESS = 'PRODUCT/PRODUCT/DELETE_TASK_SUCCESS',
   DELETE_TASK_FAILURE = 'PRODUCT/PRODUCT/DELETE_TASK_FAILURE',
+
+  CREATE_MILESTONE_REQUEST = 'PRODUCT/PRODUCT/CREATE_MILESTONE_REQUEST',
+  CREATE_MILESTONE_SUCCESS = 'PRODUCT/PRODUCT/CREATE_MILESTONE_SUCCESS',
+  CREATE_MILESTONE_FAILURE = 'PRODUCT/PRODUCT/CREATE_MILESTONE_FAILURE',
 }
 
 export type GetProductsRequestAction = Action<ProductActionTypes.GET_PRODUCTS_REQUEST>;
@@ -79,13 +79,13 @@ export type UpdateTaskRequestAction = Action<ProductActionTypes.UPDATE_TASK_REQU
 export type UpdateTaskSuccessAction = PayloadAction<ProductActionTypes.UPDATE_TASK_SUCCESS, ProductScopedTask>;
 export type UpdateTaskFailureAction = PayloadAction<ProductActionTypes.UPDATE_TASK_FAILURE, Error>;
 
-export type CreateMilestoneRequestAction = Action<ProductActionTypes.CREATE_MILESTONE_REQUEST>;
-export type CreateMilestoneSuccessAction = PayloadAction<ProductActionTypes.CREATE_MILESTONE_SUCCESS, ProductScopedMilestone>;
-export type CreateMilestoneFailureAction = PayloadAction<ProductActionTypes.CREATE_MILESTONE_FAILURE, Error>;
-
 export type DeleteTaskRequestAction = Action<ProductActionTypes.DELETE_TASK_REQUEST>;
 export type DeleteTaskSuccessAction = PayloadAction<ProductActionTypes.DELETE_TASK_SUCCESS, ProductScopedTaskId>;
 export type DeleteTaskFailureAction = PayloadAction<ProductActionTypes.DELETE_TASK_FAILURE, Error>;
+
+export type CreateMilestoneRequestAction = Action<ProductActionTypes.CREATE_MILESTONE_REQUEST>;
+export type CreateMilestoneSuccessAction = PayloadAction<ProductActionTypes.CREATE_MILESTONE_SUCCESS, ProductScopedMilestone>;
+export type CreateMilestoneFailureAction = PayloadAction<ProductActionTypes.CREATE_MILESTONE_FAILURE, Error>;
 
 export type ProductReducerActions =
   | GetProductsRequestAction
@@ -106,12 +106,12 @@ export type ProductReducerActions =
   | UpdateTaskRequestAction
   | UpdateTaskSuccessAction
   | UpdateTaskFailureAction
-  | CreateMilestoneRequestAction
-  | CreateMilestoneSuccessAction
-  | CreateMilestoneFailureAction
   | DeleteTaskRequestAction
   | DeleteTaskSuccessAction
-  | DeleteTaskFailureAction;
+  | DeleteTaskFailureAction
+  | CreateMilestoneRequestAction
+  | CreateMilestoneSuccessAction
+  | CreateMilestoneFailureAction;
 
 // SAGA ACTION TYPES
 
@@ -133,8 +133,8 @@ export type UpdateProductAction = PayloadAction<ProductSagaActionTypes.UPDATE_PR
 export type UpdateProductItemAction = PayloadAction<ProductSagaActionTypes.UPDATE_PRODUCT_ITEM, UpdateProductItemModel>;
 export type CreateTaskAction = PayloadAction<ProductSagaActionTypes.CREATE_TASK, PostPutTaskModel>;
 export type UpdateTaskAction = PayloadAction<ProductSagaActionTypes.UPDATE_TASK, PostPutTaskModel>;
-export type CreateMilestoneAction = PayloadAction<ProductSagaActionTypes.CREATE_MILESTONE, PostMilestoneModel>;
 export type DeleteTaskAction = PayloadAction<ProductSagaActionTypes.DELETE_TASK, DeleteTaskModel>;
+export type CreateMilestoneAction = PayloadAction<ProductSagaActionTypes.CREATE_MILESTONE, PostMilestoneModel>;
 
 //#endregion
 
@@ -175,16 +175,16 @@ export const updateTaskSuccess = (task: ProductScopedTask): UpdateTaskSuccessAct
   createPayloadAction(ProductActionTypes.UPDATE_TASK_SUCCESS, task);
 export const updateTaskFailure = (error: Error): UpdateTaskFailureAction => createPayloadAction(ProductActionTypes.UPDATE_TASK_FAILURE, error);
 
+export const deleteTaskRequest = (): DeleteTaskRequestAction => createAction(ProductActionTypes.DELETE_TASK_REQUEST);
+export const deleteTaskSuccess = (deletedTask: ProductScopedTaskId): DeleteTaskSuccessAction =>
+  createPayloadAction(ProductActionTypes.DELETE_TASK_SUCCESS, deletedTask);
+export const deleteTaskFailure = (error: Error): DeleteTaskFailureAction => createPayloadAction(ProductActionTypes.DELETE_TASK_FAILURE, error);
+
 export const createMilestoneRequest = (): CreateMilestoneRequestAction => createAction(ProductActionTypes.CREATE_MILESTONE_REQUEST);
 export const createMilestoneSuccess = (milestone: ProductScopedMilestone): CreateMilestoneSuccessAction =>
   createPayloadAction(ProductActionTypes.CREATE_MILESTONE_SUCCESS, milestone);
 export const createMilestoneFailure = (error: Error): CreateMilestoneFailureAction =>
   createPayloadAction(ProductActionTypes.CREATE_MILESTONE_FAILURE, error);
-
-export const deleteTaskRequest = (): DeleteTaskRequestAction => createAction(ProductActionTypes.DELETE_TASK_REQUEST);
-export const deleteTaskSuccess = (deletedTask: ProductScopedTaskId): DeleteTaskSuccessAction =>
-  createPayloadAction(ProductActionTypes.DELETE_TASK_SUCCESS, deletedTask);
-export const deleteTaskFailure = (error: Error): DeleteTaskFailureAction => createPayloadAction(ProductActionTypes.DELETE_TASK_FAILURE, error);
 
 // SAGA ACTIONS
 
@@ -198,9 +198,9 @@ export const updateProductItem = (productItem: UpdateProductItemModel): UpdatePr
   createPayloadAction(ProductSagaActionTypes.UPDATE_PRODUCT_ITEM, productItem);
 export const createTask = (task: PostPutTaskModel): CreateTaskAction => createPayloadAction(ProductSagaActionTypes.CREATE_TASK, task);
 export const updateTask = (task: PostPutTaskModel): UpdateTaskAction => createPayloadAction(ProductSagaActionTypes.UPDATE_TASK, task);
+export const deleteTask = (task: DeleteTaskModel): DeleteTaskAction => createPayloadAction(ProductSagaActionTypes.DELETE_TASK, task);
 export const createMilestone = (milestone: PostMilestoneModel): CreateMilestoneAction =>
   createPayloadAction(ProductSagaActionTypes.CREATE_MILESTONE, milestone);
-export const deleteTask = (task: DeleteTaskModel): DeleteTaskAction => createPayloadAction(ProductSagaActionTypes.DELETE_TASK, task);
 
 //#endregion
 
@@ -215,8 +215,8 @@ export type ProductStateShape = {
   updateProductFetchStatus: FetchStatus;
   createTaskFetchStatus: FetchStatus; // INFO, this call could be made frequently. is there value in tracking the Fetch status?
   updateTaskFetchStatus: FetchStatus; // INFO, this call could be made frequently. is there value in tracking the Fetch status?
-  createMilestoneFetchStatus: FetchStatus;
   deleteTaskFetchStatus: FetchStatus; // INFO, this call could be made frequently. is there value in tracking the Fetch status?
+  createMilestoneFetchStatus: FetchStatus;
 };
 
 export const initialState: ProductStateShape = {
@@ -226,8 +226,8 @@ export const initialState: ProductStateShape = {
   updateProductFetchStatus: FetchStatus.NotActive,
   createTaskFetchStatus: FetchStatus.NotActive,
   updateTaskFetchStatus: FetchStatus.NotActive,
-  createMilestoneFetchStatus: FetchStatus.NotActive,
   deleteTaskFetchStatus: FetchStatus.NotActive,
+  createMilestoneFetchStatus: FetchStatus.NotActive,
 };
 
 // HANDLERS
@@ -484,18 +484,18 @@ export const productReducer: Reducer<ProductStateShape, ProductReducerActions> =
       return updateTaskSuccessHandler(state, action.payload);
     case ProductActionTypes.UPDATE_TASK_FAILURE:
       return updateTaskFailureHandler(state, action.payload);
-    case ProductActionTypes.CREATE_MILESTONE_REQUEST:
-      return createMilestoneRequestHandler(state);
-    case ProductActionTypes.CREATE_MILESTONE_SUCCESS:
-      return createMilestoneSuccessHandler(state, action.payload);
-    case ProductActionTypes.CREATE_MILESTONE_FAILURE:
-      return createMilestoneFailureHandler(state, action.payload);
     case ProductActionTypes.DELETE_TASK_REQUEST:
       return deleteTaskRequestHandler(state);
     case ProductActionTypes.DELETE_TASK_SUCCESS:
       return deleteTaskSuccessHandler(state, action.payload);
     case ProductActionTypes.DELETE_TASK_FAILURE:
       return deleteTaskFailureHandler(state, action.payload);
+    case ProductActionTypes.CREATE_MILESTONE_REQUEST:
+      return createMilestoneRequestHandler(state);
+    case ProductActionTypes.CREATE_MILESTONE_SUCCESS:
+      return createMilestoneSuccessHandler(state, action.payload);
+    case ProductActionTypes.CREATE_MILESTONE_FAILURE:
+      return createMilestoneFailureHandler(state, action.payload);
     default:
       return state;
   }

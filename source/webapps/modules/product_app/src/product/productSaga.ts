@@ -248,7 +248,7 @@ export default function* productSaga(): Generator {
     fork(watchOnUpdateProductItem),
     fork(watchOnCreateTask),
     fork(watchOnUpdateTask),
-    fork(watchOnCreateMilestone),
     fork(watchOnDeleteTask),
+    fork(watchOnCreateMilestone),
   ]);
 }

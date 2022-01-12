@@ -26,8 +26,8 @@ export interface IDashboardProps {
   products: Product[];
   createTask: (task: PostPutTaskModel) => CreateTaskAction;
   updateTask: (task: PostPutTaskModel) => UpdateTaskAction;
-  createMilestone: (milestone: PostMilestoneModel) => CreateMilestoneAction;
   deleteTask: (task: DeleteTaskModel) => DeleteTaskAction;
+  createMilestone: (milestone: PostMilestoneModel) => CreateMilestoneAction;
   showAnnouncement: (announcement: ShowAnnouncementModel) => ShowAnnouncementAction;
 }
 
@@ -44,8 +44,8 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
   products,
   createTask,
   updateTask,
-  createMilestone,
   deleteTask,
+  createMilestone,
   showAnnouncement,
 }: IDashboardProps) => {
   const stackItemStyles: IStackItemStyles = {
