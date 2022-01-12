@@ -220,7 +220,7 @@ export function* onCreateMilestone(action: CreateMilestoneAction): Generator {
         id: data.id,
         name: data.name,
         notes: data.notes,
-        date: data.date,
+        date: new Date(data.date),
       },
       ProductKey: action.payload.ProductKey, // used for assignment to correct Product in Redux store
     };
