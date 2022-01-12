@@ -385,6 +385,36 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                     b.ToTable("Goal", "SPM");
                 });
 
+            modelBuilder.Entity("Sopheon.CloudNative.Products.Domain.Milestone", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime?>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Milestones", "SPM");
+                });
+
             modelBuilder.Entity("Sopheon.CloudNative.Products.Domain.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -562,8 +592,8 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                         .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("Notes")
-                        .HasMaxLength(5000)
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
 
                     b.Property<DateTime>("PeriodEnd")
                         .ValueGeneratedOnAddOrUpdate()
@@ -744,6 +774,17 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                     b.HasOne("Sopheon.CloudNative.Products.Domain.Product", null)
                         .WithMany("Goals")
                         .HasForeignKey("ProductId");
+                });
+
+            modelBuilder.Entity("Sopheon.CloudNative.Products.Domain.Milestone", b =>
+                {
+                    b.HasOne("Sopheon.CloudNative.Products.Domain.Product", "Product")
+                        .WithMany("Milestones")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Sopheon.CloudNative.Products.Domain.Product", b =>
@@ -1402,6 +1443,8 @@ namespace Sopheon.CloudNative.Products.DataAccess.Migrations
                     b.Navigation("Goals");
 
                     b.Navigation("Items");
+
+                    b.Navigation("Milestones");
 
                     b.Navigation("Releases");
 
