@@ -139,7 +139,7 @@ const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({
       <Stack tokens={stackChildGapTokens}>
         <Stack horizontal>
           <Stack.Item grow>
-            <Text variant="xxLarge">{formatMessage({ id: 'milestone.newmilestone' })}</Text>
+            <Text variant="xxLarge">{formatMessage({ id: 'milestone.newMilestone' })}</Text>
           </Stack.Item>
           <Stack.Item>
             <IconButton iconProps={cancelIcon} ariaLabel={formatMessage({ id: 'closemodal' })} onClick={handleCloseIconClick} />
