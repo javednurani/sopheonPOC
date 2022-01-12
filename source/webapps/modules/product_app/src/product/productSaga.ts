@@ -1,7 +1,7 @@
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 
 import { Attributes } from '../data/attributes';
-import { Product, ProductScopedMilestone, ProductScopedTask, ProductScopedTaskId, Task } from '../types';
+import { Milestone, Product, ProductScopedMilestone, ProductScopedTask, ProductScopedTaskId, Task } from '../types';
 // eslint-disable-next-line max-len
 import {
   CreateMilestoneAction,
@@ -54,6 +54,14 @@ const translateTasksFromService = (tasks: unknown[]): Task[] =>
     status: task.status,
   }));
 
+const translateMilestonesFromService = (milestones: unknown[]): Milestone[] =>
+  milestones.map(milestone => ({
+    id: milestone.id,
+    name: milestone.name,
+    notes: milestone.notes,
+    date: new Date(milestone.date),
+  }));
+
 // END TRANSLATION HELPERS
 
 export function* watchOnGetProducts(): Generator {
@@ -73,7 +81,7 @@ export function* onGetProducts(action: GetProductsAction): Generator {
       kpis: d.keyPerformanceIndicators,
       goals: d.goals,
       tasks: translateTasksFromService(d.tasks),
-      milestones: d.milestones,
+      milestones: translateMilestonesFromService(d.milestones),
     }));
     yield put(getProductsSuccess(transformedProductsData));
   } catch (error) {
@@ -212,7 +220,7 @@ export function* onCreateMilestone(action: CreateMilestoneAction): Generator {
         id: data.id,
         name: data.name,
         notes: data.notes,
-        date: data.date,
+        date: new Date(data.date),
       },
       ProductKey: action.payload.ProductKey, // used for assignment to correct Product in Redux store
     };
