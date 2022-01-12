@@ -31,11 +31,11 @@ export const Disabled = Template.bind({});
 Disabled.args = { disabled: true, value: new Date('2021-06-30') };
 
 export const label = Template.bind({});
-const labelExampleProps: DatePickerProps = { label: 'Custom Label', value: new Date('2022-1-11') };
+const labelExampleProps: DatePickerProps = { label: 'Custom Label', value: new Date('2021-10-06') };
 label.args = labelExampleProps;
 
 export const required = Template.bind({});
-const requiredExampleProps: DatePickerProps = { required: true, value: new Date('2022-1-11') };
+const requiredExampleProps: DatePickerProps = { required: true, value: new Date('2021-12-15') };
 required.args = requiredExampleProps;
 
 export const width = Template.bind({});
