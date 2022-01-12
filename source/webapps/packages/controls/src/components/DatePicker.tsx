@@ -1,4 +1,4 @@
-import { DatePicker as FluentDatePicker, DayOfWeek, IDatePickerStrings } from '@fluentui/react';
+import { DatePicker as FluentDatePicker, DayOfWeek, IDatePickerStrings, mergeStyles } from '@fluentui/react';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -72,16 +72,16 @@ const DatePicker: React.FC<DatePickerProps> = ({ disabled, label, onSelectDate, 
     isRequiredErrorMessage: formatMessage({ id: 'fieldisrequired' }),
   };
 
-  const defaultLabel = formatMessage({ id: 'date' });
+  const defaultLabel: string = formatMessage({ id: 'date' });
 
   const formatDate = (date: Date | undefined): string => (date ? date.toLocaleDateString() : '');
 
-  // TODO: need to merge styles...?
-  const styles = { root: { width: _width } };
+  const className: string = mergeStyles({ width: _width });
 
   return (
     <FluentDatePicker
       ariaLabel={formatMessage({ id: 'calendar.selectDate' })}
+      className={className}
       disabled={disabled}
       firstDayOfWeek={DayOfWeek.Sunday}
       formatDate={formatDate}
@@ -91,7 +91,6 @@ const DatePicker: React.FC<DatePickerProps> = ({ disabled, label, onSelectDate, 
       isRequired={required ?? false}
       strings={datePickerStrings}
       value={value}
-      styles={styles}
     />
   );
 };
