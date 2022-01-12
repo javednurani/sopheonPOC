@@ -37,10 +37,12 @@ const SideNav: React.FC<SideBarProps> = ({ menuItems, selectedMenuKey }): JSX.El
     root: {
       width: '150px',
       backgroundColor: theme.palette.neutralLight,
+      overflow: 'hidden'
     },
     navItem: {
       selectors: {
         '.is-selected': { backgroundColor: theme.semanticColors.bodyBackground, color: theme.semanticColors.bodyTextChecked },
+        'div': { margin: '0px, -1px' },
       },
     },
 
