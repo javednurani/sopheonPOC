@@ -105,7 +105,7 @@ const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({
   };
 
   const handleNameChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string | undefined): void => {
-    setName(newValue || '');
+    setName(newValue);
     setFormDirty(true);
   };
 
