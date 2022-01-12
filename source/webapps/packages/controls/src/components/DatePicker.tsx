@@ -1,4 +1,4 @@
-import { DatePicker as FluentDatePicker, DayOfWeek, IDatePickerStrings, mergeStyleSets } from '@fluentui/react';
+import { DatePicker as FluentDatePicker, DayOfWeek, IDatePickerStrings } from '@fluentui/react';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
