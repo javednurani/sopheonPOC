@@ -56,12 +56,6 @@ const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({
     childrenGap: 8,
   };
 
-  const notesStackStyle = mergeStyleSets({
-    stack: {
-      height: '316px',
-    },
-  });
-
   const handleSaveButtonClick = () => {
     // create new milestone
     const milestone: MilestoneDto = {
@@ -159,18 +153,16 @@ const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({
           validateOnLoad={false}
         />
         <DatePicker value={date} onSelectDate={handleDateChange} required={true} />
-        <Stack className={notesStackStyle.stack}>
-          <TextField
-            placeholder={formatMessage({ id: 'milestone.notesPlaceholder' })}
-            onChange={handleNotesChange}
-            multiline
-            maxLength={4000}
-            rows={9}
-            resizable={false}
-            label={formatMessage({ id: 'milestone.notes' })}
-            value={notes}
-          />
-        </Stack>
+        <TextField
+          placeholder={formatMessage({ id: 'milestone.notesPlaceholder' })}
+          onChange={handleNotesChange}
+          multiline
+          maxLength={4000}
+          rows={11}
+          resizable={false}
+          label={formatMessage({ id: 'milestone.notes' })}
+          value={notes}
+        />
         <Stack horizontal tokens={stackChildGapTokens}>
           <PrimaryButton text={formatMessage({ id: 'save' })} onClick={handleSaveButtonClick} disabled={saveButtonDisabled || !formDirty} />
           <DefaultButton text={formatMessage({ id: 'cancel' })} onClick={handleCancelButtonClick} />
