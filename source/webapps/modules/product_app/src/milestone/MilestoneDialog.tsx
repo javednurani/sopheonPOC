@@ -164,7 +164,7 @@ const MilestoneDialog: React.FunctionComponent<IMilestoneDialogProps> = ({
             placeholder={formatMessage({ id: 'milestone.notesPlaceholder' })}
             onChange={handleNotesChange}
             multiline
-            maxLength={5000}
+            maxLength={4000}
             rows={9}
             resizable={false}
             label={formatMessage({ id: 'milestone.notes' })}
