@@ -59,8 +59,8 @@ const Timeline: React.FunctionComponent<ITimelineProps> = ({
   // milestoneDetails modal style
   const milestoneDetailsModalStyles = mergeStyleSets({
     container: {
-      height: '480px',
-      width: '600px',
+      height: '600px',
+      width: '480px',
       display: 'flex',
       padding: '32px',
       borderRadius: '8px',
