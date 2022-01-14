@@ -78,6 +78,7 @@ const GanttComponent: React.FunctionComponent<GanttProps> = ({ tasks, milestones
       // Hardcode the width since there's no end date to go to for milestones
       // Needs to be the width of the icons you're using
       mainEl.style.width = `24px`;
+      mainEl.style.height = `auto`;
 
       return mainEl;
     };
