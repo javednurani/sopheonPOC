@@ -6,7 +6,7 @@ import {
   HideHeaderAction,
   ShowAnnouncementAction,
   ShowAnnouncementModel,
-  ShowHeaderAction
+  ShowHeaderAction,
 } from '@sopheon/shell-api';
 import { Reducer } from 'redux';
 
@@ -23,7 +23,8 @@ export type DisplayActions = HideHeaderAction | ShowHeaderAction | ShowAnnouncem
 export const showHeader = (): ShowHeaderAction => createAction(DisplayActionTypes.SHOW_HEADER);
 export const hideHeader = (): HideHeaderAction => createAction(DisplayActionTypes.HIDE_HEADER);
 
-export const showAnnouncement = (announcement: ShowAnnouncementModel): ShowAnnouncementAction => createPayloadAction(DisplayActionTypes.SHOW_ANNOUNCEMENT, announcement);
+export const showAnnouncement = (announcement: ShowAnnouncementModel): ShowAnnouncementAction =>
+  createPayloadAction(DisplayActionTypes.SHOW_ANNOUNCEMENT, announcement);
 export const hideAnnouncement = (): HideAnnouncementAction => createAction(DisplayActionTypes.HIDE_ANNOUNCEMENT);
 //#endregion
 

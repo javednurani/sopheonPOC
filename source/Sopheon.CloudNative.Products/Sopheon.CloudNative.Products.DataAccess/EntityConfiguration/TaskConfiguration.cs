@@ -15,7 +15,7 @@ namespace Sopheon.CloudNative.Products.DataAccess.EntityConfiguration
 
          builder
             .Property(t => t.Notes)
-            .HasMaxLength(ModelConstraints.NOTES_LENGTH_5000);
+            .HasMaxLength(ModelConstraints.NOTES_LENGTH_4000);
 
          builder
             .HasOne(t => t.Product)

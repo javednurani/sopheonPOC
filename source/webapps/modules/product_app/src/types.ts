@@ -20,6 +20,11 @@ export type PostPutTaskModel = {
 } & EnvironmentScopedApiRequestModel &
   ProductScopedModel;
 
+export type PostMilestoneModel = {
+  Milestone: MilestoneDto;
+} & EnvironmentScopedApiRequestModel &
+  ProductScopedModel;
+
 export type DeleteTaskModel = {
   TaskId: number;
 } & EnvironmentScopedApiRequestModel &
@@ -48,6 +53,7 @@ export interface Product {
   goals: Goal[];
   kpis: KeyPerformanceIndicator[];
   tasks: Task[];
+  milestones: Milestone[];
 }
 
 export interface Task {
@@ -56,6 +62,13 @@ export interface Task {
   notes: string | null;
   dueDate: Date | null;
   status: Status;
+}
+
+export interface Milestone {
+  id: number;
+  name: string;
+  notes: string | null;
+  date: Date;
 }
 
 export type HistoryItem = {
@@ -67,6 +80,10 @@ export type HistoryItem = {
 
 export type ProductScopedTask = {
   task: Task;
+} & ProductScopedModel; // INFO: used for Redux state assignment to correct Product after create Task API call
+
+export type ProductScopedMilestone = {
+  milestone: Milestone;
 } & ProductScopedModel; // INFO: used for Redux state assignment to correct Product after create Task API call
 
 export type ProductScopedTaskId = {
@@ -91,6 +108,13 @@ export interface TaskDto {
   notes: string | null;
   status: number | null;
   dueDate: string | null;
+}
+
+export interface MilestoneDto {
+  id: number;
+  name: string;
+  notes: string | null;
+  date: string | null;
 }
 
 export interface TaskChangeEventDto {

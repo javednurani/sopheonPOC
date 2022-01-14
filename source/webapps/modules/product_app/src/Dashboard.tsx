@@ -3,13 +3,20 @@ import { ShowAnnouncementAction, ShowAnnouncementModel } from '@sopheon/shell-ap
 import React from 'react';
 
 import KPIs from './KPIs';
-import { CreateTaskAction, DeleteTaskAction, UpdateProductAction, UpdateProductItemAction, UpdateTaskAction } from './product/productReducer';
+import {
+  CreateMilestoneAction,
+  CreateTaskAction,
+  DeleteTaskAction,
+  UpdateProductAction,
+  UpdateProductItemAction,
+  UpdateTaskAction,
+} from './product/productReducer';
 import ProductHealth from './ProductHealth';
 import ProductSection from './ProductSection';
 import ResourcesAndLinks from './ResourcesAndLinks';
 import Timeline from './timeline/Timeline';
 import ToDoList from './ToDoList';
-import { DeleteTaskModel, PostPutTaskModel, Product, UpdateProductItemModel, UpdateProductModel } from './types';
+import { DeleteTaskModel, PostMilestoneModel, PostPutTaskModel, Product, UpdateProductItemModel, UpdateProductModel } from './types';
 
 export interface IDashboardProps {
   updateProduct: (product: UpdateProductModel) => UpdateProductAction;
@@ -20,6 +27,7 @@ export interface IDashboardProps {
   createTask: (task: PostPutTaskModel) => CreateTaskAction;
   updateTask: (task: PostPutTaskModel) => UpdateTaskAction;
   deleteTask: (task: DeleteTaskModel) => DeleteTaskAction;
+  createMilestone: (milestone: PostMilestoneModel) => CreateMilestoneAction;
   showAnnouncement: (announcement: ShowAnnouncementModel) => ShowAnnouncementAction;
 }
 
@@ -37,6 +45,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
   createTask,
   updateTask,
   deleteTask,
+  createMilestone,
   showAnnouncement,
 }: IDashboardProps) => {
   const stackItemStyles: IStackItemStyles = {
@@ -80,7 +89,14 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = ({
             />
           </Stack.Item>
           <Stack.Item grow styles={stackItemStyles}>
-            <Timeline product={products[0]} />
+            <Timeline
+              accessToken={accessToken}
+              createMilestone={createMilestone}
+              environmentKey={environmentKey}
+              milestones={products[0].milestones}
+              productKey={products[0].key as string}
+              tasks={products[0].tasks}
+            />
           </Stack.Item>
         </Stack>
       </Stack.Item>

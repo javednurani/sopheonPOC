@@ -1,6 +1,4 @@
 import {
-  DatePicker,
-  DayOfWeek,
   DefaultButton,
   Dialog,
   DialogFooter,
@@ -10,7 +8,6 @@ import {
   FontWeights,
   IButtonStyles,
   IconButton,
-  IDatePickerStrings,
   IDropdownOption,
   IDropdownStyles,
   IIconProps,
@@ -25,6 +22,7 @@ import {
 } from '@fluentui/react';
 import { useBoolean } from '@fluentui/react-hooks';
 import { useTheme } from '@fluentui/react-theme-provider';
+import { DatePicker } from '@sopheon/controls';
 import { ShowAnnouncementAction, ShowAnnouncementModel } from '@sopheon/shell-api';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -130,78 +128,6 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
 
   const cancelIcon: IIconProps = { iconName: 'Cancel' };
 
-  // DATEPICKER
-
-  const firstDayOfWeek = DayOfWeek.Sunday;
-
-  const datePickerStrings: IDatePickerStrings = {
-    months: [
-      formatMessage({ id: 'calendar.janlong' }),
-      formatMessage({ id: 'calendar.feblong' }),
-      formatMessage({ id: 'calendar.marlong' }),
-      formatMessage({ id: 'calendar.aprlong' }),
-      formatMessage({ id: 'calendar.maylong' }),
-      formatMessage({ id: 'calendar.junlong' }),
-      formatMessage({ id: 'calendar.jullong' }),
-      formatMessage({ id: 'calendar.auglong' }),
-      formatMessage({ id: 'calendar.seplong' }),
-      formatMessage({ id: 'calendar.octlong' }),
-      formatMessage({ id: 'calendar.novlong' }),
-      formatMessage({ id: 'calendar.declong' }),
-    ],
-
-    shortMonths: [
-      formatMessage({ id: 'calendar.jan' }),
-      formatMessage({ id: 'calendar.feb' }),
-      formatMessage({ id: 'calendar.mar' }),
-      formatMessage({ id: 'calendar.apr' }),
-      formatMessage({ id: 'calendar.may' }),
-      formatMessage({ id: 'calendar.jun' }),
-      formatMessage({ id: 'calendar.jul' }),
-      formatMessage({ id: 'calendar.aug' }),
-      formatMessage({ id: 'calendar.sep' }),
-      formatMessage({ id: 'calendar.oct' }),
-      formatMessage({ id: 'calendar.nov' }),
-      formatMessage({ id: 'calendar.dec' }),
-    ],
-
-    days: [
-      formatMessage({ id: 'calendar.sunlong' }),
-      formatMessage({ id: 'calendar.monlong' }),
-      formatMessage({ id: 'calendar.tuelong' }),
-      formatMessage({ id: 'calendar.wedlong' }),
-      formatMessage({ id: 'calendar.thulong' }),
-      formatMessage({ id: 'calendar.frilong' }),
-      formatMessage({ id: 'calendar.satlong' }),
-    ],
-
-    shortDays: [
-      formatMessage({ id: 'calendar.sun' }),
-      formatMessage({ id: 'calendar.mon' }),
-      formatMessage({ id: 'calendar.tue' }),
-      formatMessage({ id: 'calendar.wed' }),
-      formatMessage({ id: 'calendar.thu' }),
-      formatMessage({ id: 'calendar.fri' }),
-      formatMessage({ id: 'calendar.sat' }),
-    ],
-
-    goToToday: formatMessage({ id: 'calendar.gototoday' }),
-    prevMonthAriaLabel: formatMessage({ id: 'calendar.gotoprevmonth' }),
-    nextMonthAriaLabel: formatMessage({ id: 'calendar.gotonextmonth' }),
-    prevYearAriaLabel: formatMessage({ id: 'calendar.gotoprevyear' }),
-    nextYearAriaLabel: formatMessage({ id: 'calendar.gotonextyear' }),
-    closeButtonAriaLabel: formatMessage({ id: 'calendar.closedatepicker' }),
-    monthPickerHeaderAriaLabel: formatMessage({ id: 'calendar.selecttochangemonth' }),
-    yearPickerHeaderAriaLabel: formatMessage({ id: 'calendar.selecttochangeyear' }),
-  };
-
-  const datePickerClass = mergeStyleSets({
-    control: {
-      margin: '0px 0 15px 0',
-      width: '300px',
-    },
-  });
-
   // STATUS DROPDOWN
 
   const statusDropdownStyles: Partial<IDropdownStyles> = { dropdown: { width: 300 } };
@@ -299,7 +225,7 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
   const discardDialogContentProps = {
     type: DialogType.normal,
     title: formatMessage({ id: 'toDo.discardthistask' }),
-    subText: formatMessage({ id: 'unsaveddata' }),
+    subText: formatMessage({ id: 'unsavedChangesLost' }),
   };
 
   const confirmDiscard = (): void => {
@@ -415,18 +341,7 @@ const TaskDetails: React.FunctionComponent<ITaskDetailsProps> = ({
                 />
               </Stack.Item>
               <Stack.Item>
-                <DatePicker
-                  value={taskDueDate.date}
-                  className={datePickerClass.control}
-                  firstDayOfWeek={firstDayOfWeek}
-                  placeholder={formatMessage({ id: 'calendar.selectadate' })}
-                  ariaLabel={formatMessage({ id: 'calendar.selectadate' })}
-                  // DatePicker uses English strings by default. For localized apps, you must override this prop.
-                  strings={datePickerStrings}
-                  label={formatMessage({ id: 'toDo.duedate' })}
-                  onSelectDate={handleTaskDueDateChange}
-                  formatDate={(date: Date | undefined): string => `${date ? date.getMonth() + 1 : ''}/${date?.getDate()}/${date?.getFullYear()}`}
-                />
+                <DatePicker value={taskDueDate.date} onSelectDate={handleTaskDueDateChange} width={300} />
               </Stack.Item>
             </Stack>
           </Stack.Item>
