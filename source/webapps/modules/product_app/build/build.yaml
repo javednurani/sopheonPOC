@@ -66,17 +66,6 @@ steps:
     codeCoverageTool: Cobertura
     summaryFileLocation: '**/coverage/cobertura-coverage.xml'
   condition: succeededOrFailed()
-
-- task: mspremier.BuildQualityChecks.QualityChecks-task.BuildQualityChecks@8
-  displayName: 'Check build quality'
-  inputs:
-    checkCoverage: true
-    coverageFailOption: fixed
-    coverageThreshold: 80
-    coverageType: lines
-    treat0of0as100: true
-  enabled: true
-  continueOnError: true
   
 
 - task: PublishBuildArtifacts@1
